@@ -69,5 +69,10 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		/// Gets or sets whether to delete.
 		/// </summary>
 		public bool ToDelete { get; set; }
+
+		/// <summary>
+		/// Gets or sets the account options.
+		/// </summary>
+		public IList<AccountViewModel> AccountList { get; set; }
 	}
 }

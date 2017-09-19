@@ -20,7 +20,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>A redirect to the home page.</returns>
 		public RedirectToRouteResult StatusUpdate(int subscriptionId, int reportId, string btnAction, string reasonText)
 		{
-			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.StatusUpdate, subscriptionId, 10);
+			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.StatusUpdate, subscriptionId);
 
 			switch (btnAction)
 			{

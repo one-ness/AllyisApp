@@ -272,7 +272,8 @@ namespace AllyisApps.Services
 					result.OrganizationsAndRoles.Add(item.OrganizationId, new UserContext.OrganizationAndRole()
 					{
 						OrganizationId = item.OrganizationId,
-						OrganizationRole = (OrganizationRole)item.OrganizationRoleId
+						OrganizationRole = (OrganizationRole)item.OrganizationRoleId,
+						MaxAmount = item.MaxAmount ?? 0
 					});
 				}
 
@@ -287,8 +288,7 @@ namespace AllyisApps.Services
 							ProductRoleId = item.ProductRoleId,
 							SkuId = (SkuIdEnum)item.SkuId,
 							SubscriptionId = item.SubscriptionId,
-							OrganizationId = item.OrganizationId,
-							MaxAmount = expando.User.MaxAmount
+							OrganizationId = item.OrganizationId
 						});
 
 					//result.UserSubscriptions.Add(sub.SubscriptionId, sub);
@@ -670,7 +670,6 @@ namespace AllyisApps.Services
 				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
 				UserId = user.UserId,
 				Address = address,
-				MaxAmount = user.MaxAmount
 			};
 		}
 
@@ -780,14 +779,24 @@ namespace AllyisApps.Services
 			};
 		}
 
-		public void UpdateUserMaxAmount(User user)
+		public void UpdateUserOrgMaxAmount(OrganizationUserInfo userInfo)
 		{
-			UserDBEntity entity = new UserDBEntity()
+			OrganizationUserDBEntity entity = new OrganizationUserDBEntity()
 			{
-				UserId = user.UserId,
-				MaxAmount = user.MaxAmount
+				UserId = userInfo.UserId,
+				MaxAmount = userInfo.MaxAmount,
+				OrganizationId = userInfo.OrganizationId
 			};
 			DBHelper.UpdateUserMaxAmount(entity);
+		}
+
+		public UserOrganization GetOrganizationUserMaxAmount(int userId, int orgId)
+		{
+			return new UserOrganization()
+			{
+				UserId = userId,
+				MaxAmount = DBHelper.GetUserOrgMaxAmount(userId, orgId)
+			};
 		}
 
 		#endregion Info-DBEntity Conversions

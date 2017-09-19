@@ -196,12 +196,13 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updates the max amount a user can approve of in a report.
 		/// </summary>
-		/// <param name="user"></param>
-		public void UpdateUserMaxAmount(UserDBEntity user)
+		/// <param name="orgUser"></param>
+		public void UpdateUserMaxAmount(OrganizationUserDBEntity orgUser)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@userId", user.UserId);
-			parameters.Add("@maxAmount", user.MaxAmount);
+			parameters.Add("@userId", orgUser.UserId);
+			parameters.Add("@orgId", orgUser.OrganizationId);
+			parameters.Add("@maxAmount", orgUser.MaxAmount);
 
 			using (var connection = new SqlConnection(this.SqlConnectionString))
 			{

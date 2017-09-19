@@ -126,12 +126,13 @@
 						@foreach (ExpenseItemCreateViewModel item in Model.Items)
 						{
 							item.Index = itemIndex;
-							ExpenseItemModel subModel = new ExpenseItemModel()
-							{
-								AccountList = Model.AccountList,
-								Item = item,
-							};
-							Html.RenderPartial("_AjaxExpenseReportItems", subModel);
+							item.AccountList = Model.AccountList;
+							//ExpenseItemModel subModel = new ExpenseItemModel()
+							//{
+							//	AccountList = Model.AccountList,
+							//	Item = item,
+							//};
+							Html.RenderPartial("_AjaxExpenseReportItems", item);
 							itemIndex += 1;
 						}
 						<tr class="final-row">
@@ -212,7 +213,6 @@
 			$.ajax({
 				url: url,
 				success: function (response) {
-					console.log(response);
 					$('table tr.final-row').before(response);
 					setDatePickers();
 

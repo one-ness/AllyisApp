@@ -20,19 +20,16 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>A partial view.</returns>
 		public ActionResult AddItem(int index)
 		{
-			IList<AccountDBEntity> accountEntities = AppService.GetAccounts();
+			IEnumerable<Account> accountEntities = AppService.GetAccounts();
 			List<AccountViewModel> accountViewModels = new List<AccountViewModel>();
-			foreach (AccountDBEntity entity in accountEntities)
+			foreach (Account account in accountEntities)
 			{
-				accountViewModels.Add(InitializeAccountViewModel(entity));
+				accountViewModels.Add(InitializeAccountViewModel(account));
 			}
 
-			return PartialView("_AjaxExpenseReportItems", new ExpenseItemModel()
+			return PartialView("_AjaxExpenseReportItems", new ExpenseItemCreateViewModel()
 			{
-				Item = new ExpenseItemCreateViewModel()
-				{
-					Index = index,
-				},
+				Index = index,
 				AccountList = accountViewModels
 			});
 		}
