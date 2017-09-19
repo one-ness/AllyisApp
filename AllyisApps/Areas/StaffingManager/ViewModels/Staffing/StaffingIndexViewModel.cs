@@ -11,7 +11,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// Gets or sets a list of the short-hand position objects used to populate the views main table.
 		/// </summary>
-		public List<PositionThumbnailInfo> Positions { get; set; }
+		public List<PositionThumbnailInfoViewModel> Positions { get; set; }
 
 		/// <summary>
 		/// Gets or sets organizations identifier number.
@@ -41,16 +41,16 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// Gets or sets list of employment types used by the organization.
 		/// </summary>
-		public List<EmploymentTypeViewModel> EmploymentTypes { get; set; }
+		public List<EmploymentTypeSelectViewModel> EmploymentTypes { get; set; }
 
 		/// <summary>
 		/// Gets or sets list of position levels used by the organization.
 		/// </summary>
-		public List<PositionLevelViewModel> PositionLevels { get; set; }
+		public List<PositionLevelSelectViewModel> PositionLevels { get; set; }
 
 		/// <summary>
 		/// Gets or sets list of position statuses used by the organization.
 		/// </summary>
-		public List<PositionStatusViewModel> PositionStatuses { get; set; }
+		public List<PositionStatusSelectViewModel> PositionStatuses { get; set; }
 	}
 }

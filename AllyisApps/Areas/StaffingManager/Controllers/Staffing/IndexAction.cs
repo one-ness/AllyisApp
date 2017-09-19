@@ -107,17 +107,17 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				SubscriptionName = subName,
 				Positions = positions,
 				Tags = tags,
-				EmploymentTypes = employmentTypes.AsParallel().Select(et => new EmploymentTypeViewModel()
+				EmploymentTypes = employmentTypes.AsParallel().Select(et => new EmploymentTypeSelectViewModel()
 				{
 					EmploymentTypeId = et.EmploymentTypeId,
 					EmploymentTypeName = et.EmploymentTypeName
 				}).ToList(),
-				PositionLevels = positionLevels.AsParallel().Select(pl => new PositionLevelViewModel()
+				PositionLevels = positionLevels.AsParallel().Select(pl => new PositionLevelSelectViewModel()
 				{
 					PositionLevelId = pl.PositionLevelId,
 					PositionLevelName = pl.PositionLevelName
 				}).ToList(),
-				PositionStatuses = positionStatuses.AsParallel().Select(ps => new PositionStatusViewModel()
+				PositionStatuses = positionStatuses.AsParallel().Select(ps => new PositionStatusSelectViewModel()
 				{
 					PositionStatusId = ps.PositionStatusId,
 					PositionStatusName = ps.PositionStatusName

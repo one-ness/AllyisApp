@@ -4,7 +4,6 @@
 	if (Model.IsCreating)
 	{
 		action = ActionConstants.SubmitCreatePosition;
-		Model.LocalizedStates = new Dictionary<string, string>();
 	}
 }
 
@@ -164,29 +163,29 @@
 					<div class="panel panel-default">
 						<h3 class="panel-heading panel-title">Address Info *</h3>
 						<div class="form-group">
-							@Html.ReqLabelFor(m => m.Address, Strings.Address)
-							@Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
-							@Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
+							@Html.ReqLabelFor(m => m.PositionAddress.Address, Strings.Address)
+							@Html.TextBoxFor(m => m.PositionAddress.Address, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.PositionAddress.Address, "", new { @class = "text-danger" })
 						</div>
 						<div class="form-group">
-							@Html.ReqLabelFor(m => m.Country, Strings.Country)
-							@Html.DropDownListFor(m => m.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new { @id = ViewConstants.DdlCountriesId, @class = "form-control" })
-							@Html.ValidationMessageFor(m => m.Country, "", new { @class = "text-danger" })
+							@Html.ReqLabelFor(m => m.PositionAddress.Country, Strings.Country)
+							@Html.DropDownListFor(m => m.PositionAddress.SelectedCountryCode, new SelectList(Model.PositionAddress.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new { @id = ViewConstants.DdlCountriesId, @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.PositionAddress.Country, "", new { @class = "text-danger" })
 						</div>
 						<div class="form-group">
-							@Html.ReqLabelFor(m => m.State, Strings.State)
-							@Html.DropDownListFor(m => m.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @id = ViewConstants.DdlStatesId, @class = "form-control" })
-							@Html.ValidationMessageFor(m => m.State, "", new { @class = "text-danger" })
+							@Html.ReqLabelFor(m => m.PositionAddress.State, Strings.State)
+							@Html.DropDownListFor(m => m.PositionAddress.SelectedStateId, new SelectList(Model.PositionAddress.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @id = ViewConstants.DdlStatesId, @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.PositionAddress.State, "", new { @class = "text-danger" })
 						</div>
 						<div class="form-group">
-							@Html.ReqLabelFor(m => m.City, Strings.City)
-							@Html.TextBoxFor(m => m.City, new { @class = "form-control" })
-							@Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
+							@Html.ReqLabelFor(m => m.PositionAddress.City, Strings.City)
+							@Html.TextBoxFor(m => m.PositionAddress.City, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.PositionAddress.City, "", new { @class = "text-danger" })
 						</div>
 						<div class="form-group">
-							@Html.ReqLabelFor(m => m.PostalCode, Strings.PostalCode)
-							@Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control" })
-							@Html.ValidationMessageFor(m => m.PostalCode, "", new { @class = "text-danger" })
+							@Html.ReqLabelFor(m => m.PositionAddress.PostalCode, Strings.PostalCode)
+							@Html.TextBoxFor(m => m.PositionAddress.PostalCode, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.PositionAddress.PostalCode, "", new { @class = "text-danger" })
 						</div>
 					</div>
 					<div class="form-group panel panel-default">

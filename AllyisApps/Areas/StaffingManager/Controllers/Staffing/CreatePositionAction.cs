@@ -14,8 +14,6 @@ using AllyisApps.Services;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.ViewModels;
-using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
-using System.Collections.Generic;
 using System.Web.Script.Serialization;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
@@ -73,22 +71,22 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				SubscriptionId = subInfo.SubscriptionId,
 				StartDate = System.DateTime.UtcNow.Date,
 				Tags = tags,
-				EmploymentTypes = infos.Item3.AsParallel().Select(et => new EmploymentTypeViewModel()
+				EmploymentTypes = infos.Item3.AsParallel().Select(et => new EmploymentTypeSelectViewModel()
 				{
 					EmploymentTypeId = et.EmploymentTypeId,
 					EmploymentTypeName = et.EmploymentTypeName
 				}).ToList(),
-				PositionLevels = infos.Item4.AsParallel().Select(pl => new PositionLevelViewModel()
+				PositionLevels = infos.Item4.AsParallel().Select(pl => new PositionLevelSelectViewModel()
 				{
 					PositionLevelId = pl.PositionLevelId,
 					PositionLevelName = pl.PositionLevelName
 				}).ToList(),
-				PositionStatuses = infos.Item5.AsParallel().Select(ps  => new PositionStatusViewModel()
+				PositionStatuses = infos.Item5.AsParallel().Select(ps  => new PositionStatusSelectViewModel()
 				{
 					PositionStatusId = ps.PositionStatusId,
 					PositionStatusName = ps.PositionStatusName
 				}).ToList(),
-				Customers = infos.Item6.AsParallel().Select(cus => new CustomerViewModel()
+				Customers = infos.Item6.AsParallel().Select(cus => new CustomerSelectViewModel()
 				{
 					CustomerId = cus.CustomerId,
 					CustomerName = cus.CustomerName
@@ -151,11 +149,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 
 						Address = new Address
 						{
-							Address1 = model.Address,
-							City = model.City,
-							StateId = model.SelectedStateId,
-							CountryCode = model.SelectedCountryCode,
-							PostalCode = model.PostalCode
+							Address1 = model.PositionAddress.Address,
+							City = model.PositionAddress.City,
+							StateId = model.PositionAddress.SelectedStateId,
+							CountryCode = model.PositionAddress.SelectedCountryCode,
+							PostalCode = model.PositionAddress.PostalCode
 						},
 
 						Tags = tags

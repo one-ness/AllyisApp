@@ -8,7 +8,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 	/// <summary>
 	/// Position Level select View Model 
 	/// </summary>
-	public class PositionLevelViewModel
+	public class PositionLevelSelectViewModel
 	{
 		/// <summary>
 		/// Position Level id.
@@ -22,7 +22,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 	/// <summary>
 	/// 
 	/// </summary>
-	public class PositionStatusViewModel
+	public class PositionStatusSelectViewModel
 	{
 		/// <summary>
 		/// Position Status Id
@@ -38,7 +38,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 	/// <summary>
 	/// Empolyment types.
 	/// </summary>
-	public class EmploymentTypeViewModel
+	public class EmploymentTypeSelectViewModel
 	{
 		/// <summary>
 		/// Employment type identifier
@@ -53,7 +53,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 	/// <summary>
 	/// Customer drop down.
 	/// </summary>
-	public class CustomerViewModel
+	public class CustomerSelectViewModel
 	{
 		/// <summary>
 		/// Gets or sets identificer for customer.

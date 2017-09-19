@@ -5,8 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 
 namespace AllyisApps.ViewModels.Staffing
 {
@@ -126,56 +125,8 @@ namespace AllyisApps.ViewModels.Staffing
 		public string TeamName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Customer's address.
+		/// Gets the Customer Address 
 		/// </summary>
-		[DataType(DataType.Text)]
-		[Display(Name = "Address")]
-		public string Address { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Customer's city.
-		/// </summary>
-		[DataType(DataType.Text)]
-		[Display(Name = "City")]
-		public string City { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Customer's state.
-		/// </summary>
-		[Display(Name = "State")]
-		public string State { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Customer's country or region.
-		/// </summary>
-		[Display(Name = "Country")]
-		public string Country { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Customer's postal code.
-		/// </summary>
-		[DataType(DataType.PostalCode)]
-		[Display(Name = "Postal Code")]
-		public string PostalCode { get; set; }
-
-		/// <summary>
-		/// Gets or sets the state id.
-		/// </summary>
-		public int? SelectedStateId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the state id and localized names.
-		/// </summary>
-		public Dictionary<string, string> LocalizedStates { get; set; }
-
-		/// <summary>
-		/// Gets or sets the selected country code.
-		/// </summary>
-		public string SelectedCountryCode { get; set; }
-
-		/// <summary>
-		/// Gets or sets the country code and localized names.
-		/// </summary>
-		public Dictionary<string, string> LocalizedCountries { get; set; }
+		public AddressViewModel addressModel { get; set; }
 	}
 }

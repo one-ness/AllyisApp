@@ -46,12 +46,12 @@
 					@Html.ValidationMessageFor(model => model.newCustomerAddress.City, string.Empty, new { @class = "text-danger" })
 				</div>
 				<div class="form-group">
-					@Html.ReqLabelFor(m => m.newCustomerAddress.CountryCode, Strings.Country)
-					@Html.DropDownListFor(m => m.Country, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new { @class = "form-control", @id = ViewConstants.DdlCountriesId })
+					@Html.ReqLabelFor(m => m.newCustomerAddress.SelectedCountryCode, Strings.Country)
+					@Html.DropDownListFor(m => m.newCustomerAddress.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new { @class = "form-control", @id = ViewConstants.DdlCountriesId })
 				</div>
 				<div class="form-group">
-					@Html.ReqLabelFor(m => m.newCustomerAddress.StateId, Strings.State)
-					@Html.DropDownListFor(m => m.State, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @class = "form-control", @id = ViewConstants.DdlStatesId })
+					@Html.ReqLabelFor(m => m.newCustomerAddress.SelectedStateId, Strings.State)
+					@Html.DropDownListFor(m => m.newCustomerAddress.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @class = "form-control", @id = ViewConstants.DdlStatesId })
 				</div>
 				<div class="form-group">
 					@Html.ReqLabelFor(model => model.newCustomerAddress.PostalCode, Strings.PostalCode)
