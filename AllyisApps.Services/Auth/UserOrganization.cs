@@ -16,6 +16,7 @@ namespace AllyisApps.Services
 		public int UserId { get; set; }
 		public string EmployeeId { get; set; }
 		public OrganizationRole OrganizationRole { get; set; }
+		public decimal MaxAmount { get; set; }
 		public DateTime JoinedDateUtc { get; set; }
 		public Organization Organization;
 

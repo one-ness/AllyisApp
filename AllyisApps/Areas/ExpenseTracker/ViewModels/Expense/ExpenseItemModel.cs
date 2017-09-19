@@ -19,10 +19,5 @@ namespace AllyisApps.Areas.ExpenseTracker.ViewModels.Expense
 		/// Gets or sets the Expense Items.
 		/// </summary>
 		public ExpenseItemCreateViewModel Item { get; set; }
-
-		/// <summary>
-		/// Gets or sets the index.
-		/// </summary>
-		public int Index { get; set; }
 	}
 }
