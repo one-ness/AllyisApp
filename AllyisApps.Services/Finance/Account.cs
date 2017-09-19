@@ -1,15 +1,12 @@
-//------------------------------------------------------------------------------
-// <copyright file="AccountDBEntity.cs" company="Allyis, Inc.">
-//     Copyright (c) Allyis, Inc.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace AllyisApps.DBModel.Finance
+namespace AllyisApps.Services.Finance
 {
-	/// <summary>
-	/// Represents the Accounts table in the database.
-	/// </summary>
-	public class AccountDBEntity : BaseDBEntity
+	public class Account
 	{
 		/// <summary>
 		/// Gets or sets the organization's ID.

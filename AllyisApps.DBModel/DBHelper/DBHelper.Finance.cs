@@ -39,7 +39,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@accountName", account.AccountName);
 			parameters.Add("@isActive", account.IsActive);
 			parameters.Add("@accountTypeId", account.AccountTypeId);
-			parameters.Add("@parentAccountId", account.ParentAccountId);
+			parameters.Add("@parentAccountId", account.ParentAccountId.Value);
 			parameters.Add("@returnValue", -1, DbType.Int32, direction: ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))

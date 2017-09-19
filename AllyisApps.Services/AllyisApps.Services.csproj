@@ -95,6 +95,7 @@
     <Compile Include="Expense\ExpenseReport.cs" />
     <Compile Include="Expense\ExpenseReportStatusEnum.cs" />
     <Compile Include="Expense\ExpenseService.cs" />
+    <Compile Include="Finance\Account.cs" />
     <Compile Include="Finance\FinanceService.cs" />
     <Compile Include="Lookup\Address.cs" />
     <Compile Include="Lookup\AddressService.cs" />
