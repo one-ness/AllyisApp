@@ -10,6 +10,7 @@ INSERT INTO [Auth].[ProductRole] (ProductRoleId, ProductId, [ProductRoleName]) V
 -- Product roles -- Expense Tracker
 INSERT INTO [Auth].[ProductRole] (ProductRoleId, ProductId, [ProductRoleName]) VALUES (1, 300000, 'User');
 INSERT INTO [Auth].[ProductRole] (ProductRoleId, ProductId, [ProductRoleName]) VALUES (2, 300000, 'Manager');
+INSERT INTO [Auth].[ProductRole] (ProductRoleId, ProductId, [ProductRoleName]) VALUES (3, 300000, 'Admin');
 
 -- Product roles -- Staffing Manager
 INSERT INTO [Auth].[ProductRole] (ProductRoleId, ProductId, [ProductRoleName]) VALUES (1, 400000, 'User');

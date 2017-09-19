@@ -3346,6 +3346,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set Admin.
+        /// </summary>
+        public static string SetAdmin {
+            get {
+                return ResourceManager.GetString("SetAdmin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Set Manager.
         /// </summary>
         public static string SetManager {
