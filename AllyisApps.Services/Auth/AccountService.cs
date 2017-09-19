@@ -780,9 +780,24 @@ namespace AllyisApps.Services
 			};
 		}
 
-		public IList<AccountDBEntity> GetAccounts()
+		public IEnumerable<Account> GetAccounts()
 		{
-			return DBHelper.GetAccounts().ToList();
+			List<AccountDBEntity> entity = DBHelper.GetAccounts().ToList();
+
+			return entity.Select(a => InitializeAccount(a));
+		}
+
+		public Account InitializeAccount(AccountDBEntity entity)
+		{
+			return new Account()
+			{
+				AccountId = entity.AccountId,
+				AccountName = entity.AccountName,
+				AccountTypeId = entity.AccountTypeId,
+				AccountTypeName = entity.AccountTypeName,
+				IsActive = entity.IsActive,
+				ParentAccountId = entity.ParentAccountId
+			};
 		}
 
 		public void UpdateUserOrgMaxAmount(OrganizationUserInfo userInfo)
