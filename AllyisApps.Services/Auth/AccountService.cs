@@ -89,13 +89,13 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <returns>A list of languages.</returns>
 		public IEnumerable<Language> ValidLanguages()
-        {
-            return DBHelper.ValidLanguages().Select(s => new Language
-            {
-                LanguageName = s.LanguageName,
-                CultureName = s.CultureName
-            });
-        }
+		{
+			return DBHelper.ValidLanguages().Select(s => new Language
+			{
+				LanguageName = s.LanguageName,
+				CultureName = s.CultureName
+			});
+		}
 
 		/// <summary>
 		/// Retrieves a list of all pending invitations for a given user by the user's email.
@@ -160,7 +160,6 @@ namespace AllyisApps.Services
 			{
 				return null;
 			}
-
 		}
 
 		/// <summary>
@@ -224,15 +223,14 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
 
 			User result = null;
-			result = InitializeUser(this.DBHelper.GetUserByEmail(email),false);
-			
+			result = InitializeUser(this.DBHelper.GetUserByEmail(email), false);
+
 			if (result != null)
 			{
 				// email exists, hash the given password and compare with hash in db
 				Tuple<bool, string> passwordValidation = Crypto.ValidateAndUpdate(password, result.PasswordHash);
 				if (passwordValidation.Item1)
 				{
-
 					// Store updated password hash if needed
 					if (passwordValidation.Item2 != null)
 					{
@@ -356,7 +354,7 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Get User Address, Organizaiontins, and Inviations for account page 
+		/// Get User Address, Organizaiontins, and Inviations for account page
 		/// </summary>
 		public User GetUser(int userId)
 		{
@@ -405,7 +403,7 @@ namespace AllyisApps.Services
 					new Invitation()
 					{
 						invite = new InvitationInfo()
-						{ 
+						{
 							Email = inv.Email,
 							EmployeeId = inv.EmployeeId,
 							FirstName = inv.FirstName,
@@ -676,7 +674,7 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Initialzie user from dynamic object 
+		/// Initialzie user from dynamic object
 		/// </summary>
 		/// <param name="userInfo"></param>
 		/// <returns></returns>
@@ -704,6 +702,7 @@ namespace AllyisApps.Services
 				Address = address,
 			};
 		}
+
 		/// <summary>
 		/// Translates a User into a UserDBEntity.
 		/// </summary>
@@ -777,26 +776,6 @@ namespace AllyisApps.Services
 				CreatedUtc = subUser.CreatedUtc,
 				SubscriptionId = subUser.SubscriptionId,
 				UserId = subUser.UserId
-			};
-		}
-
-		public IEnumerable<Account> GetAccounts()
-		{
-			List<AccountDBEntity> entity = DBHelper.GetAccounts().ToList();
-
-			return entity.Select(a => InitializeAccount(a));
-		}
-
-		public Account InitializeAccount(AccountDBEntity entity)
-		{
-			return new Account()
-			{
-				AccountId = entity.AccountId,
-				AccountName = entity.AccountName,
-				AccountTypeId = entity.AccountTypeId,
-				AccountTypeName = entity.AccountTypeName,
-				IsActive = entity.IsActive,
-				ParentAccountId = entity.ParentAccountId
 			};
 		}
 

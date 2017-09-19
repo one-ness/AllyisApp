@@ -34,7 +34,7 @@ namespace AllyisApps.DBModel.Finance
 		/// <summary>
 		/// Gets or sets accounts parent account.
 		/// </summary>
-		public int ParentAccountId { get; set; }
+		public int? ParentAccountId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the account type name, linked to AccountTypeId .

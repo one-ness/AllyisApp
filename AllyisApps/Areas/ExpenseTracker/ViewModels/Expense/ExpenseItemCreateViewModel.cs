@@ -12,24 +12,24 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 	public class ExpenseItemCreateViewModel
 	{
 		/// <summary>
-		/// Gets or sets the expense item id
+		/// Gets or sets the expense item id.
 		/// </summary>
 		public int ExpenseItemId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the expense description
+		/// Gets or sets the expense description.
 		/// </summary>
 		[Required(ErrorMessage = "Description is required.")]
 		public string ItemDescription { get; set; }
 
 		/// <summary>
-		/// Gets or sets the transaction date
+		/// Gets or sets the transaction date.
 		/// </summary>
 		[Required(ErrorMessage = "Date is required.")]
 		public string TransactionDate { get; set; }
 
 		/// <summary>
-		/// Gets or sets the amount of the expense
+		/// Gets or sets the amount of the expense.
 		/// </summary>
 		[Required(ErrorMessage = "Amount is required.")]
 		[DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
@@ -41,17 +41,17 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		public int ExpenseReportId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the user id associated with the Expense
+		/// Gets or sets the user id associated with the Expense.
 		/// </summary>
 		public int AccountId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the flag for if the expense can be billed to a customer
+		/// Gets or sets a value indicating whether the expense can be billed to a customer.
 		/// </summary>
 		public bool IsBillableToCustomer { get; set; }
 
 		/// <summary>
-		/// Gets or sets when the item was created
+		/// Gets or sets when the item was created.
 		/// </summary>
 		public DateTime ExpenseItemCreatedUtc { get; set; }
 
@@ -61,12 +61,12 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		public DateTime ExpenseItemModifiedUtc { get; set; }
 
 		/// <summary>
-		/// Gets or sets the index of item in report
+		/// Gets or sets the index of item in report.
 		/// </summary>
 		public int Index { get; set; }
 
 		/// <summary>
-		/// Gets or sets whether to delete.
+		/// Gets or sets a value indicating whether to delete.
 		/// </summary>
 		public bool ToDelete { get; set; }
 

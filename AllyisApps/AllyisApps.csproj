@@ -17,10 +17,8 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44326</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>
-    </IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>
-    </IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <NuGetPackageImportStamp>
@@ -207,6 +205,7 @@
   <ItemGroup>
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\AdminReportAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\AttachmentDownloadController.cs" />
+    <Compile Include="Areas\ExpenseTracker\Controllers\Expense\CreateAccountAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\FileLinkAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ExportReportAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\UpdateUserSettingsAction.cs" />
@@ -221,6 +220,7 @@
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ReportViewAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ViewAdminReport.cs" />
     <Compile Include="Areas\ExpenseTracker\ReportHelper.cs" />
+    <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\AccountPageViewModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\UserMaxAmountViewModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\AccountViewModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseItemCreateViewModel.cs" />
@@ -234,6 +234,7 @@
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\CreateReportAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Home\HomeController.cs" />
     <Compile Include="Areas\ExpenseTracker\ExpenseTrackerAreaRegistration.cs" />
+    <Compile Include="Areas\ExpenseTracker\Controllers\Expense\AccountAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\CreatePositionAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\IndexAction.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseItemModel.cs" />
@@ -594,6 +595,8 @@
       <DependentUpon>Timetracker - Copy - Copy.css</DependentUpon>
     </Content>
     <Content Include="Areas\ExpenseTracker\Views\Expense\UserSettings.cshtml" />
+    <Content Include="Areas\ExpenseTracker\Views\Expense\Accounts.cshtml" />
+    <Content Include="Areas\ExpenseTracker\Views\Expense\CreateAccount.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
@@ -1018,12 +1021,9 @@
     <Content Include="Views\Shared\DisplayTemplates\SiteMapPathHelperModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\ExpenseTracker\Views\AdminAction\" />
-    <Folder Include="Areas\ExpenseTracker\Views\AdminReportAction\" />
-    <Folder Include="Areas\ExpenseTracker\Views\Admin\" />
-    <Folder Include="Areas\ExpenseTracker\Views\AttachmentDownload\" />
-    <Folder Include="Areas\ExpenseTracker\Views\ReportAdmin\" />
-    <Folder Include="Areas\ExpenseTracker\Views\ViewAdminReport\" />
+    <Folder Include="Areas\ExpenseTracker\Views\AccountAction\" />
+    <Folder Include="Areas\ExpenseTracker\Views\AccountPageViewModel\" />
+    <Folder Include="Areas\ExpenseTracker\Views\CreateAccountAction\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

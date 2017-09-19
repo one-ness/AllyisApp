@@ -39,7 +39,6 @@
 					{
 						<div>@String.Format("{0:MM-dd-yyyy}", @Model.SubmittedUtc)</div>
 					}
-
 				</div>
 				<div class="report-detail">
 					<div><b>Status:</b></div>
@@ -64,7 +63,8 @@
 				@if (Model.Status != ExpenseStatusEnum.Approved
 					&& Model.Status != ExpenseStatusEnum.Paid
 					&& Model.Status != ExpenseStatusEnum.Draft
-					&& ((bool)ViewData["IsManager"] == true && (decimal)ViewData["MaxAmount"] >= totalAmount))
+					&& Model.Status != ExpenseStatusEnum.Rejected
+					&& ((bool)ViewData["IsManager"] == true || (decimal)ViewData["MaxAmount"] > totalAmount))
 				{
 					<div class="review-area col-lg-12 col-md-12 col-xs-12" height="290px">
 						<b>Accept/Reject Notes</b><br />
@@ -115,8 +115,6 @@
 	</tbody>
 </table>
 
-
-
 @*REPORT ATTACHMENTS AREA*@
 @if (Model.Attachments.Count() > 0)
 {
@@ -130,7 +128,6 @@
 						<td>@Html.ActionLink(attch, "download", new { reportId = Model.ReportId, fileName = attch }, htmlAttributes: new { @class = "form-inline col-xs-12", })</td>
 					</tr>
 				}
-
 			</tbody>
 		</table>
 	</div>
@@ -164,11 +161,5 @@
 					</tr>
 				}
 			</tbody>
-
 		</table>
 	}
-
-
-
-
-
