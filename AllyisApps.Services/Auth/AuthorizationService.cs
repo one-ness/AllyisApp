@@ -50,21 +50,22 @@ namespace AllyisApps.Services
 			EditOthers,
 		}
 
-        /// <summary>
-        /// Expense Tracker Actions.
-        /// </summary>
+		/// <summary>
+		/// Expense Tracker Actions.
+		/// </summary>
 		public enum ExpenseTrackerAction : int
 		{
 			Unmanaged = 0,
 			EditReport,
 			AdminReport,
-            AdminExpense,
-            StatusUpdate,
+			AdminExpense,
+			StatusUpdate,
 			Pending,
 			UpdateReport,
 			CreateReport,
-			UserSettings
-        }
+			UserSettings,
+			Accounts
+		}
 
 		/// <summary>
 		/// staffing actions.
@@ -191,7 +192,6 @@ namespace AllyisApps.Services
 			return result;
 		}
 
-
 		/// <summary>
 		/// Checks if an action is allowed for the current user.
 		/// </summary>
@@ -200,8 +200,8 @@ namespace AllyisApps.Services
 		/// <param name="throwException">Throw exception or not.</param>
 		/// <returns></returns>
 		public bool CheckExpenseTrackerAction(ExpenseTrackerAction action, int subId, bool throwException = true)
-        {
-            bool result = false;
+		{
+			bool result = false;
 
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.UserContext.SubscriptionsAndRoles.TryGetValue(subId, out subInfo);
@@ -210,16 +210,18 @@ namespace AllyisApps.Services
 				ExpenseTrackerRole etRole = (ExpenseTrackerRole)subInfo.ProductRoleId;
 				if (subInfo.ProductId == ProductIdEnum.ExpenseTracker && etRole != ExpenseTrackerRole.NotInProduct)
 				{
-					if (action == ExpenseTrackerAction.AdminReport 
-						|| action == ExpenseTrackerAction.StatusUpdate 
-						|| action == ExpenseTrackerAction.AdminExpense 
-						|| action == ExpenseTrackerAction.UserSettings)
+					if (action == ExpenseTrackerAction.AdminReport
+						|| action == ExpenseTrackerAction.StatusUpdate
+						|| action == ExpenseTrackerAction.AdminExpense
+						|| action == ExpenseTrackerAction.UserSettings
+						|| action == ExpenseTrackerAction.Accounts)
 					{
 						switch (etRole)
 						{
 							case ExpenseTrackerRole.Manager:
 								result = true;
 								break;
+
 							default:
 								break;
 						}
@@ -231,9 +233,11 @@ namespace AllyisApps.Services
 							case ExpenseTrackerRole.Manager:
 								result = true;
 								break;
+
 							case ExpenseTrackerRole.Admin:
 								result = true;
 								break;
+
 							default:
 								break;
 						}
@@ -245,14 +249,13 @@ namespace AllyisApps.Services
 				}
 			}
 
-            if (!result && throwException)
-            {
-                string message = string.Format("action {0} denied for subscription {1}", action.ToString(), subId);
-                throw new AccessViolationException(message);
-            }
+			if (!result && throwException)
+			{
+				string message = string.Format("action {0} denied for subscription {1}", action.ToString(), subId);
+				throw new AccessViolationException(message);
+			}
 
-            return result;
-        }
-    }
+			return result;
+		}
+	}
 }
-

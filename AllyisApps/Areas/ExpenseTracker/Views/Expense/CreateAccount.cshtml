@@ -26,7 +26,7 @@
 			</div>
 			<div class="form-group">
 				@Html.ReqLabelFor(m => m.ParentAccounts, "Parent Account")
-				@Html.DropDownListFor(m => m.SelectedAccount, Model.ParentAccounts, "Select Account", new { @class = "form-control" })
+				@Html.DropDownListFor(m => m.SelectedAccount, Model.ParentAccounts, new { @class = "form-control" })
 			</div>
 		</div>
 	</div>
@@ -34,7 +34,7 @@
 	<br />
 	<div style="margin-left:30px">
 		<div>
-			<input class="btn btn-primary pull-left" type="submit" name="viewDataButton" value="Create" title="Create an account" />
+			<input class="btn btn-primary pull-left" type="submit" name="viewDataButton" value="@ViewBag.ButtonName" title="@ViewBag.ButtonTitle" />
 		</div>
 		<div class="form-group pull-left">
 			<a href="@Url.Action("Accounts")">
