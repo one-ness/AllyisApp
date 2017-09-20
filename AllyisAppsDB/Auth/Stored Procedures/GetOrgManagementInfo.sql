@@ -32,7 +32,8 @@ BEGIN
 		[OU].[EmployeeId],
 		[U].[Email],
 		[U].[FirstName],
-		[U].[LastName]
+		[U].[LastName],
+		[OU].[MaxAmount]
     FROM [Auth].[OrganizationUser]	AS [OU]
 	WITH (NOLOCK)
     INNER JOIN [Auth].[User]		AS [U] WITH (NOLOCK) 

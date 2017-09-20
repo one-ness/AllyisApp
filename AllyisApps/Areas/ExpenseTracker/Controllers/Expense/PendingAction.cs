@@ -29,11 +29,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			IEnumerable<ExpenseReport> pending = reports.ToList().Where(r => r.ReportStatus == (int)ExpenseStatusEnum.Pending);
 			ExpensePendingModel model = InitializeViewModel(subscriptionId, userId, pending);
 
-			if (!(bool)ViewData["IsManager"])
-			{
-				model.PendingReports = model.PendingReports.ToList().Where(r => r.Amount <= (decimal)ViewData["MaxAmount"]);
-			}
-
+			model.PendingReports = model.PendingReports.ToList().Where(r => r.Amount <= (decimal)ViewData["MaxAmount"]);
 			return View(model);
 		}
 

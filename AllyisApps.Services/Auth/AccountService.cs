@@ -95,16 +95,13 @@ namespace AllyisApps.Services
 		/// <returns>The resulting message.</returns>
 		public bool RejectInvitation(int invitationId)
 		{
-			try
+			bool rejected = DBHelper.RejectInvitation(invitationId);
+			if (rejected)
 			{
-				DBHelper.RejectInvitation(invitationId);
 				NotifyInviteRejectAsync(invitationId);
-				return true;
 			}
-			catch (SqlException)
-			{
-				return false;
-			}
+			return rejected;
+
 		}
 
 		/// <summary>
@@ -217,7 +214,8 @@ namespace AllyisApps.Services
 					result.OrganizationsAndRoles.Add(item.OrganizationId, new UserContext.OrganizationAndRole()
 					{
 						OrganizationId = item.OrganizationId,
-						OrganizationRole = (OrganizationRole)item.OrganizationRoleId
+						OrganizationRole = (OrganizationRole)item.OrganizationRoleId,
+						MaxAmount = item.MaxAmount ?? 0
 					});
 				}
 
@@ -232,8 +230,7 @@ namespace AllyisApps.Services
 							ProductRoleId = item.ProductRoleId,
 							SkuId = (SkuIdEnum)item.SkuId,
 							SubscriptionId = item.SubscriptionId,
-							OrganizationId = item.OrganizationId,
-							MaxAmount = expando.User.MaxAmount
+							OrganizationId = item.OrganizationId
 						});
 				}
 
@@ -468,11 +465,7 @@ namespace AllyisApps.Services
 			return DBHelper.GetOrganizationsByUserId(userID).Select(o => (Organization)InitializeOrganization(o));
 		}
 
-		#region Info-DBEntity Conversions
-
-
-
-		public User InitializeUser(dynamic user)
+		private User InitializeUser(dynamic user)
 		{
 			User newUser = new User()
 			{
@@ -496,13 +489,14 @@ namespace AllyisApps.Services
 			};
 			return newUser;
 		}
+
 		/// <summary>
 		/// Translates a UserDBEntity into a User business object.
 		/// </summary>
 		/// <param name="user">UserDBEntity instance.</param>
 		/// <param name="loadAddress"></param>
 		/// <returns>User instance.</returns>
-		public User InitializeUser(UserDBEntity user, bool loadAddress = true)
+		private User InitializeUser(UserDBEntity user, bool loadAddress = true)
 		{
 			if (user == null)
 			{
@@ -542,7 +536,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="userRoles">UserRolesDBEntity instance.</param>
 		/// <returns>UserRole instance.</returns>
-		public UserRole InitializeUserRole(UserRolesDBEntity userRoles)
+		private UserRole InitializeUserRole(UserRolesDBEntity userRoles)
 		{
 			if (userRoles == null)
 			{
@@ -584,21 +578,44 @@ namespace AllyisApps.Services
 			};
 		}
 
-		public IList<AccountDBEntity> GetAccounts()
+		public IEnumerable<Account> GetAccounts()
 		{
-			return DBHelper.GetAccounts().ToList();
+			List<AccountDBEntity> entity = DBHelper.GetAccounts().ToList();
+
+			return entity.Select(a => InitializeAccount(a));
 		}
 
-		public void UpdateUserMaxAmount(User user)
+		public Account InitializeAccount(AccountDBEntity entity)
 		{
-			UserDBEntity entity = new UserDBEntity()
+			return new Account()
 			{
-				UserId = user.UserId,
-				MaxAmount = user.MaxAmount
+				AccountId = entity.AccountId,
+				AccountName = entity.AccountName,
+				AccountTypeId = entity.AccountTypeId,
+				AccountTypeName = entity.AccountTypeName,
+				IsActive = entity.IsActive,
+				ParentAccountId = entity.ParentAccountId
+			};
+		}
+
+		public void UpdateUserOrgMaxAmount(OrganizationUser userInfo)
+		{
+			OrganizationUserDBEntity entity = new OrganizationUserDBEntity()
+			{
+				UserId = userInfo.UserId,
+				MaxAmount = userInfo.MaxAmount,
+				OrganizationId = userInfo.OrganizationId
 			};
 			DBHelper.UpdateUserMaxAmount(entity);
 		}
 
-		#endregion Info-DBEntity Conversions
+		public UserOrganization GetOrganizationUserMaxAmount(int userId, int orgId)
+		{
+			return new UserOrganization()
+			{
+				UserId = userId,
+				MaxAmount = DBHelper.GetUserOrgMaxAmount(userId, orgId)
+			};
+		}
 	}
 }

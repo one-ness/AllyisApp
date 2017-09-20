@@ -484,7 +484,7 @@
     <value>Customers</value>
   </data>
   <data name="CustomerOrgId" xml:space="preserve">
-    <value>Customer ID</value>
+    <value>Organization Specific Id</value>
   </data>
   <data name="Customers" xml:space="preserve">
     <value>Customers</value>

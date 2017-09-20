@@ -484,16 +484,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets the user roles for an organization.
-		/// </summary>
-		/// <param name="orgId">The Organization Id.</param>
-		/// <returns>List of UserRolesInfos.</returns>
-		public IEnumerable<UserRole> GetUserRoles(int orgId)
-		{
-			return DBHelper.GetRoles(orgId).Select(o => InitializeUserRole(o));
-		}
-
-		/// <summary>
 		/// Assigns a new organization role to the given users for the current organization.
 		/// </summary>
 		/// <param name="userIds">List of user Ids.</param>
@@ -582,7 +572,8 @@ namespace AllyisApps.Services
 				EmployeeId = organizationUser.EmployeeId,
 				OrganizationId = organizationUser.OrganizationId,
 				OrganizationRoleId = organizationUser.OrganizationRoleId,
-				UserId = organizationUser.UserId
+				UserId = organizationUser.UserId,
+				MaxAmount = organizationUser.MaxAmount
 			};
 		}
 

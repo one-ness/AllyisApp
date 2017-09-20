@@ -52,5 +52,10 @@ namespace AllyisApps.Services
 		/// Gets or sets the user's last name.
 		/// </summary>
 		public string LastName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the maximum amount of money user is allowed to approve of in a report.
+		/// </summary>
+		public decimal MaxAmount { get; set; }
 	}
 }
