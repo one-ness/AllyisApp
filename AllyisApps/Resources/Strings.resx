@@ -1152,6 +1152,9 @@
   <data name="SetManager" xml:space="preserve">
     <value>Set Manager</value>
   </data>
+  <data name="SetSuperUser" xml:space="preserve">
+    <value>Set Super User</value>
+  </data>
   <data name="SetMember" xml:space="preserve">
     <value>Set Member</value>
   </data>

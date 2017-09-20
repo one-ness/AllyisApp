@@ -54,14 +54,11 @@ namespace AllyisApps.Services
 		/// <returns>A list of languages.</returns>
 		public IEnumerable<Language> ValidLanguages()
 		{
-			var result = new List<Language>();
-			var list = this.DBHelper.ValidLanguages();
-			foreach (var item in list)
+			return DBHelper.ValidLanguages().Select(s => new Language
 			{
-				result.Add(new Language() { CultureName = item.CultureName, LanguageName = item.LanguageName });
-			}
-
-			return result;
+				LanguageName = s.LanguageName,
+				CultureName = s.CultureName
+			});
 		}
 
 		/// <summary>
@@ -577,26 +574,6 @@ namespace AllyisApps.Services
 				CreatedUtc = subUser.CreatedUtc,
 				SubscriptionId = subUser.SubscriptionId,
 				UserId = subUser.UserId
-			};
-		}
-
-		public IEnumerable<Account> GetAccounts()
-		{
-			List<AccountDBEntity> entity = DBHelper.GetAccounts().ToList();
-
-			return entity.Select(a => InitializeAccount(a));
-		}
-
-		public Account InitializeAccount(AccountDBEntity entity)
-		{
-			return new Account()
-			{
-				AccountId = entity.AccountId,
-				AccountName = entity.AccountName,
-				AccountTypeId = entity.AccountTypeId,
-				AccountTypeName = entity.AccountTypeName,
-				IsActive = entity.IsActive,
-				ParentAccountId = entity.ParentAccountId
 			};
 		}
 

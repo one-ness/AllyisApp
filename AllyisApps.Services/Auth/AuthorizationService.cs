@@ -212,8 +212,7 @@ namespace AllyisApps.Services
 					if (action == ExpenseTrackerAction.AdminReport 
 						|| action == ExpenseTrackerAction.StatusUpdate 
 						|| action == ExpenseTrackerAction.AdminExpense 
-						|| action == ExpenseTrackerAction.UserSettings
-						|| action == ExpenseTrackerAction.Pending)
+						|| action == ExpenseTrackerAction.UserSettings)
 					{
 						switch (etRole)
 						{
@@ -221,6 +220,20 @@ namespace AllyisApps.Services
 								result = true;
 								break;
 
+							default:
+								break;
+						}
+					}
+					else if (action == ExpenseTrackerAction.Pending)
+					{
+						switch (etRole)
+						{
+							case ExpenseTrackerRole.Manager:
+								result = true;
+								break;
+							case ExpenseTrackerRole.SuperUser:
+								result = true;
+								break;
 							default:
 								break;
 						}
