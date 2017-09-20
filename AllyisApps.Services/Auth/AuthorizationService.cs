@@ -233,8 +233,7 @@ namespace AllyisApps.Services
 							case ExpenseTrackerRole.Manager:
 								result = true;
 								break;
-
-							case ExpenseTrackerRole.Admin:
+							case ExpenseTrackerRole.SuperUser:
 								result = true;
 								break;
 
