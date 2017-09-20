@@ -7,6 +7,7 @@
 using System;
 using System.Linq;
 using System.Web.Mvc;
+using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.Services.Common.Types;
 using AllyisApps.ViewModels.Auth;
@@ -34,8 +35,8 @@ namespace AllyisApps.Controllers
 			{
 				int subId = sub.SubscriptionId;
 				int startOfWeek = AppService.GetAllSettings(subId).Item1.StartOfWeek;
-				ViewBag.StartDate = AppService.GetDaysFromDateTime(SetStartingDate(startOfWeek));
-				ViewBag.EndDate = AppService.GetDaysFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
+				ViewBag.StartDate = Utility.GetDaysFromDateTime(SetStartingDate(startOfWeek));
+				ViewBag.EndDate = Utility.GetDaysFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
 			}
 
 			ViewData["UserId"] = this.AppService.UserContext.UserId;

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
+using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.Project;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
@@ -53,8 +54,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			reportVM.SubscriptionId = subscriptionId;
 
 			var infoOrg = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
-			ViewBag.WeekStart = AppService.GetDaysFromDateTime(AppService.SetStartingDate(null, infoOrg.Item1.StartOfWeek));
-			ViewBag.WeekEnd = AppService.GetDaysFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
+			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infoOrg.Item1.StartOfWeek));
+			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
 
 			return this.View(reportVM);
 		}
@@ -97,10 +98,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Selection = previousSelections ?? new ReportSelectionModel
 				{
 					CustomerId = 0,
-					EndDate = AppService.GetDaysFromDateTime(DateTime.Today),
+					EndDate = Utility.GetDaysFromDateTime(DateTime.Today),
 					Page = 1,
 					ProjectId = 0,
-					StartDate = AppService.GetDaysFromDateTime(DateTime.Today),
+					StartDate = Utility.GetDaysFromDateTime(DateTime.Today),
 					Users = new List<int>()
 				}
 			};

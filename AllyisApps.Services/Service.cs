@@ -31,45 +31,6 @@ namespace AllyisApps.Services
 		public AppService(ServiceSettings settings, UserContext userContext) : base(settings, userContext) { }
 
 		/// <summary>
-		/// Converts an int representing days since the DateTime min value (Jan 1st, 0001) into a DateTime date.
-		/// </summary>
-		/// <param name="days">An int of the date as days since Jan 1st, 0001. Use -1 for null date.</param>
-		/// <returns>The DateTime date.</returns>
-		public static DateTime GetDateFromDays(int days)
-		{
-			return DateTime.MinValue.AddDays(days);
-		}
-
-		/// <summary>
-		/// Converts a DateTime? date into an int representing days since the DateTime min value (Jan 1st, 0001).
-		/// </summary>
-		/// <param name="date">The DateTime? date.</param>
-		/// <returns>An int of the date as days since Jan 1st, 0001. Returns -1 for null.</returns>
-		public int GetDaysFromDateTime(DateTime? date)
-		{
-			if (!date.HasValue)
-			{
-				return -1;
-			}
-
-			return (int)date.Value.Subtract(DateTime.MinValue).TotalDays;
-		}
-
-		/// <summary>
-		/// Converts an int representing days since the DateTime min value (Jan 1st, 0001) into a DateTime date.
-		/// </summary>
-		/// <param name="days">An int of the date as days since Jan 1st, 0001. Use -1 for null dates.</param>
-		/// <returns>The DateTime date.</returns>
-		public DateTime? GetDateTimeFromDays(int? days)
-		{
-			if (!days.HasValue || days <= 0)
-			{
-				return null;
-			}
-			return GetDateFromDays(days.Value);
-		}
-
-		/// <summary>
 		/// Gets a <see cref="TimeEntryInfo"/>.
 		/// </summary>
 		/// <param name="timeEntryId">Time entry Id.</param>
