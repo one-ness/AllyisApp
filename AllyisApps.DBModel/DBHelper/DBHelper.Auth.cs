@@ -627,21 +627,24 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="invitationId">Invitation Id.</param>
 		/// <param name="userId">User Id for invited user.</param>
-		/// <returns>On success, returns the name of the organization and the name of the organization role.
-		/// If an error occurred, returns null.</returns>
+		/// <returns>true or false based on the number of rows affected</returns>
+
 		public bool AcceptInvitation(int invitationId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@invitationId", invitationId);
 			parameters.Add("@callingUserId", userId);
+			var result = false;
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				var results = con.Query<int>(
+				var affected = con.Query<int>(
 					"[Auth].[AcceptInvitation]",
 					parameters,
 					commandType: CommandType.StoredProcedure).First();
-				return results == 1;
+				result = (affected == 1);
 			}
+
+			return result;
 		}
 
 		/// <summary>
@@ -651,16 +654,19 @@ namespace AllyisApps.DBModel
 		/// <returns>True for success, false for error.</returns>
 		public bool DeleteInvitation(int invitationId)
 		{
+			var result = false;
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@invitationId", invitationId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				int success = connection.Execute(
+				int affected = connection.Execute(
 					"[Auth].[DeleteInvitation]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
-				return success == 1;
+				result = affected == 1;
 			}
+
+			return result;
 		}
 
 		/// <summary>
