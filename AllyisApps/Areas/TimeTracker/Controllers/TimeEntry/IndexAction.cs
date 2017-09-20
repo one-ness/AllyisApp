@@ -39,7 +39,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			string subName = AppService.GetSubscription(subscriptionId).Name;
 
-			ViewBag.GetDateFromDays = new Func<int, DateTime>(Utility.GetDateFromDays);
+			ViewBag.GetDateTimeFromDays = new Func<int, DateTime?>(Utility.GetDateTimeFromDays);
 
 			var infos = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null, userId);
 
@@ -77,7 +77,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			string subName = this.AppService.GetSubscription(subscriptionId).Name;
-			ViewBag.GetDateFromDays = new Func<int, DateTime>(Utility.GetDateFromDays);
+			ViewBag.GetDateTimeFromDays = new Func<int, DateTime?>(Utility.GetDateTimeFromDays);
 
 			var infos = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null, userId);
 
@@ -127,13 +127,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			DateTime? startingDateTime = null;
 			if (startingDate.HasValue)
 			{
-				startingDateTime = Utility.GetDateFromDays(startingDate.Value);
+				startingDateTime = Utility.GetDateTimeFromDays(startingDate.Value);
 			}
 
 			DateTime? endingDateTime = null;
 			if (endingDate.HasValue)
 			{
-				endingDateTime = Utility.GetDateFromDays(endingDate.Value);
+				endingDateTime = Utility.GetDateTimeFromDays(endingDate.Value);
 			}
 
 			var infos = AppService.GetTimeEntryIndexInfo(orgId, startingDateTime, endingDateTime, userId);
