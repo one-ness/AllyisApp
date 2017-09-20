@@ -483,8 +483,7 @@ namespace AllyisApps.Services
 				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
 				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
 				UserId = user.UserId,
-				Address = InitializeAddress(user),
-				MaxAmount = user.MaxAmount
+				Address = InitializeAddress(user)
 			};
 			return newUser;
 		}
