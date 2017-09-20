@@ -218,7 +218,8 @@ namespace AllyisApps.Services
 					result.OrganizationsAndRoles.Add(item.OrganizationId, new UserContext.OrganizationAndRole()
 					{
 						OrganizationId = item.OrganizationId,
-						OrganizationRole = (OrganizationRole)item.OrganizationRoleId
+						OrganizationRole = (OrganizationRole)item.OrganizationRoleId,
+						MaxAmount = item.MaxAmount ?? 0
 					});
 				}
 
@@ -233,8 +234,7 @@ namespace AllyisApps.Services
 							ProductRoleId = item.ProductRoleId,
 							SkuId = (SkuIdEnum)item.SkuId,
 							SubscriptionId = item.SubscriptionId,
-							OrganizationId = item.OrganizationId,
-							MaxAmount = expando.User.MaxAmount
+							OrganizationId = item.OrganizationId
 						});
 				}
 
@@ -582,19 +582,46 @@ namespace AllyisApps.Services
 			};
 		}
 
-		public IList<AccountDBEntity> GetAccounts()
+		public IEnumerable<Account> GetAccounts()
 		{
-			return DBHelper.GetAccounts().ToList();
+			List<AccountDBEntity> entity = DBHelper.GetAccounts().ToList();
+
+			return entity.Select(a => InitializeAccount(a));
 		}
 
-		public void UpdateUserMaxAmount(User user)
+		public Account InitializeAccount(AccountDBEntity entity)
 		{
-			UserDBEntity entity = new UserDBEntity()
+			return new Account()
 			{
-				UserId = user.UserId,
-				MaxAmount = user.MaxAmount
+				AccountId = entity.AccountId,
+				AccountName = entity.AccountName,
+				AccountTypeId = entity.AccountTypeId,
+				AccountTypeName = entity.AccountTypeName,
+				IsActive = entity.IsActive,
+				ParentAccountId = entity.ParentAccountId
+			};
+		}
+
+		public void UpdateUserOrgMaxAmount(OrganizationUserInfo userInfo)
+		{
+			OrganizationUserDBEntity entity = new OrganizationUserDBEntity()
+			{
+				UserId = userInfo.UserId,
+				MaxAmount = userInfo.MaxAmount,
+				OrganizationId = userInfo.OrganizationId
 			};
 			DBHelper.UpdateUserMaxAmount(entity);
 		}
+
+		public UserOrganization GetOrganizationUserMaxAmount(int userId, int orgId)
+		{
+			return new UserOrganization()
+			{
+				UserId = userId,
+				MaxAmount = DBHelper.GetUserOrgMaxAmount(userId, orgId)
+			};
+		}
+
+		#endregion Info-DBEntity Conversions
 	}
 }

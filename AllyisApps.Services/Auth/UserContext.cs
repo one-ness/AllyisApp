@@ -84,6 +84,7 @@ namespace AllyisApps.Services
 		{
 			public int OrganizationId { get; set; }
 			public OrganizationRole OrganizationRole { get; set; }
+			public decimal MaxAmount { get; set; }
 		}
 
 		/// <summary>

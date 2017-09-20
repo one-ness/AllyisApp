@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -18,6 +19,7 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		/// <summary>
 		/// The expense report title
 		/// </summary>
+		[Required(ErrorMessage = "Report name is required.")]
 		public string ReportTitle { get; set; }
 
 		/// <summary>
@@ -38,6 +40,7 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		/// <summary>
 		/// The business justification
 		/// </summary>
+		[Required(ErrorMessage = "Justification is required.")]
 		public string BusinessJustification { get; set; }
 
 		/// <summary>
