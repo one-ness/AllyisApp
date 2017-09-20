@@ -126,7 +126,9 @@ namespace AllyisApps.Services
 		/// list of invitations pending for the user
 		/// </summary>
 		public List<Invitation> Invitations { get; set; }
-		public int MaxAmount { get; internal set; }
+
+
+		public decimal MaxAmount { get; internal set; }
 
 		/// <summary>
 		/// constructor

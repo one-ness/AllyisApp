@@ -110,6 +110,6 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets MaxAmount
 		/// </summary>
-		public int MaxAmount { get; set; }
+		public decimal MaxAmount { get; set; }
 	}
 }
