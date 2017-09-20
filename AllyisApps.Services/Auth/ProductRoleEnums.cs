@@ -47,6 +47,6 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Expense Tracker Admin.
 		/// </summary>
-		Admin = 3
+		SuperUser = 3
     }
 }

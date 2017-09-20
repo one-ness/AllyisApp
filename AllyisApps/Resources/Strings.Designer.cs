@@ -3346,15 +3346,6 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set Admin.
-        /// </summary>
-        public static string SetAdmin {
-            get {
-                return ResourceManager.GetString("SetAdmin", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Set Manager.
         /// </summary>
         public static string SetManager {
@@ -3378,6 +3369,15 @@ namespace AllyisApps.Resources {
         public static string SetOwner {
             get {
                 return ResourceManager.GetString("SetOwner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Super User.
+        /// </summary>
+        public static string SetSuperUser {
+            get {
+                return ResourceManager.GetString("SetSuperUser", resourceCulture);
             }
         }
         
@@ -3659,6 +3659,15 @@ namespace AllyisApps.Resources {
                 return ResourceManager.GetString("Sunday", resourceCulture);
             }
         }
+
+		/// <summary>
+		///	  Looks up a localized string similar to SuperUser.
+		/// </summary>
+		public static string SuperUser {
+			get {
+				return ResourceManager.GetString("SuperUser", resourceCulture);
+			}
+		}
         
         /// <summary>
         ///   Looks up a localized string similar to Support.
