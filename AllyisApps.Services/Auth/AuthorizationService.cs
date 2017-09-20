@@ -196,12 +196,11 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="action">The controller action.</param>
 		/// <param name="subId">The subscription id.</param>
-		/// <param name="maxAmount">The maximum amount a user is allowed to approve.</param>
 		/// <param name="throwException">Throw exception or not.</param>
 		/// <returns></returns>
-		public bool CheckExpenseTrackerAction(ExpenseTrackerAction action, int subId, decimal maxAmount = 0, bool throwException = true)
-		{
-			bool result = false;
+		public bool CheckExpenseTrackerAction(ExpenseTrackerAction action, int subId, bool throwException = true)
+        {
+            bool result = false;
 
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.UserContext.SubscriptionsAndRoles.TryGetValue(subId, out subInfo);
@@ -210,9 +209,9 @@ namespace AllyisApps.Services
 				ExpenseTrackerRole etRole = (ExpenseTrackerRole)subInfo.ProductRoleId;
 				if (subInfo.ProductId == ProductIdEnum.ExpenseTracker && etRole != ExpenseTrackerRole.NotInProduct)
 				{
-					if (action == ExpenseTrackerAction.AdminReport
-						|| action == ExpenseTrackerAction.StatusUpdate
-						|| action == ExpenseTrackerAction.AdminExpense
+					if (action == ExpenseTrackerAction.AdminReport 
+						|| action == ExpenseTrackerAction.StatusUpdate 
+						|| action == ExpenseTrackerAction.AdminExpense 
 						|| action == ExpenseTrackerAction.UserSettings)
 					{
 						switch (etRole)
@@ -227,9 +226,16 @@ namespace AllyisApps.Services
 					}
 					else if (action == ExpenseTrackerAction.Pending)
 					{
-						if (subInfo.MaxAmount > maxAmount)
+						switch (etRole)
 						{
-							result = true;
+							case ExpenseTrackerRole.Manager:
+								result = true;
+								break;
+							case ExpenseTrackerRole.SuperUser:
+								result = true;
+								break;
+							default:
+								break;
 						}
 					}
 					else

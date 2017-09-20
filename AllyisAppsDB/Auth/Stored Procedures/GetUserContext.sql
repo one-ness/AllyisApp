@@ -5,12 +5,12 @@ begin
 	set nocount on
 	-- return 3 result sets
 	-- get user information
-	select u.FirstName, u.LastName, u.UserId, u.Email, u.PreferredLanguageId, u.MaxAmount from [User] u with (nolock)
+	select u.FirstName, u.LastName, u.UserId, u.Email, u.PreferredLanguageId from [User] u with (nolock)
 	where u.UserId = @userId;
 
 	-- get list of organizations and the user role in each
-	create table #OrgAndRole(OrganizationId int, OrganizationRoleId int, OrganizationName nvarchar(64))
-	insert into #OrgAndRole(OrganizationId, OrganizationRoleId, OrganizationName) select ou.OrganizationId, ou.OrganizationRoleId, o.OrganizationName from OrganizationUser ou with (nolock)
+	create table #OrgAndRole(OrganizationId int, OrganizationRoleId int, OrganizationName nvarchar(64), MaxAmount decimal)
+	insert into #OrgAndRole(OrganizationId, OrganizationRoleId, OrganizationName, MaxAmount) select ou.OrganizationId, ou.OrganizationRoleId, o.OrganizationName, ou.MaxAmount from OrganizationUser ou with (nolock)
 	inner join Organization o with (nolock) on o.OrganizationId = ou.OrganizationId
 	where ou.UserId = @userId and o.IsActive = 1
 	select * from #OrgAndRole with (nolock)

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
-using AllyisApps.DBModel.Finance;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
@@ -23,8 +23,14 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		{
 			SetNavData(subscriptionId);
 
-			Session["AccountList"] = AppService.GetAccounts();
-			if (((List<AccountDBEntity>)Session["AccountList"]).Count == 0)
+			IList<Account> accounts = AppService.GetAccounts().ToList();
+			List<AccountViewModel> accountViewModels = new List<AccountViewModel>();
+			foreach (Account account in accounts)
+			{
+				accountViewModels.Add(InitializeAccountViewModel(account));
+			}
+
+			if (accounts.Count == 0)
 			{
 				throw new InvalidOperationException("Cannot create a report if no accounts exist.");
 			}
@@ -66,10 +72,20 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				StartDate = DateTime.UtcNow,
 				SubscriptionId = subscriptionId,
 				Report = InitializeExpenseReportViewModel(report),
-				Files = null
+				Files = null,
+				AccountList = accountViewModels
 			};
 
 			return View(model);
+		}
+
+		private AccountViewModel InitializeAccountViewModel(Account entity)
+		{
+			return new AccountViewModel()
+			{
+				AccountId = entity.AccountId,
+				AccountName = entity.AccountName
+			};
 		}
 	}
 }

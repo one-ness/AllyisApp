@@ -195,12 +195,13 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updates the max amount a user can approve of in a report.
 		/// </summary>
-		/// <param name="user"></param>
-		public void UpdateUserMaxAmount(UserDBEntity user)
+		/// <param name="orgUser"></param>
+		public void UpdateUserMaxAmount(OrganizationUserDBEntity orgUser)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@userId", user.UserId);
-			parameters.Add("@maxAmount", user.MaxAmount);
+			parameters.Add("@userId", orgUser.UserId);
+			parameters.Add("@orgId", orgUser.OrganizationId);
+			parameters.Add("@maxAmount", orgUser.MaxAmount);
 
 			using (var connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -695,14 +696,15 @@ namespace AllyisApps.DBModel
 		/// Deletes the defined invitation.
 		/// </summary>
 		/// <param name="invitationId">The invitation's Id.</param>
-		public void RejectInvitation(int invitationId)
+		public bool RejectInvitation(int invitationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@invitationId", invitationId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[Auth].[RejectInvitation]", parameters, commandType: CommandType.StoredProcedure);
+				int ret = connection.QueryFirst<int>("[Auth].[RejectInvitation]", parameters, commandType: CommandType.StoredProcedure);
+				return ret == 1;
 			}
 		}
 

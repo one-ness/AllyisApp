@@ -127,10 +127,8 @@ namespace AllyisApps.Services
 		/// </summary>
 		public List<Invitation> Invitations { get; set; }
 
-		/// <summary>
-		/// Gets or sets the maximum amount of money user is allowed to approve of in a report.
-		/// </summary>
-		public decimal MaxAmount { get; set; }
+
+		public decimal MaxAmount { get; internal set; }
 
 		public bool IsAddressLoaded { get; set; }
 		public bool IsInvitationsLoaded { get; set; }

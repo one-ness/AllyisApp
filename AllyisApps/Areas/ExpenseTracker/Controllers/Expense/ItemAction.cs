@@ -1,6 +1,8 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
+using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -16,7 +18,20 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>A partial view.</returns>
 		public ActionResult AddItem(int index)
 		{
-			return PartialView("_AjaxExpenseReportItems", new ExpenseItem() { Index = index });
+			IEnumerable<Account> accountEntities = AppService.GetAccounts();
+			List<AccountViewModel> accountViewModels = new List<AccountViewModel>();
+			foreach (Account account in accountEntities)
+			{
+				accountViewModels.Add(InitializeAccountViewModel(account));
+			}
+
+			return PartialView(
+				"_AjaxExpenseReportItems",
+				new ExpenseItemCreateViewModel()
+				{
+					Index = index,
+					AccountList = accountViewModels
+				});
 		}
 	}
 }

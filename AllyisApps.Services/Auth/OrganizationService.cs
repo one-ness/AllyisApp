@@ -572,7 +572,8 @@ namespace AllyisApps.Services
 				EmployeeId = organizationUser.EmployeeId,
 				OrganizationId = organizationUser.OrganizationId,
 				OrganizationRoleId = organizationUser.OrganizationRoleId,
-				UserId = organizationUser.UserId
+				UserId = organizationUser.UserId,
+				MaxAmount = organizationUser.MaxAmount
 			};
 		}
 

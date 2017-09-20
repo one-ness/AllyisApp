@@ -329,7 +329,7 @@ namespace AllyisApps.Services
 		{
 			#region Validation
 
-			if (!Enum.IsDefined(typeof(TimeTrackerRole), newProductRole))
+			if (!Enum.IsDefined(typeof(TimeTrackerRole), newProductRole) && !Enum.IsDefined(typeof(ExpenseTrackerRole), newProductRole))
 			{
 				throw new ArgumentOutOfRangeException("newProductRole", "Product role must match a value of the ProductRoleIdEnum enum.");
 			}

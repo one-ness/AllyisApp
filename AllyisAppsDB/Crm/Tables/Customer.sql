@@ -14,6 +14,10 @@ CREATE TABLE [Crm].[Customer] (
     CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED ([CustomerId] ASC),
     CONSTRAINT [FK_Customer_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId])
 );
+GO
+
+CREATE UNIQUE NONCLUSTERED INDEX [IX_OrganizationUser_1]
+    ON [Crm].[Customer]([OrganizationId] ASC, [CustomerOrgId] ASC);
 
 /*
 GO

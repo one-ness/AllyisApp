@@ -54,14 +54,11 @@ namespace AllyisApps.Services
 		/// <returns>A list of languages.</returns>
 		public IEnumerable<Language> ValidLanguages()
 		{
-			var result = new List<Language>();
-			var list = this.DBHelper.ValidLanguages();
-			foreach (var item in list)
+			return DBHelper.ValidLanguages().Select(s => new Language
 			{
-				result.Add(new Language() { CultureName = item.CultureName, LanguageName = item.LanguageName });
-			}
-
-			return result;
+				LanguageName = s.LanguageName,
+				CultureName = s.CultureName
+			});
 		}
 
 		/// <summary>
@@ -96,16 +93,13 @@ namespace AllyisApps.Services
 		/// <returns>The resulting message.</returns>
 		public bool RejectInvitation(int invitationId)
 		{
-			try
+			bool rejected = DBHelper.RejectInvitation(invitationId);
+			if (rejected)
 			{
-				DBHelper.RejectInvitation(invitationId);
 				NotifyInviteRejectAsync(invitationId);
-				return true;
 			}
-			catch (SqlException)
-			{
-				return false;
-			}
+			return rejected;
+
 		}
 
 		/// <summary>
@@ -218,7 +212,8 @@ namespace AllyisApps.Services
 					result.OrganizationsAndRoles.Add(item.OrganizationId, new UserContext.OrganizationAndRole()
 					{
 						OrganizationId = item.OrganizationId,
-						OrganizationRole = (OrganizationRole)item.OrganizationRoleId
+						OrganizationRole = (OrganizationRole)item.OrganizationRoleId,
+						MaxAmount = item.MaxAmount ?? 0
 					});
 				}
 
@@ -233,8 +228,7 @@ namespace AllyisApps.Services
 							ProductRoleId = item.ProductRoleId,
 							SkuId = (SkuIdEnum)item.SkuId,
 							SubscriptionId = item.SubscriptionId,
-							OrganizationId = item.OrganizationId,
-							MaxAmount = expando.User.MaxAmount
+							OrganizationId = item.OrganizationId
 						});
 				}
 
@@ -279,7 +273,8 @@ namespace AllyisApps.Services
 						SubscriptionName = sub.SubscriptionName
 					},
 					ProductRoleId = sub.ProductRoleId,
-					UserId = userId
+					UserId = userId,
+					IconUrl = sub.IconUrl
 				}
 			).ToList();
 
@@ -488,8 +483,7 @@ namespace AllyisApps.Services
 				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
 				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
 				UserId = user.UserId,
-				Address = InitializeAddress(user),
-				MaxAmount = user.MaxAmount
+				Address = InitializeAddress(user)
 			};
 			return newUser;
 		}
@@ -582,19 +576,24 @@ namespace AllyisApps.Services
 			};
 		}
 
-		public IList<AccountDBEntity> GetAccounts()
+		public void UpdateUserOrgMaxAmount(OrganizationUserInfo userInfo)
 		{
-			return DBHelper.GetAccounts().ToList();
-		}
-
-		public void UpdateUserMaxAmount(User user)
-		{
-			UserDBEntity entity = new UserDBEntity()
+			OrganizationUserDBEntity entity = new OrganizationUserDBEntity()
 			{
-				UserId = user.UserId,
-				MaxAmount = user.MaxAmount
+				UserId = userInfo.UserId,
+				MaxAmount = userInfo.MaxAmount,
+				OrganizationId = userInfo.OrganizationId
 			};
 			DBHelper.UpdateUserMaxAmount(entity);
+		}
+
+		public UserOrganization GetOrganizationUserMaxAmount(int userId, int orgId)
+		{
+			return new UserOrganization()
+			{
+				UserId = userId,
+				MaxAmount = DBHelper.GetUserOrgMaxAmount(userId, orgId)
+			};
 		}
 	}
 }

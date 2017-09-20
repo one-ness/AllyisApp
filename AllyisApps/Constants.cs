@@ -9,6 +9,7 @@ namespace AllyisApps
 	{
 		public const string AcceptInvitation = "acceptinvitation";
 		public const string Action = "action";
+		public const string Accounts = "accounts";
 		public const string AddMember = "addmember";
 		public const string AdminReport = "adminreport";
 		public const string ChangePassword = "changepassword";

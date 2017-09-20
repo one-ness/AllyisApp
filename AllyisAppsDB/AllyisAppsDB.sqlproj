@@ -384,6 +384,7 @@
     <Build Include="Finance\Stored Procedures\GetAccounts.sql" />
     <Build Include="Expense\Tables\ExpenseReportHistory.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserMaxAmount.sql" />
+    <Build Include="Auth\Stored Procedures\GetOrgUserMaxAmount.sql" />
     <Build Include="StaffingManager\Stored Procedures\GetStaffingIndexInfoFiltered.sql" />
     <Build Include="Crm\Stored Procedures\CreateCustomer.sql" />
   </ItemGroup>
@@ -395,5 +396,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="TestData\ExpenseTracker.Expenses.Table.sql" />
+    <None Include="UpgradeScripts\AddSkuIconUrl.sql" />
   </ItemGroup>
 </Project>

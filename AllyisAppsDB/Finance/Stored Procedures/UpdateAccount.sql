@@ -4,20 +4,10 @@ CREATE PROCEDURE [Finance].[UpdateAccount]
 	@isActive BIT,
 	@accountTypeId INT,
 	@parentAccountId INT,
-	@returnValue INT
+	@returnValue INT OUTPUT
 AS
 BEGIN
     SET NOCOUNT ON;
-
-	IF EXISTS (
-		SELECT * FROM [Finance].[Account] WITH (NOLOCK)
-		WHERE [AccountName] = @accountName
-	)
-	BEGIN
-		-- Account name is not unique
-		SET @returnValue = -1;
-	END
-	ELSE
 	BEGIN
 		-- Create account
 		UPDATE [Finance].[Account]
@@ -27,7 +17,7 @@ BEGIN
 			[ParentAccountId]	= @parentAccountId
 		WHERE [AccountId]		= @accountId
 
-		SET @returnValue = SCOPE_IDENTITY();
+		SET @returnValue = 1;
 	END
 END
 

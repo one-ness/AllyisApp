@@ -39,7 +39,8 @@ else
 						<td>@userName</td>
 						<td>
 							<div class="amount-div form-control item-control" style="display: inline-block; width: 150px;">
-								$@Html.TextBoxFor(m => user.MaxAmount, new { @class = "amount-textbox", Name = maxAmountName, style = "display: inline-block; width: 100px; border: 0px; margin-top: -1px; margin-bottom: 6px;" })
+								$ @Html.TextBoxFor(m => user.MaxAmount, new { @class = "amount-textbox", Name = maxAmountName, style = "display: inline-block; width: 100px; border: 0px; margin-top: -1px; margin-bottom: 6px;" })
+								@Html.ValidationMessageFor(m => user.MaxAmount, "", new { data_valmsg_for = "model.MaxAmount" })
 							</div>
 						</td>
 					</tr>

@@ -11,7 +11,6 @@
 	[AccessFailedCount]			INT              CONSTRAINT [DF__User__AccessFailedCount] DEFAULT ((0)) NOT NULL,
 	[IsLockoutEnabled]			BIT              CONSTRAINT [DF__User__LockoutEnabled] DEFAULT ((0)) NOT NULL,
 	[UserCreatedUtc]			DATETIME2 (0)    CONSTRAINT [DF__User__UserCreatedUtc] DEFAULT (getutcdate()) NOT NULL,
-	[MaxAmount]					DECIMAL			 CONSTRAINT [DF__User__MaxAmount] DEFAULT ((0)) NOT NULL,
 	[PreferredLanguageId]		VARCHAR (16)     NULL,
 	[DateOfBirth]				DATE		     NOT NULL,
 	[PhoneNumber]				VARCHAR (16)     NULL,
