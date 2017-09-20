@@ -96,16 +96,13 @@ namespace AllyisApps.Services
 		/// <returns>The resulting message.</returns>
 		public bool RejectInvitation(int invitationId)
 		{
-			try
+			bool rejected = DBHelper.RejectInvitation(invitationId);
+			if (rejected)
 			{
-				DBHelper.RejectInvitation(invitationId);
 				NotifyInviteRejectAsync(invitationId);
-				return true;
 			}
-			catch (SqlException)
-			{
-				return false;
-			}
+			return rejected;
+
 		}
 
 		/// <summary>
@@ -621,7 +618,5 @@ namespace AllyisApps.Services
 				MaxAmount = DBHelper.GetUserOrgMaxAmount(userId, orgId)
 			};
 		}
-
-		#endregion Info-DBEntity Conversions
 	}
 }

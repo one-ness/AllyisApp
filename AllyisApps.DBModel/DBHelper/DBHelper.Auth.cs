@@ -696,14 +696,15 @@ namespace AllyisApps.DBModel
 		/// Deletes the defined invitation.
 		/// </summary>
 		/// <param name="invitationId">The invitation's Id.</param>
-		public void RejectInvitation(int invitationId)
+		public bool RejectInvitation(int invitationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@invitationId", invitationId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[Auth].[RejectInvitation]", parameters, commandType: CommandType.StoredProcedure);
+				int ret = connection.QueryFirst<int>("[Auth].[RejectInvitation]", parameters, commandType: CommandType.StoredProcedure);
+				return ret == 1;
 			}
 		}
 

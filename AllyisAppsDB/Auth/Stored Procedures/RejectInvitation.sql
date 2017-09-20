@@ -7,4 +7,6 @@ BEGIN
 	UPDATE [Auth].[Invitation] 
 	SET    [StatusId] = -1, DecisionDateUtc = GETUTCDATE()
 	WHERE [InvitationId] = @invitationId;
+
+	SELECT @@ROWCOUNT;
 END
