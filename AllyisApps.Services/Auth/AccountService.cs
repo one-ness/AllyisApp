@@ -469,11 +469,7 @@ namespace AllyisApps.Services
 			return DBHelper.GetOrganizationsByUserId(userID).Select(o => (Organization)InitializeOrganization(o));
 		}
 
-		#region Info-DBEntity Conversions
-
-
-
-		public User InitializeUser(dynamic user)
+		private User InitializeUser(dynamic user)
 		{
 			User newUser = new User()
 			{
@@ -497,13 +493,14 @@ namespace AllyisApps.Services
 			};
 			return newUser;
 		}
+
 		/// <summary>
 		/// Translates a UserDBEntity into a User business object.
 		/// </summary>
 		/// <param name="user">UserDBEntity instance.</param>
 		/// <param name="loadAddress"></param>
 		/// <returns>User instance.</returns>
-		public User InitializeUser(UserDBEntity user, bool loadAddress = true)
+		private User InitializeUser(UserDBEntity user, bool loadAddress = true)
 		{
 			if (user == null)
 			{
@@ -543,7 +540,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="userRoles">UserRolesDBEntity instance.</param>
 		/// <returns>UserRolesInfo instance.</returns>
-		public UserRolesInfo InitializeUserRolesInfo(UserRolesDBEntity userRoles)
+		private UserRolesInfo InitializeUserRolesInfo(UserRolesDBEntity userRoles)
 		{
 			if (userRoles == null)
 			{
@@ -599,7 +596,5 @@ namespace AllyisApps.Services
 			};
 			DBHelper.UpdateUserMaxAmount(entity);
 		}
-
-		#endregion Info-DBEntity Conversions
 	}
 }
