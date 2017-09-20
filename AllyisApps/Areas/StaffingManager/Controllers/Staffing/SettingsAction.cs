@@ -182,11 +182,12 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		}
 
 
-		/// <summary>
-		/// POST: 
-		/// </summary>
-		/// <param name="model">The settings ViewModel.</param>
-		/// <returns>The resulting page, Create if unsuccessful else staffing settings.</returns>
+		///// <summary>
+		///// POST: 
+		///// </summary>
+		///// <param name="model">The settings ViewModel.</param>
+		////// <returns>The resulting page, Create if unsuccessful else staffing settings.</returns>
+		/*
 		public ActionResult CreateCustomer(StaffingSettingsViewModel model)
 		{
 			if (ModelState.IsValid)
@@ -242,5 +243,6 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			// Invalid model
 			return this.View(model);
 		}
+		*/
 	}
 }

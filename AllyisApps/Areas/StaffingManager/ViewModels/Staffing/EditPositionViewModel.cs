@@ -217,6 +217,15 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// list of customers the org has used
 		/// </summary>
 		public List<CustomerSelectViewModel> Customers { get; set; }
+		/// <summary>
+		/// Localized Countries
+		/// </summary>
+		public Dictionary<string, string> LocalizedCountries { get; internal set; }
+
+		/// <summary>
+		/// Localized States
+		/// </summary>
+		public Dictionary<string, string> LocalizedStats { get; internal set; }
 	}
 
 	/// <summary>

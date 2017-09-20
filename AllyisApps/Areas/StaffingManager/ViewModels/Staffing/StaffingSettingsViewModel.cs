@@ -52,16 +52,6 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		public List<Customer> customers { get; set; }
 
 		/// <summary>
-		/// a customer for new customer creation
-		/// </summary>
-		public Customer newCustomer { get; set; }
-
-		/// <summary>
-		/// an address for new customer creation
-		/// </summary>
-		public AddressViewModel newCustomerAddress { get; set; }
-
-		/// <summary>
 		/// list of employment types used by the organization
 		/// </summary>
 		public List<EmploymentTypeSelectViewModel> employmentTypes { get; set; }
@@ -86,6 +76,9 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// </summary>
 		public Dictionary<string, string> LocalizedCountries { get; internal set; }
 
+		/// <summary>
+		/// Gets Localized States 
+		/// </summary>
 		public Dictionary<string, string> LocalizedStates { get; internal set; }
 	}
 }
