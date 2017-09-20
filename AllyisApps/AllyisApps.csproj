@@ -418,11 +418,11 @@
     <Compile Include="ViewModels\Shared\SubscriptionsViewModel.cs" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-drp-init.js" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-settings.js" />
-    <Content Include="Content\icons\ExpenseTracker.png" />
-    <Content Include="Content\icons\StaffingManager.png" />
-    <Content Include="Content\icons\TimeTrackerPro.png" />
-    <Content Include="Content\icons\TimeTracker.png" />
-    <Content Include="Content\icons\TimeTrackerOld.png" />
+    <Content Include="Content\ExpenseTracker\icons\ExpenseTracker.png" />
+    <Content Include="Content\StaffingManager\icons\StaffingManager.png" />
+    <Content Include="Content\TimeTracker\icons\TimeTrackerPro.png" />
+    <Content Include="Content\TimeTracker\icons\TimeTracker.png" />
+    <Content Include="Content\TimeTracker\icons\TimeTrackerOld.png" />
     <Content Include="Content\Timetracker - Copy - Copy.css">
       <DependentUpon>StaffingManager.less</DependentUpon>
     </Content>
@@ -682,7 +682,7 @@
     <Content Include="Content\bootstrap\less\bootstrap.min.css">
       <DependentUpon>bootstrap.css</DependentUpon>
     </Content>
-    <Content Include="Content\icons\ExpenseTrackerPro.png" />
+    <Content Include="Content\ExpenseTracker\icons\ExpenseTrackerPro.png" />
     <Content Include="Content\icons\invoice.png" />
     <Content Include="Content\icons\tasks-list.png" />
     <Content Include="Content\less\breadcrumbs.css">

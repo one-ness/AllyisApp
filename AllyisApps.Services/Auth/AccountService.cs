@@ -276,7 +276,8 @@ namespace AllyisApps.Services
 						SubscriptionName = sub.SubscriptionName
 					},
 					ProductRoleId = sub.ProductRoleId,
-					UserId = userId
+					UserId = userId,
+					IconUrl = sub.IconUrl
 				}
 			).ToList();
 
