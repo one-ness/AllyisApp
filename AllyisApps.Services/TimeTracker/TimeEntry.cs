@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="TimeEntryInfo.cs" company="Allyis, Inc.">
+// <copyright file="TimeEntry.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -11,7 +11,7 @@ namespace AllyisApps.Services.TimeTracker
 	/// <summary>
 	/// An object for keeping track of all the info related to a given Time entry.
 	/// </summary>
-	public class TimeEntryInfo
+	public class TimeEntry
 	{
 		/// <summary>
 		/// Gets or sets the TimeEntryId.

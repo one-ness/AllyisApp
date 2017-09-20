@@ -71,11 +71,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="showExport">Variable to show or hide export button.</param>
 		/// <param name="previousSelections">An object holding previous report selection data.</param>
 		/// <returns>The ReportViewModel.</returns>
-		public ReportViewModel ConstructReportViewModel(int userId, int organizationId, bool canManage, List<Customer> customers, List<CompleteProjectInfo> projects, bool showExport = true, ReportSelectionModel previousSelections = null)
+		public ReportViewModel ConstructReportViewModel(int userId, int organizationId, bool canManage, List<Customer> customers, List<CompleteProject> projects, bool showExport = true, ReportSelectionModel previousSelections = null)
 		{
 			projects.Insert(
 				0,
-				new CompleteProjectInfo
+				new CompleteProject
 				{
 					ProjectId = 0,
 					ProjectName = AllyisApps.Resources.Strings.NoFilter,
@@ -113,10 +113,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subUsers">List of subscription users.</param>
 		/// <param name="usersSelected">List of selected user ids.</param>
 		/// <returns>The user list.</returns>
-		private IEnumerable<SelectListItem> GetUserSelectList(List<SubscriptionUserInfo> subUsers, List<int> usersSelected)
+		private IEnumerable<SelectListItem> GetUserSelectList(List<SubscriptionUser> subUsers, List<int> usersSelected)
 		{
-			IList<SubscriptionUserInfo> users = subUsers;
-			users.Insert(0, new SubscriptionUserInfo { FirstName = Resources.Strings.AllUsersFirst, LastName = Resources.Strings.AllUsersLast, UserId = -1 });
+			IList<SubscriptionUser> users = subUsers;
+			users.Insert(0, new SubscriptionUser { FirstName = Resources.Strings.AllUsersFirst, LastName = Resources.Strings.AllUsersLast, UserId = -1 });
 
 			// select current user by default
 			if (usersSelected.Count < 1)
@@ -170,7 +170,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="customerSelected">The selected customer.</param>
 		/// <param name="projectSelected">The selected project.</param>
 		/// <returns>The project list.</returns>
-		private IEnumerable<SelectListItem> GetProjectSelectList(List<CompleteProjectInfo> projects, int customerSelected, int projectSelected)
+		private IEnumerable<SelectListItem> GetProjectSelectList(List<CompleteProject> projects, int customerSelected, int projectSelected)
 		{
 			var pSelectList = new List<SelectListItem>();
 
@@ -195,7 +195,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Disabled = false
 				});
 
-				List<CompleteProjectInfo> projectData = projects.Where(cpi => cpi.CustomerId == customerSelected).ToList();
+				List<CompleteProject> projectData = projects.Where(cpi => cpi.CustomerId == customerSelected).ToList();
 				foreach (var project in projectData)
 				{
 					pSelectList.Add(new SelectListItem

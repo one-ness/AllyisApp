@@ -107,7 +107,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				projectUsers.Add(new BasicUserInfoViewModel(projectUser.FirstName, projectUser.LastName, projectUser.UserId));
 			}
 
-			IEnumerable<SubscriptionUserInfo> subscriptionUserInfos = infos.Item3;
+			IEnumerable<SubscriptionUser> subscriptionUserInfos = infos.Item3;
 			var subscriptionUsers = new List<BasicUserInfoViewModel>();
 
 			foreach (var su in subscriptionUserInfos)

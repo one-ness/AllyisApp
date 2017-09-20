@@ -142,17 +142,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			DateTime endDate = SetEndingDate(endingDateTime, startOfWeek);
 
 			// Get all of the projects and initialize their total hours to 0.
-			IList<CompleteProjectInfo> allProjects = infos.Item4; // Must also grab inactive projects, or the app will crash if a user has an entry on a project he is no longer a part of
+			IList<CompleteProject> allProjects = infos.Item4; // Must also grab inactive projects, or the app will crash if a user has an entry on a project he is no longer a part of
 			IDictionary<int, ProjectHours> hours = new Dictionary<int, ProjectHours>();
 			IEnumerable<Holiday> holidays = infos.Item3.Where(x => (startDate <= x.Date.Date && x.Date.Date <= endDate)); // We only care about holidays within the date range
 
-			foreach (CompleteProjectInfo proj in allProjects.Where(p => p.ProjectId > 0))
+			foreach (CompleteProject proj in allProjects.Where(p => p.ProjectId > 0))
 			{
 				// if ( hours.Count == 0 )
 				hours.Add(proj.ProjectId, new ProjectHours { Project = new CompleteProjectViewModel(proj), Hours = 0.0f });
 			}
 
-			allProjects.Insert(0, new CompleteProjectInfo { ProjectId = -1, ProjectName = Resources.Strings.SelectProject, IsActive = true, IsCustomerActive = true, IsUserActive = true });
+			allProjects.Insert(0, new CompleteProject { ProjectId = -1, ProjectName = Resources.Strings.SelectProject, IsActive = true, IsCustomerActive = true, IsUserActive = true });
 
 			IEnumerable<User> users = infos.Item5;
 
@@ -191,8 +191,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			};
 
 			// Initialize the starting dates and get all of the time entries within that date range.
-			IEnumerable<TimeEntryInfo> timeEntries = infos.Item6; // Service.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDate, endDate);
-			IEnumerator<TimeEntryInfo> iter = timeEntries.GetEnumerator();
+			IEnumerable<TimeEntry> timeEntries = infos.Item6; // Service.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDate, endDate);
+			IEnumerator<TimeEntry> iter = timeEntries.GetEnumerator();
 			iter.MoveNext();
 
 			// Note: Setting this directly insures the weekend highlighting will always be Saturday/Sunday. This makes sense if weekend days are not treated
@@ -296,7 +296,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 					result.GrandTotal.Hours += 8;
 
-					TimeEntryInfo timeEntryInfo = new TimeEntryInfo()
+					TimeEntry timeEntryInfo = new TimeEntry()
 					{
 						ApprovalState = 1,
 						Date = date,

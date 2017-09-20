@@ -114,13 +114,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new ArgumentException(Resources.Strings.EnterATimeLongerThanZero);
 			}
 
-			IEnumerable<TimeEntryInfo> otherEntriesToday = AppService.GetTimeEntriesByUserOverDateRange(
+			IEnumerable<TimeEntry> otherEntriesToday = AppService.GetTimeEntriesByUserOverDateRange(
 				new List<int> { model.UserId },
 				Utility.GetDateTimeFromDays(model.Date),
 				Utility.GetDateTimeFromDays(model.Date),
 				AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId);
 			float durationOther = 0.0f;
-			foreach (TimeEntryInfo otherEntry in otherEntriesToday)
+			foreach (TimeEntry otherEntry in otherEntriesToday)
 			{
 				if (model.TimeEntryId != otherEntry.TimeEntryId)
 				{
@@ -149,7 +149,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new ArgumentException(Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
 			}
 
-			AppService.UpdateTimeEntry(new TimeEntryInfo()
+			AppService.UpdateTimeEntry(new TimeEntry()
 			{
 				TimeEntryId = model.TimeEntryId,
 				ProjectId = model.ProjectId,
@@ -169,7 +169,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The EditTimeEntryViewModel.</returns>
 		public EditTimeEntryViewModel ConstructEditTimeEntryViewModel(int timeEntryId, int subscriptionId)
 		{
-			TimeEntryInfo entry = AppService.GetTimeEntry(timeEntryId);
+			TimeEntry entry = AppService.GetTimeEntry(timeEntryId);
 
 			DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
 			return new EditTimeEntryViewModel

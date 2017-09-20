@@ -110,7 +110,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var inactiveInfo = AppService.GetInactiveProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
 			bool canEditProjects = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
 			string subName = AppService.getSubscriptionName(subscriptionId);
-			List<CompleteProjectInfo> projects = canEditProjects ? infos.Item1 : infos.Item1.Where(p => p.IsProjectUser == true).ToList();
+			List<CompleteProject> projects = canEditProjects ? infos.Item1 : infos.Item1.Where(p => p.IsProjectUser == true).ToList();
 			List<Customer> customers = infos.Item2;
 			IList<CustomerProjectViewModel> customersList = new List<CustomerProjectViewModel>();
 			foreach (Customer currentCustomer in customers)
@@ -141,7 +141,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			List<CompleteProjectInfo> inactiveProjects = canEditProjects ? inactiveInfo.Item1 : inactiveInfo.Item1.Where(p => p.IsProjectUser == true).ToList();
+			List<CompleteProject> inactiveProjects = canEditProjects ? inactiveInfo.Item1 : inactiveInfo.Item1.Where(p => p.IsProjectUser == true).ToList();
 			List<Customer> inactiveCustomers = inactiveInfo.Item2;
 
 			IList<CustomerProjectViewModel> inactiveCustomersList = new List<CustomerProjectViewModel>();

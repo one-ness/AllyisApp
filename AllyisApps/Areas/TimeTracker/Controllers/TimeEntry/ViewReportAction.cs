@@ -94,14 +94,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				reportVM.PreviewTotal = string.Format("{0} {1}", total, Resources.Strings.HoursTotal);
 
-				IEnumerable<CompleteProjectInfo> orgProjects = infos.Item2;
-				CompleteProjectInfo defaultProject = AppService.GetProject(0);
+				IEnumerable<CompleteProject> orgProjects = infos.Item2;
+				CompleteProject defaultProject = AppService.GetProject(0);
 				if (dataCount > 0)
 				{
 					IList<TablePreviewEntry> pEntries = new List<TablePreviewEntry>();
 					foreach (TimeEntryViewModel data in dataVM.PreviewData)
 					{
-						CompleteProjectInfo orgProj = data.ProjectId == 0 ? defaultProject : orgProjects.Where(o => o.ProjectId == data.ProjectId).SingleOrDefault();
+						CompleteProject orgProj = data.ProjectId == 0 ? defaultProject : orgProjects.Where(o => o.ProjectId == data.ProjectId).SingleOrDefault();
 						TablePreviewEntry previewData = new TablePreviewEntry
 						{
 							CustomerName = orgProj.CustomerName,
@@ -158,7 +158,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Sets the pageTotal for a DataExportViewModel in preperation for SetPreviewdata.
 		/// </summary>
-		/// <param name="data">TimeEntryInfo  needed to find total page size.</param>
+		/// <param name="data">TimeEntry  needed to find total page size.</param>
 		/// <param name="pageSize">Total size of preivew data.</param>
 		/// <param name="page">Offset page amount.</param>
 		/// <returns>The page total.</returns>

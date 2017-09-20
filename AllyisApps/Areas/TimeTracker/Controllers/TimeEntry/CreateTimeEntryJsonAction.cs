@@ -46,13 +46,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					throw new ArgumentException(Resources.Strings.EnterATimeLongerThanZero);
 				}
 
-				IEnumerable<TimeEntryInfo> otherEntriesToday = AppService.GetTimeEntriesByUserOverDateRange(
+				IEnumerable<TimeEntry> otherEntriesToday = AppService.GetTimeEntriesByUserOverDateRange(
 					new List<int> { model.UserId },
 					Utility.GetDateTimeFromDays(model.Date),
 					Utility.GetDateTimeFromDays(model.Date),
 					AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId);
 				float durationOther = 0.0f;
-				foreach (TimeEntryInfo otherEntry in otherEntriesToday)
+				foreach (TimeEntry otherEntry in otherEntriesToday)
 				{
 					durationOther += otherEntry.Duration;
 				}
@@ -78,7 +78,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					throw new ArgumentException(Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
 				}
 
-				int id = AppService.CreateTimeEntry(new TimeEntryInfo()
+				int id = AppService.CreateTimeEntry(new TimeEntry()
 				{
 					UserId = model.UserId,
 					ProjectId = model.ProjectId,

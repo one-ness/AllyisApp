@@ -80,13 +80,13 @@ namespace AllyisApps.Services
 		/// pending in the organization, the organization's billing stripe handle, and a list of all products.
 		/// </summary>
 		/// <returns>.</returns>
-		public Tuple<Organization, List<OrganizationUserInfo>, List<SubscriptionDisplayInfo>, List<InvitationInfo>, string> GetOrganizationManagementInfo(int orgId)
+		public Tuple<Organization, List<OrganizationUser>, List<SubscriptionDisplay>, List<InvitationInfo>, string> GetOrganizationManagementInfo(int orgId)
 		{
 			var spResults = DBHelper.GetOrganizationManagementInfo(orgId);
 			return Tuple.Create(
 				InitializeOrganization(spResults.Item1),
-				spResults.Item2.Select(oudb => InitializeOrganizationUserInfo(oudb)).ToList(),
-				spResults.Item3.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList(),
+				spResults.Item2.Select(oudb => InitializeOrganizationUser(oudb)).ToList(),
+				spResults.Item3.Select(sddb => InitializeSubscriptionDisplay(sddb)).ToList(),
 				spResults.Item4.Select(idb => InitializeInvitationInfo(idb)).ToList(),
 				spResults.Item5);
 		}
@@ -113,12 +113,12 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">The Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<string, List<SubscriptionDisplayInfo>, List<ProductRole>, List<CompleteProjectInfo>, string> GetAddMemberInfo(int orgId)
+		public Tuple<string, List<SubscriptionDisplay>, List<ProductRole>, List<CompleteProject>, string> GetAddMemberInfo(int orgId)
 		{
 			var spResults = DBHelper.GetAddMemberInfo(orgId);
 			return Tuple.Create(
 				spResults.Item1,
-				spResults.Item2.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList(),
+				spResults.Item2.Select(sddb => InitializeSubscriptionDisplay(sddb)).ToList(),
 				spResults.Item3.Select(srdb => InitializeSubscriptionRoleInfo(srdb)).ToList(),
 				spResults.Item4.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
 				spResults.Item5);
@@ -131,12 +131,12 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">The Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<UserRolesInfo>, List<SubscriptionDisplayInfo>> GetOrgAndSubRoles(int orgId)
+		public Tuple<List<UserRole>, List<SubscriptionDisplay>> GetOrgAndSubRoles(int orgId)
 		{
 			var spResults = DBHelper.GetOrgAndSubRoles(orgId);
 			return Tuple.Create(
-				spResults.Item1.Select(urdb => InitializeUserRolesInfo(urdb)).ToList(),
-				spResults.Item2.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList());
+				spResults.Item1.Select(urdb => InitializeUserRole(urdb)).ToList(),
+				spResults.Item2.Select(sddb => InitializeSubscriptionDisplay(sddb)).ToList());
 		}
 
 		/// <summary>
@@ -357,14 +357,14 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>The member list.</returns>
-		public IEnumerable<OrganizationUserInfo> GetOrganizationMemberList(int orgId)
+		public IEnumerable<OrganizationUser> GetOrganizationMemberList(int orgId)
 		{
 			if (orgId < 0)
 			{
 				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
 			}
 
-			return DBHelper.GetOrganizationMemberList(orgId).Select(o => InitializeOrganizationUserInfo(o));
+			return DBHelper.GetOrganizationMemberList(orgId).Select(o => InitializeOrganizationUser(o));
 		}
 
 		// TODO: Look more closely at the use of this method in UploadCsvFileAction to see if some other existing service method can be used instead, and this one retired.
@@ -473,7 +473,7 @@ namespace AllyisApps.Services
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="onlyActive">True (default) to only return active projects, false to include all projects, active or not.</param>
 		/// <returns>A list of project info objects based on Organization.</returns>
-		public IEnumerable<CompleteProjectInfo> GetProjectsByOrganization(int orgId, bool onlyActive = true)
+		public IEnumerable<CompleteProject> GetProjectsByOrganization(int orgId, bool onlyActive = true)
 		{
 			if (orgId < 0)
 			{
@@ -488,9 +488,9 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">The Organization Id.</param>
 		/// <returns>List of UserRolesInfos.</returns>
-		public IEnumerable<UserRolesInfo> GetUserRoles(int orgId)
+		public IEnumerable<UserRole> GetUserRoles(int orgId)
 		{
-			return DBHelper.GetRoles(orgId).Select(o => InitializeUserRolesInfo(o));
+			return DBHelper.GetRoles(orgId).Select(o => InitializeUserRole(o));
 		}
 
 		/// <summary>
@@ -562,18 +562,18 @@ namespace AllyisApps.Services
 		#region Info-DBEntity Conversions
 
 		/// <summary>
-		/// Translates an OrganizationUserDBEntity into an OrganizationUserInfo business object.
+		/// Translates an OrganizationUserDBEntity into an OrganizationUser business object.
 		/// </summary>
 		/// <param name="organizationUser">OrganizationUserDBEntity instance.</param>
-		/// <returns>OrganizationUserInfo instance.</returns>
-		public static OrganizationUserInfo InitializeOrganizationUserInfo(OrganizationUserDBEntity organizationUser)
+		/// <returns>OrganizationUser instance.</returns>
+		public static OrganizationUser InitializeOrganizationUser(OrganizationUserDBEntity organizationUser)
 		{
 			if (organizationUser == null)
 			{
 				return null;
 			}
 
-			return new OrganizationUserInfo
+			return new OrganizationUser
 			{
 				FirstName = organizationUser.FirstName,
 				LastName = organizationUser.LastName,

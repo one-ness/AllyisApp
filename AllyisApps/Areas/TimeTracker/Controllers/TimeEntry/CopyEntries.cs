@@ -58,17 +58,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			int organizationId = subInfo.OrganizationId;
 
 			// Reference for checking status of entries
-			List<CompleteProjectInfo> allProjects = AppService.GetProjectsByUserAndOrganization(userId, organizationId, false).ToList();
+			List<CompleteProject> allProjects = AppService.GetProjectsByUserAndOrganization(userId, organizationId, false).ToList();
 			DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
 
 			// Authorized to edit this entry
 			// Remove existing entries in target range
 			DateTime endDateTarget = startDateTarget.AddDays(endDateCopy.Subtract(startDateCopy).Days);
-			IEnumerable<TimeEntryInfo> entriesRemove = AppService.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDateTarget, endDateTarget, organizationId);
-			foreach (TimeEntryInfo entry in entriesRemove)
+			IEnumerable<TimeEntry> entriesRemove = AppService.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDateTarget, endDateTarget, organizationId);
+			foreach (TimeEntry entry in entriesRemove)
 			{
 				// If the copying user isn't a manager, some checks are required before we let them delete/copy entries
-				CompleteProjectInfo project = allProjects.Where(p => entry.ProjectId == p.ProjectId).SingleOrDefault();
+				CompleteProject project = allProjects.Where(p => entry.ProjectId == p.ProjectId).SingleOrDefault();
 				if (project != null && (!project.IsActive || !project.IsUserActive))
 				{
 					continue; // A user can't delete locked entries from projects that have been removed, or that the user is no longer assigned to.
@@ -83,14 +83,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			// Add copied entries
-			IEnumerable<TimeEntryInfo> entriesCopy = AppService.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDateCopy, endDateCopy, organizationId);
+			IEnumerable<TimeEntry> entriesCopy = AppService.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDateCopy, endDateCopy, organizationId);
 			for (int i = 0; startDateCopy.Date.AddDays(i) <= endDateCopy.Date; ++i)
 			{
 				// Cover all entries for that day
-				foreach (TimeEntryInfo entry in entriesCopy.Where(x => x.Date == startDateCopy.Date.AddDays(i)))
+				foreach (TimeEntry entry in entriesCopy.Where(x => x.Date == startDateCopy.Date.AddDays(i)))
 				{
 					// If the copying user isn't a manager, some checks are required before we let them delete/copy entries
-					CompleteProjectInfo project = allProjects.Where(p => entry.ProjectId == p.ProjectId).SingleOrDefault();
+					CompleteProject project = allProjects.Where(p => entry.ProjectId == p.ProjectId).SingleOrDefault();
 					if (project != null && (!project.IsActive || !project.IsUserActive || (project.EndDate.HasValue && DateTime.Compare(project.EndDate.Value, startDateTarget.Date.AddDays(i)) <= 0)))
 					{
 						continue; // A user can't create entries for projects that have been removed, that the user is no longer assigned to, or have reached their end date
@@ -104,7 +104,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					// Don't copy holidays.
 					if (entry.ProjectId > 0)
 					{
-						AppService.CreateTimeEntry(new TimeEntryInfo
+						AppService.CreateTimeEntry(new TimeEntry
 						{
 							UserId = userId,
 							ProjectId = entry.ProjectId,

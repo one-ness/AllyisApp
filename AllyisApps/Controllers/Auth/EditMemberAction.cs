@@ -33,7 +33,7 @@ namespace AllyisApps.Controllers
 
 			if (!isInvited)
 			{
-				OrganizationUserInfo userOrgInfo = AppService.GetOrganizationManagementInfo(orgId).Item2.Find(m => m.UserId == userId);
+				OrganizationUser userOrgInfo = AppService.GetOrganizationManagementInfo(orgId).Item2.Find(m => m.UserId == userId);
 				User userBasicInfo = AppService.GetUser(userId);
 
 				model = new EditMemberViewModel

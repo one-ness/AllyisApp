@@ -58,7 +58,7 @@ namespace AllyisApps.Controllers
 				model.ExpenseTrackerSubIndex = model.Subscriptions.IndexOf(etsub);
 			}
 
-			foreach (UserRolesInfo role in infos.Item1)
+			foreach (UserRole role in infos.Item1)
 			{
 				UserPermissionsViewModel modelUser = model.Users.Where(u => u.UserId == int.Parse(role.UserId)).SingleOrDefault();
 				if (modelUser == null)
@@ -110,10 +110,10 @@ namespace AllyisApps.Controllers
 			result.Subscriptions = AppService.GetSubscriptionsDisplay(id);
 
 			List<UserPermissionsManagement> permissions = new List<UserPermissionsManagement>();
-			IEnumerable<UserRolesInfo> users = AppService.GetUserRoles(id).OrderBy(u => u.UserId); // In case of multiple subscriptions, there can be multiple items per user, one for each sub role
+			IEnumerable<UserRole> users = AppService.GetUserRoles(id).OrderBy(u => u.UserId); // In case of multiple subscriptions, there can be multiple items per user, one for each sub role
 			string currentUser = string.Empty;
 			UserPermissionsManagement currentUserPerm = null;
-			foreach (UserRolesInfo user in users)
+			foreach (UserRole user in users)
 			{
 				if (!user.UserId.Equals(currentUser))
 				{
@@ -145,7 +145,7 @@ namespace AllyisApps.Controllers
 			// Add in "Not in Product" roles for subscriptions each user is not assigned to
 			foreach (UserPermissionsManagement permission in permissions)
 			{
-				foreach (SubscriptionDisplayInfo subscription in result.Subscriptions)
+				foreach (SubscriptionDisplay subscription in result.Subscriptions)
 				{
 					if (permission.SubscriptionRoles.Where(s => s.ProductId == subscription.ProductId).Count() == 0)
 					{

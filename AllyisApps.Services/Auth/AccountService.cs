@@ -538,18 +538,18 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Translates a <see cref="UserRolesDBEntity"/> into a <see cref="UserRolesInfo"/>.
+		/// Translates a <see cref="UserRolesDBEntity"/> into a <see cref="UserRole"/>.
 		/// </summary>
 		/// <param name="userRoles">UserRolesDBEntity instance.</param>
-		/// <returns>UserRolesInfo instance.</returns>
-		public UserRolesInfo InitializeUserRolesInfo(UserRolesDBEntity userRoles)
+		/// <returns>UserRole instance.</returns>
+		public UserRole InitializeUserRole(UserRolesDBEntity userRoles)
 		{
 			if (userRoles == null)
 			{
 				return null;
 			}
 
-			return new UserRolesInfo
+			return new UserRole
 			{
 				Email = userRoles.Email,
 				FirstName = userRoles.FirstName,
@@ -563,18 +563,18 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Translates a <see cref="SubscriptionUserDBEntity"/> into a <see cref="SubscriptionUserInfo"/>"/>.
+		/// Translates a <see cref="SubscriptionUserDBEntity"/> into a <see cref="SubscriptionUser"/>"/>.
 		/// </summary>
 		/// <param name="subUser">SubscriptionUserDBEntity instance.</param>
-		/// <returns>SubscriptionUserInfo instance.</returns>
-		public SubscriptionUserInfo InitializeSubscriptionUserInfo(SubscriptionUserDBEntity subUser)
+		/// <returns>SubscriptionUser instance.</returns>
+		public SubscriptionUser InitializeSubscriptionUser(SubscriptionUserDBEntity subUser)
 		{
 			if (subUser == null)
 			{
 				return null;
 			}
 
-			return new SubscriptionUserInfo
+			return new SubscriptionUser
 			{
 				FirstName = subUser.FirstName,
 				LastName = subUser.LastName,

@@ -506,12 +506,12 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets a list of <see cref="SubscriptionDisplayInfo"/>s for all subscriptions in the chosen organization.
+		/// Gets a list of <see cref="SubscriptionDisplay"/>s for all subscriptions in the chosen organization.
 		/// </summary>
 		/// <returns>List of SubscriptionDisplayInfos.</returns>
-		public IEnumerable<SubscriptionDisplayInfo> GetSubscriptionsDisplay(int organizationId)
+		public IEnumerable<SubscriptionDisplay> GetSubscriptionsDisplay(int organizationId)
 		{
-			return this.DBHelper.GetSubscriptionsDisplayByOrg(organizationId).Select(s => InitializeSubscriptionDisplayInfo(s)).ToList();
+			return this.DBHelper.GetSubscriptionsDisplayByOrg(organizationId).Select(s => InitializeSubscriptionDisplay(s)).ToList();
 		}
 
 		/// <summary>
@@ -827,18 +827,18 @@ namespace AllyisApps.Services
 		#region Info-DBEntity Conversions
 
 		/// <summary>
-		/// Translates a <see cref="SubscriptionDisplayDBEntity"/> into a <see cref="SubscriptionDisplayInfo"/>.
+		/// Translates a <see cref="SubscriptionDisplayDBEntity"/> into a <see cref="SubscriptionDisplay"/>.
 		/// </summary>
 		/// <param name="subscriptionDisplay">SubscriptionDisplayDBEntity instance.</param>
-		/// <returns>SubscriptionDisplayInfo instance.</returns>
-		public static SubscriptionDisplayInfo InitializeSubscriptionDisplayInfo(SubscriptionDisplayDBEntity subscriptionDisplay)
+		/// <returns>SubscriptionDisplay instance.</returns>
+		public static SubscriptionDisplay InitializeSubscriptionDisplay(SubscriptionDisplayDBEntity subscriptionDisplay)
 		{
 			if (subscriptionDisplay == null)
 			{
 				return null;
 			}
 
-			return new SubscriptionDisplayInfo
+			return new SubscriptionDisplay
 			{
 				AreaUrl = subscriptionDisplay.AreaUrl,
 				CreatedUtc = subscriptionDisplay.CreatedUtc,

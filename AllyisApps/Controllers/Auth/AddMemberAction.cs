@@ -119,7 +119,7 @@ namespace AllyisApps.Controllers
 				Subscriptions = new List<AddMemberSubscriptionViewModel>()
 			};
 
-			foreach (SubscriptionDisplayInfo sub in infos.Item2)
+			foreach (SubscriptionDisplay sub in infos.Item2)
 			{
 				AddMemberSubscriptionViewModel subInfo = new AddMemberSubscriptionViewModel
 				{

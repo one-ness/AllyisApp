@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="OrganizationUserInfo.cs" company="Allyis, Inc.">
+// <copyright file="OrganizationUser.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -11,7 +11,7 @@ namespace AllyisApps.Services
 	/// <summary>
 	/// Represents an organization user.
 	/// </summary>
-	public class OrganizationUserInfo
+	public class OrganizationUser
 	{
 		/// <summary>
 		/// Gets or sets the User Id.
