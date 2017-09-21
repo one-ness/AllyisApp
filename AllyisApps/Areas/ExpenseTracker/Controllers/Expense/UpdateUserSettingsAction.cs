@@ -26,14 +26,14 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			foreach (UserMaxAmountViewModel userMaxAmountViewModel in model.Users)
 			{
-				OrganizationUserInfo userInfo = InitializeUser(userMaxAmountViewModel, subInfo.OrganizationId);
+				OrganizationUserInfo userInfo = InitializeOrganizaionUser(userMaxAmountViewModel, subInfo.OrganizationId);
 				AppService.UpdateUserOrgMaxAmount(userInfo);
 			}
 
 			return RedirectToAction("index");
 		}
 
-		private OrganizationUserInfo InitializeUser(UserMaxAmountViewModel user, int orgId)
+		private OrganizationUserInfo InitializeOrganizaionUser(UserMaxAmountViewModel user, int orgId)
 		{
 			return new OrganizationUserInfo()
 			{

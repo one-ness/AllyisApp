@@ -587,13 +587,9 @@ namespace AllyisApps.Services
 			DBHelper.UpdateUserMaxAmount(entity);
 		}
 
-		public UserOrganization GetOrganizationUserMaxAmount(int userId, int orgId)
+		public decimal GetOrganizationUserMaxAmount(int userId, int orgId)
 		{
-			return new UserOrganization()
-			{
-				UserId = userId,
-				MaxAmount = DBHelper.GetUserOrgMaxAmount(userId, orgId)
-			};
+			return DBHelper.GetUserOrgMaxAmount(userId, orgId);
 		}
 	}
 }
