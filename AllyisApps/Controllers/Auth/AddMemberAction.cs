@@ -56,7 +56,7 @@ namespace AllyisApps.Controllers
 
 				try
 				{
-					InvitationInfo info = new InvitationInfo
+					Invitation info = new Invitation
 					{
 						Email = add.Email.Trim(),
 						FirstName = add.FirstName,

@@ -679,7 +679,7 @@ namespace AllyisApps.Services
 								try
 								{
 									//user = this.GetUserByEmail(fields[0]); // User may already exist, but not be a member of this organization
-									InvitationInfo inviteInfo = new InvitationInfo()
+									Invitation inviteInfo = new Invitation()
 									{
 										OrganizationId = orgId,
 										Email = fields[0].Trim(),

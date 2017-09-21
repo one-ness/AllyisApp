@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
-using AllyisApps.DBModel.Finance;
 using AllyisApps.DBModel.Lookup;
 using AllyisApps.Lib;
 using AllyisApps.Services.Lookup;
@@ -65,7 +64,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="invitationId">Id of invite.</param>
 		/// <returns>Inviation info </returns>
-		public InvitationInfo GetInvitationByID(int invitationId)
+		public Invitation GetInvitationByID(int invitationId)
 		{
 			return InitializeInvitationInfo(DBHelper.GetUserInvitationByInviteId(invitationId));
 		}
@@ -292,17 +291,14 @@ namespace AllyisApps.Services
 				inv =>
 					new Invitation()
 					{
-						invite = new InvitationInfo()
-						{
-							Email = inv.Email,
-							EmployeeId = inv.EmployeeId,
-							FirstName = inv.FirstName,
-							LastName = inv.LastName,
-							InvitationId = inv.InvitationId,
-							OrganizationId = inv.OrganizationId,
-							OrganizationRole = (OrganizationRole)inv.OrganizationRoleId,
-						},
-						invitingOrgName = inv.OrganizationName
+						Email = inv.Email,
+						EmployeeId = inv.EmployeeId,
+						FirstName = inv.FirstName,
+						LastName = inv.LastName,
+						InvitationId = inv.InvitationId,
+						OrganizationId = inv.OrganizationId,
+						OrganizationRole = (OrganizationRole)inv.OrganizationRoleId,
+						OrganizationName = inv.OrganizationName
 					}
 				).ToList();
 			return userInfo;

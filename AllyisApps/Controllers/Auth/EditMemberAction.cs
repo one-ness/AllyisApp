@@ -65,7 +65,7 @@ namespace AllyisApps.Controllers
 			}
 			else
 			{
-				InvitationInfo userOrgInfo = AppService.GetOrganizationManagementInfo(orgId).Item4.Find(m => m.InvitationId == userId);
+				Invitation userOrgInfo = AppService.GetOrganizationManagementInfo(orgId).Item4.Find(m => m.InvitationId == userId);
 
 				model = new EditMemberViewModel
 				{
