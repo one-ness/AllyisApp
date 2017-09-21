@@ -396,5 +396,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="TestData\ExpenseTracker.Expenses.Table.sql" />
+    <None Include="UpgradeScripts\AddSkuIconUrl.sql" />
   </ItemGroup>
 </Project>

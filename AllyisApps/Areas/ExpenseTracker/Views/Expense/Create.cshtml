@@ -109,13 +109,13 @@
 					<thead>
 						<tr class="double-bottom-border">
 							<th style="width: 10%;">
-								@Html.ReqLabelFor(m => new ExpenseItem().TransactionDate, "Transaction Date")
+								@Html.ReqLabelFor(m => new ExpenseItem().TransactionDate, "Transaction Date")<span style="color: #d9534f; font-weight: bolder;"> *</span>
 							</th>
 							<th style="width: 10%;">
 								@Html.ReqLabelFor(m => new ExpenseItem().Amount, "Amount")
 							</th>
 							<th style="width: 10%;">
-								@Html.ReqLabelFor(m => new ExpenseItem().ItemDescription, "Description")
+								@Html.ReqLabelFor(m => new ExpenseItem().ItemDescription, "Description")<span style="color: #d9534f; font-weight: bolder;"> *</span>
 							</th>
 							<th style="width: 10%;">Account</th>
 							<th style="width: 50%;">Billable to Customer</th>

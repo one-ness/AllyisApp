@@ -11,6 +11,7 @@
     [Description]       NVARCHAR (512) NULL,
     [PromoCostPerBlock] MONEY          NULL,
     [PromoDeadline]     DATETIME2 (0)  NULL,
+    [IconUrl] NVARCHAR(512) NULL, 
     CONSTRAINT [PK_Sku] PRIMARY KEY CLUSTERED ([SkuId] ASC, [ProductId] ASC),
     CONSTRAINT [FK_Sku_Product] FOREIGN KEY ([ProductId]) REFERENCES [Billing].[Product] ([ProductId])
 );

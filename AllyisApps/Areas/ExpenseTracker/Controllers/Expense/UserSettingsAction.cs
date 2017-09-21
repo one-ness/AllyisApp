@@ -31,7 +31,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			string productName = AppService.GetProductNameBySubscriptionId(subInfo.SubscriptionId);
 
 			var allInfos = AppService.GetOrganizationManagementInfo(subInfo.OrganizationId).Item2;
-			IEnumerable<OrganizationUser> userInfos = allInfos.Where(u => AppService.GetProductRoleForUser("Expense Tracker", u.UserId, subInfo.OrganizationId) == "Manager");
+			IEnumerable<OrganizationUser> userInfos = allInfos.Where(u =>
+				AppService.GetProductRoleForUser("Expense Tracker", u.UserId, subInfo.OrganizationId) == "Manager"
+				|| AppService.GetProductRoleForUser("Expense Tracker", u.UserId, subInfo.OrganizationId) == "SuperUser");
 
 			List<UserMaxAmountViewModel> userViewModels = new List<UserMaxAmountViewModel>();
 			foreach (OrganizationUser user in userInfos)

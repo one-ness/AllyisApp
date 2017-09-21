@@ -52,75 +52,68 @@ namespace AllyisApps.Controllers
 				PostalCode = accountInfo.Address?.PostalCode,
 				Country = accountInfo.Address?.CountryName,
 			};
+
 			AccountIndexViewModel indexViewModel = new AccountIndexViewModel()
 			{
 				UserInfo = userViewModel
 			};
-			if (accountInfo == null)
-			{
-				// If not signed in do not attpempt to load values.
-				return indexViewModel;
-			}
 
 			// Add invitations to view model
-
-			var invitationslist = accountInfo.Invitations;
-			foreach (var inviteInfo in invitationslist)
+			var invitationsList = accountInfo.Invitations;
+			foreach (var item in invitationsList)
 			{
-				var invite = inviteInfo.invite;
-
+				var invite = item.invite;
 				indexViewModel.Invitations.Add(new AccountIndexViewModel.InvitationViewModel()
 				{
 					InvitationId = invite.InvitationId,
-					OrganizationName = inviteInfo.invitingOrgName,
+					OrganizationName = item.invitingOrgName,
 				});
 			}
 
-			var orgs = accountInfo.Organizations;
-
 			// Add organizations to model
-			foreach (var curorg in orgs)
+			var orgsList = accountInfo.Organizations;
+			foreach (var item in orgsList)
 			{
 				AccountIndexViewModel.OrganizationViewModel orgViewModel =
 				new AccountIndexViewModel.OrganizationViewModel()
 				{
-					OrganizationId = curorg.Organization.OrganizationId,
-					OrganizationName = curorg.Organization.OrganizationName,
-					PhoneNumber = curorg.Organization.PhoneNumber,
-					Address1 = curorg.Organization.Address?.Address1,
-					City = curorg.Organization.Address?.City,
-					State = curorg.Organization.Address?.StateName,
-					PostalCode = curorg.Organization.Address?.PostalCode,
-					Country = curorg.Organization.Address?.CountryName,
-					SiteUrl = curorg.Organization.SiteUrl,
-					FaxNumber = curorg.Organization.FaxNumber,
+					OrganizationId = item.Organization.OrganizationId,
+					OrganizationName = item.Organization.OrganizationName,
+					PhoneNumber = item.Organization.PhoneNumber,
+					Address1 = item.Organization.Address?.Address1,
+					City = item.Organization.Address?.City,
+					State = item.Organization.Address?.StateName,
+					PostalCode = item.Organization.Address?.PostalCode,
+					Country = item.Organization.Address?.CountryName,
+					SiteUrl = item.Organization.SiteUrl,
+					FaxNumber = item.Organization.FaxNumber,
 					//// TODO: Infomation is dependent on curent user
-					IsManageAllowed = AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, curorg.Organization.OrganizationId, curorg.OrganizationRole, false)
+					IsManageAllowed = AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, item.Organization.OrganizationId, item.OrganizationRole, false)
 				};
 
 				// Add subscription info
-				foreach (UserSubscription userSubInfo in accountInfo.Subscriptions.Where(sub => sub.Subscription.OrganizationId == curorg.Organization.OrganizationId))
+				foreach (var subItem in accountInfo.Subscriptions.Where(sub => sub.Subscription.OrganizationId == item.Organization.OrganizationId))
 				{
 					string description =
-						userSubInfo.Subscription.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription :
-						userSubInfo.Subscription.ProductId == ProductIdEnum.ExpenseTracker ? Resources.Strings.ExpenseTrackerDescription :
+						subItem.Subscription.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription :
+						subItem.Subscription.ProductId == ProductIdEnum.ExpenseTracker ? Resources.Strings.ExpenseTrackerDescription :
 						string.Empty;
 					var subViewModel = new AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel()
 					{
-						ProductName = userSubInfo.Subscription.ProductName,
-						SubscriptionId = userSubInfo.Subscription.SubscriptionId,
-						SubscriptionName = userSubInfo.Subscription.SubscriptionName,
+						ProductName = subItem.Subscription.ProductName,
+						SubscriptionId = subItem.Subscription.SubscriptionId,
+						SubscriptionName = subItem.Subscription.SubscriptionName,
 						ProductDescription = description,
-						ProductId = userSubInfo.Subscription.ProductId,
-						AreaUrl = userSubInfo.Subscription.AreaUrl
+						ProductId = subItem.Subscription.ProductId,
+						AreaUrl = subItem.Subscription.AreaUrl
 					};
-					switch (userSubInfo.Subscription.ProductId)
+					switch (subItem.Subscription.ProductId)
 					{
 						case ProductIdEnum.TimeTracker:
 							{
 								int? sDate = null;
 								int? eDate = null;
-								int startOfWeek = AppService.GetAllSettings(userSubInfo.Subscription.SubscriptionId).Item1.StartOfWeek;
+								int startOfWeek = AppService.GetAllSettings(subItem.Subscription.SubscriptionId).Item1.StartOfWeek;
 								sDate = Utility.GetDaysFromDateTime(SetStartingDate(startOfWeek));
 								eDate = Utility.GetDaysFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
 								subViewModel.ProductGoToUrl = Url.RouteUrl(
@@ -128,7 +121,7 @@ namespace AllyisApps.Controllers
 									new
 									{
 										subscriptionId =
-										userSubInfo.Subscription.SubscriptionId,
+										subItem.Subscription.SubscriptionId,
 										controller = ControllerConstants.TimeEntry,
 										startDate = sDate,
 										endDate = eDate
@@ -141,7 +134,7 @@ namespace AllyisApps.Controllers
 									"ExpenseTracker_Default",
 									new
 									{
-										subscriptionId = userSubInfo.Subscription.SubscriptionId,
+										subscriptionId = subItem.Subscription.SubscriptionId,
 										controller = ControllerConstants.Expense
 									});
 								break;
@@ -151,7 +144,7 @@ namespace AllyisApps.Controllers
 							subViewModel.ProductGoToUrl = Url.RouteUrl("StaffingManager_default",
 								new
 								{
-									subscriptionId = userSubInfo.Subscription.SubscriptionId,
+									subscriptionId = subItem.Subscription.SubscriptionId,
 									controller = ControllerConstants.Staffing
 								});
 							break;

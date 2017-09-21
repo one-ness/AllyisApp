@@ -13,7 +13,7 @@ namespace AllyisApps.Services
 	{
 		public int UserId { get; set; }
 		public int ProductRoleId { get; set; }
-
 		public Subscription Subscription { get; set; }
+		public dynamic IconUrl { get; internal set; }
 	}
 }

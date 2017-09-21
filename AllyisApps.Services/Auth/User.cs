@@ -130,6 +130,11 @@ namespace AllyisApps.Services
 
 		public decimal MaxAmount { get; internal set; }
 
+		public bool IsAddressLoaded { get; set; }
+		public bool IsInvitationsLoaded { get; set; }
+		public bool IsOrganizationsLoaded { get; set; }
+		public bool IsSubscriptionsLoaded { get; set; }
+
 		/// <summary>
 		/// constructor
 		/// </summary>

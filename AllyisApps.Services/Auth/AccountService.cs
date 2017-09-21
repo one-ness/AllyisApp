@@ -53,14 +53,11 @@ namespace AllyisApps.Services
 		/// <returns>A list of languages.</returns>
 		public IEnumerable<Language> ValidLanguages()
 		{
-			var result = new List<Language>();
-			var list = this.DBHelper.ValidLanguages();
-			foreach (var item in list)
+			return DBHelper.ValidLanguages().Select(s => new Language
 			{
-				result.Add(new Language() { CultureName = item.CultureName, LanguageName = item.LanguageName });
-			}
-
-			return result;
+				LanguageName = s.LanguageName,
+				CultureName = s.CultureName
+			});
 		}
 
 		/// <summary>
@@ -275,7 +272,8 @@ namespace AllyisApps.Services
 						SubscriptionName = sub.SubscriptionName
 					},
 					ProductRoleId = sub.ProductRoleId,
-					UserId = userId
+					UserId = userId,
+					IconUrl = sub.IconUrl
 				}
 			).ToList();
 
@@ -484,8 +482,7 @@ namespace AllyisApps.Services
 				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
 				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
 				UserId = user.UserId,
-				Address = InitializeAddress(user),
-				MaxAmount = user.MaxAmount
+				Address = InitializeAddress(user)
 			};
 			return newUser;
 		}
@@ -578,26 +575,6 @@ namespace AllyisApps.Services
 			};
 		}
 
-		public IEnumerable<Account> GetAccounts()
-		{
-			List<AccountDBEntity> entity = DBHelper.GetAccounts().ToList();
-
-			return entity.Select(a => InitializeAccount(a));
-		}
-
-		public Account InitializeAccount(AccountDBEntity entity)
-		{
-			return new Account()
-			{
-				AccountId = entity.AccountId,
-				AccountName = entity.AccountName,
-				AccountTypeId = entity.AccountTypeId,
-				AccountTypeName = entity.AccountTypeName,
-				IsActive = entity.IsActive,
-				ParentAccountId = entity.ParentAccountId
-			};
-		}
-
 		public void UpdateUserOrgMaxAmount(OrganizationUser userInfo)
 		{
 			OrganizationUserDBEntity entity = new OrganizationUserDBEntity()
@@ -609,13 +586,9 @@ namespace AllyisApps.Services
 			DBHelper.UpdateUserMaxAmount(entity);
 		}
 
-		public UserOrganization GetOrganizationUserMaxAmount(int userId, int orgId)
+		public decimal GetOrganizationUserMaxAmount(int userId, int orgId)
 		{
-			return new UserOrganization()
-			{
-				UserId = userId,
-				MaxAmount = DBHelper.GetUserOrgMaxAmount(userId, orgId)
-			};
+			return DBHelper.GetUserOrgMaxAmount(userId, orgId);
 		}
 	}
 }

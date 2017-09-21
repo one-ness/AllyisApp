@@ -77,10 +77,10 @@
     <Compile Include="Auth\ImportService.cs" />
     <Compile Include="Auth\OrganizationRoleEnum.cs" />
     <Compile Include="Auth\Account.cs" />
+    <Compile Include="Auth\OrganizationUser.cs" />
     <Compile Include="Auth\ProductRoleEnums.cs" />
     <Compile Include="Auth\UserContext.cs" />
     <Compile Include="Auth\UserOrganization.cs" />
-    <Compile Include="Auth\UserAccount.cs" />
     <Compile Include="Auth\UserSubscription.cs" />
     <Compile Include="BaseService.cs" />
     <Compile Include="Billing\BillingFrequencyEnum.cs" />
@@ -120,7 +120,6 @@
     <Compile Include="TimeTracker\Holiday.cs" />
     <Compile Include="Auth\InvitationInfo.cs" />
     <Compile Include="Auth\Language.cs" />
-    <Compile Include="Auth\OrganizationUser.cs" />
     <Compile Include="TimeTracker\LockDatePeriodEnum.cs" />
     <Compile Include="TimeTracker\PayClass.cs" />
     <Compile Include="Crm\CompleteProject.cs" />

@@ -17,8 +17,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			UserContext.SubscriptionAndRole subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			ViewData["SubscriptionName"] = AppService.getSubscriptionName(subscriptionId);
 			ViewData["SubscriptionId"] = subscriptionId;
-			ViewData["IsManager"] = subInfo.ProductRoleId == 2;
-			ViewData["MaxAmount"] = AppService.GetOrganizationUserMaxAmount(AppService.GetCurrentUser().UserId, subInfo.OrganizationId).MaxAmount;
+			ViewData["ProductRole"] = subInfo.ProductRoleId;
+			ViewData["MaxAmount"] = AppService.GetOrganizationUserMaxAmount(AppService.UserContext.UserId, subInfo.OrganizationId);
 		}
 
 		private void UploadItems(ExpenseCreateModel model, ExpenseReport report)
