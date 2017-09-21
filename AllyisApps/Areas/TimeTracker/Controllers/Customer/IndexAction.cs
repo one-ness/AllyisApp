@@ -103,7 +103,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					CustomerInfo = currentCustomer,
 					Projects = from p in projects
 							   where p.CustomerId == currentCustomer.CustomerId
-							   select new Project
+							   select new Services.Project.Project
 							   {
 								   CustomerId = p.CustomerId,
 								   OrganizationId = p.OrganizationId,
@@ -130,7 +130,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					CustomerInfo = currentCustomer,
 					Projects = from p in inactiveProjects
 							   where p.CustomerId == currentCustomer.CustomerId
-							   select new Project
+							   select new Services.Project.Project
 							   {
 								   CustomerId = p.CustomerId,
 								   OrganizationId = p.OrganizationId,

@@ -6,7 +6,7 @@
 
 using System;
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.Project
 {
 	/// <summary>
 	/// An object for keeping track of all the info related to a given project.

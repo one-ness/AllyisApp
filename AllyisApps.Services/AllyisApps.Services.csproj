@@ -125,7 +125,7 @@
     <Compile Include="TimeTracker\LockDatePeriodEnum.cs" />
     <Compile Include="TimeTracker\PayClass.cs" />
     <Compile Include="Crm\CompleteProjectInfo.cs" />
-    <Compile Include="Crm\Project.cs" />
+    <Compile Include="Pjm\Project.cs" />
     <Compile Include="TimeTracker\PayClassIdEnum.cs" />
     <Compile Include="TimeTracker\Setting.cs" />
     <Compile Include="Billing\SkuIdEnum.cs" />
@@ -142,7 +142,6 @@
     <Compile Include="Billing\Product.cs" />
     <Compile Include="Billing\ProductIdEnum.cs" />
     <Compile Include="Auth\OrganizationService.cs" />
-    <Compile Include="Crm\ProjectService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
