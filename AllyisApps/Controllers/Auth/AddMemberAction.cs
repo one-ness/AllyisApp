@@ -7,11 +7,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers
@@ -110,7 +108,6 @@ namespace AllyisApps.Controllers
 		public AddMemberViewModel ConstructOrganizationAddMembersViewModel(int organizationId)
 		{
 			var infos = AppService.GetAddMemberInfo(organizationId);
-			
 
 			AddMemberViewModel result = new AddMemberViewModel
 			{
@@ -124,7 +121,7 @@ namespace AllyisApps.Controllers
 				AddMemberSubscriptionViewModel subInfo = new AddMemberSubscriptionViewModel
 				{
 					ProductName = sub.ProductName,
-					ProductRoles = infos.Item2.Where(r => r.ProductId == (int) sub.ProductId)
+					ProductRoles = infos.Item2.Where(r => r.ProductId == (int)sub.ProductId)
 						.Select(r => new ProductRoleViewModel()
 						{
 							ProductId = r.ProductId,

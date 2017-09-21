@@ -5,12 +5,10 @@
 //------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
 using AllyisApps.ViewModels.Auth;
 
@@ -76,9 +74,9 @@ namespace AllyisApps.Controllers
 					ProductDescription = productSubscription.Product.ProductDescription,
 					CurrentSubscription = productSubscription.SubscriptionInfo,
 					Skus = productSubscription.SkuList,
-					SelectedSku = (int) selectedSku,
-					SelectedSkuName = selectedSku > 0 ? productSubscription.SkuList.Where(s => s.SkuId == (int) selectedSku).SingleOrDefault().SkuName : string.Empty,
-					PreviousSku = (int) selectedSku,
+					SelectedSku = (int)selectedSku,
+					SelectedSkuName = selectedSku > 0 ? productSubscription.SkuList.Where(s => s.SkuId == (int)selectedSku).SingleOrDefault().SkuName : string.Empty,
+					PreviousSku = (int)selectedSku,
 					CustomerId = customerId,
 					Token = new BillingServicesToken(customerId.ToString()) // TODO: Does this just convert back to the stripeToken string?? Investigate.
 				};

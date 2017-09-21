@@ -31,13 +31,5 @@ namespace AllyisApps.Services
 		}
 
 		#endregion public static
-
-		#region public
-
-		#endregion public
-
-		#region Info-DBEntity Conversions
-
-		#endregion Info-DBEntity Conversions
 	}
 }

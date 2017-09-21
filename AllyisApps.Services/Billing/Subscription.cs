@@ -8,7 +8,7 @@ namespace AllyisApps.Services
 	public class Subscription
 	{
 		public int SubscriptionId { get; set; }
-		
+
 		public SkuIdEnum SkuId { get; set; }
 
 		public string SkuName { get; set; }
@@ -31,7 +31,6 @@ namespace AllyisApps.Services
 
 		public string Description { get; internal set; }
 
-
 		public string SubscriptionName { get; set; }
 
 		public int NumberOfUsers { get; set; }
@@ -43,6 +42,7 @@ namespace AllyisApps.Services
 		public DateTime CreatedUtc { get; set; }
 
 		public DateTime? PromoExpirationDateUtc { get; set; }
+
 		/// <summary>
 		/// Gets or sets a Name of the organization.
 		/// </summary>

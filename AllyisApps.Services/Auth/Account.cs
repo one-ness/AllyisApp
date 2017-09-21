@@ -4,8 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-
 namespace AllyisApps.Services
 {
 	/// <summary>

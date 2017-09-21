@@ -194,7 +194,7 @@ namespace AllyisApps.ViewModels.Auth
 		{
 			this.Name = name;
 			Func<UserRole, bool> whereFunction = whereExpression.Compile();
-			this.UserIds = users.Where(whereFunction).Select(x =>  x.UserId.ToString());
+			this.UserIds = users.Where(whereFunction).Select(x => x.UserId.ToString());
 		}
 
 		/// <summary>

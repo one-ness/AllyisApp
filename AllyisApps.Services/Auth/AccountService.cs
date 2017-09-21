@@ -97,7 +97,6 @@ namespace AllyisApps.Services
 				NotifyInviteRejectAsync(invitationId);
 			}
 			return rejected;
-
 		}
 
 		/// <summary>

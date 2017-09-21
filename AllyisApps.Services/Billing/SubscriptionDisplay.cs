@@ -4,8 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-
 namespace AllyisApps.Services.Billing
 {
 	/// <summary>
@@ -14,5 +12,4 @@ namespace AllyisApps.Services.Billing
 	public class SubscriptionDisplay : Subscription
 	{
 	}
-	
 }

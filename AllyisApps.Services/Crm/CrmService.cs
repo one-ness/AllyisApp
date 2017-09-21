@@ -12,7 +12,6 @@ using AllyisApps.DBModel;
 using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.Lookup;
 using AllyisApps.Services.Lookup;
-using AllyisApps.Services.Project;
 
 namespace AllyisApps.Services
 {

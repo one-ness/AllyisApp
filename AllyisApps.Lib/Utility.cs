@@ -24,7 +24,8 @@ namespace AllyisApps.Lib
 			return result;
 		}
 
-		const int EmailDisplayMaxLength = 48;
+		private const int EmailDisplayMaxLength = 48;
+
 		/// <summary>
 		/// get a reduced length email if it is too long
 		/// </summary>

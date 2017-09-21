@@ -40,8 +40,8 @@ namespace AllyisApps.Controllers
 				OrganizationId = id,
 
 				// TODO: Get rid of this once product panes in Permissions page are genericized.
-				TimeTrackerId = (int) ProductIdEnum.TimeTracker,
-				ExpenseTrackerId = (int) ProductIdEnum.ExpenseTracker
+				TimeTrackerId = (int)ProductIdEnum.TimeTracker,
+				ExpenseTrackerId = (int)ProductIdEnum.ExpenseTracker
 			};
 
 			// This can also be axed after finding a good way to genericize products in the Permissions page.
@@ -67,7 +67,7 @@ namespace AllyisApps.Controllers
 					{
 						FirstName = role.FirstName,
 						LastName = role.LastName,
-						UserId =  role.UserId,
+						UserId = role.UserId,
 						Email = role.Email,
 						OrganizationRoleId = role.OrganizationRoleId,
 						ProductRoleIds = new List<int>()

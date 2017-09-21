@@ -5,9 +5,9 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using AllyisApps.Services.Lookup;
-using System.Collections.Generic;
 
 namespace AllyisApps.Services
 {
@@ -77,12 +77,12 @@ namespace AllyisApps.Services
 		public List<Subscription> Subscriptions { get; set; }
 
 		/// <summary>
-		/// List of invites sent out by owners of the Organizaion 
+		/// List of invites sent out by owners of the Organizaion
 		/// </summary>
 		public List<Invitation> Invitations { get; set; }
 
 		public String StripeToken { get; set; }
-		
+
 		/// <summary>
 		/// Gets next Unique Employee Id. This should only be loaded when populated.
 		/// </summary>

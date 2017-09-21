@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
 
 namespace AllyisApps.Services
@@ -17,7 +16,7 @@ namespace AllyisApps.Services
 		public List<Customer> Customers { get; set; }
 		public List<CompleteProject> CompleteProjectInfo { get; set; }
 		public List<SubscriptionUser> SubscriptionUserInfo { get; set; }
-		
+
 		public ReportInfo(List<Customer> customers, List<CompleteProject> completeProjectInfo, List<SubscriptionUser> subscriptionUserInfo)
 		{
 			this.Customers = customers;

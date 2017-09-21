@@ -34,6 +34,5 @@ namespace AllyisApps.Services
 		/// Gets or sets the Employee Id.
 		/// </summary>
 		public string EmployeeId { get; set; }
-
 	}
 }

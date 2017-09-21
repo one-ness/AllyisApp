@@ -702,7 +702,7 @@ namespace AllyisApps.Services
 						}
 
 						// Importing non-required user data
-						if (userInOrg != null && hasNonRequiredUserInfo)//If user exists then allow org to change user. 
+						if (userInOrg != null && hasNonRequiredUserInfo)//If user exists then allow org to change user.
 						{
 							bool updated = false;
 							/* This allows any org to change thier users infomation Org are items of users, users are not properties of orgs */
@@ -734,7 +734,6 @@ namespace AllyisApps.Services
 							{
 								this.UpdateUserProfile(userInOrg.UserId, Utility.GetDaysFromDateTime(userInOrg.DateOfBirth), userInOrg.FirstName, userInOrg.LastName, userInOrg.PhoneNumber, userInOrg.Address?.AddressId, userInOrg.Address?.Address1, userInOrg.Address?.City, userInOrg.Address?.StateId, userInOrg.Address?.PostalCode, userInOrg.Address?.CountryCode);
 							}
-
 						}
 					}
 

@@ -102,7 +102,6 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		/// </summary>
 		public CompleteProjectViewModel()
 		{
-
 		}
 
 		/// <summary>

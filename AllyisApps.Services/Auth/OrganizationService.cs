@@ -118,8 +118,7 @@ namespace AllyisApps.Services
 			Organization org = new Organization();
 			org.NextEmpolyeeID = string.Compare(spResults.Item1, spResults.Item4) > 0 ? spResults.Item1 : spResults.Item4;
 			org.Subscriptions = spResults.Item2.Select(sddb => InitializeSubscription(sddb)).ToList();
-			
-			
+
 			return Tuple.Create(
 				org,
 				spResults.Item3.Select(srdb => InitializeSubscriptionRoleInfo(srdb)).ToList()

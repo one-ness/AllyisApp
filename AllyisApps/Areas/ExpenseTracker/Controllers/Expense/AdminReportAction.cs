@@ -39,25 +39,25 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			return View(adminReportVM);
 		}
 
-        /// <summary>
-        /// Creates an admin report view model.
-        /// </summary>
-        /// <param name="subId">The subscription id.</param>
-        /// <returns>An admin report model.</returns>
-        public AdminReportModel CreateAdminReportModel(int subId)
-        {
-            var subInfo = AppService.GetSubscription(subId);
-            var reportInfo = AppService.GetReportInfo(subId);
-            var reports = AppService.GetExpenseReportByOrgId(subInfo.OrganizationId);
+		/// <summary>
+		/// Creates an admin report view model.
+		/// </summary>
+		/// <param name="subId">The subscription id.</param>
+		/// <returns>An admin report model.</returns>
+		public AdminReportModel CreateAdminReportModel(int subId)
+		{
+			var subInfo = AppService.GetSubscription(subId);
+			var reportInfo = AppService.GetReportInfo(subId);
+			var reports = AppService.GetExpenseReportByOrgId(subInfo.OrganizationId);
 			List<ExpenseReportViewModel> reportViewModels = new List<ExpenseReportViewModel>();
 			foreach (ExpenseReport report in reports)
 			{
 				reportViewModels.Add(InitializeExpenseReportViewModel(report));
 			}
 
-            var users = reportInfo.SubscriptionUserInfo;
-            List<SelectListItem> enumList = new List<SelectListItem>();
-            List<SelectListItem> userList = new List<SelectListItem>();
+			var users = reportInfo.SubscriptionUserInfo;
+			List<SelectListItem> enumList = new List<SelectListItem>();
+			List<SelectListItem> userList = new List<SelectListItem>();
 
 			foreach (var item in Enum.GetValues(typeof(ExpenseStatusEnum)))
 			{
@@ -108,29 +108,29 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				});
 			}
 
-            AdminReportModel model = new AdminReportModel()
-            {
-                CanManage = true,
-                OrganizationId = subInfo.OrganizationId,
-                Reports = reportViewModels,
-                PreviewReports = null,
-                ShowExport = true,
-                Statuses = enumList,
-                SubscriptionId = subInfo.SubscriptionId,
-                SubscriptionName = subInfo.SubscriptionName,
-                UserId = GetCookieData().UserId,
-                Users = userList,
-                Selection = new AdminReportSelectionModel
-                {
-                    EndDate = DateTime.Today.AddDays(7),
-                    StartDate = DateTime.Today,
-                    SelectedUsers = new List<int>(),
-                    Status = new List<int>()
-                }
-            };
+			AdminReportModel model = new AdminReportModel()
+			{
+				CanManage = true,
+				OrganizationId = subInfo.OrganizationId,
+				Reports = reportViewModels,
+				PreviewReports = null,
+				ShowExport = true,
+				Statuses = enumList,
+				SubscriptionId = subInfo.SubscriptionId,
+				SubscriptionName = subInfo.SubscriptionName,
+				UserId = GetCookieData().UserId,
+				Users = userList,
+				Selection = new AdminReportSelectionModel
+				{
+					EndDate = DateTime.Today.AddDays(7),
+					StartDate = DateTime.Today,
+					SelectedUsers = new List<int>(),
+					Status = new List<int>()
+				}
+			};
 
-            return model;
-        }
+			return model;
+		}
 
 		private ExpenseReportViewModel InitializeExpenseReportViewModel(ExpenseReport report)
 		{
@@ -147,5 +147,5 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				SubmittedUtc = report.SubmittedUtc
 			};
 		}
-    }
+	}
 }

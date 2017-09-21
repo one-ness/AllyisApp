@@ -408,7 +408,7 @@ namespace AllyisApps.Services
 			{
 				OrganizationId = si.OrganizationId,
 				SubscriptionId = si.SubscriptionId,
-				SkuId = (SkuIdEnum) si.SkuId,
+				SkuId = (SkuIdEnum)si.SkuId,
 				NumberOfUsers = si.NumberOfUsers,
 				Licenses = si.Licenses,
 				CreatedUtc = si.CreatedUtc,
@@ -810,8 +810,6 @@ namespace AllyisApps.Services
 			var subscription = InitializeSubscription(spResults.Item2);
 			subscription.NumberOfUsers = spResults.Item5;
 
-			
-
 			return new ProductSubscription(
 				product,
 				InitializeSubscription(spResults.Item2),
@@ -884,7 +882,7 @@ namespace AllyisApps.Services
 				SubscriptionName = subscription.Name,
 				NumberOfUsers = subscription.NumberOfUsers,
 				OrganizationId = subscription.OrganizationId,
-				SkuId = (SkuIdEnum) subscription.SkuId,
+				SkuId = (SkuIdEnum)subscription.SkuId,
 				SubscriptionId = subscription.SubscriptionId
 			};
 		}

@@ -39,14 +39,14 @@ namespace AllyisApps.Services
 		/// </summary>
 		User = 1,
 
-        /// <summary>
-        /// Expense Tracker Manager.
-        /// </summary>
-        Manager = 2,
+		/// <summary>
+		/// Expense Tracker Manager.
+		/// </summary>
+		Manager = 2,
 
 		/// <summary>
 		/// Expense Tracker Admin.
 		/// </summary>
 		SuperUser = 3
-    }
+	}
 }
