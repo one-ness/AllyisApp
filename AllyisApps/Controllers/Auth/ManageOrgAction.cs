@@ -33,8 +33,8 @@ namespace AllyisApps.Controllers
 			var sub = model.Subscriptions.Select(x => x).Where(y => y.ProductId == (int)ProductIdEnum.TimeTracker).FirstOrDefault();
 			if (sub != null && model.Subscriptions.Count() > 0)
 			{
-				int subId = sub.SubscriptionId;
-				int startOfWeek = AppService.GetAllSettings(subId).Item1.StartOfWeek;
+				int orgID = sub.OrganizationId;
+				int startOfWeek = AppService.GetAllSettings(orgID).Item1.StartOfWeek;
 				ViewBag.StartDate = Utility.GetDaysFromDateTime(SetStartingDate(startOfWeek));
 				ViewBag.EndDate = Utility.GetDaysFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
 			}
@@ -51,10 +51,9 @@ namespace AllyisApps.Controllers
 		[CLSCompliant(false)]
 		public ManageOrgViewModel ConstructOrganizationManageViewModel(int organizationId)
 		{
-			var infos = AppService.GetOrganizationManagementInfo(organizationId);
+			var orgInfo = AppService.GetOrganizationManagementInfo(organizationId);
 
-			BillingServicesCustomer customer = (infos.Item5 == null) ? null : AppService.RetrieveCustomer(new BillingServicesCustomerId(infos.Item5));
-			Organization orgInfo = infos.Item1;
+			BillingServicesCustomer customer = (orgInfo.StripeToken == null) ? null : AppService.RetrieveCustomer(new BillingServicesCustomerId(orgInfo.StripeToken));
 			return new ManageOrgViewModel
 			{
 				Details = new OrganizationInfoViewModel()
@@ -74,7 +73,7 @@ namespace AllyisApps.Controllers
 				Members = new OrganizationMembersViewModel
 				{
 					CurrentUserId = this.AppService.UserContext.UserId,
-					DisplayUsers = infos.Item2.Select(oui => new OrganizationUserViewModel
+					DisplayUsers = orgInfo.Users.Select(oui => new OrganizationUserViewModel
 					{
 						Email = oui.Email,
 						EmployeeId = oui.EmployeeId,
@@ -83,15 +82,15 @@ namespace AllyisApps.Controllers
 						PermissionLevel = ((OrganizationRole)oui.OrganizationRoleId).ToString(),
 						UserId = oui.UserId
 					}),
-					OrganizationId = infos.Item1.OrganizationId,
-					OrganizationName = infos.Item1.OrganizationName,
-					PendingInvitation = infos.Item4.Select(invite => new InvitationInfoViewModel(invite)),
-					TotalUsers = infos.Item2.Count
+					OrganizationId = orgInfo.OrganizationId,
+					OrganizationName = orgInfo.OrganizationName,
+					PendingInvitation = orgInfo.Invitations.Select(invite => new InvitationInfoViewModel(invite)),
+					TotalUsers = orgInfo.Users.Count
 				},
 				OrganizationId = organizationId,
 				BillingCustomer = customer,
-				SubscriptionCount = infos.Item3.Count,
-				Subscriptions = infos.Item3.Select(sub => new SubscriptionDisplayViewModel(sub))
+				SubscriptionCount = orgInfo.Subscriptions.Count,
+				Subscriptions = orgInfo.Subscriptions.Select(sub => new SubscriptionDisplayViewModel(sub))
 			};
 		}
 	}

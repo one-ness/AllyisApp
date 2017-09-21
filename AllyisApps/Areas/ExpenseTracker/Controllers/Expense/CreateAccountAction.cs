@@ -23,10 +23,14 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>A Model to the Create Account Page.</returns>
 		public ActionResult CreateAccount(int subscriptionId, int? accountId = null)
 		{
+			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Accounts, subscriptionId);
+
 			SetNavData(subscriptionId);
 
 			var accounts = AppService.GetAccounts();
 			var account = (accounts != null) && (accountId != null) ? accounts.Where(x => x.AccountId == accountId.Value).FirstOrDefault() : null;
+			var parentList = new List<SelectListItem>() { new SelectListItem() { Text = "None", Value = "0" } };
+
 			CreateAccountViewModel model = new CreateAccountViewModel();
 
 			ViewBag.ButtonName = "Create";
@@ -34,10 +38,6 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			if (account != null)
 			{
-				var parentList = accounts.Where(x => x.IsActive)
-					.Select(x => new SelectListItem() { Text = x.AccountName, Value = x.AccountId.ToString() })
-					.Where(x => !string.Equals(x.Value, account.AccountId.ToString())).ToList();
-
 				ViewBag.ButtonName = "Edit";
 				ViewBag.ButtonTitle = "Submit Edits on the account.";
 
@@ -47,12 +47,23 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				model.AccountTypeName = account.AccountTypeName;
 				model.IsActive = account.IsActive;
 				model.ParentAccountId = account.ParentAccountId;
-				model.ParentAccounts = new SelectList(parentList.AsEnumerable(), "Value", "Text");
+
+				parentList.AddRange(accounts.Where(x => x.IsActive)
+				.Select(x => new SelectListItem() { Text = x.AccountName, Value = x.AccountId.ToString(), Selected = x.AccountId == model.ParentAccountId })
+				.Where(x => !string.Equals(x.Value, account.AccountId.ToString())).ToList());
+
+				var selected = parentList.Where(x => x.Selected).FirstOrDefault();
+				var selectedId = selected != null ? selected.Value : "0";
+
+				model.ParentAccounts = new SelectList(parentList.AsEnumerable(), "Value", "Text", selectedId);
 			}
 			else
 			{
-				var parentList = accounts.Select(x => new SelectListItem() { Text = x.AccountName, Value = x.AccountId.ToString() }).ToList();
-				model.ParentAccounts = new SelectList(parentList.AsEnumerable(), "Value", "Text");
+				var selected = parentList.Where(x => x.Selected).FirstOrDefault();
+				var selectedId = selected != null ? selected.Value : "0";
+
+				parentList.AddRange(accounts.Select(x => new SelectListItem() { Text = x.AccountName, Value = x.AccountId.ToString(), Selected = x.AccountId == model.ParentAccountId }).ToList());
+				model.ParentAccounts = new SelectList(parentList.AsEnumerable(), "Value", "Text", selectedId);
 			}
 
 			return View(model);
@@ -61,10 +72,13 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <summary>
 		/// Action for saving a new account or updating an already existing one.
 		/// </summary>
+		/// <param name="subscriptionId">Teh subscription id.</param>
 		/// <param name="model">The account model.</param>
 		/// <returns>The account page.</returns>
-		public ActionResult SaveAccount(CreateAccountViewModel model)
+		public ActionResult SaveAccount(int subscriptionId, CreateAccountViewModel model)
 		{
+			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Accounts, subscriptionId);
+
 			bool success = false;
 			if (model != null)
 			{
@@ -82,10 +96,6 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 				if (!success)
 				{
-					var existingAcc = AppService.GetAccounts().Where(x => string.Equals(x.AccountName, acc.AccountName)).First();
-
-					acc.AccountId = existingAcc.AccountId;
-
 					AppService.UpdateAccount(acc);
 				}
 			}
@@ -96,10 +106,13 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <summary>
 		/// Deletes an account.
 		/// </summary>
+		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="accountId">The Id of an account to be deleted.</param>
 		/// <returns>Redirect to the Accounts page.</returns>
-		public ActionResult DeleteAccount(int accountId)
+		public ActionResult DeleteAccount(int subscriptionId, int accountId)
 		{
+			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Accounts, subscriptionId);
+
 			AppService.DeleteAccount(accountId);
 
 			return RedirectToAction("Accounts");

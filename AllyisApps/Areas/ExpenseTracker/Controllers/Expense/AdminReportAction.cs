@@ -55,7 +55,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				reportViewModels.Add(InitializeExpenseReportViewModel(report));
 			}
 
-            var users = reportInfo.Item3;
+            var users = reportInfo.SubscriptionUserInfo;
             List<SelectListItem> enumList = new List<SelectListItem>();
             List<SelectListItem> userList = new List<SelectListItem>();
 
@@ -117,7 +117,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
                 ShowExport = true,
                 Statuses = enumList,
                 SubscriptionId = subInfo.SubscriptionId,
-                SubscriptionName = subInfo.Name,
+                SubscriptionName = subInfo.SubscriptionName,
                 UserId = GetCookieData().UserId,
                 Users = userList,
                 Selection = new AdminReportSelectionModel

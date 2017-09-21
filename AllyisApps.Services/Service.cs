@@ -175,12 +175,12 @@ namespace AllyisApps.Services
 		/// Gets a list of Customers for all customers in the organization, a list of CompleteProjectInfos for all
 		/// projects in the organization, and a list of SubscriptionUserInfos for all users in the current subscription.
 		/// </summary>
-		public Tuple<List<Customer>, List<CompleteProject>, List<SubscriptionUser>> GetReportInfo(int subscriptionId)
+		public ReportInfo GetReportInfo(int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			var spResults = DBHelper.GetReportInfo(subInfo.OrganizationId, subscriptionId);
-			return Tuple.Create(
+			return new ReportInfo(
 				spResults.Item1.Select(cdb => (Customer)InitializeCustomer(cdb)).ToList(),
 				spResults.Item2.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
 				spResults.Item3.Select(sudb => InitializeSubscriptionUser(sudb)).ToList());
@@ -538,13 +538,13 @@ namespace AllyisApps.Services
 		/// Returns a SettingsInfo with start of week, overtime, and lock date settings, a list of PayClassInfos,
 		/// and a list of Holidays for the current organization.
 		/// </summary>
-		/// <param name="subscriptionId">Subscription Id.</param>
+		/// <param name="organizaionId"></param>
 		/// <returns>.</returns>
-		public Tuple<Setting, List<PayClass>, List<Holiday>> GetAllSettings(int subscriptionId)
+		public Tuple<Setting, List<PayClass>, List<Holiday>> GetAllSettings(int organizaionId)
 		{
-			UserContext.SubscriptionAndRole subInfo = null;
-			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			var spResults = DBHelper.GetAllSettings(subInfo.OrganizationId);
+			UserContext.OrganizationAndRole orgInfo = null;
+			this.UserContext.OrganizationsAndRoles.TryGetValue(organizaionId, out orgInfo);
+			var spResults = DBHelper.GetAllSettings(orgInfo.OrganizationId);
 			return Tuple.Create(
 				InitializeSettingsInfo(spResults.Item1),
 				spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),

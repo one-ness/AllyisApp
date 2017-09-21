@@ -9,7 +9,7 @@ AS
 		[LastName], 
 		[Organization].[OrganizationId], 
 		[Invitation].[OrganizationRoleId],
-		[Auth].[Organization].[OrganizationName],
+		[Organization].[OrganizationName],
 		[Auth].[OrganizationRole].[OrganizationRoleName],
 		[EmployeeId],
 		[Invitation].[StatusId]

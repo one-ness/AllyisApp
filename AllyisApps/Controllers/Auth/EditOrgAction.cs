@@ -66,8 +66,8 @@ namespace AllyisApps.Controllers
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
 			bool candelete = this.AppService.CheckOrgAction(AppService.OrgAction.DeleteOrganization, id, false);
 			var infos = AppService.GetOrgWithNextEmployeeId(id);
-			EditOrganizationViewModel model = this.ConstructEditOrganizationViewModel(infos.Item1, candelete);
-			model.EmployeeId = infos.Item2;
+			EditOrganizationViewModel model = this.ConstructEditOrganizationViewModel(infos, candelete);
+			model.EmployeeId = infos.NextEmpolyeeID;
 			ViewBag.returnUrl = returnUrl;
 			return this.View(model);
 		}

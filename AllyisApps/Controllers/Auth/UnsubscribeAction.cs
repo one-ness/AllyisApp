@@ -33,7 +33,7 @@ namespace AllyisApps.Controllers
 
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
 			var infos = AppService.GetProductSubscriptionInfo(orgId, idTwo);
-			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4, orgId);
+			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos, orgId);
 
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, model.OrganizationId);
 			string notificationString = AppService.UnsubscribeAndRemoveBillingSubscription(model.SelectedSku, model.CurrentSubscription.SubscriptionId);
