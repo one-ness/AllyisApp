@@ -7,6 +7,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using AllyisApps.Services.Lookup;
+using System.Collections.Generic;
 
 namespace AllyisApps.Services
 {
@@ -63,9 +64,31 @@ namespace AllyisApps.Services
 		/// </summary>
 		public bool IsActive { get; set; }
 
+		/// <summary>
+		/// list of users in this organization
+		/// </summary>
+		public List<OrganizationUser> Users { get; set; }
+
+		/// <summary>
+		/// list of subscriptions for this organization
+		/// </summary>
+		public List<Subscription> Subscriptions { get; set; }
+
+		/// <summary>
+		/// indicates if the users list has been loaded
+		/// </summary>
+		public bool IsUsersLoaded { get; set; }
+
+		/// <summary>
+		/// indicates if subscriptions list has been loaded
+		/// </summary>
+		public bool IsSubscriptionsLoaded { get; set; }
+
 		public Organization()
 		{
 			Address = new Address();
+			this.Users = new List<OrganizationUser>();
+			this.Subscriptions = new List<Subscription>();
 		}
 	}
 }
