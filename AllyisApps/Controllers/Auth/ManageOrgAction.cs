@@ -33,8 +33,8 @@ namespace AllyisApps.Controllers
 			var sub = model.Subscriptions.Select(x => x).Where(y => y.ProductId == (int)ProductIdEnum.TimeTracker).FirstOrDefault();
 			if (sub != null && model.Subscriptions.Count() > 0)
 			{
-				int subId = sub.SubscriptionId;
-				int startOfWeek = AppService.GetAllSettings(subId).Item1.StartOfWeek;
+				int orgID = sub.OrganizationId;
+				int startOfWeek = AppService.GetAllSettings(orgID).Item1.StartOfWeek;
 				ViewBag.StartDate = Utility.GetDaysFromDateTime(SetStartingDate(startOfWeek));
 				ViewBag.EndDate = Utility.GetDaysFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
 			}

@@ -26,7 +26,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult Settings(int subscriptionId)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
-			var infos = AppService.GetAllSettings(subscriptionId);
+			int organizaionID = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			var infos = AppService.GetAllSettings(organizaionID);
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			string subName = AppService.GetSubscription(subscriptionId).Name;

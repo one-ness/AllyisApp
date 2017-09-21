@@ -538,13 +538,13 @@ namespace AllyisApps.Services
 		/// Returns a SettingsInfo with start of week, overtime, and lock date settings, a list of PayClassInfos,
 		/// and a list of Holidays for the current organization.
 		/// </summary>
-		/// <param name="subscriptionId">Subscription Id.</param>
+		/// <param name="organizaionId"></param>
 		/// <returns>.</returns>
-		public Tuple<Setting, List<PayClass>, List<Holiday>> GetAllSettings(int subscriptionId)
+		public Tuple<Setting, List<PayClass>, List<Holiday>> GetAllSettings(int organizaionId)
 		{
-			UserContext.SubscriptionAndRole subInfo = null;
-			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			var spResults = DBHelper.GetAllSettings(subInfo.OrganizationId);
+			UserContext.OrganizationAndRole orgInfo = null;
+			this.UserContext.OrganizationsAndRoles.TryGetValue(organizaionId, out orgInfo);
+			var spResults = DBHelper.GetAllSettings(orgInfo.OrganizationId);
 			return Tuple.Create(
 				InitializeSettingsInfo(spResults.Item1),
 				spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),
