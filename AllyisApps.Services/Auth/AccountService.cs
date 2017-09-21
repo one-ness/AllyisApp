@@ -260,16 +260,13 @@ namespace AllyisApps.Services
 			userInfo.Subscriptions = Subscriptions.Select(sub =>
 				new UserSubscription()
 				{
-					Subscription = new Subscription()
-					{
-						AreaUrl = sub.AreaUrl,
-						OrganizationId = sub.OrganizationId,
-						ProductId = (ProductIdEnum)sub.ProductId,
-						ProductName = sub.ProductName,
-						SkuId = (SkuIdEnum)sub.SkuId,
-						SubscriptionId = sub.SubscriptionId,
-						SubscriptionName = sub.SubscriptionName
-					},
+					AreaUrl = sub.AreaUrl,
+					OrganizationId = sub.OrganizationId,
+					ProductId = (ProductIdEnum)sub.ProductId,
+					ProductName = sub.ProductName,
+					SkuId = (SkuIdEnum)sub.SkuId,
+					SubscriptionId = sub.SubscriptionId,
+					SubscriptionName = sub.SubscriptionName,
 					ProductRoleId = sub.ProductRoleId,
 					UserId = userId,
 					IconUrl = sub.IconUrl

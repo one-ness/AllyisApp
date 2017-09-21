@@ -91,22 +91,22 @@ namespace AllyisApps.Controllers
 				};
 
 				// Add subscription info
-				foreach (var subItem in accountInfo.Subscriptions.Where(sub => sub.Subscription.OrganizationId == item.Organization.OrganizationId))
+				foreach (var subItem in accountInfo.Subscriptions.Where(sub => sub.OrganizationId == item.Organization.OrganizationId))
 				{
 					string description =
-						subItem.Subscription.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription :
-						subItem.Subscription.ProductId == ProductIdEnum.ExpenseTracker ? Resources.Strings.ExpenseTrackerDescription :
+						subItem.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription :
+						subItem.ProductId == ProductIdEnum.ExpenseTracker ? Resources.Strings.ExpenseTrackerDescription :
 						string.Empty;
 					var subViewModel = new AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel()
 					{
-						ProductName = subItem.Subscription.ProductName,
-						SubscriptionId = subItem.Subscription.SubscriptionId,
-						SubscriptionName = subItem.Subscription.SubscriptionName,
+						ProductName = subItem.ProductName,
+						SubscriptionId = subItem.SubscriptionId,
+						SubscriptionName = subItem.SubscriptionName,
 						ProductDescription = description,
-						ProductId = subItem.Subscription.ProductId,
-						AreaUrl = subItem.Subscription.AreaUrl
+						ProductId = subItem.ProductId,
+						AreaUrl = subItem.AreaUrl
 					};
-					switch (subItem.Subscription.ProductId)
+					switch (subItem.ProductId)
 					{
 						case ProductIdEnum.TimeTracker:
 							{
@@ -120,7 +120,7 @@ namespace AllyisApps.Controllers
 									new
 									{
 										subscriptionId =
-										subItem.Subscription.SubscriptionId,
+										subItem.SubscriptionId,
 										controller = ControllerConstants.TimeEntry,
 										startDate = sDate,
 										endDate = eDate
@@ -133,7 +133,7 @@ namespace AllyisApps.Controllers
 									"ExpenseTracker_Default",
 									new
 									{
-										subscriptionId = subItem.Subscription.SubscriptionId,
+										subscriptionId = subItem.SubscriptionId,
 										controller = ControllerConstants.Expense
 									});
 								break;
@@ -143,7 +143,7 @@ namespace AllyisApps.Controllers
 							subViewModel.ProductGoToUrl = Url.RouteUrl("StaffingManager_default",
 								new
 								{
-									subscriptionId = subItem.Subscription.SubscriptionId,
+									subscriptionId = subItem.SubscriptionId,
 									controller = ControllerConstants.Staffing
 								});
 							break;

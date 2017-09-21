@@ -56,7 +56,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
 
-				Project projIdMatch = AppService.GetAllProjectsForOrganization(orgId).Where(project => project.ProjectOrgId == model.ProjectOrgId && project.CustomerId == model.ParentCustomerId).SingleOrDefault();
+				Services.Project.Project projIdMatch = AppService.GetAllProjectsForOrganization(orgId).Where(project => project.ProjectOrgId == model.ProjectOrgId && project.CustomerId == model.ParentCustomerId).SingleOrDefault();
 				if (projIdMatch != null && projIdMatch.ProjectId != model.ProjectId)
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
@@ -115,7 +115,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				subscriptionUsers.Add(new BasicUserInfoViewModel(su.FirstName, su.LastName, su.UserId));
 			}
 
-			string subscriptionNameToDisplay = AppService.GetSubscription(subscriptionId).Name;
+			string subscriptionNameToDisplay = AppService.GetSubscription(subscriptionId).SubscriptionName;
 
 			return new EditProjectViewModel
 			{

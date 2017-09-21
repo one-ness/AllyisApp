@@ -74,7 +74,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets an object representing the subscription the organization currently has with this
 		/// productId.
 		/// </summary>
-		public SubscriptionInfo CurrentSubscription { get; set; }
+		public Subscription CurrentSubscription { get; set; }
 
 		/// <summary>
 		/// Gets or sets a list of the SkuS applicable to this product.

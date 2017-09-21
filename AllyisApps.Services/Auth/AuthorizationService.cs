@@ -63,7 +63,8 @@ namespace AllyisApps.Services
 			Pending,
 			UpdateReport,
 			CreateReport,
-			UserSettings
+			UserSettings,
+			Accounts
 		}
 
 		/// <summary>
@@ -199,8 +200,8 @@ namespace AllyisApps.Services
 		/// <param name="throwException">Throw exception or not.</param>
 		/// <returns></returns>
 		public bool CheckExpenseTrackerAction(ExpenseTrackerAction action, int subId, bool throwException = true)
-        {
-            bool result = false;
+		{
+			bool result = false;
 
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.UserContext.SubscriptionsAndRoles.TryGetValue(subId, out subInfo);
@@ -209,10 +210,11 @@ namespace AllyisApps.Services
 				ExpenseTrackerRole etRole = (ExpenseTrackerRole)subInfo.ProductRoleId;
 				if (subInfo.ProductId == ProductIdEnum.ExpenseTracker && etRole != ExpenseTrackerRole.NotInProduct)
 				{
-					if (action == ExpenseTrackerAction.AdminReport 
-						|| action == ExpenseTrackerAction.StatusUpdate 
-						|| action == ExpenseTrackerAction.AdminExpense 
-						|| action == ExpenseTrackerAction.UserSettings)
+					if (action == ExpenseTrackerAction.AdminReport
+						|| action == ExpenseTrackerAction.StatusUpdate
+						|| action == ExpenseTrackerAction.AdminExpense
+						|| action == ExpenseTrackerAction.UserSettings
+						|| action == ExpenseTrackerAction.Accounts)
 					{
 						switch (etRole)
 						{
@@ -234,6 +236,7 @@ namespace AllyisApps.Services
 							case ExpenseTrackerRole.SuperUser:
 								result = true;
 								break;
+
 							default:
 								break;
 						}

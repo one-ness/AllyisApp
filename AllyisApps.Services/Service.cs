@@ -175,12 +175,12 @@ namespace AllyisApps.Services
 		/// Gets a list of Customers for all customers in the organization, a list of CompleteProjectInfos for all
 		/// projects in the organization, and a list of SubscriptionUserInfos for all users in the current subscription.
 		/// </summary>
-		public Tuple<List<Customer>, List<CompleteProject>, List<SubscriptionUser>> GetReportInfo(int subscriptionId)
+		public ReportInfo GetReportInfo(int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			var spResults = DBHelper.GetReportInfo(subInfo.OrganizationId, subscriptionId);
-			return Tuple.Create(
+			return new ReportInfo(
 				spResults.Item1.Select(cdb => (Customer)InitializeCustomer(cdb)).ToList(),
 				spResults.Item2.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
 				spResults.Item3.Select(sudb => InitializeSubscriptionUser(sudb)).ToList());

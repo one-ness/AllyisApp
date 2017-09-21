@@ -79,15 +79,15 @@ namespace AllyisApps.Services
 		/// pending in the organization, the organization's billing stripe handle, and a list of all products.
 		/// </summary>
 		/// <returns>.</returns>
-		public Tuple<Organization, List<OrganizationUser>, List<SubscriptionDisplay>, List<Invitation>, string> GetOrganizationManagementInfo(int orgId)
+		public Organization GetOrganizationManagementInfo(int orgId)
 		{
 			var spResults = DBHelper.GetOrganizationManagementInfo(orgId);
-			return Tuple.Create(
-				InitializeOrganization(spResults.Item1),
-				spResults.Item2.Select(oudb => InitializeOrganizationUser(oudb)).ToList(),
-				spResults.Item3.Select(sddb => InitializeSubscriptionDisplay(sddb)).ToList(),
-				spResults.Item4.Select(idb => InitializeInvitationInfo(idb)).ToList(),
-				spResults.Item5);
+			Organization org = InitializeOrganization(spResults.Item1);
+			org.Users = spResults.Item2.Select(oudb => InitializeOrganizationUser(oudb)).ToList();
+			org.Subscriptions = spResults.Item3.Select(sddb => InitializeSubscription(sddb)).ToList();
+			org.Invitations = spResults.Item4.Select(idb => InitializeInvitationInfo(idb)).ToList();
+			org.StripeToken = spResults.Item5;
+			return org;
 		}
 
 		/// <summary>
@@ -96,12 +96,12 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<Organization, string> GetOrgWithNextEmployeeId(int orgId)
+		public Organization GetOrgWithNextEmployeeId(int orgId)
 		{
 			var spResults = DBHelper.GetOrgWithNextEmployeeId(orgId, UserContext.UserId);
-			return Tuple.Create(
-				InitializeOrganization(spResults.Item1),
-				spResults.Item2);
+			Organization org = InitializeOrganization(spResults.Item1);
+			org.NextEmpolyeeID = spResults.Item2;
+			return org;
 		}
 
 		/// <summary>
@@ -112,30 +112,33 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">The Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<string, List<SubscriptionDisplay>, List<ProductRole>, List<CompleteProject>, string> GetAddMemberInfo(int orgId)
+		public Tuple<Organization, List<ProductRole>> GetAddMemberInfo(int orgId)
 		{
 			var spResults = DBHelper.GetAddMemberInfo(orgId);
+			Organization org = new Organization();
+			org.NextEmpolyeeID = string.Compare(spResults.Item1, spResults.Item4) > 0 ? spResults.Item1 : spResults.Item4;
+			org.Subscriptions = spResults.Item2.Select(sddb => InitializeSubscription(sddb)).ToList();
+			
+			
 			return Tuple.Create(
-				spResults.Item1,
-				spResults.Item2.Select(sddb => InitializeSubscriptionDisplay(sddb)).ToList(),
-				spResults.Item3.Select(srdb => InitializeSubscriptionRoleInfo(srdb)).ToList(),
-				spResults.Item4.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
-				spResults.Item5);
+				org,
+				spResults.Item3.Select(srdb => InitializeSubscriptionRoleInfo(srdb)).ToList()
+			);
 		}
 
 		/// <summary>
 		/// Gets a list of UserRolesInfos for users in the current organization and their roles/subscription roles,
-		/// and a list of SubscriptionRoles (with only SubscriptionId, ProductId, and ProductName populated) for
+		/// and a list of Subscriptions (with only SubscriptionId, ProductId, and ProductName populated) for
 		/// all subscriptions in the current organization.
 		/// </summary>
 		/// <param name="orgId">The Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<UserRole>, List<SubscriptionDisplay>> GetOrgAndSubRoles(int orgId)
+		public Tuple<List<UserRole>, List<Subscription>> GetOrgAndSubRoles(int orgId)
 		{
 			var spResults = DBHelper.GetOrgAndSubRoles(orgId);
 			return Tuple.Create(
 				spResults.Item1.Select(urdb => InitializeUserRole(urdb)).ToList(),
-				spResults.Item2.Select(sddb => InitializeSubscriptionDisplay(sddb)).ToList());
+				spResults.Item2.Select(sddb => InitializeSubscription(sddb)).ToList());
 		}
 
 		/// <summary>

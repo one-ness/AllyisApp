@@ -135,7 +135,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			IEnumerable<int> userIds = model.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString));
 
 			return AppService.CreateProjectAndUpdateItsUserList(
-				new Project()
+				new Services.Project.Project()
 				{
 					CustomerId = model.ParentCustomerId,
 					ProjectName = model.ProjectName,
@@ -153,7 +153,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The Project Id.</returns>
 		public int CreateProject(EditProjectViewModel model)
 		{
-			return AppService.CreateProject(new Project()
+			return AppService.CreateProject(new Services.Project.Project()
 			{
 				CustomerId = model.ParentCustomerId,
 				ProjectName = model.ProjectName,

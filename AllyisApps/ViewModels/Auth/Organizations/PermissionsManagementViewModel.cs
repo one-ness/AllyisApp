@@ -181,7 +181,7 @@ namespace AllyisApps.ViewModels.Auth
 		public Filter(string name, IEnumerable<UserRole> users)
 		{
 			this.Name = name;
-			this.UserIds = users.Select(x => x.UserId);
+			this.UserIds = users.Select(x => x.UserId.ToString());
 		}
 
 		/// <summary>
@@ -194,7 +194,7 @@ namespace AllyisApps.ViewModels.Auth
 		{
 			this.Name = name;
 			Func<UserRole, bool> whereFunction = whereExpression.Compile();
-			this.UserIds = users.Where(whereFunction).Select(x => x.UserId);
+			this.UserIds = users.Where(whereFunction).Select(x =>  x.UserId.ToString());
 		}
 
 		/// <summary>
