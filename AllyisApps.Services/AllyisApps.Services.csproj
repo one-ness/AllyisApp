@@ -120,7 +120,6 @@
     <Compile Include="TimeTracker\Holiday.cs" />
     <Compile Include="Auth\InvitationInfo.cs" />
     <Compile Include="Auth\Language.cs" />
-    <Compile Include="Auth\OrganizationUserInfo.cs" />
     <Compile Include="TimeTracker\LockDatePeriodEnum.cs" />
     <Compile Include="TimeTracker\PayClass.cs" />
     <Compile Include="Crm\CompleteProjectInfo.cs" />

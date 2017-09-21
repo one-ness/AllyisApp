@@ -40,8 +40,8 @@ namespace AllyisApps.Controllers
 				OrganizationId = id,
 
 				// TODO: Get rid of this once product panes in Permissions page are genericized.
-				TimeTrackerId = (int)ProductIdEnum.TimeTracker,
-				ExpenseTrackerId = (int)ProductIdEnum.ExpenseTracker
+				TimeTrackerId = (int) ProductIdEnum.TimeTracker,
+				ExpenseTrackerId = (int) ProductIdEnum.ExpenseTracker
 			};
 
 			// This can also be axed after finding a good way to genericize products in the Permissions page.
@@ -60,14 +60,14 @@ namespace AllyisApps.Controllers
 
 			foreach (UserRolesInfo role in infos.Item1)
 			{
-				UserPermissionsViewModel modelUser = model.Users.Where(u => u.UserId == int.Parse(role.UserId)).SingleOrDefault();
-				if (modelUser == null)
+				UserPermissionsViewModel modelUser = model.Users.Where(u => u.UserId == role.UserId).SingleOrDefault();
+				if (modelUser == null)//THIS IS ALLWAYS THE CASE!!!!
 				{
 					modelUser = new UserPermissionsViewModel
 					{
 						FirstName = role.FirstName,
 						LastName = role.LastName,
-						UserId = int.Parse(role.UserId),
+						UserId =  role.UserId,
 						Email = role.Email,
 						OrganizationRoleId = role.OrganizationRoleId,
 						ProductRoleIds = new List<int>()

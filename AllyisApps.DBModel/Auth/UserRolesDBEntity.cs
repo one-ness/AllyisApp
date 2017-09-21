@@ -24,7 +24,7 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets User's Id.
 		/// </summary>
-		public string UserId { get; set; }
+		public int UserId { get; set; }
 
 		/// <summary>
 		/// Gets or sets Their orgization role id.

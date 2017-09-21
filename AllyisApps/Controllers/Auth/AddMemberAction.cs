@@ -110,21 +110,21 @@ namespace AllyisApps.Controllers
 		public AddMemberViewModel ConstructOrganizationAddMembersViewModel(int organizationId)
 		{
 			var infos = AppService.GetAddMemberInfo(organizationId);
-			string nextId = string.Compare(infos.Item1, infos.Item5) > 0 ? infos.Item1 : infos.Item5;
+			
 
 			AddMemberViewModel result = new AddMemberViewModel
 			{
 				OrganizationId = organizationId,
-				EmployeeId = new string(AppService.IncrementAlphanumericCharArray(nextId.ToCharArray())),
+				EmployeeId = new string(AppService.IncrementAlphanumericCharArray(infos.Item1.NextEmpolyeeID.ToCharArray())),
 				Subscriptions = new List<AddMemberSubscriptionViewModel>()
 			};
 
-			foreach (SubscriptionDisplayInfo sub in infos.Item2)
+			foreach (Subscription sub in infos.Item1.Subscriptions)
 			{
 				AddMemberSubscriptionViewModel subInfo = new AddMemberSubscriptionViewModel
 				{
 					ProductName = sub.ProductName,
-					ProductRoles = infos.Item3.Where(r => r.ProductId == sub.ProductId)
+					ProductRoles = infos.Item2.Where(r => r.ProductId == (int) sub.ProductId)
 						.Select(r => new ProductRoleViewModel()
 						{
 							ProductId = r.ProductId,

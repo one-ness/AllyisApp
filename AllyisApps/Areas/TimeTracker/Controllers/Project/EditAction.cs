@@ -114,7 +114,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				subscriptionUsers.Add(new BasicUserInfoViewModel(su.FirstName, su.LastName, su.UserId));
 			}
 
-			string subscriptionNameToDisplay = AppService.GetSubscription(subscriptionId).Name;
+			string subscriptionNameToDisplay = AppService.GetSubscription(subscriptionId).SubscriptionName;
 
 			return new EditProjectViewModel
 			{

@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Services;
 using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Auth
@@ -24,9 +25,9 @@ namespace AllyisApps.ViewModels.Auth
 		/// Initializes a new instance of the <see cref="SubscriptionDisplayViewModel"/> class.
 		/// </summary>
 		/// <param name="sub">Subscription display.</param>
-		public SubscriptionDisplayViewModel(SubscriptionDisplayInfo sub) : this()
+		public SubscriptionDisplayViewModel(Subscription sub) : this()
 		{
-			this.ProductId = sub.ProductId;
+			this.ProductId = (int)sub.ProductId;
 			this.ProductName = sub.ProductName;
 			this.ProductDescription = sub.Description;
 			this.SubscriptionId = sub.SubscriptionId;

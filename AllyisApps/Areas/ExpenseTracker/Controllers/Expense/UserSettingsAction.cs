@@ -30,13 +30,13 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			string productName = AppService.GetProductNameBySubscriptionId(subInfo.SubscriptionId);
 
-			var allInfos = AppService.GetOrganizationManagementInfo(subInfo.OrganizationId).Item2;
-			IEnumerable<OrganizationUserInfo> userInfos = allInfos.Where(u =>
+			var allInfos = AppService.GetOrganizationManagementInfo(subInfo.OrganizationId);
+			IEnumerable<OrganizationUser> userInfos = allInfos.Users.Where(u =>
 				AppService.GetProductRoleForUser("Expense Tracker", u.UserId, subInfo.OrganizationId) == "Manager"
 				|| AppService.GetProductRoleForUser("Expense Tracker", u.UserId, subInfo.OrganizationId) == "SuperUser");
 
 			List<UserMaxAmountViewModel> userViewModels = new List<UserMaxAmountViewModel>();
-			foreach (OrganizationUserInfo user in userInfos)
+			foreach (OrganizationUser user in userInfos)
 			{
 				userViewModels.Add(InitializeUserMaxAmount(user));
 			}
@@ -50,7 +50,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			return View(model);
 		}
 
-		private UserMaxAmountViewModel InitializeUserMaxAmount(OrganizationUserInfo user)
+		private UserMaxAmountViewModel InitializeUserMaxAmount(OrganizationUser user)
 		{
 			return new UserMaxAmountViewModel()
 			{

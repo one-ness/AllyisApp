@@ -8,15 +8,16 @@ using System;
 
 namespace AllyisApps.Services.Billing
 {
-	/// <summary>
-	/// Represents a subscription's information.
-	/// </summary>
+	///// <summary>
+	///// Represents a subscription's information.
+	///// </summary>
+	/*
 	public class SubscriptionDisplayInfo
 	{
 		/// <summary>
 		/// Gets or sets a Product Id.
 		/// </summary>
-		public int ProductId { get; set; }
+		public ProductIdEnum ProductId { get; set; }
 
 		/// <summary>
 		/// Gets or sets a Product name.
@@ -41,7 +42,7 @@ namespace AllyisApps.Services.Billing
 		/// <summary>
 		/// Gets or sets a Sku Id.
 		/// </summary>
-		public int SkuId { get; set; }
+		public SkuIdEnum SkuId { get; set; }
 
 		/// <summary>
 		/// Gets or sets a Number of users.
@@ -71,9 +72,14 @@ namespace AllyisApps.Services.Billing
 		public string Description { get; internal set; }
 
 		public String AreaUrl { get; set; }
+
+		public bool isActive { get; set; }
+
+		public DateTime? PromoExpirationDateUtc { get; set; }
 		///// <summary>
 		///// Gets or sets a value indicating whether a user has permission to view this subscription.
 		///// </summary>
 		//public bool CanViewSubscription { get; set; }
 	}
+	*/
 }

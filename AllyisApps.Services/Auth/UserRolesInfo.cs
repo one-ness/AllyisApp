@@ -24,7 +24,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the User Id.
 		/// </summary>
-		public string UserId { get; set; }
+		public int UserId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Orgization role Id.

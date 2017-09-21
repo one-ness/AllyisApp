@@ -117,7 +117,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
                 ShowExport = true,
                 Statuses = enumList,
                 SubscriptionId = subInfo.SubscriptionId,
-                SubscriptionName = subInfo.Name,
+                SubscriptionName = subInfo.SubscriptionName,
                 UserId = GetCookieData().UserId,
                 Users = userList,
                 Selection = new AdminReportSelectionModel

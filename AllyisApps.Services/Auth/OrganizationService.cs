@@ -80,15 +80,15 @@ namespace AllyisApps.Services
 		/// pending in the organization, the organization's billing stripe handle, and a list of all products.
 		/// </summary>
 		/// <returns>.</returns>
-		public Tuple<Organization, List<OrganizationUserInfo>, List<SubscriptionDisplayInfo>, List<InvitationInfo>, string> GetOrganizationManagementInfo(int orgId)
+		public Organization GetOrganizationManagementInfo(int orgId)
 		{
 			var spResults = DBHelper.GetOrganizationManagementInfo(orgId);
-			return Tuple.Create(
-				InitializeOrganization(spResults.Item1),
-				spResults.Item2.Select(oudb => InitializeOrganizationUserInfo(oudb)).ToList(),
-				spResults.Item3.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList(),
-				spResults.Item4.Select(idb => InitializeInvitationInfo(idb)).ToList(),
-				spResults.Item5);
+			Organization org = InitializeOrganization(spResults.Item1);
+			org.Users = spResults.Item2.Select(oudb => InitializeOrganizationUser(oudb)).ToList();
+			org.Subscriptions = spResults.Item3.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList();
+			org.Invitations = spResults.Item4.Select(idb => InitializeInvitationInfo(idb)).ToList();
+			org.StripeToken = spResults.Item5;
+			return org;
 		}
 
 		/// <summary>
@@ -97,12 +97,12 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<Organization, string> GetOrgWithNextEmployeeId(int orgId)
+		public Organization GetOrgWithNextEmployeeId(int orgId)
 		{
 			var spResults = DBHelper.GetOrgWithNextEmployeeId(orgId, UserContext.UserId);
-			return Tuple.Create(
-				InitializeOrganization(spResults.Item1),
-				spResults.Item2);
+			Organization org = InitializeOrganization(spResults.Item1);
+			org.NextEmpolyeeID = spResults.Item2;
+			return org;
 		}
 
 		/// <summary>
@@ -113,25 +113,28 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">The Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<string, List<SubscriptionDisplayInfo>, List<ProductRole>, List<CompleteProjectInfo>, string> GetAddMemberInfo(int orgId)
+		public Tuple<Organization, List<ProductRole>> GetAddMemberInfo(int orgId)
 		{
 			var spResults = DBHelper.GetAddMemberInfo(orgId);
+			Organization org = new Organization();
+			org.NextEmpolyeeID = string.Compare(spResults.Item1, spResults.Item4) > 0 ? spResults.Item1 : spResults.Item4;
+			org.Subscriptions = spResults.Item2.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList();
+			
+
 			return Tuple.Create(
-				spResults.Item1,
-				spResults.Item2.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList(),
-				spResults.Item3.Select(srdb => InitializeSubscriptionRoleInfo(srdb)).ToList(),
-				spResults.Item4.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
-				spResults.Item5);
+				org,
+				spResults.Item3.Select(srdb => InitializeSubscriptionRoleInfo(srdb)).ToList()
+			);
 		}
 
 		/// <summary>
 		/// Gets a list of UserRolesInfos for users in the current organization and their roles/subscription roles,
-		/// and a list of SubscriptionRoles (with only SubscriptionId, ProductId, and ProductName populated) for
+		/// and a list of Subscriptions (with only SubscriptionId, ProductId, and ProductName populated) for
 		/// all subscriptions in the current organization.
 		/// </summary>
 		/// <param name="orgId">The Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<UserRolesInfo>, List<SubscriptionDisplayInfo>> GetOrgAndSubRoles(int orgId)
+		public Tuple<List<UserRolesInfo>, List<Subscription>> GetOrgAndSubRoles(int orgId)
 		{
 			var spResults = DBHelper.GetOrgAndSubRoles(orgId);
 			return Tuple.Create(
@@ -172,7 +175,7 @@ namespace AllyisApps.Services
 		/// <param name="url">The url for Account/Index with the accessCode value as "{accessCode}".</param>
 		/// <param name="invitationInfo">An <see cref="InvitationInfo"/> with invitee information filled out.</param>
 		/// <returns>The invitation Id, or -1 if the employee id is already taken.</returns>
-		public  int InviteUser(string url, InvitationInfo invitationInfo)
+		public int InviteUser(string url, InvitationInfo invitationInfo)
 		{
 			#region Validation
 
@@ -357,14 +360,14 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>The member list.</returns>
-		public IEnumerable<OrganizationUserInfo> GetOrganizationMemberList(int orgId)
+		public IEnumerable<OrganizationUser> GetOrganizationMemberList(int orgId)
 		{
 			if (orgId < 0)
 			{
 				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
 			}
 
-			return DBHelper.GetOrganizationMemberList(orgId).Select(o => InitializeOrganizationUserInfo(o));
+			return DBHelper.GetOrganizationMemberList(orgId).Select(o => InitializeOrganizationUser(o));
 		}
 
 		// TODO: Look more closely at the use of this method in UploadCsvFileAction to see if some other existing service method can be used instead, and this one retired.
@@ -556,14 +559,14 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="organizationUser">OrganizationUserDBEntity instance.</param>
 		/// <returns>OrganizationUserInfo instance.</returns>
-		public static OrganizationUserInfo InitializeOrganizationUserInfo(OrganizationUserDBEntity organizationUser)
+		public static OrganizationUser InitializeOrganizationUser(OrganizationUserDBEntity organizationUser)
 		{
 			if (organizationUser == null)
 			{
 				return null;
 			}
 
-			return new OrganizationUserInfo
+			return new OrganizationUser
 			{
 				FirstName = organizationUser.FirstName,
 				LastName = organizationUser.LastName,

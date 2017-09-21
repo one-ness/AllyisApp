@@ -37,7 +37,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			const string TempDataKey = "RVM";
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			string subName = AppService.GetSubscription(subscriptionId).Name;
+			string subName = AppService.GetSubscription(subscriptionId).SubscriptionName;
 			if (this.TempData[TempDataKey] != null)
 			{
 				reportVM = (ReportViewModel)TempData[TempDataKey];

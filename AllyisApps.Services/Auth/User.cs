@@ -128,7 +128,7 @@ namespace AllyisApps.Services
 		public List<Invitation> Invitations { get; set; }
 
 
-		public decimal MaxAmount { get; internal set; }
+		public decimal MaxAmount { get; set; }
 
 		public bool IsAddressLoaded { get; set; }
 		public bool IsInvitationsLoaded { get; set; }
