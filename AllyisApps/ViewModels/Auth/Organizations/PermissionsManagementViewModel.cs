@@ -67,7 +67,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets the subscriptionDisplay information.
 		/// </summary>
-		public IEnumerable<Subscription> Subscriptions { get; internal set; }
+		public IEnumerable<SubscriptionDisplay> Subscriptions { get; internal set; }
 	}
 
 	/// <summary>
@@ -194,7 +194,7 @@ namespace AllyisApps.ViewModels.Auth
 		{
 			this.Name = name;
 			Func<UserRole, bool> whereFunction = whereExpression.Compile();
-			this.UserIds = users.Where(whereFunction).Select(x => x.UserId);
+			this.UserIds = users.Where(whereFunction).Select(x =>  x.UserId.ToString());
 		}
 
 		/// <summary>

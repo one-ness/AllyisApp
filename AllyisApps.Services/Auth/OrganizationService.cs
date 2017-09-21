@@ -84,7 +84,7 @@ namespace AllyisApps.Services
 			var spResults = DBHelper.GetOrganizationManagementInfo(orgId);
 			Organization org = InitializeOrganization(spResults.Item1);
 			org.Users = spResults.Item2.Select(oudb => InitializeOrganizationUser(oudb)).ToList();
-			org.Subscriptions = spResults.Item3.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList();
+			org.Subscriptions = spResults.Item3.Select(sddb => InitializeSubscription(sddb)).ToList();
 			org.Invitations = spResults.Item4.Select(idb => InitializeInvitationInfo(idb)).ToList();
 			org.StripeToken = spResults.Item5;
 			return org;
@@ -117,9 +117,9 @@ namespace AllyisApps.Services
 			var spResults = DBHelper.GetAddMemberInfo(orgId);
 			Organization org = new Organization();
 			org.NextEmpolyeeID = string.Compare(spResults.Item1, spResults.Item4) > 0 ? spResults.Item1 : spResults.Item4;
-			org.Subscriptions = spResults.Item2.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList();
+			org.Subscriptions = spResults.Item2.Select(sddb => InitializeSubscription(sddb)).ToList();
 			
-
+			
 			return Tuple.Create(
 				org,
 				spResults.Item3.Select(srdb => InitializeSubscriptionRoleInfo(srdb)).ToList()
@@ -133,12 +133,12 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">The Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<UserRole>, List<SubscriptionDisplay>> GetOrgAndSubRoles(int orgId)
+		public Tuple<List<UserRole>, List<Subscription>> GetOrgAndSubRoles(int orgId)
 		{
 			var spResults = DBHelper.GetOrgAndSubRoles(orgId);
 			return Tuple.Create(
 				spResults.Item1.Select(urdb => InitializeUserRole(urdb)).ToList(),
-				spResults.Item2.Select(sddb => InitializeSubscriptionDisplay(sddb)).ToList());
+				spResults.Item2.Select(sddb => InitializeSubscription(sddb)).ToList());
 		}
 
 		/// <summary>

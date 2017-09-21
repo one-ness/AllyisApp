@@ -77,7 +77,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			string subName = this.AppService.GetSubscription(subscriptionId).SubscriptionName;
-			ViewBag.GetDateFromDays = new Func<int, DateTime>(AppService.GetDateFromDays);
+			ViewBag.GetDateTimeFromDays = new Func<int, DateTime?>(Utility.GetDateTimeFromDays);
 
 			var infos = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null, userId);
 

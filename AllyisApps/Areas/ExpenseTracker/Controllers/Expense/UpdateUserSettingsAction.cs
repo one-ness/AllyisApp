@@ -32,10 +32,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			return RedirectToAction("index");
 		}
-
 		private OrganizationUser InitializeOrganizaionUser(UserMaxAmountViewModel user, int orgId)
 		{
-			return new OrganizationUser()
+			return new OrganizationUser
 			{
 				MaxAmount = user.MaxAmount,
 				FirstName = user.FirstName,

@@ -113,8 +113,8 @@ namespace AllyisApps.Controllers
 								int? sDate = null;
 								int? eDate = null;
 								int startOfWeek = AppService.GetAllSettings(subItem.SubscriptionId).Item1.StartOfWeek;
-								sDate = AppService.GetDaysFromDateTime(SetStartingDate(startOfWeek));
-								eDate = AppService.GetDaysFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
+								sDate = Utility.GetDaysFromDateTime(SetStartingDate(startOfWeek));
+								eDate = Utility.GetDaysFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
 								subViewModel.ProductGoToUrl = Url.RouteUrl(
 									"TimeTracker_NoUserId",
 									new

@@ -509,9 +509,9 @@ namespace AllyisApps.Services
 		/// Gets a list of <see cref="SubscriptionDisplay"/>s for all subscriptions in the chosen organization.
 		/// </summary>
 		/// <returns>List of SubscriptionDisplayInfos.</returns>
-		public IEnumerable<SubscriptionDisplay> GetSubscriptionsDisplay(int organizationId)
+		public IEnumerable<Subscription> GetSubscriptionsDisplay(int organizationId)
 		{
-			return this.DBHelper.GetSubscriptionsDisplayByOrg(organizationId).Select(s => InitializeSubscriptionDisplay(s)).ToList();
+			return this.DBHelper.GetSubscriptionsDisplayByOrg(organizationId).Select(s => InitializeSubscription(s)).ToList();
 		}
 
 		/// <summary>
@@ -839,14 +839,14 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="subscriptionDisplay">SubscriptionDisplayDBEntity instance.</param>
 		/// <returns>SubscriptionDisplay instance.</returns>
-		public static SubscriptionDisplay InitializeSubscriptionDisplay(SubscriptionDisplayDBEntity subscriptionDisplay)
+		public static Subscription InitializeSubscription(SubscriptionDisplayDBEntity subscriptionDisplay)
 		{
 			if (subscriptionDisplay == null)
 			{
 				return null;
 			}
 
-			return new SubscriptionDisplay
+			return new Subscription
 			{
 				AreaUrl = subscriptionDisplay.AreaUrl,
 				CreatedUtc = subscriptionDisplay.CreatedUtc,

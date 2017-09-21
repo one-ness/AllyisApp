@@ -69,9 +69,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Auth\Invitation.cs" />
-    <Compile Include="Auth\ProductSubscription.cs" />
-    <Compile Include="Auth\ReportInfo.cs" />
     <Compile Include="Auth\InvitationStatusEnum.cs" />
     <Compile Include="Auth\Organization.cs" />
     <Compile Include="Auth\AccountService.cs" />
@@ -81,6 +78,8 @@
     <Compile Include="Auth\Account.cs" />
     <Compile Include="Auth\OrganizationUser.cs" />
     <Compile Include="Auth\ProductRoleEnums.cs" />
+    <Compile Include="Auth\ProductSubscription.cs" />
+    <Compile Include="Auth\ReportInfo.cs" />
     <Compile Include="Auth\UserContext.cs" />
     <Compile Include="Auth\UserOrganization.cs" />
     <Compile Include="Auth\UserSubscription.cs" />
@@ -102,6 +101,7 @@
     <Compile Include="Lookup\Address.cs" />
     <Compile Include="Lookup\AddressService.cs" />
     <Compile Include="Project\PjmService.cs" />
+    <Compile Include="Project\Project.cs" />
     <Compile Include="ServiceConstants.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="Crm\Customer.cs" />
@@ -125,7 +125,6 @@
     <Compile Include="TimeTracker\LockDatePeriodEnum.cs" />
     <Compile Include="TimeTracker\PayClass.cs" />
     <Compile Include="Crm\CompleteProject.cs" />
-    <Compile Include="Crm\Project.cs" />
     <Compile Include="TimeTracker\PayClassIdEnum.cs" />
     <Compile Include="TimeTracker\Setting.cs" />
     <Compile Include="Billing\SkuIdEnum.cs" />

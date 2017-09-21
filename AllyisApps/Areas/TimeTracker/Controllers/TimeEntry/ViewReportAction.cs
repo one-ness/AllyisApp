@@ -94,8 +94,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				reportVM.PreviewTotal = string.Format("{0} {1}", total, Resources.Strings.HoursTotal);
 
-				IEnumerable<CompleteProjectInfo> orgProjects = infos.CompleteProjectInfo;
-				CompleteProjectInfo defaultProject = AppService.GetProject(0);
+				IEnumerable<CompleteProject> orgProjects = infos.CompleteProjectInfo;
+				CompleteProject defaultProject = AppService.GetProject(0);
 				if (dataCount > 0)
 				{
 					IList<TablePreviewEntry> pEntries = new List<TablePreviewEntry>();

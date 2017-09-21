@@ -79,7 +79,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// List of invites sent out by owners of the Organizaion 
 		/// </summary>
-		public List<InvitationInfo> Invitations { get; set; }
+		public List<Invitation> Invitations { get; set; }
 
 		public String StripeToken { get; set; }
 		
@@ -114,7 +114,7 @@ namespace AllyisApps.Services
 			Address = new Address();
 			this.Users = new List<OrganizationUser>();
 			this.Subscriptions = new List<Subscription>();
-			this.Invitations = new List<InvitationInfo>();
+			this.Invitations = new List<Invitation>();
 		}
 	}
 }
