@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense;
 using AllyisApps.Controllers;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
+using AllyisApps.Services;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -21,6 +22,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>The account view page.</returns>
 		public ActionResult Accounts(int subscriptionId)
 		{
+			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Accounts, subscriptionId);
+
 			SetNavData(subscriptionId);
 
 			AccountPageViewModel model = new AccountPageViewModel();
