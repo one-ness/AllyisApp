@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="CompleteProjectInfo.cs" company="Allyis, Inc.">
+// <copyright file="CompleteProject.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -11,7 +11,7 @@ namespace AllyisApps.Services
 	/// <summary>
 	/// Represents a project.
 	/// </summary>
-	public class CompleteProjectInfo
+	public class CompleteProject
 	{
 		/// <summary>
 		/// Gets or sets the Project Id.

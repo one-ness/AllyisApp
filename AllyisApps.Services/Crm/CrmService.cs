@@ -137,7 +137,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">The organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<CompleteProjectInfo>, List<Customer>> GetProjectsAndCustomersForOrgAndUser(int orgId)
+		public Tuple<List<CompleteProject>, List<Customer>> GetProjectsAndCustomersForOrgAndUser(int orgId)
 		{
 			var spResults = DBHelper.GetProjectsAndCustomersForOrgAndUser(orgId, UserContext.UserId);
 			return Tuple.Create(
@@ -151,7 +151,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">The Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<CompleteProjectInfo>, List<Customer>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId)
+		public Tuple<List<CompleteProject>, List<Customer>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId)
 		{
 			var spResults = DBHelper.GetInactiveProjectsAndCustomersForOrgAndUser(orgId, UserContext.UserId);
 			return Tuple.Create(
@@ -491,7 +491,7 @@ namespace AllyisApps.Services
 		/// <param name="orgId">The organization's Id.</param>
 		/// <param name="onlyActive">True (default) to only return active projects, false to include all projects, active or not.</param>
 		/// <returns>A list of all the projects a user can access in an organization.</returns>
-		public IEnumerable<CompleteProjectInfo> GetProjectsByUserAndOrganization(int userId, int orgId = -1, bool onlyActive = true)
+		public IEnumerable<CompleteProject> GetProjectsByUserAndOrganization(int userId, int orgId = -1, bool onlyActive = true)
 		{
 			if (userId <= 0)
 			{
@@ -502,11 +502,11 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets a <see cref="CompleteProjectInfo"/>.
+		/// Gets a <see cref="CompleteProject"/>.
 		/// </summary>
 		/// <param name="projectId">Project Id.</param>
-		/// <returns>CompleteProjectInfo instance.</returns>
-		public CompleteProjectInfo GetProject(int projectId)
+		/// <returns>CompleteProject instance.</returns>
+		public CompleteProject GetProject(int projectId)
 		{
 			if (projectId < 0)
 			{
@@ -517,12 +517,12 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets a <see cref="CompleteProjectInfo"/>, with the IsProjectUser field filled out for the
+		/// Gets a <see cref="CompleteProject"/>, with the IsProjectUser field filled out for the
 		/// current user.
 		/// </summary>
 		/// <param name="projectId">Project Id.</param>
-		/// <returns>CompleteProjectInfo instance.</returns>
-		public CompleteProjectInfo GetProjectAsUser(int projectId)
+		/// <returns>CompleteProject instance.</returns>
+		public CompleteProject GetProjectAsUser(int projectId)
 		{
 			if (projectId < 0)
 			{
@@ -533,13 +533,13 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets a CompleteProjectInfo for the given project, a list of UserInfos for the project's assigned
+		/// Gets a CompleteProject for the given project, a list of UserInfos for the project's assigned
 		/// users, and a list of SubscriptionUserInfos for all users in the current subscription.
 		/// </summary>
 		/// <param name="projectId">Project Id.</param>
 		/// <param name="subscriptionId">.</param>
 		/// <returns>.</returns>
-		public Tuple<CompleteProjectInfo, List<User>, List<SubscriptionUserInfo>> GetProjectEditInfo(int projectId, int subscriptionId)
+		public Tuple<CompleteProject, List<User>, List<SubscriptionUser>> GetProjectEditInfo(int projectId, int subscriptionId)
 		{
 			if (projectId < 0)
 			{
@@ -550,7 +550,7 @@ namespace AllyisApps.Services
 			return Tuple.Create(
 				InitializeCompleteProjectInfo(spResults.Item1),
 				spResults.Item2.Select(udb => InitializeUser(udb, false)).ToList(),
-				spResults.Item3.Select(sudb => InitializeSubscriptionUserInfo(sudb)).ToList());
+				spResults.Item3.Select(sudb => InitializeSubscriptionUser(sudb)).ToList());
 		}
 
 		/// <summary>
@@ -560,7 +560,7 @@ namespace AllyisApps.Services
 		/// <param name="customerId">Customer Id.</param>
 		/// <param name="subscriptionId">.</param>
 		/// <returns>.</returns>
-		public Tuple<string, List<SubscriptionUserInfo>> GetNextProjectIdAndSubUsers(int customerId, int subscriptionId)
+		public Tuple<string, List<SubscriptionUser>> GetNextProjectIdAndSubUsers(int customerId, int subscriptionId)
 		{
 			if (customerId < 0)
 			{
@@ -570,7 +570,7 @@ namespace AllyisApps.Services
 			var spResults = DBHelper.GetNextProjectIdAndSubUsers(customerId, subscriptionId);
 			return Tuple.Create(
 				spResults.Item1 == null ? "0000000000000000" : new string(IncrementAlphanumericCharArray(spResults.Item1.ToCharArray())),
-				spResults.Item2.Select(sudb => InitializeSubscriptionUserInfo(sudb)).ToList());
+				spResults.Item2.Select(sudb => InitializeSubscriptionUser(sudb)).ToList());
 		}
 
 		/// <summary>
@@ -848,18 +848,18 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Translates a <see cref="ProjectDBEntity"/> into a <see cref="CompleteProjectInfo"/>.
+		/// Translates a <see cref="ProjectDBEntity"/> into a <see cref="CompleteProject"/>.
 		/// </summary>
 		/// <param name="completeProject">CompleteProjectDBEntity instance.</param>
-		/// <returns>CompleteProjectInfo instance.</returns>
-		public static CompleteProjectInfo InitializeCompleteProjectInfo(ProjectDBEntity completeProject)
+		/// <returns>CompleteProject instance.</returns>
+		public static CompleteProject InitializeCompleteProjectInfo(ProjectDBEntity completeProject)
 		{
 			if (completeProject == null)
 			{
 				return null;
 			}
 
-			return new CompleteProjectInfo
+			return new CompleteProject
 			{
 				CreatedUtc = completeProject.CreatedUtc,
 				CustomerId = completeProject.CustomerId,

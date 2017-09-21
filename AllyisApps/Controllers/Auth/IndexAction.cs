@@ -7,6 +7,7 @@
 using System;
 using System.Linq;
 using System.Web.Mvc;
+using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
 
@@ -61,11 +62,10 @@ namespace AllyisApps.Controllers
 			var invitationsList = accountInfo.Invitations;
 			foreach (var item in invitationsList)
 			{
-				var invite = item.invite;
 				indexViewModel.Invitations.Add(new AccountIndexViewModel.InvitationViewModel()
 				{
-					InvitationId = invite.InvitationId,
-					OrganizationName = item.invitingOrgName,
+					InvitationId = item.InvitationId,
+					OrganizationName = item.OrganizationName,
 				});
 			}
 

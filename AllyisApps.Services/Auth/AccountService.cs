@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -14,7 +13,6 @@ using System.Threading.Tasks;
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
-using AllyisApps.DBModel.Finance;
 using AllyisApps.DBModel.Lookup;
 using AllyisApps.Lib;
 using AllyisApps.Services.Lookup;
@@ -66,7 +64,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="invitationId">Id of invite.</param>
 		/// <returns>Inviation info </returns>
-		public InvitationInfo GetInvitationByID(int invitationId)
+		public Invitation GetInvitationByID(int invitationId)
 		{
 			return InitializeInvitationInfo(DBHelper.GetUserInvitationByInviteId(invitationId));
 		}
@@ -290,17 +288,14 @@ namespace AllyisApps.Services
 				inv =>
 					new Invitation()
 					{
-						invite = new InvitationInfo()
-						{
-							Email = inv.Email,
-							EmployeeId = inv.EmployeeId,
-							FirstName = inv.FirstName,
-							LastName = inv.LastName,
-							InvitationId = inv.InvitationId,
-							OrganizationId = inv.OrganizationId,
-							OrganizationRole = (OrganizationRole)inv.OrganizationRoleId,
-						},
-						invitingOrgName = inv.OrganizationName
+						Email = inv.Email,
+						EmployeeId = inv.EmployeeId,
+						FirstName = inv.FirstName,
+						LastName = inv.LastName,
+						InvitationId = inv.InvitationId,
+						OrganizationId = inv.OrganizationId,
+						OrganizationRole = (OrganizationRole)inv.OrganizationRoleId,
+						OrganizationName = inv.OrganizationName
 					}
 				).ToList();
 			return userInfo;
@@ -311,7 +306,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		public void UpdateCurrentUserProfile(int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
 		{
-			this.DBHelper.UpdateUserProfile(this.UserContext.UserId, firstName, lastName, this.GetDateTimeFromDays(dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
+			this.DBHelper.UpdateUserProfile(this.UserContext.UserId, firstName, lastName, Utility.GetDateTimeFromDays(dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
 		}
 
 		/// <summary>
@@ -319,7 +314,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		public void UpdateUserProfile(int userId, int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
 		{
-			this.DBHelper.UpdateUserProfile(userId, firstName, lastName, this.GetDateTimeFromDays(dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
+			this.DBHelper.UpdateUserProfile(userId, firstName, lastName, Utility.GetDateTimeFromDays(dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
 		}
 
 		/// <summary>
@@ -527,18 +522,18 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Translates a <see cref="UserRolesDBEntity"/> into a <see cref="UserRolesInfo"/>.
+		/// Translates a <see cref="UserRolesDBEntity"/> into a <see cref="UserRole"/>.
 		/// </summary>
 		/// <param name="userRoles">UserRolesDBEntity instance.</param>
-		/// <returns>UserRolesInfo instance.</returns>
-		private UserRolesInfo InitializeUserRolesInfo(UserRolesDBEntity userRoles)
+		/// <returns>UserRole instance.</returns>
+		private UserRole InitializeUserRole(UserRolesDBEntity userRoles)
 		{
 			if (userRoles == null)
 			{
 				return null;
 			}
 
-			return new UserRolesInfo
+			return new UserRole
 			{
 				Email = userRoles.Email,
 				FirstName = userRoles.FirstName,
@@ -552,18 +547,18 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Translates a <see cref="SubscriptionUserDBEntity"/> into a <see cref="SubscriptionUserInfo"/>"/>.
+		/// Translates a <see cref="SubscriptionUserDBEntity"/> into a <see cref="SubscriptionUser"/>"/>.
 		/// </summary>
 		/// <param name="subUser">SubscriptionUserDBEntity instance.</param>
-		/// <returns>SubscriptionUserInfo instance.</returns>
-		public SubscriptionUserInfo InitializeSubscriptionUserInfo(SubscriptionUserDBEntity subUser)
+		/// <returns>SubscriptionUser instance.</returns>
+		public SubscriptionUser InitializeSubscriptionUser(SubscriptionUserDBEntity subUser)
 		{
 			if (subUser == null)
 			{
 				return null;
 			}
 
-			return new SubscriptionUserInfo
+			return new SubscriptionUser
 			{
 				FirstName = subUser.FirstName,
 				LastName = subUser.LastName,

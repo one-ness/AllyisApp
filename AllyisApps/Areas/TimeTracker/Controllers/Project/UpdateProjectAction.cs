@@ -7,6 +7,7 @@
 using System;
 using System.Linq;
 using AllyisApps.Controllers;
+using AllyisApps.Lib;
 using AllyisApps.ViewModels.TimeTracker.Project;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -41,8 +42,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				project.ProjectId,
 				project.ProjectName,
 				project.ProjectOrgId,
-				AppService.GetDateTimeFromDays(project.StartDate),
-				AppService.GetDateTimeFromDays(project.EndDate),
+				Utility.GetDateTimeFromDays(project.StartDate),
+				Utility.GetDateTimeFromDays(project.EndDate),
 				project.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString)),
 				project.SubscriptionId);
 

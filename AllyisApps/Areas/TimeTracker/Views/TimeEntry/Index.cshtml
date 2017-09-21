@@ -36,7 +36,7 @@
 					<span class="btn btn-primary" style="margin-right: 15px;">@Strings.Export</span>
 			</a>
 		</div>
-        <!-- Temp fix for Users button for smaller viewports -->
+		<!-- Temp fix for Users button for smaller viewports -->
 		<div class="form-group pull-right">
 			<button type="button" class="btn btn-primary visible-xs" data-toggle="offcanvas" style="margin: 0 0 0 15px">@Strings.Users</button>
 		</div>
@@ -182,10 +182,10 @@
 							@if (user.UserId == ViewBag.SignedInUserID)
 							{<a class="col-xs-11 text-left" data-search="@user.Email"
 								href="@Url.Action(ActionConstants.IndexNoUserId, routeValues: new
-                                {
-                                    startDate = Model.EntryRange.StartDate,
-                                    endDate = Model.EntryRange.EndDate
-                                })"
+								{
+									startDate = Model.EntryRange.StartDate,
+									endDate = Model.EntryRange.EndDate
+								})"
 								style="text-decoration: none; color: #000000;">
 					@user.FirstName @user.LastName
 				</a>}
@@ -203,8 +203,8 @@
 								</a>
 							}
 							<a href="@Url.Action(ActionConstants.UserEdit, routeValues: new {
-                                subscriptionId = Model.Subscriptionid,
-                                userId = user.UserId })"
+								subscriptionId = Model.Subscriptionid,
+								userId = user.UserId })"
 							   style="text-decoration: none; color: #0066AA; padding-right:5%" title="Assign Projects to User"><i class="fa fa-cog"></i></a>
 						</div>count++;
 					}
@@ -265,19 +265,19 @@
 	@Scripts.Render("~/bundles/moment")
 
 	<script type="text/javascript">
-        var model_startdate = @Model.EntryRange.StartDate;
-        var model_enddate = @Model.EntryRange.EndDate;
-        var model_lockdate = @Model.LockDate;
-        var pageSize = @Model.PageUserSize;
-        var page_container_id = "viewasuser-list";
-        var page_item_tag = "div";
+		var model_startdate = @Model.EntryRange.StartDate;
+		var model_enddate = @Model.EntryRange.EndDate;
+		var model_lockdate = @Model.LockDate;
+		var pageSize = @Model.PageUserSize;
+		var page_container_id = "viewasuser-list";
+		var page_item_tag = "div";
 
-        $(document).ready(function () {
-            var disabledButtons = document.getElementsByName("disabledButton");
-            for (var i = 0; i < disabledButtons.length; i++) {
-                disabledButtons[i].disabled = true;
-            }
-        });
+		$(document).ready(function () {
+			var disabledButtons = document.getElementsByName("disabledButton");
+			for (var i = 0; i < disabledButtons.length; i++) {
+				disabledButtons[i].disabled = true;
+			}
+		});
 	</script>
 	@Scripts.Render("~/bundles/daterangepicker")
 	@Scripts.Render("~/bundles/pageswithsearch")

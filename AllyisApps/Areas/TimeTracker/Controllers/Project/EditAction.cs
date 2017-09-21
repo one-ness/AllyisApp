@@ -10,6 +10,7 @@ using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
+using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.Project;
 
@@ -106,7 +107,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				projectUsers.Add(new BasicUserInfoViewModel(projectUser.FirstName, projectUser.LastName, projectUser.UserId));
 			}
 
-			IEnumerable<SubscriptionUserInfo> subscriptionUserInfos = infos.Item3;
+			IEnumerable<SubscriptionUser> subscriptionUserInfos = infos.Item3;
 			var subscriptionUsers = new List<BasicUserInfoViewModel>();
 
 			foreach (var su in subscriptionUserInfos)
@@ -127,8 +128,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				ProjectName = infos.Item1.ProjectName,
 				ProjectUsers = projectUsers,
 				SubscriptionUsers = subscriptionUsers.Where(user => !projectUsers.Any(pu => (pu.UserId == user.UserId))), // Grab users that are not part of the project
-				StartDate = AppService.GetDaysFromDateTime(infos.Item1.StartDate),
-				EndDate = AppService.GetDaysFromDateTime(infos.Item1.EndDate),
+				StartDate = Utility.GetDaysFromDateTime(infos.Item1.StartDate),
+				EndDate = Utility.GetDaysFromDateTime(infos.Item1.EndDate),
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subscriptionNameToDisplay,
 				UserId = AppService.UserContext.UserId

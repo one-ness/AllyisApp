@@ -9,9 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
+using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
-using AllyisApps.Utilities;
 using AllyisApps.ViewModels.TimeTracker.Project;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using static AllyisApps.ViewModels.TimeTracker.TimeEntry.TimeEntryOverDateRangeViewModel;
@@ -39,14 +39,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			string subName = AppService.GetSubscription(subscriptionId).SubscriptionName;
 
-			ViewBag.GetDateFromDays = new Func<int, DateTime>(AppService.GetDateFromDays);
+			ViewBag.GetDateTimeFromDays = new Func<int, DateTime?>(Utility.GetDateTimeFromDays);
 
 			var infos = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null, userId);
 
 			ViewBag.SignedInUserID = GetCookieData().UserId;
 			ViewBag.SelectedUserId = userId;
-			ViewBag.WeekStart = AppService.GetDaysFromDateTime(SetStartingDate(null, infos.Item1.StartOfWeek));
-			ViewBag.WeekEnd = AppService.GetDaysFromDateTime(SetEndingDate(null, infos.Item1.StartOfWeek));
+			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infos.Item1.StartOfWeek));
+			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infos.Item1.StartOfWeek));
 
 			bool manager = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
 			ViewBag.canManage = manager;
@@ -83,8 +83,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			ViewBag.SignedInUserID = userId;
 			ViewBag.SelectedUserId = userId;
-			ViewBag.WeekStart = AppService.GetDaysFromDateTime(SetStartingDate(null, infos.Item1.StartOfWeek));
-			ViewBag.WeekEnd = AppService.GetDaysFromDateTime(SetEndingDate(null, infos.Item1.StartOfWeek));
+			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infos.Item1.StartOfWeek));
+			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infos.Item1.StartOfWeek));
 
 			bool manager = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
 			ViewBag.canManage = manager;
@@ -127,32 +127,32 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			DateTime? startingDateTime = null;
 			if (startingDate.HasValue)
 			{
-				startingDateTime = AppService.GetDateFromDays(startingDate.Value);
+				startingDateTime = Utility.GetDateTimeFromDays(startingDate.Value);
 			}
 
 			DateTime? endingDateTime = null;
 			if (endingDate.HasValue)
 			{
-				endingDateTime = AppService.GetDateFromDays(endingDate.Value);
+				endingDateTime = Utility.GetDateTimeFromDays(endingDate.Value);
 			}
 
 			var infos = AppService.GetTimeEntryIndexInfo(orgId, startingDateTime, endingDateTime, userId);
 			int startOfWeek = infos.Item1.StartOfWeek;
-			DateTime startDate = SetStartingDate(startingDateTime, startOfWeek);
+			DateTime startDate = AppService.SetStartingDate(startingDateTime, startOfWeek);
 			DateTime endDate = SetEndingDate(endingDateTime, startOfWeek);
 
 			// Get all of the projects and initialize their total hours to 0.
-			IList<CompleteProjectInfo> allProjects = infos.Item4; // Must also grab inactive projects, or the app will crash if a user has an entry on a project he is no longer a part of
+			IList<CompleteProject> allProjects = infos.Item4; // Must also grab inactive projects, or the app will crash if a user has an entry on a project he is no longer a part of
 			IDictionary<int, ProjectHours> hours = new Dictionary<int, ProjectHours>();
 			IEnumerable<Holiday> holidays = infos.Item3.Where(x => (startDate <= x.Date.Date && x.Date.Date <= endDate)); // We only care about holidays within the date range
 
-			foreach (CompleteProjectInfo proj in allProjects.Where(p => p.ProjectId > 0))
+			foreach (CompleteProject proj in allProjects.Where(p => p.ProjectId > 0))
 			{
 				// if ( hours.Count == 0 )
 				hours.Add(proj.ProjectId, new ProjectHours { Project = new CompleteProjectViewModel(proj), Hours = 0.0f });
 			}
 
-			allProjects.Insert(0, new CompleteProjectInfo { ProjectId = -1, ProjectName = Resources.Strings.SelectProject, IsActive = true, IsCustomerActive = true, IsUserActive = true });
+			allProjects.Insert(0, new CompleteProject { ProjectId = -1, ProjectName = Resources.Strings.SelectProject, IsActive = true, IsCustomerActive = true, IsUserActive = true });
 
 			IEnumerable<User> users = infos.Item5;
 
@@ -160,8 +160,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				EntryRange = new TimeEntryRangeForUserViewModel
 				{
-					StartDate = AppService.GetDaysFromDateTime(startDate),
-					EndDate = AppService.GetDaysFromDateTime(endDate),
+					StartDate = Utility.GetDaysFromDateTime(startDate),
+					EndDate = Utility.GetDaysFromDateTime(endDate),
 					Entries = new List<EditTimeEntryViewModel>(),
 					UserId = userId,
 					SubscriptionId = subId
@@ -184,15 +184,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Users = users.AsParallel().Select(user => ConstuctUserViewModel(user)),
 				TotalUsers = users.Count(),
 				CurrentUser = ConstuctUserViewModel(users.Where(x => x.UserId == userId).Single()),
-				LockDate = AppService.GetDaysFromDateTime(AppService.GetLockDateFromParameters(infos.Item1.IsLockDateUsed, infos.Item1.LockDatePeriod, infos.Item1.LockDateQuantity)),
+				LockDate = Utility.GetDaysFromDateTime(AppService.GetLockDateFromParameters(infos.Item1.IsLockDateUsed, infos.Item1.LockDatePeriod, infos.Item1.LockDateQuantity)),
 				Subscriptionid = subId,
 				SubscriptionName = subName,
 				ProductRole = 1
 			};
 
 			// Initialize the starting dates and get all of the time entries within that date range.
-			IEnumerable<TimeEntryInfo> timeEntries = infos.Item6; // Service.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDate, endDate);
-			IEnumerator<TimeEntryInfo> iter = timeEntries.GetEnumerator();
+			IEnumerable<TimeEntry> timeEntries = infos.Item6; // Service.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDate, endDate);
+			IEnumerator<TimeEntry> iter = timeEntries.GetEnumerator();
 			iter.MoveNext();
 
 			// Note: Setting this directly insures the weekend highlighting will always be Saturday/Sunday. This makes sense if weekend days are not treated
@@ -206,7 +206,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			// For each date in the date range
 			for (DateTime date = startDate; date <= endDate;)
 			{
-				bool beforeLockDate = result.LockDate > 0 && AppService.GetDaysFromDateTime(date) <= result.LockDate;
+				bool beforeLockDate = result.LockDate > 0 && Utility.GetDaysFromDateTime(date) <= result.LockDate;
 
 				// If has time entry data for this date,
 				if (iter.Current != null && iter.Current.Date == date.Date)
@@ -233,11 +233,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						PayClassId = iter.Current.PayClassId,
 						UserId = iter.Current.UserId,
 						SubscriptionId = subId,
-						Date = AppService.GetDaysFromDateTime(iter.Current.Date),
+						Date = Utility.GetDaysFromDateTime(iter.Current.Date),
 						Duration = string.Format("{0:D2}:{1:D2}", (int)iter.Current.Duration, (int)Math.Round((iter.Current.Duration - (int)iter.Current.Duration) * 60, 0)),
 						Description = iter.Current.Description,
-						StartingDate = AppService.GetDaysFromDateTime(startDate),
-						EndingDate = AppService.GetDaysFromDateTime(endDate),
+						StartingDate = Utility.GetDaysFromDateTime(startDate),
+						EndingDate = Utility.GetDaysFromDateTime(endDate),
 						IsOffDay = (weekend % 7 == (int)iter.Current.Date.DayOfWeek || (weekend + 1) % 7 == (int)iter.Current.Date.DayOfWeek) ? true : false,
 						IsHoliday = holidays.Any(x => x.Date.Date == date.Date),
 						Projects = result.Projects,
@@ -264,11 +264,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					result.EntryRange.Entries.Add(new EditTimeEntryViewModel
 					{
 						Sample = true,
-						Date = AppService.GetDaysFromDateTime(date),
+						Date = Utility.GetDaysFromDateTime(date),
 						UserId = userId,
 						SubscriptionId = subId,
-						StartingDate = AppService.GetDaysFromDateTime(startDate),
-						EndingDate = AppService.GetDaysFromDateTime(endDate),
+						StartingDate = Utility.GetDaysFromDateTime(startDate),
+						EndingDate = Utility.GetDaysFromDateTime(endDate),
 						IsOffDay = (weekend % 7 == (int)date.DayOfWeek || (weekend + 1) % 7 == (int)date.DayOfWeek) ? true : false,
 						IsHoliday = holidays.Any(x => x.Date.Date == date.Date),
 						ProjectId = -1,
@@ -296,7 +296,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 					result.GrandTotal.Hours += 8;
 
-					TimeEntryInfo timeEntryInfo = new TimeEntryInfo()
+					TimeEntry timeEntryInfo = new TimeEntry()
 					{
 						ApprovalState = 1,
 						Date = date,
@@ -350,21 +350,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				LastName = user.LastName,
 				UserId = user.UserId
 			};
-		}
-
-		private DateTime SetStartingDate(DateTime? date, int startOfWeek)
-		{
-			if (date == null && !date.HasValue)
-			{
-				DateTime today = DateTime.Now;
-				int daysIntoTheWeek = (int)today.DayOfWeek < startOfWeek
-					? (int)today.DayOfWeek + (7 - startOfWeek)
-					: (int)today.DayOfWeek - startOfWeek;
-
-				date = today.AddDays(-daysIntoTheWeek);
-			}
-
-			return date.Value.Date;
 		}
 
 		private DateTime SetEndingDate(DateTime? date, int startOfWeek)

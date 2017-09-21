@@ -25,7 +25,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// Initializes a new instance of the <see cref="SubscriptionDisplayViewModel"/> class.
 		/// </summary>
 		/// <param name="sub">Subscription display.</param>
-		public SubscriptionDisplayViewModel(Subscription sub) : this()
+		public SubscriptionDisplayViewModel(SubscriptionDisplay sub) : this()
 		{
 			this.ProductId = (int)sub.ProductId;
 			this.ProductName = sub.ProductName;
@@ -44,7 +44,7 @@ namespace AllyisApps.ViewModels.Auth
 
 		/// <summary>
 		/// Gets or sets the id for the product this subscription is for.
-		/// Note: this is needed even though it also exists in SubscriptionDisplayInfo. Sometimes that is null.
+		/// Note: this is needed even though it also exists in SubscriptionDisplay. Sometimes that is null.
 		/// </summary>
 		public int ProductId { get; set; }
 

@@ -27,6 +27,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the current Organization's active subscriptions.
 		/// </summary>
-		public IEnumerable<Subscription> CurrentSubscriptions { get; set; }
+		public IEnumerable<SubscriptionDisplay> CurrentSubscriptions { get; set; }
 	}
 }

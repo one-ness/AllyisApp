@@ -58,7 +58,7 @@ namespace AllyisApps.Controllers
 				model.ExpenseTrackerSubIndex = model.Subscriptions.IndexOf(etsub);
 			}
 
-			foreach (UserRolesInfo role in infos.Item1)
+			foreach (UserRole role in infos.Item1)
 			{
 				UserPermissionsViewModel modelUser = model.Users.Where(u => u.UserId == role.UserId).SingleOrDefault();
 				if (modelUser == null)//THIS IS ALLWAYS THE CASE!!!!
