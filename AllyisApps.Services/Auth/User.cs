@@ -129,20 +129,10 @@ namespace AllyisApps.Services
 
 		public decimal MaxAmount { get; set; }
 
-		public bool IsAddressLoaded { get; set; }
-		public bool IsInvitationsLoaded { get; set; }
-		public bool IsOrganizationsLoaded { get; set; }
-		public bool IsSubscriptionsLoaded { get; set; }
+		public bool IsAddressLoaded => Address != null;
+		public bool IsInvitationsLoaded => Invitations != null;
+		public bool IsOrganizationsLoaded => Organizations != null;
+		public bool IsSubscriptionsLoaded => Subscriptions != null;
 
-		/// <summary>
-		/// constructor
-		/// </summary>
-		public User()
-		{
-			this.Address = new Address();
-			this.Organizations = new List<UserOrganization>();
-			this.Subscriptions = new List<UserSubscription>();
-			this.Invitations = new List<Invitation>();
-		}
 	}
 }
