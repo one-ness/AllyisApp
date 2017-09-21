@@ -70,6 +70,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auth\Invitation.cs" />
+    <Compile Include="Auth\ProductSubscription.cs" />
+    <Compile Include="Auth\ReportInfo.cs" />
     <Compile Include="Auth\InvitationStatusEnum.cs" />
     <Compile Include="Auth\Organization.cs" />
     <Compile Include="Auth\AccountService.cs" />
@@ -99,7 +101,7 @@
     <Compile Include="Finance\FinanceService.cs" />
     <Compile Include="Lookup\Address.cs" />
     <Compile Include="Lookup\AddressService.cs" />
-    <Compile Include="Pjm\PjmService.cs" />
+    <Compile Include="Project\PjmService.cs" />
     <Compile Include="ServiceConstants.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="Crm\Customer.cs" />
@@ -123,7 +125,7 @@
     <Compile Include="TimeTracker\LockDatePeriodEnum.cs" />
     <Compile Include="TimeTracker\PayClass.cs" />
     <Compile Include="Crm\CompleteProjectInfo.cs" />
-    <Compile Include="Crm\Project.cs" />
+    <Compile Include="Project\Project.cs" />
     <Compile Include="TimeTracker\PayClassIdEnum.cs" />
     <Compile Include="TimeTracker\Setting.cs" />
     <Compile Include="Billing\SkuIdEnum.cs" />
@@ -140,7 +142,6 @@
     <Compile Include="Billing\Product.cs" />
     <Compile Include="Billing\ProductIdEnum.cs" />
     <Compile Include="Auth\OrganizationService.cs" />
-    <Compile Include="Crm\ProjectService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

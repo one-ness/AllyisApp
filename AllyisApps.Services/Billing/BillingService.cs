@@ -797,7 +797,7 @@ namespace AllyisApps.Services
 		/// <param name="orgId">.</param>
 		/// <param name="skuId">Product Id.</param>
 		/// <returns>.</returns>
-		public Tuple<Product, Subscription, string> GetProductSubscriptionInfo(int orgId, int skuId)
+		public ProductSubscription GetProductSubscriptionInfo(int orgId, int skuId)
 		{
 			if (skuId <= 0)
 			{
@@ -810,10 +810,14 @@ namespace AllyisApps.Services
 			var subscription = InitializeSubscription(spResults.Item2);
 			subscription.NumberOfUsers = spResults.Item5;
 
-			return Tuple.Create(
-				InitializeProduct(spResults.Item1),
+			
+
+			return new ProductSubscription(
+				product,
 				InitializeSubscription(spResults.Item2),
-				spResults.Item4
+				spResults.Item3.Select(sdb => InitializeSkuInfo(sdb)).ToList(),
+				spResults.Item4,
+				spResults.Item5
 			);
 		}
 

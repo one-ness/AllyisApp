@@ -44,13 +44,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else
 			{
-				reportVM = this.ConstructReportViewModel(this.AppService.UserContext.UserId, subInfo.OrganizationId, true, infos.Item1, infos.Item2);
+				reportVM = this.ConstructReportViewModel(this.AppService.UserContext.UserId, subInfo.OrganizationId, true, infos.Customers, infos.CompleteProjectInfo);
 				reportVM.SubscriptionName = subName;
 			}
 
-			reportVM.UserView = this.GetUserSelectList(infos.Item3, reportVM.Selection.Users);
-			reportVM.CustomerView = this.GetCustomerSelectList(infos.Item1, reportVM.Selection.CustomerId);
-			reportVM.ProjectView = this.GetProjectSelectList(infos.Item2, reportVM.Selection.CustomerId, reportVM.Selection.ProjectId);
+			reportVM.UserView = this.GetUserSelectList(infos.SubscriptionUserInfo, reportVM.Selection.Users);
+			reportVM.CustomerView = this.GetCustomerSelectList(infos.Customers, reportVM.Selection.CustomerId);
+			reportVM.ProjectView = this.GetProjectSelectList(infos.CompleteProjectInfo, reportVM.Selection.CustomerId, reportVM.Selection.ProjectId);
 			reportVM.SubscriptionId = subscriptionId;
 
 			var infoOrg = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
