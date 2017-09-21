@@ -7,13 +7,13 @@ AS
 		[Email],
 		[FirstName],
 		[LastName], 
-		[OrganizationId], 
+		[Invitation].[OrganizationId], 
 		[Invitation].[OrganizationRoleId],
-		[Auth].[Organization].[OrganizationName],
+		[Organization].[OrganizationName],
 		[Auth].[OrganizationRole].[OrganizationRoleName],
 		[EmployeeId],
 		[Invitation].[StatusId]
 	FROM [Auth].[Invitation] WITH (NOLOCK)
 	LEFT JOIN [Auth].[OrganizationRole] WITH (NOLOCK) ON [OrganizationRole].[OrganizationRoleId] = [Invitation].[OrganizationRoleId]
-	LEFT JOIN [Auth].[Organizaion] WITH (NOLOCK) ON [Auth].[Organization].OrganizationId =  [Invitation].[OrganizationId] 
-	WHERE [InvitationId] = @inviteId AND [IsActive] = 1
+	LEFT JOIN [Organization] WITH (NOLOCK) ON [Organization].[OrganizationId] =  [Invitation].[OrganizationId] 
+	WHERE [InvitationId] = @inviteId AND [Invitation].IsActive = 1
