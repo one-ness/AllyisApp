@@ -33,17 +33,17 @@ namespace AllyisApps.Controllers
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, id);
 			var infos = AppService.GetProductSubscriptionInfo(id, skuId);
 
-			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4, id);
+			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Product, infos.SubscriptionInfo, infos.List, infos.StripeTokenCustId, id);
 			model.SelectedSku = skuId;
-			model.SelectedSkuName = infos.Item3.Where(s => s.SkuId == skuId).SingleOrDefault().SkuName;
-			model.SelectedSkuDescription = infos.Item3.Where(s => s.SkuId == skuId).SingleOrDefault().Description;
+			model.SelectedSkuName = infos.List.Where(s => s.SkuId == skuId).SingleOrDefault().SkuName;
+			model.SelectedSkuDescription = infos.List.Where(s => s.SkuId == skuId).SingleOrDefault().Description;
 
 			if (!model.IsValid)
 			{
 				return this.View(ViewConstants.Details, id);
 			}
 
-			model.CurrentUsers = infos.Item5;
+			model.CurrentUsers = infos.UserCount;
 			return this.View(ViewConstants.Subscribe, model);
 		}
 

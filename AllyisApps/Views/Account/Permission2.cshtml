@@ -73,12 +73,10 @@
                     <th style="width: 6%;"></th>
                     <th style="width: 47%;">@Strings.User</th>
                     <th style="width: 47%;" class="tab-OrganizationTab">@Strings.OrganizationRole</th>
+					<th style="width: 47%; display: none;" class="tab-ExpenseTrackerTab">@Strings.ExpenseTrackerRole</th>
                     @if (hasTimeTracker)
                     {
                         <th class="tab-TimeTrackerTab" style="display: none; width: 47%;">@Strings.TimeTrackerRole</th>
-                    }
-                    @if (hasTimeTracker)
-                    {
                         <th class="tab-TimeTrackerTab" style="display: none; width: 47%;">@Strings.ExpenseTrackerRole</th>
                     }
                 </tr>
