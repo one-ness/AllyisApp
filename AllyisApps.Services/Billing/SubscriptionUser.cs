@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="SubscriptionUserInfo.cs" company="Allyis, Inc.">
+// <copyright file="SubscriptionUser.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -11,7 +11,7 @@ namespace AllyisApps.Services
 	/// <summary>
 	/// An object for keeping track of all the info related to a given subscription user.
 	/// </summary>
-	public class SubscriptionUserInfo
+	public class SubscriptionUser
 	{
 		/// <summary>
 		/// Gets or sets FirstName.

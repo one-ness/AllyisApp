@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
-using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.TimeTracker;
 using AllyisApps.Lib;
@@ -438,11 +437,11 @@ namespace AllyisApps.Services
 							bool customerFieldIsName = true;
 
 							/*
-                                There are 3 required fields, and we may need to traverse at most 2 links to get them all, with no knowledge of which links will succeed or fail in providing
-                                the needed information. To solve this, we do 2 passes (i), each time checking for the missing information (j) using the links we've found to the information
-                                we already have (k). On each pass, any known information is skipped, so time won't be wasted if the first pass succeeds. This way, any combination of paths
-                                to acquire the missing information from the known information is covered.
-                            */
+								There are 3 required fields, and we may need to traverse at most 2 links to get them all, with no knowledge of which links will succeed or fail in providing
+								the needed information. To solve this, we do 2 passes (i), each time checking for the missing information (j) using the links we've found to the information
+								we already have (k). On each pass, any known information is skipped, so time won't be wasted if the first pass succeeds. This way, any combination of paths
+								to acquire the missing information from the known information is covered.
+							*/
 							for (int i = 0; i < 2; i++)
 							{
 								// i = pass, out of 2
@@ -613,18 +612,18 @@ namespace AllyisApps.Services
 								{
 									hasUserEmail ? row[ColumnHeaders.UserEmail].ToString() : null,
 									hasEmployeeId ? row[ColumnHeaders.EmployeeId].ToString() : null,
-                                    // Since first and last name must be together and treated as one piece of information, they are joined in this datastructure. Hopefully, we'll never
-                                    // have a user who's name includes the text __IMPORT__
-                                    hasUserName ? (row[ColumnHeaders.UserFirstName].ToString() == "" || row[ColumnHeaders.UserLastName].ToString() == "" ? null : row[ColumnHeaders.UserFirstName].ToString() + "__IMPORT__" + row[ColumnHeaders.UserLastName].ToString()) : null
+									// Since first and last name must be together and treated as one piece of information, they are joined in this datastructure. Hopefully, we'll never
+									// have a user who's name includes the text __IMPORT__
+									hasUserName ? (row[ColumnHeaders.UserFirstName].ToString() == "" || row[ColumnHeaders.UserLastName].ToString() == "" ? null : row[ColumnHeaders.UserFirstName].ToString() + "__IMPORT__" + row[ColumnHeaders.UserLastName].ToString()) : null
 								};
 								// if (fields[2] == "__IMPORT__") fields[2] = null;
 
 								/*
-                                    There are 3 required fields, and we may need to traverse at most 2 links to get them all, with no knowledge of which links will succeed or fail in providing
-                                    the needed information. To solve this, we do 2 passes (i), each time checking for the missing information (j) using the links we've found to the information
-                                    we already have (k). On each pass, any known information is skipped, so time won't be wasted if the first pass succeeds. This way, any combination of paths
-                                    to acquire the missing information from the known information is covered.
-                                */
+									There are 3 required fields, and we may need to traverse at most 2 links to get them all, with no knowledge of which links will succeed or fail in providing
+									the needed information. To solve this, we do 2 passes (i), each time checking for the missing information (j) using the links we've found to the information
+									we already have (k). On each pass, any known information is skipped, so time won't be wasted if the first pass succeeds. This way, any combination of paths
+									to acquire the missing information from the known information is covered.
+								*/
 								for (int i = 0; i < 2; i++)
 								{
 									// i = pass, out of 2
@@ -680,7 +679,7 @@ namespace AllyisApps.Services
 								try
 								{
 									//user = this.GetUserByEmail(fields[0]); // User may already exist, but not be a member of this organization
-									InvitationInfo inviteInfo = new InvitationInfo()
+									Invitation inviteInfo = new Invitation()
 									{
 										OrganizationId = orgId,
 										Email = fields[0].Trim(),
@@ -733,7 +732,7 @@ namespace AllyisApps.Services
 
 							if (updated)
 							{
-								this.UpdateUserProfile(userInOrg.UserId, this.GetDaysFromDateTime(userInOrg.DateOfBirth), userInOrg.FirstName, userInOrg.LastName, userInOrg.PhoneNumber, userInOrg.Address?.AddressId, userInOrg.Address?.Address1, userInOrg.Address?.City, userInOrg.Address?.StateId, userInOrg.Address?.PostalCode, userInOrg.Address?.CountryCode);
+								this.UpdateUserProfile(userInOrg.UserId, Utility.GetDaysFromDateTime(userInOrg.DateOfBirth), userInOrg.FirstName, userInOrg.LastName, userInOrg.PhoneNumber, userInOrg.Address?.AddressId, userInOrg.Address?.Address1, userInOrg.Address?.City, userInOrg.Address?.StateId, userInOrg.Address?.PostalCode, userInOrg.Address?.CountryCode);
 							}
 
 						}

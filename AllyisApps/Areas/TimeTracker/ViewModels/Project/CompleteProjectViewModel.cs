@@ -108,7 +108,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		/// <summary>
 		/// Initializes a instance of see <see cref="CompleteProjectViewModel"/>
 		/// </summary>
-		public CompleteProjectViewModel(Services.CompleteProjectInfo proj)
+		public CompleteProjectViewModel(Services.CompleteProject proj)
 		{
 			this.CanEditProject = proj.CanEditProject;
 			this.CreatedUtc = proj.CreatedUtc;

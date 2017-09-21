@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="UserRolesInfo.cs" company="Allyis, Inc.">
+// <copyright file="UserRole.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -9,7 +9,7 @@ namespace AllyisApps.Services
 	/// <summary>
 	/// Represents all the roles held by a user.
 	/// </summary>
-	public class UserRolesInfo
+	public class UserRole
 	{
 		/// <summary>
 		/// Gets or sets the First name.

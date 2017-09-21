@@ -105,7 +105,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		public IEnumerable<BasicUserInfoViewModel> ProjectUsers { get; set; }
 
 		/// <summary>
-		/// Gets or sets the SubscriptionUserInfo of users who are not a part of this project, but are a part of this subscription.
+		/// Gets or sets the SubscriptionUser of users who are not a part of this project, but are a part of this subscription.
 		/// </summary>
 		public IEnumerable<BasicUserInfoViewModel> SubscriptionUsers { get; set; }
 
