@@ -112,7 +112,7 @@ namespace AllyisApps.Controllers
 							{
 								int? sDate = null;
 								int? eDate = null;
-								int startOfWeek = AppService.GetAllSettings(subItem.Subscription.OrganizationId).Item1.StartOfWeek;
+								int startOfWeek = AppService.GetAllSettings(subItem.OrganizationId).Item1.StartOfWeek;
 								sDate = Utility.GetDaysFromDateTime(SetStartingDate(startOfWeek));
 								eDate = Utility.GetDaysFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
 								subViewModel.ProductGoToUrl = Url.RouteUrl(
