@@ -14,6 +14,10 @@ using System.Linq;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.DBModel.StaffingManager;
 using AllyisApps.Services.Lookup;
+using AllyisApps.Services.Billing;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Crm;
+using AllyisApps.Services.Expense;
 
 namespace AllyisApps.Services
 {
@@ -61,7 +65,7 @@ namespace AllyisApps.Services
 		/// <returns>The DateTime date.</returns>
 		public DateTime? GetDateTimeFromDays(int? days)
 		{
-			if (!days.HasValue || days <=0)
+			if (!days.HasValue || days <= 0)
 			{
 				return null;
 			}
@@ -215,7 +219,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		public Tuple<List<Customer>, List<CompleteProjectInfo>, List<SubscriptionUserInfo>> GetReportInfo(int subscriptionId)
 		{
-            UserContext.SubscriptionAndRole subInfo = null;
+			UserContext.SubscriptionAndRole subInfo = null;
 			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			var spResults = DBHelper.GetReportInfo(subInfo.OrganizationId, subscriptionId);
 			return Tuple.Create(
@@ -343,7 +347,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		public IEnumerable<PayClass> GetPayClasses(int subscriptionId)
 		{
-            UserContext.SubscriptionAndRole subInfo = null;
+			UserContext.SubscriptionAndRole subInfo = null;
 			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			return DBHelper.GetPayClasses(subInfo.OrganizationId).Select(pc => InitializePayClassInfo(pc));
 		}
@@ -510,46 +514,44 @@ namespace AllyisApps.Services
 			return output;
 		}
 
-        public StreamWriter PrepareExpenseCSVExport(int orgId, IEnumerable<ExpenseReport> reports, DateTime startDate, DateTime endDate)
-        {
-            
+		public StreamWriter PrepareExpenseCSVExport(int orgId, IEnumerable<ExpenseReport> reports, DateTime startDate, DateTime endDate)
+		{
+			StreamWriter output = new StreamWriter(new MemoryStream());
 
-            StreamWriter output = new StreamWriter(new MemoryStream());
+			output.WriteLine(
+				string.Format(
+					"\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\"",
+					"Expense Report Id",
+					"Report Title",
+					"Organization Id",
+					"Submitted By",
+					"Report Status",
+					"Created On",
+					"Modified On",
+					"Submitted On"
+				));
 
-            output.WriteLine(
-                string.Format(
-                    "\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\"",
-                    "Expense Report Id",
-                    "Report Title",
-                    "Organization Id",
-                    "Submitted By",
-                    "Report Status",
-                    "Created On",
-                    "Modified On",
-                    "Submitted On"
-                ));
+			foreach (ExpenseReport report in reports)
+			{
+				output.WriteLine(
+					string.Format(
+						"\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\"",
+						report.ExpenseReportId,
+						report.ReportTitle,
+						report.OrganizationId,
+						report.SubmittedById,
+						report.ReportStatus,
+						report.CreatedUtc,
+						report.ModifiedUtc,
+						report.SubmittedUtc
+						));
+			}
 
-            foreach (ExpenseReport report in reports)
-            {
-                output.WriteLine(
-                    string.Format(
-                        "\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\"",
-                        report.ExpenseReportId,
-                        report.ReportTitle,
-                        report.OrganizationId,
-                        report.SubmittedById,
-                        report.ReportStatus,
-                        report.CreatedUtc,
-                        report.ModifiedUtc,
-                        report.SubmittedUtc
-                        ));
-            }
+			output.Flush();
+			output.BaseStream.Seek(0, SeekOrigin.Begin);
 
-            output.Flush();
-            output.BaseStream.Seek(0, SeekOrigin.Begin);
-
-            return output;
-        }
+			return output;
+		}
 
 		/// <summary>
 		/// Updates the lock date setttings.
@@ -634,7 +636,7 @@ namespace AllyisApps.Services
 				spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),
 				spResults.Item3.Select(hdb => InitializeHoliday(hdb)).ToList(),
 				spResults.Item4.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
-				spResults.Item5.Select(udb => InitializeUser(udb,false)).ToList(),
+				spResults.Item5.Select(udb => InitializeUser(udb, false)).ToList(),
 				spResults.Item6.Select(tedb => InitializeTimeEntryInfo(tedb)).ToList());
 		}
 
@@ -864,7 +866,7 @@ namespace AllyisApps.Services
 				EmploymentTypeName = type.EmploymentTypeName
 			};
 		}
-		
+
 		/// <summary>
 		/// Converts positionLevelDBEntity to employment level service object
 		/// </summary>

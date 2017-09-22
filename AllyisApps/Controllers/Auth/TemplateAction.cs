@@ -6,7 +6,7 @@
 
 using System.Web.Mvc;
 
-namespace AllyisApps.Controllers
+namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
 	/// Represents pages for the management of a Customer.

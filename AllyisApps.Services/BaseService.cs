@@ -4,9 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel;
 using System;
 using System.Collections.Generic;
+using AllyisApps.DBModel;
+using AllyisApps.Services.Auth;
 
 namespace AllyisApps.Services
 {

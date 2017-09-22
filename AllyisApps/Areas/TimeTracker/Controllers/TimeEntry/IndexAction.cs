@@ -10,6 +10,8 @@ using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Crm;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
@@ -34,7 +36,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-            string subName = AppService.GetSubscription(subscriptionId).Name;
+			string subName = AppService.GetSubscription(subscriptionId).Name;
 
 			ViewBag.GetDateFromDays = new Func<int, DateTime>(AppService.GetDateFromDays);
 
@@ -73,7 +75,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-            string subName = this.AppService.GetSubscription(subscriptionId).Name;
+			string subName = this.AppService.GetSubscription(subscriptionId).Name;
 			ViewBag.GetDateFromDays = new Func<int, DateTime>(AppService.GetDateFromDays);
 
 			var infos = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null, userId);

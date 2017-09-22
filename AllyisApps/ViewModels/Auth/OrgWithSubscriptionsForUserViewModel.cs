@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
 
 namespace AllyisApps.ViewModels.Auth
 {

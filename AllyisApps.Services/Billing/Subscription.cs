@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.Billing
 {
 	/// <summary>
 	/// a subscription (by an organization to a sku of a product)

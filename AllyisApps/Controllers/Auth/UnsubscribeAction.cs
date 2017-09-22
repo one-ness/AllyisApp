@@ -8,9 +8,10 @@ using System;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.Auth;
 
-namespace AllyisApps.Controllers
+namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
 	/// Controller for account and organization related actions.
@@ -26,7 +27,7 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult Unsubscribe(int id, int idTwo)
 		{
-            UserContext.SubscriptionAndRole userSub = null;
+			UserContext.SubscriptionAndRole userSub = null;
 			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(id, out userSub);
 			int orgId = userSub.OrganizationId;
 			int productId = (int)userSub.ProductId;

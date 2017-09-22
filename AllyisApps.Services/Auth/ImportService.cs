@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
+using AllyisApps.Services.Billing;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Crm;
 
 namespace AllyisApps.Services
 {

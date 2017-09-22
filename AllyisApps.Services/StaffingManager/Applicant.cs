@@ -6,7 +6,7 @@
 
 using System;
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.StaffingManager
 {
 	/// <summary>
 	/// An Applicant object, holding all info directly related to the Applicant.  Also performs basic field validation.
@@ -27,11 +27,12 @@ namespace AllyisApps.Services
 		private int addressId;
 		private string address;
 		private string city;
+
 		//private string state;
 		//private string country;
 		private string postalCode;
-		private string phoneNumber;
 
+		private string phoneNumber;
 
 		/// <summary>
 		/// Gets or sets the applicant's ID.

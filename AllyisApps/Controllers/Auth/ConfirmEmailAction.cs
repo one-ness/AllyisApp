@@ -8,7 +8,7 @@ using System;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 
-namespace AllyisApps.Controllers
+namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
 	/// Class which manages user accounts.

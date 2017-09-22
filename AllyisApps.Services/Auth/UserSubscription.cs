@@ -4,8 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 using System;
+using AllyisApps.Services.Billing;
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.Auth
 {
 	/// <summary>
 	/// a subscription that a user belongs to
@@ -14,7 +15,7 @@ namespace AllyisApps.Services
 	{
 		public int UserId { get; set; }
 		public int ProductRoleId { get; set; }
-		
-		public Subscription Subscription {get; set;}
+
+		public Subscription Subscription { get; set; }
 	}
 }

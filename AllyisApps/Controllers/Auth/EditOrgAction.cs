@@ -9,11 +9,12 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
 using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Auth;
 
-namespace AllyisApps.Controllers
+namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
 	/// Controller for account and organization related actions.
@@ -105,14 +106,14 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Builds an organizaion servie object form the view Model ensures that the built service object has all of its current propreties.
 		/// </summary>
-        /// <param name="model">An EditOrgViewModel.</param>
-        /// <param name="loadOrginal">Sets if the model loads the original organization model.</param>
+		/// <param name="model">An EditOrgViewModel.</param>
+		/// <param name="loadOrginal">Sets if the model loads the original organization model.</param>
 		/// <returns>Returns an Organization object.</returns>
 		private Organization BuildEditOrganizaiton(EditOrganizationViewModel model, bool loadOrginal = false)
 		{
 			Organization orginal = null;
 
-            if (loadOrginal)
+			if (loadOrginal)
 			{
 				orginal = AppService.GetOrganization(model.OrganizationId);
 			}
@@ -134,8 +135,8 @@ namespace AllyisApps.Controllers
 
 				PhoneNumber = model.PhoneNumber,
 				FaxNumber = model.FaxNumber,
-				
-                // Properties not in model
+
+				// Properties not in model
 				Subdomain = orginal?.Subdomain,
 				CreatedUtc = orginal?.CreatedUtc
 			};

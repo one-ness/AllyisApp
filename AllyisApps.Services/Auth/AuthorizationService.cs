@@ -5,6 +5,8 @@
 //------------------------------------------------------------------------------
 
 using System;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.Services
 {
@@ -233,6 +235,7 @@ namespace AllyisApps.Services
 							case ExpenseTrackerRole.Manager:
 								result = true;
 								break;
+
 							case ExpenseTrackerRole.SuperUser:
 								result = true;
 								break;

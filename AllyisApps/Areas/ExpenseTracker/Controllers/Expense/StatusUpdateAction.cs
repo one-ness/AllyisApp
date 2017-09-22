@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
+using AllyisApps.Services.Expense;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -27,9 +28,11 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				case "Approve":
 					UpdateReport(reportId, "Approve", reasonText);
 					break;
+
 				case "Reject":
 					UpdateReport(reportId, "Reject", reasonText);
 					break;
+
 				default:
 					break;
 			}

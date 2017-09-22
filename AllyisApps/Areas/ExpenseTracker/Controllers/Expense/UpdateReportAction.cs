@@ -9,6 +9,7 @@ using AllyisApps.DBModel;
 using AllyisApps.DBModel.Finance;
 using AllyisApps.Lib;
 using AllyisApps.Services;
+using AllyisApps.Services.Expense;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
@@ -17,7 +18,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// Show the list of expense reports submitted by the logged in user.
 		/// </summary>
 		/// <param name="model">The view model.</param>
-        /// <returns>The action result.</returns>
+		/// <returns>The action result.</returns>
 		[HttpPost]
 		public ActionResult UpdateUserSettings(UserSettingsViewModel model)
 		{

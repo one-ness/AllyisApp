@@ -6,7 +6,7 @@
 
 using System.Collections.Generic;
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.Billing
 {
 	/// <summary>
 	/// Represents a product.

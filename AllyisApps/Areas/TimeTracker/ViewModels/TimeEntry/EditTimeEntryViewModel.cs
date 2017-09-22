@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using AllyisApps.Services;
+using AllyisApps.Services.Crm;
 using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry

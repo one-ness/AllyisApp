@@ -8,7 +8,7 @@ using AllyisApps.Services.Lookup;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.Auth
 {
 	/// <summary>
 	/// an organization

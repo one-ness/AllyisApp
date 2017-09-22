@@ -2,7 +2,7 @@
 // <copyright file="CustomerInfoViewModel.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
-//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------\
 
 namespace AllyisApps.ViewModels.TimeTracker.Customer
 {
@@ -19,6 +19,6 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		/// <summary>
 		/// Gets the Customer's info object.
 		/// </summary>
-		public Services.Customer CustomerInfo { get; internal set; }
+		public Services.Crm.Customer CustomerInfo { get; internal set; }
 	}
 }

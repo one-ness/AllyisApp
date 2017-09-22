@@ -13,7 +13,7 @@ using AllyisApps.Services;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Auth;
 
-namespace AllyisApps.Controllers
+namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
 	/// Controller for account and organization related actions.
@@ -66,7 +66,7 @@ namespace AllyisApps.Controllers
 				int userId = await AppService.SetupNewUser(model.Email, model.Password, model.FirstName, model.LastName, code, birthdate, model.PhoneNumber, model.Address, null, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode, confirmEmailSubject, confirmEmailBody);
 				if (userId > 0)
 				{
-					// sign in (and set cookie) do not set cookie need to confirm email 
+					// sign in (and set cookie) do not set cookie need to confirm email
 					// this.SignIn(userId, model.Email);
 					Notifications.Add(new BootstrapAlert(Strings.RegistationSucessful, Variety.Success));
 					return this.RedirectToLocal(returnUrl);

@@ -4,15 +4,16 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.Lib;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
+using AllyisApps.Services.Auth;
 
 namespace AllyisApps.Services
 {
@@ -417,15 +418,15 @@ namespace AllyisApps.Services
 			};
 		}
 
-        /// <summary>
-        /// Get Name of Subscription
-        /// </summary>
-        /// <param name="subscriptionId"></param>
-        /// <returns></returns>
-        public string getSubscriptionName(int subscriptionId)
-        {
-            return DBHelper.GetSubscriptionName(subscriptionId);
-        }
+		/// <summary>
+		/// Get Name of Subscription
+		/// </summary>
+		/// <param name="subscriptionId"></param>
+		/// <returns></returns>
+		public string getSubscriptionName(int subscriptionId)
+		{
+			return DBHelper.GetSubscriptionName(subscriptionId);
+		}
 
 		/// <summary>
 		/// Gets a subscription Id for a customer of the current organization.
@@ -502,7 +503,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
 			}
 
-			return DBHelper.GetUsersWithSubscriptionToProductInOrganization(orgId, productId).Select(u => InitializeUser(u,false));
+			return DBHelper.GetUsersWithSubscriptionToProductInOrganization(orgId, productId).Select(u => InitializeUser(u, false));
 		}
 
 		/// <summary>
@@ -840,13 +841,13 @@ namespace AllyisApps.Services
 
 			return new SubscriptionDisplayInfo
 			{
-                AreaUrl = subscriptionDisplay.AreaUrl,
+				AreaUrl = subscriptionDisplay.AreaUrl,
 				CreatedUtc = subscriptionDisplay.CreatedUtc,
 				NumberOfUsers = subscriptionDisplay.NumberOfUsers,
 				OrganizationId = subscriptionDisplay.OrganizationId,
 				OrganizationName = subscriptionDisplay.OrganizationName,
-                Description = subscriptionDisplay.Description,
-                ProductId = subscriptionDisplay.ProductId,
+				Description = subscriptionDisplay.Description,
+				ProductId = subscriptionDisplay.ProductId,
 				ProductName = subscriptionDisplay.ProductName,
 				SkuId = subscriptionDisplay.SkuId,
 				SkuName = subscriptionDisplay.SkuName,

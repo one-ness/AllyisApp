@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
+using AllyisApps.Services.Crm;
 
 namespace AllyisApps.ViewModels.TimeTracker.Customer
 {
@@ -16,11 +17,11 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		/// <summary>
 		/// Gets data about the Customer this model represents.
 		/// </summary>
-		public Services.Customer CustomerInfo { get; internal set; }
+		public Services.Crm.Customer CustomerInfo { get; internal set; }
 
 		/// <summary>
 		/// Gets the list of projects this Customer has.
 		/// </summary>
-		public IEnumerable<Services.Project> Projects { get; internal set; }
+		public IEnumerable<Services.Crm.Project> Projects { get; internal set; }
 	}
 }
