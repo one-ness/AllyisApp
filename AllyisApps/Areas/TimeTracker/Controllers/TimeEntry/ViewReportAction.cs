@@ -10,6 +10,7 @@ using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
+using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
@@ -64,13 +65,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				string subName = AppService.getSubscriptionName(subscriptionId);
 
 				bool canEditOthers = this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId, false);
-				ReportViewModel reportVM = this.ConstructReportViewModel(this.AppService.UserContext.UserId, organizationId, canEditOthers, infos.Item1, infos.Item2, showExport, reportVMselect);
+				ReportViewModel reportVM = this.ConstructReportViewModel(this.AppService.UserContext.UserId, organizationId, canEditOthers, infos.Customers, infos.CompleteProject, showExport, reportVMselect);
 				reportVM.SubscriptionName = subName;
 
 				DataExportViewModel dataVM = null;
 				try
 				{
-					dataVM = this.ConstructDataExportViewModel(subscriptionId, organizationId, reportVMselect.Users, AppService.GetDateTimeFromDays(dateRangeStart.Value), AppService.GetDateTimeFromDays(dateRangeEnd.Value), projectSelect, customerSelect);
+					dataVM = this.ConstructDataExportViewModel(subscriptionId, organizationId, reportVMselect.Users, Utility.GetDateTimeFromDays(dateRangeStart.Value), Utility.GetDateTimeFromDays(dateRangeEnd.Value), projectSelect, customerSelect);
 				}
 				catch (Exception ex)
 				{
@@ -93,14 +94,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				reportVM.PreviewTotal = string.Format("{0} {1}", total, Resources.Strings.HoursTotal);
 
-				IEnumerable<CompleteProjectInfo> orgProjects = infos.Item2;
-				CompleteProjectInfo defaultProject = AppService.GetProject(0);
+				IEnumerable<CompleteProject> orgProjects = infos.CompleteProject;
+				CompleteProject defaultProject = AppService.GetProject(0);
 				if (dataCount > 0)
 				{
 					IList<TablePreviewEntry> pEntries = new List<TablePreviewEntry>();
 					foreach (TimeEntryViewModel data in dataVM.PreviewData)
 					{
-						CompleteProjectInfo orgProj = data.ProjectId == 0 ? defaultProject : orgProjects.Where(o => o.ProjectId == data.ProjectId).SingleOrDefault();
+						CompleteProject orgProj = data.ProjectId == 0 ? defaultProject : orgProjects.Where(o => o.ProjectId == data.ProjectId).SingleOrDefault();
 						TablePreviewEntry previewData = new TablePreviewEntry
 						{
 							CustomerName = orgProj.CustomerName,
@@ -130,7 +131,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else if (viewDataButton.Equals(Resources.Strings.Export))
 			{
-				return this.ExportReport(subscriptionId, organizationId, userSelect, AppService.GetDateTimeFromDays(dateRangeStart.Value), AppService.GetDateTimeFromDays(dateRangeEnd.Value), customerSelect, projectSelect);
+				return this.ExportReport(subscriptionId, organizationId, userSelect, Utility.GetDateTimeFromDays(dateRangeStart.Value), Utility.GetDateTimeFromDays(dateRangeEnd.Value), customerSelect, projectSelect);
 			}
 
 			return this.RedirectToAction(ActionConstants.Report);
@@ -157,7 +158,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Sets the pageTotal for a DataExportViewModel in preperation for SetPreviewdata.
 		/// </summary>
-		/// <param name="data">TimeEntryInfo  needed to find total page size.</param>
+		/// <param name="data">TimeEntry  needed to find total page size.</param>
 		/// <param name="pageSize">Total size of preivew data.</param>
 		/// <param name="page">Offset page amount.</param>
 		/// <returns>The page total.</returns>

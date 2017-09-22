@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Threading.Tasks;
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
@@ -80,15 +79,15 @@ namespace AllyisApps.Services
 		/// pending in the organization, the organization's billing stripe handle, and a list of all products.
 		/// </summary>
 		/// <returns>.</returns>
-		public Tuple<Organization, List<OrganizationUserInfo>, List<SubscriptionDisplayInfo>, List<InvitationInfo>, string> GetOrganizationManagementInfo(int orgId)
+		public Organization GetOrganizationManagementInfo(int orgId)
 		{
 			var spResults = DBHelper.GetOrganizationManagementInfo(orgId);
-			return Tuple.Create(
-				InitializeOrganization(spResults.Item1),
-				spResults.Item2.Select(oudb => InitializeOrganizationUserInfo(oudb)).ToList(),
-				spResults.Item3.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList(),
-				spResults.Item4.Select(idb => InitializeInvitationInfo(idb)).ToList(),
-				spResults.Item5);
+			Organization org = InitializeOrganization(spResults.Item1);
+			org.Users = spResults.Item2.Select(oudb => InitializeOrganizationUser(oudb)).ToList();
+			org.Subscriptions = spResults.Item3.Select(sddb => InitializeSubscription(sddb)).ToList();
+			org.Invitations = spResults.Item4.Select(idb => InitializeInvitationInfo(idb)).ToList();
+			org.StripeToken = spResults.Item5;
+			return org;
 		}
 
 		/// <summary>
@@ -97,12 +96,12 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<Organization, string> GetOrgWithNextEmployeeId(int orgId)
+		public Organization GetOrgWithNextEmployeeId(int orgId)
 		{
 			var spResults = DBHelper.GetOrgWithNextEmployeeId(orgId, UserContext.UserId);
-			return Tuple.Create(
-				InitializeOrganization(spResults.Item1),
-				spResults.Item2);
+			Organization org = InitializeOrganization(spResults.Item1);
+			org.NextEmpolyeeID = spResults.Item2;
+			return org;
 		}
 
 		/// <summary>
@@ -113,30 +112,32 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">The Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<string, List<SubscriptionDisplayInfo>, List<ProductRole>, List<CompleteProjectInfo>, string> GetAddMemberInfo(int orgId)
+		public Tuple<Organization, List<ProductRole>> GetAddMemberInfo(int orgId)
 		{
 			var spResults = DBHelper.GetAddMemberInfo(orgId);
+			Organization org = new Organization();
+			org.NextEmpolyeeID = string.Compare(spResults.Item1, spResults.Item4) > 0 ? spResults.Item1 : spResults.Item4;
+			org.Subscriptions = spResults.Item2.Select(sddb => InitializeSubscription(sddb)).ToList();
+
 			return Tuple.Create(
-				spResults.Item1,
-				spResults.Item2.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList(),
-				spResults.Item3.Select(srdb => InitializeSubscriptionRoleInfo(srdb)).ToList(),
-				spResults.Item4.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
-				spResults.Item5);
+				org,
+				spResults.Item3.Select(srdb => InitializeSubscriptionRoleInfo(srdb)).ToList()
+			);
 		}
 
 		/// <summary>
 		/// Gets a list of UserRolesInfos for users in the current organization and their roles/subscription roles,
-		/// and a list of SubscriptionRoles (with only SubscriptionId, ProductId, and ProductName populated) for
+		/// and a list of Subscriptions (with only SubscriptionId, ProductId, and ProductName populated) for
 		/// all subscriptions in the current organization.
 		/// </summary>
 		/// <param name="orgId">The Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<UserRolesInfo>, List<SubscriptionDisplayInfo>> GetOrgAndSubRoles(int orgId)
+		public Tuple<List<UserRole>, List<Subscription>> GetOrgAndSubRoles(int orgId)
 		{
 			var spResults = DBHelper.GetOrgAndSubRoles(orgId);
 			return Tuple.Create(
-				spResults.Item1.Select(urdb => InitializeUserRolesInfo(urdb)).ToList(),
-				spResults.Item2.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList());
+				spResults.Item1.Select(urdb => InitializeUserRole(urdb)).ToList(),
+				spResults.Item2.Select(sddb => InitializeSubscription(sddb)).ToList());
 		}
 
 		/// <summary>
@@ -170,9 +171,9 @@ namespace AllyisApps.Services
 		/// Creates an invitation for a new user in the database, and also sends an email to the new user with their access code.
 		/// </summary>
 		/// <param name="url">The url for Account/Index with the accessCode value as "{accessCode}".</param>
-		/// <param name="invitationInfo">An <see cref="InvitationInfo"/> with invitee information filled out.</param>
+		/// <param name="invitationInfo">An <see cref="Invitation"/> with invitee information filled out.</param>
 		/// <returns>The invitation Id, or -1 if the employee id is already taken.</returns>
-		public async Task<int> InviteUser(string url, InvitationInfo invitationInfo)
+		public int InviteUser(string url, Invitation invitationInfo)
 		{
 			#region Validation
 
@@ -215,11 +216,11 @@ namespace AllyisApps.Services
 				url);
 
 			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
-			await Lib.Mailer.SendEmailAsync(
+			bool email = Lib.Mailer.SendEmailAsync(
 				this.ServiceSettings.SupportEmail,
 				invitationInfo.Email,
 				"Join Allyis Apps!",
-				msgbody);
+				msgbody).Result;
 
 			// Return invitation id
 			return spResults.Item1;
@@ -287,7 +288,7 @@ namespace AllyisApps.Services
 		///// Getst a list of the user invitations for the current organization.
 		///// </summary>
 		///// <returns>List of InvitationInfos of organization's user invitations.</returns>
-		// public IEnumerable<InvitationInfo> GetUserInvitations()
+		// public IEnumerable<Invitation> GetUserInvitations()
 		//{
 		//	return DBHelper.GetUserInvitationsByOrgId(UserContext.ChosenOrganizationId).Select(i => InitializeInvitationInfo(i));
 		//}
@@ -357,14 +358,14 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>The member list.</returns>
-		public IEnumerable<OrganizationUserInfo> GetOrganizationMemberList(int orgId)
+		public IEnumerable<OrganizationUser> GetOrganizationMemberList(int orgId)
 		{
 			if (orgId < 0)
 			{
 				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
 			}
 
-			return DBHelper.GetOrganizationMemberList(orgId).Select(o => InitializeOrganizationUserInfo(o));
+			return DBHelper.GetOrganizationMemberList(orgId).Select(o => InitializeOrganizationUser(o));
 		}
 
 		// TODO: Look more closely at the use of this method in UploadCsvFileAction to see if some other existing service method can be used instead, and this one retired.
@@ -473,7 +474,7 @@ namespace AllyisApps.Services
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="onlyActive">True (default) to only return active projects, false to include all projects, active or not.</param>
 		/// <returns>A list of project info objects based on Organization.</returns>
-		public IEnumerable<CompleteProjectInfo> GetProjectsByOrganization(int orgId, bool onlyActive = true)
+		public IEnumerable<CompleteProject> GetProjectsByOrganization(int orgId, bool onlyActive = true)
 		{
 			if (orgId < 0)
 			{
@@ -481,16 +482,6 @@ namespace AllyisApps.Services
 			}
 
 			return DBHelper.GetProjectsByOrgId(orgId, onlyActive ? 1 : 0).Select(c => InitializeCompleteProjectInfo(c));
-		}
-
-		/// <summary>
-		/// Gets the user roles for an organization.
-		/// </summary>
-		/// <param name="orgId">The Organization Id.</param>
-		/// <returns>List of UserRolesInfos.</returns>
-		public IEnumerable<UserRolesInfo> GetUserRoles(int orgId)
-		{
-			return DBHelper.GetRoles(orgId).Select(o => InitializeUserRolesInfo(o));
 		}
 
 		/// <summary>
@@ -562,18 +553,18 @@ namespace AllyisApps.Services
 		#region Info-DBEntity Conversions
 
 		/// <summary>
-		/// Translates an OrganizationUserDBEntity into an OrganizationUserInfo business object.
+		/// Translates an OrganizationUserDBEntity into an OrganizationUser business object.
 		/// </summary>
 		/// <param name="organizationUser">OrganizationUserDBEntity instance.</param>
-		/// <returns>OrganizationUserInfo instance.</returns>
-		public static OrganizationUserInfo InitializeOrganizationUserInfo(OrganizationUserDBEntity organizationUser)
+		/// <returns>OrganizationUser instance.</returns>
+		public static OrganizationUser InitializeOrganizationUser(OrganizationUserDBEntity organizationUser)
 		{
 			if (organizationUser == null)
 			{
 				return null;
 			}
 
-			return new OrganizationUserInfo
+			return new OrganizationUser
 			{
 				FirstName = organizationUser.FirstName,
 				LastName = organizationUser.LastName,
@@ -582,7 +573,8 @@ namespace AllyisApps.Services
 				EmployeeId = organizationUser.EmployeeId,
 				OrganizationId = organizationUser.OrganizationId,
 				OrganizationRoleId = organizationUser.OrganizationRoleId,
-				UserId = organizationUser.UserId
+				UserId = organizationUser.UserId,
+				MaxAmount = organizationUser.MaxAmount
 			};
 		}
 
@@ -686,26 +678,27 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Translates an InvitationDBEntity into an InvitationInfo business object.
+		/// Translates an InvitationDBEntity into an Invitation business object.
 		/// </summary>
 		/// <param name="invitation">InvitationDBEntity instance.</param>
-		/// <returns>InvitationInfo instance.</returns>
-		public static InvitationInfo InitializeInvitationInfo(InvitationDBEntity invitation)
+		/// <returns>Invitation instance.</returns>
+		public static Invitation InitializeInvitationInfo(InvitationDBEntity invitation)
 		{
 			if (invitation == null)
 			{
 				return null;
 			}
 
-			return new InvitationInfo
+			return new Invitation
 			{
 				Email = invitation.Email,
-				CompressedEmail = AppService.GetCompressedEmail(invitation.Email),
+				CompressedEmail = Utility.GetCompressedEmail(invitation.Email),
 				FirstName = invitation.FirstName,
 				InvitationId = invitation.InvitationId,
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
 				OrganizationRole = (OrganizationRole)invitation.OrganizationRoleId,
+				OrganizationName = invitation.OrganizationName,
 				EmployeeId = invitation.EmployeeId,
 				DecisionDateUtc = invitation.DecisionDateUtc,
 				status = (InvitationStatusEnum)invitation.InvitationStatusId
@@ -734,11 +727,11 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Translates an InvitationInfo business object into an InvitationDBEntity.
+		/// Translates an Invitation business object into an InvitationDBEntity.
 		/// </summary>
-		/// <param name="invitation">InvitationInfo instance.</param>
+		/// <param name="invitation">Invitation instance.</param>
 		/// <returns>InvitationDBEntity instance.</returns>
-		public static InvitationDBEntity GetDBEntityFromInvitationInfo(InvitationInfo invitation)
+		public static InvitationDBEntity GetDBEntityFromInvitationInfo(Invitation invitation)
 		{
 			if (invitation == null)
 			{

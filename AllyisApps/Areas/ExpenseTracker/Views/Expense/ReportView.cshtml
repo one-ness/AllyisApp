@@ -7,7 +7,7 @@
 	DisplayHints.LayoutThemeBundle = "~/Content/ExpenseTracker";
 
 	decimal totalAmount = 0;
-	foreach (ExpenseItem item in Model.Expenses)
+	foreach (ExpenseItemCreateViewModel item in Model.Expenses)
 	{
 		totalAmount += item.Amount;
 	}
@@ -63,7 +63,8 @@
 				@if (Model.Status != ExpenseStatusEnum.Approved
 					&& Model.Status != ExpenseStatusEnum.Paid
 					&& Model.Status != ExpenseStatusEnum.Draft
-					&& ((bool)ViewData["IsManager"] == true || (decimal)ViewData["MaxAmount"] > totalAmount))
+					&& Model.Status != ExpenseStatusEnum.Rejected
+					&& (((int)ViewData["ProductRole"] == 2 || (int)ViewData["ProductRole"] == 3) && (decimal)ViewData["MaxAmount"] >= totalAmount))
 				{
 					<div class="review-area col-lg-12 col-md-12 col-xs-12" height="290px">
 						<b>Accept/Reject Notes</b><br />
@@ -93,7 +94,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		@foreach (ExpenseItem item in Model.Expenses)
+		@foreach (ExpenseItemCreateViewModel item in Model.Expenses)
 		{
 			<tr>
 				<td>@Math.Round(@item.Amount, 2)</td>

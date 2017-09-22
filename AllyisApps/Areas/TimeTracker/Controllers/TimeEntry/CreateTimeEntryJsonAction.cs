@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
+using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
@@ -45,13 +46,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					throw new ArgumentException(Resources.Strings.EnterATimeLongerThanZero);
 				}
 
-				IEnumerable<TimeEntryInfo> otherEntriesToday = AppService.GetTimeEntriesByUserOverDateRange(
+				IEnumerable<TimeEntry> otherEntriesToday = AppService.GetTimeEntriesByUserOverDateRange(
 					new List<int> { model.UserId },
-					AppService.GetDateTimeFromDays(model.Date),
-					AppService.GetDateTimeFromDays(model.Date),
+					Utility.GetDateTimeFromDays(model.Date),
+					Utility.GetDateTimeFromDays(model.Date),
 					AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId);
 				float durationOther = 0.0f;
-				foreach (TimeEntryInfo otherEntry in otherEntriesToday)
+				foreach (TimeEntry otherEntry in otherEntriesToday)
 				{
 					durationOther += otherEntry.Duration;
 				}
@@ -72,17 +73,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					throw new ArgumentException(Resources.Strings.MustSelectPayClass);
 				}
-				else if (subInfo.ProductRoleId != (int)TimeTrackerRole.Manager && model.Date <= (lockDate == null ? -1 : AppService.GetDayFromDateTime(lockDate.Value)))
+				else if (subInfo.ProductRoleId != (int)TimeTrackerRole.Manager && model.Date <= (lockDate == null ? -1 : Utility.GetDaysFromDateTime(lockDate.Value)))
 				{
 					throw new ArgumentException(Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
 				}
 
-				int id = AppService.CreateTimeEntry(new TimeEntryInfo()
+				int id = AppService.CreateTimeEntry(new TimeEntry()
 				{
 					UserId = model.UserId,
 					ProjectId = model.ProjectId,
 					PayClassId = model.PayClassId,
-					Date = AppService.GetDateTimeFromDays(model.Date) ?? DateTime.Now,
+					Date = Utility.GetDateTimeFromDays(model.Date) ?? DateTime.Now,
 					Duration = durationResult.Value,
 					Description = model.Description
 				});

@@ -3,50 +3,52 @@
 @model ManagePermissionsViewModel
 @Html.HiddenFor(m => m.OrganizationId)
 @{
-    ViewBag.Title = Strings.Permissions;
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Title = Strings.Permissions;
+	Layout = "~/Views/Shared/_Layout.cshtml";
 
-    bool hasTimeTracker = Model.Subscriptions.Where(s => s.ProductId == Model.TimeTrackerId).Any();
-    bool hasExpenseTracker = Model.Subscriptions.Where(s => s.ProductId == Model.ExpenseTrackerId).Any();
+	bool hasTimeTracker = Model.Subscriptions.Where(s => s.ProductId == Model.TimeTrackerId).Any();
+	bool hasExpenseTracker = Model.Subscriptions.Where(s => s.ProductId == Model.ExpenseTrackerId).Any();
 
-    Dictionary<int, string> organizationRoles = new Dictionary<int, string>
-    {
-        { (int)AllyisApps.Services.OrganizationRole.Member, Strings.Member },
-        { (int)AllyisApps.Services.OrganizationRole.Owner, Strings.Owner }
-    };
-    Dictionary<int, string> ttRoles = new Dictionary<int, string>
-    {
-        { (int)AllyisApps.Services.TimeTrackerRole.User, Strings.User },
-        { (int)AllyisApps.Services.TimeTrackerRole.Manager, Strings.Manager },
-        { (int)AllyisApps.Services.TimeTrackerRole.NotInProduct, Strings.Unassigned }
-    };
+	Dictionary<int, string> organizationRoles = new Dictionary<int, string>
+	{
+		{ (int)AllyisApps.Services.OrganizationRole.Member, Strings.Member },
+		{ (int)AllyisApps.Services.OrganizationRole.Owner, Strings.Owner }
+	};
+	Dictionary<int, string> ttRoles = new Dictionary<int, string>
+	{
+		{ (int)AllyisApps.Services.TimeTrackerRole.User, Strings.User },
+		{ (int)AllyisApps.Services.TimeTrackerRole.Manager, Strings.Manager },
+		{ (int)AllyisApps.Services.TimeTrackerRole.NotInProduct, Strings.Unassigned }
+	};
 
-    Dictionary<int, string> etRoles = new Dictionary<int, string>
-    {
-        { (int)AllyisApps.Services.ExpenseTrackerRole.User, Strings.User },
-        { (int)AllyisApps.Services.ExpenseTrackerRole.Manager, Strings.Manager },
-        { (int)AllyisApps.Services.ExpenseTrackerRole.NotInProduct, Strings.Unassigned }
-    };
+	Dictionary<int, string> etRoles = new Dictionary<int, string>
+	{
+		{ (int)AllyisApps.Services.ExpenseTrackerRole.User, Strings.User },
+		{ (int)AllyisApps.Services.ExpenseTrackerRole.Manager, Strings.Manager },
+		{ (int)AllyisApps.Services.ExpenseTrackerRole.SuperUser, "Super User" },
+		{ (int)AllyisApps.Services.ExpenseTrackerRole.NotInProduct, Strings.Unassigned }
+	};
 
-    Dictionary<string, int> setOrganizationRoles = new Dictionary<string, int>
-    {
-        { Strings.RemoveOrg, -1 },
-        { Strings.SetMember, (int)AllyisApps.Services.OrganizationRole.Member },
-        { Strings.SetOwner, (int)AllyisApps.Services.OrganizationRole.Owner }
-    };
-    Dictionary<string, int> setTTRoles = new Dictionary<string, int>
-    {
-        { Strings.RemoveFromSubscription, 0 },
-        { Strings.SetUser, (int)AllyisApps.Services.TimeTrackerRole.User },
-        { Strings.SetManager, (int)AllyisApps.Services.TimeTrackerRole.Manager }
-    };
+	Dictionary<string, int> setOrganizationRoles = new Dictionary<string, int>
+	{
+		{ Strings.RemoveOrg, -1 },
+		{ Strings.SetMember, (int)AllyisApps.Services.OrganizationRole.Member },
+		{ Strings.SetOwner, (int)AllyisApps.Services.OrganizationRole.Owner }
+	};
+	Dictionary<string, int> setTTRoles = new Dictionary<string, int>
+	{
+		{ Strings.RemoveFromSubscription, 0 },
+		{ Strings.SetUser, (int)AllyisApps.Services.TimeTrackerRole.User },
+		{ Strings.SetManager, (int)AllyisApps.Services.TimeTrackerRole.Manager }
+	};
 
-    Dictionary<string, int> setETRoles = new Dictionary<string, int>
-    {
-        { Strings.RemoveFromSubscription, 0},
-        { Strings.SetUser, (int)AllyisApps.Services.ExpenseTrackerRole.User },
-        { Strings.SetManager, (int)AllyisApps.Services.ExpenseTrackerRole.Manager }
-    };
+	Dictionary<string, int> setETRoles = new Dictionary<string, int>
+	{
+		{ Strings.RemoveFromSubscription, 0},
+		{ Strings.SetUser, (int)AllyisApps.Services.ExpenseTrackerRole.User },
+		{ Strings.SetManager, (int)AllyisApps.Services.ExpenseTrackerRole.Manager },
+		{ "Set Super User", (int)AllyisApps.Services.ExpenseTrackerRole.SuperUser }
+	};
 }
 
 @Html.AntiForgeryToken()
@@ -70,12 +72,10 @@
                     <th style="width: 6%;"></th>
                     <th style="width: 47%;">@Strings.User</th>
                     <th style="width: 47%;" class="tab-OrganizationTab">@Strings.OrganizationRole</th>
+					<th style="width: 47%; display: none;" class="tab-ExpenseTrackerTab">@Strings.ExpenseTrackerRole</th>
                     @if (hasTimeTracker)
                     {
                         <th class="tab-TimeTrackerTab" style="display: none; width: 47%;">@Strings.TimeTrackerRole</th>
-                    }
-                    @if (hasTimeTracker)
-                    {
                         <th class="tab-TimeTrackerTab" style="display: none; width: 47%;">@Strings.ExpenseTrackerRole</th>
                     }
                 </tr>
@@ -109,7 +109,7 @@
                     }
                     @if(hasExpenseTracker)
                     {
-                        <td class="tab-ExpenseTrackerTab" style="="display: none;">
+                        <td class="tab-ExpenseTrackerTab" style="display: none;">
                             <select id="etRoleFilter" class=" = form-control">
                                 <option>@Strings.Any</option>
                                 @foreach(string etrole in etRoles.Values)

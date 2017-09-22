@@ -20,7 +20,7 @@ begin
 	where ou.UserId = @userId AND o.IsActive = 1 
 
 	-- get a list of subscriptions and the user role in each
-	select s.*, su.*, sku.SkuId, p.ProductId, p.ProductName, p.AreaUrl from Billing.Subscription s with (nolock)
+	select s.*, su.*, sku.SkuId, sku.IconUrl, p.ProductId, p.ProductName, p.AreaUrl from Billing.Subscription s with (nolock)
 	inner join Billing.SubscriptionUser su with (nolock) on su.SubscriptionId = s.SubscriptionId
 	inner join Organization o with (nolock) on o.OrganizationId = s.OrganizationId
 	inner join OrganizationUser ou with (nolock) on ou.OrganizationId = o.OrganizationId

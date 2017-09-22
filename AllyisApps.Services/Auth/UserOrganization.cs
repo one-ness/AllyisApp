@@ -16,12 +16,9 @@ namespace AllyisApps.Services
 		public int UserId { get; set; }
 		public string EmployeeId { get; set; }
 		public OrganizationRole OrganizationRole { get; set; }
+		public decimal MaxAmount { get; set; }
 		public DateTime JoinedDateUtc { get; set; }
-		public Organization Organization;
 
-		public UserOrganization()
-		{
-			//this.OrganizationRole = OrganizationRole.Member; Not sure what this was used for should not be putting deflats into constuctor unless obvious.
-		}
+		public Organization Organization;
 	}
 }

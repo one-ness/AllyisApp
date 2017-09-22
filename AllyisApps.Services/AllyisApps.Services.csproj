@@ -69,17 +69,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Auth\Invitation.cs" />
     <Compile Include="Auth\InvitationStatusEnum.cs" />
     <Compile Include="Auth\Organization.cs" />
     <Compile Include="Auth\AccountService.cs" />
     <Compile Include="Auth\AuthorizationService.cs" />
     <Compile Include="Auth\ImportService.cs" />
     <Compile Include="Auth\OrganizationRoleEnum.cs" />
+    <Compile Include="Auth\Account.cs" />
+    <Compile Include="Auth\OrganizationUser.cs" />
     <Compile Include="Auth\ProductRoleEnums.cs" />
+    <Compile Include="Auth\ProductSubscription.cs" />
+    <Compile Include="Auth\ReportInfo.cs" />
     <Compile Include="Auth\UserContext.cs" />
     <Compile Include="Auth\UserOrganization.cs" />
-    <Compile Include="Auth\UserAccount.cs" />
     <Compile Include="Auth\UserSubscription.cs" />
     <Compile Include="BaseService.cs" />
     <Compile Include="Billing\BillingFrequencyEnum.cs" />
@@ -98,7 +100,8 @@
     <Compile Include="Finance\FinanceService.cs" />
     <Compile Include="Lookup\Address.cs" />
     <Compile Include="Lookup\AddressService.cs" />
-    <Compile Include="Pjm\PjmService.cs" />
+    <Compile Include="Project\PjmService.cs" />
+    <Compile Include="Project\Project.cs" />
     <Compile Include="ServiceConstants.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="Crm\Customer.cs" />
@@ -117,31 +120,29 @@
     <Compile Include="Lookup\Tags.cs" />
     <Compile Include="Lookup\Tag.cs" />
     <Compile Include="TimeTracker\Holiday.cs" />
-    <Compile Include="Auth\InvitationInfo.cs" />
+    <Compile Include="Auth\Invitation.cs" />
     <Compile Include="Auth\Language.cs" />
-    <Compile Include="Auth\OrganizationUserInfo.cs" />
     <Compile Include="TimeTracker\LockDatePeriodEnum.cs" />
     <Compile Include="TimeTracker\PayClass.cs" />
-    <Compile Include="Crm\CompleteProjectInfo.cs" />
-    <Compile Include="Crm\Project.cs" />
+    <Compile Include="Crm\CompleteProject.cs" />
     <Compile Include="TimeTracker\PayClassIdEnum.cs" />
     <Compile Include="TimeTracker\Setting.cs" />
     <Compile Include="Billing\SkuIdEnum.cs" />
     <Compile Include="Billing\SkuInfo.cs" />
     <Compile Include="TimeTracker\StartOfWeekEnum.cs" />
-    <Compile Include="Billing\SubscriptionDisplayInfo.cs" />
+    <Compile Include="Billing\SubscriptionDisplay.cs" />
     <Compile Include="Billing\SubscriptionInfo.cs" />
     <Compile Include="Auth\ProductRole.cs" />
-    <Compile Include="Billing\SubscriptionUserInfo.cs" />
-    <Compile Include="TimeTracker\TimeEntryInfo.cs" />
+    <Compile Include="Billing\SubscriptionUser.cs" />
+    <Compile Include="TimeTracker\TimeEntry.cs" />
     <Compile Include="Auth\User.cs" />
-    <Compile Include="Auth\UserRolesInfo.cs" />
+    <Compile Include="Auth\UserRole.cs" />
     <Compile Include="Crm\CrmService.cs" />
     <Compile Include="Billing\Product.cs" />
     <Compile Include="Billing\ProductIdEnum.cs" />
     <Compile Include="Auth\OrganizationService.cs" />
-    <Compile Include="Crm\ProjectService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TimeTracker\TimeTrackerService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AllyisApps.DBModel\AllyisApps.DBModel.csproj">

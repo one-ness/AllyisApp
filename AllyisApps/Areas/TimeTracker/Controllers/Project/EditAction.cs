@@ -10,6 +10,7 @@ using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
+using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.Project;
 
@@ -55,7 +56,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
 
-				Project projIdMatch = AppService.GetAllProjectsForOrganization(orgId).Where(project => project.ProjectOrgId == model.ProjectOrgId && project.CustomerId == model.ParentCustomerId).SingleOrDefault();
+				Services.Project.Project projIdMatch = AppService.GetAllProjectsForOrganization(orgId).Where(project => project.ProjectOrgId == model.ProjectOrgId && project.CustomerId == model.ParentCustomerId).SingleOrDefault();
 				if (projIdMatch != null && projIdMatch.ProjectId != model.ProjectId)
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
@@ -106,7 +107,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				projectUsers.Add(new BasicUserInfoViewModel(projectUser.FirstName, projectUser.LastName, projectUser.UserId));
 			}
 
-			IEnumerable<SubscriptionUserInfo> subscriptionUserInfos = infos.Item3;
+			IEnumerable<SubscriptionUser> subscriptionUserInfos = infos.Item3;
 			var subscriptionUsers = new List<BasicUserInfoViewModel>();
 
 			foreach (var su in subscriptionUserInfos)
@@ -114,7 +115,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				subscriptionUsers.Add(new BasicUserInfoViewModel(su.FirstName, su.LastName, su.UserId));
 			}
 
-			string subscriptionNameToDisplay = AppService.GetSubscription(subscriptionId).Name;
+			string subscriptionNameToDisplay = AppService.GetSubscription(subscriptionId).SubscriptionName;
 
 			return new EditProjectViewModel
 			{
@@ -127,8 +128,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				ProjectName = infos.Item1.ProjectName,
 				ProjectUsers = projectUsers,
 				SubscriptionUsers = subscriptionUsers.Where(user => !projectUsers.Any(pu => (pu.UserId == user.UserId))), // Grab users that are not part of the project
-				StartDate = AppService.GetDayFromDateTime(infos.Item1.StartDate),
-				EndDate = AppService.GetDayFromDateTime(infos.Item1.EndDate),
+				StartDate = Utility.GetDaysFromDateTime(infos.Item1.StartDate),
+				EndDate = Utility.GetDaysFromDateTime(infos.Item1.EndDate),
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subscriptionNameToDisplay,
 				UserId = AppService.UserContext.UserId

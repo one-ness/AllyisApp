@@ -925,7 +925,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Customer ID.
+        ///   Looks up a localized string similar to Organization Specific Id.
         /// </summary>
         public static string CustomerOrgId {
             get {
@@ -3382,6 +3382,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set Super User.
+        /// </summary>
+        public static string SetSuperUser {
+            get {
+                return ResourceManager.GetString("SetSuperUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string Settings {
@@ -3659,6 +3668,15 @@ namespace AllyisApps.Resources {
                 return ResourceManager.GetString("Sunday", resourceCulture);
             }
         }
+
+		/// <summary>
+		///	  Looks up a localized string similar to SuperUser.
+		/// </summary>
+		public static string SuperUser {
+			get {
+				return ResourceManager.GetString("SuperUser", resourceCulture);
+			}
+		}
         
         /// <summary>
         ///   Looks up a localized string similar to Support.

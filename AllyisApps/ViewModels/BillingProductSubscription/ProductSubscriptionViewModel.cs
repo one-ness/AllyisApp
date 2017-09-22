@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using AllyisApps.Services;
-using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
 
 namespace AllyisApps.ViewModels.Auth
@@ -74,7 +73,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets an object representing the subscription the organization currently has with this
 		/// productId.
 		/// </summary>
-		public SubscriptionInfo CurrentSubscription { get; set; }
+		public Subscription CurrentSubscription { get; set; }
 
 		/// <summary>
 		/// Gets or sets a list of the SkuS applicable to this product.

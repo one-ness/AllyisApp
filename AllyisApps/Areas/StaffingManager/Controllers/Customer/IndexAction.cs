@@ -4,14 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
-using AllyisApps.ViewModels.Staffing;
-using AllyisApps.ViewModels.Staffing.Customer;
 using AllyisApps.ViewModels.TimeTracker.Customer;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
@@ -64,7 +61,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			var inactiveInfo = AppService.GetInactiveProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
 			bool canEditProjects = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
 			string subName = AppService.getSubscriptionName(subscriptionId);
-			List<CompleteProjectInfo> projects = canEditProjects ? infos.Item1 : infos.Item1.Where(p => p.IsProjectUser == true).ToList();
+			List<CompleteProject> projects = canEditProjects ? infos.Item1 : infos.Item1.Where(p => p.IsProjectUser == true).ToList();
 			List<Customer> customers = infos.Item2;
 			IList<CustomerProjectViewModel> customersList = new List<CustomerProjectViewModel>();
 			foreach (Customer currentCustomer in customers)
@@ -87,7 +84,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 								   ProjectId = p.ProjectId
 							   }
 				};
-				
+
 				customersList.Add(customerResult);
 			}
 			IList<CustomerProjectViewModel> inactiveCustomersList = new List<CustomerProjectViewModel>();

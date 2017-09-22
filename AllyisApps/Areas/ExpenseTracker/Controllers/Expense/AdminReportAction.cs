@@ -49,7 +49,13 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			var subInfo = AppService.GetSubscription(subId);
 			var reportInfo = AppService.GetReportInfo(subId);
 			var reports = AppService.GetExpenseReportByOrgId(subInfo.OrganizationId);
-			var users = reportInfo.Item3;
+			List<ExpenseReportViewModel> reportViewModels = new List<ExpenseReportViewModel>();
+			foreach (ExpenseReport report in reports)
+			{
+				reportViewModels.Add(InitializeExpenseReportViewModel(report));
+			}
+
+			var users = reportInfo.SubscriptionUserInfo;
 			List<SelectListItem> enumList = new List<SelectListItem>();
 			List<SelectListItem> userList = new List<SelectListItem>();
 
@@ -106,12 +112,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			{
 				CanManage = true,
 				OrganizationId = subInfo.OrganizationId,
-				Reports = reports,
+				Reports = reportViewModels,
 				PreviewReports = null,
 				ShowExport = true,
 				Statuses = enumList,
 				SubscriptionId = subInfo.SubscriptionId,
-				SubscriptionName = subInfo.Name,
+				SubscriptionName = subInfo.SubscriptionName,
 				UserId = GetCookieData().UserId,
 				Users = userList,
 				Selection = new AdminReportSelectionModel
@@ -124,6 +130,22 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			};
 
 			return model;
+		}
+
+		private ExpenseReportViewModel InitializeExpenseReportViewModel(ExpenseReport report)
+		{
+			return report == null ? null : new ExpenseReportViewModel()
+			{
+				BusinessJustification = report.BusinessJustification,
+				CreatedUtc = report.CreatedUtc,
+				ExpenseReportId = report.ExpenseReportId,
+				ModifiedUtc = report.ModifiedUtc,
+				OrganizationId = report.OrganizationId,
+				ReportStatus = report.ReportStatus,
+				ReportTitle = report.ReportTitle,
+				SubmittedById = report.SubmittedById,
+				SubmittedUtc = report.SubmittedUtc
+			};
 		}
 	}
 }

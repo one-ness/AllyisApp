@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -38,20 +37,6 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<StateDBEntity>("[Lookup].[GetStates] @a", new { a = countryCode }).ToDictionary(x => x.StateId, x => x.StateName);
-			}
-		}
-
-		/// <summary>
-		/// Retrieves a collection of valid states (or provinces)
-		///     from the database based on the source country.
-		/// </summary>
-		/// <param name="countryName">The country's name.</param>
-		/// <returns>A collection of states/provinces within that country.</returns>
-		public IEnumerable ValidStates(string countryName)
-		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				return connection.Query<string>("[Lookup].[GetStatesByCountry]", new { CountryName = countryName }, commandType: CommandType.StoredProcedure);
 			}
 		}
 

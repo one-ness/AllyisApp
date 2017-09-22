@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using AllyisApps.Services.Lookup;
 
@@ -15,6 +16,8 @@ namespace AllyisApps.Services
 	/// </summary>
 	public class Organization
 	{
+		private string nextEmpolyeeID;
+
 		/// <summary>
 		/// Gets or sets the Organization Id.
 		/// </summary>
@@ -63,9 +66,55 @@ namespace AllyisApps.Services
 		/// </summary>
 		public bool IsActive { get; set; }
 
+		/// <summary>
+		/// list of users in this organization
+		/// </summary>
+		public List<OrganizationUser> Users { get; set; }
+
+		/// <summary>
+		/// list of subscriptions for this organization
+		/// </summary>
+		public List<Subscription> Subscriptions { get; set; }
+
+		/// <summary>
+		/// List of invites sent out by owners of the Organizaion
+		/// </summary>
+		public List<Invitation> Invitations { get; set; }
+
+		public String StripeToken { get; set; }
+
+		/// <summary>
+		/// Gets next Unique Employee Id. This should only be loaded when populated.
+		/// </summary>
+		public String NextEmpolyeeID
+		{
+			get
+			{
+				if (nextEmpolyeeID == null) throw new Exception("Attempt to get NextEmpolyeeID when not poptualted.");
+				return nextEmpolyeeID;
+			}
+			set
+			{
+				nextEmpolyeeID = value;
+			}
+		}
+
+		/// <summary>
+		/// indicates if the users list has been loaded
+		/// </summary>
+		public bool IsUsersLoaded { get; set; }
+
+		/// <summary>
+		/// indicates if subscriptions list has been loaded
+		/// </summary>
+		public bool IsSubscriptionsLoaded { get; set; }
+
 		public Organization()
 		{
 			Address = new Address();
+			this.Users = new List<OrganizationUser>();
+			this.Subscriptions = new List<Subscription>();
+			this.Invitations = new List<Invitation>();
 		}
 	}
 }

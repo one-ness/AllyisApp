@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -14,7 +13,6 @@ using System.Threading.Tasks;
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
-using AllyisApps.DBModel.Finance;
 using AllyisApps.DBModel.Lookup;
 using AllyisApps.Lib;
 using AllyisApps.Services.Lookup;
@@ -26,41 +24,6 @@ namespace AllyisApps.Services
 	/// </summary>
 	public partial class AppService : BaseService
 	{
-		#region public static
-
-		/// <summary>
-		/// Returns a compressed version of the given email address if it is too long.
-		/// </summary>
-		/// <param name="fullEmail">Full email address.</param>
-		/// <returns>Compressed email address, or the full address if it is short enough (or null).</returns>
-		public static string GetCompressedEmail(string fullEmail)
-		{
-			if (!string.IsNullOrEmpty(fullEmail) && fullEmail.Length > 50)
-			{
-				string cemail = string.Format("{0}...{1}", fullEmail.Substring(0, 20), fullEmail.Substring(fullEmail.Length - 15));
-				return cemail;
-			}
-			else
-			{
-				return fullEmail;
-			}
-		}
-
-		#endregion public static
-
-		#region public
-
-		/// <summary>
-		/// Returns a collection of valid states/provinces for the given country.
-		/// </summary>
-		/// <param name="countryName">Country name.</param>
-		/// <returns><see cref="IEnumerable"/> of valid states/provinces.</returns>
-		public IEnumerable ValidStates(string countryName)
-		{
-			if (string.IsNullOrWhiteSpace(countryName)) throw new ArgumentException("countryName");
-			return DBHelper.ValidStates(countryName);
-		}
-
 		/// <summary>
 		/// Gets the list of valid countries.
 		/// </summary>
@@ -97,27 +60,13 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Retrieves a list of all pending invitations for a given user by the user's email.
+		/// Gets information for an invite.
 		/// </summary>
-		/// <param name="userEmail">The user's email address.</param>
-		/// <returns>The invitation associated with the user.</returns>
-		public List<InvitationInfo> GetInvitationsByUser(string userEmail)
+		/// <param name="invitationId">Id of invite.</param>
+		/// <returns>Inviation info </returns>
+		public Invitation GetInvitationByID(int invitationId)
 		{
-			#region Validation
-
-			if (!Utility.IsValidEmail(userEmail))
-			{
-				throw new FormatException("Email address must be in a valid format.");
-			}
-
-			#endregion Validation
-
-			var invitationsDB = DBHelper.GetUserInvitationsByUserData(new UserDBEntity()
-			{
-				Email = userEmail
-			});
-
-			return invitationsDB.Select(idb => InitializeInvitationInfo(idb)).ToList();
+			return InitializeInvitationInfo(DBHelper.GetUserInvitationByInviteId(invitationId));
 		}
 
 		/// <summary>
@@ -125,21 +74,14 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="invitationId">The invitationId.</param>
 		/// <returns>The resulting action message if succeed, null if fail.</returns>
-		public string AcceptUserInvitation(int invitationId)
+		public bool AcceptUserInvitation(int invitationId)
 		{
-			#region Validation
-
-			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId", "The invitation id cannot be zero or negative.");
-
-			#endregion Validation
-
-			NotifyInviteAcceptAsync(invitationId);
+			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId");
 
 			var results = DBHelper.AcceptInvitation(invitationId, UserContext.UserId);
+			NotifyInviteAcceptAsync(invitationId);
 
-			if (results == null) return null;
-
-			return string.Format("You have successfully joined {0} in the role of {1}.", results.Item1, results.Item2);
+			return results;
 		}
 
 		/// <summary>
@@ -147,18 +89,14 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="invitationId">The id of the invitation to reject.</param>
 		/// <returns>The resulting message.</returns>
-		public string RejectInvitation(int invitationId)
+		public bool RejectInvitation(int invitationId)
 		{
-			try
+			bool rejected = DBHelper.RejectInvitation(invitationId);
+			if (rejected)
 			{
-				DBHelper.RejectInvitation(invitationId);
 				NotifyInviteRejectAsync(invitationId);
-				return "The invitation has been rejected.";
 			}
-			catch (SqlException)
-			{
-				return null;
-			}
+			return rejected;
 		}
 
 		/// <summary>
@@ -271,7 +209,8 @@ namespace AllyisApps.Services
 					result.OrganizationsAndRoles.Add(item.OrganizationId, new UserContext.OrganizationAndRole()
 					{
 						OrganizationId = item.OrganizationId,
-						OrganizationRole = (OrganizationRole)item.OrganizationRoleId
+						OrganizationRole = (OrganizationRole)item.OrganizationRoleId,
+						MaxAmount = item.MaxAmount ?? 0
 					});
 				}
 
@@ -286,11 +225,8 @@ namespace AllyisApps.Services
 							ProductRoleId = item.ProductRoleId,
 							SkuId = (SkuIdEnum)item.SkuId,
 							SubscriptionId = item.SubscriptionId,
-							OrganizationId = item.OrganizationId,
-							MaxAmount = expando.User.MaxAmount
+							OrganizationId = item.OrganizationId
 						});
-
-					//result.UserSubscriptions.Add(sub.SubscriptionId, sub);
 				}
 
 				// set result to self
@@ -301,54 +237,10 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Updates the active subsciption for the current user.
-		/// </summary>
-		/// <param name="subscriptionId">Subscription Id.</param>
-		public void UpdateActiveSubscription(int? subscriptionId)
-		{
-			if (subscriptionId.HasValue && subscriptionId.Value <= 0) throw new ArgumentException("subscriptionId");
-			DBHelper.UpdateActiveSubscription(UserContext.UserId, subscriptionId);
-		}
-
-		/// <summary>
-		/// Gets the user info for a specific user.
-		/// </summary>
-		/// <param name="userId">User Id.</param>
-		/// <returns>A User instance with the current user's info.</returns>
-		public User GetUserInfo(int userId)
-		{
-			if (userId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
-			}
-			var results = DBHelper.GetUserInfo(userId);
-			User user = InitializeUser(results.Item1, false);
-			if (results.Item2 != null)
-			{
-				user.Address = InitializeAddress(results.Item2);
-			}
-			return user;
-		}
-
-		/// <summary>
-		/// get the user profile
-		/// </summary>
-		public User GetCurrentUserInfo()
-		{
-			if (this.UserContext?.UserId == null)
-			{
-				return null;
-			}
-			var result = GetUserInfo(this.UserContext.UserId);
-			return result;
-		}
-
-		/// <summary>
 		/// get the current logged in user
 		/// </summary>
 		public User GetCurrentUser()
 		{
-			// TODO: this should return User object
 			return this.GetUser(this.UserContext.UserId);
 		}
 
@@ -360,29 +252,23 @@ namespace AllyisApps.Services
 			if (userId <= 0) throw new ArgumentOutOfRangeException("userId");
 
 			dynamic infos = this.DBHelper.GetUser(userId);
-			// TODO: return User object from this method
-			// copy infos in to User object
-			User userInfo = AppService.InitializeUser(infos.User);
-
+			User userInfo = this.InitializeUser(infos.User);
 			IEnumerable<dynamic> Organizations = infos.Organizations;
-
 			IEnumerable<dynamic> Subscriptions = infos.Subscriptions;
 
 			userInfo.Subscriptions = Subscriptions.Select(sub =>
 				new UserSubscription()
 				{
-					Subscription = new Subscription()
-					{
-						AreaUrl = sub.AreaUrl,
-						OrganizationId = sub.OrganizationId,
-						ProductId = (ProductIdEnum)sub.ProductId,
-						ProductName = sub.ProductName,
-						SkuId = (SkuIdEnum)sub.SkuId,
-						SubscriptionId = sub.SubscriptionId,
-						SubscriptionName = sub.SubscriptionName
-					},
+					AreaUrl = sub.AreaUrl,
+					OrganizationId = sub.OrganizationId,
+					ProductId = (ProductIdEnum)sub.ProductId,
+					ProductName = sub.ProductName,
+					SkuId = (SkuIdEnum)sub.SkuId,
+					SubscriptionId = sub.SubscriptionId,
+					SubscriptionName = sub.SubscriptionName,
 					ProductRoleId = sub.ProductRoleId,
-					UserId = userId
+					UserId = userId,
+					IconUrl = sub.IconUrl
 				}
 			).ToList();
 
@@ -401,17 +287,14 @@ namespace AllyisApps.Services
 				inv =>
 					new Invitation()
 					{
-						invite = new InvitationInfo()
-						{
-							Email = inv.Email,
-							EmployeeId = inv.EmployeeId,
-							FirstName = inv.FirstName,
-							LastName = inv.LastName,
-							InvitationId = inv.InvitationId,
-							OrganizationId = inv.OrganizationId,
-							OrganizationRole = (OrganizationRole)inv.OrganizationRoleId,
-						},
-						invitingOrgName = inv.OrganizationName
+						Email = inv.Email,
+						EmployeeId = inv.EmployeeId,
+						FirstName = inv.FirstName,
+						LastName = inv.LastName,
+						InvitationId = inv.InvitationId,
+						OrganizationId = inv.OrganizationId,
+						OrganizationRole = (OrganizationRole)inv.OrganizationRoleId,
+						OrganizationName = inv.OrganizationName
 					}
 				).ToList();
 			return userInfo;
@@ -422,7 +305,15 @@ namespace AllyisApps.Services
 		/// </summary>
 		public void UpdateCurrentUserProfile(int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
 		{
-			this.DBHelper.UpdateUserProfile(this.UserContext.UserId, firstName, lastName, this.GetDateTimeFromDays(dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
+			this.DBHelper.UpdateUserProfile(this.UserContext.UserId, firstName, lastName, Utility.GetDateTimeFromDays(dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
+		}
+
+		/// <summary>
+		/// update the current user profile
+		/// </summary>
+		public void UpdateUserProfile(int userId, int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
+		{
+			this.DBHelper.UpdateUserProfile(userId, firstName, lastName, Utility.GetDateTimeFromDays(dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
 		}
 
 		/// <summary>
@@ -438,85 +329,39 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Saves the user info in the database.
-		/// </summary>
-		/// <param name="model">UserInfo containing updated info.</param>
-		public void SaveUserInfo(User model)
-		{
-			if (model == null)
-			{
-				throw new ArgumentNullException("model", "UserInfo object must not be null.");
-			}
-
-			//// TODO: Add UserInfo->UserDBEntity conversion at bottom
-			DBHelper.UpdateUserProfile(model.UserId,
-				model.FirstName, model.LastName, model.DateOfBirth, model.PhoneNumber,
-				model.Address?.AddressId, model.Address?.Address1, model.Address?.Address2, model.Address?.City, model.Address?.StateId, model.Address?.PostalCode, model.Address?.CountryCode
-			);
-		}
-
-		/// <summary>
 		/// Updates an organization member's info.
 		/// </summary>
-		/// <param name="modelData">The data from the form that the controller passed in.</param>
-		public bool UpdateMember(Dictionary<string, dynamic> modelData)
+		public bool UpdateMember(int userId, int orgId, string employeeId, int roleId, string firstName, string lastName, bool isInvited)
 		{
-			if (modelData["userId"] <= 0)
-			{
-				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
-			}
+			if (userId <= 0) throw new ArgumentOutOfRangeException("userId");
+			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
+			if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException("employeeId");
+			if (roleId <= 0) throw new ArgumentOutOfRangeException("roleId");
 
-			if (modelData["orgId"] < 0)
-			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
-			}
-
-			if (string.IsNullOrEmpty(modelData["employeeId"]))
-			{
-				throw new ArgumentNullException("employeeId", "Employee Id must have a value");
-			}
-
-			if (modelData["employeeRoleId"] < 0)
-			{
-				throw new ArgumentOutOfRangeException("employeeRoleId", "Employee Role Id cannot be negative.");
-			}
-
-			return DBHelper.UpdateMember(modelData) == 1 ? false : true;
+			return DBHelper.UpdateMember(userId, orgId, employeeId, roleId, firstName, lastName, isInvited) == 1 ? false : true;
 		}
 
 		/// <summary>
 		/// Sets the language preference for the current user.
 		/// </summary>
-		/// <param name="CultureName">The language Id.</param>
-		public void SetLanguage(string CultureName)
+		public void SetLanguage(string cultureName)
 		{
-			if (CultureName == null)
-			{
-				throw new ArgumentOutOfRangeException("CultureName", "Culture Name cannot be empty.");
-			}
+			if (string.IsNullOrWhiteSpace(cultureName)) throw new ArgumentNullException("cultureName");
 
-			DBHelper.UpdateUserLanguagePreference(UserContext.UserId, CultureName);
+			this.DBHelper.UpdateUserLanguagePreference(UserContext.UserId, cultureName);
 		}
 
 		/// <summary>
 		/// Gets the browser-compatible universal culture language string (e.g. "en-US") based on language Id.
 		/// </summary>
-		/// <param name="CultureName">The language Id. May use 0 to indicate no language setting.</param>
-		/// <returns>Culture string.</returns>
-		public Language GetLanguage(string CultureName)
+		public Language GetLanguage(string cultureName)
 		{
-			if (CultureName == null)
+			if (string.IsNullOrWhiteSpace(cultureName))
 			{
-				throw new ArgumentOutOfRangeException("CultureName", "Culture Name cannot be empty.");
+				cultureName = System.Globalization.CultureInfo.CurrentCulture.Name;
 			}
 
-			// No language setting, use browser setting. May return null if browser culture is unsupported in this app's database.
-			if (CultureName == null)
-			{
-				return this.ValidLanguages().Where(c => System.Globalization.CultureInfo.CurrentCulture.Name.Equals(c.CultureName)).SingleOrDefault();
-			}
-
-			LanguageDBEntity language = DBHelper.GetLanguage(CultureName);
+			LanguageDBEntity language = this.DBHelper.GetLanguage(cultureName);
 			return new Language
 			{
 				LanguageName = language.LanguageName,
@@ -597,17 +442,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets a password hash.
-		/// </summary>
-		/// <param name = "password" >The password entered by user.</param>
-		/// <returns>Password hash.</returns>
-		public string GetPasswordHash(string password)
-		{
-			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentNullException("password");
-			return Crypto.GetPasswordHash(password);
-		}
-
-		/// <summary>
 		/// Confirms the users email.
 		/// </summary>
 		public bool ConfirmUserEmail(Guid code)
@@ -616,23 +450,34 @@ namespace AllyisApps.Services
 			return DBHelper.UpdateEmailConfirmed(code) > 0 ? true : false;
 		}
 
-		/// <summary>
-		/// Gets a list of <see cref="Organization"/>s for all organizations the user is a part of.
-		/// </summary>
-		/// <returns>Collection of Organizations.</returns>
-		public IEnumerable<Organization> GetOrganizationsByUserId()
-		{
-			return GetOrganizationsByUserId(UserContext.UserId);
-		}
-
 		public IEnumerable<Organization> GetOrganizationsByUserId(int userID)
 		{
 			return DBHelper.GetOrganizationsByUserId(userID).Select(o => (Organization)InitializeOrganization(o));
 		}
 
-		#endregion public
-
-		#region Info-DBEntity Conversions
+		private User InitializeUser(dynamic user)
+		{
+			User newUser = new User()
+			{
+				AccessFailedCount = user.AccessFailedCount,
+				DateOfBirth = user.DateOfBirth,
+				Email = user.Email,
+				IsEmailConfirmed = user.IsEmailConfirmed,
+				FirstName = user.FirstName,
+				LastName = user.LastName,
+				IsLockoutEnabled = user.IsLockoutEnabled,
+				LockoutEndDateUtc = user.LockoutEndDateUtc,
+				PasswordHash = user.PasswordHash,
+				PasswordResetCode = user.PasswordResetCode,
+				PhoneExtension = user.PhoneExtension,
+				PhoneNumber = user.PhoneNumber,
+				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
+				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
+				UserId = user.UserId,
+				Address = InitializeAddress(user)
+			};
+			return newUser;
+		}
 
 		/// <summary>
 		/// Translates a UserDBEntity into a User business object.
@@ -640,17 +485,19 @@ namespace AllyisApps.Services
 		/// <param name="user">UserDBEntity instance.</param>
 		/// <param name="loadAddress"></param>
 		/// <returns>User instance.</returns>
-		public User InitializeUser(UserDBEntity user, bool loadAddress = true)
+		private User InitializeUser(UserDBEntity user, bool loadAddress = true)
 		{
 			if (user == null)
 			{
 				return null;
 			}
+
 			Address address = null;
 			if (user.AddressId != null && loadAddress)
 			{
 				address = getAddress(user.AddressId);
 			}
+
 			return new User
 			{
 				AccessFailedCount = user.AccessFailedCount,
@@ -674,77 +521,18 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Initialzie user from dynamic object
-		/// </summary>
-		/// <param name="userInfo"></param>
-		/// <returns></returns>
-		public static User InitializeUser(dynamic userInfo)
-		{
-			Address address = InitializeAddress((dynamic)userInfo);
-
-			return new User
-			{
-				AccessFailedCount = userInfo.AccessFailedCount,
-				DateOfBirth = userInfo.DateOfBirth,
-				Email = userInfo.Email,
-				IsEmailConfirmed = userInfo.IsEmailConfirmed,
-				FirstName = userInfo.FirstName,
-				LastName = userInfo.LastName,
-				IsLockoutEnabled = userInfo.IsLockoutEnabled,
-				LockoutEndDateUtc = userInfo.LockoutEndDateUtc,
-				PasswordHash = userInfo.PasswordHash,
-				PasswordResetCode = userInfo.PasswordResetCode,
-				PhoneExtension = userInfo.PhoneExtension,
-				PhoneNumber = userInfo.PhoneNumber,
-				IsPhoneNumberConfirmed = userInfo.IsPhoneNumberConfirmed,
-				IsTwoFactorEnabled = userInfo.IsTwoFactorEnabled,
-				UserId = userInfo.UserId,
-				Address = address,
-			};
-		}
-
-		/// <summary>
-		/// Translates a User into a UserDBEntity.
-		/// </summary>
-		/// <param name="user">User instance.</param>
-		/// <returns>UserDBEntity instance.</returns>
-		public UserDBEntity GetDBEntityFromUser(User user)
-		{
-			return new UserDBEntity()
-			{
-				AddressId = user.Address?.AddressId,
-				AccessFailedCount = user.AccessFailedCount,
-				DateOfBirth = user.DateOfBirth,
-				Email = user.Email,
-				IsEmailConfirmed = user.IsEmailConfirmed,
-				FirstName = user.FirstName,
-				LastName = user.LastName,
-				IsLockoutEnabled = user.IsLockoutEnabled,
-				LockoutEndDateUtc = user.LockoutEndDateUtc,
-				PasswordHash = user.PasswordHash,
-				PasswordResetCode = user.PasswordResetCode,
-				PhoneExtension = user.PhoneExtension,
-				PhoneNumber = user.PhoneNumber,
-				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
-				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
-				UserId = user.UserId,
-				PreferredLanguageId = "en-US"          // TODO: Put this into UserInfo and do proper lookup
-			};
-		}
-
-		/// <summary>
-		/// Translates a <see cref="UserRolesDBEntity"/> into a <see cref="UserRolesInfo"/>.
+		/// Translates a <see cref="UserRolesDBEntity"/> into a <see cref="UserRole"/>.
 		/// </summary>
 		/// <param name="userRoles">UserRolesDBEntity instance.</param>
-		/// <returns>UserRolesInfo instance.</returns>
-		public UserRolesInfo InitializeUserRolesInfo(UserRolesDBEntity userRoles)
+		/// <returns>UserRole instance.</returns>
+		private UserRole InitializeUserRole(UserRolesDBEntity userRoles)
 		{
 			if (userRoles == null)
 			{
 				return null;
 			}
 
-			return new UserRolesInfo
+			return new UserRole
 			{
 				Email = userRoles.Email,
 				FirstName = userRoles.FirstName,
@@ -758,18 +546,18 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Translates a <see cref="SubscriptionUserDBEntity"/> into a <see cref="SubscriptionUserInfo"/>"/>.
+		/// Translates a <see cref="SubscriptionUserDBEntity"/> into a <see cref="SubscriptionUser"/>"/>.
 		/// </summary>
 		/// <param name="subUser">SubscriptionUserDBEntity instance.</param>
-		/// <returns>SubscriptionUserInfo instance.</returns>
-		public SubscriptionUserInfo InitializeSubscriptionUserInfo(SubscriptionUserDBEntity subUser)
+		/// <returns>SubscriptionUser instance.</returns>
+		public SubscriptionUser InitializeSubscriptionUser(SubscriptionUserDBEntity subUser)
 		{
 			if (subUser == null)
 			{
 				return null;
 			}
 
-			return new SubscriptionUserInfo
+			return new SubscriptionUser
 			{
 				FirstName = subUser.FirstName,
 				LastName = subUser.LastName,
@@ -779,21 +567,20 @@ namespace AllyisApps.Services
 			};
 		}
 
-		public IList<AccountDBEntity> GetAccounts()
+		public void UpdateUserOrgMaxAmount(OrganizationUser userInfo)
 		{
-			return DBHelper.GetAccounts().ToList();
-		}
-
-		public void UpdateUserMaxAmount(User user)
-		{
-			UserDBEntity entity = new UserDBEntity()
+			OrganizationUserDBEntity entity = new OrganizationUserDBEntity()
 			{
-				UserId = user.UserId,
-				MaxAmount = user.MaxAmount
+				UserId = userInfo.UserId,
+				MaxAmount = userInfo.MaxAmount,
+				OrganizationId = userInfo.OrganizationId
 			};
 			DBHelper.UpdateUserMaxAmount(entity);
 		}
 
-		#endregion Info-DBEntity Conversions
+		public decimal GetOrganizationUserMaxAmount(int userId, int orgId)
+		{
+			return DBHelper.GetUserOrgMaxAmount(userId, orgId);
+		}
 	}
 }

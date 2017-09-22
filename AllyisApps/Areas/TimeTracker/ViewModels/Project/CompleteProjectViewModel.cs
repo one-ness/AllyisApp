@@ -96,5 +96,37 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		/// Gets or sets a value indicating whether the user is a user of this project, in some contexts.
 		/// </summary>
 		public bool? IsProjectUser { get; set; }
+
+		/// <summary>
+		/// Initializes a instance of see <see cref="CompleteProjectViewModel"/>
+		/// </summary>
+		public CompleteProjectViewModel()
+		{
+		}
+
+		/// <summary>
+		/// Initializes a instance of see <see cref="CompleteProjectViewModel"/>
+		/// </summary>
+		public CompleteProjectViewModel(Services.CompleteProject proj)
+		{
+			this.CanEditProject = proj.CanEditProject;
+			this.CreatedUtc = proj.CreatedUtc;
+			this.CustomerId = proj.CustomerId;
+			this.CustomerName = proj.CustomerName;
+			this.CustomerOrgId = proj.CustomerOrgId;
+			this.EndDate = proj.EndDate;
+			this.IsActive = proj.IsActive;
+			this.IsCustomerActive = proj.IsCustomerActive;
+			this.IsProjectUser = proj.IsProjectUser;
+			this.IsUserActive = proj.IsUserActive;
+			this.OrganizationId = proj.OrganizationId;
+			this.OrganizationName = proj.OrganizationName;
+			this.OrganizationRoleId = proj.OrganizationRoleId;
+			this.PriceType = proj.PriceType;
+			this.ProjectId = proj.ProjectId;
+			this.ProjectName = proj.ProjectName;
+			this.ProjectOrgId = proj.ProjectOrgId;
+			this.StartDate = proj.StartDate;
+		}
 	}
 }

@@ -1,0 +1,45 @@
+﻿@using AllyisApps.ViewModels.ExpenseTracker.Expense;
+@model  AccountPageViewModel
+
+@{
+	Layout = "~/Areas/ExpenseTracker/Views/Shared/_Layout.cshtml";
+	ViewBag.Title = "Accounts";
+}
+
+<div class="form-group pull-right">
+	<a href="@Url.Action("CreateAccount")">
+		<span class="btn btn-primary">Create Account</span>
+	</a>
+</div>
+<div class="accounts col-lg-12 col-md-12 col-sm-12">
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th width="25%">Name</th>
+				<th width="25%">Account Type</th>
+				<th width="25%">Parent Account</th>
+				<th width="25%"></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var account in @Model.Accounts)
+			{
+				<tr>
+					<td>@account.AccountName</td>
+					<td>@account.AccountTypeName</td>
+					<td>@account.ParentAccountId</td>
+					<td>
+						<a href="@Url.Action("CreateAccount", ControllerConstants.Expense, new { accountId = @account.AccountId })" title="Edit the report..">
+							<span class="btn btn-primary">Edit</span>
+						</a>
+						<a href="@Url.Action("DeleteAccount", ControllerConstants.Expense, new { accountId = @account.AccountId })" title="Delete the report...">
+							<span class="btn btn-primary " style="background-color:red">
+								<i class="fa fa-times" style="color:white" />
+							</span>
+						</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>

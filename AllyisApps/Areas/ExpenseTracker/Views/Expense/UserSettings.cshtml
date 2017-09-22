@@ -8,37 +8,48 @@
 	ViewBag.Title = "User Settings";
 }
 
-@using (Html.BeginForm("UpdateUserSettings", ControllerConstants.Expense, FormMethod.Post, new { }))
+@if (Model.Users.Count() == 0)
 {
-	<table class="table table-hover">
-		<thead>
-			<tr class="double-bottom-border">
-				<th style="width: 50%">Name</th>
-				<th style="width: 50%">Max Amount</th>
-			</tr>
-		</thead>
-		<tbody>
-			@for (int i = 0; i < Model.Users.Count(); i++)
-			{
-				User user = Model.Users.ToArray()[i];
-				string userIdName = "Users[" + i + "].UserId";
-				string maxAmountName = "Users[" + i + "].MaxAmount";
-				string userName = user.FirstName + " " + user.LastName;
-
-				@Html.HiddenFor(m => user.UserId, new { Name = userIdName })
-				<tr>
-					<td>@userName</td>
-					<td>
-						<div class="amount-div form-control item-control" style="display: inline-block; width: 150px;">
-							$@Html.TextBoxFor(m => user.MaxAmount, new { @class = "amount-textbox", Name = maxAmountName, style = "display: inline-block; width: 100px; border: 0px; margin-top: -1px; margin-bottom: 6px;" })
-						</div>
-					</td>
+	<span class="text-warning"
+		  style="font-size: 20px; text-align: center; display: block; margin-top: 100px;">
+		This organization has no users.
+	</span>
+}
+else
+{
+	using (Html.BeginForm("UpdateUserSettings", ControllerConstants.Expense, FormMethod.Post, new { }))
+	{
+		<table class="table table-hover">
+			<thead>
+				<tr class="double-bottom-border">
+					<th style="width: 50%">Name</th>
+					<th style="width: 50%">Max Amount</th>
 				</tr>
+			</thead>
+			<tbody>
+				@for (int i = 0; i < Model.Users.Count(); i++)
+				{
+					UserMaxAmountViewModel user = Model.Users.ToArray()[i];
+					string userIdName = "Users[" + i + "].UserId";
+					string maxAmountName = "Users[" + i + "].MaxAmount";
+					string userName = user.FirstName + " " + user.LastName;
+
+					@Html.HiddenFor(m => user.UserId, new { Name = userIdName })
+					<tr>
+						<td>@userName</td>
+						<td>
+							<div class="amount-div form-control item-control" style="display: inline-block; width: 150px;">
+								$ @Html.TextBoxFor(m => user.MaxAmount, new { @class = "amount-textbox", Name = maxAmountName, style = "display: inline-block; width: 100px; border: 0px; margin-top: -1px; margin-bottom: 6px;" })
+								@Html.ValidationMessageFor(m => user.MaxAmount, "", new { data_valmsg_for = "model.MaxAmount" })
+							</div>
+						</td>
+					</tr>
 				}
-		</tbody>
-	</table>
-	<div class="pull-right">
-		@Html.ActionLink("Cancel", "Index", new { }, new { @class = "btn btn-reject", type = "button", name = "viewDataButton", value = "Cancel", title = "Export Excel Expense Tracker entries", style = "display: inline-block; color: white !important; border-color: maroon !important;" })
-		<input class="btn btn-primary" type="submit" value="Submit" />
-	</div>
+			</tbody>
+		</table>
+		<div class="pull-right">
+			@Html.ActionLink("Cancel", "Index", new { }, new { @class = "btn btn-reject", type = "button", name = "viewDataButton", value = "Cancel", title = "Export Excel Expense Tracker entries", style = "display: inline-block; color: white !important; border-color: maroon !important;" })
+			<input class="btn btn-primary" type="submit" value="Submit" />
+		</div>
+	}
 }

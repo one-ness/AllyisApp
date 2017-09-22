@@ -4,8 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
@@ -33,8 +31,8 @@ namespace AllyisApps.Controllers
 
 			if (!isInvited)
 			{
-				OrganizationUserInfo userOrgInfo = AppService.GetOrganizationManagementInfo(orgId).Item2.Find(m => m.UserId == userId);
-				User userBasicInfo = AppService.GetUserInfo(userId);
+				OrganizationUser userOrgInfo = AppService.GetOrganizationManagementInfo(orgId).Users.Find(m => m.UserId == userId);
+				User userBasicInfo = AppService.GetUser(userId);
 
 				model = new EditMemberViewModel
 				{
@@ -42,6 +40,7 @@ namespace AllyisApps.Controllers
 					{
 						UserId = userBasicInfo.UserId,
 						DateOfBirth = userBasicInfo.DateOfBirth,
+						PhoneNumber = userBasicInfo.PhoneNumber,
 						PhoneExtension = userBasicInfo.PhoneExtension,
 						Email = userBasicInfo.Email,
 						FirstName = userBasicInfo.FirstName,
@@ -64,7 +63,7 @@ namespace AllyisApps.Controllers
 			}
 			else
 			{
-				InvitationInfo userOrgInfo = AppService.GetOrganizationManagementInfo(orgId).Item4.Find(m => m.InvitationId == userId);
+				Invitation userOrgInfo = AppService.GetOrganizationManagementInfo(orgId).Invitations.Find(m => m.InvitationId == userId);
 
 				model = new EditMemberViewModel
 				{
@@ -88,26 +87,13 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// POST: /Account/EditMember.
 		/// </summary>
-		/// <param name="model">The Edit Member view model, with all the form info that we need to save.</param>
-		/// <returns>The async task to redirect to the manage org page.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> EditMember(EditMemberViewModel model)
+		public ActionResult EditMember(EditMemberViewModel model)
 		{
-			Dictionary<string, dynamic> modelData = new Dictionary<string, dynamic>
-			{
-				{ "employeeId", model.EmployeeId },
-				{ "employeeRoleId", model.EmployeeRoleId },
-				{ "isInvited", model.IsInvited },
-				{ "userId", model.UserInfo.UserId },
-				{ "orgId", model.OrganizationId },
-				{ "firstName", model.FirstName },
-				{ "lastName", model.LastName }
-			};
-
 			if (ModelState.IsValid)
 			{
-				if (await Task.Factory.StartNew(() => AppService.UpdateMember(modelData)))
+				if (this.AppService.UpdateMember(model.UserInfo.UserId, model.OrganizationId, model.EmployeeId, model.EmployeeRoleId, model.FirstName, model.LastName, model.IsInvited))
 				{
 					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UpdateMemberSuccessMessage, model.UserInfo.FirstName, model.UserInfo.LastName), Variety.Success));
 				}

@@ -3,6 +3,7 @@
     [OrganizationId] INT           NOT NULL,
     [EmployeeId]     NVARCHAR (16) NOT NULL,
     [OrganizationRoleId]      INT           NOT NULL,
+	[MaxAmount]					DECIMAL			 CONSTRAINT [DF__User__MaxAmount] DEFAULT ((0)) NOT NULL,
     [OrganizationUserCreatedUtc]     DATETIME2 (0) CONSTRAINT [DF_OrganizationUser_CreatedUtc] DEFAULT (getutcdate()) NOT NULL,
     CONSTRAINT [PK_OrganizationUser] PRIMARY KEY CLUSTERED ([UserId] ASC, [OrganizationId] ASC),
     CONSTRAINT [FK_OrganizationUser_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId]),

@@ -43,10 +43,6 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					Status = selectedStatus
 				};
 
-				var infos = AppService.GetReportInfo(subscriptionId);
-				UserContext.SubscriptionAndRole subInfo = null;
-				AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-
 				AdminReportModel adminReportVM = CreateAdminReportModel(subscriptionId);
 				adminReportVM.SubscriptionName = AppService.getSubscriptionName(subscriptionId);
 				adminReportVM.Selection = adminRVMSelect;
@@ -92,7 +88,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>An ExpenseDataExportViewModel.</returns>
 		public ExpenseDataExportViewModel ConstructAdminDataExportViewModel(int subscriptionId, int organizationId, List<int> userId, List<int> selectedStatus, DateTime? startDate = null, DateTime? endDate = null)
 		{
-			List<ExpenseReport> expenses = new List<ExpenseReport>();
+			List<ExpenseReportViewModel> expenses = new List<ExpenseReportViewModel>();
 
 			DateTime start = startDate != null ? startDate.Value : DateTime.UtcNow;
 			DateTime end = endDate != null ? endDate.Value : DateTime.UtcNow;
@@ -101,7 +97,11 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			{
 				var reports = AppService.GetExpenseReportBySubmittedId(user).Select(x => x).Where(x => DateTime.Compare(x.CreatedUtc, start) >= 0 && DateTime.Compare(x.CreatedUtc, end) <= 0);
 				reports = reports.Select(x => x).Where(y => selectedStatus.IndexOf(y.ReportStatus) != -1);
-				expenses.AddRange(reports);
+				List<ExpenseReportViewModel> reportViewModels = new List<ExpenseReportViewModel>();
+				foreach (ExpenseReport report in reports)
+				{
+					expenses.Add(InitializeExpenseReportViewModel(report));
+				}
 			}
 
 			ExpenseDataExportViewModel model = new ExpenseDataExportViewModel()

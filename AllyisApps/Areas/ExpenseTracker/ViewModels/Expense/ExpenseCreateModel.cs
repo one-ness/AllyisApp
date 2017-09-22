@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web;
-using AllyisApps.DBModel.Finance;
-using AllyisApps.Services;
 
 namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 {
@@ -29,7 +27,7 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		/// <summary>
 		/// Gets or sets the Expense Report.
 		/// </summary>
-		public ExpenseReport Report { get; set; }
+		public ExpenseReportViewModel Report { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Start Date.
@@ -39,7 +37,7 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		/// <summary>
 		/// Gets or sets the Expense Items.
 		/// </summary>
-		public IList<ExpenseItem> Items { get; set; }
+		public IList<ExpenseItemCreateViewModel> Items { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Expense Files.
@@ -54,6 +52,6 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		/// <summary>
 		/// Gets or sets the list of accounts.
 		/// </summary>
-		public IList<AccountDBEntity> AccountList { get; set; }
+		public IList<AccountViewModel> AccountList { get; set; }
 	}
 }

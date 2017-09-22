@@ -39,7 +39,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			var report = AppService.GetExpenseReport(id);
 			var reportItems = AppService.GetExpenseItemsByReportId(id);
-			var user = AppService.GetUserInfo(report.SubmittedById);
+			List<ExpenseItemCreateViewModel> itemViewModels = new List<ExpenseItemCreateViewModel>();
+			foreach (ExpenseItem item in reportItems)
+			{
+				itemViewModels.Add(InitializeExpenseItemViewModel(item));
+			}
+			var user = AppService.GetUser(report.SubmittedById);
 			var history = AppService.GetExpenseHistoryByReportId(id);
 			List<ExpenseHistoryViewModel> reportHistory = new List<ExpenseHistoryViewModel>();
 
@@ -47,7 +52,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			foreach (var item in history)
 			{
-				var reviewer = AppService.GetUserInfo(item.UserId);
+				var reviewer = AppService.GetUser(item.UserId);
 				reportHistory.Add(new ExpenseHistoryViewModel()
 				{
 					Reviewer = string.Format("{0} {1}", reviewer.FirstName, reviewer.LastName),
@@ -66,12 +71,30 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				SubmittedUtc = report.SubmittedUtc,
 				Justification = report.BusinessJustification,
 				Status = (ExpenseStatusEnum)report.ReportStatus,
-				Expenses = reportItems,
+				Expenses = itemViewModels,
 				History = reportHistory,
 				UserId = user.UserId,
 				ReportId = report.ExpenseReportId,
 				SubscriptionId = subscriptionId,
 				Attachments = fileNames
+			};
+		}
+
+		private ExpenseItemCreateViewModel InitializeExpenseItemViewModel(ExpenseItem item)
+		{
+			return new ExpenseItemCreateViewModel()
+			{
+				AccountId = item.AccountId,
+				Amount = item.Amount,
+				ExpenseItemCreatedUtc = item.ExpenseItemCreatedUtc,
+				ExpenseItemId = item.ExpenseItemId,
+				ExpenseItemModifiedUtc = item.ExpenseItemModifiedUtc,
+				ExpenseReportId = item.ExpenseReportId,
+				Index = item.Index,
+				IsBillableToCustomer = item.IsBillableToCustomer,
+				ItemDescription = item.ItemDescription,
+				ToDelete = item.ToDelete,
+				TransactionDate = item.TransactionDate
 			};
 		}
 	}

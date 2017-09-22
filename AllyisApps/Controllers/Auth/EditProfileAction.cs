@@ -6,6 +6,7 @@
 
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
+using AllyisApps.Lib;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Auth;
 
@@ -24,11 +25,11 @@ namespace AllyisApps.Controllers
 		{
 			var model = new EditProfileViewModel();
 			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
-			var user = this.AppService.GetCurrentUserInfo();
+			var user = this.AppService.GetCurrentUser();
 			model.Address = user.Address?.Address1;
 			model.AddressId = user.Address?.AddressId;
 			model.City = user.Address?.City;
-			model.DateOfBirth = this.AppService.GetDayFromDateTime(user.DateOfBirth);
+			model.DateOfBirth = Utility.GetDaysFromDateTime(user.DateOfBirth);
 			model.Email = user.Email;
 			model.FirstName = user.FirstName;
 			model.LastName = user.LastName;

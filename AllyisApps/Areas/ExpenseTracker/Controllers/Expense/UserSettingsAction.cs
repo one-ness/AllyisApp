@@ -26,18 +26,39 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			int userId = GetCookieData().UserId;
 
 			UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
-
-			IEnumerable<User> allUsers = AppService.GetUsersWithSubscriptionToProductInOrganization(subInfo.OrganizationId, (int)subInfo.ProductId);
+			var productInfo = AppService.GetProductSubscriptionInfo(subInfo.OrganizationId, (int)subInfo.SkuId);
 
 			string productName = AppService.GetProductNameBySubscriptionId(subInfo.SubscriptionId);
+
+			var allInfos = AppService.GetOrganizationManagementInfo(subInfo.OrganizationId);
+			IEnumerable<OrganizationUser> userInfos = allInfos.Users.Where(u =>
+				AppService.GetProductRoleForUser("Expense Tracker", u.UserId, subInfo.OrganizationId) == "Manager"
+				|| AppService.GetProductRoleForUser("Expense Tracker", u.UserId, subInfo.OrganizationId) == "SuperUser");
+
+			List<UserMaxAmountViewModel> userViewModels = new List<UserMaxAmountViewModel>();
+			foreach (OrganizationUser user in userInfos)
+			{
+				userViewModels.Add(InitializeUserMaxAmount(user));
+			}
 
 			UserSettingsViewModel model = new UserSettingsViewModel()
 			{
 				SubscriptionId = subscriptionId,
-				Users = allUsers.Where(u => AppService.GetProductRoleForUser(productName, u.UserId, subInfo.OrganizationId) == "User")
+				Users = userViewModels
 			};
 
 			return View(model);
+		}
+
+		private UserMaxAmountViewModel InitializeUserMaxAmount(OrganizationUser user)
+		{
+			return new UserMaxAmountViewModel()
+			{
+				MaxAmount = user.MaxAmount,
+				FirstName = user.FirstName,
+				LastName = user.LastName,
+				UserId = user.UserId
+			};
 		}
 	}
 }

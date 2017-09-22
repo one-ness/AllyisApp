@@ -13,7 +13,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
-using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.Lookup;
 using Dapper;
 
@@ -195,12 +194,13 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updates the max amount a user can approve of in a report.
 		/// </summary>
-		/// <param name="user"></param>
-		public void UpdateUserMaxAmount(UserDBEntity user)
+		/// <param name="orgUser"></param>
+		public void UpdateUserMaxAmount(OrganizationUserDBEntity orgUser)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@userId", user.UserId);
-			parameters.Add("@maxAmount", user.MaxAmount);
+			parameters.Add("@userId", orgUser.UserId);
+			parameters.Add("@orgId", orgUser.OrganizationId);
+			parameters.Add("@maxAmount", orgUser.MaxAmount);
 
 			using (var connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -407,18 +407,16 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updates an organization member's info.
 		/// </summary>
-		/// <param name="modelData">The data from the form that the service passed in.</param>
-		/// <returns>A 1 or 0 based on if the employeeId already exists or not.</returns>
-		public int UpdateMember(Dictionary<string, dynamic> modelData)
+		public int UpdateMember(int userId, int orgId, string employeeId, int roleId, string firstName, string lastName, bool isInvited)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@userId", modelData["userId"]);
-			parameters.Add("@orgId", modelData["orgId"]);
-			parameters.Add("@employeeId", modelData["employeeId"]);
-			parameters.Add("@employeeRoleId", modelData["employeeRoleId"]);
-			parameters.Add("@firstName", modelData["firstName"]);
-			parameters.Add("@lastName", modelData["lastName"]);
-			parameters.Add("@isInvited", modelData["isInvited"] ? 1 : 0);
+			parameters.Add("@userId", userId);
+			parameters.Add("@orgId", orgId);
+			parameters.Add("@employeeId", employeeId);
+			parameters.Add("@employeeRoleId", roleId);
+			parameters.Add("@firstName", firstName);
+			parameters.Add("@lastName", lastName);
+			parameters.Add("@isInvited", isInvited);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<int>("[Auth].[UpdateMember]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
@@ -614,7 +612,7 @@ namespace AllyisApps.DBModel
 				int inviteId = results.Read<int>().FirstOrDefault();
 				if (inviteId < 0)
 				{
-					return new Tuple<int, string, string>(inviteId, inviteId == -1 ? "User is already in organization." : "Employee Id is taken.", null);
+					return new Tuple<int, string, string>(inviteId, null, null);
 				}
 				return Tuple.Create(
 					inviteId,
@@ -629,27 +627,24 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="invitationId">Invitation Id.</param>
 		/// <param name="userId">User Id for invited user.</param>
-		/// <returns>On success, returns the name of the organization and the name of the organization role.
-		/// If an error occurred, returns null.</returns>
-		public Tuple<string, string> AcceptInvitation(int invitationId, int userId)
+		/// <returns>true or false based on the number of rows affected</returns>
+
+		public bool AcceptInvitation(int invitationId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@invitationId", invitationId);
 			parameters.Add("@callingUserId", userId);
+			var result = false;
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				var results = con.QueryMultiple(
+				var affected = con.Query<int>(
 					"[Auth].[AcceptInvitation]",
 					parameters,
-					commandType: CommandType.StoredProcedure);
-				if (results == null) return null;
-				else
-				{
-					return Tuple.Create(
-						results.Read<string>().FirstOrDefault(),
-						results.Read<string>().FirstOrDefault());
-				}
+					commandType: CommandType.StoredProcedure).First();
+				result = (affected == 1);
 			}
+
+			return result;
 		}
 
 		/// <summary>
@@ -659,16 +654,19 @@ namespace AllyisApps.DBModel
 		/// <returns>True for success, false for error.</returns>
 		public bool DeleteInvitation(int invitationId)
 		{
+			var result = false;
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@invitationId", invitationId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				int success = connection.Execute(
+				int affected = connection.Execute(
 					"[Auth].[DeleteInvitation]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
-				return success == 1;
+				result = affected == 1;
 			}
+
+			return result;
 		}
 
 		/// <summary>
@@ -697,67 +695,17 @@ namespace AllyisApps.DBModel
 		/// Deletes the defined invitation.
 		/// </summary>
 		/// <param name="invitationId">The invitation's Id.</param>
-		public void RejectInvitation(int invitationId)
+		public bool RejectInvitation(int invitationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@invitationId", invitationId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[Auth].[RejectInvitation]", parameters, commandType: CommandType.StoredProcedure);
+				int ret = connection.QueryFirst<int>("[Auth].[RejectInvitation]", parameters, commandType: CommandType.StoredProcedure);
+				return ret == 1;
 			}
 		}
-
-		///// <summary>
-		///// Adds a single entry to the InvitationSubRole database.
-		///// </summary>
-		///// <param name="invitationId">The invitation Id.</param>
-		///// <param name="subscriptionId">The subscription Id.</param>
-		///// <param name="productRoleId">The Id of the product role.</param>
-		// public void CreateInvitationSubRole(int invitationId, int subscriptionId, int productRoleId)
-		//{
-		//    DynamicParameters parameters = new DynamicParameters();
-		//    parameters.Add("@invitationId", invitationId);
-		//    parameters.Add("@subscriptionId", subscriptionId);
-		//    parameters.Add("@productRoleId", productRoleId);
-
-		//    using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//    {
-		//        connection.Execute("[Auth].[CreateInvitationSubRole]", parameters, commandType: CommandType.StoredProcedure);
-		//    }
-		//}
-
-		///// <summary>
-		///// Deletes a single entry from the InvitationSubRole database.
-		///// </summary>
-		///// <param name="invitationId">The invitation Id.</param>
-		///// <param name="subscriptionId">The subscription Id.</param>
-		// public void DeleteInvitationSubRole(int invitationId, int subscriptionId)
-		//{
-		//    DynamicParameters parameters = new DynamicParameters();
-		//    parameters.Add("@invitationId", invitationId);
-		//    parameters.Add("@subscriptionId", subscriptionId);
-
-		//    using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//    {
-		//        connection.Execute("[Auth].[DeleteInvitationSubRole]", parameters, commandType: CommandType.StoredProcedure);
-		//    }
-		//}
-
-		///// <summary>
-		///// Gets the roles for each subscription the invited user has.
-		///// </summary>
-		///// <param name="invitationId">The invitation Id.</param>
-		///// <returns>List of all roles.</returns>
-		// public IEnumerable<InvitationSubRoleDBEntity> GetInvitationSubRolesByInvitationId(int invitationId)
-		//{
-		//    DynamicParameters parameters = new DynamicParameters();
-		//    parameters.Add("@invitationId", invitationId);
-		//    using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//    {
-		//        return connection.Query<InvitationSubRoleDBEntity>("[Auth].[GetInvitationSubRolesByInvitationId]", parameters, commandType: CommandType.StoredProcedure);
-		//    }
-		//}
 
 		/// <summary>
 		/// Gets the first name of a user if they are in that organizaiton.
@@ -805,7 +753,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<InvitationDBEntity>("[Auth].[GetUserInvitationsByInviteId]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				return connection.Query<InvitationDBEntity>("[Auth].[GetUserInvitationByInviteId]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
 		}
 
@@ -921,7 +869,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<string, List<SubscriptionDisplayDBEntity>, List<SubscriptionRoleDBEntity>, List<ProjectDBEntity>, string> GetAddMemberInfo(int orgId)
+		public Tuple<string, List<SubscriptionDisplayDBEntity>, List<SubscriptionRoleDBEntity>, string> GetAddMemberInfo(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
@@ -935,7 +883,6 @@ namespace AllyisApps.DBModel
 					results.Read<string>().SingleOrDefault(),
 					results.Read<SubscriptionDisplayDBEntity>().ToList(),
 					results.Read<SubscriptionRoleDBEntity>().ToList(),
-					results.Read<ProjectDBEntity>().ToList(),
 					results.Read<string>().SingleOrDefault());
 			}
 		}

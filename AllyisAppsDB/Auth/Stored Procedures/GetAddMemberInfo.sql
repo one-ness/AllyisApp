@@ -32,6 +32,7 @@ AS
 	RIGHT JOIN [Auth].[ProductRole]  WITH (NOLOCK) ON [ProductRole].[ProductId] = [Sku].[ProductId]
 	WHERE [Subscription].[OrganizationId] = @organizationId AND [Subscription].[IsActive] = 1
 
+	/*
 	SELECT	[Project].[ProjectId],
 		[Project].[CustomerId],
 		[Customer].[OrganizationId],
@@ -54,6 +55,7 @@ AS
 		AND [Project].[IsActive] >= 1
 
 	ORDER BY [Project].[ProjectName]
+	*/
 
 	SELECT TOP 1
 		[EmployeeId]

@@ -18,17 +18,31 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		[HttpPost]
 		public ActionResult UpdateUserSettings(UserSettingsViewModel model)
 		{
+			UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId];
 			if (!ModelState.IsValid)
 			{
 				return RedirectToAction("UserSettings", new { subscriptionId = model.SubscriptionId });
 			}
 
-			foreach (User user in model.Users)
+			foreach (UserMaxAmountViewModel userMaxAmountViewModel in model.Users)
 			{
-				AppService.UpdateUserMaxAmount(user);
+				OrganizationUser userInfo = InitializeOrganizaionUser(userMaxAmountViewModel, subInfo.OrganizationId);
+				AppService.UpdateUserOrgMaxAmount(userInfo);
 			}
 
 			return RedirectToAction("index");
+		}
+
+		private OrganizationUser InitializeOrganizaionUser(UserMaxAmountViewModel user, int orgId)
+		{
+			return new OrganizationUser
+			{
+				MaxAmount = user.MaxAmount,
+				FirstName = user.FirstName,
+				LastName = user.LastName,
+				UserId = user.UserId,
+				OrganizationId = orgId
+			};
 		}
 	}
 }

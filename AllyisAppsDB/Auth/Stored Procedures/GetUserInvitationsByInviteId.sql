@@ -1,4 +1,4 @@
-CREATE PROCEDURE [Auth].[GetUserInvitationsByInviteId]
+CREATE PROCEDURE [Auth].[GetUserInvitationByInviteId]
 	@inviteId INT
 AS
 	SET NOCOUNT ON;
@@ -7,11 +7,13 @@ AS
 		[Email],
 		[FirstName],
 		[LastName], 
-		[OrganizationId], 
+		[Organization].[OrganizationId], 
 		[Invitation].[OrganizationRoleId],
-		[OrganizationRoleName] AS [OrganizationRoleName],
+		[Organization].[OrganizationName],
+		[Auth].[OrganizationRole].[OrganizationRoleName],
 		[EmployeeId],
 		[Invitation].[StatusId]
 	FROM [Auth].[Invitation] WITH (NOLOCK)
 	LEFT JOIN [Auth].[OrganizationRole] WITH (NOLOCK) ON [OrganizationRole].[OrganizationRoleId] = [Invitation].[OrganizationRoleId]
-	WHERE [InvitationId] = @inviteId AND [IsActive] = 1
+	LEFT JOIN [Auth].[Organization] WITH (NOLOCK) ON [Auth].[Organization].OrganizationId =  [Invitation].[OrganizationId] 
+	WHERE [InvitationId] = @inviteId AND [Invitation].[IsActive] = 1

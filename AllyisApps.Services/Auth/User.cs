@@ -127,20 +127,12 @@ namespace AllyisApps.Services
 		/// </summary>
 		public List<Invitation> Invitations { get; set; }
 
-		/// <summary>
-		/// Gets or sets the maximum amount of money user is allowed to approve of in a report.
-		/// </summary>
 		public decimal MaxAmount { get; set; }
 
-		/// <summary>
-		/// constructor
-		/// </summary>
-		public User()
-		{
-			this.Address = new Address();
-			this.Organizations = new List<UserOrganization>();
-			this.Subscriptions = new List<UserSubscription>();
-			this.Invitations = new List<Invitation>();
-		}
+		public bool IsAddressLoaded => Address != null;
+		public bool IsInvitationsLoaded => Invitations != null;
+		public bool IsOrganizationsLoaded => Organizations != null;
+		public bool IsSubscriptionsLoaded => Subscriptions != null;
+
 	}
 }

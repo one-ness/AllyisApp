@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 using System.Collections.Generic;
 using AllyisApps.Services;
-using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -27,6 +26,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the current Organization's active subscriptions.
 		/// </summary>
-		public IEnumerable<SubscriptionDisplayInfo> CurrentSubscriptions { get; set; }
+		public IEnumerable<Subscription> CurrentSubscriptions { get; set; }
 	}
 }

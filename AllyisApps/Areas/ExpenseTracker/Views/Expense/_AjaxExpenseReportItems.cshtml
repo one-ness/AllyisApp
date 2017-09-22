@@ -4,7 +4,7 @@
 @using AllyisApps.Services
 @using AllyisApps.ViewModels.ExpenseTracker.Expense
 @using HtmlHelpers.BeginCollectionItem
-@model ExpenseItem
+@model ExpenseItemCreateViewModel
 @{
 	if (this.ViewContext.FormContext == null)
 	{
@@ -22,10 +22,9 @@
 		string dateVal = Convert.ToDateTime(Model.TransactionDate).ToShortDateString() == "1/1/0001" ? "" : Convert.ToDateTime(Model.TransactionDate).ToShortDateString();
 		string itemIdName = String.Format("[{0}].ExpenseItemId", Model.Index);
 		string accountName = String.Format("[{0}].AccountId", Model.Index);
-		var accountList = (List<AccountDBEntity>)Session["AccountList"];
-		var selection = accountList.ToArray().Where(a => a.AccountId == Model.AccountId);
-		var selected = selection.Count() == 0 ? accountList.First() : selection.First();
-		var selectList = new SelectList(accountList, "AccountId", "AccountName", selected.AccountId);
+		var selection = Model.AccountList.ToArray().Where(a => a.AccountId == Model.AccountId);
+		var selected = selection.Count() == 0 ? Model.AccountList.First() : selection.First();
+		var selectList = new SelectList(Model.AccountList, "AccountId", "AccountName", selected.AccountId);
 
 		<td>
 			@Html.HiddenFor(m => m.ExpenseItemId)
