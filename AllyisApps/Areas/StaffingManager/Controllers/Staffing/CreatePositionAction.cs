@@ -13,8 +13,6 @@ using AllyisApps.Services;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.ViewModels;
-using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
-using System.Collections.Generic;
 using System.Web.Script.Serialization;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
@@ -57,7 +55,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				for (int j = 0; j < i; j++)
 				{
 					if (infos.Item2[i].TagName == temp[j] && !taken) taken = true;
-					if (!taken) temp[count] = infos.Item2[i].TagName;
+				}
+				if (!taken)
+				{
+					temp[count] = infos.Item2[i].TagName;
+					count++;
 				}
 			}
 			var tags = new string[count];
@@ -95,7 +97,6 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					UserContext.SubscriptionAndRole subInfo = null;
 					this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 					model.OrganizationId = subInfo.OrganizationId;
-					if (model.IsCreating) model.PositionStatusId = model.PositionStatuses[0].PositionStatusId;
 					if (model.TagsToSubmit != null)
 					{
 						JavaScriptSerializer js = new JavaScriptSerializer();

@@ -27,7 +27,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="Types"></param>
 		/// <param name="Tags"></param>
 		/// <returns>The index view.</returns>
-		public ActionResult Index(int subscriptionId, IList<string> Statuses, IList<string> Types, IList<string> Tags)
+		public ActionResult Index(int subscriptionId, string Statuses, string Types, string Tags)
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
 			int userId = this.AppService.UserContext.UserId;
@@ -36,14 +36,14 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 
 			System.Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<Customer>> infos;
 
-			if ((Statuses != null  && Statuses.Count != 0) || (Types.Count != 0 && Types != null) || (Tags.Count == 0 && Tags != null))
+			if ((Statuses != null) || (Types != null) || (Tags != null))
 			{
 				List<string> statuses = new List<string>();
-				if(Statuses != null) statuses = new List<string>(Statuses);
+				if(Statuses != null) statuses = new List<string>(Statuses.Split(",".ToCharArray()));
 				List<string> types = new List<string>();
-				if (Types != null) types = new List<string>(Types);
+				if (Types != null) types = new List<string>(Types.Split(",".ToCharArray()));
 				List<string> tags = new List<string>();
-				if (Tags != null) tags = new List<string>(Tags);
+				if (Tags != null) tags = new List<string>(Tags.Split(",".ToCharArray()));
 
 				infos = AppService.GetStaffingIndexInfoFiltered(subInfo.OrganizationId, statuses, types, tags, userId);
 			}
@@ -94,18 +94,26 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			int subId,
 			string subName,
 			List<PositionThumbnailInfo> positions,
-			List<Services.Lookup.Tag> tags,
+			List<Tag> tags,
 			List<EmploymentType> employmentTypes,
 			List<PositionLevel> positionLevels,
 			List<PositionStatus> positionStatuses)
 		{
+			List<Tag> uniqueTags = new List<Tag>();
+			foreach(Tag tag in tags)
+			{
+				bool skip = false;
+				foreach (Tag checkTag in uniqueTags) if (tag.TagName == checkTag.TagName) skip = true;
+				if (!skip) uniqueTags.Add(tag);
+			}
+
 			StaffingIndexViewModel result = new StaffingIndexViewModel()
 			{
 				OrganizationId = orgId,
 				SubscriptionId = subId,
 				SubscriptionName = subName,
 				Positions = positions,
-				Tags = tags,
+				Tags = uniqueTags,
 				EmploymentTypes = employmentTypes,
 				PositionLevels = positionLevels,
 				PositionStatuses = positionStatuses

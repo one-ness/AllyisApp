@@ -6,6 +6,7 @@ CREATE PROCEDURE [StaffingManager].[GetStaffingIndexInfoFiltered]
 AS
 BEGIN
 	DECLARE @sSQL NVARCHAR(MAX), @Where NVARCHAR(MAX) = ''
+	DECLARE @order NVARCHAR(100) = ' ORDER BY [StaffingManager].[Position].[StartDate] ASC'
 	SET @sSQL =
 		'SELECT DISTINCT [Position].[PositionId],
 			[Position].[OrganizationId],
@@ -59,7 +60,7 @@ BEGIN
 		SET @Where = CONCAT(@Where, 'AND [EmploymentType].[EmploymentTypeName] IN (SELECT [TypeName] FROM @_Type) ')
 	IF (SELECT count(*) from @tags) > 0
 		SET @Where = CONCAT(@Where, 'AND [Tag].[TagName] IN (SELECT [TagName] FROM @_Tags) ')
-		SET @sSQL = CONCAT(@sSQL, @where)
+		SET @sSQL = CONCAT(@sSQL, @where, @order)
 	EXEC sp_executesql @sSQL,
 		N'@_organizationId INT, @_Status [StaffingManager].[StatusesTable] READONLY, @_Type [StaffingManager].[TypesTable] READONLY, @_Tags [Lookup].[TagTable] READONLY',
 	@_organizationId = @organizationId, @_Status = @status, @_Type = @type, @_Tags = @tags

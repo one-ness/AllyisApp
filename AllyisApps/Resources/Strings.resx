@@ -1540,4 +1540,7 @@
   <data name="ExpenseTrackerRole" xml:space="preserve">
     <value>ExpenseTracker Roles</value>
   </data>
+  <data name="PositionTitle" xml:space="preserve">
+    <value>Position Title</value>
+  </data>
 </root>

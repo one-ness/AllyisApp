@@ -5,6 +5,7 @@
 	Model.IsCreating = true;
 	ViewData.Add(ControllerConstants.Controller, ControllerConstants.Staffing);
 	ViewData.Add(ActionConstants.Action, ActionConstants.SubmitCreatePosition);
+	DisplayHints.LayoutThemeBundle = "~/Content/StaffingManager";
 
 	ViewBag.OrganizationId = Model.OrganizationId;
 }
@@ -45,7 +46,7 @@
 		var getStatesUrl = "/Home/GetStates";
 		var selectedCountryCode = "@Model.SelectedCountryCode";
 		var selectedStateId = "@Model.SelectedStateId";
-		var mindate_shortstring = "@DateTime.MinValue.ToShortDateString()";
+		var mindate_shortstring = "@DateTime.Today.ToShortDateString()";
 		var maxdate_shortstring = "@DateTime.MaxValue.ToShortDateString()";
 	</script>
     @Scripts.Render("~/bundles/UpdateStateDDL");

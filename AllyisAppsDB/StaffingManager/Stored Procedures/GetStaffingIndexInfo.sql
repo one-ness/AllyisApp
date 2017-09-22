@@ -34,7 +34,7 @@ BEGIN
 	LEFT JOIN [Lookup].[Country]				WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
 	LEFT JOIN [Lookup].[State]					WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
 	WHERE [Position].[OrganizationId] = @organizationId
-	ORDER BY [StaffingManager].[Position].[PositionCreatedUtc] DESC
+	ORDER BY [StaffingManager].[Position].[StartDate] ASC
 
 	-- Select all tags from the positions
 	SELECT
