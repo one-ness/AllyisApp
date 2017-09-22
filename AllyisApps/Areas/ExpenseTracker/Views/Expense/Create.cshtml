@@ -127,11 +127,6 @@
 						{
 							item.Index = itemIndex;
 							item.AccountList = Model.AccountList;
-							//ExpenseItemModel subModel = new ExpenseItemModel()
-							//{
-							//	AccountList = Model.AccountList,
-							//	Item = item,
-							//};
 							Html.RenderPartial("_AjaxExpenseReportItems", item);
 							itemIndex += 1;
 						}

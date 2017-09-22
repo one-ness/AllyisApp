@@ -56,9 +56,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				reportViewModels.Add(InitializeExpenseReportViewModel(report));
 			}
 
-			var users = reportInfo.Item3;
-			List<SelectListItem> enumList = new List<SelectListItem>();
-			List<SelectListItem> userList = new List<SelectListItem>();
+            var users = reportInfo.SubscriptionUserInfo;
+            List<SelectListItem> enumList = new List<SelectListItem>();
+            List<SelectListItem> userList = new List<SelectListItem>();
 
 			foreach (var item in Enum.GetValues(typeof(ExpenseStatusEnum)))
 			{

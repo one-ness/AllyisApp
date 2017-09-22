@@ -22,6 +22,11 @@ namespace AllyisApps.Services
 		public ServiceSettings ServiceSettings { get; private set; }
 
 		/// <summary>
+		/// Default constructor
+		/// </summary>
+		public BaseService() { }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="BaseService"/> class.
 		/// </summary>
 		public BaseService(ServiceSettings settings)

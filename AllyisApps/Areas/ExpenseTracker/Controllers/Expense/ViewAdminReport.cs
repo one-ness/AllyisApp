@@ -45,10 +45,6 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					Status = selectedStatus
 				};
 
-				var infos = AppService.GetReportInfo(subscriptionId);
-				UserContext.SubscriptionAndRole subInfo = null;
-				AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-
 				AdminReportModel adminReportVM = CreateAdminReportModel(subscriptionId);
 				adminReportVM.SubscriptionName = AppService.getSubscriptionName(subscriptionId);
 				adminReportVM.Selection = adminRVMSelect;

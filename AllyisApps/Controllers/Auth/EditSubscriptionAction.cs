@@ -101,9 +101,9 @@ namespace AllyisApps.Controllers.Auth
 						}
 					}
 
-					Tuple<Product, SubscriptionInfo, List<SkuInfo>, string, int> infos = AppService.GetProductSubscriptionInfo(model.OrganizationId, model.SkuIdNext);
+					ProductSubscription infos = AppService.GetProductSubscriptionInfo(model.OrganizationId, model.SkuIdNext);
 
-					var id = infos.Item4;
+					var id = infos.StripeTokenCustId;
 					var customerId = new BillingServicesCustomerId(id);
 					var token = new BillingServicesToken(customerId.ToString());
 
@@ -129,7 +129,7 @@ namespace AllyisApps.Controllers.Auth
 		{
 			var infos = AppService.GetProductSubscriptionInfo(id, skuId);
 			SkuInfo sku = AppService.GetSkuDetails(skuId);
-			SkuInfo skuNext = infos.Item3.Where(s => s.SkuId != skuId && s.ProductId == productId).SingleOrDefault();
+			SkuInfo skuNext = infos.List.Where(s => s.SkuId != skuId && s.ProductId == productId).SingleOrDefault();
 			sku.SkuIdNext = skuNext == null ? 0 : skuNext.SkuId;
 			sku.NextName = skuNext == null ? null : skuNext.SkuName;
 			switch (sku.SkuName)

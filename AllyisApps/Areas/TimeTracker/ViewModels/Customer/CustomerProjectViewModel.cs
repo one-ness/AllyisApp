@@ -22,6 +22,6 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		/// <summary>
 		/// Gets the list of projects this Customer has.
 		/// </summary>
-		public IEnumerable<Services.Crm.Project> Projects { get; internal set; }
+		public IEnumerable<Services.Project.Project> Projects { get; internal set; }
 	}
 }

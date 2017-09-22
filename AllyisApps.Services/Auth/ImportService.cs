@@ -58,10 +58,10 @@ namespace AllyisApps.Services
 			tables = sortableTables.OrderBy(tup => tup.Item2 * -1).Select(tup => tup.Item1).ToList();
 
 			// Retrieval of existing customer and project data
-			List<Tuple<Customer, List<Project>>> customersProjects = new List<Tuple<Customer, List<Project>>>();
+			List<Tuple<Customer, List<Project.Project>>> customersProjects = new List<Tuple<Customer, List<Project.Project>>>();
 			foreach (Customer customer in this.GetCustomerList(orgId))
 			{
-				customersProjects.Add(new Tuple<Customer, List<Project>>(
+				customersProjects.Add(new Tuple<Customer, List<Project.Project>>(
 					customer,
 					this.GetProjectsByCustomer(customer.CustomerId).ToList()
 				));
@@ -279,9 +279,9 @@ namespace AllyisApps.Services
 										continue;
 									}
 
-									customersProjects.Add(new Tuple<Customer, List<Project>>(
+									customersProjects.Add(new Tuple<Customer, List<Project.Project>>(
 										newCustomer,
-										new List<Project>()
+										new List<Project.Project>()
 									));
 									customer = newCustomer;
 									result.CustomersImported += 1;
@@ -323,7 +323,7 @@ namespace AllyisApps.Services
 					DateTime? defaultProjectStartDate = null;
 					DateTime? defaultProjectEndDate = null;
 
-					Project project = null;
+					Project.Project project = null;
 
 					// If there is no identifying information for projects, all project related importing is skipped.
 					if (hasProjectName || hasProjectId)
@@ -399,7 +399,7 @@ namespace AllyisApps.Services
 								}
 
 								// All required information is known: time to create the project
-								project = new Project
+								project = new Project.Project
 								{
 									CustomerId = customer.CustomerId,
 									ProjectName = thisRowHasProjectName ? knownValue : readValue,
@@ -504,7 +504,7 @@ namespace AllyisApps.Services
 									}
 
 									// All required information is known: time to create the project
-									project = new Project
+									project = new Project.Project
 									{
 										CustomerId = customer.CustomerId,
 										ProjectName = fields[0],

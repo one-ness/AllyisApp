@@ -1,4 +1,4 @@
-﻿namespace AllyisApps.Services
+﻿namespace AllyisApps.Services.Project
 {
 	/// <summary>
 	/// Business logic for all project related operations.

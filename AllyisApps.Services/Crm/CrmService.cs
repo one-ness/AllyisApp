@@ -166,7 +166,7 @@ namespace AllyisApps.Services
 		/// (current organization by default), another list of Projects for all projects in the organization,
 		/// the name of the user (as "Firstname Lastname"), and the user's email.
 		/// </summary>
-		public Tuple<List<Project>, List<Project>, string, string> GetProjectsForOrgAndUser(int userId, int subscriptionId)
+		public Tuple<List<Project.Project>, List<Project.Project>, string, string> GetProjectsForOrgAndUser(int userId, int subscriptionId)
 		{
 			if (userId <= 0) throw new ArgumentException("userId");
 			if (subscriptionId <= 0) throw new ArgumentException("subscriptionId");
@@ -195,7 +195,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="customerId">Customer Id.</param>
 		/// <returns>List of ProjectInfo's.</returns>
-		public IEnumerable<Project> GetProjectsByCustomer(int customerId)
+		public IEnumerable<Project.Project> GetProjectsByCustomer(int customerId)
 		{
 			if (customerId <= 0)
 			{
@@ -203,7 +203,7 @@ namespace AllyisApps.Services
 			}
 
 			IEnumerable<ProjectDBEntity> dbeList = DBHelper.GetProjectsByCustomer(customerId);
-			List<Project> list = new List<Project>();
+			List<Project.Project> list = new List<Project.Project>();
 			foreach (ProjectDBEntity dbe in dbeList)
 			{
 				if (dbe != null)
@@ -220,7 +220,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="customerId">Customer Id.</param>
 		/// <returns>List of ProjectInfo's.</returns>
-		public IEnumerable<Project> GetInactiveProjectsByCustomer(int customerId)
+		public IEnumerable<Project.Project> GetInactiveProjectsByCustomer(int customerId)
 		{
 			if (customerId <= 0)
 			{
@@ -228,7 +228,7 @@ namespace AllyisApps.Services
 			}
 
 			IEnumerable<ProjectDBEntity> dbeList = DBHelper.GetInactiveProjectsByCustomer(customerId);
-			List<Project> list = new List<Project>();
+			List<Project.Project> list = new List<Project.Project>();
 			foreach (ProjectDBEntity dbe in dbeList)
 			{
 				if (dbe != null)
@@ -246,7 +246,7 @@ namespace AllyisApps.Services
 		/// <param name="newProject">Project with project information.</param>
 		/// <param name="userIds">List of users being assigned to the project.</param>
 		/// <returns>Project Id if succeed, -1 if ProjectOrgId is taken.</returns>
-		public int CreateProjectAndUpdateItsUserList(Project newProject, IEnumerable<int> userIds)
+		public int CreateProjectAndUpdateItsUserList(Project.Project newProject, IEnumerable<int> userIds)
 		{
 			#region Validation
 
@@ -280,7 +280,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="newProject">Project with project information.</param>
 		/// <returns>Project Id.</returns>
-		public int CreateProject(Project newProject)
+		public int CreateProject(Project.Project newProject)
 		{
 			#region Validation
 
@@ -314,7 +314,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="subId">SubscriptionId.</param>
 		/// <param name="project">Project with updated properties.</param>
-		public void UpdateProject(int subId, Project project)
+		public void UpdateProject(int subId, Project.Project project)
 		{
 			#region Validation
 
@@ -580,9 +580,9 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>All the projects in the organization.</returns>
-		public IEnumerable<Project> GetAllProjectsForOrganization(int orgId)
+		public IEnumerable<Project.Project> GetAllProjectsForOrganization(int orgId)
 		{
-			var result = new List<Project>();
+			var result = new List<Project.Project>();
 			foreach (var customer in this.GetCustomerList(orgId))
 			{
 				result.AddRange(this.GetProjectsByCustomer(customer.CustomerId));
@@ -803,14 +803,14 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="project">ProjectDBEntity instance.</param>
 		/// <returns>Project instance.</returns>
-		public static Project InitializeProject(ProjectDBEntity project)
+		public static Project.Project InitializeProject(ProjectDBEntity project)
 		{
 			if (project == null)
 			{
 				return null;
 			}
 
-			return new Project
+			return new Project.Project
 			{
 				CustomerId = project.CustomerId,
 				CustomerName = project.CustomerName,
@@ -829,7 +829,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="project">Project instance.</param>
 		/// <returns>ProjectDBEntity instance.</returns>
-		public static ProjectDBEntity GetDBEntityFromProject(Project project)
+		public static ProjectDBEntity GetDBEntityFromProject(Project.Project project)
 		{
 			if (project == null)
 			{
