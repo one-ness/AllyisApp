@@ -688,18 +688,7 @@ namespace AllyisApps.Services
 
 								try
 								{
-									Invitation inviteInfo = new Invitation()
-									{
-										OrganizationId = orgId,
-										Email = fields[0].Trim(),
-										EmployeeId = fields[1],
-										FirstName = names[0],
-										LastName = names[1],
-										OrganizationRole = OrganizationRole.Member
-									};
-
-									int x = InviteUser(inviteUrl, fields[0].Trim(), names[0], names[1], orgId, OrganizationRole.Member, fields[1]);
-
+									InviteUser(inviteUrl, fields[0].Trim(), names[0], names[1], orgId, OrganizationRole.Member, fields[1]);
 									result.UsersImported += 1;
 								}
 								catch (DuplicateNameException)
