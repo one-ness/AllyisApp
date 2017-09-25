@@ -16,6 +16,7 @@ using AllyisApps.Lib;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Lookup;
+using AllyisApps.Services.Crm;
 
 namespace AllyisApps.Services
 {

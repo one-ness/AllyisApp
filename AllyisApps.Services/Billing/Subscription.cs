@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.Billing
 {
 	/// <summary>
 	/// a subscription (by an organization to a sku of a product)

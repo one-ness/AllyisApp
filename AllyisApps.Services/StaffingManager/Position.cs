@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services.StaffingManager

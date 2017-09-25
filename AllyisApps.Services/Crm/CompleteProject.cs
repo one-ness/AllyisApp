@@ -6,7 +6,7 @@
 
 using System;
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.Crm
 {
 	/// <summary>
 	/// Represents a project.

@@ -11,7 +11,7 @@ using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels;
 
-namespace AllyisApps.Controllers
+namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
 	/// Controller for account and organization related actions.

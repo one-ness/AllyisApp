@@ -6,7 +6,7 @@
 
 using AllyisApps.Services.Lookup;
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.Crm
 {
 	/// <summary>
 	/// An object for keeping track of all the info related to a given customer.

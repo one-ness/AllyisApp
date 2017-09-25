@@ -15,6 +15,8 @@ using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Lookup;
 using AllyisApps.Lib;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Billing;
 using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services
@@ -266,7 +268,7 @@ namespace AllyisApps.Services
 					SkuId = (SkuIdEnum)sub.SkuId,
 					SubscriptionId = sub.SubscriptionId,
 					SubscriptionName = sub.SubscriptionName,
-					ProductRole = new Billing.ProductRole()
+					ProductRole = new ProductRole()
 					{
 						ProductRoleId = sub.ProductRoleId,
 						ProductId = (ProductIdEnum)sub.ProductId

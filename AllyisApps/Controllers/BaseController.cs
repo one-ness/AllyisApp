@@ -17,6 +17,7 @@ using AllyisApps.Core.Alert;
 using AllyisApps.Filters;
 using AllyisApps.Lib;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
 
 namespace AllyisApps.Controllers
 {

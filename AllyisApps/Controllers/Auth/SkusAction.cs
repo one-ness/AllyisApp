@@ -7,9 +7,10 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using AllyisApps.Services;
+using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.Auth;
 
-namespace AllyisApps.Controllers
+namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
 	/// Controller for account and organization related actions.

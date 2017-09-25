@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using AllyisApps.Services.Lookup;
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.Auth
 {
 	/// <summary>
 	/// Represents a user.
