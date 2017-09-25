@@ -88,14 +88,17 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					AccountTypeId = model.AccountTypeId,
 					AccountTypeName = model.AccountTypeName,
 					IsActive = true,
-					ParentAccountId = model.SelectedAccount != null ? (int?)Convert.ToInt32(model.SelectedAccount) : null
+					ParentAccountId = Convert.ToInt32(model.SelectedAccount) != 0 ? (int?)Convert.ToInt32(model.SelectedAccount) : null
 				};
 
-				success = AppService.CreateAccount(acc);
-
-				if (!success)
+				if (CheckAccountParent(acc))
 				{
-					AppService.UpdateAccount(acc);
+					success = AppService.CreateAccount(acc);
+
+					if (!success)
+					{
+						AppService.UpdateAccount(acc);
+					}
 				}
 			}
 
@@ -115,6 +118,35 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			AppService.DeleteAccount(accountId);
 
 			return RedirectToAction("Accounts");
+		}
+
+		/// <summary>
+		/// Checks to make sure a loop isn't created when adding a parent account to another account.
+		/// </summary>
+		/// <param name="childAcc">The child account</param>
+		/// <returns></returns>
+		public bool CheckAccountParent(Account childAcc)
+		{
+			bool results = true;
+
+			var childId = childAcc.AccountId;
+
+			var currentAccount = childAcc;
+
+			List<Account> accounts = AppService.GetAccounts().ToList();
+
+			while (currentAccount.ParentAccountId != null && accounts.Count != 0)
+			{
+				currentAccount = accounts.Where(x => x.AccountId == currentAccount.ParentAccountId).FirstOrDefault();
+				accounts.RemoveAll(x => x.AccountId == currentAccount.AccountId);
+
+				if (currentAccount.AccountId == childAcc.AccountId)
+				{
+					return false;
+				}
+			}
+
+			return results;
 		}
 	}
 }
