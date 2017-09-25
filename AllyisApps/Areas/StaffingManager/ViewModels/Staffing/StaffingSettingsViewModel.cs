@@ -68,18 +68,18 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		public List<PositionStatusSelectViewModel> positionStatuses { get; set; }
 
 		/// <summary>
-		/// Gets information for the positions Address 
+		/// Gets information for the positions Address
 		/// </summary>
 		public AddressViewModel PositionAddress { get; set; }
 
 		/// <summary>
 		/// Gets localized Counties for the address information
 		/// </summary>
-		public Dictionary<string, string> LocalizedCountries { get; internal set; }
+		public Dictionary<string, string> LocalizedCountries { get; set; }
 
 		/// <summary>
-		/// Gets Localized States 
+		/// Gets Localized States
 		/// </summary>
-		public Dictionary<string, string> LocalizedStates { get; internal set; }
+		public Dictionary<string, string> LocalizedStates { get; set; }
 	}
 }

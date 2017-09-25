@@ -45,7 +45,6 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 
-			
 			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
 			//TODO: this is piggy-backing off the get index action, create a new action that just gets items 3-5.
 			var infos = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
@@ -69,7 +68,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			return new EditPositionViewModel
 			{
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
-				LocalizedStats = new Dictionary<string, string>(),
+				LocalizedStates = new Dictionary<string, string>(),
 				IsCreating = true,
 				OrganizationId = subInfo.OrganizationId,
 				SubscriptionName = subscriptionNameToDisplay,
@@ -86,7 +85,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					PositionLevelId = pl.PositionLevelId,
 					PositionLevelName = pl.PositionLevelName
 				}).ToList(),
-				PositionStatuses = infos.Item5.AsParallel().Select(ps  => new PositionStatusSelectViewModel()
+				PositionStatuses = infos.Item5.AsParallel().Select(ps => new PositionStatusSelectViewModel()
 				{
 					PositionStatusId = ps.PositionStatusId,
 					PositionStatusName = ps.PositionStatusName

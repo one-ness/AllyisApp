@@ -148,11 +148,9 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		public string TagsToSubmit { get; set; }
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public AddressViewModel PositionAddress { get; set; }
-
-		
 
 		/// <summary>
 		/// CustomerInfo for View Model
@@ -199,6 +197,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 			/// </summary>
 			public AddressViewModel Address { get; set; }
 		}
+
 		/// <summary>
 		/// position levels available
 		/// </summary>
@@ -214,24 +213,24 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// </summary>
 		public List<EmploymentTypeSelectViewModel> EmploymentTypes { get; set; }
 
-
 		/// <summary>
 		/// list of customers the org has used
 		/// </summary>
 		public List<CustomerSelectViewModel> Customers { get; set; }
+
 		/// <summary>
 		/// Localized Countries
 		/// </summary>
-		public Dictionary<string, string> LocalizedCountries { get; internal set; }
+		public Dictionary<string, string> LocalizedCountries { get; set; }
 
 		/// <summary>
 		/// Localized States
 		/// </summary>
-		public Dictionary<string, string> LocalizedStats { get; internal set; }
+		public Dictionary<string, string> LocalizedStates { get; set; }
 	}
 
 	/// <summary>
-	/// Edit Position Address View Model 
+	/// Edit Position Address View Model
 	/// </summary>
 	public class AddressViewModel
 	{
@@ -282,6 +281,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// country code and localized names
 		/// </summary>
 		public Dictionary<string, string> LocalizedCountries { get; set; }
+
 		/// <summary>
 		/// state id and localized names
 		/// </summary>
