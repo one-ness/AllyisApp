@@ -23,6 +23,9 @@
 	ViewBag.Title = Strings.Settings;
 	DisplayHints.LayoutThemeBundle = "~/Content/StaffingManager";
 	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	ViewData["UserId"] = Model.userId;
+	ViewData["SubscriptionId"] = Model.subscriptionId;
+	ViewData["SubscriptionName"] = Model.subscriptionName;
 }
 
 <div>
