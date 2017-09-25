@@ -108,6 +108,10 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 							else tags.Add(new Tag { TagName = tag, TagId = -1, PositionId = -1 });
 						}
 					}
+					if(model.PositionStatusId == 0)
+					{
+						model.PositionStatusId = AppService.GetStaffingDefaultStatus(subInfo.OrganizationId);
+					}
 				}
 				int? positionId = AppService.CreatePosition(
 					new Position()

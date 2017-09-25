@@ -208,6 +208,13 @@ namespace AllyisApps.Services
 		/// <returns>returns a list of all current tags. </returns>
 		public List<Tag> GetTags() => DBHelper.GetTags().Select(DBEntityToServiceObject).ToList();
 
+		/// <summary>
+		/// get the default status ID from staffingsettings
+		/// </summary>
+		/// <param name="orgId"></param>
+		/// <returns></returns>
+		public int GetStaffingDefaultStatus(int orgId) => DBHelper.GetStaffingDefaultStatus(orgId);
+
 		#endregion GetMethods
 
 		#region UpdateMethods
@@ -239,6 +246,13 @@ namespace AllyisApps.Services
 		/// <param name="position">The service layer Position object to be passed to the DB and updated. </param>
 		/// <returns>Returns the number of rows updated.</returns>
 		public int UpdatePosition(Position position) => DBHelper.UpdatePosition(ServiceObjectToDBEntity(position));
+
+		/// <summary>
+		/// update default status
+		/// </summary>
+		/// <param name="organizationId"></param>
+		/// <param name="positionStatusId"></param>
+		public void UpdateDefaultPositionStatus(int organizationId, int positionStatusId) => DBHelper.UpdateStaffingSettings(organizationId, positionStatusId);
 
 		#endregion UpdateMethods
 

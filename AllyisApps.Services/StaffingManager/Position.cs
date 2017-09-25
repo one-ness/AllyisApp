@@ -14,8 +14,6 @@ namespace AllyisApps.Services.StaffingManager
 		private int employmentTypeId;
 		private int positionCount;
 		private string requiredSkills;
-		private string hiringManager;
-		private string teamName;
 		private List<Tag> tags;
 
 		/// <summary>
@@ -143,28 +141,12 @@ namespace AllyisApps.Services.StaffingManager
 		/// <summary>
 		/// Get or sets the name of the responsible hiring manager.
 		/// </summary>
-		public string HiringManager
-		{
-			get => hiringManager;
-			set
-			{
-				if (value.Length > nameLenthMax) throw new ArgumentOutOfRangeException(nameof(hiringManager), value, "Hiring Manager Name cannot be over " + nameLenthMax.ToString() + " characters");
-				hiringManager = value;
-			}
-		}
+		public string HiringManager { get; set; }
 
 		/// <summary>
 		/// Gets or sets the name of the team this position is for.
 		/// </summary>
-		public string TeamName
-		{
-			get => teamName;
-			set
-			{
-				if (value.Length > nameLenthMax) throw new ArgumentOutOfRangeException(nameof(teamName), value, "Team Name cannot be  over " + nameLenthMax.ToString() + " characters");
-				teamName = value;
-			}
-		}
+		public string TeamName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the address for the positions.

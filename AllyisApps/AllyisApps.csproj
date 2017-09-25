@@ -608,7 +608,6 @@
     <Content Include="Areas\StaffingManager\Views\Customer\Index.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Customer\_CustomerEdit.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Customer\Create.cshtml" />
-    <Content Include="Areas\StaffingManager\Views\Customer\_IndexPartial_Inactive.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Customer\_IndexPartial_Active.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Customer\Edit.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\Accounts.cshtml" />

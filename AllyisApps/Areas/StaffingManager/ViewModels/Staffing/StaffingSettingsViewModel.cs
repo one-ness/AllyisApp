@@ -77,6 +77,11 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		public List<PositionStatus> positionStatuses { get; set; }
 
 		/// <summary>
+		/// the default position status
+		/// </summary>
+		public int defaultPositionStatus { get; set; }
+
+		/// <summary>
 		/// Gets or sets the position's address.
 		/// </summary>
 		[DataType(DataType.Text)]
