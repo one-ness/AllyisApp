@@ -4,95 +4,145 @@
 	DisplayHints.PageBodyId = "paneled-index";
 	DisplayHints.LayoutThemeBundle = "~/Content/StaffingManager";
 	ViewBag.TitleBar = Strings.MyAccount;
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/StaffingManager/Views/Shared/_BreadcrumbNavPartial.cshtml";
 }
 <div class="row">
-	<style>
-		table {
-			border-collapse: collapse;
-			text-align: left;
-			width: 100%;
-		}
 
-		table td, .datagrid table th {
-			padding: 5px 5px;
-		}
+<style>
+	.datagrid table {
+		border-collapse: collapse;
+		text-align: left;
+		width: 100%;
+	}
 
-			table thead th {
-				background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #893b26), color-stop(1, #893b26) );
-				background: -moz-linear-gradient( center top, #bc7967 5%, #80141C 100% );
-				filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#991821', endColorstr='#80141C');
-				color: #FFFFFF;
-				font-size: 14px;
-				font-weight: bold;
-				border-left: 1px solid #bc7967;
-			}
+	.datagrid {
+		font: normal 14px/150% Arial, Helvetica, sans-serif;
+		background: #fff;
+		overflow: hidden;
+		-webkit-border-radius: 3px;
+		-moz-border-radius: 3px;
+		border-radius: 3px;
+	}
 
-		table thead th:first-child {
-			border: none;
-		}
+	.datagrid table td, .datagrid table th {
+		padding: 3px 3px;
+	}
 
-		table tbody td {
-			color: #80141C;
-			border-left: 1px solid #F7CDCD;
+	.datagrid table thead th {
+		background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #A38FC3), color-stop(1, #795FA2) );
+		background: -moz-linear-gradient( center top, #A38FC3 5%, #795FA2 100% );
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#A38FC3', endColorstr='#795FA2');
+		background-color: #A38FC3;
+		color: #FFFFFF;
+		font-size: 16px;
+		font-weight: bold;
+		border-left: 1px solid #A38FC3;
+	}
+
+	.datagrid table thead th:first-child {
+		border: none;
+	}
+
+		.datagrid table tbody td {
+			color: #326D7B;
+			border-left: 1px solid #FFD9B1;
+			border-bottom: 2px solid #1C5464;
 			font-size: 14px;
 			font-weight: normal;
 		}
 
-		table tbody .alt td {
-			background: #F7CDCD;
-			color: #80141C;
-		}
+	.datagrid table tbody .alt td {
+		background: #E1EEF4;
+		color: #326D7B;
+	}
 
-		table tbody td:first-child {
-			border-left: none;
-		}
+	.datagrid table tbody td:first-child {
+		border-left: none;
+	}
 
-		table tr {
-			border-bottom: solid #bc7967;
-		}
+	.datagrid table tbody tr:last-child td {
+		border-bottom: none;
+	}
 
-		tbody tr:last-child td {
-			border-bottom: none;
-		}
+	.datagrid table tfoot td div {
+		border-top: 1px solid #795FA2;
+		background: #E1EEF4;
+	}
 
-		.left-element {
-			display: inline-block;
-			left: 0;
-		}
+	.datagrid table tfoot td {
+		padding: 0;
+		font-size: 14px
+	}
 
-		select {
-			width: 150px
-		}
+	.datagrid table tfoot td div {
+		padding: 2px;
+	}
 
-		label {
-			padding: 5px 5px;
-		}
+	.datagrid table tfoot td ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		text-align: right;
+	}
 
-		div {
-			padding: 3px 3px;
-		}
+	.datagrid table tfoot li {
+		display: inline;
+	}
 
-		.right-element {
-			position: absolute;
-			display: inline-block;
-			right: 0px;
-		}
+	.datagrid table tfoot li a {
+		text-decoration: none;
+		display: inline-block;
+		padding: 2px 8px;
+		margin: 1px;
+		color: #FFFFFF;
+		border: 1px solid #795FA2;
+		-webkit-border-radius: 3px;
+		-moz-border-radius: 3px;
+		border-radius: 3px;
+		background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #A38FC3), color-stop(1, #795FA2) );
+		background: -moz-linear-gradient( center top, #A38FC3 5%, #795FA2 100% );
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#A38FC3', endColorstr='#795FA2');
+		background-color: #A38FC3;
+	}
 
-		.column-left {
-			float: left;
-			width: 33%;
-		}
+	.datagrid table tfoot ul.active, .datagrid table tfoot ul a:hover {
+		text-decoration: none;
+		border-color: #795FA2;
+		color: #FFFFFF;
+		background: none;
+		background-color: #795FA2;
+	}
 
-		.column-right {
-			float: right;
-			width: 33%;
-		}
+	div.dhtmlx_window_active, div.dhx_modal_cover_dv {
+		position: fixed !important;
+	}
 
-		.column-center {
-			display: inline-block;
-			width: 33%;
-		}
-	</style>
+	.column-left {
+		float: left;
+		width: 33%;
+	}
+	.column-center {
+		display: inline-block;
+		width: 33%;
+	}
+	.column-right {
+		float: right;
+		width: 33%;
+	}
+
+
+	.newIndicator {
+		font-size: 8px;
+		color: #C68A4D;
+		padding: 8px 2px;
+	}
+
+	.tagSpan {
+		font-size: 10px;
+		color: #336B7B;
+		background-color: #FFD9B1;
+	}
+</style>
 
 	<div class="panel-heading">
 		<h2 class="left-element" style="margin-top: 0px; margin-bottom: 0px;">
@@ -138,7 +188,7 @@
 		<br>
 	</div>
 	<div class="panel panel-default" width="100%">
-		<div>
+		<div class="datagrid">
 			<table class="table-responsive" id="PositionsTable">
 				<thead>
 					<tr class="panel panel-default">
@@ -157,12 +207,12 @@
 							@pos.PositionTitle
 							@if(pos.PositionModifiedUtc > DateTime.UtcNow.AddDays(-10))
 							{
-								<span class="pull-right">NEW</span>
+								<span class="newIndicator">NEW</span>
 							}
 							<p style="font-size: 10px">
 								@foreach (var tag in pos.Tags)
 								{
-									<span style="font-style: italic">@tag.TagName,</span>
+									<span class="tagSpan" style="font-style: italic">@tag.TagName,</span>
 								}
 							</p>
 						</td>

@@ -390,6 +390,7 @@
     <Build Include="Crm\Stored Procedures\CreateCustomer.sql" />
     <Build Include="StaffingManager\User Defined Types\TypesTable.sql" />
     <Build Include="StaffingManager\User Defined Types\StatusesTable.sql" />
+    <Build Include="StaffingManager\Tables\StaffingSettings.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
