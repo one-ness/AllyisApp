@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
+using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers.Auth

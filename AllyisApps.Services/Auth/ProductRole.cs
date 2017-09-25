@@ -4,6 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Services.Billing;
+
 namespace AllyisApps.Services.Auth
 {
 	/// <summary>

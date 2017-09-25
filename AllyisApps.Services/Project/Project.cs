@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using AllyisApps.Services.Crm;
 
 namespace AllyisApps.Services.Project
 {
@@ -53,6 +54,6 @@ namespace AllyisApps.Services.Project
 		/// </summary>
 		public bool IsActive { get; set; }
 
-		public Customer owningCustomer{ get; set;}
+		public Customer owningCustomer { get; set; }
 	}
 }

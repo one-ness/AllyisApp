@@ -268,7 +268,7 @@ namespace AllyisApps.Services
 					SkuId = (SkuIdEnum)sub.SkuId,
 					SubscriptionId = sub.SubscriptionId,
 					SubscriptionName = sub.SubscriptionName,
-					ProductRole = new Billing.ProductRole()
+					ProductRole = new ProductRole()
 					{
 						ProductRoleId = sub.ProductRoleId,
 						ProductId = (ProductIdEnum)sub.ProductId
