@@ -4,7 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.Services.Billing
+using AllyisApps.Services.Billing;
+
+namespace AllyisApps.Services.Auth
 {
 	/// <summary>
 	/// Subscription Role obj.
@@ -29,6 +31,6 @@ namespace AllyisApps.Services.Billing
 		/// <summary>
 		/// Gets or sets the Product Id.
 		/// </summary>
-		public int ProductId { get; set; }
+		public ProductIdEnum ProductId { get; set; }
 	}
 }

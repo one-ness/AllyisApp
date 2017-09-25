@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.TimeTracker.Customer;
@@ -28,15 +29,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult Create(int subscriptionId)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
-			var idAndCountries = AppService.GetNextCustId(subscriptionId);
+			int orgId = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+
+			var NextCustomerId = AppService.GetNextCustId(subscriptionId);
 			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
 			return this.View(new EditCustomerInfoViewModel
 			{
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
 				IsCreating = true,
-				CustomerOrgId = idAndCountries.Item1,
+				CustomerOrgId = NextCustomerId,
 				SubscriptionId = subscriptionId,
-				OrganizationId = idAndCountries.Item2,
+				OrganizationId = orgId,
 				UserId = AppService.UserContext.UserId,
 				SubscriptionName = subscriptionNameToDisplay,
 			});

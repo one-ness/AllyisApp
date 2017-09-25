@@ -38,7 +38,7 @@ namespace AllyisApps.Areas.ExpenseTracker
 				area: this.AreaName,
 				defaults: new { controller = "expense", action = "index" },
 				constraints: new { subscriptionId = @"\d+", reportId = @"\d+" },
-				namespaces: new string[] { "AllyisApps.Areas.ExpenseTracker.Controllers" });
+				namespaces: new string[] { "AllyisApps.Areas.ExpenseTracker.Controllers", "AllyisApps.Areas.ExpenseTracker.Controllers.Expense" });
 
 			context.Routes.MapSubdomainRoute(
 				name: "ExpenseTracker_Action",
@@ -46,7 +46,7 @@ namespace AllyisApps.Areas.ExpenseTracker
 				area: this.AreaName,
 				defaults: new { controller = "expense", action = "index" },
 				constraints: new { subscriptionId = @"\d+" },
-				namespaces: new string[] { "AllyisApps.Areas.ExpenseTracker.Controllers" });
+				namespaces: new string[] { "AllyisApps.Areas.ExpenseTracker.Controllers", "AllyisApps.Areas.ExpenseTracker.Controllers.Expense" });
 
 			context.Routes.MapSubdomainRoute(
 				name: "ExpenseTracker_Default",
@@ -54,7 +54,7 @@ namespace AllyisApps.Areas.ExpenseTracker
 				area: this.AreaName,
 				defaults: new { controller = "expense", action = "index" },
 				constraints: new { subscriptionId = @"\d+" },
-				namespaces: new string[] { "AllyisApps.Areas.ExpenseTracker.Controllers" });
+				namespaces: new string[] { "AllyisApps.Areas.ExpenseTracker.Controllers", "AllyisApps.Areas.ExpenseTracker.Controllers.Expense" });
 		}
 	}
 }

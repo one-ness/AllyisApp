@@ -12,6 +12,9 @@ using AllyisApps.Controllers;
 using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.Project;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Billing;
+using AllyisApps.Services.Crm;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -79,7 +82,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					ProjectId = 0,
 					ProjectName = AllyisApps.Resources.Strings.NoFilter,
-					CustomerId = 0
+					owningCustomer = new Customer()
+					{
+						CustomerId = 0
+					}
 				});
 
 			return new ReportViewModel
@@ -195,7 +201,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Disabled = false
 				});
 
-				List<CompleteProject> projectData = projects.Where(cpi => cpi.CustomerId == customerSelected).ToList();
+				List<CompleteProject> projectData = projects.Where(cpi => cpi.owningCustomer.CustomerId == customerSelected).ToList();
 				foreach (var project in projectData)
 				{
 					pSelectList.Add(new SelectListItem

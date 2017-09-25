@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
 using AllyisApps.Services;
+using AllyisApps.Services.Expense;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
@@ -44,6 +45,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			{
 				itemViewModels.Add(InitializeExpenseItemViewModel(item));
 			}
+
 			var user = AppService.GetUser(report.SubmittedById);
 			var history = AppService.GetExpenseHistoryByReportId(id);
 			List<ExpenseHistoryViewModel> reportHistory = new List<ExpenseHistoryViewModel>();

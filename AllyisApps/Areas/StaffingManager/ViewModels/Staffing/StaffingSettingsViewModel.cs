@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using AllyisApps.Services;
+using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
 
@@ -14,7 +15,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// a list of the short-hand position objects used to populate the views main table
 		/// </summary>
-		public List<PositionThumbnailInfo> positions { get; set; }
+		public List<PositionThumbnailInfoViewModel> positions { get; set; }
 
 		/// <summary>
 		/// organizations identifier number
@@ -44,7 +45,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// list fo tag objects used by the organization
 		/// </summary>
-		public List<Services.Lookup.Tag> tags { get; set; }
+		public List<TagViewModel> tags { get; set; }
 
 		/// <summary>
 		/// customers from the company
@@ -52,86 +53,38 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		public List<Customer> customers { get; set; }
 
 		/// <summary>
-		/// a customer for new customer creation
-		/// </summary>
-		public Customer newCustomer { get; set; }
-
-		/// <summary>
-		/// an address for new customer creation
-		/// </summary>
-		public Address newCustomerAddress { get; set; }
-
-		/// <summary>
 		/// list of employment types used by the organization
 		/// </summary>
-		public List<EmploymentType> employmentTypes { get; set; }
+		public List<EmploymentTypeSelectViewModel> employmentTypes { get; set; }
 
 		/// <summary>
 		/// list of position levels used by the organization
 		/// </summary>
-		public List<PositionLevel> positionLevels { get; set; }
+		public List<PositionLevelSelectViewModel> positionLevels { get; set; }
 
 		/// <summary>
 		/// list of position statuses used by the organization
 		/// </summary>
-		public List<PositionStatus> positionStatuses { get; set; }
+		public List<PositionStatusSelectViewModel> positionStatuses { get; set; }
 
 		/// <summary>
-		/// the default position status
+		/// deafult status identification number
 		/// </summary>
 		public int defaultPositionStatus { get; set; }
 
 		/// <summary>
-		/// Gets or sets the position's address.
+		/// Gets information for the positions Address
 		/// </summary>
-		[DataType(DataType.Text)]
-		[Display(Name = "Address")]
-		public string Address { get; set; }
+		public AddressViewModel PositionAddress { get; set; }
 
 		/// <summary>
-		/// Gets or sets the position's city.
-		/// </summary>
-		[DataType(DataType.Text)]
-		[Display(Name = "City")]
-		public string City { get; set; }
-
-		/// <summary>
-		/// Gets or sets the position's state.
-		/// </summary>
-		[Display(Name = "State")]
-		public string State { get; set; }
-
-		/// <summary>
-		/// Gets or sets the position's country or region.
-		/// </summary>
-		[Display(Name = "Country")]
-		public string Country { get; set; }
-
-		/// <summary>
-		/// Gets or sets the position's postal code.
-		/// </summary>
-		[DataType(DataType.PostalCode)]
-		[Display(Name = "Postal Code")]
-		public string PostalCode { get; set; }
-
-		/// <summary>
-		/// selected state id
-		/// </summary>
-		public int? SelectedStateId { get; set; }
-
-		/// <summary>
-		/// state id and localized names
-		/// </summary>
-		public Dictionary<string, string> LocalizedStates { get; set; }
-
-		/// <summary>
-		/// selected country code
-		/// </summary>
-		public string SelectedCountryCode { get; set; }
-
-		/// <summary>
-		/// country code and localized names
+		/// Gets localized Counties for the address information
 		/// </summary>
 		public Dictionary<string, string> LocalizedCountries { get; set; }
+
+		/// <summary>
+		/// Gets Localized States
+		/// </summary>
+		public Dictionary<string, string> LocalizedStates { get; set; }
 	}
 }

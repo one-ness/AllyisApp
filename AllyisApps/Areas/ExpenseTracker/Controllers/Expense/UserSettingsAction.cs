@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
@@ -26,7 +27,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			int userId = GetCookieData().UserId;
 
 			UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
-			var productInfo = AppService.GetProductSubscriptionInfo(subInfo.OrganizationId, (int)subInfo.SkuId);
+			var productInfo = AppService.GetProductSubscriptionInfo(subInfo.OrganizationId, subInfo.SkuId);
 
 			string productName = AppService.GetProductNameBySubscriptionId(subInfo.SubscriptionId);
 

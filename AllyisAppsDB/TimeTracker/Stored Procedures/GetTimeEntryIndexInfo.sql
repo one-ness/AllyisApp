@@ -76,7 +76,6 @@ AS
 			[Customer].[CustomerOrgId],
 			[Customer].[IsActive] AS [IsCustomerActive],
 			[ProjectUser].[IsActive] AS [IsUserActive],
-			[OrganizationRoleId],
 			[ProjectOrgId]
 	FROM (
 		(SELECT [OrganizationId], [UserId], [OrganizationRoleId]
@@ -104,7 +103,6 @@ AS
 			(SELECT [OrganizationName] FROM [Auth].[Organization] WITH (NOLOCK) WHERE [OrganizationId] = 0),
 			(SELECT [CustomerName] FROM [Crm].[Customer] WITH (NOLOCK) WHERE [CustomerId] = 0),
 			NULL,
-			0,
 			0,
 			0,
 			[ProjectOrgId]

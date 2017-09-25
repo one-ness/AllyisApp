@@ -9,6 +9,8 @@ using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Crm;
 using AllyisApps.ViewModels.TimeTracker.Customer;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
@@ -75,10 +77,10 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 						IsActive = currentCustomer.IsActive
 					},
 					Projects = from p in projects
-							   where p.CustomerId == currentCustomer.CustomerId
+							   where p.owningCustomer.CustomerId == currentCustomer.CustomerId
 							   select new CustomerProjectViewModel.ProjectViewModel
 							   {
-								   CustomerId = p.CustomerId,
+								   CustomerId = p.owningCustomer.CustomerId,
 								   OrganizationId = p.OrganizationId,
 								   ProjectName = p.ProjectName,
 								   ProjectId = p.ProjectId

@@ -12,6 +12,9 @@ using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Lib;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Billing;
+using AllyisApps.Services.Crm;
 using AllyisApps.ViewModels.TimeTracker.Project;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -56,7 +59,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
 
-				Services.Project.Project projIdMatch = AppService.GetAllProjectsForOrganization(orgId).Where(project => project.ProjectOrgId == model.ProjectOrgId && project.CustomerId == model.ParentCustomerId).SingleOrDefault();
+				Services.Project.Project projIdMatch = AppService.GetAllProjectsForOrganization(orgId).Where(project => project.ProjectOrgId == model.ProjectOrgId && project.owningCustomer?.CustomerId == model.ParentCustomerId).SingleOrDefault();
 				if (projIdMatch != null && projIdMatch.ProjectId != model.ProjectId)
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
@@ -119,9 +122,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			return new EditProjectViewModel
 			{
-				CustomerName = infos.Item1.CustomerName,
+				CustomerName = infos.Item1.owningCustomer.CustomerName,
 				OrganizationName = infos.Item1.OrganizationName,
-				ParentCustomerId = infos.Item1.CustomerId,
+				ParentCustomerId = infos.Item1.owningCustomer.CustomerId,
 				OrganizationId = infos.Item1.OrganizationId,
 				ProjectId = infos.Item1.ProjectId,
 				ProjectOrgId = infos.Item1.ProjectOrgId,

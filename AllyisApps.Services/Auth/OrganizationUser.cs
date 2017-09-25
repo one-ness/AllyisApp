@@ -5,8 +5,9 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.Auth
 {
 	/// <summary>
 	/// Represents an organization user.
@@ -34,5 +35,7 @@ namespace AllyisApps.Services
 		/// Gets or sets the Employee Id.
 		/// </summary>
 		public string EmployeeId { get; set; }
+
+		
 	}
 }

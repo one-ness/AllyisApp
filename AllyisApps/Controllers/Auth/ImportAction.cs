@@ -13,7 +13,7 @@ using AllyisApps.Services;
 using AllyisApps.Utilities;
 using Excel;
 
-namespace AllyisApps.Controllers
+namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
 	/// Represents pages for the management of a Customer.

@@ -10,6 +10,7 @@ using System.Dynamic;
 using System.Linq;
 using AllyisApps.DBModel.Lookup;
 using AllyisApps.DBModel.StaffingManager;
+using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
 
@@ -71,7 +72,7 @@ namespace AllyisApps.Services
 		public void AssignTag(int tagId, int positionId) => DBHelper.AssignTag(tagId, positionId);
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="newLevel"></param>
 		/// <param name="orgId"></param>
@@ -85,7 +86,7 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="newStatus"></param>
 		/// <param name="orgId"></param>
@@ -99,7 +100,7 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="newType"></param>
 		/// <param name="orgId"></param>
@@ -111,7 +112,7 @@ namespace AllyisApps.Services
 			type.organizationId = orgId;
 			DBHelper.CreateEmploymentType(type);
 		}
-		
+
 		/// <summary>
 		/// Creates a customer.
 		/// </summary>
@@ -306,13 +307,13 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="positionLevelId"></param>
 		public void DeletePositionLevel(int positionLevelId) => DBHelper.DeletePositionLevel(positionLevelId);
-		
+
 		/// <summary>
 		/// delete a specific position status
 		/// </summary>
 		/// <param name="positionStatusId"></param>
 		public void DeletePositionStatus(int positionStatusId) => DBHelper.DeletePositionStatus(positionStatusId);
-		
+
 		#endregion DeleteMethods
 
 		//////////////////////////////////////////

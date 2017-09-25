@@ -13,8 +13,10 @@ using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Lookup;
 using AllyisApps.Lib;
+using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Lookup;
+using AllyisApps.Services.Crm;
 
 namespace AllyisApps.Services
 {
@@ -107,37 +109,44 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets the next recommended employee id by existing users, a list of SubscriptionDisplayInfos for subscriptions in
 		/// the organization, a list of SubscriptionRoleInfos for roles within the subscriptions of the organization,
-		/// a list of CompleteProjectInfos for TimeTracker projects in the organization, and the next recommended employee id
-		/// by invitations.
+		/// and the next recommended employee id by invitations.
 		/// </summary>
 		/// <param name="orgId">The Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<Organization, List<ProductRole>> GetAddMemberInfo(int orgId)
+		public Organization GetAddMemberInfo(int orgId)
 		{
 			var spResults = DBHelper.GetAddMemberInfo(orgId);
-			Organization org = new Organization();
-			org.NextEmpolyeeID = string.Compare(spResults.Item1, spResults.Item4) > 0 ? spResults.Item1 : spResults.Item4;
-			org.Subscriptions = spResults.Item2.Select(sddb => InitializeSubscription(sddb)).ToList();
+			Organization org = new Organization()
+			{
+				NextEmpolyeeID = string.Compare(spResults.Item1, spResults.Item4) > 0 ? spResults.Item1 : spResults.Item4,
+				Subscriptions = spResults.Item2.Select(sddb => InitializeSubscription(sddb)).ToList()
+			};
+			var productRoles = spResults.Item3.Select(srdb => InitializeSubscriptionRoleInfo(srdb)).ToList();
 
-			return Tuple.Create(
-				org,
-				spResults.Item3.Select(srdb => InitializeSubscriptionRoleInfo(srdb)).ToList()
-			);
+			foreach (Subscription sub in org.Subscriptions)
+			{
+				sub.ProductRoles = productRoles.Where(pr => sub.ProductId == pr.ProductId).ToList();
+			}
+			return org;
 		}
 
 		/// <summary>
 		/// Gets a list of UserRolesInfos for users in the current organization and their roles/subscription roles,
 		/// and a list of Subscriptions (with only SubscriptionId, ProductId, and ProductName populated) for
 		/// all subscriptions in the current organization.
+		/// TODO: Redisign to populate Organization Service object and child objects.
 		/// </summary>
 		/// <param name="orgId">The Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<UserRole>, List<Subscription>> GetOrgAndSubRoles(int orgId)
+		public OrganizaionPermissions GetOrgAndSubRoles(int orgId)
 		{
 			var spResults = DBHelper.GetOrgAndSubRoles(orgId);
-			return Tuple.Create(
-				spResults.Item1.Select(urdb => InitializeUserRole(urdb)).ToList(),
-				spResults.Item2.Select(sddb => InitializeSubscription(sddb)).ToList());
+
+			return new OrganizaionPermissions()
+			{
+				UserRoles = spResults.Item1.Select(urdb => InitializeUserRole(urdb)).ToList(),
+				Subscriptions = spResults.Item2.Select(sddb => InitializeSubscription(sddb)).ToList()
+			};
 		}
 
 		/// <summary>
@@ -720,7 +729,7 @@ namespace AllyisApps.Services
 			return new Product
 			{
 				ProductDescription = product.Description,
-				ProductId = product.ProductId,
+				ProductId = (ProductIdEnum)product.ProductId,
 				ProductName = product.Name,
 				AreaUrl = product.AreaUrl
 			};

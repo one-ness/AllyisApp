@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.Expense
 {
 	public class ExpenseReport
 	{

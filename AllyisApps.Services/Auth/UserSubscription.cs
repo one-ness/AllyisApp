@@ -3,8 +3,10 @@
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
+using System;
+using AllyisApps.Services.Billing;
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.Auth
 {
 	/// <summary>
 	/// a subscription that a user belongs to
@@ -12,7 +14,10 @@ namespace AllyisApps.Services
 	public class UserSubscription : Subscription
 	{
 		public int UserId { get; set; }
-		public int ProductRoleId { get; set; }
-		public string IconUrl { get; internal set; }
+
+		public ProductRole ProductRole { get;  set; }
+
 	}
+
+
 }

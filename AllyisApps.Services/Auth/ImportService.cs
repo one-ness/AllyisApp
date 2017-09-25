@@ -7,6 +7,9 @@ using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.TimeTracker;
 using AllyisApps.Lib;
 using AllyisApps.Services.TimeTracker;
+using AllyisApps.Services.Billing;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Crm;
 
 namespace AllyisApps.Services
 {
@@ -398,7 +401,11 @@ namespace AllyisApps.Services
 								// All required information is known: time to create the project
 								project = new Project.Project
 								{
-									CustomerId = customer.CustomerId,
+									owningCustomer = new Customer()
+									{
+										CustomerId = customer.CustomerId,
+										OrganizationId = orgId,
+									},
 									ProjectName = thisRowHasProjectName ? knownValue : readValue,
 									IsHourly = false, // TODO un-hardcode once project isHourly property is supported.  Currently disabled
 									OrganizationId = orgId,
@@ -503,7 +510,10 @@ namespace AllyisApps.Services
 									// All required information is known: time to create the project
 									project = new Project.Project
 									{
-										CustomerId = customer.CustomerId,
+										owningCustomer = new Customer()
+										{
+											CustomerId = customer.CustomerId
+										},
 										ProjectName = fields[0],
 										IsHourly = false,  // TODO un-hardocode once project isHourly property is supported.  Currently disabled
 										OrganizationId = orgId,

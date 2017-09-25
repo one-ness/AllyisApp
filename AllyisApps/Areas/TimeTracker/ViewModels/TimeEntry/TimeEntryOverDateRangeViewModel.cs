@@ -7,6 +7,10 @@
 using System;
 using System.Collections.Generic;
 using AllyisApps.ViewModels.TimeTracker.Project;
+using AllyisApps.Services;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Crm;
+using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
@@ -102,7 +106,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets start of week for an Organization.
 		/// </summary>
-		public Services.StartOfWeekEnum StartOfWeek { get; internal set; }
+		public StartOfWeekEnum StartOfWeek { get; internal set; }
 
 		/// <summary>
 		/// Gets pay classes for an org.

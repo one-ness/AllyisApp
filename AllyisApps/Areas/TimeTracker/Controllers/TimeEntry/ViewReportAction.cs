@@ -12,6 +12,9 @@ using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Lib;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Crm;
+using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -104,7 +107,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						CompleteProject orgProj = data.ProjectId == 0 ? defaultProject : orgProjects.Where(o => o.ProjectId == data.ProjectId).SingleOrDefault();
 						TablePreviewEntry previewData = new TablePreviewEntry
 						{
-							CustomerName = orgProj.CustomerName,
+							CustomerName = orgProj.owningCustomer?.CustomerName,
 							ProjectName = orgProj.ProjectName,
 							TimeEntry = data
 						};

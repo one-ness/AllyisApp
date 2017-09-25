@@ -1,11 +1,11 @@
 ﻿@using AllyisApps.ViewModels.Auth
-@using AllyisApps.Services
+@using AllyisApps.Services.Billing
 
 @model AccountIndexViewModel.OrganizationViewModel
 @{
-    string title = Model.OrganizationName;
-    string subtitle = Model.SiteUrl ?? "";
-    var OrgcityState = Model.City != null && Model.State != null ? Model.City + ", " + Model.State : Model.City + Model.State;
+	string title = Model.OrganizationName;
+	string subtitle = Model.SiteUrl ?? "";
+	var OrgcityState = Model.City != null && Model.State != null ? Model.City + ", " + Model.State : Model.City + Model.State;
 }
 <div class="row">
     <div class="col-md-12">
@@ -57,9 +57,9 @@
                     {
                         <div class="square-box">
 
-                            @{
+							@{
 								string route = "";
-								switch (sub.productId)
+								switch (sub.ProductId)
 								{
 									case ProductIdEnum.None:
 										break;
@@ -76,30 +76,30 @@
 									default:
 										break;
 								}
-                            }
+							}
 
-                            <a href="@(route)" style="text-decoration: none">
-                                <div class="panel panel-default">
-                                    <div class="btn default" style="text-align:center; margin:10px;">
-                                        <div class="center-block" text-align: center; vertical-align: middle;" style="margin-top:5px;">
-                                            <img src="~/@string.Format("Content/icons/{0}.png", @sub.ProductName.Replace(" ", ""))" alt="@sub.ProductName" />
-                                        </div>
+							<a href="@(route)" style="text-decoration: none">
+								<div class="panel panel-default">
+									<div class="btn default" style="text-align:center; margin:10px;">
+										<div class="center-block" text-align: center; vertical-align: middle;" style="margin-top:5px;">
+											<img src="~/@string.Format("Content/icons/{0}.png", @sub.ProductName.Replace(" ", ""))" alt="@sub.ProductName" />
+										</div>
 
-                                        <h3>
-                                            @sub.ProductName
-                                        </h3>
-                                        <p>
-                                            @sub.SubscriptionName
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                      }
-                </div>
-            </div>
-        </div>
-    </div>
+										<h3>
+											@sub.ProductName
+										</h3>
+										<p>
+											@sub.SubscriptionName
+										</p>
+									</div>
+								</div>
+							</a>
+						</div>
+								}
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <div class="row">

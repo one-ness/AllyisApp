@@ -7,7 +7,7 @@
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 
-namespace AllyisApps.Controllers
+namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
 	/// Controller for account and organization related actions.

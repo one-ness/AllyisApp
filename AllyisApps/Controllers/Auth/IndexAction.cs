@@ -9,9 +9,11 @@ using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Lib;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.Auth;
 
-namespace AllyisApps.Controllers
+namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
 	/// Controller for account and organization related actions.
@@ -149,7 +151,7 @@ namespace AllyisApps.Controllers
 							break;
 					}
 
-					subViewModel.IconUrl = string.Format("Content/icons/{0}.png", subViewModel.ProductName.Replace(" ", string.Empty));
+					subViewModel.IconUrl = subItem.IconUrl == null ? null : string.Format(subItem.IconUrl);
 					orgViewModel.Subscriptions.Add(subViewModel);
 				}
 				indexViewModel.Organizations.Add(orgViewModel);

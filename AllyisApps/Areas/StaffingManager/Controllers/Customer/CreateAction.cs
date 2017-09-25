@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Staffing.Customer;
@@ -27,15 +28,16 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		[HttpGet]
 		public ActionResult Create(int subscriptionId)
 		{
-			var idAndCountries = AppService.GetNextCustId(subscriptionId);
+			var nextCustomerId = AppService.GetNextCustId(subscriptionId);
 			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
+			int orgID = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			return this.View(new EditCustomerInfoViewModel
 			{
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
 				IsCreating = true,
-				CustomerOrgId = idAndCountries.Item1,
+				CustomerOrgId = nextCustomerId,
 				SubscriptionId = subscriptionId,
-				OrganizationId = idAndCountries.Item2,
+				OrganizationId = orgID,
 				UserId = AppService.UserContext.UserId,
 				SubscriptionName = subscriptionNameToDisplay,
 			});

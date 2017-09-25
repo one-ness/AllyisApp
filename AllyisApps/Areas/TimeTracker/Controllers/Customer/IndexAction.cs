@@ -11,6 +11,8 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Crm;
 using AllyisApps.ViewModels.TimeTracker.Customer;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -67,7 +69,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			.Select(proj => new
 			CustomerProjectViewModel.ProjectViewModel()
 			{
-				CustomerId = proj.CustomerId,
+				CustomerId = proj.owningCustomer.CustomerId,
 				OrganizationId = proj.OrganizationId,
 				ProjectId = proj.ProjectId,
 				ProjectName = proj.ProjectName
@@ -89,7 +91,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			.Select(proj => new
 			CustomerProjectViewModel.ProjectViewModel()
 			{
-				CustomerId = proj.CustomerId,
+				CustomerId = proj.owningCustomer.CustomerId,
 				OrganizationId = proj.OrganizationId,
 				ProjectId = proj.ProjectId,
 				ProjectName = proj.ProjectName
@@ -124,10 +126,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						IsActive = currentCustomer.IsActive
 					},
 					Projects = from p in projects
-							   where p.CustomerId == currentCustomer.CustomerId
+							   where p.owningCustomer.CustomerId == currentCustomer.CustomerId
 							   select new CustomerProjectViewModel.ProjectViewModel
 							   {
-								   CustomerId = p.CustomerId,
+								   CustomerId = p.owningCustomer.CustomerId,
 								   OrganizationId = p.OrganizationId,
 								   ProjectName = p.ProjectName,
 								   ProjectId = p.ProjectId
@@ -156,10 +158,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						IsActive = currentCustomer.IsActive
 					},
 					Projects = from p in inactiveProjects
-							   where p.CustomerId == currentCustomer.CustomerId
+							   where p.owningCustomer.CustomerId == currentCustomer.CustomerId
 							   select new CustomerProjectViewModel.ProjectViewModel
 							   {
-								   CustomerId = p.CustomerId,
+								   CustomerId = p.owningCustomer.CustomerId,
 								   OrganizationId = p.OrganizationId,
 								   ProjectName = p.ProjectName,
 								   ProjectId = p.ProjectId

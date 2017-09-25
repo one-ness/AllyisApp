@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using AllyisApps.Services.Crm;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -27,9 +28,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			CompleteProject project = AppService.GetProject(userId);
 			if (project != null)
 			{
-				if (!AppService.GetCustomer(project.CustomerId).IsActive.Value)
+				if (!AppService.GetCustomer(project.owningCustomer.CustomerId).IsActive.Value)
 				{
-					AppService.ReactivateCustomer(project.CustomerId, subscriptionId, project.OrganizationId);
+					AppService.ReactivateCustomer(project.owningCustomer.CustomerId, subscriptionId, project.OrganizationId);
 				}
 
 				if (AppService.ReactivateProject(userId, project.OrganizationId, subscriptionId))

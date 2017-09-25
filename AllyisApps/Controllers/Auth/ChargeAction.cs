@@ -9,7 +9,7 @@ using System.Web.Mvc;
 using AllyisApps.Services;
 using AllyisApps.Services.Common.Types;
 
-namespace AllyisApps.Controllers
+namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
 	/// Controller for account and organization related actions.

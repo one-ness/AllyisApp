@@ -11,6 +11,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Web;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Auth

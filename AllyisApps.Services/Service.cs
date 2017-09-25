@@ -15,6 +15,10 @@ using AllyisApps.DBModel.TimeTracker;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.Services.TimeTracker;
+using AllyisApps.Services.Billing;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Crm;
+using AllyisApps.Services.Expense;
 
 namespace AllyisApps.Services
 {
@@ -401,7 +405,7 @@ namespace AllyisApps.Services
 			{
 				if (customerId > 0)
 				{
-					IEnumerable<int> customerProjects = GetProjectsByCustomer(customerId).Select(p => p.CustomerId);
+					IEnumerable<int> customerProjects = GetProjectsByCustomer(customerId).Select(p => p.ProjectId);
 					data = data.Where(t => customerProjects.Contains(t.ProjectId));
 				}
 			}
@@ -456,8 +460,8 @@ namespace AllyisApps.Services
 							entry.PayClassName,
 							project != null ? (project.ProjectName ?? string.Empty) : string.Empty,
 							project != null ? (project.ProjectOrgId ?? string.Empty) : string.Empty,
-							project != null ? (project.CustomerName ?? string.Empty) : string.Empty,
-							project != null ? (project.CustomerOrgId ?? string.Empty) : string.Empty,
+							project != null ? (project.owningCustomer.CustomerName ?? string.Empty) : string.Empty,
+							project != null ? (project.owningCustomer.CustomerOrgId ?? string.Empty) : string.Empty,
 							entry.Description));
 				}
 				catch (Exception ex)

@@ -6,7 +6,7 @@
 
 using System;
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.StaffingManager
 {
 	/// <summary>
 	/// An ApplicationDocument object, holding all info directly related to the ApplicationDocument.  Also performs basic field validation.

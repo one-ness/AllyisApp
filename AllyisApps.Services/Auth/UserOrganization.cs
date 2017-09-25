@@ -6,7 +6,7 @@
 
 using System;
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.Auth
 {
 	/// <summary>
 	/// an organization that a user belongs to

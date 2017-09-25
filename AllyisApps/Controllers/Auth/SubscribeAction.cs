@@ -9,10 +9,11 @@ using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
 using AllyisApps.ViewModels.Auth;
 
-namespace AllyisApps.Controllers
+namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
 	/// Controller for account and organization related actions.
@@ -26,7 +27,7 @@ namespace AllyisApps.Controllers
 		/// <param name="skuId">The id of the SKU being subscribed to.</param>
 		/// <returns>The result of this action.</returns>
 		[HttpGet]
-		public ActionResult Subscribe(int id, int skuId)
+		public ActionResult Subscribe(int id, SkuIdEnum skuId)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, id);
 			var infos = AppService.GetProductSubscriptionInfo(id, skuId);
@@ -74,9 +75,9 @@ namespace AllyisApps.Controllers
 					ProductDescription = productSubscription.Product.ProductDescription,
 					CurrentSubscription = productSubscription.SubscriptionInfo,
 					Skus = productSubscription.SkuList,
-					SelectedSku = (int)selectedSku,
-					SelectedSkuName = selectedSku > 0 ? productSubscription.SkuList.Where(s => s.SkuId == (int)selectedSku).SingleOrDefault().SkuName : string.Empty,
-					PreviousSku = (int)selectedSku,
+					SelectedSku = selectedSku,
+					SelectedSkuName = selectedSku > 0 ? productSubscription.SkuList.Where(s => s.SkuId == selectedSku).SingleOrDefault().SkuName : string.Empty,
+					PreviousSku = selectedSku,
 					CustomerId = customerId,
 					Token = new BillingServicesToken(customerId.ToString()) // TODO: Does this just convert back to the stripeToken string?? Investigate.
 				};
