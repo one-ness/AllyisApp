@@ -151,7 +151,7 @@ namespace AllyisApps.Controllers.Auth
 							break;
 					}
 
-					subViewModel.IconUrl = string.Format("Content/icons/{0}.png", subViewModel.ProductName.Replace(" ", string.Empty));
+					subViewModel.IconUrl = subItem.IconUrl == null ? null : string.Format(subItem.IconUrl);
 					orgViewModel.Subscriptions.Add(subViewModel);
 				}
 				indexViewModel.Organizations.Add(orgViewModel);

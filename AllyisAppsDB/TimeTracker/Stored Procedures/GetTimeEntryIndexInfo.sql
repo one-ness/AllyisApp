@@ -105,7 +105,6 @@ AS
 			NULL,
 			0,
 			0,
-			0,
 			[ProjectOrgId]
 			FROM [Pjm].[Project] WITH (NOLOCK) WHERE [ProjectId] = 0
 	ORDER BY [Project].[ProjectName]
