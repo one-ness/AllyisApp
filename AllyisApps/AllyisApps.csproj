@@ -234,14 +234,24 @@
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\CreateReportAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Home\HomeController.cs" />
     <Compile Include="Areas\ExpenseTracker\ExpenseTrackerAreaRegistration.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Customer\CreateAction.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Customer\CustomerController.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Customer\EditAction.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Customer\IndexAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\AccountAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\CreatePositionAction.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Staffing\DeleteEmploymentTypeAction.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Staffing\DeletePositionStatusAction.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Staffing\DeletePositionLevelAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\SettingsAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\IndexAction.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseFileModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseHistoryViewModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ReportViewModel.cs" />
     <Compile Include="Areas\StaffingManager\StaffingManagerAreaRegistration.cs" />
+    <Compile Include="Areas\StaffingManager\ViewModels\Customer\CustomerInfoViewModel.cs" />
+    <Compile Include="Areas\StaffingManager\ViewModels\Customer\EditCustomerInfoViewModel.cs" />
+    <Compile Include="Areas\StaffingManager\ViewModels\Customer\ManageCustomerViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\CreateApplicationDocumentViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\CreateApplicationViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\CreateApplicantViewModel.cs" />
@@ -595,6 +605,12 @@
     </Content>
     <Content Include="Areas\StaffingManager\Views\Staffing\settings.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\UserSettings.cshtml" />
+    <Content Include="Areas\StaffingManager\Views\Customer\Index.cshtml" />
+    <Content Include="Areas\StaffingManager\Views\Customer\_CustomerEdit.cshtml" />
+    <Content Include="Areas\StaffingManager\Views\Customer\Create.cshtml" />
+    <Content Include="Areas\StaffingManager\Views\Customer\_IndexPartial_Inactive.cshtml" />
+    <Content Include="Areas\StaffingManager\Views\Customer\_IndexPartial_Active.cshtml" />
+    <Content Include="Areas\StaffingManager\Views\Customer\Edit.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\Accounts.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\CreateAccount.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />

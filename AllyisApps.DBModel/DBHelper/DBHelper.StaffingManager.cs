@@ -582,24 +582,32 @@ namespace AllyisApps.DBModel
 		/// TODO
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
-		/// <param name="statusName">Organization Id.</param>
-		/// <param name="typeName">Organization Id.</param>
+		/// <param name="statuses">Organization Id.</param>
+		/// <param name="types">Organization Id.</param>
 		/// <param name="tags">Organization Id.</param>
 		/// <returns>.</returns>
 		public Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>, List<CustomerDBEntity>>
-			GetStaffingIndexPageInfoFiltered(int orgId, string statusName = "", string typeName = "", List<string> tags = null)
+			GetStaffingIndexPageInfoFiltered(int orgId, List<string> statuses, List<string> types, List<string> tags = null)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
-			parameters.Add("@statusName", statusName);
-			parameters.Add("@typeName", typeName);
+
+			DataTable StatusesTable = new DataTable();
+			StatusesTable.Columns.Add("StatusName", typeof(string));
+			foreach (string status in statuses) StatusesTable.Rows.Add(status);
+
+			DataTable TypesTable = new DataTable();
+			TypesTable.Columns.Add("TypeName", typeof(string));
+			foreach (string type in types) TypesTable.Rows.Add(type);
 
 			DataTable TagTable = new DataTable();
-			TagTable.Columns.Add("tagNames", typeof(string));
+			TagTable.Columns.Add("TagName", typeof(string));
 			foreach (string tag in tags) TagTable.Rows.Add(tag);
 
-			parameters.Add("@tags", TagTable);
-
+			parameters.Add("@status", StatusesTable.AsTableValuedParameter("[StaffingManager].[StatusesTable]"));
+			parameters.Add("@type", TypesTable.AsTableValuedParameter("[StaffingManager].[TypesTable]"));
+			parameters.Add("@tags", TagTable.AsTableValuedParameter("[Lookup].[TagTable]"));
+			
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(

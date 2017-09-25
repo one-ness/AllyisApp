@@ -68,7 +68,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				string subName = AppService.getSubscriptionName(subscriptionId);
 
 				bool canEditOthers = this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId, false);
-				ReportViewModel reportVM = this.ConstructReportViewModel(this.AppService.UserContext.UserId, organizationId, canEditOthers, infos.Customers, infos.CompleteProjectInfo, showExport, reportVMselect);
+				ReportViewModel reportVM = this.ConstructReportViewModel(this.AppService.UserContext.UserId, organizationId, canEditOthers, infos.Customers, infos.CompleteProject, showExport, reportVMselect);
 				reportVM.SubscriptionName = subName;
 
 				DataExportViewModel dataVM = null;
@@ -97,7 +97,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				reportVM.PreviewTotal = string.Format("{0} {1}", total, Resources.Strings.HoursTotal);
 
-				IEnumerable<CompleteProject> orgProjects = infos.CompleteProjectInfo;
+				IEnumerable<CompleteProject> orgProjects = infos.CompleteProject;
 				CompleteProject defaultProject = AppService.GetProject(0);
 				if (dataCount > 0)
 				{

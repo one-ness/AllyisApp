@@ -2869,6 +2869,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Position Title.
+        /// </summary>
+        public static string PositionTitle {
+            get {
+                return ResourceManager.GetString("PositionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Postal Code.
         /// </summary>
         public static string PostalCode {

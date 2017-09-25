@@ -70,6 +70,59 @@ namespace AllyisApps.Services
 		/// <returns>The id of the created Tag or -1 if the tag name is already in use. </returns>
 		public void AssignTag(int tagId, int positionId) => DBHelper.AssignTag(tagId, positionId);
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="newLevel"></param>
+		/// <param name="orgId"></param>
+		/// <param name="subId"></param>
+		public void CreatePositionLevel(string newLevel, int orgId, int subId)
+		{
+			dynamic level = new ExpandoObject();
+			level.positionLevelName = newLevel;
+			level.organizationId = orgId;
+			DBHelper.CreatePositionLevel(level);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="newStatus"></param>
+		/// <param name="orgId"></param>
+		/// <param name="subId"></param>
+		public void CreatePositionStatus(string newStatus, int orgId, int subId)
+		{
+			dynamic status = new ExpandoObject();
+			status.positionStatusName = newStatus;
+			status.organizationId = orgId;
+			DBHelper.CreatePositionStatus(status);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="newType"></param>
+		/// <param name="orgId"></param>
+		/// <param name="subId"></param>
+		public void CreateEmploymentType(string newType, int orgId, int subId)
+		{
+			dynamic type = new ExpandoObject();
+			type.employmentTypeName = newType;
+			type.organizationId = orgId;
+			DBHelper.CreateEmploymentType(type);
+		}
+		
+		/// <summary>
+		/// Creates a customer.
+		/// </summary>
+		/// <param name="customer">Customer.</param>
+		/// <param name="subscriptionId">.</param>
+		/// <returns>Customer id.</returns>
+		public int? CreateStaffingCustomer(Customer customer, int subscriptionId)
+		{
+			return DBHelper.CreateCustomerInfo(GetDBEntitiesFromCustomerInfo(customer));
+		}
+
 		#endregion CreateMethods
 
 		#region GetMethods
@@ -228,6 +281,24 @@ namespace AllyisApps.Services
 		/// <param name="positionId">ID of the Position to be removed from the DB. </param>
 		public void DeletePosition(int positionId) => DBHelper.DeletePosition(positionId);
 
+		/// <summary>
+		/// delete a specific employment type
+		/// </summary>
+		/// <param name="employmentTypeId"></param>
+		public void DeleteEmploymentType(int employmentTypeId) => DBHelper.DeleteEmploymentType(employmentTypeId);
+
+		/// <summary>
+		/// delete a specific position level
+		/// </summary>
+		/// <param name="positionLevelId"></param>
+		public void DeletePositionLevel(int positionLevelId) => DBHelper.DeletePositionLevel(positionLevelId);
+		
+		/// <summary>
+		/// delete a specific position status
+		/// </summary>
+		/// <param name="positionStatusId"></param>
+		public void DeletePositionStatus(int positionStatusId) => DBHelper.DeletePositionStatus(positionStatusId);
+		
 		#endregion DeleteMethods
 
 		//////////////////////////////////////////

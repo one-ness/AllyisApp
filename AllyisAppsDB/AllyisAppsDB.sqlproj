@@ -90,6 +90,7 @@
     <Folder Include="StaffingManager\Stored Procedures" />
     <Folder Include="StaffingManager\Tables" />
     <Folder Include="Lookup\User Defined Types" />
+    <Folder Include="StaffingManager\User Defined Types" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TimeTracker\Tables\Holiday.sql" />
@@ -387,6 +388,8 @@
     <Build Include="Auth\Stored Procedures\GetOrgUserMaxAmount.sql" />
     <Build Include="StaffingManager\Stored Procedures\GetStaffingIndexInfoFiltered.sql" />
     <Build Include="Crm\Stored Procedures\CreateCustomer.sql" />
+    <Build Include="StaffingManager\User Defined Types\TypesTable.sql" />
+    <Build Include="StaffingManager\User Defined Types\StatusesTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

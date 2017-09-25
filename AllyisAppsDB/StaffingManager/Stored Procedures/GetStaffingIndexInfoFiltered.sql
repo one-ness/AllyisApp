@@ -1,23 +1,24 @@
 CREATE PROCEDURE [StaffingManager].[GetStaffingIndexInfoFiltered]
 	@organizationId INT,
-	@status NVARCHAR(32),
-	@type NVARCHAR(32),
-	@tags [Lookup].[TagTable] READONLY
+	@status			[StaffingManager].[StatusesTable] READONLY,
+	@type			[StaffingManager].[TypesTable] READONLY,
+	@tags			[Lookup].[TagTable] READONLY
 AS
 BEGIN
-	DECLARE @sSQL NVARCHAR(2000), @Where NVARCHAR(1000) = ''
+	DECLARE @sSQL NVARCHAR(MAX), @Where NVARCHAR(MAX) = ''
+	DECLARE @order NVARCHAR(100) = ' ORDER BY [StaffingManager].[Position].[StartDate] ASC'
 	SET @sSQL =
-		'SELECT DISTINCT [PositionId],
-			[OrganizationId],
-			[CustomerId],
+		'SELECT DISTINCT [Position].[PositionId],
+			[Position].[OrganizationId],
+			[Position].[CustomerId],
 			[Position].[AddressId],
 			[StartDate], 
-			[PositionStatusId],
+			[Position].[PositionStatusId],
 			[PositionTitle], 
 			[BillingRateFrequency],
 			[BillingRateAmount],
 			[DurationMonths],
-			[EmploymentTypeId],
+			[Position].[EmploymentTypeId],
 			[PositionCount],
 			[RequiredSkills],
 			[JobResponsibilities],
@@ -44,22 +45,25 @@ BEGIN
 			[Customer].[CustomerOrgId],
 			[Customer].[IsActive]
 		FROM [StaffingManager].[Position]
-		LEFT JOIN [StaffingManager].[PositionTag]	WITH (NOLOCK) ON [PositionTag].[PositionId] = [Position].[PositionId]
-			 JOIN [Lookup].[Tag]					WITH (NOLOCK) ON [PositionTag].[TagId] = [Tag].[TagId]
-		LEFT JOIN [Lookup].[Address]				WITH (NOLOCK) ON [Address].[AddressId] = [Position].[AddressId]
-		LEFT JOIN [Lookup].[Country]				WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
-		LEFT JOIN [Lookup].[State]					WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
-		LEFT JOIN [CRM].[Customer]					WITH (NOLOCK) ON [Customer].[CustomerId] = [Position].[CustomerId]
-		WHERE [Position].[OrganizationId] = @organizationId '
-	IF @status is not null
-		SET @Where = @Where + 'AND [PositionStatusName] = @_Status '
-	IF @type is not null
-		SET @Where = @Where + 'AND [EmploymentTypeName] = @_Type '
+		LEFT JOIN [StaffingManager].[PositionTag]	 WITH (NOLOCK) ON [PositionTag].[PositionId] = [Position].[PositionId]
+			 JOIN [Lookup].[Tag]					 WITH (NOLOCK) ON [PositionTag].[TagId] = [Tag].[TagId]
+		LEFT JOIN [Lookup].[Address]				 WITH (NOLOCK) ON [Address].[AddressId] = [Position].[AddressId]
+		LEFT JOIN [Lookup].[Country]				 WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
+		LEFT JOIN [Lookup].[State]					 WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
+		LEFT JOIN [CRM].[Customer]					 WITH (NOLOCK) ON [Customer].[CustomerId] = [Position].[CustomerId]
+		LEFT JOIN [StaffingManager].[EmploymentType] WITH (NOLOCK) ON [EmploymentType].[EmploymentTypeId] = [Position].[EmploymentTypeId]
+		LEFT JOIN [StaffingManager].[PositionStatus] WITH (NOLOCK) ON [PositionStatus].[PositionStatusId] = [Position].[PositionStatusId]
+		WHERE [Position].[OrganizationId] = @_organizationId '
+	IF (SELECT count(*) from @status) > 0
+		SET @Where = CONCAT(@Where, 'AND [PositionStatus].[PositionStatusName] IN ( SELECT [StatusName] FROM @_Status) ')
+	IF(SELECT count(*) from @type) > 0
+		SET @Where = CONCAT(@Where, 'AND [EmploymentType].[EmploymentTypeName] IN (SELECT [TypeName] FROM @_Type) ')
 	IF (SELECT count(*) from @tags) > 0
-		SET @Where = @Where + 'AND [Tag].[TagName] IN (SELECT [TagName] FROM @_Tags) '
+		SET @Where = CONCAT(@Where, 'AND [Tag].[TagName] IN (SELECT [TagName] FROM @_Tags) ')
+		SET @sSQL = CONCAT(@sSQL, @where, @order)
 	EXEC sp_executesql @sSQL,
-	N'@_Status NVARCHAR, @_Type NVARCHAR, @_Tags [Lookup].[TagTable] READONLY',
-	@_Status = @status, @_Type = @type, @_Tags = @tags
+		N'@_organizationId INT, @_Status [StaffingManager].[StatusesTable] READONLY, @_Type [StaffingManager].[TypesTable] READONLY, @_Tags [Lookup].[TagTable] READONLY',
+	@_organizationId = @organizationId, @_Status = @status, @_Type = @type, @_Tags = @tags
 
 	-- Select all tags from the positions
 	SELECT
