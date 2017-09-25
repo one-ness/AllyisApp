@@ -29,6 +29,6 @@ namespace AllyisApps.Services.Auth
 		/// <summary>
 		/// Gets or sets the Product Id.
 		/// </summary>
-		public int ProductId { get; set; }
+		public ProductIdEnum ProductId { get; set; }
 	}
 }

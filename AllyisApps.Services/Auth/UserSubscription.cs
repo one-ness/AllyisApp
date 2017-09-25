@@ -14,7 +14,10 @@ namespace AllyisApps.Services.Auth
 	public class UserSubscription : Subscription
 	{
 		public int UserId { get; set; }
-		public int ProductRoleId { get; set; }
-		public string IconUrl { get; internal set; }
+
+		public ProductRole ProductRole { get;  set; }
+
 	}
+
+
 }

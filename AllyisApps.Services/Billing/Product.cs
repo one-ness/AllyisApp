@@ -16,7 +16,7 @@ namespace AllyisApps.Services.Billing
 		/// <summary>
 		/// Gets or sets the product Id.
 		/// </summary>
-		public int ProductId { get; set; }
+		public ProductIdEnum ProductId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the product Name.

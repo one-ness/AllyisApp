@@ -38,14 +38,13 @@ namespace AllyisApps.Services
 		/// valid country names.
 		/// </summary>
 		/// <returns>.</returns>
-		public Tuple<string, int> GetNextCustId(int subscriptionId)
+		public string GetNextCustId(int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			var spResults = DBHelper.GetNextCustId(subInfo.OrganizationId);
-			return Tuple.Create(
-				spResults.Item1 == null ? "0000000000000000" : new string(IncrementAlphanumericCharArray(spResults.Item1.ToCharArray())),
-				subInfo.OrganizationId);
+			return spResults.Item1 == null ? "0000000000000000" : new string(IncrementAlphanumericCharArray(spResults.Item1.ToCharArray()));
+				
 		}
 
 		/// <summary>
@@ -53,13 +52,12 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="customerId">Customer Id.</param>
 		/// <returns>.</returns>
-		public Tuple<Customer> GetCustomerInfo(int customerId)
+		public Customer GetCustomerInfo(int customerId)
 		{
 			var spResults = DBHelper.GetCustomerProfile(customerId);
 			Customer customer = InitializeCustomer(spResults.Item1);
 			customer.Address = InitializeAddress(spResults.Item2);
-			return Tuple.Create(
-				customer);
+			return customer;
 		}
 
 		/// <summary>
@@ -250,7 +248,7 @@ namespace AllyisApps.Services
 		{
 			#region Validation
 
-			if (newProject.CustomerId <= 0)
+			if (newProject.owningCustomer.CustomerId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be 0 or negative.");
 			}
@@ -284,7 +282,7 @@ namespace AllyisApps.Services
 		{
 			#region Validation
 
-			if (newProject.CustomerId <= 0)
+			if (newProject.owningCustomer.CustomerId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be 0 or negative.");
 			}
@@ -812,8 +810,11 @@ namespace AllyisApps.Services
 
 			return new AllyisApps.Services.Project.Project
 			{
-				CustomerId = project.CustomerId,
-				CustomerName = project.CustomerName,
+				owningCustomer = new Customer()
+				{
+					CustomerId = project.CustomerId,
+					CustomerName = project.CustomerName,
+				},
 				EndingDate = project.EndingDate,
 				ProjectName = project.ProjectName,
 				OrganizationId = project.OrganizationId,
@@ -838,7 +839,7 @@ namespace AllyisApps.Services
 
 			return new ProjectDBEntity
 			{
-				CustomerId = project.CustomerId,
+				CustomerId = project.owningCustomer.CustomerId,
 				EndingDate = project.EndingDate,
 				ProjectName = project.ProjectName,
 				OrganizationId = project.OrganizationId,
@@ -864,16 +865,19 @@ namespace AllyisApps.Services
 			return new CompleteProject
 			{
 				CreatedUtc = completeProject.CreatedUtc,
-				CustomerId = completeProject.CustomerId,
-				CustomerName = completeProject.CustomerName,
-				CustomerOrgId = completeProject.CustomerOrgId,
+				owningCustomer = new Customer()
+				{
+					CustomerId = completeProject.CustomerId,
+					CustomerName = completeProject.CustomerName,
+					CustomerOrgId = completeProject.CustomerOrgId,
+
+				},
 				EndDate = completeProject.EndDate,
 				IsActive = completeProject.IsActive,
 				IsCustomerActive = completeProject.IsCustomerActive,
 				IsUserActive = completeProject.IsUserActive,
 				OrganizationId = completeProject.OrganizationId,
 				OrganizationName = completeProject.OrganizationName,
-				OrganizationRoleId = completeProject.OrganizationRoleId,
 				PriceType = completeProject.PriceType,
 				ProjectId = completeProject.ProjectId,
 				ProjectName = completeProject.ProjectName,

@@ -35,9 +35,9 @@ namespace AllyisApps.Controllers.Auth
 			ManagePermissionsViewModel model = new ManagePermissionsViewModel
 			{
 				Users = new List<UserPermissionsViewModel>(),
-				Subscriptions = infos.Item2.Select(sub => new
+				Subscriptions = infos.Subscriptions.Select(sub => new
 					SubscriptionDisplayViewModel(sub)).ToList(),
-				SubIds = infos.Item2.Select(s => s.SubscriptionId).ToList(),
+				SubIds = infos.Subscriptions.Select(s => s.SubscriptionId).ToList(),
 				OrganizationId = id,
 
 				// TODO: Get rid of this once product panes in Permissions page are genericized.
@@ -59,10 +59,10 @@ namespace AllyisApps.Controllers.Auth
 				model.ExpenseTrackerSubIndex = model.Subscriptions.IndexOf(etsub);
 			}
 
-			foreach (UserRole role in infos.Item1)
+			foreach (UserRole role in infos.UserRoles)
 			{
 				UserPermissionsViewModel modelUser = model.Users.Where(u => u.UserId == role.UserId).SingleOrDefault();
-				if (modelUser == null)//THIS IS ALLWAYS THE CASE!!!!
+				if (modelUser == null)
 				{
 					modelUser = new UserPermissionsViewModel
 					{
@@ -175,15 +175,15 @@ namespace AllyisApps.Controllers.Auth
 				{
 					// TODO: instead of providing product id, provide subscription id of the subscription to be modified
 					// TODO: split updating user roles and creating new sub users
-					Tuple<int, int> updatedAndAdded = AppService.UpdateSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.TimeTrackerRoleTarget.Value, model.OrganizationId, (int)ProductIdEnum.TimeTracker);
-					if (updatedAndAdded.Item1 > 0)
+					var updatedAndAdded = AppService.UpdateSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.TimeTrackerRoleTarget.Value, model.OrganizationId, (int)ProductIdEnum.TimeTracker);
+					if (updatedAndAdded.UsersChanged > 0)
 					{
-						Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersChangedRolesInTimeTracker, updatedAndAdded.Item1), Variety.Success));
+						Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersChangedRolesInTimeTracker, updatedAndAdded.UsersChanged), Variety.Success));
 					}
 
-					if (updatedAndAdded.Item2 > 0)
+					if (updatedAndAdded.UsersAddedToSubscription > 0)
 					{
-						Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersAddedToTimeTracker, updatedAndAdded.Item2), Variety.Success));
+						Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersAddedToTimeTracker, updatedAndAdded.UsersAddedToSubscription), Variety.Success));
 					}
 				}
 				else
@@ -211,15 +211,15 @@ namespace AllyisApps.Controllers.Auth
 				{
 					// TODO: instead of providing product id, provide subscription id of the subscription to be modified
 					// TODO: split updating user roles and creating new sub users
-					Tuple<int, int> updatedAndAdded = AppService.UpdateSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.ExpenseTrackerRoleTarget.Value, model.OrganizationId, (int)ProductIdEnum.ExpenseTracker);
-					if (updatedAndAdded.Item1 > 0)
+					var updatedAndAdded = AppService.UpdateSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.ExpenseTrackerRoleTarget.Value, model.OrganizationId, (int)ProductIdEnum.ExpenseTracker);
+					if (updatedAndAdded.UsersChanged > 0)
 					{
-						Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UserChangedRolesInExpenseTracker, updatedAndAdded.Item1), Variety.Success));
+						Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UserChangedRolesInExpenseTracker, updatedAndAdded.UsersChanged), Variety.Success));
 					}
 
-					if (updatedAndAdded.Item2 > 0)
+					if (updatedAndAdded.UsersAddedToSubscription > 0)
 					{
-						Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UserAddedToExpenseTracker, updatedAndAdded.Item2), Variety.Success));
+						Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UserAddedToExpenseTracker, updatedAndAdded.UsersAddedToSubscription), Variety.Success));
 					}
 				}
 				else

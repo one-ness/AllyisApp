@@ -21,7 +21,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		/// <summary>
 		/// Gets or sets the Customer Id that the project belongs to.
 		/// </summary>
-		public int CustomerId { get; set; }
+		public int? CustomerId { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether or not the Customer is active.
@@ -52,11 +52,6 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		/// Gets or sets the Name of the organization.
 		/// </summary>
 		public string OrganizationName { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Id of the organization role.
-		/// </summary>
-		public int OrganizationRoleId { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether a user is active on the project, if that project was fetched via userId.
@@ -112,9 +107,9 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		{
 			this.CanEditProject = proj.CanEditProject;
 			this.CreatedUtc = proj.CreatedUtc;
-			this.CustomerId = proj.CustomerId;
-			this.CustomerName = proj.CustomerName;
-			this.CustomerOrgId = proj.CustomerOrgId;
+			this.CustomerId = proj.owningCustomer?.CustomerId;
+			this.CustomerName = proj.owningCustomer?.CustomerName;
+			this.CustomerOrgId = proj.owningCustomer?.CustomerOrgId;
 			this.EndDate = proj.EndDate;
 			this.IsActive = proj.IsActive;
 			this.IsCustomerActive = proj.IsCustomerActive;
@@ -122,7 +117,6 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 			this.IsUserActive = proj.IsUserActive;
 			this.OrganizationId = proj.OrganizationId;
 			this.OrganizationName = proj.OrganizationName;
-			this.OrganizationRoleId = proj.OrganizationRoleId;
 			this.PriceType = proj.PriceType;
 			this.ProjectId = proj.ProjectId;
 			this.ProjectName = proj.ProjectName;

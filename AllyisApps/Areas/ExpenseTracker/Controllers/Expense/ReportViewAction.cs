@@ -45,6 +45,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			{
 				itemViewModels.Add(InitializeExpenseItemViewModel(item));
 			}
+
 			var user = AppService.GetUser(report.SubmittedById);
 			var history = AppService.GetExpenseHistoryByReportId(id);
 			List<ExpenseHistoryViewModel> reportHistory = new List<ExpenseHistoryViewModel>();

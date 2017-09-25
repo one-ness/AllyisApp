@@ -167,13 +167,13 @@ namespace AllyisApps.Services
 			if (result != null)
 			{
 				// email exists, hash the given password and compare with hash in db
-				Tuple<bool, string> passwordValidation = Crypto.ValidateAndUpdate(password, result.PasswordHash);
-				if (passwordValidation.Item1)
+				PassWordValidationResult passwordValidation = Crypto.ValidateAndUpdate(password, result.PasswordHash);
+				if (passwordValidation.successfulMatch)
 				{
 					// Store updated password hash if needed
-					if (passwordValidation.Item2 != null)
+					if (passwordValidation.updatedHash != null)
 					{
-						DBHelper.UpdateUserPassword(result.UserId, passwordValidation.Item2);
+						DBHelper.UpdateUserPassword(result.UserId, passwordValidation.updatedHash);
 					}
 				}
 			}
@@ -268,7 +268,11 @@ namespace AllyisApps.Services
 					SkuId = (SkuIdEnum)sub.SkuId,
 					SubscriptionId = sub.SubscriptionId,
 					SubscriptionName = sub.SubscriptionName,
-					ProductRoleId = sub.ProductRoleId,
+					ProductRole = new Billing.ProductRole()
+					{
+						ProductRoleId = sub.ProductRoleId,
+						ProductId = (ProductIdEnum)sub.ProductId
+					},
 					UserId = userId,
 					IconUrl = sub.IconUrl
 				}
@@ -431,8 +435,8 @@ namespace AllyisApps.Services
 			string passwordHash = this.DBHelper.GetPasswordHashById(UserContext.UserId);
 			if (!string.IsNullOrWhiteSpace(passwordHash))
 			{
-				Tuple<bool, string> validation = Crypto.ValidateAndUpdate(oldPassword, passwordHash);
-				if (validation.Item1)
+				PassWordValidationResult validation = Crypto.ValidateAndUpdate(oldPassword, passwordHash);
+				if (validation.successfulMatch)
 				{
 					// old password is correct.
 					result = true;

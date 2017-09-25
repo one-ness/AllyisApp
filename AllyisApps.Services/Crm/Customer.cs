@@ -75,7 +75,7 @@ namespace AllyisApps.Services.Crm
 
 		public Customer()
 		{
-			Address = new Address();
+			//Address = new Address();
 		}
 	}
 }

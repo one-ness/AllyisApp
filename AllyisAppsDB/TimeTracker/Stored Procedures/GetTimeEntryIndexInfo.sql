@@ -76,7 +76,6 @@ AS
 			[Customer].[CustomerOrgId],
 			[Customer].[IsActive] AS [IsCustomerActive],
 			[ProjectUser].[IsActive] AS [IsUserActive],
-			[OrganizationRoleId],
 			[ProjectOrgId]
 	FROM (
 		(SELECT [OrganizationId], [UserId], [OrganizationRoleId]

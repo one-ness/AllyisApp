@@ -19,17 +19,17 @@ namespace AllyisApps.Services.Billing
 		/// <summary>
 		/// Gets or sets the Id of the entry in the SKU table.
 		/// </summary>
-		public int SkuId { get; set; }
+		public SkuIdEnum SkuId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the SkuId of the upgrade or downgrade version of the Product.
 		/// </summary>
-		public int SkuIdNext { get; set; }
+		public SkuIdEnum SkuIdNext { get; set; }
 
 		/// <summary>
 		/// Gets or sets the products id number.
 		/// </summary>
-		public int ProductId { get; set; }
+		public ProductIdEnum ProductId { get; set; }
 
 		/// <summary>
 		/// Gets or sets name of the sku.

@@ -28,7 +28,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
 			var infos = AppService.GetCustomerInfo(customerId);
-			var customer = infos.Item1;
+			var customer = infos;
 			return this.View(new EditCustomerInfoViewModel
 			{
 				ContactEmail = customer.ContactEmail,
@@ -42,13 +42,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Country = customer.Address?.CountryName,
 				PostalCode = customer.Address?.PostalCode,
 				ContactPhoneNumber = customer.ContactPhoneNumber,
-				FaxNumber = infos.Item1.FaxNumber,
-				Website = infos.Item1.Website,
-				EIN = infos.Item1.EIN,
+				FaxNumber = infos.FaxNumber,
+				Website = infos.Website,
+				EIN = infos.EIN,
 				OrganizationId = customer.OrganizationId,
 				CustomerId = customerId,
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
-				CustomerOrgId = infos.Item1.CustomerOrgId,
+				CustomerOrgId = infos.CustomerOrgId,
 				CanEditCustomers = this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId, false)
 			});
 		}

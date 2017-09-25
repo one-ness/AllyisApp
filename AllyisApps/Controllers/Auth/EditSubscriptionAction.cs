@@ -24,9 +24,9 @@ namespace AllyisApps.Controllers.Auth
 		{
 			int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
-			int skuId = (int)AppService.GetSubscription(subscriptionId).SkuId;
+			var skuId = AppService.GetSubscription(subscriptionId).SkuId;
 
-			int productId = (int)AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId;
+			var productId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId;
 			string subscriptionName = AppService.getSubscriptionName(subscriptionId);
 
 			SkuInfo sku = GetNextName(subscriptionId, skuId, productId);
@@ -84,15 +84,15 @@ namespace AllyisApps.Controllers.Auth
 						switch (model.ActionType)
 						{
 							case "Time Tracker":
-								model.SkuIdNext = 200001;
+								model.SkuIdNext = SkuIdEnum.TimeTrackerBasic;
 								break;
 
 							case "Expense Tracker":
-								model.SkuIdNext = 300001;
+								model.SkuIdNext = SkuIdEnum.ExpenseTrackerBasic;
 								break;
 
 							case "Staffing Manager":
-								model.SkuIdNext = 400001;
+								model.SkuIdNext = SkuIdEnum.StaffingManagerBasic;
 								break;
 
 							default:
@@ -124,7 +124,7 @@ namespace AllyisApps.Controllers.Auth
 			return this.View(model);
 		}
 
-		private SkuInfo GetNextName(int id, int skuId, int productId)
+		private SkuInfo GetNextName(int id, SkuIdEnum skuId, ProductIdEnum productId)
 		{
 			var infos = AppService.GetProductSubscriptionInfo(id, skuId);
 			SkuInfo sku = AppService.GetSkuDetails(skuId);
@@ -135,12 +135,12 @@ namespace AllyisApps.Controllers.Auth
 			{
 				case "Time Tracker":
 					sku.NextName = "Time Tracker Pro";
-					sku.SkuIdNext = 300001;
+					sku.SkuIdNext = SkuIdEnum.TimeTrackerPro;
 					break;
 
 				case "Time Tracker Pro":
 					sku.NextName = "Time Tracker";
-					sku.SkuIdNext = 200001;
+					sku.SkuIdNext = SkuIdEnum.TimeTrackerBasic;
 					break;
 
 				default:
