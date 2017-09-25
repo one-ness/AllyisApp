@@ -68,7 +68,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		public List<PositionStatusSelectViewModel> positionStatuses { get; set; }
 
 		/// <summary>
-		/// the default position status
+		/// deafult status identification number
 		/// </summary>
 		public int defaultPositionStatus { get; set; }
 
