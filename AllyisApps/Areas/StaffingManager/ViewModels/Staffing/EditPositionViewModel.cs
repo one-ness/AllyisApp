@@ -148,6 +148,94 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		public string TagsToSubmit { get; set; }
 
 		/// <summary>
+		/// 
+		/// </summary>
+		public AddressViewModel PositionAddress { get; set; }
+
+		
+
+		/// <summary>
+		/// CustomerInfo for View Model
+		/// </summary>
+		public CustomerInfoViewModel CustomerInfo { get; set; }
+
+		/// <summary>
+		/// Customer infromation
+		/// </summary>
+		public class CustomerInfoViewModel
+		{
+			/// <summary>
+			/// selected country code
+			/// </summary>
+			public string Name { get; set; }
+
+			/// <summary>
+			/// selected country code
+			/// </summary>
+			public string ContactEmail { get; set; }
+
+			/// <summary>
+			/// selected country code
+			/// </summary>
+			public string ContactPhoneNumber { get; set; }
+
+			/// <summary>
+			/// selected country code
+			/// </summary>
+			public string FaxNumber { get; set; }
+
+			/// <summary>
+			/// selected country code
+			/// </summary>
+			public string EIN { get; set; }
+
+			/// <summary>
+			/// selected country code
+			/// </summary>
+			public int OrganizationId { get; set; }
+
+			/// <summary>
+			/// Address country code
+			/// </summary>
+			public AddressViewModel Address { get; set; }
+		}
+		/// <summary>
+		/// position levels available
+		/// </summary>
+		public List<PositionLevelSelectViewModel> PositionLevels { get; set; }
+
+		/// <summary>
+		/// position statuses available
+		/// </summary>
+		public List<PositionStatusSelectViewModel> PositionStatuses { get; set; }
+
+		/// <summary>
+		/// employment types available
+		/// </summary>
+		public List<EmploymentTypeSelectViewModel> EmploymentTypes { get; set; }
+
+
+		/// <summary>
+		/// list of customers the org has used
+		/// </summary>
+		public List<CustomerSelectViewModel> Customers { get; set; }
+		/// <summary>
+		/// Localized Countries
+		/// </summary>
+		public Dictionary<string, string> LocalizedCountries { get; internal set; }
+
+		/// <summary>
+		/// Localized States
+		/// </summary>
+		public Dictionary<string, string> LocalizedStats { get; internal set; }
+	}
+
+	/// <summary>
+	/// Edit Position Address View Model 
+	/// </summary>
+	public class AddressViewModel
+	{
+		/// <summary>
 		/// Gets or sets the position's address.
 		/// </summary>
 		[DataType(DataType.Text)]
@@ -186,11 +274,6 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		public int? SelectedStateId { get; set; }
 
 		/// <summary>
-		/// state id and localized names
-		/// </summary>
-		public Dictionary<string, string> LocalizedStates { get; set; }
-
-		/// <summary>
 		/// selected country code
 		/// </summary>
 		public string SelectedCountryCode { get; set; }
@@ -199,98 +282,9 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// country code and localized names
 		/// </summary>
 		public Dictionary<string, string> LocalizedCountries { get; set; }
-
 		/// <summary>
-		/// selected country code
+		/// state id and localized names
 		/// </summary>
-		public string CustomerName { get; set; }
-
-		/// <summary>
-		/// selected country code
-		/// </summary>
-		public string CustomerContactEmail { get; set; }
-
-		/// <summary>
-		/// selected country code
-		/// </summary>
-		public string CustomerContactPhoneNumber { get; set; }
-
-		/// <summary>
-		/// selected country code
-		/// </summary>
-		public string CustomerFaxNumber { get; set; }
-
-		/// <summary>
-		/// selected country code
-		/// </summary>
-		public string CustomerEIN { get; set; }
-
-		/// <summary>
-		/// selected country code
-		/// </summary>
-		public int CustomerOrganizationId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Customer's address.
-		/// </summary>
-		[DataType(DataType.Text)]
-		[Display(Name = "Address")]
-		public string CustomerAddress { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Customer's city.
-		/// </summary>
-		[DataType(DataType.Text)]
-		[Display(Name = "City")]
-		public string CustomerCity { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Customer's state.
-		/// </summary>
-		[Display(Name = "State")]
-		public string CustomerState { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Customer's country or region.
-		/// </summary>
-		[Display(Name = "Country")]
-		public string CustomerCountry { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Customer's postal code.
-		/// </summary>
-		[DataType(DataType.PostalCode)]
-		[Display(Name = "Postal Code")]
-		public string CustomerPostalCode { get; set; }
-
-		/// <summary>
-		/// selected country code
-		/// </summary>
-		public string CustomerSelectedCountryCode { get; set; }
-
-		/// <summary>
-		/// selected state id
-		/// </summary>
-		public int? CustomerSelectedStateId { get; set; }
-
-		/// <summary>
-		/// position levels available
-		/// </summary>
-		public List<PositionLevel> PositionLevels { get; set; }
-
-		/// <summary>
-		/// position statuses available
-		/// </summary>
-		public List<PositionStatus> PositionStatuses { get; set; }
-
-		/// <summary>
-		/// employment types available
-		/// </summary>
-		public List<EmploymentType> EmploymentTypes { get; set; }
-
-		/// <summary>
-		/// list of customers the org has used
-		/// </summary>
-		public List<Customer> Customers { get; set; }
+		public Dictionary<string, string> LocalizedStates { get; set; }
 	}
 }

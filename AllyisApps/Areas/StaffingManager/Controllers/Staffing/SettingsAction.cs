@@ -16,6 +16,7 @@ using AllyisApps.Core.Alert;
 using System;
 using AllyisApps.ViewModels;
 using AllyisApps.Services.Lookup;
+using System.Linq;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -76,10 +77,10 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				organizationId = orgId,
 				subscriptionId = subId,
 				subscriptionName = subName,
-				tags = tags,
-				employmentTypes = employmentTypes,
-				positionLevels = positionLevelsList,
-				positionStatuses = positionStatuses,
+				tags = tags.AsParallel().Select(t => new TagViewModel() { TagId = t.TagId, TagName = t.TagName, PositionId = t.PositionId }).ToList(),
+				employmentTypes = employmentTypes.AsParallel().Select(empt => new EmploymentTypeSelectViewModel() { EmploymentTypeId = empt.EmploymentTypeId, EmploymentTypeName = empt.EmploymentTypeName }).ToList(),
+				positionLevels = positionLevelsList.AsParallel().Select(pos => new PositionLevelSelectViewModel() { PositionLevelId = pos.PositionLevelId, PositionLevelName = pos.PositionLevelName }).ToList(),
+				positionStatuses = positionStatuses.AsParallel().Select(pos => new PositionStatusSelectViewModel() { PositionStatusId = pos.PositionStatusId, PositionStatusName = pos.PositionStatusName }).ToList(),
 				customers = customers
 			};
 
@@ -183,11 +184,12 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		}
 
 
-		/// <summary>
-		/// POST: 
-		/// </summary>
-		/// <param name="model">The settings ViewModel.</param>
-		/// <returns>The resulting page, Create if unsuccessful else staffing settings.</returns>
+		///// <summary>
+		///// POST: 
+		///// </summary>
+		///// <param name="model">The settings ViewModel.</param>
+		////// <returns>The resulting page, Create if unsuccessful else staffing settings.</returns>
+		/*
 		public ActionResult CreateCustomer(StaffingSettingsViewModel model)
 		{
 			if (ModelState.IsValid)
@@ -202,13 +204,13 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 						CustomerName = model.newCustomer.CustomerName,
 						Address = new Address()
 						{
-							Address1 = model.Address,
-							City = model.City,
-							StateName = model.State,
-							CountryName = model.Country,
-							PostalCode = model.PostalCode,
-							CountryCode = model.SelectedCountryCode,
-							StateId = model.SelectedStateId
+							Address1 = model.newCustomerAddress.Address,
+							City = model.newCustomerAddress.City,
+							StateName = model.newCustomerAddress.State,
+							CountryName = model.newCustomerAddress.Country,
+							PostalCode = model.newCustomerAddress.PostalCode,
+							CountryCode = model.newCustomerAddress.SelectedCountryCode,
+							StateId = model.newCustomerAddress.SelectedStateId
 						},
 						ContactPhoneNumber = model.newCustomer.ContactPhoneNumber,
 						FaxNumber = model.newCustomer.FaxNumber,
@@ -243,5 +245,6 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			// Invalid model
 			return this.View(model);
 		}
+		*/
 	}
 }
