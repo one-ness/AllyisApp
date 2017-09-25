@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels;
@@ -28,7 +29,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpGet]
 		public ActionResult Create(int subscriptionId)
 		{
-			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
+			if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
+			{
+				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
+			}
 			int orgId = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 
 			var NextCustomerId = AppService.GetNextCustId(subscriptionId);
