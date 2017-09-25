@@ -24,16 +24,6 @@ namespace AllyisApps.Services.Project
 		public int OrganizationId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the id of the customer associated with the project.
-		/// </summary>
-		public int CustomerId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the name of the customer associated with the project.
-		/// </summary>
-		public string CustomerName { get; set; }
-
-		/// <summary>
 		/// Gets or sets the project name.
 		/// </summary>
 		public string ProjectName { get; set; }
@@ -62,5 +52,7 @@ namespace AllyisApps.Services.Project
 		/// Gets or sets the bool value indicating if this Customer is currently active.
 		/// </summary>
 		public bool IsActive { get; set; }
+
+		public Customer owningCustomer{ get; set;}
 	}
 }

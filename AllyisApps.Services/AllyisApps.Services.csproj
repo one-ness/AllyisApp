@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auth\InvitationStatusEnum.cs" />
+    <Compile Include="Auth\OrganizaionPermissions.cs" />
     <Compile Include="Auth\Organization.cs" />
     <Compile Include="Auth\AccountService.cs" />
     <Compile Include="Auth\AuthorizationService.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Billing\BillingService.cs" />
     <Compile Include="Billing\BlockBasedOnEnum.cs" />
     <Compile Include="Billing\Subscription.cs" />
+    <Compile Include="Billing\UpdateSubscriptionUserRolesResuts.cs" />
     <Compile Include="Expense\ExpenseHistory.cs" />
     <Compile Include="Expense\ExpenseFile.cs" />
     <Compile Include="Expense\ExpenseItem.cs" />

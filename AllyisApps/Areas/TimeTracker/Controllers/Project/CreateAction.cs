@@ -137,7 +137,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			return AppService.CreateProjectAndUpdateItsUserList(
 				new Services.Project.Project()
 				{
-					CustomerId = model.ParentCustomerId,
+					owningCustomer = new Customer(){
+						CustomerId = model.ParentCustomerId,
+					},
 					ProjectName = model.ProjectName,
 					ProjectOrgId = model.ProjectOrgId,
 					StartingDate = Utility.GetDateTimeFromDays(model.StartDate),
@@ -155,7 +157,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			return AppService.CreateProject(new Services.Project.Project()
 			{
-				CustomerId = model.ParentCustomerId,
+				owningCustomer = new Customer(){
+					CustomerId = model.ParentCustomerId,
+				},
 				ProjectName = model.ProjectName,
 				ProjectOrgId = model.ProjectOrgId,
 				StartingDate = Utility.GetDateTimeFromDays(model.StartDate),

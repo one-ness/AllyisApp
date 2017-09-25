@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 
 namespace AllyisApps.Services
 {
@@ -34,5 +35,7 @@ namespace AllyisApps.Services
 		/// Gets or sets the Employee Id.
 		/// </summary>
 		public string EmployeeId { get; set; }
+
+		
 	}
 }

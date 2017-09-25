@@ -21,14 +21,20 @@ namespace AllyisApps.Services
 		/// </summary>
 		TimeTrackerBasic = 200001,
 
+		TimeTrackerPro = 200002,
+
 		/// <summary>
 		/// Expense tracker basic.
 		/// </summary>
 		ExpenseTrackerBasic = 300001,
 
+		ExpenseTrackerPro = 300002,
+
 		/// <summary>
 		/// staffing manager basic.
 		/// </summary>
 		StaffingManagerBasic = 400001,
+
+		StaffingManagerPro = 400002
 	}
 }

@@ -37,13 +37,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					ProjectId = proj.ProjectId,
 					ProjectName = proj.ProjectName,
-					CustomerName = proj.CustomerName
+					CustomerName = proj.owningCustomer.CustomerName
 				}),
 				AllProjects = infos.Item2.AsParallel().Select(proj => new UserEditViewModel.ProjectInfoViewModel()
 				{
 					ProjectName = proj.ProjectName,
 					ProjectId = proj.ProjectId,
-					CustomerName = proj.CustomerName
+					CustomerName = proj.owningCustomer.CustomerName
 				}),
 				UserName = infos.Item3,
 				SubscriptionName = subscriptionNameToDisplay

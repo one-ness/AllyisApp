@@ -26,7 +26,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			int userId = GetCookieData().UserId;
 
 			UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
-			var productInfo = AppService.GetProductSubscriptionInfo(subInfo.OrganizationId, (int)subInfo.SkuId);
+			var productInfo = AppService.GetProductSubscriptionInfo(subInfo.OrganizationId, subInfo.SkuId);
 
 			string productName = AppService.GetProductNameBySubscriptionId(subInfo.SubscriptionId);
 
