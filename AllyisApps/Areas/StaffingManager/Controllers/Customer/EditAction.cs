@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Staffing.Customer;
@@ -28,9 +29,9 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		[HttpGet]
 		public ActionResult Edit(int subscriptionId, int userId)
 		{
-			var infos = AppService.GetCustomerInfo(userId);
+			var customer = AppService.GetCustomerInfo(userId);
 			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
-			Customer customer = infos.Item1;
+
 			return this.View(new EditCustomerInfoViewModel
 			{
 				ContactEmail = customer.ContactEmail,
