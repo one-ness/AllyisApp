@@ -113,6 +113,7 @@
 						@Html.TextBoxFor(m => m.StartDate, new { @class = "updatable datepicker form-control item-control", @id = "datepicker" })
 						@Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger" })
 					</div>
+					<input type="hidden" id="DefaultStatus" name="defaultStatus" value="@Model.defaultStatusId" />
 					@if (!Model.IsCreating)
 					{
 						<div class="form-group">
