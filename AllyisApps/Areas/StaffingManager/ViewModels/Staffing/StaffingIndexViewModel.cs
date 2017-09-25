@@ -37,7 +37,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// Gets or sets list fo tag objects used by the organization.
 		/// </summary>
 		public List<Services.Lookup.Tag> Tags { get; set; }
-		
+
 		/// <summary>
 		/// Gets or sets list of employment types used by the organization.
 		/// </summary>

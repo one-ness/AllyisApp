@@ -8,55 +8,54 @@
 	var OrgcityState = Model.City != null && Model.State != null ? Model.City + ", " + Model.State : Model.City + Model.State;
 }
 <div class="row">
-	<div class="col-md-12">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h2 style="margin-top: 0px; margin-bottom: 0px;">
-					@title
-					@if (Model.IsManageAllowed)
-					{
-						<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId })" title="@Strings.EditOrganization" class="pull-right text-muted">
-							<i class="fa fa-cog  fa-lg"></i>
-						</a>
-					}
-				</h2>
-			</div>
-			<div class="panel-body">
-				<div class="col-sm-8 index-details">
-					<p>
-						<label>@Strings.PhoneNumber:</label>
-						@Model.PhoneNumber
-					</p>
-					<p>
-						<label>@Strings.Address:</label>
-						<span class="address-row">@Model.Address1</span>
-						<span class="address-row">@OrgcityState @Model.PostalCode</span>
-					</p>
-				</div>
-				<div class="col-sm-4 index-details">
-					<p>
-						<label>@Strings.Website:</label>
-						@{
-							string orgWebSite = subtitle;
-							if (!(subtitle == null || subtitle == ""))
-							{
-								if (!subtitle.StartsWith("http"))
-								{
-									orgWebSite = "http://" + subtitle;
-								}
-								<a href="@orgWebSite" target="_blank">@subtitle</a>
-							}
-						}
-					</p>
-					<p>
-						<label>@Strings.Fax:</label>
-						@Model.FaxNumber
-					</p>
-				</div>
-				<div class="col-md-12" style="height: 100%; margin-top:15px; display: flex; flex-wrap: wrap; justify-content: space-around; clear: both;">
-					@foreach (AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel sub in Model.Subscriptions)
-					{
-						<div class="square-box">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 style="margin-top: 0px; margin-bottom: 0px;">
+                    @title
+                    @if (Model.IsManageAllowed) {
+                        <a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId })" title="@Strings.EditOrganization" class="pull-right text-muted">
+                            <i class="fa fa-cog  fa-lg"></i>
+                        </a>
+                    }
+                </h2>
+            </div>
+            <div class="panel-body">
+                <div class="col-sm-8 index-details">
+                    <p>
+                        <label>@Strings.PhoneNumber:</label>
+                        @Model.PhoneNumber
+                    </p>
+                    <p>
+                        <label>@Strings.Address:</label>
+                        <span class="address-row">@Model.Address1</span>
+                        <span class="address-row">@OrgcityState @Model.PostalCode</span>
+                    </p>
+                </div>
+                <div class="col-sm-4 index-details">
+                    <p>
+                        <label>@Strings.Website:</label>
+                        @{
+                            string orgWebSite = subtitle;
+                            if (!(subtitle == null || subtitle == ""))
+                            {
+                                if (!subtitle.StartsWith("http"))
+                                {
+                                    orgWebSite = "http://" + subtitle;
+                                }
+                                <a href="@orgWebSite" target="_blank">@subtitle</a>
+                            }
+                        }
+                    </p>
+                    <p>
+                        <label>@Strings.Fax:</label>
+                        @Model.FaxNumber
+                    </p>
+                </div>
+                <div class="col-md-12" style="height: 100%; margin-top:15px; display: flex; flex-wrap: wrap; justify-content: space-around; clear: both;">
+                    @foreach (AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel sub in Model.Subscriptions)
+                    {
+                        <div class="square-box">
 
 							@{
 								string route = "";

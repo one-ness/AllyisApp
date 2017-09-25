@@ -52,7 +52,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			{
 				var expItems = AppService.GetExpenseItemsByReportId(item.ExpenseReportId);
 
-				var user = AppService.GetUserInfo(item.SubmittedById);
+				var user = AppService.GetUser(item.SubmittedById);
 
 				decimal totalAmount = expItems.Sum(x => x.Amount);
 

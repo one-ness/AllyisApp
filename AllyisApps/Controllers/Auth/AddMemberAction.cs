@@ -7,7 +7,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
@@ -26,13 +25,13 @@ namespace AllyisApps.Controllers.Auth
 		/// GET: /Add.
 		/// The page for adding members to an organization.
 		/// </summary>
-		/// <param name="organizationId">Organization id.</param>
+		/// <param name="id">Organization id.</param>
 		/// <param name="returnUrl">The return url to redirect to after form submit.</param>
 		/// <returns>The result of this action.</returns>
-		public ActionResult AddMember(int organizationId, string returnUrl)
+		public ActionResult AddMember(int id, string returnUrl)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, organizationId);
-			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(organizationId);
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
+			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(id);
 			ViewBag.returnUrl = returnUrl;
 			return this.View(model);
 		}
@@ -46,11 +45,10 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>The result of this action.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> AddMember(AddMemberViewModel add, int organizationId)
+		public ActionResult AddMember(AddMemberViewModel add, int organizationId)
 		{
 			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(organizationId);
 			add.Subscriptions = model.Subscriptions;
-			add.Projects = model.Projects;
 
 			if (ModelState.IsValid)
 			{
@@ -58,7 +56,7 @@ namespace AllyisApps.Controllers.Auth
 
 				try
 				{
-					InvitationInfo info = new InvitationInfo
+					Invitation info = new Invitation
 					{
 						Email = add.Email.Trim(),
 						FirstName = add.FirstName,
@@ -73,7 +71,7 @@ namespace AllyisApps.Controllers.Auth
 						Url.Action(ActionConstants.Index, ControllerConstants.Account, null, protocol: Request.Url.Scheme) :
 						Url.Action(ActionConstants.Register, ControllerConstants.Account, null, protocol: Request.Url.Scheme);
 
-					int invitationId = await AppService.InviteUser(url, info);
+					int invitationId = AppService.InviteUser(url, info);
 
 					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserEmailed, add.FirstName, add.LastName), Variety.Success));
 					return this.RedirectToAction(ActionConstants.ManageOrg, new { id = add.OrganizationId });
@@ -112,27 +110,31 @@ namespace AllyisApps.Controllers.Auth
 		public AddMemberViewModel ConstructOrganizationAddMembersViewModel(int organizationId)
 		{
 			var infos = AppService.GetAddMemberInfo(organizationId);
-			string nextId = string.Compare(infos.Item1, infos.Item5) > 0 ? infos.Item1 : infos.Item5;
 
 			AddMemberViewModel result = new AddMemberViewModel
 			{
 				OrganizationId = organizationId,
-				EmployeeId = new string(AppService.IncrementAlphanumericCharArray(nextId.ToCharArray())),
-				Subscriptions = new List<AddMemberSubscriptionInfo>(),
-				Projects = infos.Item4,
+				EmployeeId = new string(AppService.IncrementAlphanumericCharArray(infos.Item1.NextEmpolyeeID.ToCharArray())),
+				Subscriptions = new List<AddMemberSubscriptionViewModel>()
 			};
 
-			foreach (SubscriptionDisplayInfo sub in infos.Item2)
+			foreach (Subscription sub in infos.Item1.Subscriptions)
 			{
-				AddMemberSubscriptionInfo subInfo = new AddMemberSubscriptionInfo
+				AddMemberSubscriptionViewModel subInfo = new AddMemberSubscriptionViewModel
 				{
 					ProductName = sub.ProductName,
-					ProductRoles = infos.Item3.Where(r => r.ProductId == sub.ProductId).ToList(),
+					ProductRoles = infos.Item2.Where(r => r.ProductId == (int)sub.ProductId)
+						.Select(r => new ProductRoleViewModel()
+						{
+							ProductId = r.ProductId,
+							ProductRoleId = r.ProductRoleId,
+							ProductRoleName = r.ProductRoleName
+						}).ToList(),
 					SubscriptionId = sub.SubscriptionId
 				};
 				subInfo.ProductRoles.Insert(
 					0,
-					new ProductRole
+					new ProductRoleViewModel
 					{
 						ProductRoleName = "None",
 						ProductId = (int)ProductIdEnum.None,

@@ -70,7 +70,7 @@ namespace AllyisApps.Services
 		/// <returns>The id of the created Tag or -1 if the tag name is already in use. </returns>
 		public void AssignTag(int tagId, int positionId) => DBHelper.AssignTag(tagId, positionId);
 
-		#endregion
+		#endregion CreateMethods
 
 		#region GetMethods
 
@@ -155,7 +155,7 @@ namespace AllyisApps.Services
 		/// <returns>returns a list of all current tags. </returns>
 		public List<Tag> GetTags() => DBHelper.GetTags().Select(DBEntityToServiceObject).ToList();
 
-		#endregion
+		#endregion GetMethods
 
 		#region UpdateMethods
 
@@ -187,7 +187,7 @@ namespace AllyisApps.Services
 		/// <returns>Returns the number of rows updated.</returns>
 		public int UpdatePosition(Position position) => DBHelper.UpdatePosition(ServiceObjectToDBEntity(position));
 
-		#endregion
+		#endregion UpdateMethods
 
 		#region DeleteMethods
 
@@ -228,7 +228,7 @@ namespace AllyisApps.Services
 		/// <param name="positionId">ID of the Position to be removed from the DB. </param>
 		public void DeletePosition(int positionId) => DBHelper.DeletePosition(positionId);
 
-		#endregion
+		#endregion DeleteMethods
 
 		//////////////////////////////////////////
 		// DB LAYER to SERVICE LAYER CONVERSION //
@@ -328,7 +328,6 @@ namespace AllyisApps.Services
 				DesiredSkills = position.DesiredSkills,
 				HiringManager = position.HiringManager,
 				TeamName = position.TeamName,
-
 
 				Address = new Address
 				{
@@ -433,7 +432,7 @@ namespace AllyisApps.Services
 			return new Tag { TagId = tag.TagId, TagName = tag.TagName };
 		}
 
-		#endregion DB to Service Conversion
+		#endregion DB to Service Conversions
 
 		//////////////////////////////////////////
 		// SERVICE LAYER to DB LAYER CONVERSION //
@@ -508,7 +507,7 @@ namespace AllyisApps.Services
 			obj.Position.CustomerId = position.CustomerId;
 			obj.Position.AddressId = position.AddressId;
 			obj.Position.PositionStatusId = position.PositionStatusId;
-			obj.Position.ositionTitle = position.PositionTitle;
+			obj.Position.PositionTitle = position.PositionTitle;
 			obj.Position.DurationMonths = position.DurationMonths;
 			obj.Position.EmploymentTypeId = position.EmploymentTypeId;
 			obj.Position.PositionCount = position.PositionCount;
@@ -533,11 +532,11 @@ namespace AllyisApps.Services
 			obj.Address.PostalCode = position.Address.PostalCode;
 			obj.Address.CountryCode = position.Address.CountryCode;
 
-			obj.Tags = ServiceObjectToDBEntity(position.Tags);
+			if (position.Tags != null && position.Tags.Count != 0) obj.Tags = ServiceObjectToDBEntity(position.Tags);
+			else obj.Tags = new List<dynamic>();
 
 			return obj;
 		}
-
 
 		/// <summary>
 		/// Converts a list of Tag service layer objects to a TagDBEntity object list.
@@ -548,9 +547,17 @@ namespace AllyisApps.Services
 		{
 			if (tags == null) throw new ArgumentNullException(nameof(tags), "Cannot accept null list of tags to be converted.");
 
-			dynamic obj = tags;
+			List<dynamic> list = new List<dynamic>();
+			foreach (Tag tag in tags)
+			{
+				dynamic obj = new ExpandoObject();
+				obj.TagName = tag.TagName;
+				obj.TagId = tag.TagId;
+				obj.PositionId = tag.PositionId;
+				list.Add(obj);
+			}
 
-			return obj;
+			return list;
 		}
 
 		/// <summary>

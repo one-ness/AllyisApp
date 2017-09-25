@@ -465,8 +465,8 @@ $('form').change(function () { formChange(); });
 //);
 
 $('#datePickerStart').datepicker({
-    changeMonth: true,
-    changeYear: true,
+	changeMonth: true,
+	changeYear: true,
 	showOn: "button",
 	buttonImageOnly: true,
 	onSelect: function () {
@@ -481,8 +481,8 @@ $('#datePickerStart').on("change", function () {
 	$('#StartDate').val(DateConvert.GetDaysFromMoment(enteredDate));
 });
 $('#datePickerEnd').datepicker({
-    changeMonth: true,
-    changeYear: true,
+	changeMonth: true,
+	changeYear: true,
 	showOn: "button",
 	buttonImageOnly: true,
 	onSelect: function () {

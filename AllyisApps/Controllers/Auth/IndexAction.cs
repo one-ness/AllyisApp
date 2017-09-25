@@ -7,6 +7,7 @@
 using System;
 using System.Linq;
 using System.Web.Mvc;
+using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
@@ -39,86 +40,120 @@ namespace AllyisApps.Controllers.Auth
 		{
 			User accountInfo = AppService.GetCurrentUser();
 
-			AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel(accountInfo);
+			AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel()
+			{
+				FirstName = accountInfo.FirstName,
+				LastName = accountInfo.LastName,
+				Email = accountInfo.Email,
+				PhoneNumber = accountInfo.PhoneNumber,
+				PhoneExtension = accountInfo.PhoneExtension,
+				Address1 = accountInfo.Address?.Address1,
+				Address2 = accountInfo.Address?.Address2,
+				City = accountInfo.Address?.City,
+				State = accountInfo.Address?.StateName,
+				PostalCode = accountInfo.Address?.PostalCode,
+				Country = accountInfo.Address?.CountryName,
+			};
+
 			AccountIndexViewModel indexViewModel = new AccountIndexViewModel()
 			{
 				UserInfo = userViewModel
 			};
-			if (accountInfo == null)
-			{
-				// If not signed in do not attpempt to load values.
-				return indexViewModel;
-			}
 
 			// Add invitations to view model
-
-			var invitationslist = accountInfo.Invitations;
-			foreach (var inviteInfo in invitationslist)
+			var invitationsList = accountInfo.Invitations;
+			foreach (var item in invitationsList)
 			{
-				var invite = inviteInfo.invite;
-
 				indexViewModel.Invitations.Add(new AccountIndexViewModel.InvitationViewModel()
 				{
-					InvitationId = invite.InvitationId,
-					OrganizationName = inviteInfo.invitingOrgName,
+					InvitationId = item.InvitationId,
+					OrganizationName = item.OrganizationName,
 				});
 			}
 
-			var orgs = accountInfo.Organizations;
-
 			// Add organizations to model
-			foreach (var curorg in orgs)
+			var orgsList = accountInfo.Organizations;
+			foreach (var item in orgsList)
 			{
 				AccountIndexViewModel.OrganizationViewModel orgViewModel =
-				new AccountIndexViewModel.OrganizationViewModel(
-					curorg.Organization,
-					this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, curorg.Organization.OrganizationId, curorg.OrganizationRole, false));
+				new AccountIndexViewModel.OrganizationViewModel()
+				{
+					OrganizationId = item.Organization.OrganizationId,
+					OrganizationName = item.Organization.OrganizationName,
+					PhoneNumber = item.Organization.PhoneNumber,
+					Address1 = item.Organization.Address?.Address1,
+					City = item.Organization.Address?.City,
+					State = item.Organization.Address?.StateName,
+					PostalCode = item.Organization.Address?.PostalCode,
+					Country = item.Organization.Address?.CountryName,
+					SiteUrl = item.Organization.SiteUrl,
+					FaxNumber = item.Organization.FaxNumber,
+					//// TODO: Infomation is dependent on curent user
+					IsManageAllowed = AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, item.Organization.OrganizationId, item.OrganizationRole, false)
+				};
 
 				// Add subscription info
-				foreach (UserSubscription userSubInfo in accountInfo.Subscriptions.Where(sub => sub.Subscription.OrganizationId == curorg.Organization.OrganizationId))
+				foreach (var subItem in accountInfo.Subscriptions.Where(sub => sub.OrganizationId == item.Organization.OrganizationId))
 				{
 					string description =
-						userSubInfo.Subscription.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription :
-						userSubInfo.Subscription.ProductId == ProductIdEnum.ExpenseTracker ? Resources.Strings.ExpenseTrackerDescription :
+						subItem.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription :
+						subItem.ProductId == ProductIdEnum.ExpenseTracker ? Resources.Strings.ExpenseTrackerDescription :
 						string.Empty;
-					var subViewModel = new AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel(userSubInfo, description);
-					if (userSubInfo.Subscription.ProductId == ProductIdEnum.TimeTracker)
+					var subViewModel = new AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel()
 					{
-						int? sDate = null;
-						int? eDate = null;
-						int startOfWeek = AppService.GetAllSettings(userSubInfo.Subscription.SubscriptionId).Item1.StartOfWeek;
-						sDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek));
-						eDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
-						subViewModel.ProductGoToUrl = Url.RouteUrl(
-							"TimeTracker_NoUserId",
-							new
+						ProductName = subItem.ProductName,
+						SubscriptionId = subItem.SubscriptionId,
+						SubscriptionName = subItem.SubscriptionName,
+						ProductDescription = description,
+						ProductId = subItem.ProductId,
+						AreaUrl = subItem.AreaUrl
+					};
+					switch (subItem.ProductId)
+					{
+						case ProductIdEnum.TimeTracker:
 							{
-								subscriptionId =
-								userSubInfo.Subscription.SubscriptionId,
-								controller = ControllerConstants.TimeEntry,
-								startDate = sDate,
-								endDate = eDate
-							});
-					}
-					else if (userSubInfo.Subscription.ProductId == ProductIdEnum.ExpenseTracker)
-					{
-						subViewModel.ProductGoToUrl = Url.RouteUrl(
-							"ExpenseTracker_Default",
-							new
+								int? sDate = null;
+								int? eDate = null;
+								int startOfWeek = AppService.GetAllSettings(subItem.OrganizationId).Item1.StartOfWeek;
+								sDate = Utility.GetDaysFromDateTime(SetStartingDate(startOfWeek));
+								eDate = Utility.GetDaysFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
+								subViewModel.ProductGoToUrl = Url.RouteUrl(
+									"TimeTracker_NoUserId",
+									new
+									{
+										subscriptionId =
+										subItem.SubscriptionId,
+										controller = ControllerConstants.TimeEntry,
+										startDate = sDate,
+										endDate = eDate
+									});
+								break;
+							}
+						case ProductIdEnum.ExpenseTracker:
 							{
-								subscriptionId = userSubInfo.Subscription.SubscriptionId,
-								controller = ControllerConstants.Expense
-							});
-					}
-					else
-					{
-						subViewModel.ProductGoToUrl = userSubInfo.Subscription.AreaUrl + "/" + subViewModel.SubscriptionId;
+								subViewModel.ProductGoToUrl = Url.RouteUrl(
+									"ExpenseTracker_Default",
+									new
+									{
+										subscriptionId = subItem.SubscriptionId,
+										controller = ControllerConstants.Expense
+									});
+								break;
+							}
+						case ProductIdEnum.StaffingManager:
+
+							subViewModel.ProductGoToUrl = Url.RouteUrl("StaffingManager_default",
+								new
+								{
+									subscriptionId = subItem.SubscriptionId,
+									controller = ControllerConstants.Staffing
+								});
+							break;
 					}
 
 					subViewModel.IconUrl = string.Format("Content/icons/{0}.png", subViewModel.ProductName.Replace(" ", string.Empty));
 					orgViewModel.Subscriptions.Add(subViewModel);
 				}
-
 				indexViewModel.Organizations.Add(orgViewModel);
 			}
 

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
 using AllyisApps.Services;
@@ -23,7 +20,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			ViewData["SubscriptionName"] = AppService.getSubscriptionName(subscriptionId);
 			ViewData["SubscriptionId"] = subscriptionId;
 			ViewData["ProductRole"] = subInfo.ProductRoleId;
-			ViewData["MaxAmount"] = AppService.GetOrganizationUserMaxAmount(AppService.GetCurrentUser().UserId, subInfo.OrganizationId).MaxAmount;
+			ViewData["MaxAmount"] = AppService.GetOrganizationUserMaxAmount(AppService.UserContext.UserId, subInfo.OrganizationId);
 		}
 
 		private void UploadItems(ExpenseCreateModel model, ExpenseReport report)

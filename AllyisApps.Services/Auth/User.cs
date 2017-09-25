@@ -4,9 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services.Lookup;
 using System;
 using System.Collections.Generic;
+using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services.Auth
 {
@@ -127,15 +127,12 @@ namespace AllyisApps.Services.Auth
 		/// </summary>
 		public List<Invitation> Invitations { get; set; }
 
-		/// <summary>
-		/// constructor
-		/// </summary>
-		public User()
-		{
-			this.Address = new Address();
-			this.Organizations = new List<UserOrganization>();
-			this.Subscriptions = new List<UserSubscription>();
-			this.Invitations = new List<Invitation>();
-		}
+		public decimal MaxAmount { get; set; }
+
+		public bool IsAddressLoaded => Address != null;
+		public bool IsInvitationsLoaded => Invitations != null;
+		public bool IsOrganizationsLoaded => Organizations != null;
+		public bool IsSubscriptionsLoaded => Subscriptions != null;
+
 	}
 }

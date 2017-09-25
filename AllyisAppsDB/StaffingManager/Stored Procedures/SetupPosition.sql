@@ -34,7 +34,7 @@ BEGIN TRANSACTION
 		@countryCode
 		
 		DECLARE @addressId INT
-		SET @addressId = IDENT_CURRENT('[Lookup].[CreateAddress]')
+		SET @addressId = IDENT_CURRENT('[Lookup].[Address]')
 
 	EXEC [StaffingManager].[CreatePosition]
 		@organizationId,
@@ -56,7 +56,7 @@ BEGIN TRANSACTION
 		@teamName
 	
 		DECLARE @positionId INT
-		SET @positionId = IDENT_CURRENT('[StaffingManager].[CreatePosition]')
+		SET @positionId = IDENT_CURRENT('[StaffingManager].[Position]')
 
 	EXEC [StaffingManager].[CreatePositionTags]
 		@tags,

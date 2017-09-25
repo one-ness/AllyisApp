@@ -1,6 +1,6 @@
-﻿using AllyisApps.Services.Lookup;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services.StaffingManager
 {
@@ -9,7 +9,7 @@ namespace AllyisApps.Services.StaffingManager
 		private const int titleLengthMax = 140;
 		private const int nameLenthMax = 64;
 		private const int maxTags = 10;
-		
+
 		private string positionTitle;
 		private int employmentTypeId;
 		private int positionCount;
@@ -172,6 +172,16 @@ namespace AllyisApps.Services.StaffingManager
 		public Address Address { get; set; }
 
 		/// <summary>
+		/// Gets or sets the customer for the positions.
+		/// </summary>
+		public Customer Customer { get; set; }
+
+		/// <summary>
+		/// Gets or sets the customers address for the positions.
+		/// </summary>
+		public Address CustomerAddress { get; set; }
+
+		/// <summary>
 		/// Gets or sets a list of tags on the position.
 		/// </summary>
 		public List<Tag> Tags
@@ -179,7 +189,8 @@ namespace AllyisApps.Services.StaffingManager
 			get => tags;
 			set
 			{
-				if (value.Count > maxTags) throw new ArgumentOutOfRangeException(nameof(tags), value, "A position can only have a maximum of " + maxTags.ToString() + " tags");
+				if (value == null || value.Count == 0) tags = null;
+				else if (value.Count > maxTags) throw new ArgumentOutOfRangeException(nameof(tags), value, "A position can only have a maximum of " + maxTags.ToString() + " tags");
 				tags = value;
 			}
 		}
@@ -198,6 +209,5 @@ namespace AllyisApps.Services.StaffingManager
 		/// Gets or sets the Position Level object of the position.
 		/// </summary>
 		public string PositionLevelName { get; set; }
-
 	}
 }

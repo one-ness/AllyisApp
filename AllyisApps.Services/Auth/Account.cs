@@ -4,9 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-
-namespace AllyisApps.Services.Auth
+namespace AllyisApps.Services
 {
 	/// <summary>
 	/// Represents an organization user.

@@ -65,14 +65,7 @@ BEGIN
 			SET StatusId = 1, DecisionDateUtc = GETUTCDATE()
 			WHERE [InvitationId] = @invitationId;
 			
-			-- On success, return name of organization and role
-			SELECT [Organization].[OrganizationName]
-			FROM [Auth].[Organization]
-			WHERE [Organization].[OrganizationId] = @organizationId;
-
-			SELECT [OrganizationRole].[OrganizationRoleName]
-			FROM [Auth].[OrganizationRole]
-			WHERE [OrganizationRole].[OrganizationRoleId] = @organizationRole;
+			SELECT @@ROWCOUNT;
 
 			COMMIT
 		END

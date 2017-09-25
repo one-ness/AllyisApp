@@ -1,10 +1,8 @@
-﻿using AllyisApps.DBModel;
-using AllyisApps.DBModel.Finance;
-using AllyisApps.Services.Expense;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using AllyisApps.DBModel;
+using AllyisApps.DBModel.Finance;
 
 namespace AllyisApps.Services
 {
@@ -13,11 +11,11 @@ namespace AllyisApps.Services
 	/// </summary>
 	public partial class AppService : BaseService
 	{
-        /// <summary>
-        /// Gets an expense items by the user that submited them.
-        /// </summary>
-        /// <param name="userId">The user id.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets an expense items by the user that submited them.
+		/// </summary>
+		/// <param name="userId">The user id.</param>
+		/// <returns></returns>
 		public IEnumerable<ExpenseItem> GetExpenseItemsByUserSubmitted(int userId)
 		{
 			var spResults = DBHelper.GetExpenseItemsByAccountId(userId);
@@ -25,25 +23,25 @@ namespace AllyisApps.Services
 			return spResults.Select(x => InitializeExpenseItem(x));
 		}
 
-        /// <summary>
-        /// Gets an expense item by its id.
-        /// </summary>
-        /// <param name="expenseId">The expense id.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets an expense item by its id.
+		/// </summary>
+		/// <param name="expenseId">The expense id.</param>
+		/// <returns></returns>
 		public ExpenseItem GetExpenseItem(int expenseId)
 		{
 			return InitializeExpenseItem(DBHelper.GetExpenseItem(expenseId));
 		}
 
-        /// <summary>
-        /// Get expense report items by report id.
-        /// </summary>
-        /// <param name="reportId">The reports id</param>
-        /// <returns>A IEnumerabe of ExpenseItems for the report.</returns>
-        public IList<ExpenseItem> GetExpenseItemsByReportId(int reportId)
-        {
-            return DBHelper.GetExpenseItemsByReportId(reportId).Select(x => InitializeExpenseItem(x)).AsEnumerable().ToList();
-        }
+		/// <summary>
+		/// Get expense report items by report id.
+		/// </summary>
+		/// <param name="reportId">The reports id</param>
+		/// <returns>A IEnumerabe of ExpenseItems for the report.</returns>
+		public IList<ExpenseItem> GetExpenseItemsByReportId(int reportId)
+		{
+			return DBHelper.GetExpenseItemsByReportId(reportId).Select(x => InitializeExpenseItem(x)).AsEnumerable().ToList();
+		}
 
 		/// <summary>
 		/// Gets an expense report by its id.
@@ -97,82 +95,82 @@ namespace AllyisApps.Services
 			DBHelper.UpdateExpenseItem(itemEntity);
 		}
 
-        /// <summary>
-        /// Get an expense report by its organization id.
-        /// </summary>
-        /// <param name="orgId">The organization id</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Get an expense report by its organization id.
+		/// </summary>
+		/// <param name="orgId">The organization id</param>
+		/// <returns></returns>
 		public IEnumerable<ExpenseReport> GetExpenseReportByOrgId(int orgId)
 		{
 			return DBHelper.GetExpenseReportsByOrganizationId(orgId).Select(x => InitializeExpenseReport(x));
 		}
 
-        /// <summary>
-        /// Get an expense report by the submitted id
-        /// </summary>
-        /// <param name="submittedId">The submitting users id.</param>
-        /// <returns>An IEnumerabe of expense reports.</returns>
+		/// <summary>
+		/// Get an expense report by the submitted id
+		/// </summary>
+		/// <param name="submittedId">The submitting users id.</param>
+		/// <returns>An IEnumerabe of expense reports.</returns>
 		public IEnumerable<ExpenseReport> GetExpenseReportBySubmittedId(int submittedId)
 		{
 			return DBHelper.GetExpenseReportsBySubmittedById(submittedId).Select(x => InitializeExpenseReport(x));
 		}
 
-        public IEnumerable<ExpenseHistory> GetExpenseHistoryByReportId(int reportId)
-        {
-            return DBHelper.GetExpenseHistory(reportId).Select(x=> InitializeExpenseHistory(x));
-        }
+		public IEnumerable<ExpenseHistory> GetExpenseHistoryByReportId(int reportId)
+		{
+			return DBHelper.GetExpenseHistory(reportId).Select(x => InitializeExpenseHistory(x));
+		}
 
-        /// <summary>
-        /// Updates an expense report history.
-        /// </summary>
-        /// <param name="history">An expense history object.</param>
-        public void UpdateExpenseReportHistory(ExpenseHistory history)
-        {
-            ExpenseHistoryDBEntity expHistory = new ExpenseHistoryDBEntity()
-            {
-                HistoryId = history.HistoryId,
-                CreatedUtc = history.CreatedUtc,
-                ModifiedUtc = history.ModifiedUtc,
-                ExpenseReportId = history.ReportId,
-                Status = history.Status,
-                Text = history.Text,
-                UserId = history.UserId
-            };
+		/// <summary>
+		/// Updates an expense report history.
+		/// </summary>
+		/// <param name="history">An expense history object.</param>
+		public void UpdateExpenseReportHistory(ExpenseHistory history)
+		{
+			ExpenseHistoryDBEntity expHistory = new ExpenseHistoryDBEntity()
+			{
+				HistoryId = history.HistoryId,
+				CreatedUtc = history.CreatedUtc,
+				ModifiedUtc = history.ModifiedUtc,
+				ExpenseReportId = history.ReportId,
+				Status = history.Status,
+				Text = history.Text,
+				UserId = history.UserId
+			};
 
-            DBHelper.UpdateExpenseHistory(expHistory);
-        }
+			DBHelper.UpdateExpenseHistory(expHistory);
+		}
 
-        /// <summary>
-        /// Updates an expense report history.
-        /// </summary>
-        /// <param name="history">An expense history object.</param>
-        public void CreateExpenseReportHistory(ExpenseHistory history)
-        {
-            ExpenseHistoryDBEntity expHistory = new ExpenseHistoryDBEntity()
-            {
-                HistoryId = history.HistoryId,
-                CreatedUtc = history.CreatedUtc,
-                ModifiedUtc = history.ModifiedUtc,
-                ExpenseReportId = history.ReportId,
-                Text = history.Text,
-                Status = history.Status,
-                UserId = history.UserId
-            };
+		/// <summary>
+		/// Updates an expense report history.
+		/// </summary>
+		/// <param name="history">An expense history object.</param>
+		public void CreateExpenseReportHistory(ExpenseHistory history)
+		{
+			ExpenseHistoryDBEntity expHistory = new ExpenseHistoryDBEntity()
+			{
+				HistoryId = history.HistoryId,
+				CreatedUtc = history.CreatedUtc,
+				ModifiedUtc = history.ModifiedUtc,
+				ExpenseReportId = history.ReportId,
+				Text = history.Text,
+				Status = history.Status,
+				UserId = history.UserId
+			};
 
-            DBHelper.CreateExpenseHistory(expHistory);
-        }
+			DBHelper.CreateExpenseHistory(expHistory);
+		}
 
-        /// <summary>
-        /// Initializes an ExpenseReport from and ExpenseReportDbEntity.
-        /// </summary>
-        /// <param name="entity">The ExpenseReportDBEntity</param>
-        /// <returns></returns>
-        public static ExpenseReport InitializeExpenseReport(ExpenseReportDBEntity entity)
-        {
-            if (entity == null)
-            {
-                return null;
-            }
+		/// <summary>
+		/// Initializes an ExpenseReport from and ExpenseReportDbEntity.
+		/// </summary>
+		/// <param name="entity">The ExpenseReportDBEntity</param>
+		/// <returns></returns>
+		public static ExpenseReport InitializeExpenseReport(ExpenseReportDBEntity entity)
+		{
+			if (entity == null)
+			{
+				return null;
+			}
 
 			return new ExpenseReport()
 			{
@@ -185,18 +183,17 @@ namespace AllyisApps.Services
 				ReportStatus = entity.ReportStatus,
 				ReportTitle = entity.ReportTitle,
 				BusinessJustification = entity.BusinessJustification
-            };
-        }
+			};
+		}
 
-        /// <summary>
-        /// Initialize an ExpenseItem from an ExpenseItemDBEntity.
-        /// </summary>
-        /// <param name="entity">The ExpenseItemDBEntity</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Initialize an ExpenseItem from an ExpenseItemDBEntity.
+		/// </summary>
+		/// <param name="entity">The ExpenseItemDBEntity</param>
+		/// <returns></returns>
 		public static ExpenseItem InitializeExpenseItem(ExpenseItemDBEntity entity)
 		{
-
-			if(entity == null)
+			if (entity == null)
 			{
 				return null;
 			}
@@ -215,25 +212,24 @@ namespace AllyisApps.Services
 			};
 		}
 
-        public ExpenseHistory InitializeExpenseHistory(ExpenseHistoryDBEntity entity)
-        {
-            if(entity == null)
-            {
-                return null;
-            }
+		public ExpenseHistory InitializeExpenseHistory(ExpenseHistoryDBEntity entity)
+		{
+			if (entity == null)
+			{
+				return null;
+			}
 
-            return new ExpenseHistory()
-            {
-                UserId = entity.UserId,
-                HistoryId = entity.HistoryId,
-                ReportId = entity.ExpenseReportId,
-                Text = entity.Text,
-                Status = entity.Status,
-                CreatedUtc = entity.CreatedUtc,
-                ModifiedUtc = entity.ModifiedUtc
-            };
-
-        }
+			return new ExpenseHistory()
+			{
+				UserId = entity.UserId,
+				HistoryId = entity.HistoryId,
+				ReportId = entity.ExpenseReportId,
+				Text = entity.Text,
+				Status = entity.Status,
+				CreatedUtc = entity.CreatedUtc,
+				ModifiedUtc = entity.ModifiedUtc
+			};
+		}
 
 		public void CreateExpenseItem(ExpenseItem item)
 		{

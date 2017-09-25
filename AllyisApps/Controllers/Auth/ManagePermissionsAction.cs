@@ -30,12 +30,13 @@ namespace AllyisApps.Controllers.Auth
 		[HttpGet]
 		public ActionResult ManagePermissions(int id)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id);
 			var infos = AppService.GetOrgAndSubRoles(id);
 			ManagePermissionsViewModel model = new ManagePermissionsViewModel
 			{
 				Users = new List<UserPermissionsViewModel>(),
-				Subscriptions = infos.Item2,
+				Subscriptions = infos.Item2.Select(sub => new
+					SubscriptionDisplayViewModel(sub)).ToList(),
 				SubIds = infos.Item2.Select(s => s.SubscriptionId).ToList(),
 				OrganizationId = id,
 
@@ -58,23 +59,23 @@ namespace AllyisApps.Controllers.Auth
 				model.ExpenseTrackerSubIndex = model.Subscriptions.IndexOf(etsub);
 			}
 
-			foreach (UserRolesInfo role in infos.Item1)
+			foreach (UserRole role in infos.Item1)
 			{
-				UserPermissionsViewModel modelUser = model.Users.Where(u => u.UserId == int.Parse(role.UserId)).SingleOrDefault();
-				if (modelUser == null)
+				UserPermissionsViewModel modelUser = model.Users.Where(u => u.UserId == role.UserId).SingleOrDefault();
+				if (modelUser == null)//THIS IS ALLWAYS THE CASE!!!!
 				{
 					modelUser = new UserPermissionsViewModel
 					{
 						FirstName = role.FirstName,
 						LastName = role.LastName,
-						UserId = int.Parse(role.UserId),
+						UserId = role.UserId,
 						Email = role.Email,
 						OrganizationRoleId = role.OrganizationRoleId,
 						ProductRoleIds = new List<int>()
 					};
 
 					// Start out with default TT NotInProduct role if org is subscribed to TT.
-					foreach (SubscriptionDisplayInfo sub in model.Subscriptions)
+					foreach (SubscriptionDisplayViewModel sub in model.Subscriptions)
 					{
 						modelUser.ProductRoleIds.Add(ProductRole.NotInProduct);
 					}
@@ -94,87 +95,6 @@ namespace AllyisApps.Controllers.Auth
 
 			return this.View("Permission2", model);
 		}
-
-		/*
-		/// <summary>
-		/// Uses services to populate a <see cref="PermissionsManagementViewModel"/> and returns it.
-		/// </summary>
-		/// <param name="id">The Organization Id.</param>
-		/// <returns>The PermissionsManagementViewModel.</returns>
-		public PermissionsManagementViewModel ConstructPermissionsManagementViewModel(int id)
-		{
-			PermissionsManagementViewModel result = new PermissionsManagementViewModel()
-			{
-				TimeTrackerId = (int)ProductIdEnum.TimeTracker
-			};
-			result.Subscriptions = AppService.GetSubscriptionsDisplay(id);
-
-			List<UserPermissionsManagement> permissions = new List<UserPermissionsManagement>();
-			IEnumerable<UserRolesInfo> users = AppService.GetUserRoles(id).OrderBy(u => u.UserId); // In case of multiple subscriptions, there can be multiple items per user, one for each sub role
-			string currentUser = string.Empty;
-			UserPermissionsManagement currentUserPerm = null;
-			foreach (UserRolesInfo user in users)
-			{
-				if (!user.UserId.Equals(currentUser))
-				{
-					currentUser = user.UserId;
-					currentUserPerm = new UserPermissionsManagement()
-					{
-						UserId = user.UserId,
-						UserName = string.Format("{0} {1}", user.FirstName, user.LastName),
-						OrganizationRoleId = user.OrganizationRoleId,
-						SubscriptionRoles = new List<ProductRole>()
-					};
-					permissions.Add(currentUserPerm);
-				}
-
-				if (user.ProductRoleId > 0)
-				{
-					try
-					{
-						currentUserPerm.SubscriptionRoles.Add(new ProductRole
-						{
-							ProductRoleId = user.ProductRoleId,
-							ProductId = result.Subscriptions.Where(s => s.SubscriptionId == user.SubscriptionId).Single().ProductId
-						});
-					}
-					catch (InvalidOperationException) { } // Deleted subscription
-				}
-			}
-
-			// Add in "Not in Product" roles for subscriptions each user is not assigned to
-			foreach (UserPermissionsManagement permission in permissions)
-			{
-				foreach (SubscriptionDisplayInfo subscription in result.Subscriptions)
-				{
-					if (permission.SubscriptionRoles.Where(s => s.ProductId == subscription.ProductId).Count() == 0)
-					{
-						permission.SubscriptionRoles.Add(new ProductRole
-						{
-							ProductId = subscription.ProductId,
-							ProductRoleId = (int)TimeTrackerRole.NotInProduct
-						});
-					}
-				}
-			}
-
-			result.UserPermissions = permissions.DistinctBy(u => u.UserId).OrderBy(u => u.UserName.Split(' ').Last()).ToList();   // UserRoles are unique via SubscriptionId and UserId, but UserPermissionsManagement does not track SubscriptionId, causing duplicate users to be stored
-
-			result.Filters = new FilterDataModel();
-			result.Filters.UnassignedUsers = new ViewModels.Auth.Filter("Unassigned", users, x => x.ProductRoleId == 0);
-			result.Filters.AllUsers = new ViewModels.Auth.Filter("All Users", users);
-			FilterGroup orgFilters = result.Filters.AddNewFilterGroup("Organization");
-			orgFilters.Filters.Add(new ViewModels.Auth.Filter("Owner", users, x => x.OrganizationRoleId == (int)OrganizationRole.Owner));
-			orgFilters.Filters.Add(new ViewModels.Auth.Filter("Member", users, x => x.OrganizationRoleId == (int)OrganizationRole.Member));
-
-			FilterGroup timeTrackerFilters = result.Filters.AddNewFilterGroup("TimeTracker");
-			timeTrackerFilters.Filters.Add(new ViewModels.Auth.Filter("Any", users, x => x.ProductRoleId != 0));
-			timeTrackerFilters.Filters.Add(new ViewModels.Auth.Filter("Manager", users, u => u.ProductRoleId == (int)TimeTrackerRole.Manager));
-			timeTrackerFilters.Filters.Add(new ViewModels.Auth.Filter("User", users, u => u.ProductRoleId == (int)TimeTrackerRole.User));
-			timeTrackerFilters.Filters.Add(new ViewModels.Auth.Filter("Unassigned", users, x => x.ProductRoleId == 0));
-
-			return result;
-		} */
 
 		/// <summary>
 		/// Makes changes to users' permissions in the organization.

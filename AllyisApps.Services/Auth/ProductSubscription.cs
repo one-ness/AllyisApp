@@ -4,9 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
-using AllyisApps.Services.Billing;
 
 namespace AllyisApps.Services
 {
@@ -16,16 +14,16 @@ namespace AllyisApps.Services
 	public class ProductSubscription
 	{
 		public Product Product { get; set; }
-		public SubscriptionInfo SubscriptionInfo { get; set; }
-		public List<SkuInfo> List { get; set; }
+		public Subscription SubscriptionInfo { get; set; }
+		public List<SkuInfo> SkuList { get; set; }
 		public string StripeTokenCustId { get; set; }
 		public int UserCount { get; set; }
 
-		public ProductSubscription(Product product, SubscriptionInfo subscriptionInfo, List<SkuInfo> list, string stripeTokenCustId, int userCount)
+		public ProductSubscription(Product product, Subscription subscriptionInfo, List<SkuInfo> list, string stripeTokenCustId, int userCount)
 		{
 			this.Product = product;
 			this.SubscriptionInfo = subscriptionInfo;
-			this.List = list;
+			this.SkuList = list;
 			this.StripeTokenCustId = stripeTokenCustId;
 			this.UserCount = userCount;
 		}

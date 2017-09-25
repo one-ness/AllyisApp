@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
+using AllyisApps.ViewModels.TimeTracker.Project;
 using AllyisApps.Services;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.TimeTracker;
@@ -27,7 +28,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets or sets the payClasses for an org.
 		/// </summary>
-		public IEnumerable<PayClass> PayClasses { get; set; }
+		public IEnumerable<PayClassInfoViewModel> PayClasses { get; set; }
 
 		/// <summary>
 		/// Gets or sets the starting date of the date range.
@@ -137,12 +138,12 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets or sets the list of projects available to select from.
 		/// </summary>
-		public IEnumerable<CompleteProjectInfo> Projects { get; set; }
+		public IEnumerable<CompleteProjectViewModel> Projects { get; set; }
 
 		/// <summary>
 		/// Gets or sets the list of projects available to select from, including inactive projects.
 		/// </summary>
-		public IEnumerable<CompleteProjectInfo> ProjectsWithInactive { get; set; }
+		public IEnumerable<CompleteProjectViewModel> ProjectsWithInactive { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the current user a manager and can approve time entries  [This needs logics].

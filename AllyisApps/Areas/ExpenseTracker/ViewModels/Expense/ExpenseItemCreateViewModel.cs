@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
-using AllyisApps.Services;
 
 namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 {

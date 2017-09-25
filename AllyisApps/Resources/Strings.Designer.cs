@@ -925,7 +925,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Customer ID.
+        ///   Looks up a localized string similar to Organization Specific Id.
         /// </summary>
         public static string CustomerOrgId {
             get {

@@ -236,16 +236,18 @@
     <Compile Include="Areas\ExpenseTracker\ExpenseTrackerAreaRegistration.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\AccountAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\CreatePositionAction.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Staffing\SettingsAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\IndexAction.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseFileModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseHistoryViewModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ReportViewModel.cs" />
-    <Compile Include="Areas\StaffingManager\Controllers\Staffing\StaffingController.cs" />
     <Compile Include="Areas\StaffingManager\StaffingManagerAreaRegistration.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\CreateApplicationDocumentViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\CreateApplicationViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\CreateApplicantViewModel.cs" />
-    <Compile Include="Areas\StaffingManager\ViewModels\Staffing\CreatePositionViewModel.cs" />
+    <Compile Include="Areas\StaffingManager\ViewModels\Staffing\PositionViewModel.cs" />
+    <Compile Include="Areas\StaffingManager\ViewModels\Staffing\EditPositionViewModel.cs" />
+    <Compile Include="Areas\StaffingManager\ViewModels\Staffing\StaffingSettingsViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\StaffingIndexViewModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseSummaryViewModelItem.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseIndexViewModel.cs" />
@@ -258,8 +260,11 @@
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\MergePayClassAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ImportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\TemplateAction.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\Project\CompleteProjectViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\MergePayClassViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\TimeEntryRangeForUserViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\TimeEntryViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\PayClassInfoViewModel.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -382,37 +387,32 @@
     </Compile>
     <Compile Include="Utilities\ApplicationExceptions.cs" />
     <Compile Include="Utilities\ImportMessageFormatter.cs" />
-    <Compile Include="ViewModels\Auth\AccountOrgsViewModel.cs" />
-    <Compile Include="ViewModels\Auth\AddMemberViewModel.cs" />
-    <Compile Include="ViewModels\Auth\ChangePasswordViewModel.cs" />
-    <Compile Include="Areas\TimeTracker\ViewModels\Manage\EditSubscriptionUsersViewModel.cs" />
-    <Compile Include="ViewModels\Auth\EditMemberViewModel.cs" />
-    <Compile Include="ViewModels\Auth\EditSubscriptionViewModel.cs" />
-    <Compile Include="ViewModels\Auth\IndexAndOrgsViewModel.cs" />
-    <Compile Include="ViewModels\Auth\AccountIndexViewModel.cs" />
-    <Compile Include="ViewModels\Auth\InvitationViewModel.cs" />
-    <Compile Include="ViewModels\Auth\ManageOrgViewModel.cs" />
-    <Compile Include="ViewModels\Auth\ManagePermissionsViewModel.cs" />
-    <Compile Include="ViewModels\Auth\OrgWithSubscriptionsForUserViewModel.cs" />
-    <Compile Include="ViewModels\Auth\RegisterViewModel.cs" />
-    <Compile Include="ViewModels\Auth\EditProfileViewModel.cs" />
-    <Compile Include="ViewModels\Auth\ForgotPasswordViewModel.cs" />
-    <Compile Include="ViewModels\Auth\LogOnViewModel.cs" />
-    <Compile Include="ViewModels\Auth\SkusListViewModel.cs" />
-    <Compile Include="ViewModels\Auth\TestViewModel.cs" />
-    <Compile Include="ViewModels\Auth\BillingHistoryItemViewModel.cs" />
-    <Compile Include="ViewModels\Auth\PermissionsManagementViewModel.cs" />
-    <Compile Include="ViewModels\Auth\ResetPasswordViewModel.cs" />
-    <Compile Include="ViewModels\Auth\UserInfoViewModel.cs" />
-    <Compile Include="ViewModels\Auth\BillingViewModel.cs" />
-    <Compile Include="ViewModels\Auth\EditOrganizationViewModel.cs" />
-    <Compile Include="ViewModels\Auth\EditUserPermissionViewModel.cs" />
-    <Compile Include="ViewModels\Auth\OrganizationAddMembersViewModel.cs" />
-    <Compile Include="ViewModels\Auth\OrganizationMembersViewModel.cs" />
-    <Compile Include="ViewModels\Auth\OrganizationUserViewModel.cs" />
-    <Compile Include="ViewModels\Auth\SubscriptionDisplayViewModel.cs" />
-    <Compile Include="ViewModels\Auth\SubscriptionRoleSelectionModel.cs" />
-    <Compile Include="ViewModels\Auth\UserOrgViewModel.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\AddMemberViewModel.cs" />
+    <Compile Include="ViewModels\Auth\User\ChangePasswordViewModel.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\EditMemberViewModel.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\EditSubscriptionViewModel.cs" />
+    <Compile Include="ViewModels\Auth\User\AccountIndexViewModel.cs" />
+    <Compile Include="ViewModels\Auth\Invitation\InvitationInfoViewModel.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\ManageOrgViewModel.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\ManagePermissionsViewModel.cs" />
+    <Compile Include="ViewModels\Auth\User\RegisterViewModel.cs" />
+    <Compile Include="ViewModels\Auth\User\EditProfileViewModel.cs" />
+    <Compile Include="ViewModels\Auth\User\ForgotPasswordViewModel.cs" />
+    <Compile Include="ViewModels\Auth\User\LogOnViewModel.cs" />
+    <Compile Include="ViewModels\BillingProductSubscription\ProductRoleViewModel.cs" />
+    <Compile Include="ViewModels\BillingProductSubscription\SkusListViewModel.cs" />
+    <Compile Include="ViewModels\BillingProductSubscription\BillingHistoryItemViewModel.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\PermissionsManagementViewModel.cs" />
+    <Compile Include="ViewModels\Auth\User\ResetPasswordViewModel.cs" />
+    <Compile Include="ViewModels\Auth\User\UserInfoViewModel.cs" />
+    <Compile Include="ViewModels\BillingProductSubscription\BillingViewModel.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\EditOrganizationViewModel.cs" />
+    <Compile Include="ViewModels\Auth\User\EditUserPermissionViewModel.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\OrganizationAddMembersViewModel.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\OrganizationMembersViewModel.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\OrganizationUserViewModel.cs" />
+    <Compile Include="ViewModels\BillingProductSubscription\SubscriptionDisplayViewModel.cs" />
+    <Compile Include="ViewModels\BillingProductSubscription\SubscriptionRoleSelectionModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\ModelHelper.cs" />
     <Compile Include="ViewModels\Shared\LanguageViewModel.cs" />
@@ -420,11 +420,11 @@
     <Compile Include="ViewModels\Shared\SubscriptionsViewModel.cs" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-drp-init.js" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-settings.js" />
-    <Content Include="Content\icons\ExpenseTracker.png" />
-    <Content Include="Content\icons\StaffingManager.png" />
-    <Content Include="Content\icons\TimeTrackerPro.png" />
-    <Content Include="Content\icons\TimeTracker.png" />
-    <Content Include="Content\icons\TimeTrackerOld.png" />
+    <Content Include="Content\ExpenseTracker\icons\ExpenseTracker.png" />
+    <Content Include="Content\StaffingManager\icons\StaffingManager.png" />
+    <Content Include="Content\TimeTracker\icons\TimeTrackerPro.png" />
+    <Content Include="Content\TimeTracker\icons\TimeTracker.png" />
+    <Content Include="Content\TimeTracker\icons\TimeTrackerOld.png" />
     <Content Include="Content\Timetracker - Copy - Copy.css">
       <DependentUpon>StaffingManager.less</DependentUpon>
     </Content>
@@ -469,7 +469,7 @@
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Utilities\InviteMap.cs" />
-    <Compile Include="ViewModels\Auth\ProductSubscriptionViewModel.cs" />
+    <Compile Include="ViewModels\BillingProductSubscription\ProductSubscriptionViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Filters\NotificationFilter.cs" />
     <Compile Include="Utilities\ErrorHandler.cs" />
@@ -593,6 +593,7 @@
     <Content Include="Content\Timetracker - Copy.css - Copy.map">
       <DependentUpon>Timetracker - Copy - Copy.css</DependentUpon>
     </Content>
+    <Content Include="Areas\StaffingManager\Views\Staffing\settings.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\UserSettings.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\Accounts.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\CreateAccount.cshtml" />
@@ -685,7 +686,7 @@
     <Content Include="Content\bootstrap\less\bootstrap.min.css">
       <DependentUpon>bootstrap.css</DependentUpon>
     </Content>
-    <Content Include="Content\icons\ExpenseTrackerPro.png" />
+    <Content Include="Content\ExpenseTracker\icons\ExpenseTrackerPro.png" />
     <Content Include="Content\icons\invoice.png" />
     <Content Include="Content\icons\tasks-list.png" />
     <Content Include="Content\less\breadcrumbs.css">
@@ -1022,7 +1023,14 @@
   <ItemGroup>
     <Folder Include="Areas\ExpenseTracker\Views\AccountAction\" />
     <Folder Include="Areas\ExpenseTracker\Views\AccountPageViewModel\" />
+    <Folder Include="Areas\ExpenseTracker\Views\AdminAction\" />
+    <Folder Include="Areas\ExpenseTracker\Views\AdminReportAction\" />
+    <Folder Include="Areas\ExpenseTracker\Views\Admin\" />
+    <Folder Include="Areas\ExpenseTracker\Views\AttachmentDownload\" />
     <Folder Include="Areas\ExpenseTracker\Views\CreateAccountAction\" />
+    <Folder Include="Areas\ExpenseTracker\Views\ReportAdmin\" />
+    <Folder Include="Areas\ExpenseTracker\Views\ViewAdminReport\" />
+    <Folder Include="Areas\TimeTracker\ViewModels\Manage\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

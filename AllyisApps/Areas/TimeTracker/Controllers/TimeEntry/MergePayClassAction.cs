@@ -62,7 +62,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				SourcePayClassId = sourcePayClassId,
 				SourcePayClassName = sourcePayClassName,
 				SubscriptionId = subscriptionId,
-				DestinationPayClasses = destPayClasses
+				DestinationPayClasses = destPayClasses.Select(payclass => new PayClassInfoViewModel()
+				{
+					CreatedUtc = payclass.CreatedUtc,
+					OrganizationId = payclass.OrganizationId,
+					PayClassId = payclass.PayClassId,
+					PayClassName = payclass.PayClassName
+				})
 			};
 		}
 

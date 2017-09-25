@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
 using AllyisApps.ViewModels.Auth;
 
@@ -129,7 +127,7 @@ namespace AllyisApps.Controllers.Auth
 		{
 			var infos = AppService.GetProductSubscriptionInfo(id, skuId);
 			SkuInfo sku = AppService.GetSkuDetails(skuId);
-			SkuInfo skuNext = infos.List.Where(s => s.SkuId != skuId && s.ProductId == productId).SingleOrDefault();
+			SkuInfo skuNext = infos.SkuList.Where(s => s.SkuId != skuId && s.ProductId == productId).SingleOrDefault();
 			sku.SkuIdNext = skuNext == null ? 0 : skuNext.SkuId;
 			sku.NextName = skuNext == null ? null : skuNext.SkuName;
 			switch (sku.SkuName)

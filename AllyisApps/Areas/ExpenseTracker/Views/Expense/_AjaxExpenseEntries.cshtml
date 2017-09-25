@@ -7,46 +7,46 @@
 }
 
 <table class="table table-hover">
-	<thead>
-		<tr class="double-bottom-border">
-			<th style="width: 25%">Report Name</th>
-			<th style="width: 25%">Submitted Date</th>
-			<th style="width: 25%">Status</th>
-			<th style="width: 15%">Amount</th>
-			<th style="width: 10%"></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (ExpenseItemViewModel report in Model.Reports)
-		{
-			<tr>
-				<td>@Html.ActionLink(@report.ReportName, "reportview", new { reportId = @report.ReportId }, htmlAttributes: new { @class = "form-inline col-xs-12" })</td>
+    <thead>
+        <tr class="double-bottom-border">
+            <th style="width: 25%">Report Name</th>
+            <th style="width: 25%">Submitted Date</th>
+            <th style="width: 25%">Status</th>
+            <th style="width: 15%">Amount</th>
+            <th style="width: 10%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(ExpenseItemViewModel report in Model.Reports)
+        {
+            <tr>
+                <td>@Html.ActionLink(@report.ReportName,"reportview", new { reportId = @report.ReportId }, htmlAttributes: new { @class = "form-inline col-xs-12" })</td>
 
-				@if (report.SubmittedDate == null)
-				{
-					<td>-</td>
-				}
-				else
-				{
-					<td>@String.Format("{0:MM-dd-yyyy}", @report.SubmittedDate)</td>
-				}
-				<td>@report.Status</td>
-				<td>@Math.Round(@report.Amount, 2)</td>
-				<td class="text-right icon-strip">
-					@if (report.Status == ExpenseStatusEnum.Rejected || report.Status == ExpenseStatusEnum.Draft)
-					{
-						<a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Expense, new { reportId = report.ReportId })" title="Edit Report">
-							<span class="fa fa-fw fa-edit"></span>
-						</a>
-					}
-					else
-					{
-						<a>
-							<span class="fa fa-edit" title="Can't Edit" style="color:slategray;"></span>
-						</a>
-					}
-				</td>
-			</tr>
-		}
-	</tbody>
+                @if(report.SubmittedDate == null)
+                {
+                    <td>-</td>
+                }
+                else
+                {
+                   <td>@String.Format("{0:MM-dd-yyyy}", @report.SubmittedDate)</td>
+                }
+                <td>@report.Status</td>
+                <td>@Math.Round(@report.Amount, 2)</td>
+                <td class="text-right icon-strip">
+                    @if (report.Status == ExpenseStatusEnum.Rejected || report.Status == ExpenseStatusEnum.Draft)
+                    {
+                        <a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Expense, new { reportId = report.ReportId })" title="Edit Report">
+                            <span class="fa fa-fw fa-edit"></span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a>
+                            <span class="fa fa-edit" title="Can't Edit" style="color:slategray;"></span>
+                        </a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>

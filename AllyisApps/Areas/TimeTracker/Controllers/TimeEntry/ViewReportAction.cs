@@ -10,6 +10,7 @@ using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
+using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Crm;
@@ -73,7 +74,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				DataExportViewModel dataVM = null;
 				try
 				{
-					dataVM = this.ConstructDataExportViewModel(subscriptionId, organizationId, reportVMselect.Users, AppService.GetDateTimeFromDays(dateRangeStart.Value), AppService.GetDateTimeFromDays(dateRangeEnd.Value), projectSelect, customerSelect);
+					dataVM = this.ConstructDataExportViewModel(subscriptionId, organizationId, reportVMselect.Users, Utility.GetDateTimeFromDays(dateRangeStart.Value), Utility.GetDateTimeFromDays(dateRangeEnd.Value), projectSelect, customerSelect);
 				}
 				catch (Exception ex)
 				{
@@ -96,14 +97,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				reportVM.PreviewTotal = string.Format("{0} {1}", total, Resources.Strings.HoursTotal);
 
-				IEnumerable<CompleteProjectInfo> orgProjects = infos.CompleteProjectInfo;
-				CompleteProjectInfo defaultProject = AppService.GetProject(0);
+				IEnumerable<CompleteProject> orgProjects = infos.CompleteProjectInfo;
+				CompleteProject defaultProject = AppService.GetProject(0);
 				if (dataCount > 0)
 				{
 					IList<TablePreviewEntry> pEntries = new List<TablePreviewEntry>();
-					foreach (TimeEntryInfo data in dataVM.PreviewData)
+					foreach (TimeEntryViewModel data in dataVM.PreviewData)
 					{
-						CompleteProjectInfo orgProj = data.ProjectId == 0 ? defaultProject : orgProjects.Where(o => o.ProjectId == data.ProjectId).SingleOrDefault();
+						CompleteProject orgProj = data.ProjectId == 0 ? defaultProject : orgProjects.Where(o => o.ProjectId == data.ProjectId).SingleOrDefault();
 						TablePreviewEntry previewData = new TablePreviewEntry
 						{
 							CustomerName = orgProj.CustomerName,
@@ -133,7 +134,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else if (viewDataButton.Equals(Resources.Strings.Export))
 			{
-				return this.ExportReport(subscriptionId, organizationId, userSelect, AppService.GetDateTimeFromDays(dateRangeStart.Value), AppService.GetDateTimeFromDays(dateRangeEnd.Value), customerSelect, projectSelect);
+				return this.ExportReport(subscriptionId, organizationId, userSelect, Utility.GetDateTimeFromDays(dateRangeStart.Value), Utility.GetDateTimeFromDays(dateRangeEnd.Value), customerSelect, projectSelect);
 			}
 
 			return this.RedirectToAction(ActionConstants.Report);
@@ -146,13 +147,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="pageSize">The page size.</param>
 		/// <param name="page">The page.</param>
 		/// <returns>A list of time entry info objects.</returns>
-		public IEnumerable<TimeEntryInfo> SetPreviewData(IEnumerable<TimeEntryInfo> data, int pageSize = 0, int page = 1)
+		public IEnumerable<TimeEntryViewModel> SetPreviewData(IEnumerable<TimeEntryViewModel> data, int pageSize = 0, int page = 1)
 		{
 			int skipNum = pageSize * (page - 1);
 			int limit = pageSize == 0 ? data.Count() : pageSize;
 
 			// only process data values for current page
-			IEnumerable<TimeEntryInfo> previewData = (from p in data select p).Skip(skipNum).Take(limit);
+			IEnumerable<TimeEntryViewModel> previewData = (from p in data select p).Skip(skipNum).Take(limit);
 
 			return previewData;
 		}
@@ -160,11 +161,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Sets the pageTotal for a DataExportViewModel in preperation for SetPreviewdata.
 		/// </summary>
-		/// <param name="data">TimeEntryInfo  needed to find total page size.</param>
+		/// <param name="data">TimeEntry  needed to find total page size.</param>
 		/// <param name="pageSize">Total size of preivew data.</param>
 		/// <param name="page">Offset page amount.</param>
 		/// <returns>The page total.</returns>
-		public int SetPageTotal(IEnumerable<TimeEntryInfo> data, int pageSize = 0, int page = 1)
+		public int SetPageTotal(IEnumerable<TimeEntryViewModel> data, int pageSize = 0, int page = 1)
 		{
 			int skipNum = pageSize * (page - 1);
 			int pageTotal = 0;

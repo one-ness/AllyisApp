@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 
 namespace AllyisApps.Services.Auth
 {
@@ -19,11 +18,7 @@ namespace AllyisApps.Services.Auth
 		public OrganizationRole OrganizationRole { get; set; }
 		public decimal MaxAmount { get; set; }
 		public DateTime JoinedDateUtc { get; set; }
-		public Organization Organization;
 
-		public UserOrganization()
-		{
-			//this.OrganizationRole = OrganizationRole.Member; Not sure what this was used for should not be putting deflats into constuctor unless obvious.
-		}
+		public Organization Organization;
 	}
 }

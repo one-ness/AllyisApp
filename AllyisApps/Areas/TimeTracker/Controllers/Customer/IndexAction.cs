@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
+using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Crm;
@@ -48,8 +49,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 
 			var infos = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
-			ViewBag.WeekStart = AppService.GetDayFromDateTime(SetStartingDate(null, infos.Item1.StartOfWeek));
-			ViewBag.WeekEnd = AppService.GetDayFromDateTime(SetEndingDate(null, infos.Item1.StartOfWeek));
+			ViewBag.WeekStart = Utility.GetDaysFromDateTime(SetStartingDate(null, infos.Item1.StartOfWeek));
+			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infos.Item1.StartOfWeek));
 
 			return this.View("Index", this.ConstructManageCustomerViewModel(subscriptionId));
 		}
@@ -63,8 +64,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult PopulateProjects(int customerId)
 		{
 			var model = new CustomerProjectViewModel();
-			model.CustomerInfo = new Customer { CustomerId = customerId };
-			model.Projects = AppService.GetProjectsByCustomer(customerId);
+			model.CustomerInfo = new CustomerProjectViewModel.CustomerViewModel { CustomerId = customerId };
+			model.Projects = AppService.GetProjectsByCustomer(customerId).AsParallel()
+			.Select(proj => new
+			CustomerProjectViewModel.ProjectViewModel()
+			{
+				CustomerId = proj.CustomerId,
+				OrganizationId = proj.OrganizationId,
+				ProjectId = proj.ProjectId,
+				ProjectName = proj.ProjectName
+			});
 			return PartialView("_ProjectsByCustomer", model);
 		}
 
@@ -77,8 +86,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult PopulateInactiveProjects(int customerId)
 		{
 			var model = new CustomerProjectViewModel();
-			model.CustomerInfo = new Customer { CustomerId = customerId };
-			model.Projects = AppService.GetInactiveProjectsByCustomer(customerId);
+			model.CustomerInfo = new CustomerProjectViewModel.CustomerViewModel { CustomerId = customerId };
+			model.Projects = AppService.GetInactiveProjectsByCustomer(customerId).AsParallel()
+			.Select(proj => new
+			CustomerProjectViewModel.ProjectViewModel()
+			{
+				CustomerId = proj.CustomerId,
+				OrganizationId = proj.OrganizationId,
+				ProjectId = proj.ProjectId,
+				ProjectName = proj.ProjectName
+			});
 			return PartialView("_ProjectsByCustomer", model);
 		}
 
@@ -95,17 +112,22 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var inactiveInfo = AppService.GetInactiveProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
 			bool canEditProjects = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
 			string subName = AppService.getSubscriptionName(subscriptionId);
-			List<CompleteProjectInfo> projects = canEditProjects ? infos.Item1 : infos.Item1.Where(p => p.IsProjectUser == true).ToList();
+			List<CompleteProject> projects = canEditProjects ? infos.Item1 : infos.Item1.Where(p => p.IsProjectUser == true).ToList();
 			List<Customer> customers = infos.Item2;
 			IList<CustomerProjectViewModel> customersList = new List<CustomerProjectViewModel>();
 			foreach (Customer currentCustomer in customers)
 			{
 				CustomerProjectViewModel customerResult = new CustomerProjectViewModel()
 				{
-					CustomerInfo = currentCustomer,
+					CustomerInfo = new CustomerProjectViewModel.CustomerViewModel()
+					{
+						CustomerName = currentCustomer.CustomerName,
+						CustomerId = currentCustomer.CustomerId,
+						IsActive = currentCustomer.IsActive
+					},
 					Projects = from p in projects
 							   where p.CustomerId == currentCustomer.CustomerId
-							   select new Services.Project.Project
+							   select new CustomerProjectViewModel.ProjectViewModel
 							   {
 								   CustomerId = p.CustomerId,
 								   OrganizationId = p.OrganizationId,
@@ -121,7 +143,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			List<CompleteProjectInfo> inactiveProjects = canEditProjects ? inactiveInfo.Item1 : inactiveInfo.Item1.Where(p => p.IsProjectUser == true).ToList();
+			List<CompleteProject> inactiveProjects = canEditProjects ? inactiveInfo.Item1 : inactiveInfo.Item1.Where(p => p.IsProjectUser == true).ToList();
 			List<Customer> inactiveCustomers = inactiveInfo.Item2;
 
 			IList<CustomerProjectViewModel> inactiveCustomersList = new List<CustomerProjectViewModel>();
@@ -129,10 +151,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				CustomerProjectViewModel customerResult = new CustomerProjectViewModel()
 				{
-					CustomerInfo = currentCustomer,
+					CustomerInfo = new CustomerProjectViewModel.CustomerViewModel()
+					{
+						CustomerId = currentCustomer.CustomerId,
+						CustomerName = currentCustomer.CustomerName,
+						IsActive = currentCustomer.IsActive
+					},
 					Projects = from p in inactiveProjects
 							   where p.CustomerId == currentCustomer.CustomerId
-							   select new Services.Project.Project
+							   select new CustomerProjectViewModel.ProjectViewModel
 							   {
 								   CustomerId = p.CustomerId,
 								   OrganizationId = p.OrganizationId,

@@ -1,13 +1,12 @@
-using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Billing;
-using AllyisApps.DBModel.TimeTracker;
-using AllyisApps.Lib;
-using AllyisApps.Services.TimeTracker;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
+using AllyisApps.DBModel.Billing;
+using AllyisApps.DBModel.TimeTracker;
+using AllyisApps.Lib;
+using AllyisApps.Services.TimeTracker;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Crm;
@@ -29,7 +28,8 @@ namespace AllyisApps.Services
 		/// <param name="subscriptionId">SubscriptionId.</param>
 		/// <param name="importData">Workbook with data to import.</param>
 		/// <param name="organizationId">The organization's Id.</param>
-		public ImportActionResult Import(DataSet importData, int subscriptionId = 0, int organizationId = 0)
+		/// <param name="inviteUrl">Used for userImport when adding users via AddMemberPage</param>
+		public ImportActionResult Import(DataSet importData, int subscriptionId = 0, int organizationId = 0, string inviteUrl = null)
 		{
 			int orgId;
 			if (subscriptionId > 0 && UserContext.SubscriptionsAndRoles[subscriptionId] != null)
@@ -68,7 +68,7 @@ namespace AllyisApps.Services
 			}
 
 			// Retrieval of existing user data
-			List<Tuple<string, User>> users = this.GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, this.GetUserInfo(o.UserId))).ToList();
+			List<Tuple<string, User>> users = this.GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, this.GetUser(o.UserId))).ToList();
 
 			// Retrieval of existing user product subscription data
 			int ttProductId = (int)ProductIdEnum.TimeTracker;
@@ -440,11 +440,11 @@ namespace AllyisApps.Services
 							bool customerFieldIsName = true;
 
 							/*
-                                There are 3 required fields, and we may need to traverse at most 2 links to get them all, with no knowledge of which links will succeed or fail in providing
-                                the needed information. To solve this, we do 2 passes (i), each time checking for the missing information (j) using the links we've found to the information
-                                we already have (k). On each pass, any known information is skipped, so time won't be wasted if the first pass succeeds. This way, any combination of paths
-                                to acquire the missing information from the known information is covered.
-                            */
+								There are 3 required fields, and we may need to traverse at most 2 links to get them all, with no knowledge of which links will succeed or fail in providing
+								the needed information. To solve this, we do 2 passes (i), each time checking for the missing information (j) using the links we've found to the information
+								we already have (k). On each pass, any known information is skipped, so time won't be wasted if the first pass succeeds. This way, any combination of paths
+								to acquire the missing information from the known information is covered.
+							*/
 							for (int i = 0; i < 2; i++)
 							{
 								// i = pass, out of 2
@@ -571,7 +571,7 @@ namespace AllyisApps.Services
 
 					#region User Import
 
-					User user = null;
+					User userInOrg = null;
 					if (hasUserEmail || hasEmployeeId || hasUserName)
 					{
 						Tuple<string, User> userTuple = null;
@@ -593,7 +593,7 @@ namespace AllyisApps.Services
 								{
 									userTuple = users.Where(tup => tup.Item1.Equals(readValue)).FirstOrDefault();
 								}
-							}
+							}//Remove logic only email matters.
 							if (userTuple == null)
 							{
 								string readLastName = null;
@@ -603,9 +603,9 @@ namespace AllyisApps.Services
 								}
 							}
 						}
-						user = userTuple == null ? null : userTuple.Item2;
+						userInOrg = userTuple == null ? null : userTuple.Item2;
 
-						if (user == null)
+						if (userInOrg == null)
 						{
 							if (canImportUsers)
 							{
@@ -615,18 +615,18 @@ namespace AllyisApps.Services
 								{
 									hasUserEmail ? row[ColumnHeaders.UserEmail].ToString() : null,
 									hasEmployeeId ? row[ColumnHeaders.EmployeeId].ToString() : null,
-                                    // Since first and last name must be together and treated as one piece of information, they are joined in this datastructure. Hopefully, we'll never
-                                    // have a user who's name includes the text __IMPORT__
-                                    hasUserName ? (row[ColumnHeaders.UserFirstName].ToString() == "" || row[ColumnHeaders.UserLastName].ToString() == "" ? null : row[ColumnHeaders.UserFirstName].ToString() + "__IMPORT__" + row[ColumnHeaders.UserLastName].ToString()) : null
+									// Since first and last name must be together and treated as one piece of information, they are joined in this datastructure. Hopefully, we'll never
+									// have a user who's name includes the text __IMPORT__
+									hasUserName ? (row[ColumnHeaders.UserFirstName].ToString() == "" || row[ColumnHeaders.UserLastName].ToString() == "" ? null : row[ColumnHeaders.UserFirstName].ToString() + "__IMPORT__" + row[ColumnHeaders.UserLastName].ToString()) : null
 								};
 								// if (fields[2] == "__IMPORT__") fields[2] = null;
 
 								/*
-                                    There are 3 required fields, and we may need to traverse at most 2 links to get them all, with no knowledge of which links will succeed or fail in providing
-                                    the needed information. To solve this, we do 2 passes (i), each time checking for the missing information (j) using the links we've found to the information
-                                    we already have (k). On each pass, any known information is skipped, so time won't be wasted if the first pass succeeds. This way, any combination of paths
-                                    to acquire the missing information from the known information is covered.
-                                */
+									There are 3 required fields, and we may need to traverse at most 2 links to get them all, with no knowledge of which links will succeed or fail in providing
+									the needed information. To solve this, we do 2 passes (i), each time checking for the missing information (j) using the links we've found to the information
+									we already have (k). On each pass, any known information is skipped, so time won't be wasted if the first pass succeeds. This way, any combination of paths
+									to acquire the missing information from the known information is covered.
+								*/
 								for (int i = 0; i < 2; i++)
 								{
 									// i = pass, out of 2
@@ -681,53 +681,20 @@ namespace AllyisApps.Services
 
 								try
 								{
-									user = this.GetUserByEmail(fields[0]); // User may already exist, but not be a member of this organization
-									if (user == null)
+									//user = this.GetUserByEmail(fields[0]); // User may already exist, but not be a member of this organization
+									Invitation inviteInfo = new Invitation()
 									{
-										user = new User()
-										{
-											Email = fields[0],
-											FirstName = names[0],
-											LastName = names[1],
-											EmailConfirmationCode = Guid.NewGuid(),
-											// TODO: Figure out a better default password generation system
-											PasswordHash = Crypto.GetPasswordHash("password")
-										};
-										try
-										{
-											result.UsersImported += 1;
-											//user.UserId = DBHelper.CreateUser(GetDBEntityFromUser(user));
-										}
-										catch
-										{
-											result.UserFailures.Add(string.Format("Could not create user {0}, {1}: error adding user to database.", names[0], names[1]));
-										}
-									}
-									if (user.UserId != -1)
-									{
-										try
-										{
-											// get the id of employeeType, if not found default to Salaried
-											DBHelper.CreateOrganizationUser(new OrganizationUserDBEntity()
-											{
-												EmployeeId = fields[1],
-												OrganizationId = orgId,
-												OrganizationRoleId = (int)(OrganizationRole.Member),
-											});
-											result.UsersAddedToOrganization += 1;
-										}
-										catch (System.Data.SqlClient.SqlException)
-										{
-											result.OrgUserFailures.Add(string.Format("Database error assigning user {0} {1} to organization. Could be a duplicate employee id ({2}).", names[0], names[1], fields[1]));
-											continue;
-										}
-										users.Add(new Tuple<string, User>(fields[1], user));
-									}
-									else
-									{
-										result.UserFailures.Add(string.Format("Database error creating user {0} {1}.", names[0], names[1]));
-										continue;
-									}
+										OrganizationId = orgId,
+										Email = fields[0].Trim(),
+										EmployeeId = fields[1],
+										FirstName = names[0],
+										LastName = names[1],
+										OrganizationRole = OrganizationRole.Member
+									};
+
+									int x = InviteUser(inviteUrl, inviteInfo);
+
+									result.UsersImported += 1;
 								}
 								catch (System.Data.SqlClient.SqlException)
 								{
@@ -738,13 +705,13 @@ namespace AllyisApps.Services
 						}
 
 						// Importing non-required user data
-						if (user != null && hasNonRequiredUserInfo)
+						if (userInOrg != null && hasNonRequiredUserInfo)//If user exists then allow org to change user.
 						{
 							bool updated = false;
-
-							if (hasUserAddress) updated = this.readColumn(row, ColumnHeaders.UserAddress, val => user.Address.Address1 = val) || updated;
-							if (hasUserCity) updated = this.readColumn(row, ColumnHeaders.UserCity, val => user.Address.City = val) || updated;
-							if (hasUserCountry) updated = this.readColumn(row, ColumnHeaders.UserCountry, val => user.Address.CountryName = val) || updated;
+							/* This allows any org to change thier users infomation Org are items of users, users are not properties of orgs */
+							if (hasUserAddress) updated = this.readColumn(row, ColumnHeaders.UserAddress, val => userInOrg.Address.Address1 = val) || updated;
+							if (hasUserCity) updated = this.readColumn(row, ColumnHeaders.UserCity, val => userInOrg.Address.City = val) || updated;
+							if (hasUserCountry) updated = this.readColumn(row, ColumnHeaders.UserCountry, val => userInOrg.Address.CountryName = val) || updated;
 							string dateOfBirth = null;
 							if (hasUserDateOfBirth) updated = this.readColumn(row, ColumnHeaders.UserDateOfBirth, val => dateOfBirth = val) || updated;
 							if (!string.IsNullOrEmpty(dateOfBirth))
@@ -753,22 +720,22 @@ namespace AllyisApps.Services
 								DateTime.TryParse(dateOfBirth, out dob);
 								if (DateTime.Compare(dob, DateTime.MinValue) <= 0)
 								{
-									result.UserFailures.Add(string.Format("The birthdate entered for {0} {1} was invalid. Please check to make sure it's in date format: dd/mm/yyyy and preferably after 1900 ", user.FirstName, user.LastName));
+									result.UserFailures.Add(string.Format("The birthdate entered for {0} {1} was invalid. Please check to make sure it's in date format: dd/mm/yyyy and preferably after 1900 ", userInOrg.FirstName, userInOrg.LastName));
 								}
 								else
 								{
-									user.DateOfBirth = dob;
+									userInOrg.DateOfBirth = dob;
 								}
 							}
 
-							if (hasUserPhoneExtension) updated = this.readColumn(row, ColumnHeaders.UserPhoneExtension, val => user.PhoneExtension = val) || updated;
-							if (hasUserPhoneNumber) updated = this.readColumn(row, ColumnHeaders.UserPhoneNumber, val => user.PhoneNumber = val) || updated;
-							if (hasUserPostalCode) updated = this.readColumn(row, ColumnHeaders.UserPostalCode, val => user.Address.PostalCode = val) || updated;
-							if (hasUserState) updated = this.readColumn(row, ColumnHeaders.UserState, val => user.Address.StateName = val) || updated;
+							if (hasUserPhoneExtension) updated = this.readColumn(row, ColumnHeaders.UserPhoneExtension, val => userInOrg.PhoneExtension = val) || updated;
+							if (hasUserPhoneNumber) updated = this.readColumn(row, ColumnHeaders.UserPhoneNumber, val => userInOrg.PhoneNumber = val) || updated;
+							if (hasUserPostalCode) updated = this.readColumn(row, ColumnHeaders.UserPostalCode, val => userInOrg.Address.PostalCode = val) || updated;
+							if (hasUserState) updated = this.readColumn(row, ColumnHeaders.UserState, val => userInOrg.Address.StateName = val) || updated;
 
 							if (updated)
 							{
-								this.SaveUserInfo(user);
+								this.UpdateUserProfile(userInOrg.UserId, Utility.GetDaysFromDateTime(userInOrg.DateOfBirth), userInOrg.FirstName, userInOrg.LastName, userInOrg.PhoneNumber, userInOrg.Address?.AddressId, userInOrg.Address?.Address1, userInOrg.Address?.City, userInOrg.Address?.StateId, userInOrg.Address?.PostalCode, userInOrg.Address?.CountryCode);
 							}
 						}
 					}
@@ -780,13 +747,13 @@ namespace AllyisApps.Services
 					if (canImportProjectUser)
 					{
 						// Double-check that previous adding/finding of project and user didn't fail
-						if (project != null && user != null)
+						if (project != null && userInOrg != null)
 						{
 							// Find existing project user
-							if (!this.GetProjectsByUserAndOrganization(user.UserId).Where(p => p.ProjectId == project.ProjectId).Any())
+							if (!this.GetProjectsByUserAndOrganization(userInOrg.UserId).Where(p => p.ProjectId == project.ProjectId).Any())
 							{
 								// If no project user entry exists for this user and project, we create one.
-								this.CreateProjectUser(project.ProjectId, user.UserId);
+								this.CreateProjectUser(project.ProjectId, userInOrg.UserId);
 							}
 
 							// Time Entry Import
@@ -794,11 +761,11 @@ namespace AllyisApps.Services
 							{
 								// Check for subscription role
 								bool canImportThisEntry = false;
-								if (!userSubs.Where(u => u.UserId == user.UserId).Any())
+								if (!userSubs.Where(u => u.UserId == userInOrg.UserId).Any())
 								{
 									// No existing subscription for this user, so we create one.
-									this.DBHelper.UpdateSubscriptionUserProductRole((int)(TimeTrackerRole.User), ttSub.SubscriptionId, user.UserId);
-									userSubs.Add(user);
+									this.DBHelper.UpdateSubscriptionUserProductRole((int)(TimeTrackerRole.User), ttSub.SubscriptionId, userInOrg.UserId);
+									userSubs.Add(userInOrg);
 									result.UsersAddedToSubscription += 1;
 									canImportThisEntry = true; // Successfully created.
 								}
@@ -854,7 +821,7 @@ namespace AllyisApps.Services
 									}
 
 									// Find existing entry. If none, create new one     TODO: See if there's a good way to populate this by sheet rather than by row, or once at the top
-									List<TimeEntryDBEntity> entries = DBHelper.GetTimeEntriesByUserOverDateRange(new List<int> { user.UserId }, orgId, theDate, theDate).ToList();
+									List<TimeEntryDBEntity> entries = DBHelper.GetTimeEntriesByUserOverDateRange(new List<int> { userInOrg.UserId }, orgId, theDate, theDate).ToList();
 									if (!entries.Where(e => ((e.Description == null && description.Equals("")) || description.Equals(e.Description)) && e.Duration == theDuration && e.PayClassId == payClass.PayClassId && e.ProjectId == project.ProjectId).Any())
 									{
 										if (entries.Select(e => e.Duration).Sum() + theDuration > 24)
@@ -869,11 +836,11 @@ namespace AllyisApps.Services
 											Date = theDate,
 											Description = description,
 											Duration = theDuration.Value, // value is verified earlier
-											FirstName = user.FirstName,
-											LastName = user.LastName,
+											FirstName = userInOrg.FirstName,
+											LastName = userInOrg.LastName,
 											PayClassId = payClass.PayClassId,
 											ProjectId = project.ProjectId,
-											UserId = user.UserId
+											UserId = userInOrg.UserId
 										}) == -1)
 										{
 											result.TimeEntryFailures.Add(string.Format("Database error importing time entry on sheet {0}, row {1}.", table.TableName, table.Rows.IndexOf(row) + 2));

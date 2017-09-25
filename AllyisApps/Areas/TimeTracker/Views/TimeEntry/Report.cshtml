@@ -1,5 +1,6 @@
 ﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 @using AllyisApps.Core;
+@using AllyisApps.ViewModels.TimeTracker.Project;
 @using AllyisApps.Services.Crm;
 
 @model ReportViewModel
@@ -53,7 +54,7 @@
 
 						<!-- A holder for all the projects, to draw from for populating the real selection list -->
 						<select id="allprojects" style="display: none;">
-							@foreach (CompleteProjectInfo proj in Model.Projects)
+							@foreach (CompleteProjectViewModel proj in Model.Projects)
 							{
 								<option value="@proj.ProjectId" data-cust="@proj.CustomerId" class="projectSelectOption">@proj.ProjectName</option>
 							}
@@ -77,7 +78,7 @@
 									Model.ProjectView,
 									htmlAttributes: new { @class = "form-control", @id = "ddl-projects" })*@
 								<select name="ProjectSelect" class="form-control" id="ddl-projects">
-									@foreach (CompleteProjectInfo project in Model.Projects)
+									@foreach (CompleteProjectViewModel project in Model.Projects)
 									{
 										if (Model.Selection.CustomerId == project.CustomerId)
 										{

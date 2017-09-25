@@ -65,7 +65,8 @@ namespace AllyisApps.Controllers.Auth
 					DataSet result = reader.AsDataSet();
 					reader.Close();
 
-					string[] formattedResult = ImportMessageFormatter.FormatImportResult(AppService.Import(result, organizationId: id));
+					string[] formattedResult = ImportMessageFormatter.FormatImportResult(AppService.Import(result, organizationId: id,
+						inviteUrl: Url.Action(ActionConstants.Index, ControllerConstants.Account, null, protocol: Request.Url.Scheme)));
 					if (!string.IsNullOrEmpty(formattedResult[0]))
 					{
 						Notifications.Add(new BootstrapAlert(formattedResult[0], Variety.Success));

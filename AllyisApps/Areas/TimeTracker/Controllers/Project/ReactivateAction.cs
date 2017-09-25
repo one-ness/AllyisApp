@@ -25,7 +25,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>A redirect to the customer index page controller action.</returns>
 		public ActionResult Reactivate(int subscriptionId, int userId)
 		{
-			CompleteProjectInfo project = AppService.GetProject(userId);
+			CompleteProject project = AppService.GetProject(userId);
 			if (project != null)
 			{
 				if (!AppService.GetCustomer(project.CustomerId).IsActive.Value)

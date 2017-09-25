@@ -18,7 +18,6 @@
 	@teamName NVARCHAR (140)
 AS
 BEGIN
-
 	SET NOCOUNT ON;
 		INSERT INTO [StaffingManager].[Position] 
 		([OrganizationId], 

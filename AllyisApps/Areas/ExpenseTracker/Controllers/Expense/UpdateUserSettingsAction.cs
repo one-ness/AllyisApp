@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
@@ -17,7 +14,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <summary>
 		/// Show the list of expense reports submitted by the logged in user.
 		/// </summary>
-		/// <param name="model">The view model.</param>
+		/// <param name="model">User settings information.</param>
 		/// <returns>The action result.</returns>
 		[HttpPost]
 		public ActionResult UpdateUserSettings(UserSettingsViewModel model)
@@ -30,16 +27,16 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			foreach (UserMaxAmountViewModel userMaxAmountViewModel in model.Users)
 			{
-				OrganizationUserInfo userInfo = InitializeUser(userMaxAmountViewModel, subInfo.OrganizationId);
+				OrganizationUser userInfo = InitializeOrganizaionUser(userMaxAmountViewModel, subInfo.OrganizationId);
 				AppService.UpdateUserOrgMaxAmount(userInfo);
 			}
 
 			return RedirectToAction("index");
 		}
 
-		private OrganizationUserInfo InitializeUser(UserMaxAmountViewModel user, int orgId)
+		private OrganizationUser InitializeOrganizaionUser(UserMaxAmountViewModel user, int orgId)
 		{
-			return new OrganizationUserInfo()
+			return new OrganizationUser
 			{
 				MaxAmount = user.MaxAmount,
 				FirstName = user.FirstName,

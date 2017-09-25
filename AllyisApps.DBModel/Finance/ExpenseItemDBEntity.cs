@@ -37,22 +37,19 @@ namespace AllyisApps.DBModel.Finance
 		/// </summary>
 		public int AccountId { get; set; }
 
+		/// <summary>
+		/// Gets or sets whether the Expense Item can be billed to the associated customer.
+		/// </summary>
+		public bool IsBillableToCustomer { get; set; }
 
-        /// <summary>
-        /// Gets or sets whether the Expense Item can be billed to the associated customer.
-        /// </summary>
-        public bool IsBillableToCustomer { get; set; }
-        
-        /// <summary>
-        /// Gets or sets the Expense Item's creation date.
-        /// </summary>
-        public DateTime CreatedUtc { get; set; }
+		/// <summary>
+		/// Gets or sets the Expense Item's creation date.
+		/// </summary>
+		public DateTime CreatedUtc { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Expense Item's last-modified-on date.
-        /// </summary>
-        public DateTime ModifiedUtc { get; set; }
-        
-    }
-
+		/// <summary>
+		/// Gets or sets the Expense Item's last-modified-on date.
+		/// </summary>
+		public DateTime ModifiedUtc { get; set; }
+	}
 }

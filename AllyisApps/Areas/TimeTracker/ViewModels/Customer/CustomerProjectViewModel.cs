@@ -17,11 +17,58 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		/// <summary>
 		/// Gets data about the Customer this model represents.
 		/// </summary>
-		public Services.Crm.Customer CustomerInfo { get; internal set; }
+		public CustomerViewModel CustomerInfo { get; internal set; }
 
 		/// <summary>
 		/// Gets the list of projects this Customer has.
 		/// </summary>
-		public IEnumerable<Services.Project.Project> Projects { get; internal set; }
+		public IEnumerable<ProjectViewModel> Projects { get; internal set; }
+
+		/// <summary>
+		/// Customer View Model.
+		/// </summary>
+		public class CustomerViewModel
+		{
+			/// <summary>
+			/// Gets or sets Is Acive.
+			/// </summary>
+			public bool? IsActive { get; set; }
+
+			/// <summary>
+			/// Gets or sets Cusomter Id.
+			/// </summary>
+			public int CustomerId { get; set; }
+
+			/// <summary>
+			/// Gets or sets Cusomter Name.
+			/// </summary>
+			public string CustomerName { get; set; }
+		}
+
+		/// <summary>
+		/// Internal Project View Model.
+		/// </summary>
+		public class ProjectViewModel
+		{
+			/// <summary>
+			/// Gets  ProjectId.
+			/// </summary>
+			public int ProjectId { get; internal set; }
+
+			/// <summary>
+			/// Gets  Name of project.
+			/// </summary>
+			public string ProjectName { get; internal set; }
+
+			/// <summary>
+			/// Gets Custoemr Project is assigned to.
+			/// </summary>
+			public int CustomerId { get; internal set; }
+
+			/// <summary>
+			/// Gets  Organization Project is assigned to.
+			/// </summary>
+			public int OrganizationId { get; internal set; }
+		}
 	}
 }
