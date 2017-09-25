@@ -322,4 +322,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="DecisionDateUtc" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="585735d4-c544-470c-8887-384ce93c34b4" ChangeDateTime="09/20/2017 20:17:02">
+    <Property Name="ElementName" Value="[Billing].[Sku].[SkuIconUrl]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Billing].[Sku]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IconUrl" />
+  </Operation>
 </Operations>

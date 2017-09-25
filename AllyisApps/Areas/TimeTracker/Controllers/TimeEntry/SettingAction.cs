@@ -7,7 +7,9 @@
 using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
+using AllyisApps.Lib;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -25,13 +27,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult Settings(int subscriptionId)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
-			var infos = AppService.GetAllSettings(subscriptionId);
+			int organizaionID = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			var infos = AppService.GetAllSettings(organizaionID);
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			string subName = AppService.GetSubscription(subscriptionId).Name;
+			string subName = AppService.GetSubscription(subscriptionId).SubscriptionName;
 			var infoOrg = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
-			ViewBag.WeekStart = AppService.GetDaysFromDateTime(SetStartingDate(null, infoOrg.Item1.StartOfWeek));
-			ViewBag.WeekEnd = AppService.GetDaysFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
+			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infoOrg.Item1.StartOfWeek));
+			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
 			Services.TimeTracker.Setting settings = infos.Item1;
 			return this.View(new SettingsViewModel()
 			{

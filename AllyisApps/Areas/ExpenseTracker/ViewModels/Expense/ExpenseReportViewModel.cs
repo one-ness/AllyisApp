@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.ComponentModel.DataAnnotations;
 
 namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 {
@@ -11,47 +9,49 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 	public class ExpenseReportViewModel
 	{
 		/// <summary>
-		/// The expense report id.
+		/// Gets or sets the expense report id.
 		/// </summary>
 		public int ExpenseReportId { get; set; }
 
 		/// <summary>
-		/// The expense report title
+		/// Gets or sets the expense report title.
 		/// </summary>
+		[Required(ErrorMessage = "Report name is required.")]
 		public string ReportTitle { get; set; }
 
 		/// <summary>
-		/// the organization id of the expense
+		/// Gets or sets he organization id of the expense.
 		/// </summary>
 		public int OrganizationId { get; set; }
 
 		/// <summary>
-		/// Te submiting user id.
+		/// Gets or sets the submiting user id.
 		/// </summary>
 		public int SubmittedById { get; set; }
 
 		/// <summary>
-		/// The report status
+		/// Gets or sets the report status.
 		/// </summary>
 		public int ReportStatus { get; set; }
 
 		/// <summary>
-		/// The business justification
+		/// Gets or sets the business justification.
 		/// </summary>
+		[Required(ErrorMessage = "Justification is required.")]
 		public string BusinessJustification { get; set; }
 
 		/// <summary>
-		/// The date created
+		/// Gets or sets the date created.
 		/// </summary>
 		public DateTime CreatedUtc { get; set; }
 
 		/// <summary>
-		/// The last date modified
+		/// Gets or sets the last date modified.
 		/// </summary>
 		public DateTime ModifiedUtc { get; set; }
 
 		/// <summary>
-		/// The date submitted
+		/// Gets or sets the date submitted.
 		/// </summary>
 		public DateTime? SubmittedUtc { get; set; }
 	}

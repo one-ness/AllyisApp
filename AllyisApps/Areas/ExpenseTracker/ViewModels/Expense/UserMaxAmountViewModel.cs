@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web;
-using System.Web.Mvc;
-using AllyisApps.DBModel.Finance;
-using AllyisApps.Services;
-using AllyisApps.Services.Expense;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 {
@@ -16,6 +10,8 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		/// <summary>
 		/// Gets or sets the max amount.
 		/// </summary>
+		[Required(ErrorMessage = "Max Amount is required.")]
+		[DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
 		public decimal MaxAmount { get; set; }
 
 		/// <summary>

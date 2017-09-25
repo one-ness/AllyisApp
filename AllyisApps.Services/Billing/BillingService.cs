@@ -13,6 +13,7 @@ using AllyisApps.DBModel.Billing;
 using AllyisApps.Lib;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
+using AllyisApps.Services.Auth;
 
 namespace AllyisApps.Services
 {
@@ -116,7 +117,7 @@ namespace AllyisApps.Services
 		/// <param name="description">Description for billing history item.</param>
 		/// <param name="orgId">.</param>
 		/// <returns>The subscription plan id of the deleted subscription plan, or null if none found.</returns>
-		public string DeleteSubscriptionPlanAndAddHistory(string stripeCustomerId, int skuId, string description, int orgId)
+		public string DeleteSubscriptionPlanAndAddHistory(string stripeCustomerId, SkuIdEnum skuId, string description, int orgId)
 		{
 			#region Validation
 
@@ -132,7 +133,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return DBHelper.DeleteSubscriptionPlanAndAddHistory(orgId, stripeCustomerId, UserContext.UserId, skuId, description);
+			return DBHelper.DeleteSubscriptionPlanAndAddHistory(orgId, stripeCustomerId, UserContext.UserId, (int)skuId, description);
 		}
 
 		/// <summary>
@@ -325,11 +326,11 @@ namespace AllyisApps.Services
 		/// <param name="orgId">The Organization Id.</param>
 		/// <param name="productId">The subscribed Product Id.</param>
 		/// <returns>A tuple containing the number of updated users and the number of added users.</returns>
-		public Tuple<int, int> UpdateSubscriptionUserRoles(List<int> userIds, int newProductRole, int orgId, int productId)
+		public UpdateSubscriptionUserRolesResuts UpdateSubscriptionUserRoles(List<int> userIds, int newProductRole, int orgId, int productId)
 		{
 			#region Validation
 
-			if (!Enum.IsDefined(typeof(TimeTrackerRole), newProductRole))
+			if (!Enum.IsDefined(typeof(TimeTrackerRole), newProductRole) && !Enum.IsDefined(typeof(ExpenseTrackerRole), newProductRole))
 			{
 				throw new ArgumentOutOfRangeException("newProductRole", "Product role must match a value of the ProductRoleIdEnum enum.");
 			}
@@ -342,7 +343,12 @@ namespace AllyisApps.Services
 			#endregion Validation
 
 			// TODO: split updating user roles and creating new sub users
-			return DBHelper.UpdateSubscriptionUserRoles(userIds, orgId, newProductRole, productId);
+			var UpdatedRows = DBHelper.UpdateSubscriptionUserRoles(userIds, orgId, newProductRole, productId);
+			return new UpdateSubscriptionUserRolesResuts()
+			{
+				UsersChanged = UpdatedRows.Item1,
+				UsersAddedToSubscription = UpdatedRows.Item2
+			};
 		}
 
 		/// <summary>Deletes the given users in the given organization's subscription</summary>
@@ -379,7 +385,7 @@ namespace AllyisApps.Services
 			ProductDBEntity product = DBHelper.GetProductById(productId);
 			return new Product
 			{
-				ProductId = product.ProductId,
+				ProductId = (ProductIdEnum)product.ProductId,
 				ProductName = product.Name,
 				ProductDescription = product.Description,
 				AreaUrl = product.AreaUrl
@@ -387,11 +393,11 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets a <see cref="SubscriptionInfo"/>.
+		/// Gets a <see cref="Subscription"/>.
 		/// </summary>
 		/// <param name="subscriptionId">Product Id.</param>
 		/// <returns>A SubscriptionDBEntity.</returns>
-		public SubscriptionInfo GetSubscription(int subscriptionId)
+		public Subscription GetSubscription(int subscriptionId)
 		{
 			if (subscriptionId <= 0)
 			{
@@ -404,16 +410,16 @@ namespace AllyisApps.Services
 				return null;
 			}
 
-			return new SubscriptionInfo
+			return new Subscription
 			{
 				OrganizationId = si.OrganizationId,
 				SubscriptionId = si.SubscriptionId,
-				SkuId = si.SkuId,
+				SkuId = (SkuIdEnum)si.SkuId,
 				NumberOfUsers = si.NumberOfUsers,
 				Licenses = si.Licenses,
 				CreatedUtc = si.CreatedUtc,
 				IsActive = si.IsActive,
-				Name = si.Name
+				SubscriptionName = si.Name
 			};
 		}
 
@@ -506,12 +512,12 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets a list of <see cref="SubscriptionDisplayInfo"/>s for all subscriptions in the chosen organization.
+		/// Gets a list of <see cref="SubscriptionDisplay"/>s for all subscriptions in the chosen organization.
 		/// </summary>
 		/// <returns>List of SubscriptionDisplayInfos.</returns>
-		public IEnumerable<SubscriptionDisplayInfo> GetSubscriptionsDisplay(int organizationId)
+		public IEnumerable<Subscription> GetSubscriptionsDisplay(int organizationId)
 		{
-			return this.DBHelper.GetSubscriptionsDisplayByOrg(organizationId).Select(s => InitializeSubscriptionDisplayInfo(s)).ToList();
+			return this.DBHelper.GetSubscriptionsDisplayByOrg(organizationId).Select(s => InitializeSubscription(s)).ToList();
 		}
 
 		/// <summary>
@@ -546,14 +552,14 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="skuId">Sku Id.</param>
 		/// <returns>The SKU details.</returns>
-		public SkuInfo GetSkuDetails(int skuId)
+		public SkuInfo GetSkuDetails(SkuIdEnum skuId)
 		{
 			if (skuId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("skuId", "Sku Id cannot be 0 or negative.");
 			}
 
-			SkuDBEntity sku = DBHelper.GetSkuDetails(skuId);
+			SkuDBEntity sku = DBHelper.GetSkuDetails((int)skuId);
 			if (sku == null)
 			{
 				return null;
@@ -561,8 +567,8 @@ namespace AllyisApps.Services
 
 			return new SkuInfo
 			{
-				SkuId = sku.SkuId,
-				ProductId = sku.ProductId,
+				SkuId = (SkuIdEnum)sku.SkuId,
+				ProductId = (ProductIdEnum)sku.ProductId,
 				SkuName = sku.SkuName,
 				Price = sku.Price,
 				UserLimit = sku.UserLimit,
@@ -579,7 +585,7 @@ namespace AllyisApps.Services
 		/// <param name="SelectedSku">Sku id, for the billing history item.</param>
 		/// <param name="subscriptionId">Subscription id to unsubscribe from.</param>
 		/// <returns>A notification string, or null.</returns>
-		public string UnsubscribeAndRemoveBillingSubscription(int SelectedSku, int? subscriptionId)
+		public string UnsubscribeAndRemoveBillingSubscription(SkuIdEnum SelectedSku, int? subscriptionId)
 		{
 			var orgId = this.UserContext.SubscriptionsAndRoles[subscriptionId.Value].OrganizationId;
 			BillingServicesCustomer custId = this.RetrieveCustomer(this.GetOrgBillingServicesCustomerId(orgId));
@@ -619,7 +625,7 @@ namespace AllyisApps.Services
 		/// <param name="orgId">.</param>
 		/// <returns>.</returns>
 		[CLSCompliant(false)]
-		public void Subscribe(int productId, string productName, int selectedSku, string subscriptionName, int previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
+		public void Subscribe(ProductIdEnum productId, string productName, SkuIdEnum selectedSku, string subscriptionName, SkuIdEnum previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
 		{
 			// TODO: Split Subscribe into CreateSubscription and Update Subscription, called from SubscribeAction and EditSubscriptionAction
 
@@ -630,12 +636,12 @@ namespace AllyisApps.Services
 
 			if (previousSku == 0) // creating new subscription
 			{
-				DBHelper.CreateSubscription(orgId, selectedSku, subscriptionName, UserContext.UserId);
+				DBHelper.CreateSubscription(orgId, (int)selectedSku, subscriptionName, UserContext.UserId);
 			}
 			else // upgrading or downgrading
 			{
 				// TODO: pass in subscriptionId as a parameter to simplify logic
-				DBHelper.UpdateSubscription(orgId, selectedSku, subscriptionName);
+				DBHelper.UpdateSubscription(orgId, (int)selectedSku, subscriptionName);
 			}
 		}
 
@@ -718,16 +724,21 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="productId">Product Id.</param>
 		/// <param name="orgId">.</param>
-		public void InitializeSettingsForProduct(int productId, int orgId)
+		public void InitializeSettingsForProduct(ProductIdEnum productId, int orgId)
 		{
 			if (productId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
 			}
 
-			if (productId == (int)ProductIdEnum.TimeTracker)
+			if (productId == ProductIdEnum.TimeTracker)
 			{
 				DBHelper.InitializeTimeTrackerSettings(orgId);
+			}
+
+			if (productId == ProductIdEnum.StaffingManager)
+			{
+				DBHelper.CreateStaffingSettings(orgId);
 			}
 		}
 
@@ -797,20 +808,28 @@ namespace AllyisApps.Services
 		/// <param name="orgId">.</param>
 		/// <param name="skuId">Product Id.</param>
 		/// <returns>.</returns>
-		public Tuple<Product, SubscriptionInfo, List<SkuInfo>, string, int> GetProductSubscriptionInfo(int orgId, int skuId)
+		public ProductSubscription GetProductSubscriptionInfo(int orgId, SkuIdEnum skuId)
 		{
 			if (skuId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("skuId", "SKU Id cannot be 0 or negative.");
 			}
+			var spResults = DBHelper.GetProductSubscriptionInfo(orgId, (int)skuId);
+			var product = InitializeProduct(spResults.Item1);
+			product.ProductSkus = spResults.Item3.Select(sdb => InitializeSkuInfo(sdb)).ToList();
 
-			var spResults = DBHelper.GetProductSubscriptionInfo(orgId, skuId);
-			return Tuple.Create(
-				InitializeProduct(spResults.Item1),
-				InitializeSubscriptionInfo(spResults.Item2),
+			var subscription = InitializeSubscription(spResults.Item2);
+			if (subscription != null)
+			{
+				subscription.NumberOfUsers = spResults.Item5;
+			}
+			return new ProductSubscription(
+				product,
+				InitializeSubscription(spResults.Item2),
 				spResults.Item3.Select(sdb => InitializeSkuInfo(sdb)).ToList(),
 				spResults.Item4,
-				spResults.Item5);
+				spResults.Item5
+			);
 		}
 
 		/// <summary>
@@ -827,18 +846,18 @@ namespace AllyisApps.Services
 		#region Info-DBEntity Conversions
 
 		/// <summary>
-		/// Translates a <see cref="SubscriptionDisplayDBEntity"/> into a <see cref="SubscriptionDisplayInfo"/>.
+		/// Translates a <see cref="SubscriptionDisplayDBEntity"/> into a <see cref="SubscriptionDisplay"/>.
 		/// </summary>
 		/// <param name="subscriptionDisplay">SubscriptionDisplayDBEntity instance.</param>
-		/// <returns>SubscriptionDisplayInfo instance.</returns>
-		public static SubscriptionDisplayInfo InitializeSubscriptionDisplayInfo(SubscriptionDisplayDBEntity subscriptionDisplay)
+		/// <returns>SubscriptionDisplay instance.</returns>
+		public static Subscription InitializeSubscription(SubscriptionDisplayDBEntity subscriptionDisplay)
 		{
 			if (subscriptionDisplay == null)
 			{
 				return null;
 			}
 
-			return new SubscriptionDisplayInfo
+			return new Subscription
 			{
 				AreaUrl = subscriptionDisplay.AreaUrl,
 				CreatedUtc = subscriptionDisplay.CreatedUtc,
@@ -846,9 +865,9 @@ namespace AllyisApps.Services
 				OrganizationId = subscriptionDisplay.OrganizationId,
 				OrganizationName = subscriptionDisplay.OrganizationName,
 				Description = subscriptionDisplay.Description,
-				ProductId = subscriptionDisplay.ProductId,
+				ProductId = (ProductIdEnum)subscriptionDisplay.ProductId,
 				ProductName = subscriptionDisplay.ProductName,
-				SkuId = subscriptionDisplay.SkuId,
+				SkuId = (SkuIdEnum)subscriptionDisplay.SkuId,
 				SkuName = subscriptionDisplay.SkuName,
 				SubscriptionId = subscriptionDisplay.SubscriptionId,
 				SubscriptionName = subscriptionDisplay.SubscriptionName,
@@ -857,26 +876,26 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Translates a <see cref="SubscriptionDBEntity"/> into a <see cref="SubscriptionInfo"/>.
+		/// Translates a <see cref="SubscriptionDBEntity"/> into a <see cref="Subscription"/>.
 		/// </summary>
 		/// <param name="subscription">SubscriptionDBEntity instance.</param>
 		/// <returns>SubscriptionInfo instance.</returns>
-		public static SubscriptionInfo InitializeSubscriptionInfo(SubscriptionDBEntity subscription)
+		public static Subscription InitializeSubscription(SubscriptionDBEntity subscription)
 		{
 			if (subscription == null)
 			{
 				return null;
 			}
 
-			return new SubscriptionInfo
+			return new Subscription
 			{
 				CreatedUtc = subscription.CreatedUtc,
 				IsActive = subscription.IsActive,
 				Licenses = subscription.Licenses,
-				Name = subscription.Name,
+				SubscriptionName = subscription.Name,
 				NumberOfUsers = subscription.NumberOfUsers,
 				OrganizationId = subscription.OrganizationId,
-				SkuId = subscription.SkuId,
+				SkuId = (SkuIdEnum)subscription.SkuId,
 				SubscriptionId = subscription.SubscriptionId
 			};
 		}
@@ -898,8 +917,8 @@ namespace AllyisApps.Services
 				BillingFrequency = (BillingFrequencyEnum)sku.BillingFrequency,
 				SkuName = sku.SkuName,
 				Price = sku.Price,
-				ProductId = sku.ProductId,
-				SkuId = sku.SkuId,
+				ProductId = (ProductIdEnum)sku.ProductId,
+				SkuId = (SkuIdEnum)sku.SkuId,
 				SubscriptionId = sku.SubscriptionId,
 				UserLimit = sku.UserLimit,
 				Description = sku.Description
@@ -922,7 +941,7 @@ namespace AllyisApps.Services
 			{
 				ProductRoleName = subscriptionRole.ProductRoleName,
 				ProductRoleId = subscriptionRole.ProductRoleId,
-				ProductId = subscriptionRole.ProductId
+				ProductId = (ProductIdEnum)subscriptionRole.ProductId
 			};
 		}
 

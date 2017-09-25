@@ -4,13 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-
 namespace AllyisApps.Services.Billing
 {
-	/// <summary>
-	/// An object for keeping track of all the info related to a given subscription.
-	/// </summary>
+	///// <summary>
+	///// An object for keeping track of all the info related to a given subscription.
+	///// </summary>
+	/*
 	public class SubscriptionInfo
 	{
 		/// <summary>
@@ -58,4 +57,5 @@ namespace AllyisApps.Services.Billing
 		/// </summary>
 		public string Name { get; set; }
 	}
+	*/
 }

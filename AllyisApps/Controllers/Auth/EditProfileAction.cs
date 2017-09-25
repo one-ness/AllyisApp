@@ -6,10 +6,11 @@
 
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
+using AllyisApps.Lib;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Auth;
 
-namespace AllyisApps.Controllers
+namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
 	/// Controller for account and organization related actions.
@@ -28,7 +29,7 @@ namespace AllyisApps.Controllers
 			model.Address = user.Address?.Address1;
 			model.AddressId = user.Address?.AddressId;
 			model.City = user.Address?.City;
-			model.DateOfBirth = this.AppService.GetDaysFromDateTime(user.DateOfBirth);
+			model.DateOfBirth = Utility.GetDaysFromDateTime(user.DateOfBirth);
 			model.Email = user.Email;
 			model.FirstName = user.FirstName;
 			model.LastName = user.LastName;

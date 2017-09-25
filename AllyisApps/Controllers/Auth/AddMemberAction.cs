@@ -7,14 +7,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.Auth;
 
-namespace AllyisApps.Controllers
+namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
 	/// Controller for account and organization related actions.
@@ -30,7 +30,7 @@ namespace AllyisApps.Controllers
 		/// <returns>The result of this action.</returns>
 		public ActionResult AddMember(int id, string returnUrl)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
+			this.AppService.CheckOrgAction(AppService.OrgAction.AddUserToOrganization, id);
 			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(id);
 			ViewBag.returnUrl = returnUrl;
 			return this.View(model);
@@ -47,16 +47,13 @@ namespace AllyisApps.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult AddMember(AddMemberViewModel add, int organizationId)
 		{
-			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(organizationId);
-			add.Subscriptions = model.Subscriptions;
-
 			if (ModelState.IsValid)
 			{
 				this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, add.OrganizationId);
 
 				try
 				{
-					InvitationInfo info = new InvitationInfo
+					Invitation info = new Invitation
 					{
 						Email = add.Email.Trim(),
 						FirstName = add.FirstName,
@@ -109,40 +106,13 @@ namespace AllyisApps.Controllers
 		/// <returns>The OrganizationAddMembersViewModel.</returns>
 		public AddMemberViewModel ConstructOrganizationAddMembersViewModel(int organizationId)
 		{
-			var infos = AppService.GetAddMemberInfo(organizationId);
-			string nextId = string.Compare(infos.Item1, infos.Item5) > 0 ? infos.Item1 : infos.Item5;
+			Organization infos = AppService.GetAddMemberInfo(organizationId);
 
 			AddMemberViewModel result = new AddMemberViewModel
 			{
 				OrganizationId = organizationId,
-				EmployeeId = new string(AppService.IncrementAlphanumericCharArray(nextId.ToCharArray())),
-				Subscriptions = new List<AddMemberSubscriptionViewModel>()
+				EmployeeId = new string(AppService.IncrementAlphanumericCharArray(infos.NextEmpolyeeID.ToCharArray())),
 			};
-
-			foreach (SubscriptionDisplayInfo sub in infos.Item2)
-			{
-				AddMemberSubscriptionViewModel subInfo = new AddMemberSubscriptionViewModel
-				{
-					ProductName = sub.ProductName,
-					ProductRoles = infos.Item3.Where(r => r.ProductId == sub.ProductId)
-						.Select(r => new ProductRoleViewModel()
-						{
-							ProductId = r.ProductId,
-							ProductRoleId = r.ProductRoleId,
-							ProductRoleName = r.ProductRoleName
-						}).ToList(),
-					SubscriptionId = sub.SubscriptionId
-				};
-				subInfo.ProductRoles.Insert(
-					0,
-					new ProductRoleViewModel
-					{
-						ProductRoleName = "None",
-						ProductId = (int)ProductIdEnum.None,
-						ProductRoleId = (int)TimeTrackerRole.User
-					});
-				result.Subscriptions.Add(subInfo);
-			}
 
 			return result;
 		}

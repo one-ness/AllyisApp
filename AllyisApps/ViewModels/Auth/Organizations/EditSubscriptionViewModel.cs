@@ -4,6 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Services;
+using AllyisApps.Services.Billing;
+
 namespace AllyisApps.ViewModels.Auth
 {
 	/// <summary>
@@ -24,7 +27,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the current product's Id.
 		/// </summary>
-		public int ProductId { get; set; }
+		public ProductIdEnum ProductId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the current product's Name.
@@ -34,12 +37,12 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the current product's Id.
 		/// </summary>
-		public int SkuId { get; set; }
+		public SkuIdEnum SkuId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the SkuId of the upgrade or downgrade version of the Product.
 		/// </summary>
-		public int SkuIdNext { get; set; }
+		public SkuIdEnum SkuIdNext { get; set; }
 
 		/// <summary>
 		/// Gets or sets all information relating to this product.

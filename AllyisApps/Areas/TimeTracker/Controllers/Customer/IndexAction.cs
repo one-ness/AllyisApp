@@ -9,7 +9,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
+using AllyisApps.Lib;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Billing;
+using AllyisApps.Services.Crm;
 using AllyisApps.ViewModels.TimeTracker.Customer;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -28,7 +32,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpGet]
 		public ActionResult Index(int subscriptionId)
 		{
-			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
+			if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
+			{
+				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
+			}
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			return this.View(this.ConstructManageCustomerViewModel(subscriptionId));
@@ -41,13 +48,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The index page.</returns>
 		public ActionResult IndexNoUserId(int subscriptionId)
 		{
-			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
+			if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
+			{
+				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
+			}
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 
 			var infos = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
-			ViewBag.WeekStart = AppService.GetDaysFromDateTime(SetStartingDate(null, infos.Item1.StartOfWeek));
-			ViewBag.WeekEnd = AppService.GetDaysFromDateTime(SetEndingDate(null, infos.Item1.StartOfWeek));
+			ViewBag.WeekStart = Utility.GetDaysFromDateTime(SetStartingDate(null, infos.Item1.StartOfWeek));
+			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infos.Item1.StartOfWeek));
 
 			return this.View("Index", this.ConstructManageCustomerViewModel(subscriptionId));
 		}
@@ -66,7 +76,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			.Select(proj => new
 			CustomerProjectViewModel.ProjectViewModel()
 			{
-				CustomerId = proj.CustomerId,
+				CustomerId = proj.owningCustomer.CustomerId,
 				OrganizationId = proj.OrganizationId,
 				ProjectId = proj.ProjectId,
 				ProjectName = proj.ProjectName
@@ -88,7 +98,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			.Select(proj => new
 			CustomerProjectViewModel.ProjectViewModel()
 			{
-				CustomerId = proj.CustomerId,
+				CustomerId = proj.owningCustomer.CustomerId,
 				OrganizationId = proj.OrganizationId,
 				ProjectId = proj.ProjectId,
 				ProjectName = proj.ProjectName
@@ -109,7 +119,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var inactiveInfo = AppService.GetInactiveProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
 			bool canEditProjects = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
 			string subName = AppService.getSubscriptionName(subscriptionId);
-			List<CompleteProjectInfo> projects = canEditProjects ? infos.Item1 : infos.Item1.Where(p => p.IsProjectUser == true).ToList();
+			List<CompleteProject> projects = canEditProjects ? infos.Item1 : infos.Item1.Where(p => p.IsProjectUser == true).ToList();
 			List<Customer> customers = infos.Item2;
 			IList<CustomerProjectViewModel> customersList = new List<CustomerProjectViewModel>();
 			foreach (Customer currentCustomer in customers)
@@ -123,10 +133,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						IsActive = currentCustomer.IsActive
 					},
 					Projects = from p in projects
-							   where p.CustomerId == currentCustomer.CustomerId
+							   where p.owningCustomer.CustomerId == currentCustomer.CustomerId
 							   select new CustomerProjectViewModel.ProjectViewModel
 							   {
-								   CustomerId = p.CustomerId,
+								   CustomerId = p.owningCustomer.CustomerId,
 								   OrganizationId = p.OrganizationId,
 								   ProjectName = p.ProjectName,
 								   ProjectId = p.ProjectId
@@ -140,7 +150,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			List<CompleteProjectInfo> inactiveProjects = canEditProjects ? inactiveInfo.Item1 : inactiveInfo.Item1.Where(p => p.IsProjectUser == true).ToList();
+			List<CompleteProject> inactiveProjects = canEditProjects ? inactiveInfo.Item1 : inactiveInfo.Item1.Where(p => p.IsProjectUser == true).ToList();
 			List<Customer> inactiveCustomers = inactiveInfo.Item2;
 
 			IList<CustomerProjectViewModel> inactiveCustomersList = new List<CustomerProjectViewModel>();
@@ -155,10 +165,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						IsActive = currentCustomer.IsActive
 					},
 					Projects = from p in inactiveProjects
-							   where p.CustomerId == currentCustomer.CustomerId
+							   where p.owningCustomer.CustomerId == currentCustomer.CustomerId
 							   select new CustomerProjectViewModel.ProjectViewModel
 							   {
-								   CustomerId = p.CustomerId,
+								   CustomerId = p.owningCustomer.CustomerId,
 								   OrganizationId = p.OrganizationId,
 								   ProjectName = p.ProjectName,
 								   ProjectId = p.ProjectId

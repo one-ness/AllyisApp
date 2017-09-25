@@ -1,5 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using AllyisApps.Services;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Billing;
+using AllyisApps.Services.Crm;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -8,11 +12,6 @@ namespace AllyisApps.ViewModels.Auth
 	/// </summary>
 	public class AddMemberViewModel
 	{
-		/// <summary>
-		/// Gets or sets the list of subscriptions for the organization.
-		/// </summary>
-		public List<AddMemberSubscriptionViewModel> Subscriptions { get; set; }
-
 		/// <summary>
 		/// Gets or sets the organization id.
 		/// </summary>
@@ -50,36 +49,5 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets a value indicating whether to add as an owner.
 		/// </summary>
 		public bool AddAsOwner { get; set; }
-
-		/// <summary>
-		/// Gets or sets the project id selected by the drop down menu.
-		/// </summary>
-		public int? SubscriptionProjectId { get; set; }
-	}
-
-	/// <summary>
-	/// A sub-view model for relevant subscription information on the Add Member page.
-	/// </summary>
-	public class AddMemberSubscriptionViewModel
-	{
-		/// <summary>
-		/// Gets or sets the subscription id.
-		/// </summary>
-		public int SubscriptionId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the product name.
-		/// </summary>
-		public string ProductName { get; set; }
-
-		/// <summary>
-		/// Gets or sets the list of product roles.
-		/// </summary>
-		public List<ProductRoleViewModel> ProductRoles { get; set; }
-
-		/// <summary>
-		/// Gets or sets the role selected in the drop down menu.
-		/// </summary>
-		public int SelectedRole { get; set; }
 	}
 }

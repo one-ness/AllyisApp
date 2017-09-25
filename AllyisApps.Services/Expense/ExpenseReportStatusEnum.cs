@@ -1,4 +1,10 @@
-﻿namespace AllyisApps.Services
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AllyisApps.Services.Expense
 {
 	/// <summary>
 	/// Represents the status of a expense report

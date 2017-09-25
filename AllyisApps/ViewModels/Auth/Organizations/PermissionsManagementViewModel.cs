@@ -11,6 +11,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Web;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Auth
@@ -67,7 +68,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets the subscriptionDisplay information.
 		/// </summary>
-		public IEnumerable<SubscriptionDisplayInfo> Subscriptions { get; internal set; }
+		public IEnumerable<SubscriptionDisplay> Subscriptions { get; internal set; }
 	}
 
 	/// <summary>
@@ -178,10 +179,10 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		/// <param name="name">The name of the filter.</param>
 		/// <param name="users">The list of users.</param>
-		public Filter(string name, IEnumerable<UserRolesInfo> users)
+		public Filter(string name, IEnumerable<UserRole> users)
 		{
 			this.Name = name;
-			this.UserIds = users.Select(x => x.UserId);
+			this.UserIds = users.Select(x => x.UserId.ToString());
 		}
 
 		/// <summary>
@@ -190,11 +191,11 @@ namespace AllyisApps.ViewModels.Auth
 		/// <param name="name">The name of the filter.</param>
 		/// <param name="users">The list of users.</param>
 		/// <param name="whereExpression">A limiting where expression for selecting a subset of users.</param>
-		public Filter(string name, IEnumerable<UserRolesInfo> users, Expression<Func<UserRolesInfo, bool>> whereExpression)
+		public Filter(string name, IEnumerable<UserRole> users, Expression<Func<UserRole, bool>> whereExpression)
 		{
 			this.Name = name;
-			Func<UserRolesInfo, bool> whereFunction = whereExpression.Compile();
-			this.UserIds = users.Where(whereFunction).Select(x => x.UserId);
+			Func<UserRole, bool> whereFunction = whereExpression.Compile();
+			this.UserIds = users.Where(whereFunction).Select(x => x.UserId.ToString());
 		}
 
 		/// <summary>

@@ -7,6 +7,8 @@ using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Resources;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Expense;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
@@ -42,10 +44,6 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					SelectedUsers = selectedUsers,
 					Status = selectedStatus
 				};
-
-				var infos = AppService.GetReportInfo(subscriptionId);
-				UserContext.SubscriptionAndRole subInfo = null;
-				AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 
 				AdminReportModel adminReportVM = CreateAdminReportModel(subscriptionId);
 				adminReportVM.SubscriptionName = AppService.getSubscriptionName(subscriptionId);

@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using AllyisApps.Services.StaffingManager;
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.StaffingManager
 {
 	/// <summary>
 	/// An Application object, holding all info directly related to the Application.  Also performs basic field validation.

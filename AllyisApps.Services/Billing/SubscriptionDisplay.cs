@@ -1,15 +1,15 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="ProjectService.cs" company="Allyis, Inc.">
+// <copyright file="SubscriptionDisplay.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.Billing
 {
 	/// <summary>
-	/// The Project Service.
+	/// Represents a subscription's information.
 	/// </summary>
-	public partial class AppService : BaseService
+	public class SubscriptionDisplay : Subscription
 	{
 	}
 }

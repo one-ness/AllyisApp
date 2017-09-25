@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
@@ -13,11 +14,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <summary>
 		/// Show the list of expense reports submitted by the logged in user.
 		/// </summary>
-		/// <param name="model">User settings infoamtion.</param>
+		/// <param name="model">User settings information.</param>
 		/// <returns>The action result.</returns>
 		[HttpPost]
 		public ActionResult UpdateUserSettings(UserSettingsViewModel model)
 		{
+			UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId];
 			if (!ModelState.IsValid)
 			{
 				return RedirectToAction("UserSettings", new { subscriptionId = model.SubscriptionId });
@@ -25,21 +27,22 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			foreach (UserMaxAmountViewModel userMaxAmountViewModel in model.Users)
 			{
-				User user = InitializeUser(userMaxAmountViewModel);
-				AppService.UpdateUserMaxAmount(user);
+				OrganizationUser userInfo = InitializeOrganizaionUser(userMaxAmountViewModel, subInfo.OrganizationId);
+				AppService.UpdateUserOrgMaxAmount(userInfo);
 			}
 
 			return RedirectToAction("index");
 		}
 
-		private User InitializeUser(UserMaxAmountViewModel user)
+		private OrganizationUser InitializeOrganizaionUser(UserMaxAmountViewModel user, int orgId)
 		{
-			return new User()
+			return new OrganizationUser
 			{
 				MaxAmount = user.MaxAmount,
 				FirstName = user.FirstName,
 				LastName = user.LastName,
-				UserId = user.UserId
+				UserId = user.UserId,
+				OrganizationId = orgId
 			};
 		}
 	}

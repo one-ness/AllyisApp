@@ -5,8 +5,9 @@
 //------------------------------------------------------------------------------
 
 using System;
+using AllyisApps.Services.Crm;
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.Project
 {
 	/// <summary>
 	/// An object for keeping track of all the info related to a given project.
@@ -22,16 +23,6 @@ namespace AllyisApps.Services
 		/// Gets or sets the id of the organization associated with the project.
 		/// </summary>
 		public int OrganizationId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the id of the customer associated with the project.
-		/// </summary>
-		public int CustomerId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the name of the customer associated with the project.
-		/// </summary>
-		public string CustomerName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the project name.
@@ -62,5 +53,7 @@ namespace AllyisApps.Services
 		/// Gets or sets the bool value indicating if this Customer is currently active.
 		/// </summary>
 		public bool IsActive { get; set; }
+
+		public Customer owningCustomer { get; set; }
 	}
 }

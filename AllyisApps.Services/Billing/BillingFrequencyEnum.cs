@@ -1,6 +1,6 @@
 #pragma warning disable 1591
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.Billing
 {
 	/// <summary>
 	/// Billing frequency.

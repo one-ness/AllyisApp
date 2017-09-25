@@ -10,7 +10,9 @@ using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
+using AllyisApps.Lib;
 using AllyisApps.Services;
+using AllyisApps.Services.Crm;
 using AllyisApps.ViewModels.TimeTracker.Project;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -51,8 +53,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					ParentCustomerId = userId,
 					ProjectUsers = new List<BasicUserInfoViewModel>(),
 					SubscriptionUsers = subList,
-					StartDate = AppService.GetDaysFromDateTime(defaultStart),
-					EndDate = AppService.GetDaysFromDateTime(defaultEnd),
+					StartDate = Utility.GetDaysFromDateTime(defaultStart),
+					EndDate = Utility.GetDaysFromDateTime(defaultEnd),
 					ProjectOrgId = idAndUsers.Item1, // Service.GetRecommendedProjectId()
 					CustomerName = AppService.GetCustomer(userId).CustomerName,
 					SubscriptionId = subscriptionId,
@@ -134,13 +136,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			IEnumerable<int> userIds = model.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString));
 
 			return AppService.CreateProjectAndUpdateItsUserList(
-				new Project()
+				new Services.Project.Project()
 				{
-					CustomerId = model.ParentCustomerId,
+					owningCustomer = new Customer(){
+						CustomerId = model.ParentCustomerId,
+					},
 					ProjectName = model.ProjectName,
 					ProjectOrgId = model.ProjectOrgId,
-					StartingDate = AppService.GetDateTimeFromDays(model.StartDate),
-					EndingDate = AppService.GetDateTimeFromDays(model.EndDate)
+					StartingDate = Utility.GetDateTimeFromDays(model.StartDate),
+					EndingDate = Utility.GetDateTimeFromDays(model.EndDate)
 				},
 				userIds);
 		}
@@ -152,13 +156,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The Project Id.</returns>
 		public int CreateProject(EditProjectViewModel model)
 		{
-			return AppService.CreateProject(new Project()
+			return AppService.CreateProject(new Services.Project.Project()
 			{
-				CustomerId = model.ParentCustomerId,
+				owningCustomer = new Customer(){
+					CustomerId = model.ParentCustomerId,
+				},
 				ProjectName = model.ProjectName,
 				ProjectOrgId = model.ProjectOrgId,
-				StartingDate = AppService.GetDateTimeFromDays(model.StartDate),
-				EndingDate = AppService.GetDateTimeFromDays(model.EndDate)
+				StartingDate = Utility.GetDateTimeFromDays(model.StartDate),
+				EndingDate = Utility.GetDateTimeFromDays(model.EndDate)
 			});
 		}
 	}

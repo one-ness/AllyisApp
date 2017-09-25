@@ -53,7 +53,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the current product's Id.
 		/// </summary>
-		public int ProductId { get; set; }
+		public ProductIdEnum ProductId { get; set; }
 
 		/// <summary>
 		/// Gets or sets all information relating to this product.
@@ -74,7 +74,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets an object representing the subscription the organization currently has with this
 		/// productId.
 		/// </summary>
-		public SubscriptionInfo CurrentSubscription { get; set; }
+		public Subscription CurrentSubscription { get; set; }
 
 		/// <summary>
 		/// Gets or sets a list of the SkuS applicable to this product.
@@ -85,12 +85,12 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the Id of the Sku that is currently selected.
 		/// </summary>
-		public int SelectedSku { get; set; }
+		public SkuIdEnum SelectedSku { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Id of the previous Sku used for this product.
 		/// </summary>
-		public int PreviousSku { get; set; }
+		public SkuIdEnum PreviousSku { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the model successfully populated or not.

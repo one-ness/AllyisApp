@@ -2,163 +2,220 @@
 @{
 	DisplayHints.ShowBreadcrumbs = false;
 	DisplayHints.PageBodyId = "paneled-index";
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/StaffingManager/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/StaffingManager";
 	ViewBag.TitleBar = Strings.MyAccount;
+	ViewData["UserId"] = Model.UserId;
+	ViewData["SubscriptionId"] = Model.SubscriptionId;
+	ViewData["SubscriptionName"] = Model.SubscriptionName;
 }
-
 <div class="row">
-	<style>
-		table {
-			border-collapse: collapse;
-			text-align: left;
-			width: 100%;
-		}
 
-		table td, .datagrid table th {
-			padding: 5px 5px;
-		}
+<style>
+	.datagrid table {
+		border-collapse: collapse;
+		text-align: left;
+		width: 100%;
+	}
 
-		table thead th {
-			background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #bc7967), color-stop(1, #80141C) );
-			background: -moz-linear-gradient( center top, #bc7967 5%, #80141C 100% );
-			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#991821', endColorstr='#80141C');
-			background-color: #bc7967;
-			color: #FFFFFF;
-			font-size: 14px;
-			font-weight: bold;
-			border-left: 2px solid #bc7967;
-		}
+	.datagrid {
+		font: normal 14px/150% Arial, Helvetica, sans-serif;
+		background: #fff;
+		overflow: hidden;
+		-webkit-border-radius: 3px;
+		-moz-border-radius: 3px;
+		border-radius: 3px;
+	}
 
-		table thead th:first-child {
-			border: none;
-		}
+	.datagrid table td, .datagrid table th {
+		padding: 3px 3px;
+	}
 
-		table tbody td {
-			color: #80141C;
-			border-left: 3px solid #F7CDCD;
+	.datagrid table thead th {
+		background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #A38FC3), color-stop(1, #795FA2) );
+		background: -moz-linear-gradient( center top, #A38FC3 5%, #795FA2 100% );
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#A38FC3', endColorstr='#795FA2');
+		background-color: #A38FC3;
+		color: #FFFFFF;
+		font-size: 16px;
+		font-weight: bold;
+		border-left: 1px solid #A38FC3;
+	}
+
+	.datagrid table thead th:first-child {
+		border: none;
+	}
+
+		.datagrid table tbody td {
+			color: #326D7B;
+			border-left: 1px solid #FFD9B1;
+			border-bottom: 2px solid #1C5464;
 			font-size: 14px;
 			font-weight: normal;
 		}
 
-		table tbody .alt td {
-			background: #F7CDCD;
-			color: #80141C;
-		}
+	.datagrid table tbody .alt td {
+		background: #E1EEF4;
+		color: #326D7B;
+	}
 
-		table tbody td:first-child {
-			border-left: none;
-		}
+	.datagrid table tbody td:first-child {
+		border-left: none;
+	}
 
-		table tr {
-			border-bottom: solid #bc7967;
-		}
+	.datagrid table tbody tr:last-child td {
+		border-bottom: none;
+	}
 
-		tbody tr:last-child td {
-			border-bottom: none;
-		}
+	.datagrid table tfoot td div {
+		border-top: 1px solid #795FA2;
+		background: #E1EEF4;
+	}
 
-		.left-element {
-			display: inline-block;
-			left: 0;
-		}
+	.datagrid table tfoot td {
+		padding: 0;
+		font-size: 14px
+	}
 
-		select {
-			width: 150px
-		}
+	.datagrid table tfoot td div {
+		padding: 2px;
+	}
 
-		label {
-			padding: 5px 5px;
-		}
+	.datagrid table tfoot td ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		text-align: right;
+	}
 
-		div {
-			padding: 3px 3px;
-		}
+	.datagrid table tfoot li {
+		display: inline;
+	}
 
-		.right-element {
-			position: absolute;
-			display: inline-block;
-			right: 0px;
-		}
+	.datagrid table tfoot li a {
+		text-decoration: none;
+		display: inline-block;
+		padding: 2px 8px;
+		margin: 1px;
+		color: #FFFFFF;
+		border: 1px solid #795FA2;
+		-webkit-border-radius: 3px;
+		-moz-border-radius: 3px;
+		border-radius: 3px;
+		background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #A38FC3), color-stop(1, #795FA2) );
+		background: -moz-linear-gradient( center top, #A38FC3 5%, #795FA2 100% );
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#A38FC3', endColorstr='#795FA2');
+		background-color: #A38FC3;
+	}
 
-		.column-left {
-			float: left;
-			width: 33%;
-		}
+	.datagrid table tfoot ul.active, .datagrid table tfoot ul a:hover {
+		text-decoration: none;
+		border-color: #795FA2;
+		color: #FFFFFF;
+		background: none;
+		background-color: #795FA2;
+	}
 
-		.column-right {
-			float: right;
-			width: 33%;
-		}
+	div.dhtmlx_window_active, div.dhx_modal_cover_dv {
+		position: fixed !important;
+	}
 
-		.column-center {
-			display: inline-block;
-			width: 33%;
-		}
-	</style>
+	.column-left {
+		float: left;
+		width: 33%;
+	}
+	.column-center {
+		display: inline-block;
+		width: 33%;
+	}
+	.column-right {
+		float: right;
+		width: 33%;
+	}
 
-	<div class="panel panel-default" width ="100%">
-		<div class="panel-heading">
-			<h2 class="left-element" style="margin-top: 0px; margin-bottom: 0px;">
-				@Model.SubscriptionName
-			</h2>
-			<button type="button" class="btn" data-toggle="collapse" data-target="#FilterArea">Filters</button>
 
-			<div id="FilterArea" class="collapse panel panel-default filter">
-				<div class="column-left">
-					<label>Filter by Position Status</label>
-					<select multiple id="statusFilter" class="statusFilter form-control">
-						@foreach (var status in Model.PositionStatuses)
-						{
-							<option value=@status.PositionStatusName>@status.PositionStatusName</option>
-						}
-					</select>
-				</div>
-				<div class="column-center">
-					<label>Filter by Employment Type</label>
-					<select multiple id="typesFilter" class="typesFilter form-control">
-						@foreach (var type in Model.EmploymentTypes)
-						{
-							<option value=@type.EmploymentTypeName>@type.EmploymentTypeName</option>
-						}
-					</select>
-				</div>
-				<div class="column-right">
-					<label>Filter By Tags</label>
-					<select multiple id="tagsFilter" class="tagsFilter form-control">
-						@foreach (var tag in Model.Tags)
-						{
-							<option value=@tag.TagName>@tag.TagName</option>
-						}
-					</select>
-				</div>
-				<div class="text-right">
-					<button id="filterSubmit" type="button" class="btn btn-default text-right filterSubmit" onclick="filteredSubmit()"> Apply Filters </button>
-				</div>
+	.newIndicator {
+		font-size: 8px;
+		color: #C68A4D;
+		padding: 8px 2px;
+	}
+
+	.tagSpan {
+		font-size: 10px;
+		color: #336B7B;
+		background-color: #FFD9B1;
+	}
+</style>
+
+	<div class="panel-heading">
+		<h2 class="left-element" style="margin-top: 0px; margin-bottom: 0px;">
+			@Model.SubscriptionName
+		</h2>
+		<br>
+		<div id="FilterArea" class="collapse panel panel-default filter">
+			<div class="column-left">
+				<label>Filter by Position Status</label>
+				<select multiple id="statusFilter" class="statusFilter form-control">
+					@foreach (var status in Model.PositionStatuses)
+					{
+						<option value=@status.PositionStatusName>@status.PositionStatusName</option>
+					}
+				</select>
+			</div>
+			<div class="column-center">
+				<label>Filter by Employment Type</label>
+				<select multiple id="typesFilter" class="typesFilter form-control">
+					@foreach (var type in Model.EmploymentTypes)
+					{
+						<option value=@type.EmploymentTypeName>@type.EmploymentTypeName</option>
+					}
+				</select>
+			</div>
+			<div class="column-right">
+				<label>Filter By Tags</label>
+				<select multiple id="tagsFilter" class="tagsFilter form-control">
+					@foreach (var tag in Model.Tags)
+					{
+						<option value=@tag.TagName>@tag.TagName</option>
+					}
+				</select>
 			</div>
 			<div class="text-right">
-				<button class="btn btn-default" onclick="location.href='@Url.Action(ActionConstants.CreatePosition, ControllerConstants.Staffing, new { subscriptionId = Model.SubscriptionId } )'">New Position</button>
+				<button id="filterSubmit" type="button" class="btn btn-default text-right filterSubmit" onclick="filteredSubmit()"> Apply Filters </button>
 			</div>
 		</div>
-		<div>
+		<br>
+		<button type="button" data-toggle="collapse" data-target="#FilterArea"><i class="glyphicon glyphicon-filter"></i></button>
+		<span>Positions: @Model.Positions.Count</span>
+		<button class="btn btn-default pull-right" onclick="location.href='@Url.Action(ActionConstants.CreatePosition, ControllerConstants.Staffing, new { subscriptionId = Model.SubscriptionId } )'"><i class="glyphicon glyphicon-plus"></i></button>
+		<br>
+	</div>
+	<div class="panel panel-default" width="100%">
+		<div class="datagrid">
 			<table class="table-responsive" id="PositionsTable">
 				<thead>
 					<tr class="panel panel-default">
-						<th width ="24%" style="padding:0 5px 0 5px;" onclick="sortTable(0)">Position Title </th>
-						<th width ="10%" style="padding:0 5px 0 5px;" onclick="sortTable(1)">Position Status </th>
-						<th width ="8%"  style="padding:0 5px 0 5px;" onclick="sortTable(2)">Positions Available </th>
-						<th width ="12%" style="padding:0 5px 0 5px;" onclick="sortTable(3)">@Strings.Customer </th>
-						<th width ="12%" style="padding:0 5px 0 5px;" onclick="sortTable(4)">Hiring Manager </th>
-						<th width ="12%" style="padding:0 5px 0 5px;" onclick="sortTable(5)">Start Date </th>
+						<th width="24%" style="padding:0 5px 0 5px;" onclick="sortTable(0)">Position Title </th>
+						<th width="10%" style="padding:0 5px 0 5px;" onclick="sortTable(1)">Position Status </th>
+						<th width="8%" style="padding:0 5px 0 5px;" onclick="sortTable(2)">Positions Available </th>
+						<th width="12%" style="padding:0 5px 0 5px;" onclick="sortTable(3)">@Strings.Customer </th>
+						<th width="12%" style="padding:0 5px 0 5px;" onclick="sortTable(4)">Hiring Manager </th>
+						<th width="12%" style="padding:0 5px 0 5px;" onclick="sortTable(5)">Start Date </th>
 					</tr>
 				</thead>
 				@foreach (var pos in Model.Positions)
 				{
 					<tr>
-						<td href = "@Url.Action(ActionConstants.EditPosition, ControllerConstants.Staffing, new { id = pos.PositionId })">
+						<td href="@Url.Action(ActionConstants.EditPosition, ControllerConstants.Staffing, new { id = pos.PositionId })">
 							@pos.PositionTitle
+							@if(pos.PositionModifiedUtc > DateTime.UtcNow.AddDays(-10))
+							{
+								<span class="newIndicator">NEW</span>
+							}
 							<p style="font-size: 10px">
 								@foreach (var tag in pos.Tags)
 								{
-									<span style="font-style: italic">@tag.TagName,</span>
+									<span class="tagSpan" style="font-style: italic">@tag.TagName,</span>
 								}
 							</p>
 						</td>
@@ -182,6 +239,7 @@
 </div>
 
 <script type="text/javascript">
+	
 	function sortTable(n) {
 		var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
 		table = document.getElementById("PositionsTable");
@@ -239,8 +297,11 @@
 		var k = 0;
 		var selecter = document.getElementById("statusFilter");
 		for (k = 0; k < selecter.options.length; k++) {
-			if (selecter.options[k].selected) statuses[count] = selecter.options[k].value;
-			count++;
+			if (selecter.options[k].selected)
+			{
+				statuses[count] = selecter.options[k].value;
+				count++;
+			}
 		}
 
 		var types = [];
@@ -248,8 +309,11 @@
 		var j = 0;
 		selecter = document.getElementById("typesFilter");
 		for (j = 0; j < selecter.options.length; j++) {
-			if (selecter.options[j].selected) types[count] = selecter.options[j].value;
-			count++;
+			if (selecter.options[j].selected)
+			{
+				types[count] = selecter.options[j].value;
+				count++
+			}
 		}
 
 		var tags = [];
@@ -258,20 +322,24 @@
 		selecter = document.getElementById("tagsFilter");
 		for(i = 0; i < selecter.options.length; i++)
 		{
-			if (selecter.options[i].selected) tags[count] = selecter.options[i].value;
-			count++;
+			if (selecter.options[i].selected)
+			{
+				tags[count] = selecter.options[i].value;
+				count++;
+			}
 		}
 
-		var url = "/staffingmanager/" + @Model.SubscriptionId + "/?";
-		if (status.count != 0) {
-			url = url + "Status=" + statuses;
+		console.log("DEBUG:  status = " + statuses + "  type = " + types + "  tags = " + tags);
+		var url = "/staffingmanager/" + @Model.SubscriptionId + "/staffing?";
+		if (statuses.length != 0) {
+			url = url + "Statuses=" + statuses;
 		}
-		if (types.count != 0) {
-			if (status != null) url = url + "&";
+		if (types.length != 0) {
+			if (statuses.length != 0) url = url + "&";
 			url = url + "Types=" + types;
 		}
-		if (tags.count != 0 && tags[0] != "") {
-			if (status != null || type != null) url = url + "&";
+		if (tags.length != 0 && tags[0] != "") {
+			if (statuses.length != 0 || types.length != 0 ) url = url + "&";
 			url = url + "Tags=" + tags;
 		}
 		window.location.href = url;

@@ -484,7 +484,7 @@
     <value>Customers</value>
   </data>
   <data name="CustomerOrgId" xml:space="preserve">
-    <value>Customer ID</value>
+    <value>Organization Specific Id</value>
   </data>
   <data name="Customers" xml:space="preserve">
     <value>Customers</value>
@@ -1152,6 +1152,9 @@
   <data name="SetManager" xml:space="preserve">
     <value>Set Manager</value>
   </data>
+  <data name="SetSuperUser" xml:space="preserve">
+    <value>Set Super User</value>
+  </data>
   <data name="SetMember" xml:space="preserve">
     <value>Set Member</value>
   </data>
@@ -1539,5 +1542,8 @@
   </data>
   <data name="ExpenseTrackerRole" xml:space="preserve">
     <value>ExpenseTracker Roles</value>
+  </data>
+  <data name="PositionTitle" xml:space="preserve">
+    <value>Position Title</value>
   </data>
 </root>

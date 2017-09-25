@@ -9,9 +9,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.Auth;
 
-namespace AllyisApps.Controllers
+namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
 	/// Controller for account and organization related actions.

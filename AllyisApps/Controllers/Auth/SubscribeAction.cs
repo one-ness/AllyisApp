@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
@@ -14,7 +13,7 @@ using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
 using AllyisApps.ViewModels.Auth;
 
-namespace AllyisApps.Controllers
+namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
 	/// Controller for account and organization related actions.
@@ -28,58 +27,56 @@ namespace AllyisApps.Controllers
 		/// <param name="skuId">The id of the SKU being subscribed to.</param>
 		/// <returns>The result of this action.</returns>
 		[HttpGet]
-		public ActionResult Subscribe(int id, int skuId)
+		public ActionResult Subscribe(int id, SkuIdEnum skuId)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, id);
 			var infos = AppService.GetProductSubscriptionInfo(id, skuId);
 
-			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4, id);
+			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos, id);
 			model.SelectedSku = skuId;
-			model.SelectedSkuName = infos.Item3.Where(s => s.SkuId == skuId).SingleOrDefault().SkuName;
-			model.SelectedSkuDescription = infos.Item3.Where(s => s.SkuId == skuId).SingleOrDefault().Description;
+			model.SelectedSkuName = infos.SkuList.Where(s => s.SkuId == skuId).SingleOrDefault().SkuName;
+			model.SelectedSkuDescription = infos.SkuList.Where(s => s.SkuId == skuId).SingleOrDefault().Description;
 
 			if (!model.IsValid)
 			{
 				return this.View(ViewConstants.Details, id);
 			}
 
-			model.CurrentUsers = infos.Item5;
+			model.CurrentUsers = infos.UserCount;
 			return this.View(ViewConstants.Subscribe, model);
 		}
 
 		/// <summary>
 		/// Uses services to populate a <see cref="ProductSubscriptionViewModel"/> and returns it.
 		/// </summary>
-		/// <param name="productInfo">Product for product.</param>
-		/// <param name="currentSubscription">SubscriptionInfo for this org's subscription to the product.</param>
-		/// <param name="skus">List of SkuInfos for this product's skus.</param>
-		/// <param name="stripeToken">This org's billing stripe token.</param>
+
+		/// <param name="productSubscription"></param>
 		/// <param name="organizationId">Organization id.</param>
 		/// <returns>The ProductSubscriptionViewModel.</returns>
 		[CLSCompliant(false)]
-		public ProductSubscriptionViewModel ConstructProductSubscriptionViewModel(Product productInfo, SubscriptionInfo currentSubscription, List<SkuInfo> skus, string stripeToken, int organizationId)
+		public ProductSubscriptionViewModel ConstructProductSubscriptionViewModel(ProductSubscription productSubscription, int organizationId)
 		{
-			if (productInfo != null)
+			if (productSubscription.Product != null)
 			{
-				int selectedSku = currentSubscription == null ? 0 : currentSubscription.SkuId;
+				SkuIdEnum selectedSku = productSubscription.SubscriptionInfo == null ? 0 : productSubscription.SubscriptionInfo.SkuId;
 
 				// TODO: orgName MUST be obtained in the service call AppService.GetProductSubscriptionInfo (it gets the orgId)
-				string orgName = "Get ORG Name";
-				BillingServicesCustomerId customerId = new BillingServicesCustomerId(stripeToken);
+				string SubscriptionName = "SubScription Name";
+				BillingServicesCustomerId customerId = new BillingServicesCustomerId(productSubscription.StripeTokenCustId);
 
 				return new ProductSubscriptionViewModel
 				{
 					IsValid = true,
 					OrganizationId = organizationId,
-					OrganizationName = orgName,
-					ProductId = productInfo.ProductId,
-					ProductName = productInfo.ProductName,
-					AreaUrl = productInfo.AreaUrl,
-					ProductDescription = productInfo.ProductDescription,
-					CurrentSubscription = currentSubscription,
-					Skus = skus,
+					OrganizationName = SubscriptionName,
+					ProductId = productSubscription.Product.ProductId,
+					ProductName = productSubscription.Product.ProductName,
+					AreaUrl = productSubscription.Product.AreaUrl,
+					ProductDescription = productSubscription.Product.ProductDescription,
+					CurrentSubscription = productSubscription.SubscriptionInfo,
+					Skus = productSubscription.SkuList,
 					SelectedSku = selectedSku,
-					SelectedSkuName = selectedSku > 0 ? skus.Where(s => s.SkuId == selectedSku).SingleOrDefault().SkuName : string.Empty,
+					SelectedSkuName = selectedSku > 0 ? productSubscription.SkuList.Where(s => s.SkuId == selectedSku).SingleOrDefault().SkuName : string.Empty,
 					PreviousSku = selectedSku,
 					CustomerId = customerId,
 					Token = new BillingServicesToken(customerId.ToString()) // TODO: Does this just convert back to the stripeToken string?? Investigate.

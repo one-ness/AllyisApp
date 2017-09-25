@@ -1,5 +1,5 @@
 ﻿@using AllyisApps.ViewModels.ExpenseTracker.Expense;
-@using AllyisApps.Services;
+@using AllyisApps.Services.Expense;
 @model ReportViewModel
 
 @{
@@ -63,7 +63,8 @@
 				@if (Model.Status != ExpenseStatusEnum.Approved
 					&& Model.Status != ExpenseStatusEnum.Paid
 					&& Model.Status != ExpenseStatusEnum.Draft
-					&& ((bool)ViewData["IsManager"] == true || (decimal)ViewData["MaxAmount"] > totalAmount))
+					&& Model.Status != ExpenseStatusEnum.Rejected
+					&& (((int)ViewData["ProductRole"] == 2 || (int)ViewData["ProductRole"] == 3) && (decimal)ViewData["MaxAmount"] >= totalAmount))
 				{
 					<div class="review-area col-lg-12 col-md-12 col-xs-12" height="290px">
 						<b>Accept/Reject Notes</b><br />
@@ -74,6 +75,13 @@
 						<input type="submit" value="Reject" name="btnAction" class="btn btn-reject" />
 						<input type="submit" value="Approve" name="btnAction" class="btn btn-primary" />
 					</div>
+				}
+				else
+				{
+					<span class="text-warning"
+						  style="font-size: 20px; text-align: center; display: block; margin-top: 100px;">
+						You do not have permission to approve or reject this report.
+					</span>
 				}
 			</div>
 		</div>

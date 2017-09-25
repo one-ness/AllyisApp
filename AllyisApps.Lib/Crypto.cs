@@ -72,7 +72,7 @@ namespace AllyisApps.Lib
 		/// <param name="correctHash">Correct hash of the password.</param>
 		/// <returns>Item1 is bool, indicates if the hash of the given password matches the given hash.
 		/// If Item1 indicates a match, then Item2 may contain the updated hash of the password, which the caller can update in database.</returns>
-		public static Tuple<bool, string> ValidateAndUpdate(string password, string correctHash)
+		public static PassWordValidationResult ValidateAndUpdate(string password, string correctHash)
 		{
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentNullException("password");
 			if (string.IsNullOrWhiteSpace(correctHash)) throw new ArgumentNullException("correctHash");
@@ -102,7 +102,10 @@ namespace AllyisApps.Lib
 				}
 			}
 
-			return Tuple.Create<bool, string>(result, newHash);
+			return new PassWordValidationResult(){
+				successfulMatch = result,
+				updatedHash = newHash
+			};
 		}
 
 		private static bool ByteArrayEquals(byte[] a, byte[] b)
@@ -251,5 +254,18 @@ namespace AllyisApps.Lib
 				throw new AllyisAppsLibraryException("Decryption Failed.", ex);
 			}
 		}
+	}
+
+	public class PassWordValidationResult
+	{
+		/// <summary>
+		/// Wheather password was successfully given for login 
+		/// </summary>
+		public bool successfulMatch { get; internal set; }
+
+		/// <summary>
+		/// Updated password hash if needed otherwise null. 
+		/// </summary>
+		public string updatedHash { get; internal set; } 
 	}
 }

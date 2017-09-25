@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web.Mvc;
-using AllyisApps.Services;
 using System.ComponentModel.DataAnnotations;
 
 namespace AllyisApps.ViewModels.ExpenseTracker.Expense
@@ -12,58 +10,67 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 	public class ExpenseItemCreateViewModel
 	{
 		/// <summary>
-		/// The expense item id
+		/// Gets or sets the expense item id.
 		/// </summary>
 		public int ExpenseItemId { get; set; }
 
 		/// <summary>
-		/// The expense description
+		/// Gets or sets the expense description.
 		/// </summary>
+		[Required(ErrorMessage = "Description is required.")]
 		public string ItemDescription { get; set; }
 
 		/// <summary>
-		/// The transaction date
+		/// Gets or sets the transaction date.
 		/// </summary>
+		[Required(ErrorMessage = "Date is required.")]
 		public string TransactionDate { get; set; }
 
 		/// <summary>
-		/// The amount of the expense
+		/// Gets or sets the amount of the expense.
 		/// </summary>
+		[Required(ErrorMessage = "Amount is required.")]
+		[DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
 		public decimal Amount { get; set; }
 
 		/// <summary>
-		/// The expenses report id.
+		/// Gets or sets the expenses report id.
 		/// </summary>
 		public int ExpenseReportId { get; set; }
 
 		/// <summary>
-		/// the user id associated with the Expense
+		/// Gets or sets the user id associated with the Expense.
 		/// </summary>
 		public int AccountId { get; set; }
 
 		/// <summary>
-		/// Flag for i the epense can be billed to a customer
+		/// Gets or sets a value indicating whether the expense can be billed to a customer.
 		/// </summary>
 		public bool IsBillableToCustomer { get; set; }
 
 		/// <summary>
-		/// When the item was created
+		/// Gets or sets when the item was created.
 		/// </summary>
 		public DateTime ExpenseItemCreatedUtc { get; set; }
 
 		/// <summary>
-		/// When it was last modified.
+		/// Gets or sets when it was last modified.
 		/// </summary>
 		public DateTime ExpenseItemModifiedUtc { get; set; }
 
 		/// <summary>
-		/// Index of item in report
+		/// Gets or sets the index of item in report.
 		/// </summary>
 		public int Index { get; set; }
 
 		/// <summary>
-		/// Gets or sets whether to delete.
+		/// Gets or sets a value indicating whether to delete.
 		/// </summary>
 		public bool ToDelete { get; set; }
+
+		/// <summary>
+		/// Gets or sets the account options.
+		/// </summary>
+		public IList<AccountViewModel> AccountList { get; set; }
 	}
 }

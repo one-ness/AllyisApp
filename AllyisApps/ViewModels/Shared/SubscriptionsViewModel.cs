@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Shared
@@ -18,7 +19,7 @@ namespace AllyisApps.ViewModels.Shared
 		/// <summary>
 		/// Gets or sets the Subscription info.
 		/// </summary>
-		public IEnumerable<SubscriptionDisplayInfo> Subscriptions { get; set; }
+		public IEnumerable<SubscriptionDisplay> Subscriptions { get; set; }
 
 		/// <summary>
 		/// Gets or sets a List of available products.

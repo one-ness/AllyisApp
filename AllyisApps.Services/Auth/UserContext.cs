@@ -6,8 +6,9 @@
 
 using System;
 using System.Collections.Generic;
+using AllyisApps.Services.Billing;
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.Auth
 {
 	/// <summary>
 	/// Logged in user context.
@@ -84,6 +85,7 @@ namespace AllyisApps.Services
 		{
 			public int OrganizationId { get; set; }
 			public OrganizationRole OrganizationRole { get; set; }
+			public decimal MaxAmount { get; set; }
 		}
 
 		/// <summary>

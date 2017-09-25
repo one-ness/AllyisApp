@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.Billing
 {
 	/// <summary>
 	/// This enum is the be-all-end-all location for keeping track of what services we support.  If it isn't here, the code won't try.

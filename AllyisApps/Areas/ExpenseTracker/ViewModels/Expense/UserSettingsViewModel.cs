@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using AllyisApps.Services;
-using static AllyisApps.ViewModels.Auth.AccountIndexViewModel;
 
 namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 {

@@ -109,7 +109,7 @@ namespace AllyisApps.DBModel.Auth
 		public string PreferredLanguageId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the maximum amount that a user can approve of in a report.
+		/// Gets or sets MaxAmount
 		/// </summary>
 		public decimal MaxAmount { get; set; }
 	}

@@ -6,7 +6,7 @@
 
 using System;
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.StaffingManager
 {
 	/// <summary>
 	/// An Applicant object, holding all info directly related to the Applicant.  Also performs basic field validation.

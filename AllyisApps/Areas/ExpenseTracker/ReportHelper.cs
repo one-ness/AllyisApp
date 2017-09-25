@@ -3,6 +3,8 @@ using System.Linq;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Expense;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
@@ -17,8 +19,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			UserContext.SubscriptionAndRole subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			ViewData["SubscriptionName"] = AppService.getSubscriptionName(subscriptionId);
 			ViewData["SubscriptionId"] = subscriptionId;
-			ViewData["IsManager"] = subInfo.ProductRoleId == 2;
-			ViewData["MaxAmount"] = subInfo.MaxAmount;
+			ViewData["ProductRole"] = subInfo.ProductRoleId;
+			ViewData["MaxAmount"] = AppService.GetOrganizationUserMaxAmount(AppService.UserContext.UserId, subInfo.OrganizationId);
 		}
 
 		private void UploadItems(ExpenseCreateModel model, ExpenseReport report)

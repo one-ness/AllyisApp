@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -14,9 +13,10 @@ using System.Threading.Tasks;
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
-using AllyisApps.DBModel.Finance;
 using AllyisApps.DBModel.Lookup;
 using AllyisApps.Lib;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Billing;
 using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services
@@ -54,14 +54,11 @@ namespace AllyisApps.Services
 		/// <returns>A list of languages.</returns>
 		public IEnumerable<Language> ValidLanguages()
 		{
-			var result = new List<Language>();
-			var list = this.DBHelper.ValidLanguages();
-			foreach (var item in list)
+			return DBHelper.ValidLanguages().Select(s => new Language
 			{
-				result.Add(new Language() { CultureName = item.CultureName, LanguageName = item.LanguageName });
-			}
-
-			return result;
+				LanguageName = s.LanguageName,
+				CultureName = s.CultureName
+			});
 		}
 
 		/// <summary>
@@ -69,7 +66,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="invitationId">Id of invite.</param>
 		/// <returns>Inviation info </returns>
-		public InvitationInfo GetInvitationByID(int invitationId)
+		public Invitation GetInvitationByID(int invitationId)
 		{
 			return InitializeInvitationInfo(DBHelper.GetUserInvitationByInviteId(invitationId));
 		}
@@ -96,16 +93,12 @@ namespace AllyisApps.Services
 		/// <returns>The resulting message.</returns>
 		public bool RejectInvitation(int invitationId)
 		{
-			try
+			bool rejected = DBHelper.RejectInvitation(invitationId);
+			if (rejected)
 			{
-				DBHelper.RejectInvitation(invitationId);
 				NotifyInviteRejectAsync(invitationId);
-				return true;
 			}
-			catch (SqlException)
-			{
-				return false;
-			}
+			return rejected;
 		}
 
 		/// <summary>
@@ -174,13 +167,13 @@ namespace AllyisApps.Services
 			if (result != null)
 			{
 				// email exists, hash the given password and compare with hash in db
-				Tuple<bool, string> passwordValidation = Crypto.ValidateAndUpdate(password, result.PasswordHash);
-				if (passwordValidation.Item1)
+				PassWordValidationResult passwordValidation = Crypto.ValidateAndUpdate(password, result.PasswordHash);
+				if (passwordValidation.successfulMatch)
 				{
 					// Store updated password hash if needed
-					if (passwordValidation.Item2 != null)
+					if (passwordValidation.updatedHash != null)
 					{
-						DBHelper.UpdateUserPassword(result.UserId, passwordValidation.Item2);
+						DBHelper.UpdateUserPassword(result.UserId, passwordValidation.updatedHash);
 					}
 				}
 			}
@@ -218,7 +211,8 @@ namespace AllyisApps.Services
 					result.OrganizationsAndRoles.Add(item.OrganizationId, new UserContext.OrganizationAndRole()
 					{
 						OrganizationId = item.OrganizationId,
-						OrganizationRole = (OrganizationRole)item.OrganizationRoleId
+						OrganizationRole = (OrganizationRole)item.OrganizationRoleId,
+						MaxAmount = item.MaxAmount ?? 0
 					});
 				}
 
@@ -233,8 +227,7 @@ namespace AllyisApps.Services
 							ProductRoleId = item.ProductRoleId,
 							SkuId = (SkuIdEnum)item.SkuId,
 							SubscriptionId = item.SubscriptionId,
-							OrganizationId = item.OrganizationId,
-							MaxAmount = expando.User.MaxAmount
+							OrganizationId = item.OrganizationId
 						});
 				}
 
@@ -268,18 +261,20 @@ namespace AllyisApps.Services
 			userInfo.Subscriptions = Subscriptions.Select(sub =>
 				new UserSubscription()
 				{
-					Subscription = new Subscription()
+					AreaUrl = sub.AreaUrl,
+					OrganizationId = sub.OrganizationId,
+					ProductId = (ProductIdEnum)sub.ProductId,
+					ProductName = sub.ProductName,
+					SkuId = (SkuIdEnum)sub.SkuId,
+					SubscriptionId = sub.SubscriptionId,
+					SubscriptionName = sub.SubscriptionName,
+					ProductRole = new ProductRole()
 					{
-						AreaUrl = sub.AreaUrl,
-						OrganizationId = sub.OrganizationId,
-						ProductId = (ProductIdEnum)sub.ProductId,
-						ProductName = sub.ProductName,
-						SkuId = (SkuIdEnum)sub.SkuId,
-						SubscriptionId = sub.SubscriptionId,
-						SubscriptionName = sub.SubscriptionName
+						ProductRoleId = sub.ProductRoleId,
+						ProductId = (ProductIdEnum)sub.ProductId
 					},
-					ProductRoleId = sub.ProductRoleId,
-					UserId = userId
+					UserId = userId,
+					IconUrl = sub.IconUrl
 				}
 			).ToList();
 
@@ -298,17 +293,14 @@ namespace AllyisApps.Services
 				inv =>
 					new Invitation()
 					{
-						invite = new InvitationInfo()
-						{
-							Email = inv.Email,
-							EmployeeId = inv.EmployeeId,
-							FirstName = inv.FirstName,
-							LastName = inv.LastName,
-							InvitationId = inv.InvitationId,
-							OrganizationId = inv.OrganizationId,
-							OrganizationRole = (OrganizationRole)inv.OrganizationRoleId,
-						},
-						invitingOrgName = inv.OrganizationName
+						Email = inv.Email,
+						EmployeeId = inv.EmployeeId,
+						FirstName = inv.FirstName,
+						LastName = inv.LastName,
+						InvitationId = inv.InvitationId,
+						OrganizationId = inv.OrganizationId,
+						OrganizationRole = (OrganizationRole)inv.OrganizationRoleId,
+						OrganizationName = inv.OrganizationName
 					}
 				).ToList();
 			return userInfo;
@@ -319,7 +311,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		public void UpdateCurrentUserProfile(int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
 		{
-			this.DBHelper.UpdateUserProfile(this.UserContext.UserId, firstName, lastName, this.GetDateTimeFromDays(dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
+			this.DBHelper.UpdateUserProfile(this.UserContext.UserId, firstName, lastName, Utility.GetDateTimeFromDays(dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
 		}
 
 		/// <summary>
@@ -327,7 +319,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		public void UpdateUserProfile(int userId, int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
 		{
-			this.DBHelper.UpdateUserProfile(userId, firstName, lastName, this.GetDateTimeFromDays(dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
+			this.DBHelper.UpdateUserProfile(userId, firstName, lastName, Utility.GetDateTimeFromDays(dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
 		}
 
 		/// <summary>
@@ -443,8 +435,8 @@ namespace AllyisApps.Services
 			string passwordHash = this.DBHelper.GetPasswordHashById(UserContext.UserId);
 			if (!string.IsNullOrWhiteSpace(passwordHash))
 			{
-				Tuple<bool, string> validation = Crypto.ValidateAndUpdate(oldPassword, passwordHash);
-				if (validation.Item1)
+				PassWordValidationResult validation = Crypto.ValidateAndUpdate(oldPassword, passwordHash);
+				if (validation.successfulMatch)
 				{
 					// old password is correct.
 					result = true;
@@ -469,11 +461,7 @@ namespace AllyisApps.Services
 			return DBHelper.GetOrganizationsByUserId(userID).Select(o => (Organization)InitializeOrganization(o));
 		}
 
-		#region Info-DBEntity Conversions
-
-
-
-		public User InitializeUser(dynamic user)
+		private User InitializeUser(dynamic user)
 		{
 			User newUser = new User()
 			{
@@ -492,18 +480,18 @@ namespace AllyisApps.Services
 				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
 				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
 				UserId = user.UserId,
-				Address = InitializeAddress(user),
-				MaxAmount = user.MaxAmount
+				Address = InitializeAddress(user)
 			};
 			return newUser;
 		}
+
 		/// <summary>
 		/// Translates a UserDBEntity into a User business object.
 		/// </summary>
 		/// <param name="user">UserDBEntity instance.</param>
 		/// <param name="loadAddress"></param>
 		/// <returns>User instance.</returns>
-		public User InitializeUser(UserDBEntity user, bool loadAddress = true)
+		private User InitializeUser(UserDBEntity user, bool loadAddress = true)
 		{
 			if (user == null)
 			{
@@ -539,18 +527,18 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Translates a <see cref="UserRolesDBEntity"/> into a <see cref="UserRolesInfo"/>.
+		/// Translates a <see cref="UserRolesDBEntity"/> into a <see cref="UserRole"/>.
 		/// </summary>
 		/// <param name="userRoles">UserRolesDBEntity instance.</param>
-		/// <returns>UserRolesInfo instance.</returns>
-		public UserRolesInfo InitializeUserRolesInfo(UserRolesDBEntity userRoles)
+		/// <returns>UserRole instance.</returns>
+		private UserRole InitializeUserRole(UserRolesDBEntity userRoles)
 		{
 			if (userRoles == null)
 			{
 				return null;
 			}
 
-			return new UserRolesInfo
+			return new UserRole
 			{
 				Email = userRoles.Email,
 				FirstName = userRoles.FirstName,
@@ -564,18 +552,18 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Translates a <see cref="SubscriptionUserDBEntity"/> into a <see cref="SubscriptionUserInfo"/>"/>.
+		/// Translates a <see cref="SubscriptionUserDBEntity"/> into a <see cref="SubscriptionUser"/>"/>.
 		/// </summary>
 		/// <param name="subUser">SubscriptionUserDBEntity instance.</param>
-		/// <returns>SubscriptionUserInfo instance.</returns>
-		public SubscriptionUserInfo InitializeSubscriptionUserInfo(SubscriptionUserDBEntity subUser)
+		/// <returns>SubscriptionUser instance.</returns>
+		public SubscriptionUser InitializeSubscriptionUser(SubscriptionUserDBEntity subUser)
 		{
 			if (subUser == null)
 			{
 				return null;
 			}
 
-			return new SubscriptionUserInfo
+			return new SubscriptionUser
 			{
 				FirstName = subUser.FirstName,
 				LastName = subUser.LastName,
@@ -585,21 +573,20 @@ namespace AllyisApps.Services
 			};
 		}
 
-		public IList<AccountDBEntity> GetAccounts()
+		public void UpdateUserOrgMaxAmount(OrganizationUser userInfo)
 		{
-			return DBHelper.GetAccounts().ToList();
-		}
-
-		public void UpdateUserMaxAmount(User user)
-		{
-			UserDBEntity entity = new UserDBEntity()
+			OrganizationUserDBEntity entity = new OrganizationUserDBEntity()
 			{
-				UserId = user.UserId,
-				MaxAmount = user.MaxAmount
+				UserId = userInfo.UserId,
+				MaxAmount = userInfo.MaxAmount,
+				OrganizationId = userInfo.OrganizationId
 			};
 			DBHelper.UpdateUserMaxAmount(entity);
 		}
 
-		#endregion Info-DBEntity Conversions
+		public decimal GetOrganizationUserMaxAmount(int userId, int orgId)
+		{
+			return DBHelper.GetUserOrgMaxAmount(userId, orgId);
+		}
 	}
 }

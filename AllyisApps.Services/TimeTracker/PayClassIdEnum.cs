@@ -1,4 +1,4 @@
-﻿namespace AllyisApps.Services.Auth
+﻿namespace AllyisApps.Services.TimeTracker
 {
 	public enum PayClassId : int
 	{

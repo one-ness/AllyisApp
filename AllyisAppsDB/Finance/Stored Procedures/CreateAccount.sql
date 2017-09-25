@@ -3,7 +3,7 @@
 	@isActive BIT,
 	@accountTypeId INT,
 	@parentAccountId INT,
-	@returnValue INT
+	@returnValue INT OUTPUT
 AS
 BEGIN
     SET NOCOUNT ON;

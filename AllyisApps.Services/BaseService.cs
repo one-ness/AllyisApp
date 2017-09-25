@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using AllyisApps.DBModel;
+using AllyisApps.Services.Auth;
 
 namespace AllyisApps.Services
 {
@@ -19,6 +20,11 @@ namespace AllyisApps.Services
 		/// service settings.
 		/// </summary>
 		public ServiceSettings ServiceSettings { get; private set; }
+
+		/// <summary>
+		/// Default constructor
+		/// </summary>
+		public BaseService() { }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BaseService"/> class.

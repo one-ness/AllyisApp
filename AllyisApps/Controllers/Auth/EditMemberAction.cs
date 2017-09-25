@@ -4,14 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.Auth;
 
-namespace AllyisApps.Controllers
+namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
 	/// Controller for account and organization related actions.
@@ -33,7 +32,7 @@ namespace AllyisApps.Controllers
 
 			if (!isInvited)
 			{
-				OrganizationUserInfo userOrgInfo = AppService.GetOrganizationManagementInfo(orgId).Item2.Find(m => m.UserId == userId);
+				OrganizationUser userOrgInfo = AppService.GetOrganizationManagementInfo(orgId).Users.Find(m => m.UserId == userId);
 				User userBasicInfo = AppService.GetUser(userId);
 
 				model = new EditMemberViewModel
@@ -65,7 +64,7 @@ namespace AllyisApps.Controllers
 			}
 			else
 			{
-				InvitationInfo userOrgInfo = AppService.GetOrganizationManagementInfo(orgId).Item4.Find(m => m.InvitationId == userId);
+				Invitation userOrgInfo = AppService.GetOrganizationManagementInfo(orgId).Invitations.Find(m => m.InvitationId == userId);
 
 				model = new EditMemberViewModel
 				{

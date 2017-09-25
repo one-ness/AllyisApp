@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
-using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.TimeTracker;
 using AllyisApps.Lib;
 using AllyisApps.Services.TimeTracker;
+using AllyisApps.Services.Billing;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Crm;
 
 namespace AllyisApps.Services
 {
@@ -56,10 +58,10 @@ namespace AllyisApps.Services
 			tables = sortableTables.OrderBy(tup => tup.Item2 * -1).Select(tup => tup.Item1).ToList();
 
 			// Retrieval of existing customer and project data
-			List<Tuple<Customer, List<Project>>> customersProjects = new List<Tuple<Customer, List<Project>>>();
+			List<Tuple<Customer, List<Project.Project>>> customersProjects = new List<Tuple<Customer, List<Project.Project>>>();
 			foreach (Customer customer in this.GetCustomerList(orgId))
 			{
-				customersProjects.Add(new Tuple<Customer, List<Project>>(
+				customersProjects.Add(new Tuple<Customer, List<Project.Project>>(
 					customer,
 					this.GetProjectsByCustomer(customer.CustomerId).ToList()
 				));
@@ -277,9 +279,9 @@ namespace AllyisApps.Services
 										continue;
 									}
 
-									customersProjects.Add(new Tuple<Customer, List<Project>>(
+									customersProjects.Add(new Tuple<Customer, List<Project.Project>>(
 										newCustomer,
-										new List<Project>()
+										new List<Project.Project>()
 									));
 									customer = newCustomer;
 									result.CustomersImported += 1;
@@ -321,7 +323,7 @@ namespace AllyisApps.Services
 					DateTime? defaultProjectStartDate = null;
 					DateTime? defaultProjectEndDate = null;
 
-					Project project = null;
+					Project.Project project = null;
 
 					// If there is no identifying information for projects, all project related importing is skipped.
 					if (hasProjectName || hasProjectId)
@@ -397,9 +399,13 @@ namespace AllyisApps.Services
 								}
 
 								// All required information is known: time to create the project
-								project = new Project
+								project = new Project.Project
 								{
-									CustomerId = customer.CustomerId,
+									owningCustomer = new Customer()
+									{
+										CustomerId = customer.CustomerId,
+										OrganizationId = orgId,
+									},
 									ProjectName = thisRowHasProjectName ? knownValue : readValue,
 									IsHourly = false, // TODO un-hardcode once project isHourly property is supported.  Currently disabled
 									OrganizationId = orgId,
@@ -438,11 +444,11 @@ namespace AllyisApps.Services
 							bool customerFieldIsName = true;
 
 							/*
-                                There are 3 required fields, and we may need to traverse at most 2 links to get them all, with no knowledge of which links will succeed or fail in providing
-                                the needed information. To solve this, we do 2 passes (i), each time checking for the missing information (j) using the links we've found to the information
-                                we already have (k). On each pass, any known information is skipped, so time won't be wasted if the first pass succeeds. This way, any combination of paths
-                                to acquire the missing information from the known information is covered.
-                            */
+								There are 3 required fields, and we may need to traverse at most 2 links to get them all, with no knowledge of which links will succeed or fail in providing
+								the needed information. To solve this, we do 2 passes (i), each time checking for the missing information (j) using the links we've found to the information
+								we already have (k). On each pass, any known information is skipped, so time won't be wasted if the first pass succeeds. This way, any combination of paths
+								to acquire the missing information from the known information is covered.
+							*/
 							for (int i = 0; i < 2; i++)
 							{
 								// i = pass, out of 2
@@ -502,9 +508,12 @@ namespace AllyisApps.Services
 									}
 
 									// All required information is known: time to create the project
-									project = new Project
+									project = new Project.Project
 									{
-										CustomerId = customer.CustomerId,
+										owningCustomer = new Customer()
+										{
+											CustomerId = customer.CustomerId
+										},
 										ProjectName = fields[0],
 										IsHourly = false,  // TODO un-hardocode once project isHourly property is supported.  Currently disabled
 										OrganizationId = orgId,
@@ -613,18 +622,18 @@ namespace AllyisApps.Services
 								{
 									hasUserEmail ? row[ColumnHeaders.UserEmail].ToString() : null,
 									hasEmployeeId ? row[ColumnHeaders.EmployeeId].ToString() : null,
-                                    // Since first and last name must be together and treated as one piece of information, they are joined in this datastructure. Hopefully, we'll never
-                                    // have a user who's name includes the text __IMPORT__
-                                    hasUserName ? (row[ColumnHeaders.UserFirstName].ToString() == "" || row[ColumnHeaders.UserLastName].ToString() == "" ? null : row[ColumnHeaders.UserFirstName].ToString() + "__IMPORT__" + row[ColumnHeaders.UserLastName].ToString()) : null
+									// Since first and last name must be together and treated as one piece of information, they are joined in this datastructure. Hopefully, we'll never
+									// have a user who's name includes the text __IMPORT__
+									hasUserName ? (row[ColumnHeaders.UserFirstName].ToString() == "" || row[ColumnHeaders.UserLastName].ToString() == "" ? null : row[ColumnHeaders.UserFirstName].ToString() + "__IMPORT__" + row[ColumnHeaders.UserLastName].ToString()) : null
 								};
 								// if (fields[2] == "__IMPORT__") fields[2] = null;
 
 								/*
-                                    There are 3 required fields, and we may need to traverse at most 2 links to get them all, with no knowledge of which links will succeed or fail in providing
-                                    the needed information. To solve this, we do 2 passes (i), each time checking for the missing information (j) using the links we've found to the information
-                                    we already have (k). On each pass, any known information is skipped, so time won't be wasted if the first pass succeeds. This way, any combination of paths
-                                    to acquire the missing information from the known information is covered.
-                                */
+									There are 3 required fields, and we may need to traverse at most 2 links to get them all, with no knowledge of which links will succeed or fail in providing
+									the needed information. To solve this, we do 2 passes (i), each time checking for the missing information (j) using the links we've found to the information
+									we already have (k). On each pass, any known information is skipped, so time won't be wasted if the first pass succeeds. This way, any combination of paths
+									to acquire the missing information from the known information is covered.
+								*/
 								for (int i = 0; i < 2; i++)
 								{
 									// i = pass, out of 2
@@ -680,7 +689,7 @@ namespace AllyisApps.Services
 								try
 								{
 									//user = this.GetUserByEmail(fields[0]); // User may already exist, but not be a member of this organization
-									InvitationInfo inviteInfo = new InvitationInfo()
+									Invitation inviteInfo = new Invitation()
 									{
 										OrganizationId = orgId,
 										Email = fields[0].Trim(),
@@ -703,7 +712,7 @@ namespace AllyisApps.Services
 						}
 
 						// Importing non-required user data
-						if (userInOrg != null && hasNonRequiredUserInfo)//If user exists then allow org to change user. 
+						if (userInOrg != null && hasNonRequiredUserInfo)//If user exists then allow org to change user.
 						{
 							bool updated = false;
 							/* This allows any org to change thier users infomation Org are items of users, users are not properties of orgs */
@@ -733,9 +742,8 @@ namespace AllyisApps.Services
 
 							if (updated)
 							{
-								this.UpdateUserProfile(userInOrg.UserId, this.GetDaysFromDateTime(userInOrg.DateOfBirth), userInOrg.FirstName, userInOrg.LastName, userInOrg.PhoneNumber, userInOrg.Address?.AddressId, userInOrg.Address?.Address1, userInOrg.Address?.City, userInOrg.Address?.StateId, userInOrg.Address?.PostalCode, userInOrg.Address?.CountryCode);
+								this.UpdateUserProfile(userInOrg.UserId, Utility.GetDaysFromDateTime(userInOrg.DateOfBirth), userInOrg.FirstName, userInOrg.LastName, userInOrg.PhoneNumber, userInOrg.Address?.AddressId, userInOrg.Address?.Address1, userInOrg.Address?.City, userInOrg.Address?.StateId, userInOrg.Address?.PostalCode, userInOrg.Address?.CountryCode);
 							}
-
 						}
 					}
 

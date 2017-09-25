@@ -38,7 +38,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@accountName", account.AccountName);
 			parameters.Add("@isActive", account.IsActive);
 			parameters.Add("@accountTypeId", account.AccountTypeId);
-			parameters.Add("@parentAccountId", account.ParentAccountId);
+			parameters.Add("@parentAccountId", account.ParentAccountId != null ? account.ParentAccountId.Value : 0);
 			parameters.Add("@returnValue", -1, DbType.Int32, direction: ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
@@ -183,6 +183,25 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query("[Auth].[GetOrganizationOwnerEmails]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Returns the OrganizationUser db entity with userId and maxAmount
+		/// </summary>
+		/// <param name="userId"></param>
+		/// <param name="orgId"></param>
+		/// <returns>The ORganizationUserDBEntity object.</returns>
+		public decimal GetUserOrgMaxAmount(int userId, int orgId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@userId", userId);
+			parameters.Add("@orgId", orgId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var orgUsers = connection.Query<decimal>("[Auth].[GetOrgUserMaxAmount]", parameters, commandType: CommandType.StoredProcedure);
+				return orgUsers.FirstOrDefault();
 			}
 		}
 	}

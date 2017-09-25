@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
@@ -8,7 +7,7 @@ using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
 using AllyisApps.ViewModels.Auth;
 
-namespace AllyisApps.Controllers
+namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
 	/// Controller for account and organization related actions.
@@ -25,9 +24,9 @@ namespace AllyisApps.Controllers
 		{
 			int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
-			int skuId = (int)AppService.GetSubscription(subscriptionId).SkuId;
+			var skuId = AppService.GetSubscription(subscriptionId).SkuId;
 
-			int productId = (int)AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId;
+			var productId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId;
 			string subscriptionName = AppService.getSubscriptionName(subscriptionId);
 
 			SkuInfo sku = GetNextName(subscriptionId, skuId, productId);
@@ -85,15 +84,15 @@ namespace AllyisApps.Controllers
 						switch (model.ActionType)
 						{
 							case "Time Tracker":
-								model.SkuIdNext = 200001;
+								model.SkuIdNext = SkuIdEnum.TimeTrackerBasic;
 								break;
 
 							case "Expense Tracker":
-								model.SkuIdNext = 300001;
+								model.SkuIdNext = SkuIdEnum.ExpenseTrackerBasic;
 								break;
 
 							case "Staffing Manager":
-								model.SkuIdNext = 400001;
+								model.SkuIdNext = SkuIdEnum.StaffingManagerBasic;
 								break;
 
 							default:
@@ -101,9 +100,9 @@ namespace AllyisApps.Controllers
 						}
 					}
 
-					Tuple<Product, SubscriptionInfo, List<SkuInfo>, string, int> infos = AppService.GetProductSubscriptionInfo(model.OrganizationId, model.SkuIdNext);
+					ProductSubscription infos = AppService.GetProductSubscriptionInfo(model.OrganizationId, model.SkuIdNext);
 
-					var id = infos.Item4;
+					var id = infos.StripeTokenCustId;
 					var customerId = new BillingServicesCustomerId(id);
 					var token = new BillingServicesToken(customerId.ToString());
 
@@ -125,23 +124,23 @@ namespace AllyisApps.Controllers
 			return this.View(model);
 		}
 
-		private SkuInfo GetNextName(int id, int skuId, int productId)
+		private SkuInfo GetNextName(int id, SkuIdEnum skuId, ProductIdEnum productId)
 		{
 			var infos = AppService.GetProductSubscriptionInfo(id, skuId);
 			SkuInfo sku = AppService.GetSkuDetails(skuId);
-			SkuInfo skuNext = infos.Item3.Where(s => s.SkuId != skuId && s.ProductId == productId).SingleOrDefault();
+			SkuInfo skuNext = infos.SkuList.Where(s => s.SkuId != skuId && s.ProductId == productId).SingleOrDefault();
 			sku.SkuIdNext = skuNext == null ? 0 : skuNext.SkuId;
 			sku.NextName = skuNext == null ? null : skuNext.SkuName;
 			switch (sku.SkuName)
 			{
 				case "Time Tracker":
 					sku.NextName = "Time Tracker Pro";
-					sku.SkuIdNext = 300001;
+					sku.SkuIdNext = SkuIdEnum.TimeTrackerPro;
 					break;
 
 				case "Time Tracker Pro":
 					sku.NextName = "Time Tracker";
-					sku.SkuIdNext = 200001;
+					sku.SkuIdNext = SkuIdEnum.TimeTrackerBasic;
 					break;
 
 				default:

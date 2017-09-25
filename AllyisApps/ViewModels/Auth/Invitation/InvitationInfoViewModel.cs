@@ -1,5 +1,6 @@
 ﻿using System;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -13,7 +14,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// Invitation Info constuctor as it is likely that service object is reused in many places.
 		/// </summary>
 		/// <param name="info">Invitation Infos.</param>
-		public InvitationInfoViewModel(InvitationInfo info)
+		public InvitationInfoViewModel(Invitation info)
 		{
 			this.CompressedEmail = info.CompressedEmail;
 			this.DecisionDateUtc = info.DecisionDateUtc;

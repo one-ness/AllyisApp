@@ -9,9 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
+using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
-using AllyisApps.Utilities;
 using AllyisApps.ViewModels.TimeTracker.Project;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
@@ -38,8 +38,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			}
 
-			DateTime? start = startingDate.HasValue ? (DateTime?)AppService.GetDateTimeFromDays(startingDate.Value) : null;
-			DateTime? end = endingDate.HasValue ? (DateTime?)AppService.GetDateTimeFromDays(endingDate.Value) : null;
+			DateTime? start = startingDate.HasValue ? (DateTime?)Utility.GetDateTimeFromDays(startingDate.Value) : null;
+			DateTime? end = endingDate.HasValue ? (DateTime?)Utility.GetDateTimeFromDays(endingDate.Value) : null;
 
 			return this.File(AppService.PrepareCSVExport(orgId, new List<int> { userId }, start, end).BaseStream, "text/csv", "export.csv");
 		}
@@ -92,12 +92,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				if ((userIds.Count > 1) || (userIds[0] == -1))
 				{
-					result.Projects = AppService.GetProjectsByOrganization(orgId).AsParallel().Select(proj => new CompleteProjectViewModel(proj));
+					result.Projects = AppService.GetProjectsByOrganization(orgId).AsParallel().Select(proj => 
+					new	CompleteProjectViewModel(proj));
 				}
 				else
 				{
 					// single user selected
-					result.Projects = AppService.GetProjectsByUserAndOrganization(userIds[0], orgId, false).AsParallel().Select(proj => new CompleteProjectViewModel(proj));
+					result.Projects = AppService.GetProjectsByUserAndOrganization(userIds[0], orgId, false).AsParallel().Select(proj => 
+					new CompleteProjectViewModel(proj));
 				}
 
 				// Add default project in case there are holiday entries
@@ -114,7 +116,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="timeEntry">Time entry service object.</param>
 		/// <returns>View Model for time entry.</returns>
-		public TimeEntryViewModel ConstuctTimeEntryViewModel(TimeEntryInfo timeEntry)
+		public TimeEntryViewModel ConstuctTimeEntryViewModel(TimeEntry timeEntry)
 		{
 			return new TimeEntryViewModel()
 			{

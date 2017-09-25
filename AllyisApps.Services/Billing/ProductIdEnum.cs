@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.Billing
 {
 	/// <summary>
 	/// Products offered by us. Must match the Ids inserted in to db.

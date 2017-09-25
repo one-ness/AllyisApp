@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.Auth
 {
 	/// <summary>
 	/// Product role aka Subscription role.
@@ -42,6 +42,11 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Expense Tracker Manager.
 		/// </summary>
-		Manager = 2
+		Manager = 2,
+
+		/// <summary>
+		/// Expense Tracker Admin.
+		/// </summary>
+		SuperUser = 3
 	}
 }

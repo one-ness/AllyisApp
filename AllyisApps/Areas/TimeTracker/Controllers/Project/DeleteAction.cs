@@ -48,7 +48,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>Deletes the project from the database.</returns>
 		public ActionResult Delete(int id)
 		{
-			CompleteProjectInfo project = AppService.GetProject(id);
+			CompleteProject project = AppService.GetProject(id);
 
 			if (project != null)
 			{
