@@ -89,7 +89,7 @@ namespace AllyisApps.Controllers.Auth
 					SiteUrl = item.Organization.SiteUrl,
 					FaxNumber = item.Organization.FaxNumber,
 					//// TODO: Infomation is dependent on curent user
-					IsManageAllowed = AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, item.Organization.OrganizationId, item.OrganizationRole, false)
+					IsManageAllowed = AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, item.Organization.OrganizationId, false)
 				};
 
 				// Add subscription info

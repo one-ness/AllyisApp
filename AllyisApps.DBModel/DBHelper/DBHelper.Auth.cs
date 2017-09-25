@@ -587,37 +587,18 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Adds an Invitation to the invitations table and invitation sub roles table.
 		/// </summary>
-		/// <param name="invitingUserId">The id of the user sending the invitation.</param>
-		/// <param name="invitation">A representation of the invitation to create.</param>
-		/// <returns>The id of the newly created invitation (or -1 if the employee id is taken), and the
-		/// first and last name of the inviting user.</returns>
-		public Tuple<int, string, string> CreateInvitation(int invitingUserId, InvitationDBEntity invitation)
+		public int CreateInvitation(string email, string firstName, string lastName, int organizationId, int organizationRoleId, string employeedId)
 		{
-			if (invitation == null)
-			{
-				throw new ArgumentException("invitation cannot be null.");
-			}
-
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@userId", invitingUserId);
-			parameters.Add("@email", invitation.Email);
-			parameters.Add("@firstName", invitation.FirstName);
-			parameters.Add("@lastName", invitation.LastName);
-			parameters.Add("@organizationId", invitation.OrganizationId);
-			parameters.Add("@organizationRole", invitation.OrganizationRoleId);
-			parameters.Add("@employeeId", invitation.EmployeeId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			parameters.Add("@email", email);
+			parameters.Add("@firstName", firstName);
+			parameters.Add("@lastName", lastName);
+			parameters.Add("@organizationId", organizationId);
+			parameters.Add("@organizationRole", organizationRoleId);
+			parameters.Add("@employeeId", employeedId);
+			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				var results = connection.QueryMultiple("[Auth].[CreateInvitation]", parameters, commandType: CommandType.StoredProcedure);
-				int inviteId = results.Read<int>().FirstOrDefault();
-				if (inviteId < 0)
-				{
-					return new Tuple<int, string, string>(inviteId, null, null);
-				}
-				return Tuple.Create(
-					inviteId,
-					results.Read<string>().FirstOrDefault(),
-					results.Read<string>().FirstOrDefault());
+				return con.Query<int>("[Auth].[CreateInvitation]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
 		}
 

@@ -40,63 +40,41 @@ namespace AllyisApps.Controllers.Auth
 		/// POST: /Add
 		/// Adding a new member to an organization.
 		/// </summary>
-		/// <param name="add">The View Model of user info passed from Add.cshtml.</param>
+		/// <param name="model">The View Model of user info passed from Add.cshtml.</param>
 		/// <param name="organizationId">Organization id.</param>
 		/// <returns>The result of this action.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult AddMember(AddMemberViewModel add, int organizationId)
+		public ActionResult AddMember(AddMemberViewModel model, int organizationId)
 		{
 			if (ModelState.IsValid)
 			{
-				this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, add.OrganizationId);
-
 				try
 				{
-					Invitation info = new Invitation
-					{
-						Email = add.Email.Trim(),
-						FirstName = add.FirstName,
-						LastName = add.LastName,
-						OrganizationId = add.OrganizationId,
-						OrganizationRole = add.AddAsOwner ? OrganizationRole.Owner : OrganizationRole.Member,
-						EmployeeId = add.EmployeeId,
-					};
-
-					User usr = AppService.GetUserByEmail(info.Email);
-					string url = usr != null && usr.Email == info.Email ?
+					User usr = AppService.GetUserByEmail(model.Email);
+					string url = usr != null ?
 						Url.Action(ActionConstants.Index, ControllerConstants.Account, null, protocol: Request.Url.Scheme) :
 						Url.Action(ActionConstants.Register, ControllerConstants.Account, null, protocol: Request.Url.Scheme);
 
-					int invitationId = AppService.InviteUser(url, info);
+					int invitationId = AppService.InviteUser(url, model.Email.Trim(), model.FirstName, model.LastName, model.OrganizationId, model.AddAsOwner ? OrganizationRole.Owner : OrganizationRole.Member, model.EmployeeId);
 
-					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserEmailed, add.FirstName, add.LastName), Variety.Success));
-					return this.RedirectToAction(ActionConstants.ManageOrg, new { id = add.OrganizationId });
-				}
-				catch (ArgumentException ex)
-				{
-					if (ex.ParamName.Equals("invitationInfo.Email"))
-					{
-						Notifications.Add(new BootstrapAlert(Resources.Strings.InvalidEmail, Variety.Danger));
-						return this.View(add);
-					}
-
-					throw ex;
+					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserEmailed, model.FirstName, model.LastName), Variety.Success));
+					return this.RedirectToAction(ActionConstants.ManageOrg, new { id = model.OrganizationId });
 				}
 				catch (InvalidOperationException)
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.EmployeeIdNotUniqueError, Variety.Danger));
-					return this.View(add);
+					return this.View(model);
 				}
 				catch (System.Data.DuplicateNameException)
 				{
-					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserAlreadyExists, add.FirstName, add.LastName), Variety.Warning));
-					return this.View(add);
+					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserAlreadyExists, model.FirstName, model.LastName), Variety.Warning));
+					return this.View(model);
 				}
 			}
 
 			// Invalid model; try again
-			return this.View(add);
+			return this.View(model);
 		}
 
 		/// <summary>
