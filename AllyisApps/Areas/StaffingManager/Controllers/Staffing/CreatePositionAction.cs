@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
@@ -44,7 +45,6 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 
-			
 			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
 			//TODO: this is piggy-backing off the get index action, create a new action that just gets items 3-5.
 			var infos = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
@@ -68,17 +68,33 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			return new EditPositionViewModel
 			{
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
-
+				LocalizedStates = new Dictionary<string, string>(),
 				IsCreating = true,
 				OrganizationId = subInfo.OrganizationId,
 				SubscriptionName = subscriptionNameToDisplay,
 				SubscriptionId = subInfo.SubscriptionId,
 				StartDate = System.DateTime.UtcNow.Date,
 				Tags = tags,
-				EmploymentTypes = infos.Item3,
-				PositionLevels = infos.Item4,
-				PositionStatuses = infos.Item5,
-				Customers = infos.Item6
+				EmploymentTypes = infos.Item3.AsParallel().Select(et => new EmploymentTypeSelectViewModel()
+				{
+					EmploymentTypeId = et.EmploymentTypeId,
+					EmploymentTypeName = et.EmploymentTypeName
+				}).ToList(),
+				PositionLevels = infos.Item4.AsParallel().Select(pl => new PositionLevelSelectViewModel()
+				{
+					PositionLevelId = pl.PositionLevelId,
+					PositionLevelName = pl.PositionLevelName
+				}).ToList(),
+				PositionStatuses = infos.Item5.AsParallel().Select(ps => new PositionStatusSelectViewModel()
+				{
+					PositionStatusId = ps.PositionStatusId,
+					PositionStatusName = ps.PositionStatusName
+				}).ToList(),
+				Customers = infos.Item6.AsParallel().Select(cus => new CustomerSelectViewModel()
+				{
+					CustomerId = cus.CustomerId,
+					CustomerName = cus.CustomerName
+				}).ToList()
 			};
 		}
 
@@ -109,6 +125,10 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 							else tags.Add(new Tag { TagName = tag, TagId = -1, PositionId = -1 });
 						}
 					}
+					if(model.PositionStatusId == 0)
+					{
+						model.PositionStatusId = AppService.GetStaffingDefaultStatus(subInfo.OrganizationId);
+					}
 				}
 				int? positionId = AppService.CreatePosition(
 					new Position()
@@ -136,11 +156,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 
 						Address = new Address
 						{
-							Address1 = model.Address,
-							City = model.City,
-							StateId = model.SelectedStateId,
-							CountryCode = model.SelectedCountryCode,
-							PostalCode = model.PostalCode
+							Address1 = model.PositionAddress.Address,
+							City = model.PositionAddress.City,
+							StateId = model.PositionAddress.SelectedStateId,
+							CountryCode = model.PositionAddress.SelectedCountryCode,
+							PostalCode = model.PositionAddress.PostalCode
 						},
 
 						Tags = tags

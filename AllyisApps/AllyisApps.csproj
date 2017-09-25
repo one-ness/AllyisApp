@@ -255,12 +255,15 @@
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\CreateApplicationDocumentViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\CreateApplicationViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\CreateApplicantViewModel.cs" />
+    <Compile Include="Areas\StaffingManager\ViewModels\Staffing\PositionThumbnailInfoViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\PositionViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\EditPositionViewModel.cs" />
+    <Compile Include="Areas\StaffingManager\ViewModels\Staffing\SelectListViewModels.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\StaffingSettingsViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\StaffingIndexViewModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseSummaryViewModelItem.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseIndexViewModel.cs" />
+    <Compile Include="Areas\StaffingManager\ViewModels\Staffing\TagViewModel.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\DetailsAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ImportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ReactivateAction.cs" />
@@ -608,7 +611,6 @@
     <Content Include="Areas\StaffingManager\Views\Customer\Index.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Customer\_CustomerEdit.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Customer\Create.cshtml" />
-    <Content Include="Areas\StaffingManager\Views\Customer\_IndexPartial_Inactive.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Customer\_IndexPartial_Active.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Customer\Edit.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\Accounts.cshtml" />

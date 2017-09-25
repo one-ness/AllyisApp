@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using AllyisApps.Services.Billing;
 using AllyisApps.Services.Expense;
 using AllyisApps.Utilities;
 using Excel;
@@ -36,7 +37,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			// TODO: Buff up the error handling (catch errors from import functions, etc.)
 			if (ModelState.IsValid)
 			{
-				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
+				if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
+				{
+					this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
+				}
+
 				if (file != null && file.ContentLength > 0)
 				{
 					// ExcelDataReader works with the binary Excel file, so it needs a FileStream

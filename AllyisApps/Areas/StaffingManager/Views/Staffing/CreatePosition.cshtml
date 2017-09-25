@@ -5,6 +5,7 @@
 	Model.IsCreating = true;
 	ViewData.Add(ControllerConstants.Controller, ControllerConstants.Staffing);
 	ViewData.Add(ActionConstants.Action, ActionConstants.SubmitCreatePosition);
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/StaffingManager/Views/Shared/_BreadcrumbNavPartial.cshtml";
 	DisplayHints.LayoutThemeBundle = "~/Content/StaffingManager";
 
 	ViewBag.OrganizationId = Model.OrganizationId;
@@ -38,16 +39,16 @@
 			setDatePickers();
 		});
 	</script>
-    <script type="text/javascript">
-        var preserveState = '@(Model.State != null ? (States.ResourceManager.GetString(Model.State) ?? Model.State) : "")';
+	<script type="text/javascript">
+        var preserveState = '@( (Model.PositionAddress != null && Model.PositionAddress.State != null) ? (States.ResourceManager.GetString(Model.PositionAddress.State) ?? Model.PositionAddress.State) : "")';
 		var dropdownempty = "@Strings.DropDownEmpty";
 		var ddlStatesId = "@ViewConstants.DdlStatesId";
 		var ddlStatesOptionsId = "@ViewConstants.DdlStatesOptionsId";
 		var getStatesUrl = "/Home/GetStates";
-		var selectedCountryCode = "@Model.SelectedCountryCode";
-		var selectedStateId = "@Model.SelectedStateId";
+		var selectedCountryCode = "@(Model.PositionAddress == null ? null : Model.PositionAddress.SelectedCountryCode)";
+		var selectedStateId = "@(Model.PositionAddress == null ? null : Model.PositionAddress.SelectedStateId)";
 		var mindate_shortstring = "@DateTime.Today.ToShortDateString()";
 		var maxdate_shortstring = "@DateTime.MaxValue.ToShortDateString()";
 	</script>
-    @Scripts.Render("~/bundles/UpdateStateDDL");
+	@Scripts.Render("~/bundles/UpdateStateDDL");
 }

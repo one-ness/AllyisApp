@@ -86,7 +86,6 @@
 	label{
 		float: left;
 	}
-
 </style>
 
 <div class="shrink-wrap-center">
@@ -114,6 +113,7 @@
 						@Html.TextBoxFor(m => m.StartDate, new { @class = "updatable datepicker form-control item-control", @id = "datepicker" })
 						@Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger" })
 					</div>
+					<input type="hidden" id="DefaultStatus" name="defaultStatus" value="@Model.defaultStatusId" />
 					@if (!Model.IsCreating)
 					{
 						<div class="form-group">
@@ -138,19 +138,19 @@
 						@Html.ValidationMessageFor(m => m.RequiredSkills, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
-						@Html.ReqLabelFor(m => m.Country, Strings.Country + " *")
-						@Html.DropDownListFor(m => m.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new { @id = ViewConstants.DdlCountriesId, @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.Country, "", new { @class = "text-danger" })
+						@Html.ReqLabelFor(m => m.PositionAddress.Country, Strings.Country + " *")
+						@Html.DropDownListFor(m => m.PositionAddress.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new { @id = ViewConstants.DdlCountriesId, @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.PositionAddress.Country, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
-						@Html.ReqLabelFor(m => m.State, Strings.State + " *")
-						@Html.DropDownListFor(m => m.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @id = ViewConstants.DdlStatesId, @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.State, "", new { @class = "text-danger" })
+						@Html.ReqLabelFor(m => m.PositionAddress.State, Strings.State + " *")
+						@Html.DropDownListFor(m => m.PositionAddress.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @id = ViewConstants.DdlStatesId, @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.PositionAddress.State, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
-						@Html.ReqLabelFor(m => m.City, Strings.City)
-						@Html.TextBoxFor(m => m.City, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
+						@Html.ReqLabelFor(m => m.PositionAddress.City, Strings.City)
+						@Html.TextBoxFor(m => m.PositionAddress.City, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.PositionAddress.City, "", new { @class = "text-danger" })
 					</div>
 				</div>
 			</div>
@@ -199,7 +199,7 @@
 					</div>
 				</div>
 				<div class="form-group panel panel-default">
-					<input type="hidden" id="TagsToSubmit" name="TagsToSubmit" value="[]"/>
+					<input type="hidden" id="TagsToSubmit" name="TagsToSubmit" value="[]" />
 					<Label class="panel-info">Tags</Label>
 					<div>
 						<div id="tags">
@@ -265,8 +265,7 @@
 			console.log("Parsed: " + parsed);
 		}
 		var newArr = [];
-		for (var i in parsed)
-		{
+		for (var i in parsed) {
 			newArr.push(tagsInput[i]);
 		}
 		newArr.push(tag);
@@ -293,8 +292,7 @@
 		$("#tags input").on({
 			focusout: function () {
 				var txt = this.value.replace(/[^a-z0-9\+\-\.\#]/ig, ''); // allowed characters
-				if (txt)
-				{
+				if (txt) {
 					$("<span />", { text: txt.toLowerCase(), insertAfter: this });
 					updateTags(txt);
 					console.log("ADD: " + txt);

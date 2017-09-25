@@ -61,14 +61,14 @@ namespace AllyisApps.Controllers.Auth
 				SkuIdEnum selectedSku = productSubscription.SubscriptionInfo == null ? 0 : productSubscription.SubscriptionInfo.SkuId;
 
 				// TODO: orgName MUST be obtained in the service call AppService.GetProductSubscriptionInfo (it gets the orgId)
-				string orgName = "Get ORG Name";
+				string SubscriptionName = "SubScription Name";
 				BillingServicesCustomerId customerId = new BillingServicesCustomerId(productSubscription.StripeTokenCustId);
 
 				return new ProductSubscriptionViewModel
 				{
 					IsValid = true,
 					OrganizationId = organizationId,
-					OrganizationName = orgName,
+					OrganizationName = SubscriptionName,
 					ProductId = productSubscription.Product.ProductId,
 					ProductName = productSubscription.Product.ProductName,
 					AreaUrl = productSubscription.Product.AreaUrl,
