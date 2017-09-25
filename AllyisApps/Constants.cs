@@ -99,6 +99,11 @@ namespace AllyisApps
 		public const string CreatePositionStatus = "createpositionstatus";
 		public const string CreatePositionLevel = "createpositionlevel";
 		public const string CreateEmploymentType = "createemploymenttype";
+		public const string DeletePositionLevel = "deletepositionlevel";
+		public const string DeletePositionStatus = "deletepositionstatus";
+		public const string DeleteEmploymentType = "deleteemploymenttype";
+		public const string CreateCustomer = "createcustomer";
+		public const string UpdatePositionStatus = "updatePositionStatus";
 	}
 
 	/// <summary>

@@ -10,11 +10,12 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using AllyisApps.Services.Billing;
 using AllyisApps.Services.Expense;
 using AllyisApps.Utilities;
 using Excel;
 
-namespace AllyisApps.Areas.TimeTracker.Controllers
+namespace AllyisApps.Areas.StaffingManager.Controllers
 {
 	/// <summary>
 	/// Represents pages for the management of a Customer.
@@ -30,13 +31,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Import(int subscriptionId, ExpenseFile file)
+		public ActionResult CustomerImport(int subscriptionId, ExpenseFile file)
 		{
 			// TODO: Replace ModelState errors with exception catches and notifications
 			// TODO: Buff up the error handling (catch errors from import functions, etc.)
 			if (ModelState.IsValid)
 			{
-				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
+				if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
+				{
+					this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
+				}
+
 				if (file != null && file.ContentLength > 0)
 				{
 					// ExcelDataReader works with the binary Excel file, so it needs a FileStream

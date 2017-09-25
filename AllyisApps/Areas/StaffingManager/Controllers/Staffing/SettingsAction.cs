@@ -12,6 +12,11 @@ using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.StaffingManager;
+using AllyisApps.Core.Alert;
+using System;
+using AllyisApps.ViewModels;
+using AllyisApps.Services.Lookup;
+using System.Linq;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -29,7 +34,9 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			string Subname = AppService.getSubscriptionName(subscriptionId);
+			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
+			var defaultStatus = AppService.GetStaffingDefaultStatus(subInfo.OrganizationId);
+
 			var infos = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
 
 			//ViewBag.SignedInUserID = GetCookieData().UserId;
@@ -38,12 +45,13 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			StaffingSettingsViewModel model = this.ConstructStaffingSettingsViewModel(
 				subInfo.OrganizationId,
 				subscriptionId,
-				Subname,
+				subscriptionNameToDisplay,
 				infos.Item2, //tags list
 				infos.Item3, //employmentTypes list
 				infos.Item4, //positionLevels list
 				infos.Item5,  //positionStatuses list
-				infos.Item6
+				infos.Item6,
+				defaultStatus
 				);
 
 			return this.View(model);
@@ -60,24 +68,209 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="positionLevelsList"></param>
 		/// <param name="positionStatuses"></param>
 		/// <param name="customers"></param>
+		/// <param name="defaultStatusId"></param>
 		/// <returns></returns>
 		public StaffingSettingsViewModel ConstructStaffingSettingsViewModel(int orgId, int subId, string subName,
 						List<Services.Lookup.Tag> tags, List<EmploymentType> employmentTypes, List<PositionLevel> positionLevelsList,
-						List<PositionStatus> positionStatuses, List<Customer> customers)
+						List<PositionStatus> positionStatuses, List<Customer> customers, int defaultStatusId)
 		{
 			StaffingSettingsViewModel result = new StaffingSettingsViewModel()
 			{
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
 				organizationId = orgId,
 				subscriptionId = subId,
 				subscriptionName = subName,
-				tags = tags,
-				employmentTypes = employmentTypes,
-				positionLevels = positionLevelsList,
-				positionStatuses = positionStatuses,
+				tags = tags.AsParallel().Select(t => new TagViewModel() { TagId = t.TagId, TagName = t.TagName, PositionId = t.PositionId }).ToList(),
+				employmentTypes = employmentTypes.AsParallel().Select(empt => new EmploymentTypeSelectViewModel() { EmploymentTypeId = empt.EmploymentTypeId, EmploymentTypeName = empt.EmploymentTypeName }).ToList(),
+				positionLevels = positionLevelsList.AsParallel().Select(pos => new PositionLevelSelectViewModel() { PositionLevelId = pos.PositionLevelId, PositionLevelName = pos.PositionLevelName }).ToList(),
+				positionStatuses = positionStatuses.AsParallel().Select(pos => new PositionStatusSelectViewModel() { PositionStatusId = pos.PositionStatusId, PositionStatusName = pos.PositionStatusName }).ToList(),
 				customers = customers
 			};
 
 			return result;
 		}
+
+		/// <summary>
+		/// Create new position level for the users Org
+		/// </summary>
+		/// <param name="positionLevel"></param>
+		/// <param name="subscriptionId"></param>
+		/// <returns></returns>
+		public ActionResult CreatePositionLevel(string positionLevel, int subscriptionId)
+		{
+			if(string.IsNullOrWhiteSpace(positionLevel))
+			{
+				Notifications.Add(new BootstrapAlert("Position Level cannot be blank", Variety.Warning));
+			}
+			else
+			{
+				int orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+
+				// should put try catch in 'else'. Creating a blank level results in Two alerts: "Cannot create blank position level" and "pay class already exists"
+				try
+				{
+					AppService.CreatePositionLevel(positionLevel, orgId, subscriptionId);
+					Notifications.Add(new BootstrapAlert("Created new Position Level", Variety.Success));
+				}
+				catch (ArgumentException)
+				{
+					// Level already exists
+					Notifications.Add(new BootstrapAlert("Position Level already exists", Variety.Danger));
+				}
+			}
+
+			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId });
+		}
+
+		/// <summary>
+		/// Create new position level for the users Org
+		/// </summary>
+		/// <param name="positionStatus"></param>
+		/// <param name="subscriptionId"></param>
+		/// <returns></returns>
+		public ActionResult CreatePositionStatus(string positionStatus, int subscriptionId)
+		{
+			if (string.IsNullOrWhiteSpace(positionStatus))
+			{
+				Notifications.Add(new BootstrapAlert("Position Status cannot be blank", Variety.Warning));
+			}
+			else
+			{
+				int orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+
+				// should put try catch in 'else'. Creating a blank level results in Two alerts: "Cannot create blank position level" and "pay class already exists"
+				try
+				{
+					AppService.CreatePositionStatus(positionStatus, orgId, subscriptionId);
+					Notifications.Add(new BootstrapAlert("Created new Position Status", Variety.Success));
+				}
+				catch (ArgumentException)
+				{
+					// Level already exists
+					Notifications.Add(new BootstrapAlert("Position Status already exists", Variety.Danger));
+				}
+			}
+
+			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId });
+		}
+
+		/// <summary>
+		/// Create new position level for the users Org
+		/// </summary>
+		/// <param name="employmentType"></param>
+		/// <param name="subscriptionId"></param>
+		/// <returns></returns>
+		public ActionResult CreateEmploymentType(string employmentType, int subscriptionId)
+		{
+			if (string.IsNullOrWhiteSpace(employmentType))
+			{
+				Notifications.Add(new BootstrapAlert("Position Status cannot be blank", Variety.Warning));
+			}
+			else
+			{
+				int orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+
+				// should put try catch in 'else'. Creating a blank level results in Two alerts: "Cannot create blank position level" and "pay class already exists"
+				try
+				{
+					AppService.CreateEmploymentType(employmentType, orgId, subscriptionId);
+					Notifications.Add(new BootstrapAlert("Created new Position Status", Variety.Success));
+				}
+				catch (ArgumentException)
+				{
+					// Level already exists
+					Notifications.Add(new BootstrapAlert("Position Status already exists", Variety.Danger));
+				}
+			}
+
+			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId });
+		}
+
+		/// <summary>
+		/// update status default for the users Org
+		/// </summary>
+		/// <param name="organizationId"></param>
+		/// <param name="positionStatusId"></param>
+		/// <param name="subscriptionId"></param>
+		/// <returns></returns>
+		public ActionResult updatePositionStatus(int organizationId, int positionStatusId, int subscriptionId)
+		{
+			try
+			{
+				AppService.UpdateDefaultPositionStatus(organizationId, positionStatusId);
+				Notifications.Add(new BootstrapAlert("update new Position Status", Variety.Success));
+			}
+			catch (ArgumentException)
+			{
+				// Level already exists
+				Notifications.Add(new BootstrapAlert("Position Status already exists", Variety.Danger));
+			}
+
+			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId });
+		}
+
+
+		///// <summary>
+		///// POST: 
+		///// </summary>
+		///// <param name="model">The settings ViewModel.</param>
+		////// <returns>The resulting page, Create if unsuccessful else staffing settings.</returns>
+		/*
+		public ActionResult CreateCustomer(StaffingSettingsViewModel model)
+		{
+			if (ModelState.IsValid)
+			{
+
+				UserContext.SubscriptionAndRole subInfo = null;
+				this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(model.subscriptionId, out subInfo);
+				int? customerId = AppService.CreateStaffingCustomer(
+					new Customer()
+					{
+						ContactEmail = model.newCustomer.ContactEmail,
+						CustomerName = model.newCustomer.CustomerName,
+						Address = new Address()
+						{
+							Address1 = model.newCustomerAddress.Address,
+							City = model.newCustomerAddress.City,
+							StateName = model.newCustomerAddress.State,
+							CountryName = model.newCustomerAddress.Country,
+							PostalCode = model.newCustomerAddress.PostalCode,
+							CountryCode = model.newCustomerAddress.SelectedCountryCode,
+							StateId = model.newCustomerAddress.SelectedStateId
+						},
+						ContactPhoneNumber = model.newCustomer.ContactPhoneNumber,
+						FaxNumber = model.newCustomer.FaxNumber,
+						Website = model.newCustomer.Website,
+						EIN = model.newCustomer.EIN,
+						OrganizationId = subInfo.OrganizationId,
+						CustomerOrgId = model.newCustomer.CustomerOrgId
+					},
+					model.subscriptionId);
+
+				if (customerId.HasValue)
+				{
+					// CustomerOrgId is not unique
+					if (customerId == -1)
+					{
+						Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerOrgIdNotUnique, Variety.Danger));
+						return this.View(model);
+					}
+
+					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerCreatedNotification, Variety.Success));
+
+					// Redirect to the user details page
+					return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = model.subscriptionId });
+				}
+
+				// No customer value, should only happen because of a permission failure
+				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
+
+				return this.RedirectToAction(ActionConstants.Settings);
+			}
+
+			// Invalid model
+			return this.View(model);
+		}
+		*/
 	}
 }

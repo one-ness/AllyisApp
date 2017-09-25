@@ -30,7 +30,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>The result of this action.</returns>
 		public ActionResult AddMember(int id, string returnUrl)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
+			this.AppService.CheckOrgAction(AppService.OrgAction.AddUserToOrganization, id);
 			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(id);
 			ViewBag.returnUrl = returnUrl;
 			return this.View(model);
@@ -47,9 +47,6 @@ namespace AllyisApps.Controllers.Auth
 		[ValidateAntiForgeryToken]
 		public ActionResult AddMember(AddMemberViewModel add, int organizationId)
 		{
-			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(organizationId);
-			add.Subscriptions = model.Subscriptions;
-
 			if (ModelState.IsValid)
 			{
 				this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, add.OrganizationId);
@@ -115,33 +112,7 @@ namespace AllyisApps.Controllers.Auth
 			{
 				OrganizationId = organizationId,
 				EmployeeId = new string(AppService.IncrementAlphanumericCharArray(infos.NextEmpolyeeID.ToCharArray())),
-				Subscriptions = new List<AddMemberSubscriptionViewModel>()
 			};
-
-			foreach (Subscription sub in infos.Subscriptions)
-			{
-				AddMemberSubscriptionViewModel subInfo = new AddMemberSubscriptionViewModel
-				{
-					ProductName = sub.ProductName,
-					ProductRoles = sub.ProductRoles
-						.Select(r => new ProductRoleViewModel()
-						{
-							ProductId = (int)r.ProductId,
-							ProductRoleId = r.ProductRoleId,
-							ProductRoleName = r.ProductRoleName
-						}).ToList(),
-					SubscriptionId = sub.SubscriptionId
-				};
-				subInfo.ProductRoles.Insert(
-					0,
-					new ProductRoleViewModel
-					{
-						ProductRoleName = "None",
-						ProductId = (int)ProductIdEnum.None,
-						ProductRoleId = (int)TimeTrackerRole.User
-					});
-				result.Subscriptions.Add(subInfo);
-			}
 
 			return result;
 		}

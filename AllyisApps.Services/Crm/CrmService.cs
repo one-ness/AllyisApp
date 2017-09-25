@@ -44,7 +44,6 @@ namespace AllyisApps.Services
 			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			var spResults = DBHelper.GetNextCustId(subInfo.OrganizationId);
 			return spResults.Item1 == null ? "0000000000000000" : new string(IncrementAlphanumericCharArray(spResults.Item1.ToCharArray()));
-				
 		}
 
 		/// <summary>
@@ -68,7 +67,10 @@ namespace AllyisApps.Services
 		/// <returns>Customer id.</returns>
 		public int? CreateCustomer(Customer customer, int subscriptionId)
 		{
-			this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
+			if (this.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
+			{
+				this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
+			}
 			customer.Address?.EnsureDBRef(this);
 			return DBHelper.CreateCustomerInfo(GetDBEntitiesFromCustomerInfo(customer));
 		}
@@ -81,7 +83,10 @@ namespace AllyisApps.Services
 		/// <returns>Returns 1 if succeed, -1 if fail, and null if authorization fails.</returns>
 		public int? UpdateCustomer(Customer customer, int subscriptionId)
 		{
-			this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
+			if (this.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
+			{
+				this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
+			}
 			customer.Address?.EnsureDBRef(this);
 			return DBHelper.UpdateCustomer(GetDBEntitiesFromCustomerInfo(customer));
 		}
@@ -94,7 +99,10 @@ namespace AllyisApps.Services
 		/// <returns>Returns false if authorization fails.</returns>
 		public string DeleteCustomer(int subscriptionId, int customerId)
 		{
-			this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
+			if (this.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
+			{
+				this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
+			}
 			return DBHelper.DeleteCustomer(customerId);
 		}
 
@@ -107,7 +115,10 @@ namespace AllyisApps.Services
 		/// <returns>Returns false if authorization fails.</returns>
 		public string ReactivateCustomer(int customerId, int subscriptionId, int orgId)
 		{
-			this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
+			if (this.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
+			{
+				this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
+			}
 			return DBHelper.ReactivateCustomer(customerId);
 		}
 
@@ -870,7 +881,6 @@ namespace AllyisApps.Services
 					CustomerId = completeProject.CustomerId,
 					CustomerName = completeProject.CustomerName,
 					CustomerOrgId = completeProject.CustomerOrgId,
-
 				},
 				EndDate = completeProject.EndDate,
 				IsActive = completeProject.IsActive,

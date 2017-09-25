@@ -16,13 +16,13 @@ namespace AllyisApps.Services
 	public class ReportInfo
 	{
 		public List<Customer> Customers { get; set; }
-		public List<CompleteProject> CompleteProjectInfo { get; set; }
+		public List<CompleteProject> CompleteProject { get; set; }
 		public List<SubscriptionUser> SubscriptionUserInfo { get; set; }
 
 		public ReportInfo(List<Customer> customers, List<CompleteProject> completeProjectInfo, List<SubscriptionUser> subscriptionUserInfo)
 		{
 			this.Customers = customers;
-			this.CompleteProjectInfo = completeProjectInfo;
+			this.CompleteProject = completeProjectInfo;
 			this.SubscriptionUserInfo = subscriptionUserInfo;
 		}
 	}

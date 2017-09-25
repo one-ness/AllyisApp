@@ -259,6 +259,23 @@ namespace AllyisApps.DBModel
 			}
 		}
 
+		/// <summary>
+		/// Adds an organizations staffing settings.
+		/// </summary>
+		/// <param name="orgId">org ID thats getting a new settings object</param>
+		/// <returns>Creates an orgs staffing object</returns>
+		public void CreateStaffingSettings(int orgId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationId", orgId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				// default -1
+				connection.Execute("[StaffingManager].[CreateStaffingSettings]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
 		#endregion Create Methods
 
 		////////////////////////////
@@ -582,24 +599,32 @@ namespace AllyisApps.DBModel
 		/// TODO
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
-		/// <param name="statusName">Organization Id.</param>
-		/// <param name="typeName">Organization Id.</param>
+		/// <param name="statuses">Organization Id.</param>
+		/// <param name="types">Organization Id.</param>
 		/// <param name="tags">Organization Id.</param>
 		/// <returns>.</returns>
 		public Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>, List<CustomerDBEntity>>
-			GetStaffingIndexPageInfoFiltered(int orgId, string statusName = "", string typeName = "", List<string> tags = null)
+			GetStaffingIndexPageInfoFiltered(int orgId, List<string> statuses, List<string> types, List<string> tags = null)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
-			parameters.Add("@statusName", statusName);
-			parameters.Add("@typeName", typeName);
+
+			DataTable StatusesTable = new DataTable();
+			StatusesTable.Columns.Add("StatusName", typeof(string));
+			foreach (string status in statuses) StatusesTable.Rows.Add(status);
+
+			DataTable TypesTable = new DataTable();
+			TypesTable.Columns.Add("TypeName", typeof(string));
+			foreach (string type in types) TypesTable.Rows.Add(type);
 
 			DataTable TagTable = new DataTable();
-			TagTable.Columns.Add("tagNames", typeof(string));
+			TagTable.Columns.Add("TagName", typeof(string));
 			foreach (string tag in tags) TagTable.Rows.Add(tag);
 
-			parameters.Add("@tags", TagTable);
-
+			parameters.Add("@status", StatusesTable.AsTableValuedParameter("[StaffingManager].[StatusesTable]"));
+			parameters.Add("@type", TypesTable.AsTableValuedParameter("[StaffingManager].[TypesTable]"));
+			parameters.Add("@tags", TagTable.AsTableValuedParameter("[Lookup].[TagTable]"));
+			
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
@@ -614,6 +639,27 @@ namespace AllyisApps.DBModel
 					results.Read<PositionLevelDBEntity>().ToList(),
 					results.Read<PositionStatusDBEntity>().ToList(),
 					results.Read<CustomerDBEntity>().ToList());
+			}
+		}
+		
+		/// <summary>
+		/// Updates an organizations staffing settings.
+		/// </summary>
+		/// <param name="orgId">org ID thats getting a new setting </param>
+		/// <returns>Creates an orgs staffing object</returns>
+		public int GetStaffingDefaultStatus(int orgId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationId", orgId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				// default -1
+				var returnInt = 0;
+				var result = connection.Query("[StaffingManager].[GetStaffingDefaultStatus]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				if (result.DefaultPositionStatusId == null) return returnInt;
+				else return result.DefaultPositionStatusId;
+
 			}
 		}
 
@@ -742,6 +788,25 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Execute("[StaffingManager].[UpdatePosition]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Updates an organizations staffing settings.
+		/// </summary>
+		/// <param name="orgId">org ID thats getting a new setting </param>
+		/// <param name="positionStatusId">position status to be set as default</param>
+		/// <returns>Creates an orgs staffing object</returns>
+		public void UpdateStaffingSettings(int orgId, int positionStatusId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationId", orgId);
+			parameters.Add("@positionStatusId", positionStatusId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				// default -1
+				connection.Execute("[StaffingManager].[UpdateStaffingSettings]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 

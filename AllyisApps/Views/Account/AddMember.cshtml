@@ -48,7 +48,7 @@
 			<div class="row">
 				<div class="col-xs-12">
 					<div class="form-group allyis-action-buttons pull-right">
-                        <a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId })" new { class="btn btn-default" }> @Strings.Cancel </a>
+                        <a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { @id = Model.OrganizationId })" class="btn btn-default">@Strings.Cancel</a>&nbsp;
 						<input type="submit" id="addMember" value="@Strings.Add" class="btn btn-primary" />
 					</div>
 				</div>
