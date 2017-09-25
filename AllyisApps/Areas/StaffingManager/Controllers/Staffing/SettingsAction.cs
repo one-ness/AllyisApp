@@ -35,6 +35,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
+			var defaultStatus = AppService.GetStaffingDefaultStatus(subInfo.OrganizationId);
 
 			var infos = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
 
@@ -49,7 +50,8 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				infos.Item3, //employmentTypes list
 				infos.Item4, //positionLevels list
 				infos.Item5,  //positionStatuses list
-				infos.Item6
+				infos.Item6,
+				defaultStatus
 				);
 
 			return this.View(model);
@@ -66,10 +68,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="positionLevelsList"></param>
 		/// <param name="positionStatuses"></param>
 		/// <param name="customers"></param>
+		/// <param name="defaultStatusId"></param>
 		/// <returns></returns>
 		public StaffingSettingsViewModel ConstructStaffingSettingsViewModel(int orgId, int subId, string subName,
 						List<Services.Lookup.Tag> tags, List<EmploymentType> employmentTypes, List<PositionLevel> positionLevelsList,
-						List<PositionStatus> positionStatuses, List<Customer> customers)
+						List<PositionStatus> positionStatuses, List<Customer> customers, int defaultStatusId)
 		{
 			StaffingSettingsViewModel result = new StaffingSettingsViewModel()
 			{
@@ -81,7 +84,8 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				employmentTypes = employmentTypes.AsParallel().Select(empt => new EmploymentTypeSelectViewModel() { EmploymentTypeId = empt.EmploymentTypeId, EmploymentTypeName = empt.EmploymentTypeName }).ToList(),
 				positionLevels = positionLevelsList.AsParallel().Select(pos => new PositionLevelSelectViewModel() { PositionLevelId = pos.PositionLevelId, PositionLevelName = pos.PositionLevelName }).ToList(),
 				positionStatuses = positionStatuses.AsParallel().Select(pos => new PositionStatusSelectViewModel() { PositionStatusId = pos.PositionStatusId, PositionStatusName = pos.PositionStatusName }).ToList(),
-				customers = customers
+				customers = customers,
+				defaultPositionStatus = defaultStatusId 
 			};
 
 			return result;
@@ -178,6 +182,29 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					// Level already exists
 					Notifications.Add(new BootstrapAlert("Position Status already exists", Variety.Danger));
 				}
+			}
+
+			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId });
+		}
+
+		/// <summary>
+		/// update status default for the users Org
+		/// </summary>
+		/// <param name="organizationId"></param>
+		/// <param name="positionStatusId"></param>
+		/// <param name="subscriptionId"></param>
+		/// <returns></returns>
+		public ActionResult updatePositionStatus(int organizationId, int positionStatusId, int subscriptionId)
+		{
+			try
+			{
+				AppService.UpdateDefaultPositionStatus(organizationId, positionStatusId);
+				Notifications.Add(new BootstrapAlert("update new Position Status", Variety.Success));
+			}
+			catch (ArgumentException)
+			{
+				// Level already exists
+				Notifications.Add(new BootstrapAlert("Position Status already exists", Variety.Danger));
 			}
 
 			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId });

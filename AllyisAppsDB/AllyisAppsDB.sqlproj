@@ -391,6 +391,9 @@
     <Build Include="StaffingManager\User Defined Types\TypesTable.sql" />
     <Build Include="StaffingManager\User Defined Types\StatusesTable.sql" />
     <Build Include="StaffingManager\Tables\StaffingSettings.sql" />
+    <Build Include="StaffingManager\Stored Procedures\CreateStaffingSettings.sql" />
+    <Build Include="StaffingManager\Stored Procedures\UpdateStaffingSettings.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetStaffingDefaultStatus.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

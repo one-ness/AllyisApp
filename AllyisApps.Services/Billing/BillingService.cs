@@ -735,6 +735,11 @@ namespace AllyisApps.Services
 			{
 				DBHelper.InitializeTimeTrackerSettings(orgId);
 			}
+
+			if (productId == (int)ProductIdEnum.StaffingManager)
+			{
+				DBHelper.CreateStaffingSettings(orgId);
+			}
 		}
 
 		/// <summary>
