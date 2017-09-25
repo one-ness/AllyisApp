@@ -55,7 +55,7 @@
 		display: block;
 		float: left;
 		color: #fff;
-		background: #bc7967;
+		background: #336B7B;
 		padding: 5px;
 		padding-right: 25px;
 		margin: 4px;
@@ -66,6 +66,7 @@
 	}
 
 	#tags > span:after {
+		color: #C68A4D;
 		position: absolute;
 		content: "×";
 		border: 1px solid;
@@ -75,12 +76,17 @@
 	}
 
 	#tags > input {
-		background: #eee;
+		background: #CBBEDF;
 		border: 0;
 		margin: 4px;
 		padding: 7px;
 		width: auto;
 	}
+
+	label{
+		float: left;
+	}
+
 </style>
 
 <div class="shrink-wrap-center">
@@ -103,26 +109,19 @@
 						@Html.ValidationMessageFor(m => m.CustomerId, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
+						<span class="fa fa-fw fa-calendar fa-pull-left"></span>
 						@Html.ReqLabelFor(m => m.StartDate, Strings.StartDate)
-						<span class="fa fa-fw fa-calendar"></span>
 						@Html.TextBoxFor(m => m.StartDate, new { @class = "updatable datepicker form-control item-control", @id = "datepicker" })
 						@Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger" })
 					</div>
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.PositionStatusId, "Position Status")
-						@Html.DropDownListFor(m => m.PositionStatusId, new SelectList(Model.PositionStatuses, "PositionStatusId", "PositionStatusName"), Strings.DropDownEmpty, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.PositionStatusId, "", new { @class = "text-danger" })
-					</div>
-					<div class="form-group billing-amount">
-						<label>Billing Amount</label>
-						@Html.TextBoxFor(m => m.BillingRateAmount, new { @class = "form-control", type = "number", min = "0.00", step = "0.01" })
-						@Html.ValidationMessageFor(m => m.BillingRateAmount, "", new { @class = "text-danger" })
-					</div>
-					<div class="form-group billing-frequency">
-						<label>Billing Rate</label>
-						@Html.EnumDropDownListFor(m => m.BillingRateFrequency, Strings.DropDownEmpty, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.BillingRateFrequency, "", new { @class = "text-danger" })
-					</div>
+					@if (!Model.IsCreating)
+					{
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.PositionStatusId, "Position Status")
+							@Html.DropDownListFor(m => m.PositionStatusId, new SelectList(Model.PositionStatuses, "PositionStatusId", "PositionStatusName"), Strings.DropDownEmpty, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.PositionStatusId, "", new { @class = "text-danger" })
+						</div>
+					}
 					<div class="form-group">
 						@Html.ReqLabelFor(m => m.TeamName, Strings.TeamName)
 						@Html.TextBoxFor(m => m.TeamName, new { @class = "form-control" })
@@ -164,7 +163,7 @@
 						@Html.ValidationMessageFor(m => m.EmploymentTypeId, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group duration">
-						<label>Duration (Months)*</label>
+						<label>Duration (Months)</label>
 						@Html.TextBoxFor(m => m.DurationMonths, new { @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.DurationMonths, "", new { @class = "text-danger" })
 					</div>
@@ -174,9 +173,19 @@
 						@Html.ValidationMessageFor(m => m.PositionLevelId, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group position-count">
-						<label>Position Count *</label>
+						<label>Position Count</label>
 						@Html.TextBoxFor(m => m.PositionCount, new { @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.PositionCount, "", new { @class = "text-danger" })
+					</div>
+					<div class="form-group billing-amount">
+						<label>Billing Amount</label>
+						@Html.TextBoxFor(m => m.BillingRateAmount, new { @class = "form-control", type = "number", min = "0.00", step = "0.01" })
+						@Html.ValidationMessageFor(m => m.BillingRateAmount, "", new { @class = "text-danger" })
+					</div>
+					<div class="form-group billing-frequency">
+						<label>Billing Rate</label>
+						@Html.EnumDropDownListFor(m => m.BillingRateFrequency, Strings.DropDownEmpty, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.BillingRateFrequency, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
 						<label>Job Responsibilities</label>
@@ -194,7 +203,7 @@
 					<Label class="panel-info">Tags</Label>
 					<div>
 						<div id="tags">
-							<input type="text" data-role="tagsinput" placeholder="Add a tag" size="45" list="orgTags" />
+							<input type="text" data-role="tagsinput" placeholder="Add a tag" size="65" list="orgTags" />
 						</div>
 					</div>
 					<br>
