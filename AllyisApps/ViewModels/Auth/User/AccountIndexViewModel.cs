@@ -232,7 +232,7 @@ namespace AllyisApps.ViewModels.Auth
 				/// <summary>
 				/// Gets or sets the ProductId.
 				/// </summary>
-				public Services.ProductIdEnum ProductId { get; set; }
+				public ProductIdEnum ProductId { get; set; }
 
 				/// <summary>
 				/// Gets or sets the ProductGoToUrl.

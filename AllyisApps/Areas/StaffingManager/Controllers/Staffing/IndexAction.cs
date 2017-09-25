@@ -10,6 +10,7 @@ using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
+using AllyisApps.Services.Crm;
 using AllyisApps.Services.StaffingManager;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
