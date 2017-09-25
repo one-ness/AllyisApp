@@ -6,7 +6,7 @@
 	DisplayHints.PageBodyId = "tt-customer";
 	ViewBag.Title = Strings.CustomerList;
 	ViewData["IsManager"] = Model.CanEdit;
-	Layout = "~/Areas/TimeTracker/Views/Shared/_Layout.cshtml";
+	Layout = "~/Areas/StaffingManager/Views/Shared/_Layout.cshtml";
 	var empty = new EditCustomerInfoViewModel() { OrganizationId = Model.OrganizationId };
 	var createButtonClass = !Model.CanEdit ? "invisible" : "";
 	ViewData["UserId"] = Model.UserId;

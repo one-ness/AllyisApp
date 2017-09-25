@@ -891,7 +891,12 @@ namespace AllyisApps.Services
 				PositionId = tag.PositionId
 			};
 		}
-
+		
+		/// <summary>
+		/// initialize a base customer object
+		/// </summary>
+		/// <param name="customer"></param>
+		/// <returns></returns>
 		public static Customer InitializeBaseCustomer(CustomerDBEntity customer)
 		{
 			return new Customer()

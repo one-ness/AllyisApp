@@ -259,6 +259,23 @@ namespace AllyisApps.DBModel
 			}
 		}
 
+		/// <summary>
+		/// Adds an organizations staffing settings.
+		/// </summary>
+		/// <param name="orgId">org ID thats getting a new settings object</param>
+		/// <returns>Creates an orgs staffing object</returns>
+		public void CreateStaffingSettings(int orgId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationId", orgId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				// default -1
+				connection.Execute("[StaffingManager].[CreateStaffingSettings]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
 		#endregion Create Methods
 
 		////////////////////////////
@@ -624,6 +641,27 @@ namespace AllyisApps.DBModel
 					results.Read<CustomerDBEntity>().ToList());
 			}
 		}
+		
+		/// <summary>
+		/// Updates an organizations staffing settings.
+		/// </summary>
+		/// <param name="orgId">org ID thats getting a new setting </param>
+		/// <returns>Creates an orgs staffing object</returns>
+		public int GetStaffingDefaultStatus(int orgId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationId", orgId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				// default -1
+				var returnInt = 0;
+				var result = connection.Query("[StaffingManager].[GetStaffingDefaultStatus]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				if (result.DefaultPositionStatusId == null) return returnInt;
+				else return result.DefaultPositionStatusId;
+
+			}
+		}
 
 		#endregion Get Methods
 
@@ -750,6 +788,25 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Execute("[StaffingManager].[UpdatePosition]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Updates an organizations staffing settings.
+		/// </summary>
+		/// <param name="orgId">org ID thats getting a new setting </param>
+		/// <param name="positionStatusId">position status to be set as default</param>
+		/// <returns>Creates an orgs staffing object</returns>
+		public void UpdateStaffingSettings(int orgId, int positionStatusId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationId", orgId);
+			parameters.Add("@positionStatusId", positionStatusId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				// default -1
+				connection.Execute("[StaffingManager].[UpdateStaffingSettings]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 

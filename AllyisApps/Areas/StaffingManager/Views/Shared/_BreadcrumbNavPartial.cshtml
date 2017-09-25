@@ -4,6 +4,7 @@
 	</a>
 
 	<ul class="dropdown-menu dropdown-menu-right" id="TheDropdown2">
+		<li>@Html.ActionLink("Positions", ActionConstants.Index, ControllerConstants.Staffing, new { subscriptionId = ViewData["SubscriptionId"] })</li>
 		<li>@Html.ActionLink(Strings.Settings, ActionConstants.Settings, ControllerConstants.Staffing, new { subscriptionId = ViewData["SubscriptionId"] })</li>
 		<li>@Html.ActionLink(Strings.Customer, ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = ViewData["SubscriptionId"] })</li>
 

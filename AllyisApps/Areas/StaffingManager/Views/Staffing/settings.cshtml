@@ -94,7 +94,14 @@
 										   onclick='deletePositionStatus("@status.PositionStatusId", @Model.userId, @Model.organizationId, @Model.subscriptionId)'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
 									</td>
 									<td>
-										<input type="radio" name="statusRadio" class="pull-right">
+										@if (status.PositionStatusId == Model.defaultPositionStatus)
+										{
+											<input type="radio" name="statusRadio" class="pull-right" checked="checked" value="status.PositionStatusId" onclick="updateDefaultStatus(@Model.organizationId, @status.PositionStatusId, @Model.subscriptionId)">
+										}
+										else
+										{
+											<input type="radio" name="statusRadio" class="pull-right" value="status.PositionStatusId" onclick="updateDefaultStatus(@Model.organizationId, @status.PositionStatusId, @Model.subscriptionId)">
+										}
 									</td>
 								</tr>
 							}
@@ -158,6 +165,13 @@
 
 @section scripts{
 	<script type="text/javascript">
+		function updateDefaultStatus(orgId, PositionStatusId, subscriptionId) {
+			$.ajax({
+				url: '@Url.Action(ActionConstants.UpdatePositionStatus, ControllerConstants.Staffing)',
+				data: { organizationId: orgId, positionStatusId: PositionStatusId, subscriptionId: subscriptionId }
+			})
+			window.location.reload();
+		}
 
 		deletePositionLevelUrl = "Url.Action(ActionConstants.DeletePositionLevel, ControllerConstants.Staffing, new { ";
 		deletePositionStatusUrl = "Url.Action(ActionConstants.DeletePositionStatus, ControllerConstants.Staffing, new { ";
