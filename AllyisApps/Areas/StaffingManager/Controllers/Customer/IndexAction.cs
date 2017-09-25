@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
+using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
 using AllyisApps.ViewModels.TimeTracker.Customer;
 
