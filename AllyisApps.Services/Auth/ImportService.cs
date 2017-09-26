@@ -688,20 +688,16 @@ namespace AllyisApps.Services
 
 								try
 								{
-									//user = this.GetUserByEmail(fields[0]); // User may already exist, but not be a member of this organization
-									Invitation inviteInfo = new Invitation()
-									{
-										OrganizationId = orgId,
-										Email = fields[0].Trim(),
-										EmployeeId = fields[1],
-										FirstName = names[0],
-										LastName = names[1],
-										OrganizationRole = OrganizationRole.Member
-									};
-
-									int x = InviteUser(inviteUrl, inviteInfo);
-
+									InviteUser(inviteUrl, fields[0].Trim(), names[0], names[1], orgId, OrganizationRole.Member, fields[1]);
 									result.UsersImported += 1;
+								}
+								catch (DuplicateNameException)
+								{
+									result.UserFailures.Add(string.Format("Employee Id: {0} is already taken. Please assign a different Id.", fields[1]));
+								}
+								catch (InvalidOperationException)
+								{
+									result.UserFailures.Add(string.Format("{0} {1} already exists in the organization", names[0], names[1]));
 								}
 								catch (System.Data.SqlClient.SqlException)
 								{

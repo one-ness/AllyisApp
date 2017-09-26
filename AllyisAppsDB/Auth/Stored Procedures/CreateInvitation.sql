@@ -1,5 +1,4 @@
-CREATE PROCEDURE [Auth].[CreateInvitation]
-	@userId INT,
+﻿CREATE PROCEDURE [Auth].[CreateInvitation]
 	@email NVARCHAR(384),
 	@firstName NVARCHAR(40),
 	@lastName NVARCHAR(40),
@@ -54,10 +53,6 @@ BEGIN
 
 			-- Return invitation id
 			SELECT SCOPE_IDENTITY()
-
-			-- Return first and last names of inviting user
-			SELECT [FirstName] FROM [Auth].[User] WITH (NOLOCK) WHERE [UserId] = @userId
-			SELECT [LastName] FROM [Auth].[User] WITH (NOLOCK) WHERE [UserId] = @userId
 		END
 	END
 END
