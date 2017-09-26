@@ -12,8 +12,8 @@ using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Crm;
-using AllyisApps.Services.StaffingManager;
 using AllyisApps.Services.Lookup;
+using AllyisApps.Services.StaffingManager;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -42,7 +42,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			if ((Statuses != null) || (Types != null) || (Tags != null))
 			{
 				List<string> statuses = new List<string>();
-				if(Statuses != null) statuses = new List<string>(Statuses.Split(",".ToCharArray()));
+				if (Statuses != null) statuses = new List<string>(Statuses.Split(",".ToCharArray()));
 				List<string> types = new List<string>();
 				if (Types != null) types = new List<string>(Types.Split(",".ToCharArray()));
 				List<string> tags = new List<string>();
@@ -103,7 +103,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			List<PositionStatus> positionStatuses)
 		{
 			List<Tag> uniqueTags = new List<Tag>();
-			foreach(Tag tag in tags)
+			foreach (Tag tag in tags)
 			{
 				bool skip = false;
 				foreach (Tag checkTag in uniqueTags) if (tag.TagName == checkTag.TagName) skip = true;
@@ -119,7 +119,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				{
 					CustomerId = pos.CustomerId,
 					CustomerName = pos.CustomerName,
-					EmploymentTypeName =pos.EmploymentTypeName,
+					EmploymentTypeName = pos.EmploymentTypeName,
 					HiringManager = pos.HiringManager,
 					OrganizationId = pos.OrganizationId,
 					PositionCount = pos.PositionCount,
@@ -129,7 +129,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					PositionStatusName = pos.PositionStatusName,
 					PositionTitle = pos.PositionTitle,
 					StartDate = pos.StartDate,
-					Tags = pos.Tags.Select(tag => new TagViewModel() { TagId = tag.TagId,TagName = tag.TagName,PositionId=tag.PositionId}).ToList(),
+					Tags = pos.Tags.Select(tag => new TagViewModel() { TagId = tag.TagId, TagName = tag.TagName, PositionId = tag.PositionId }).ToList(),
 					TeamName = pos.TeamName
 				}).ToList(),
 				Tags = uniqueTags.Select(tag => new TagViewModel() { TagId = tag.TagId, TagName = tag.TagName, PositionId = tag.PositionId }).ToList(),

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
-using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
@@ -123,8 +122,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <summary>
 		/// Checks to make sure a loop isn't created when adding a parent account to another account.
 		/// </summary>
-		/// <param name="childAcc">The child account</param>
-		/// <returns></returns>
+		/// <param name="childAcc">The child account.</param>
+		/// <returns>If loop is created by the new child account.</returns>
 		public bool CheckAccountParent(Account childAcc)
 		{
 			bool results = true;

@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -15,7 +16,6 @@ using AllyisApps.Services.Auth;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.ViewModels;
-using System.Web.Script.Serialization;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -125,7 +125,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 							else tags.Add(new Tag { TagName = tag, TagId = -1, PositionId = -1 });
 						}
 					}
-					if(model.PositionStatusId == 0)
+					if (model.PositionStatusId == 0)
 					{
 						model.PositionStatusId = AppService.GetStaffingDefaultStatus(subInfo.OrganizationId);
 					}
