@@ -44,23 +44,7 @@ namespace AllyisApps.Controllers.Auth
 			var activeSubscriptions = AppService.GetSubscriptionsDisplay(orgId);
 
 			model.CurrentSubscriptions = activeSubscriptions;
-			model.ProductsList = result.Item1;
-			foreach (Product prod in model.ProductsList)
-			{
-				prod.ProductSkus = new List<SkuInfo>();
-			}
-
-			foreach (SkuInfo sku in result.Item2)
-			{
-				foreach (Product prod in model.ProductsList)
-				{
-					if (sku.ProductId == prod.ProductId)
-					{
-						prod.ProductSkus.Add(sku);
-						break;
-					}
-				}
-			}
+			model.ProductsList = result;
 
 			return model;
 		}

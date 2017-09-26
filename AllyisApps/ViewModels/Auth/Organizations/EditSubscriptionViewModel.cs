@@ -45,6 +45,11 @@ namespace AllyisApps.ViewModels.Auth
 		public SkuIdEnum SkuIdNext { get; set; }
 
 		/// <summary>
+		/// IcornUrl
+		/// </summary>
+		public string SkuIconUrl { get; set; }
+
+		/// <summary>
 		/// Gets or sets all information relating to this product.
 		/// </summary>
 		public string Name { get; set; }

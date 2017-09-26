@@ -21,7 +21,8 @@ AS
 		[Sku].[BlockSize],
 		[Sku].[Description],
 		[Sku].[PromoCostPerBlock],
-		[Sku].[PromoDeadline]
+		[Sku].[PromoDeadline],
+		[Sku].[IconUrl]
 	FROM [Billing].[Product] 
 	LEFT JOIN [Billing].[Sku]
 	WITH (NOLOCK) 

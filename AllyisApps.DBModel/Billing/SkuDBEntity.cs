@@ -78,5 +78,10 @@ namespace AllyisApps.DBModel.Billing
 		/// Gets or sets the description.
 		/// </summary>
 		public string Description { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Icon Url of the product
+		/// </summary>
+		public string IconUrl { get; set; }
 	}
 }

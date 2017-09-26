@@ -14,4 +14,5 @@ AS
       ,[PromoCostPerBlock]
       ,[PromoDeadline]
       ,[IsActive]
+	  ,[IconUrl]
        FROM [Billing].[Sku] WITH (NOLOCK) WHERE [SkuId] = @skuId
