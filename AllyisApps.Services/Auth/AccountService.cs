@@ -453,7 +453,7 @@ namespace AllyisApps.Services
 		public bool ConfirmUserEmail(Guid code)
 		{
 			if (code == null) throw new ArgumentNullException("code");
-			return DBHelper.UpdateEmailConfirmed(code) > 0 ? true : false;
+			return DBHelper.UpdateEmailConfirmed(code) == 1 ? true : false;
 		}
 
 		public IEnumerable<Organization> GetOrganizationsByUserId(int userID)

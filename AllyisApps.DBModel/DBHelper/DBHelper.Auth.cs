@@ -899,9 +899,9 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@emailConfirmCode", code);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Execute("[Auth].[UpdateEmailConfirmed]", parameters, commandType: CommandType.StoredProcedure);
+				return con.ExecuteScalar<int>("[Auth].[UpdateEmailConfirmed]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 	}
