@@ -44,17 +44,18 @@ namespace AllyisApps.DBModel
 			parameters.Add("@email", applicant.Email);
 			parameters.Add("@firstName", applicant.FirstName);
 			parameters.Add("@lastName", applicant.LastName);
-			parameters.Add("@address", applicant.Address);
+			parameters.Add("@address1", applicant.Address1);
+			parameters.Add("@address2", applicant.Address2);
 			parameters.Add("@city", applicant.City);
-			parameters.Add("@state", applicant.State);
-			parameters.Add("@country", applicant.Country);
+			parameters.Add("@stateId", applicant.StateId);
 			parameters.Add("@postalCode", applicant.PostalCode);
+			parameters.Add("@countryCode", "US"); // add real country code
 			parameters.Add("@phoneNumber", applicant.PhoneNumber);
 			parameters.Add("@notes", applicant.Notes);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<int>("[StaffingManager].[CreateApplicant]", parameters, commandType: CommandType.StoredProcedure).Single();
+			return connection.Query<int>("[StaffingManager].[CreateApplicant]", parameters, commandType: CommandType.StoredProcedure).Single();
 			}
 		}
 

@@ -17,6 +17,36 @@ namespace AllyisApps.DBModel.StaffingManager
 		public int ApplicantId { get; set; }
 
 		/// <summary>
+		/// Gets or sets the applicant's city.
+		/// </summary>
+		public string City { get; set; }
+
+		/// <summary>
+		/// Gets or sets the applicant's state Id.
+		/// </summary>
+		public int StateId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the applicant's country.
+		/// </summary>
+		public string Country { get; set; }
+
+		/// <summary>
+		/// Gets or sets the applicant's postal code.
+		/// </summary>
+		public string PostalCode { get; set; }
+
+		/// <summary>
+		/// Gets or sets the applicant's Address Id.
+		/// </summary>
+		public string Address1 { get; set; }
+
+		/// <summary>
+		/// Gets or sets the applicant's Address Id.
+		/// </summary>
+		public string Address2 { get; set; }
+
+		/// <summary>
 		/// Gets or sets FirstName.
 		/// </summary>
 		public string FirstName { get; set; }

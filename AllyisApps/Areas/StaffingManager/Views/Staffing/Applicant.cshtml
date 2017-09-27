@@ -1,0 +1,24 @@
+﻿@model AllyisApps.Areas.StaffingManager.ViewModels.Staffing.StaffingApplicantViewModel
+
+@{
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/StaffingManager/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/StaffingManager";
+	ViewBag.Title = "Create Applicant";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Applicant</title>
+</head>
+<body>
+	@using (Html.BeginForm("Applicant", "Staffing", FormMethod.Post))
+	{
+		@Html.AntiForgeryToken()
+		@Html.EditorFor(m => m);
+		<input type="submit" value="Submit"/>
+	}
+</body>
+</html>

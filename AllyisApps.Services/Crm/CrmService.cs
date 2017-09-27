@@ -68,7 +68,7 @@ namespace AllyisApps.Services
 		/// <returns>Customer id.</returns>
 		public int? CreateCustomer(Customer customer, int subscriptionId)
 		{
-			this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
+			this.CheckStaffingManagerAction(StaffingManagerAction.EditCustomer, subscriptionId);
 			customer.Address?.EnsureDBRef(this);
 			return DBHelper.CreateCustomerInfo(GetDBEntitiesFromCustomerInfo(customer));
 		}

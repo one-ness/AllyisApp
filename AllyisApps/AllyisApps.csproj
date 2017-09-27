@@ -17,8 +17,10 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44326</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <NuGetPackageImportStamp>
@@ -243,6 +245,8 @@
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\DeleteEmploymentTypeAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\DeletePositionStatusAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\DeletePositionLevelAction.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Staffing\ApplicationAction.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Staffing\ApplicantAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\SettingsAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\IndexAction.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseFileModel.cs" />
@@ -259,6 +263,9 @@
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\PositionViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\EditPositionViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\SelectListViewModels.cs" />
+    <Compile Include="Areas\StaffingManager\ViewModels\Staffing\ApplicationDocumentViewModel.cs" />
+    <Compile Include="Areas\StaffingManager\ViewModels\Staffing\StaffingApplicantViewModel.cs" />
+    <Compile Include="Areas\StaffingManager\ViewModels\Staffing\StaffingApplicationViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\StaffingSettingsViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\StaffingIndexViewModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseSummaryViewModelItem.cs" />
@@ -615,6 +622,8 @@
     <Content Include="Areas\StaffingManager\Views\Customer\Edit.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\Accounts.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\CreateAccount.cshtml" />
+    <Content Include="Areas\StaffingManager\Views\Staffing\Application.cshtml" />
+    <Content Include="Areas\StaffingManager\Views\Staffing\Applicant.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
