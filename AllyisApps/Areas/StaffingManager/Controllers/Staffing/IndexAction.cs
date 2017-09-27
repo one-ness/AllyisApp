@@ -62,11 +62,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				subInfo.OrganizationId,
 				subscriptionId,
 				subName,
-				infos.Item1, //positions list
-				infos.Item2, //tags list
-				infos.Item3, //employmentTypes list
-				infos.Item4, //positionLevels list
-				infos.Item5  //positionStatuses list
+				infos.Item1, ////positions list
+				infos.Item2, ////tags list
+				infos.Item3, ////employmentTypes list
+				infos.Item4, ////positionLevels list
+				infos.Item5  ////positionStatuses list
 				);
 
 			foreach (PositionThumbnailInfoViewModel pos in model.Positions)

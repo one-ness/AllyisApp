@@ -35,6 +35,7 @@ namespace AllyisApps.ViewModels.Auth
 			this.OrganizationId = sub.OrganizationId;
 			this.AreaUrl = sub.AreaUrl;
 			this.NumberofUsers = sub.NumberOfUsers;
+			this.SkuId = sub.SkuId;
 		}
 
 		/// <summary>
@@ -82,5 +83,10 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets Number of users in the subscription.
 		/// </summary>
 		public int NumberofUsers { get; set; }
+
+		/// <summary>
+		/// SkuID enum
+		/// </summary>
+		public SkuIdEnum SkuId { get; private set; }
 	}
 }
