@@ -28,9 +28,26 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// </summary>
 		/// <returns>A create application page.</returns>
 		[HttpGet]
-		public ActionResult Application()
+		public ActionResult Application(int subscriptionId, int applicantId)
 		{
-			StaffingApplicationViewModel model = new StaffingApplicationViewModel();
+			var subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+			List<Position> positions = this.AppService.GetPositionsByOrganizationId(subInfo.OrganizationId);
+			List<SelectListItem> positionList = new List<SelectListItem>();
+			foreach (Position pos in positions)
+			{
+				positionList.Add(new SelectListItem()
+				{
+					Text = pos.PositionTitle,
+					Value = pos.PositionId.ToString()
+				});
+			}
+
+			StaffingApplicationViewModel model = new StaffingApplicationViewModel()
+			{
+				ApplicantId = applicantId,
+				PositionList = positionList
+			};
+
 			return this.View(model);
 		}
 
@@ -44,19 +61,23 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		public ActionResult Application(StaffingApplicationViewModel model)
 		{
 			Application application = InitializeApplication(model);
-			this.AppService.CreateApplication(application);
+			int applicationId = this.AppService.CreateApplication(application);
 			return this.RedirectToAction("Index");
 		}
 
 		private static Application InitializeApplication(StaffingApplicationViewModel model)
 		{
+			List<ApplicationDocument> documents = model.ApplicationDocuments != null ?
+				model.ApplicationDocuments.Select(d => InitializeApplicationDocument(d)).ToList() :
+				new List<ApplicationDocument>();
+
 			return new Application()
 			{
 				Applicant = model.Applicant,
 				ApplicantId = model.ApplicantId,
 				ApplicationCreatedUtc = model.ApplicationCreatedUtc,
-				ApplicationDocuments = model.ApplicationDocuments.Select(d => InitializeApplicationDocument(d)).ToList(),
-				ApplicationId = model.ApplicationId,
+				ApplicationDocuments = documents,
+				ApplicationId = 1, // this will be replaced by stored procedure
 				ApplicationModifiedUtc = model.ApplicationModifiedUtc,
 				ApplicationStatus = model.ApplicationStatus,
 				Notes = model.Notes,

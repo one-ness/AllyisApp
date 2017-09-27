@@ -13,6 +13,7 @@ using AllyisApps.DBModel.StaffingManager;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
+using Microsoft.CSharp.RuntimeBinder;
 
 namespace AllyisApps.Services
 {
@@ -468,24 +469,31 @@ namespace AllyisApps.Services
 
 					Address = new Address
 					{
-						Address1 = position.position.Address1,
-						Address2 = position.position.Address2,
-						City = position.position.City,
-						StateId = position.position.StateId,
-						CountryCode = position.position.CountryCode,
-						PostalCode = position.position.PostalCodes
+						Address1 = position.Address1,
+						Address2 = position.Address2,
+						City = position.City,
+						StateId = position.StateId,
+						CountryCode = position.CountryCode,
+						PostalCode = position.PostalCodes
 					},
 
 					Tags = new List<Tag>()
 				};
 
-				foreach (dynamic tag in positionsAndTags.tags[position.PositionId])
+				try
 				{
-					newPosition.Tags.Add(new Tag
+					foreach (dynamic tag in positionsAndTags.tags[position.PositionId])
 					{
-						TagId = tag.TagId,
-						TagName = tag.TagName
-					});
+						newPosition.Tags.Add(new Tag
+						{
+							TagId = tag.TagId,
+							TagName = tag.TagName
+						});
+					}
+				}
+				catch (RuntimeBinderException)
+				{
+
 				}
 
 				positions.Add(newPosition);

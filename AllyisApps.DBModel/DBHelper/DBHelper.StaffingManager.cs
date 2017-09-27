@@ -445,7 +445,7 @@ namespace AllyisApps.DBModel
 			{
 				var results = connection.QueryMultiple("[StaffingManager].[GetPositionsByOrganizationId]", parameters, commandType: CommandType.StoredProcedure);
 				positionsAndTags.positions = results.Read<dynamic>().ToList();
-				positionsAndTags.tags = results.Read<dynamic>().ToDictionary(t => t.PositionId, t => t);
+				//positionsAndTags.tags = results.Read<dynamic>().ToDictionary(t => t.PositionId, t => t);
 			}
 			return positionsAndTags;
 		}
