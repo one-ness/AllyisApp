@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
 using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Auth
