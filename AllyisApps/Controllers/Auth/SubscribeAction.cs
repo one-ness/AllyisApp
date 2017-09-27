@@ -78,7 +78,7 @@ namespace AllyisApps.Controllers.Auth
 					SelectedSku = selectedSku,
 					SelectedSkuName = selectedSku > 0 ? productSubscription.SkuList.Where(s => s.SkuId == selectedSku).SingleOrDefault().SkuName : string.Empty,
 					PreviousSku = selectedSku,
-					CustomerId = customerId,
+					CustomerId = customerId.Id,
 					Token = new BillingServicesToken(customerId.ToString()) // TODO: Does this just convert back to the stripeToken string?? Investigate.
 				};
 			}

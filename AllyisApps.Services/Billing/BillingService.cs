@@ -11,9 +11,9 @@ using System.Linq;
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.Lib;
+using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
-using AllyisApps.Services.Auth;
 
 namespace AllyisApps.Services
 {
@@ -835,12 +835,28 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Returns a list of active products and each product's active skus.
 		/// </summary>
-		public Tuple<List<Product>, List<SkuInfo>> GetAllActiveProductsAndSkus()
+		public List<Product> GetAllActiveProductsAndSkus()
 		{
 			var spResults = DBHelper.GetAllActiveProductsAndSkus();
-			return Tuple.Create(
-				spResults.Item1.Select(pdb => InitializeProduct(pdb)).ToList(),
-				spResults.Item2.Select(sdb => InitializeSkuInfo(sdb)).ToList());
+			var products = spResults.Item1.Select(pdb => InitializeProduct(pdb)).ToList();
+
+			foreach (Product prod in products)
+			{
+				prod.ProductSkus = new List<SkuInfo>();
+			}
+
+			foreach (SkuInfo sku in spResults.Item2.Select(sk => InitializeSkuInfo(sk)))
+			{
+				foreach (Product prod in products)
+				{
+					if (sku.ProductId == prod.ProductId)
+					{
+						prod.ProductSkus.Add(sku);
+						break;
+					}
+				}
+			}
+			return products;
 		}
 
 		#region Info-DBEntity Conversions
@@ -921,7 +937,8 @@ namespace AllyisApps.Services
 				SkuId = (SkuIdEnum)sku.SkuId,
 				SubscriptionId = sku.SubscriptionId,
 				UserLimit = sku.UserLimit,
-				Description = sku.Description
+				Description = sku.Description,
+				IconUrl = sku.IconUrl
 			};
 		}
 

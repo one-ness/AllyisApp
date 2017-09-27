@@ -92,13 +92,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				if ((userIds.Count > 1) || (userIds[0] == -1))
 				{
-					result.Projects = AppService.GetProjectsByOrganization(orgId).AsParallel().Select(proj => 
-					new	CompleteProjectViewModel(proj));
+					result.Projects = AppService.GetProjectsByOrganization(orgId).AsParallel().Select(proj =>
+					new CompleteProjectViewModel(proj));
 				}
 				else
 				{
 					// single user selected
-					result.Projects = AppService.GetProjectsByUserAndOrganization(userIds[0], orgId, false).AsParallel().Select(proj => 
+					result.Projects = AppService.GetProjectsByUserAndOrganization(userIds[0], orgId, false).AsParallel().Select(proj =>
 					new CompleteProjectViewModel(proj));
 				}
 

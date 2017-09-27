@@ -40,7 +40,8 @@ namespace AllyisApps.Controllers.Auth
 				SubscriptionId = subscriptionId,
 				OrganizationId = orgId,
 				ProductId = sku.ProductId,
-				SubscriptionName = subscriptionName
+				SubscriptionName = subscriptionName,
+				SkuIconUrl = sku.IconUrl
 			};
 			return this.View(ViewConstants.EditSubscription, model);
 		}

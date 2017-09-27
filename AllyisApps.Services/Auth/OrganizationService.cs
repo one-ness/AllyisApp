@@ -15,8 +15,8 @@ using AllyisApps.DBModel.Lookup;
 using AllyisApps.Lib;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
-using AllyisApps.Services.Lookup;
 using AllyisApps.Services.Crm;
+using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services
 {
@@ -172,45 +172,32 @@ namespace AllyisApps.Services
 		/// <returns>Returns false if permissions fail.</returns>
 		public void DeleteOrganization(int orgId)
 		{
-			this.CheckOrgAction(OrgAction.EditOrganization, orgId);
+			this.CheckOrgAction(OrgAction.DeleteOrganization, orgId);
 			DBHelper.DeleteOrganization(orgId);
 		}
 
 		/// <summary>
 		/// Creates an invitation for a new user in the database, and also sends an email to the new user with their access code.
 		/// </summary>
-		/// <param name="url">The url for Account/Index with the accessCode value as "{accessCode}".</param>
-		/// <param name="invitationInfo">An <see cref="Invitation"/> with invitee information filled out.</param>
-		/// <returns>The invitation Id, or -1 if the employee id is already taken.</returns>
-		public int InviteUser(string url, Invitation invitationInfo)
+		public int InviteUser(string url, string email, string firstName, string lastName, int organizationId, OrganizationRole organizationRoleId, string employeedId)
 		{
-			#region Validation
-
-			if (string.IsNullOrEmpty(url))
-			{
-				throw new ArgumentNullException("url", "Url must have a value.");
-			}
-
-			if (invitationInfo == null)
-			{
-				throw new ArgumentNullException("invitationInfo", "Invitation info object must not be null.");
-			}
-
-			if (string.IsNullOrEmpty(invitationInfo.Email) || !Utility.IsValidEmail(invitationInfo.Email))
-			{
-				throw new ArgumentException("Email address is not valid", "invitationInfo.Email");
-			}
-
-			#endregion Validation
+			if (organizationId <= 0) throw new ArgumentOutOfRangeException("organizationId");
+			this.CheckOrgAction(OrgAction.AddUserToOrganization, organizationId);
+			if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException("url");
+			if (string.IsNullOrWhiteSpace(email)) throw new ArgumentNullException("email");
+			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException("firstName");
+			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException("lastName");
+			if (string.IsNullOrWhiteSpace(employeedId)) throw new ArgumentNullException("employeedId");
 
 			// Creation of invitation
-			var spResults = DBHelper.CreateInvitation(UserContext.UserId, GetDBEntityFromInvitationInfo(invitationInfo));
-			if (spResults.Item1 == -1)
+			var result = DBHelper.CreateInvitation(email, firstName, lastName, organizationId, (int)organizationRoleId, employeedId);
+
+			if (result == -1)
 			{
 				throw new DuplicateNameException("User is already a member of the organization.");
 			}
 
-			if (spResults.Item1 == -2)
+			if (result == -2)
 			{
 				throw new InvalidOperationException("Employee Id is already taken.");
 			}
@@ -219,20 +206,21 @@ namespace AllyisApps.Services
 			string orgName = string.Empty;
 			string htmlbody = string.Format(
 				"{0} {1} has requested you join their organization on Allyis Apps{2}!<br /> Click <a href={3}>Here</a> to create an account and join!",
-				spResults.Item2,
-				spResults.Item3,
+				this.UserContext.FirstName,
+				this.UserContext.LastName,
 				orgName,
 				url);
 
 			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
-			bool email = Lib.Mailer.SendEmailAsync(
+			var task = Mailer.SendEmailAsync(
 				this.ServiceSettings.SupportEmail,
-				invitationInfo.Email,
+				email,
 				"Join Allyis Apps!",
-				msgbody).Result;
+				msgbody);
+			task.RunSynchronously();
 
 			// Return invitation id
-			return spResults.Item1;
+			return result;
 		}
 
 		public async void NotifyInviteAcceptAsync(int inviteId)

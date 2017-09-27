@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 {
 	/// <summary>
-	/// Position Infomation 
+	/// Position Infomation
 	/// </summary>
 	public class PositionThumbnailInfoViewModel
 	{

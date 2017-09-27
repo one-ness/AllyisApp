@@ -133,6 +133,5 @@ namespace AllyisApps.Services.Auth
 		public bool IsInvitationsLoaded => Invitations != null;
 		public bool IsOrganizationsLoaded => Organizations != null;
 		public bool IsSubscriptionsLoaded => Subscriptions != null;
-
 	}
 }

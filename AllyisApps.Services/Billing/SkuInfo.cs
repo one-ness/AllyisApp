@@ -60,5 +60,7 @@ namespace AllyisApps.Services.Billing
 		/// Gets or sets the description of the sku.
 		/// </summary>
 		public string Description { get; set; }
+
+		public string IconUrl { get; set; }
 	}
 }

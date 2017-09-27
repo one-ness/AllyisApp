@@ -125,7 +125,7 @@ namespace AllyisApps.ViewModels.Staffing
 		public string TeamName { get; set; }
 
 		/// <summary>
-		/// Gets the Customer Address 
+		/// Gets the Customer Address
 		/// </summary>
 		public AddressViewModel addressModel { get; set; }
 	}

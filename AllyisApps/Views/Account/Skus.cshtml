@@ -26,11 +26,11 @@
 									<div class="panel-heading" style="display: table; width: 100%; height: 100%;">
 										<div class="row">
 											<div class="col-md-4">
-												<div class="row" style="text-align: center; vertical-align: middle; margin-top: 25px; margin-bottom: 10px;"><img src="~/@string.Format("Content/icons/{0}.png", @sku.SkuName.Replace(" ", ""))" alt="@sku.SkuName" /></div>
+												<div class="row" style="text-align: center; vertical-align: middle; margin-top: 25px; margin-bottom: 10px;"><img src="~/@sku.IconUrl" alt="@sku.SkuName" /></div>
 												<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><strong>$@sku.Price.ToString("N2")</strong></div>
-												@if (Model.CurrentSubscriptions.Where(sub => sub.ProductId == sku.ProductId).FirstOrDefault() != null)   //subscribed to another sku under the same product
+												@if (Model.CurrentSubscriptions.Where(sub => sub.ProductId == ((int)sku.ProductId)).FirstOrDefault() != null)   //subscribed to another sku under the same product
 												{
-													var currentSubId = Model.CurrentSubscriptions.Where(sub => sub.ProductId == sku.ProductId).FirstOrDefault().SubscriptionId;
+													var currentSubId = Model.CurrentSubscriptions.Where(sub => sub.ProductId == ((int)sku.ProductId)).FirstOrDefault().SubscriptionId;
 													if (Model.CurrentSubscriptions.Where(sub => sub.SkuId == sku.SkuId).FirstOrDefault() != null)   //already subscribed to this sku
 													{
 														<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;">
@@ -39,7 +39,7 @@
 													}
 													else
 													{
-														if (Model.CurrentSubscriptions.Where(sub => sub.ProductId == sku.ProductId).FirstOrDefault().SkuId > sku.SkuId) //pro version always has higher skuId than basic version
+														if (Model.CurrentSubscriptions.Where(sub => sub.ProductId == ((int)sku.ProductId)).FirstOrDefault().SkuId > sku.SkuId) //pro version always has higher skuId than basic version
 														{
 															<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;">
 																<a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { subscriptionId = currentSubId })" style="text-decoration: none" class="btn btn-default">@Strings.Downgrade</a>
