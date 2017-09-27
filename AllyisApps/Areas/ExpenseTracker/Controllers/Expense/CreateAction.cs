@@ -28,7 +28,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			List<AccountViewModel> accountViewModels = new List<AccountViewModel>();
 			foreach (Account account in accounts)
 			{
-				accountViewModels.Add(InitializeAccountViewModel(account));
+				if (account.IsActive)
+				{
+					accountViewModels.Add(InitializeAccountViewModel(account));
+				}
 			}
 
 			if (accounts.Count == 0)

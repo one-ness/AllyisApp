@@ -35,6 +35,11 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		public bool IsActive { get; set; }
 
 		/// <summary>
+		/// Gets or sets the current status of an account.
+		/// </summary>
+		public string Status { get; set; }
+
+		/// <summary>
 		/// Gets or sets the AccountTypeId (TODO: what are the account types).
 		/// </summary>
 		public int AccountTypeId { get; set; }
@@ -66,8 +71,18 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		public string SelectedAccount { get; set; }
 
 		/// <summary>
+		/// Gets or sets the selected status.
+		/// </summary>
+		public string SelectedStatus { get; set; }
+
+		/// <summary>
 		/// Gets or sets existing accounts that can be a parent account.
 		/// </summary>
 		public SelectList ParentAccounts { get; set; }
+
+		/// <summary>
+		/// Gets or sets the status of the account.
+		/// </summary>
+		public SelectList AccountStatuses { get; set; }
 	}
 }
