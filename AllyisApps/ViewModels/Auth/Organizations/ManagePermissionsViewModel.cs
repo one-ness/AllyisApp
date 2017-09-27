@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -27,12 +28,12 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the product id for TimeTracker.
 		/// </summary>
-		public int TimeTrackerId { get; set; }
+		public ProductIdEnum TimeTrackerId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the product id for ExpenseTracker.
 		/// </summary>
-		public int ExpenseTrackerId { get; set; }
+		public ProductIdEnum ExpenseTrackerId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the index of TimeTracker in the subscriptions list.
