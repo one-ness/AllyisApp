@@ -11,9 +11,9 @@ using System.Linq;
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.Lib;
+using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
-using AllyisApps.Services.Auth;
 
 namespace AllyisApps.Services
 {
