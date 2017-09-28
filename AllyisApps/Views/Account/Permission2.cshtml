@@ -146,35 +146,34 @@
 				</tr>
 			}
 
-			@*This last blank row is just an easy way to have a border at the bottom of the table content*@
-			<tr id="tableEnd" class="nohover">
-				<td></td>
-				<td></td>
-				<td class="tab-OrganizationTab"></td>
-				@if (hasTimeTracker)
-				{
-					<td class="tab-TimeTrackerTab" style="display: none;"></td>
-				}
-			</tr>
-		</table>
-		<div class="pageContainer">
-			@*This container is populated by javascript in allyis-account-permission2.js*@
-		</div>
-	</div>
-	<div class="panel-footer" style="height: 54px; position: relative;">
-		<div class="col-xs-2 col-sm-1 col-md-1" style="text-align: right; vertical-align: middle; line-height: 33px; padding-right: 0px;">
-			@Strings.Actions
-		</div>
-		<div class="col-xs-6 col-sm-6 col-md-5 col-lg-4">
-			<select class="form-control tab-OrganizationTab" id="orgActionSelect">
-				<optgroup label="@Strings.Organization">
-					@foreach (string setOrganizationRole in setOrganizationRoles.Keys)
+				@*This last blank row is just an easy way to have a border at the bottom of the table content*@
+				<tr id="tableEnd" class="nohover">
+					<td></td>
+					<td></td>
+					<td class="tab-OrganizationTab"></td>
+					@if (hasTimeTracker)
 					{
-						<option>@setOrganizationRole</option>
-					}
-				</optgroup>
-			</select>
-			@if (hasTimeTracker)
+				<td class="tab-TimeTrackerTab" style="display: none;"></td> }
+				</tr>
+			</table>
+			<div class="pageContainer">
+				@*This container is populated by javascript in allyis-account-permission2.js*@
+			</div>
+		</div>
+		<div class="panel-footer" style="height: 54px; position: relative;">
+			<div class="col-xs-6 col-sm-6 col-md-5" style="text-align: right; vertical-align: middle; line-height: 33px; padding-right: 0px;">
+				Please select user(s), choose an action, then click Save
+			</div>
+			<div class="col-xs-6 col-sm-6 col-md-5 col-lg-4">
+				<select class="form-control tab-OrganizationTab" id="orgActionSelect">
+					<optgroup label="@Strings.Organization">
+						@foreach (string setOrganizationRole in setOrganizationRoles.Keys)
+						{
+							<option>@setOrganizationRole</option>
+						}
+					</optgroup>
+				</select>
+				@if (hasTimeTracker)
 			{
 				<select class="form-control tab-TimeTrackerTab" id="ttActionSelect" style="display: none;">
 					<optgroup label="@Strings.TimeTracker">
@@ -185,25 +184,24 @@
 					</optgroup>
 				</select>
 			}
-			@if (hasExpenseTracker)
-			{
-				<select class="form-control tab-ExpenseTrackerTab" id="etActionSelect" style="display: none">
-					<optgroup label="@Strings.ExpenseTracker">
-						@foreach (string setETRole in setETRoles.Keys)
-						{
-							<option>@setETRole</option>
-						}
-					</optgroup>
-				</select>
-			}
-		</div>
-
-		<div class="bottom-right">
-			<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default"> @Strings.Cancel </a>
-			<input type="button" class="btn btn-primary" id="do-it" value="@Strings.Save" />
+				@if (hasExpenseTracker)
+				{
+					<select class="form-control tab-ExpenseTrackerTab" id="etActionSelect" style="display: none">
+						<optgroup label="@Strings.ExpenseTracker">
+							@foreach (string setETRole in setETRoles.Keys)
+							{
+								<option>@setETRole</option>
+							}
+						</optgroup>
+					</select>
+				}
+			</div>
+			<div class="bottom-right">
+				<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default"> @Strings.Cancel </a>
+				<input type="button" class="btn btn-primary" id="do-it" value="@Strings.Save" />
+			</div>
 		</div>
 	</div>
-</div>
 
 @section scripts {
 	<script type="text/javascript">
