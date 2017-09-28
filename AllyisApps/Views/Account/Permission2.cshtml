@@ -161,8 +161,8 @@
 			</div>
 		</div>
 		<div class="panel-footer" style="height: 54px; position: relative;">
-			<div class="col-xs-2 col-sm-1 col-md-1" style="text-align: right; vertical-align: middle; line-height: 33px; padding-right: 0px;">
-				@Strings.Actions
+			<div class="col-xs-6 col-sm-6 col-md-5" style="text-align: right; vertical-align: middle; line-height: 33px; padding-right: 0px;">
+				Please select user(s), choose an action, then click Save
 			</div>
 			<div class="col-xs-6 col-sm-6 col-md-5 col-lg-4">
 				<select class="form-control tab-OrganizationTab" id="orgActionSelect">
@@ -196,7 +196,6 @@
 					</select>
 				}
 			</div>
-
 			<div class="bottom-right">
 				<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default"> @Strings.Cancel </a>
 				<input type="button" class="btn btn-primary" id="do-it" value="@Strings.Save" />
