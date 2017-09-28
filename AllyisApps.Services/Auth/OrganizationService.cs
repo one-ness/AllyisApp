@@ -143,7 +143,8 @@ namespace AllyisApps.Services
 			{
 				address = GetDBEntityFromAddress(organization.Address);
 			}
-			return DBHelper.UpdateOrganization(GetDBEntityFromOrganization(organization), address) > 0;
+
+			return this.DBHelper.UpdateOrganization(GetDBEntityFromOrganization(organization), address) > 0;
 		}
 
 		/// <summary>
@@ -152,8 +153,9 @@ namespace AllyisApps.Services
 		/// <returns>Returns false if permissions fail.</returns>
 		public void DeleteOrganization(int orgId)
 		{
+			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
 			this.CheckOrgAction(OrgAction.DeleteOrganization, orgId);
-			DBHelper.DeleteOrganization(orgId);
+			this.DBHelper.DeleteOrganization(orgId);
 		}
 
 		/// <summary>
