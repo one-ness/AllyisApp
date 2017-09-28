@@ -339,9 +339,9 @@ namespace AllyisApps.Services
 
 			return new Applicant
 			{
-				Address = applicant.Address,
-				State = applicant.State,
-				AddressId = applicant.AddressId,
+				//Address = applicant.Address,
+				//State = applicant.State,
+				//AddressId = applicant.AddressId,
 				ApplicantId = applicant.ApplicantId,
 				City = applicant.City,
 				Country = applicant.Country,
@@ -594,6 +594,7 @@ namespace AllyisApps.Services
 				FirstName = applicant.FirstName,
 				LastName = applicant.LastName,
 				Notes = applicant.Notes,
+				OrganizationId = applicant.OrgId,
 				PhoneNumber = applicant.PhoneNumber
 			};
 		}

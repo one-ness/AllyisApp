@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [StaffingManager].[GetApplicantById]
-	@applicant INT
+	@applicantId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
-	SELECT * FROM [StaffingManager].[Applicant] WHERE [ApplicantId] = @applicant
+	SELECT * FROM [StaffingManager].[Applicant] WHERE [ApplicantId] = @applicantId
 END
