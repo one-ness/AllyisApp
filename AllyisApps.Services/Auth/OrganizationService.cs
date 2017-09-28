@@ -28,32 +28,12 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Creates an organization.
 		/// </summary>
-		/// <param name="organization">Organization.</param>
-		/// <param name="employeeId">Organization owner employee Id.</param>
-		/// <returns>Organizaiton Id, or -1 if the subdomain name is taken.</returns>
-		public int SetupOrganization(Organization organization, string employeeId)
+		public int SetupOrganization(string employeeId, string organizationName, string phoneNumber, string faxNumber, string siteUrl, string subDomainName, string address1, string city, int? stateId, string postalCode, string countryCode)
 		{
-			#region Validation
+			if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException("employeeId");
+			if (string.IsNullOrWhiteSpace(organizationName)) throw new ArgumentNullException("organizationName");
 
-			if (organization == null)
-			{
-				throw new ArgumentNullException("organization", "Organization object must not be null.");
-			}
-
-			if (string.IsNullOrWhiteSpace(employeeId))
-			{
-				throw new ArgumentNullException("employeeId", "EmployeeId must not be null");
-			}
-			AddressDBEntity address = null;
-			if (organization.Address != null)
-			{
-				address = GetDBEntityFromAddress(organization.Address);
-			}
-
-			#endregion Validation
-
-			return DBHelper.SetupOrganization(GetDBEntityFromOrganization(organization),
-				GetDBEntityFromAddress(organization.Address), this.UserContext.UserId, (int)OrganizationRole.Owner, employeeId);
+			return this.DBHelper.SetupOrganization(this.UserContext.UserId, (int)OrganizationRole.Owner, employeeId, organizationName, phoneNumber, faxNumber, siteUrl, subDomainName, address1, city, stateId, postalCode, countryCode);
 		}
 
 		/// <summary>

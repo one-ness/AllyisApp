@@ -279,39 +279,28 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Adds an organization to the database and sets the owner's chosen organization to th.
+		/// create a new organization, add the user in the given role
 		/// </summary>
-		/// <param name="organization">The OrganizationDBEntity to create with address infomation.</param>
-		/// <param name="address"></param>
-		/// <param name="ownerId">The owner's user Id.</param>
-		/// <param name="roleId">The role associated with the creator of the organization.</param>
-		/// <param name="employeeId">The employee Id for the user creating the organization.</param>
-		/// <returns>The id of the created organization.</returns>
-		public int SetupOrganization(OrganizationDBEntity organization, AddressDBEntity address, int ownerId, int roleId, string employeeId)
+		public int SetupOrganization(int userId, int roleId, string employeeId, string organizationName, string phoneNumber, string faxNumber, string siteUrl, string subDomainName, string address1, string city, int? stateId, string postalCode, string countryCode)
 		{
-			if (organization == null)
-			{
-				throw new ArgumentException("organizationId cannot be null or empty.");
-			}
-
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@userId", ownerId);
+			parameters.Add("@userId", userId);
 			parameters.Add("@roleId", roleId);
-			parameters.Add("@organizationName", organization.OrganizationName);
-			parameters.Add("@siteUrl", organization.SiteUrl);
-			parameters.Add("@address", address?.Address1);
-			parameters.Add("@city", address?.City);
-			parameters.Add("@stateID", address?.StateId);
-			parameters.Add("@countryCode", address?.CountryCode);
-			parameters.Add("@postalCode", address?.PostalCode);
-			parameters.Add("@phoneNumber", organization.PhoneNumber);
-			parameters.Add("@faxNumber", organization.FaxNumber);
-			parameters.Add("@subdomainName", organization.Subdomain);
+			parameters.Add("@organizationName", organizationName);
+			parameters.Add("@siteUrl", siteUrl);
+			parameters.Add("@address", address1);
+			parameters.Add("@city", city);
+			parameters.Add("@stateID", stateId);
+			parameters.Add("@countryCode", countryCode);
+			parameters.Add("@postalCode", postalCode);
+			parameters.Add("@phoneNumber", phoneNumber);
+			parameters.Add("@faxNumber", faxNumber);
+			parameters.Add("@subdomainName", subDomainName);
 			parameters.Add("@employeeId", employeeId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<int>("[Auth].[SetupOrganization]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				return con.Query<int>("[Auth].[SetupOrganization]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
 		}
 

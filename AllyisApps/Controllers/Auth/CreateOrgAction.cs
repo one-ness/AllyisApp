@@ -46,23 +46,7 @@ namespace AllyisApps.Controllers.Auth
 		{
 			if (ModelState.IsValid)
 			{
-				int orgId = AppService.SetupOrganization(
-					new Organization()
-					{
-						Address = new Services.Lookup.Address()
-						{
-							Address1 = model.Address,
-							City = model.City,
-							CountryCode = model.SelectedCountryCode,
-							StateId = model.SelectedStateId,
-							PostalCode = model.PostalCode,
-						},
-						OrganizationName = model.OrganizationName,
-						SiteUrl = model.SiteUrl,
-						PhoneNumber = model.PhoneNumber,
-						FaxNumber = model.FaxNumber
-					},
-					model.EmployeeId);
+				int orgId = this.AppService.SetupOrganization(model.EmployeeId, model.OrganizationName, model.PhoneNumber, model.FaxNumber, model.SiteUrl, null, model.Address, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode);
 
 				if (orgId < 0)
 				{
