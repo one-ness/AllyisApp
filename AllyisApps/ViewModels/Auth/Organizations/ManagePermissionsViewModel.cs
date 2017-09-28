@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Web.Mvc;
+using AllyisApps.Resources;
+using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Auth
@@ -85,5 +88,36 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets this user's role in each product. List order should be same as in list of subscriptions.
 		/// </summary>
 		public List<int> ProductRoleIds { get; set; }
+	}
+
+	public class SubscriptionPermissionsViewModel
+	{
+		private List<UserPermssionViewModel> Users;
+
+		/// <summary>
+		/// Gets or sets availe Role
+		/// </summary>
+		public SelectList Roles { get; set; }
+	}
+
+	/// <summary>
+	/// Row in
+	/// </summary>
+	public class UserPermssionViewModel
+	{
+		/// <summary>
+		/// UserId
+		/// </summary>
+		public int UserID { get; set; }
+
+		public ProductIdEnum productId { get; set; }
+
+		public string currentRoleName { get; set; }
+
+		public string FirstName { get; set; }
+
+		public string LastName { get; set; }
+
+		public bool isChecked { get; set; }
 	}
 }
