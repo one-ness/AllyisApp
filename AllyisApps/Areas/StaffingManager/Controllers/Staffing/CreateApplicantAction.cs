@@ -36,18 +36,20 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <summary>
 		/// Create Applicant.
 		/// </summary>
+		/// <param name="subscriptionId"></param>
 		/// <param name="model"></param>
 		/// <returns></returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult CreateApplicant(StaffingApplicantViewModel model)
+		public ActionResult CreateApplicant(int subscriptionId, StaffingApplicantViewModel model)
 		{
-			Applicant applicant = InitializeApplicant(model);
+			var subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+			Applicant applicant = InitializeApplicant(subInfo.OrganizationId, model);
 			this.AppService.CreateApplicant(applicant);
 			return this.RedirectToAction("Index");
 		}
 
-		private static Applicant InitializeApplicant(StaffingApplicantViewModel model)
+		private static Applicant InitializeApplicant(int orgId, StaffingApplicantViewModel model)
 		{
 			return new Applicant()
 			{
@@ -60,6 +62,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				FirstName = model.FirstName,
 				LastName = model.LastName,
 				Notes = model.Notes,
+				OrgId = orgId,
 				PhoneNumber = model.PhoneNumber,
 				PostalCode = model.PostalCode,
 				State = model.State

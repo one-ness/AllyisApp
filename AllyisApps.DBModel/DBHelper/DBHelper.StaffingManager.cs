@@ -52,6 +52,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@countryCode", "US"); // add real country code
 			parameters.Add("@phoneNumber", applicant.PhoneNumber);
 			parameters.Add("@notes", applicant.Notes);
+			parameters.Add("@organizationId", applicant.OrganizationId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{

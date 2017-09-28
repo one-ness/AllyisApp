@@ -70,5 +70,10 @@ namespace AllyisApps.DBModel.StaffingManager
 		/// Gets or sets Notes.
 		/// </summary>
 		public string Notes { get; set; }
+
+		/// <summary>
+		/// Gets or sets OrganizationId.
+		/// </summary>
+		public int OrganizationId { get; set; }
 	}
 }

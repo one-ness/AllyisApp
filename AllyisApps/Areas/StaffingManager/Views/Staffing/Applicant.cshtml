@@ -1,4 +1,6 @@
-﻿@model AllyisApps.Areas.StaffingManager.ViewModels.Staffing.StaffingApplicantViewModel
+﻿@using AllyisApps.Areas.StaffingManager.ViewModels.Staffing
+
+@model AllyisApps.Areas.StaffingManager.ViewModels.Staffing.StaffingApplicantViewModel
 
 @{
 	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/StaffingManager/Views/Shared/_BreadcrumbNavPartial.cshtml";
@@ -17,6 +19,6 @@
 <body>
 	<h3>@name</h3>
 	<h3>@Model.Email</h3>
-	@Html.Partial("_ApplicationsPartial", Model.Applications)
+	@Html.Partial("_ApplicationsPartial", Model.Applications ?? new List<StaffingApplicationViewModel>())
 </body>
 </html>

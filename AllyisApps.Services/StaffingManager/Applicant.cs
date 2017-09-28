@@ -204,5 +204,10 @@ namespace AllyisApps.Services.StaffingManager
 		/// Gets or sets Notes.
 		/// </summary>
 		public string Notes { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Organization Id.
+		/// </summary>
+		public int OrgId { get; set; }
 	}
 }
