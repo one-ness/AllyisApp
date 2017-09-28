@@ -38,7 +38,7 @@
 				}
 			</table>
 			<div class="panel-body">
-				<p><i>Please visit the <a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { organizationId = Model.OrganizationId })" style="color:cornflowerblue">subscriptions page</a> to subscribe to other products.</i></p>
+				<p><i>Please visit the <a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { id = Model.OrganizationId })" style="color:cornflowerblue">subscriptions page</a> to subscribe to other products.</i></p>
 			</div>
 		}
 		else
@@ -46,7 +46,7 @@
 			<div class="panel-body">
 				<h4>No Subscriptions</h4>
 				<p><i>You have not subscribed to any of our products yet.</i></p>
-				<p><i>Please visit the <a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { organizationId = Model.OrganizationId })" style="color:cornflowerblue">subscriptions page</a> to subscribe to our products.</i></p>
+				<p><i>Please visit the <a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { id = Model.OrganizationId })" style="color:cornflowerblue">subscriptions page</a> to subscribe to our products.</i></p>
 			</div>
 		}
 	</div>

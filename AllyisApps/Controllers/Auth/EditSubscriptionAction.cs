@@ -22,26 +22,32 @@ namespace AllyisApps.Controllers.Auth
 		[HttpGet]
 		public ActionResult EditSubscription(int id)
 		{
-			int orgId = AppService.GetSubscription(id).OrganizationId;
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
+			var sub = AppService.GetSubscription(id);
+
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, sub.OrganizationId);
+
 			var skuId = AppService.GetSubscription(id).SkuId;
 
 			var productId = AppService.UserContext.SubscriptionsAndRoles[id].ProductId;
-			string subscriptionName = AppService.getSubscriptionName(id);
 
-			SkuInfo sku = GetNextName(id, skuId, productId);
+			ProductSubscription infos = AppService.GetProductSubscriptionInfo(id, skuId);
+
+			//SkuInfo nextSku = GetNextName(id, skuId, productId);
+			SkuInfo sku = AppService.GetSkuDetails(skuId);
+
 			EditSubscriptionViewModel model = new EditSubscriptionViewModel
 			{
 				SkuId = sku.SkuId,
 				SkuIdNext = sku.SkuIdNext,
 				Name = sku.SkuName,
 				NextName = sku.NextName,
-				Description = sku.Description,
+				Description = nextSku.Description,
 				SubscriptionId = id,
-				OrganizationId = orgId,
-				ProductId = sku.ProductId,
-				SubscriptionName = subscriptionName,
-				SkuIconUrl = sku.IconUrl
+				OrganizationId = sub.OrganizationId,
+				ProductId = nextSku.ProductId,
+				SubscriptionName = sub.SubscriptionName,
+				SkuIconUrl = nextSku.IconUrl,
+				OtherSkus = infos.SkuList.Where(sk => nextSku.SkuId != sk.SkuId).Select(sk => sk.SkuId)
 			};
 			return this.View(ViewConstants.EditSubscription, model);
 		}
@@ -63,42 +69,13 @@ namespace AllyisApps.Controllers.Auth
 			{
 				try
 				{
-					// TODO: Go straight to unsubscribe action from the view -- create a seperate button for unsubscribing
-					if (model.ActionType == "Unsubscribe")
+					AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, model.OrganizationId);
+
+					bool newSubscription = false;
+					if (model.SelectedNewSkuEnum.HasValue)
 					{
-						// Unsubscribe
-						return this.RedirectToAction(ActionConstants.Unsubscribe, new { id = model.SubscriptionId, idTwo = model.SkuId });
-					}
-					else if (model.ActionType == model.Name)
-					{
-						// Nothing happening in "change subscription" dropdown, just changing subscription name
-
-						model.SkuIdNext = model.SkuId;
-						model.NextName = model.Name;
-					}
-					else
-					{
-						// Upgrade or downgrade
-						// TODO: Pass SKU ids from the db to the view dropdown values.  No hardcoding here plz
-
-						model.NextName = model.ActionType;
-						switch (model.ActionType)
-						{
-							case "Time Tracker":
-								model.SkuIdNext = SkuIdEnum.TimeTrackerBasic;
-								break;
-
-							case "Expense Tracker":
-								model.SkuIdNext = SkuIdEnum.ExpenseTrackerBasic;
-								break;
-
-							case "Staffing Manager":
-								model.SkuIdNext = SkuIdEnum.StaffingManagerBasic;
-								break;
-
-							default:
-								break;
-						}
+						model.SkuIdNext = model.SelectedNewSkuEnum.Value;
+						newSubscription = true;
 					}
 
 					ProductSubscription infos = AppService.GetProductSubscriptionInfo(model.OrganizationId, model.SkuIdNext);
@@ -107,10 +84,7 @@ namespace AllyisApps.Controllers.Auth
 					var customerId = new BillingServicesCustomerId(id);
 					var token = new BillingServicesToken(customerId.ToString());
 
-					AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, model.OrganizationId);
-
-					// TODO: Seperate edit subscription and create subscription
-					AppService.Subscribe(model.ProductId, model.ProductName, model.SkuIdNext, model.SubscriptionName, model.SkuId, 0, token, false, null, null, model.OrganizationId);
+					AppService.UpdateSubscription(model.OrganizationId, (int)model.SkuIdNext, model.SubscriptionId, model.SubscriptionName);
 					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.SubscribedSuccessfully, model.NextName), Variety.Success));
 					return this.RedirectToAction(ActionConstants.ManageOrg, new { id = model.OrganizationId });
 				}
@@ -132,22 +106,6 @@ namespace AllyisApps.Controllers.Auth
 			SkuInfo skuNext = infos.SkuList.Where(s => s.SkuId != skuId && s.ProductId == productId).SingleOrDefault();
 			sku.SkuIdNext = skuNext == null ? 0 : skuNext.SkuId;
 			sku.NextName = skuNext == null ? null : skuNext.SkuName;
-			switch (sku.SkuName)
-			{
-				case "Time Tracker":
-					sku.NextName = "Time Tracker Pro";
-					sku.SkuIdNext = SkuIdEnum.TimeTrackerPro;
-					break;
-
-				case "Time Tracker Pro":
-					sku.NextName = "Time Tracker";
-					sku.SkuIdNext = SkuIdEnum.TimeTrackerBasic;
-					break;
-
-				default:
-					break;
-			}
-
 			return sku;
 		}
 	}

@@ -4,6 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+using System.Web.Mvc;
 using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Auth
@@ -91,6 +93,11 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the type of edit being done (upgrade, downgrade, unsubscribe).
 		/// </summary>
-		public string ActionType { get; set; }
+		public SkuIdEnum? SelectedNewSkuEnum { get; set; }
+
+		/// <summary>
+		/// Gets or sets otherSkus for the edit being made.
+		/// </summary>
+		public IEnumerable<SkuIdEnum> OtherSkus { get; set; }
 	}
 }

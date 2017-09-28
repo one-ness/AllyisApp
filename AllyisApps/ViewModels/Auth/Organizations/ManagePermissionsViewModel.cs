@@ -90,9 +90,15 @@ namespace AllyisApps.ViewModels.Auth
 		public List<int> ProductRoleIds { get; set; }
 	}
 
+	/// <summary>
+	/// Subscription Permission vView s
+	/// </summary>
 	public class SubscriptionPermissionsViewModel
 	{
-		private List<UserPermssionViewModel> Users;
+		/// <summary>
+		///
+		/// </summary>
+		public List<UserPermssionViewModel> Users;
 
 		/// <summary>
 		/// Gets or sets availe Role
@@ -110,14 +116,29 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public int UserID { get; set; }
 
+		/// <summary>
+		///
+		/// </summary>
 		public ProductIdEnum productId { get; set; }
 
+		/// <summary>
+		///
+		/// </summary>
 		public string currentRoleName { get; set; }
 
+		/// <summary>
+		///
+		/// </summary>
 		public string FirstName { get; set; }
 
+		/// <summary>
+		///
+		/// </summary>
 		public string LastName { get; set; }
 
+		/// <summary>
+		///
+		/// </summary>
 		public bool isChecked { get; set; }
 	}
 }
