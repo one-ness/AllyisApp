@@ -1,0 +1,24 @@
+﻿@using AllyisApps.Areas.StaffingManager.ViewModels.Staffing
+
+@model IEnumerable<StaffingApplicationViewModel>
+
+<div>
+	<table>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Status</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (StaffingApplicationViewModel application in Model)
+			{
+				string name = application.Applicant.FirstName + " " + application.Applicant.LastName;
+				<tr>
+					<td>@name</td>
+					<td>@application.ApplicationStatus.ToString()</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>

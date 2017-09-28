@@ -130,6 +130,13 @@ namespace AllyisApps.Services
 		#region GetMethods
 
 		/// <summary>
+		/// Retrieves the applicants in an organization.
+		/// </summary>
+		/// <param name="orgId"></param>
+		/// <returns>The list of applicants in organization.</returns>
+		public List<Applicant> GetApplicantsByOrgId(int orgId) => DBHelper.GetApplicantsBySubscriptionId(orgId).Select(DBApplicantToServiceObject).ToList();
+
+		/// <summary>
 		/// Retrieves the applicant with a given id.
 		/// </summary>
 		/// <param name="applicantId">The id of the applicant.</param>

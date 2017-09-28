@@ -24,34 +24,20 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 	public partial class StaffingController : BaseController
 	{
 		/// <summary>
-		/// Applicant page.
+		/// Page for list of applicants.
 		/// </summary>
+		/// <param name="subscriptionId"></param>
 		/// <returns></returns>
-		public ActionResult Applicant(int applicantId)
+		public ActionResult ApplicantList(int subscriptionId)
 		{
-			Applicant applicant = this.AppService.GetApplicantById(applicantId);
-			StaffingApplicantViewModel model = InitializeStaffingApplicantViewModel(applicant);
+			var subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+			List<Applicant> applicants = this.AppService.GetApplicantsByOrgId(subInfo.OrganizationId);
+			ApplicantListViewModel model = new ApplicantListViewModel()
+			{
+				Applicants = applicants.Select(a => InitializeStaffingApplicantViewModel(a)).ToList()
+			};
 
 			return this.View(model);
-		}
-
-		private static StaffingApplicantViewModel InitializeStaffingApplicantViewModel(Applicant applicant)
-		{
-			return new StaffingApplicantViewModel()
-			{
-				Address = applicant.Address,
-				AddressId = applicant.AddressId,
-				ApplicantId = applicant.ApplicantId,
-				City = applicant.City,
-				Country = applicant.Country,
-				Email = applicant.Email,
-				FirstName = applicant.FirstName,
-				LastName = applicant.LastName,
-				Notes = applicant.Notes,
-				PhoneNumber = applicant.PhoneNumber,
-				PostalCode = applicant.PostalCode,
-				State = applicant.State
-			};
 		}
 	}
 }

@@ -394,6 +394,7 @@
     <Build Include="StaffingManager\Stored Procedures\CreateStaffingSettings.sql" />
     <Build Include="StaffingManager\Stored Procedures\UpdateStaffingSettings.sql" />
     <Build Include="StaffingManager\Stored Procedures\GetStaffingDefaultStatus.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetApplicantsByOrgId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

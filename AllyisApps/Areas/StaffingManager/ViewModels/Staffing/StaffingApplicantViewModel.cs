@@ -67,5 +67,10 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// Gets or sets Notes.
 		/// </summary>
 		public string Notes { get; set; }
+
+		/// <summary>
+		/// Gets or sets Applications.
+		/// </summary>
+		public List<StaffingApplicationViewModel> Applications { get; set; }
 	}
 }

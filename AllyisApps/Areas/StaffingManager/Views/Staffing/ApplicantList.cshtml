@@ -1,0 +1,36 @@
+﻿@model AllyisApps.ViewModels.Staffing.ApplicantListViewModel
+
+@{
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/StaffingManager/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/StaffingManager";
+	ViewBag.Title = "Applicant";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Applicant List</title>
+</head>
+<body>
+	<table>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Email</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var applicant in Model.Applicants)
+			{
+				string name = applicant.FirstName + " " + applicant.LastName;
+				<tr>
+					<td>@name</td>
+					<td>@applicant.Email</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</body>
+</html>

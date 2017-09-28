@@ -379,6 +379,22 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// Retrieves the list of applicants.
+		/// </summary>
+		/// <param name="orgId"></param>
+		/// <returns>All the applicants in a subscription.</returns>
+		public List<ApplicantDBEntity> GetApplicantsBySubscriptionId(int orgId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@orgId", orgId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				return connection.Query<ApplicantDBEntity>("[StaffingManager].[GetApplicantsByOrgId]", parameters, commandType: CommandType.StoredProcedure).ToList();
+			}
+		}
+
+		/// <summary>
 		/// Retrieves the applicant with a given id.
 		/// </summary>
 		/// <param name="applicantId">The id of the applicant.</param>
