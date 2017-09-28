@@ -78,6 +78,14 @@
 	label {
 		float: left;
 	}
+
+	.panel-heading{
+		padding-bottom: 5px;
+	}
+
+	.paragraph {
+		white-space: pre-wrap;
+	}
 </style>
 
 
@@ -105,13 +113,19 @@
 					<span class="fa fa-fw fa-calendar"></span>
 					<label>Start date: &nbsp;</label>
 					 @Model.StartDate.ToShortDateString()
+
+					<div>
+						<label>Expected Duration: &nbsp;</label>
+						@Model.DurationMonths &nbsp;
+						months
+					</div>
 				</div>
 			</div>
 			<br>
 			<br>
 			<br>
 			<br>
-			<span class="fa-pull-right">Edit Position: &nbsp;<a href="@Url.Action(ActionConstants.EditPosition, ControllerConstants.Staffing, new { positionId = Model.PositionId, subscriptionId = Model.SubscriptionId })"><i class="glyphicon glyphicon-edit fa-pull-right"></i></a></span>
+			<span class="fa-pull-right">Edit: &nbsp;<a href="@Url.Action(ActionConstants.EditPosition, ControllerConstants.Staffing, new { positionId = Model.PositionId, subscriptionId = Model.SubscriptionId })"><i class="glyphicon glyphicon-edit fa-pull-right"></i></a></span>
 		</div>
 		<div class="panel panel-default col-md-12">
 			<div class="col-md-6 fa-pull-left">
@@ -157,23 +171,35 @@
 					}
 				</div>
 				<div class="form-group">
-					<label>Hiring Manager: &nbsp;</label>
-					@Model.HiringManager
+						<label>Hiring Manager: &nbsp;</label>
+						@Model.HiringManager
+				</div>
+				<div class="form-group">
+					<span>
+						<label>Team: &nbsp;</label>
+						@Model.TeamName
+					</span>
 				</div>
 				<div class="form-group">
 					<label>Location: &nbsp;</label>
 					@if (Model.PositionAddress.City != "" && Model.PositionAddress.City != null)
 					{
 						@Model.PositionAddress.City
-						@:, &nbsp;
 					}					
 					@if (Model.PositionAddress.State != "" && Model.PositionAddress.State != null)
 					{
+						if(Model.PositionAddress.City != "" && Model.PositionAddress.City != null)
+						{ 
+							@:, &nbsp;
+						}
 						@Model.PositionAddress.State
-						@: &nbsp;-&nbsp;
 					}
 					@if (Model.PositionAddress.Country != "" && Model.PositionAddress.Country != null)
 					{
+						if (Model.PositionAddress.State != "" && Model.PositionAddress.State != null)
+						{
+							@: &nbsp;-&nbsp;
+						}
 						@Model.PositionAddress.Country
 					}
 				</div>
@@ -183,19 +209,25 @@
 			@if (Model.RequiredSkills != "" && Model.RequiredSkills != null)
 			{
 				<div class="form-group">
-					<p class="panel-default panel" width="100%"><label>Required Skills: </label>@Model.RequiredSkills</p>
+					<label>Required Skills: </label>
+					<br>
+					<p class="panel-default panel paragraph" width="100%">@Model.RequiredSkills</p>
 				</div>
 			}
 			@if (Model.JobResponsibilities != "" && Model.JobResponsibilities != null)
 			{
 				<div class="form-group">
-					<p class="panel-default panel" width="100%"><label>Job Responsibilities: </label>@Model.JobResponsibilities</p>
+					<label>Job Responsibilities: </label>
+					<br>
+					<p class="panel-default panel paragraph" width="100%">@Model.JobResponsibilities</p>
 				</div>
 			}
 			@if (Model.DesiredSkills != "" && Model.DesiredSkills != null)
 			{
 				<div class="form-group">
-					<p class="panel-default panel" width="100%"><label>Desired Skills: </label>@Model.DesiredSkills</p>
+					<label>Desired Skills: </label>
+					<br>
+					<p class="panel-default panel paragraph" width="100%">@Model.DesiredSkills</p>
 				</div>
 			}
 		</div>
@@ -215,7 +247,7 @@
 <script>
 	$(document).ready(function () {
 		$("#datepicker").attr("value", " ");
-		loadTags()
+		loadTags();
 	});
 
 	function loadTags() {
@@ -230,7 +262,6 @@
 			var n = document.createTextNode(t[x]);
 			spa.appendChild(n);
 			document.getElementById("tags").appendChild(spa);
-
 		}
 	}
 

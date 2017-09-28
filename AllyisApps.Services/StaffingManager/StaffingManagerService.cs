@@ -430,7 +430,9 @@ namespace AllyisApps.Services
 					City = position.position.City,
 					StateId = position.position.StateId,
 					CountryCode = position.position.CountryCode,
-					PostalCode = position.position.PostalCodes
+					PostalCode = position.position.PostalCodes,
+					StateName = position.position.StateName,
+					CountryName = position.position.CountryName
 				},
 
 				Tags = DBDynamicToServiceObject(position.tags),
