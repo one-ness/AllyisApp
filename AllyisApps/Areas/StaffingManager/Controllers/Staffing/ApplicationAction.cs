@@ -30,6 +30,8 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		[HttpGet]
 		public ActionResult Application(int subscriptionId, int applicantId)
 		{
+			SetNavData(subscriptionId);
+
 			var subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			List<Position> positions = this.AppService.GetPositionsByOrganizationId(subInfo.OrganizationId);
 			List<SelectListItem> positionList = new List<SelectListItem>();

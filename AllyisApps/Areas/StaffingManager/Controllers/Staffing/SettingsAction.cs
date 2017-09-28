@@ -32,6 +32,8 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns></returns>
 		public ActionResult Settings(int subscriptionId)
 		{
+			SetNavData(subscriptionId);
+
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);

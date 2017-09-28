@@ -32,6 +32,8 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns>The index view.</returns>
 		public ActionResult Index(int subscriptionId, string Statuses, string Types, string Tags)
 		{
+			SetNavData(subscriptionId);
+
 			UserContext.SubscriptionAndRole subInfo = null;
 			int userId = this.AppService.UserContext.UserId;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);

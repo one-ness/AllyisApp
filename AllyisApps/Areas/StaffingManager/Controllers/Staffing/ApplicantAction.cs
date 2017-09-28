@@ -27,8 +27,10 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// Applicant page.
 		/// </summary>
 		/// <returns></returns>
-		public ActionResult Applicant(int applicantId)
+		public ActionResult Applicant(int subscriptionId, int applicantId)
 		{
+			SetNavData(subscriptionId);
+
 			Applicant applicant = this.AppService.GetApplicantById(applicantId);
 			StaffingApplicantViewModel model = InitializeStaffingApplicantViewModel(applicant);
 
