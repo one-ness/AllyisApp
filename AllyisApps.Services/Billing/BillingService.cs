@@ -573,7 +573,8 @@ namespace AllyisApps.Services
 				Price = sku.Price,
 				UserLimit = sku.UserLimit,
 				BillingFrequency = (BillingFrequencyEnum)sku.BillingFrequency,
-				Description = sku.Description
+				Description = sku.Description,
+				IconUrl = sku.IconUrl,
 			};
 		}
 

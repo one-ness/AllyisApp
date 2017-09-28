@@ -34,7 +34,7 @@
 													if (Model.CurrentSubscriptions.Where(sub => sub.SkuId == sku.SkuId).FirstOrDefault() != null)   //already subscribed to this sku
 													{
 														<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;">
-															<a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { subscriptionId = currentSubId })" class="btn btn-default">@Strings.Edit</a>
+															<a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = currentSubId })" class="btn btn-default">@Strings.Edit</a>
 														</div>
 													}
 													else
@@ -42,13 +42,13 @@
 														if (Model.CurrentSubscriptions.Where(sub => sub.ProductId == sku.ProductId).FirstOrDefault().SkuId > sku.SkuId) //pro version always has higher skuId than basic version
 														{
 															<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;">
-																<a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { subscriptionId = currentSubId })" style="text-decoration: none" class="btn btn-default">@Strings.Downgrade</a>
+																<a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = currentSubId })" style="text-decoration: none" class="btn btn-default">@Strings.Downgrade</a>
 															</div>
 														}
 														else
 														{
 															<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;">
-																<a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { subscriptionId = currentSubId })" style="text-decoration: none" class="btn btn-default">@Strings.Upgrade</a>
+																<a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = currentSubId })" style="text-decoration: none" class="btn btn-default">@Strings.Upgrade</a>
 															</div>
 														}
 													}

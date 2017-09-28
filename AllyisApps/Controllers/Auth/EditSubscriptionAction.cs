@@ -17,19 +17,19 @@ namespace AllyisApps.Controllers.Auth
 		/// <summary>
 		/// GET: /Account/EditSubscription.
 		/// </summary>
-		/// <param name="subscriptionId">Subscription id.</param>
+		/// <param name="id">Subscription id.</param>
 		/// <returns>The result of this action.</returns>
 		[HttpGet]
-		public ActionResult EditSubscription(int subscriptionId)
+		public ActionResult EditSubscription(int id)
 		{
-			int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
+			int orgId = AppService.GetSubscription(id).OrganizationId;
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
-			var skuId = AppService.GetSubscription(subscriptionId).SkuId;
+			var skuId = AppService.GetSubscription(id).SkuId;
 
-			var productId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId;
-			string subscriptionName = AppService.getSubscriptionName(subscriptionId);
+			var productId = AppService.UserContext.SubscriptionsAndRoles[id].ProductId;
+			string subscriptionName = AppService.getSubscriptionName(id);
 
-			SkuInfo sku = GetNextName(subscriptionId, skuId, productId);
+			SkuInfo sku = GetNextName(id, skuId, productId);
 			EditSubscriptionViewModel model = new EditSubscriptionViewModel
 			{
 				SkuId = sku.SkuId,
@@ -37,7 +37,7 @@ namespace AllyisApps.Controllers.Auth
 				Name = sku.SkuName,
 				NextName = sku.NextName,
 				Description = sku.Description,
-				SubscriptionId = subscriptionId,
+				SubscriptionId = id,
 				OrganizationId = orgId,
 				ProductId = sku.ProductId,
 				SubscriptionName = subscriptionName,
