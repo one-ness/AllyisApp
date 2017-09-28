@@ -73,7 +73,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			{
 				PositionId = pos.PositionId,
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
-				LocalizedStates = new Dictionary<string, string>(),
+				LocalizedStates = ModelHelper.GetLocalizedStates(AppService, pos.Address.CountryCode),
 				IsCreating = false,
 				OrganizationId = subInfo.OrganizationId,
 				SubscriptionName = subscriptionNameToDisplay,
@@ -115,7 +115,16 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				PositionLevelId = pos.PositionLevelId,
 				HiringManager = pos.HiringManager,
 				TeamName = pos.TeamName,
-				TagsToSubmit = assignedTags
+				TagsToSubmit = assignedTags,
+				PositionAddress = new AddressViewModel
+				{
+					Country = pos.Address.CountryName,
+					City = pos.Address.City,
+					State = pos.Address.StateName
+				},
+				SelectedCountryCode = pos.Address?.CountryCode,
+				SelectedStateId = pos.Address?.StateId
+
 			};
 		}
 

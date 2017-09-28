@@ -17,10 +17,11 @@
 	@positionLevel NVARCHAR (140),
 	@hiringManager NVARCHAR (140),
 	@teamName NVARCHAR (140),
-	@address NVARCHAR (64),
+	@address1 NVARCHAR (64),
+	@address2 NVARCHAR (64),
 	@city NVARCHAR(32),
-	@state NVARCHAR(32),
-	@country NVARCHAR(32),
+	@stateId NVARCHAR(32),
+	@countryCode NVARCHAR(32),
 	@postalCode NVARCHAR(16)
 
 AS
@@ -47,11 +48,12 @@ BEGIN
 	WHERE [PositionId] = @positionId
 
 	SET NOCOUNT ON
-	UPDATE [Lookup].[Address] SET 
-		[Address1] = @address,
-		[City] = @city,
-		[StateId] = @state,
-		[CountryCode] = @country,
-		[PostalCode] = @postalCode
-	WHERE [AddressId] = @addressId
+	EXEC [Lookup].[UpdateAddress]
+		@addressId,
+		@address1,
+		@address2,
+		@city,
+		@stateId,
+		@postalCode,
+		@countryCode
 END

@@ -781,10 +781,11 @@ namespace AllyisApps.DBModel
 			parameters.Add("@positionLevel", position.Position.PositionLevelId);
 			parameters.Add("@hiringManager", position.Position.HiringManager);
 			parameters.Add("@teamName", position.Position.TeamName);
-			parameters.Add("@address", position.Address.Address1);
+			parameters.Add("@address1", position.Address.Address1);
+			parameters.Add("@address2", position.Address.Address2);
 			parameters.Add("@city", position.Address.City);
-			parameters.Add("@state", position.Address.StateId);
-			parameters.Add("@country", position.Address.CountryCode);
+			parameters.Add("@stateId", position.Address.StateId);
+			parameters.Add("@countryCode", position.Address.CountryCode);
 			parameters.Add("@postalCode ", position.Address.PostalCode);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))

@@ -158,6 +158,16 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		public AddressViewModel PositionAddress { get; set; }
 
 		/// <summary>
+		/// Gets or sets Selected state id.
+		/// </summary>
+		public int? SelectedStateId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Selected country code.
+		/// </summary>
+		public string SelectedCountryCode { get; set; }
+
+		/// <summary>
 		/// CustomerInfo for View Model
 		/// </summary>
 		public CustomerInfoViewModel CustomerInfo { get; set; }
