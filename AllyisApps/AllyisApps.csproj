@@ -241,6 +241,8 @@
     <Compile Include="Areas\StaffingManager\Controllers\Customer\EditAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Customer\IndexAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\AccountAction.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Staffing\ViewPosition.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Staffing\EditPositionAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\CreatePositionAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\DeleteEmploymentTypeAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\DeletePositionStatusAction.cs" />
@@ -259,6 +261,7 @@
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\CreateApplicationDocumentViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\CreateApplicationViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\CreateApplicantViewModel.cs" />
+    <Compile Include="Areas\StaffingManager\ViewModels\Staffing\ViewPositionViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\PositionThumbnailInfoViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\PositionViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\EditPositionViewModel.cs" />
@@ -624,6 +627,9 @@
     <Content Include="Areas\ExpenseTracker\Views\Expense\CreateAccount.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\Application.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\Applicant.cshtml" />
+    <Content Include="Areas\StaffingManager\Views\Staffing\EditPosition.cshtml" />
+    <Content Include="Areas\StaffingManager\Views\Staffing\ViewPosition.cshtml" />
+    <Content Include="Areas\StaffingManager\Views\Staffing\_PositionViewDetails.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />

@@ -108,28 +108,6 @@
 									</td>
 								</tr>
 							}
-							<tr>
-								<th>Status Name</th>
-								<th><span class="pull-right">@Strings.Delete</span></th>
-								<th><span class="pull-right">Default</span></th>
-							</tr>
-						</thead>
-						@foreach (dynamic status in Model.positionStatuses)
-						{
-							<tr>
-								@{
-									string _statusName = Strings.ResourceManager.GetString((status.PositionStatusName).Replace(" ", string.Empty)) ?? status.PositionStatusName;
-								}
-								<td>@_statusName</td>
-								<td>
-									<a href="javascript: void(0);" class="text-muted" title="Delete Position Status"
-									   onclick='deletePositionStatus("@status.PositionStatusId", @Model.userId, @Model.organizationId, @Model.subscriptionId)'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
-								</td>
-								<td>
-									<input type="radio" name="statusRadio" class="pull-right">
-								</td>
-							</tr>
-									}
 						<tr>
 							@using (Html.BeginForm(ActionConstants.CreatePositionStatus, ControllerConstants.Staffing, new { subscriptionId = Model.subscriptionId, orgId = Model.organizationId }, FormMethod.Post))
 							{

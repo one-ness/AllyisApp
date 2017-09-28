@@ -1,0 +1,287 @@
+﻿@model AllyisApps.Areas.StaffingManager.ViewModels.Staffing.ViewPositionViewModel
+@{
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/StaffingManager/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/StaffingManager";
+	ViewBag.TitleBar = Strings.MyAccount;
+
+}
+
+<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="~/Content/jquery.comiseo.daterangepicker.css" />
+
+<style>
+	.billing-amount {
+		width: 60%;
+		float: left;
+	}
+
+	.billing-frequency {
+		width: 38%;
+		float: right;
+	}
+
+	.employment-type {
+		width: 60%;
+		float: left;
+	}
+
+	.duration {
+		width: 38%;
+		float: right;
+	}
+
+	.position-level {
+		width: 60%;
+		float: left;
+	}
+
+	.position-count {
+		width: 38%;
+		float: right;
+	}
+
+	div {
+		padding-left: 2px;
+		padding-right: 2px;
+	}
+
+	#tags {
+		float: left;
+		border: 1px solid #ccc;
+		padding: 5px;
+	}
+
+	#tags > span {
+		cursor: pointer;
+		display: block;
+		float: left;
+		color: #fff;
+		font-size: 10px;
+		background: #336B7B;
+		padding: 5px;
+		padding-right: 25px;
+		margin: 4px;
+	}
+
+	#tags > span:hover {
+		opacity: 0.7;
+	}
+
+	#tags > input {
+		background: #CBBEDF;
+		border: 0;
+		margin: 4px;
+		padding: 7px;
+		width: auto;
+	}
+
+	label {
+		float: left;
+	}
+</style>
+
+
+<div class="flexbox-row flexbox-row-2-col-collapse">
+	<div class="panel panel-info" style="position: relative">
+		<div class="panel-heading panel-title col-md-12">
+			<div class="col-md-6 fa-pull-left">
+				<h1 >@Model.PositionTitle</h1>
+				<div class="form-group" id="tags">
+					<Label>Tags</Label>
+				</div>
+				<br>
+				<br>
+			</div>
+			<div class="col-md-6 fa-pull-right">
+				<Label>Status: &nbsp;</Label>
+				@foreach (var sta in Model.PositionStatuses)
+				{
+					if (sta.PositionStatusId == Model.PositionStatusId)
+					{
+						<span>@sta.PositionStatusName</span> 
+					}
+				}
+				<div class="form-group fa-pull-right">
+					<span class="fa fa-fw fa-calendar"></span>
+					<label>Start date: &nbsp;</label>
+					 @Model.StartDate.ToShortDateString()
+				</div>
+			</div>
+			<br>
+			<br>
+			<br>
+			<br>
+			<span class="fa-pull-right">Edit Position: &nbsp;<a href="@Url.Action(ActionConstants.EditPosition, ControllerConstants.Staffing, new { positionId = Model.PositionId, subscriptionId = Model.SubscriptionId })"><i class="glyphicon glyphicon-edit fa-pull-right"></i></a></span>
+		</div>
+		<div class="panel panel-default col-md-12">
+			<div class="col-md-6 fa-pull-left">
+				<div class="form-group">
+					<label>Position Level: &nbsp;</label>
+					@foreach (var lev in Model.PositionLevels)
+					{
+						if (lev.PositionLevelId == Model.PositionLevelId)
+						{
+							<span>@lev.PositionLevelName</span>
+						}
+					}
+				</div>
+				<div class="form-group">
+					<label>Employment Type: &nbsp;</label>
+					@foreach (var typ in Model.EmploymentTypes)
+					{
+						if (typ.EmploymentTypeId == Model.EmploymentTypeId)
+						{
+							<span>@typ.EmploymentTypeName</span>
+						}
+					}
+				</div>
+				<div class="form-group">
+					<label>Positions Available: &nbsp;</label>
+					@Model.PositionCount
+				</div>
+				<div class="form-group">
+					<label>Billing Rate: &nbsp;</label>
+					@Model.BillingRateAmount &nbsp;
+					@Model.BillingRateFrequency
+				</div>
+			</div>
+			<div class="col-md-6 fa-pull-right">
+				<div class="form-group">
+					<label>Customer: &nbsp;</label>
+					@foreach(var cust in Model.Customers)
+					{
+						if (cust.CustomerId == Model.CustomerId)
+						{
+							<span>@cust.CustomerName</span>
+						}
+					}
+				</div>
+				<div class="form-group">
+					<label>Hiring Manager: &nbsp;</label>
+					@Model.HiringManager
+				</div>
+				<div class="form-group">
+					<label>Location: &nbsp;</label>
+					@if (Model.PositionAddress.City != "" && Model.PositionAddress.City != null)
+					{
+						@Model.PositionAddress.City
+						@:, &nbsp;
+					}					
+					@if (Model.PositionAddress.State != "" && Model.PositionAddress.State != null)
+					{
+						@Model.PositionAddress.State
+						@: &nbsp;-&nbsp;
+					}
+					@if (Model.PositionAddress.Country != "" && Model.PositionAddress.Country != null)
+					{
+						@Model.PositionAddress.Country
+					}
+				</div>
+			</div>
+		</div>
+		<div class="pull-left col-md-12">
+			@if (Model.RequiredSkills != "" && Model.RequiredSkills != null)
+			{
+				<div class="form-group">
+					<p class="panel-default panel" width="100%"><label>Required Skills: </label>@Model.RequiredSkills</p>
+				</div>
+			}
+			@if (Model.JobResponsibilities != "" && Model.JobResponsibilities != null)
+			{
+				<div class="form-group">
+					<p class="panel-default panel" width="100%"><label>Job Responsibilities: </label>@Model.JobResponsibilities</p>
+				</div>
+			}
+			@if (Model.DesiredSkills != "" && Model.DesiredSkills != null)
+			{
+				<div class="form-group">
+					<p class="panel-default panel" width="100%"><label>Desired Skills: </label>@Model.DesiredSkills</p>
+				</div>
+			}
+		</div>
+
+		<div class="panel-body list-group" id="Applications">
+		</div>
+	</div>
+</div>
+
+<div>
+	<h3>Applications: </h3>
+	<div class="panel panel-default col-md-12">
+	</div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+	$(document).ready(function () {
+		$("#datepicker").attr("value", " ");
+		loadTags()
+	});
+
+	function loadTags() {
+		var t = [];
+		@foreach(var y in Model.Tags)
+		{
+			@: t.push("@y");
+		}
+		for (var x in t)
+		{
+			var spa = document.createElement("span");
+			var n = document.createTextNode(t[x]);
+			spa.appendChild(n);
+			document.getElementById("tags").appendChild(spa);
+
+		}
+	}
+
+
+	function updateTags(tag) {
+		var parsed = JSON.parse(document.getElementById("TagsToSubmit").value);
+		var tagsInput = [];
+		for (var x in parsed) {
+			tagsInput.push(parsed[x]);
+			console.log("Parsed: " + parsed);
+		}
+		var newArr = [];
+		for (var i in parsed) {
+			newArr.push(tagsInput[i]);
+		}
+		newArr.push(tag);
+		document.getElementById("TagsToSubmit").value = JSON.stringify(newArr);
+		console.log("AfterTagDebug: " + document.getElementById("TagsToSubmit").value);
+	}
+
+	function removeTag(tag) {
+		var parsed = JSON.parse(document.getElementById("TagsToSubmit").value);
+		var tagsInput = [];
+		for (var x in parsed) {
+			tagsInput.push(parsed[x]);
+			console.log("Parsed: " + parsed);
+		}
+		var newArr = [];
+		for (var i in parsed) { //push all but the one you want removed
+			if (tagsInput[i] != tag) newArr.push(tagsInput[i]);
+		}
+		document.getElementById("TagsToSubmit").value = JSON.stringify(newArr);
+		console.log("AfterTagDebug: " + document.getElementById("TagsToSubmit").value);
+	}
+
+	$(function () {
+		$("#tags input").on({
+			focusout: function () {
+				var txt = this.value.replace(/[^a-z0-9\+\-\.\#]/ig, ''); // allowed characters
+				if (txt) {
+					$("<span />", { text: txt.toLowerCase(), insertAfter: this });
+					updateTags(txt);
+					console.log("ADD: " + txt);
+				}
+				this.value = "";
+			},
+			keyup: function (ev) {
+				// if: comma|enter (delimit more keyCodes with | pipe)
+				if (/(188|13|32)/.test(ev.which)) $(this).focusout();
+			}
+		});
+
+	});
+</script>
