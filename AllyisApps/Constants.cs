@@ -104,6 +104,8 @@ namespace AllyisApps
 		public const string DeleteEmploymentType = "deleteemploymenttype";
 		public const string CreateCustomer = "createcustomer";
 		public const string UpdatePositionStatus = "updatePositionStatus";
+		public const string SubmitUpdatePosition = "submitupdateposition";
+		public const string ViewPosition = "viewposition";
 	}
 
 	/// <summary>

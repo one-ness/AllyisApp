@@ -819,7 +819,7 @@ namespace AllyisApps.Services
 			product.ProductSkus = spResults.Item3.Select(sdb => InitializeSkuInfo(sdb)).ToList();
 
 			var subscription = InitializeSubscription(spResults.Item2);
-			subscription.NumberOfUsers = spResults.Item5;
+			if(subscription != null )subscription.NumberOfUsers = spResults.Item5;
 
 			return new ProductSubscription(
 				product,
