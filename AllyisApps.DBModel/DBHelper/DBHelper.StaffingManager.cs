@@ -439,8 +439,8 @@ namespace AllyisApps.DBModel
 			dynamic positionAndTags = new ExpandoObject();
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var results = connection.Query<dynamic>("[StaffingManager].[GetPosition]", parameters, commandType: CommandType.StoredProcedure).Single();
-				positionAndTags.position = results.Read<dynamic>().Single();
+				var results = connection.QueryMultiple("[StaffingManager].[GetPosition]", parameters, commandType: CommandType.StoredProcedure);
+				positionAndTags.position = results.Read<dynamic>().First();
 				positionAndTags.tags = results.Read<dynamic>().ToList();
 			}
 			return positionAndTags;
@@ -779,28 +779,29 @@ namespace AllyisApps.DBModel
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@positionId", position.PositionId);
-			parameters.Add("@organizationId", position.OrganizationId);
-			parameters.Add("@addressId", position.AddressId);
-			parameters.Add("@startDate", position.StartDate);
-			parameters.Add("@positionStatus", position.PositionStatus);
-			parameters.Add("@positionTitle", position.PositionTitle);
-			parameters.Add("@billingRateFrequency", position.BillingRateFrequency);
-			parameters.Add("@billingRateAmount", position.BillingRateAmount);
-			parameters.Add("@durationMonths", position.DurationMonths);
-			parameters.Add("@employmentType", position.EmploymentType);
-			parameters.Add("@positionCount", position.PositionCount);
-			parameters.Add("@requiredSkills", position.RequiredSkills);
-			parameters.Add("@jobResponsibilities", position.JobResponsibilities);
-			parameters.Add("@desiredSkills", position.DesiredSkills);
-			parameters.Add("@positionLevel", position.PositionLevel);
-			parameters.Add("@hiringManager", position.HiringManager);
-			parameters.Add("@teamName", position.TeamName);
-			parameters.Add("@address", position.Address);
-			parameters.Add("@city", position.City);
-			parameters.Add("@state", position.State);
-			parameters.Add("@country", position.Country);
-			parameters.Add("@postalCode ", position.PostalCode);
+			parameters.Add("@positionId", position.Position.PositionId);
+			parameters.Add("@organizationId", position.Position.OrganizationId);
+			parameters.Add("@customerId", position.Position.CustomerId);
+			parameters.Add("@addressId", position.Position.AddressId);
+			parameters.Add("@startDate", position.Position.StartDate);
+			parameters.Add("@positionStatus", position.Position.PositionStatusId);
+			parameters.Add("@positionTitle", position.Position.PositionTitle);
+			parameters.Add("@billingRateFrequency", position.Position.BillingRateFrequency);
+			parameters.Add("@billingRateAmount", position.Position.BillingRateAmount);
+			parameters.Add("@durationMonths", position.Position.DurationMonths);
+			parameters.Add("@employmentType", position.Position.EmploymentTypeId);
+			parameters.Add("@positionCount", position.Position.PositionCount);
+			parameters.Add("@requiredSkills", position.Position.RequiredSkills);
+			parameters.Add("@jobResponsibilities", position.Position.JobResponsibilities);
+			parameters.Add("@desiredSkills", position.Position.DesiredSkills);
+			parameters.Add("@positionLevel", position.Position.PositionLevelId);
+			parameters.Add("@hiringManager", position.Position.HiringManager);
+			parameters.Add("@teamName", position.Position.TeamName);
+			parameters.Add("@address", position.Address.Address1);
+			parameters.Add("@city", position.Address.City);
+			parameters.Add("@state", position.Address.StateId);
+			parameters.Add("@country", position.Address.CountryCode);
+			parameters.Add("@postalCode ", position.Address.PostalCode);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{

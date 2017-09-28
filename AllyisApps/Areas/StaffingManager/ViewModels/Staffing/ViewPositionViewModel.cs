@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="CreateTimeEntryViewModel.cs" company="Allyis, Inc.">
+// <copyright file="ViewPositionViewModel.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -16,7 +16,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 	/// <summary>
 	/// Represents a position for creation into the database.
 	/// </summary>
-	public class EditPositionViewModel
+	public class ViewPositionViewModel
 	{
 		/// <summary>
 		/// used to tell if editing or creating new position
@@ -108,8 +108,6 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// Gets or sets the number of hires needed for this position
 		/// </summary>
-		[DataType(DataType.Text)]
-		[Display(Name = "Required Skills")]
 		public int PositionCount { get; set; }
 
 		/// <summary>
@@ -230,65 +228,6 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 
 		/// <summary>
 		/// Localized States
-		/// </summary>
-		public Dictionary<string, string> LocalizedStates { get; set; }
-	}
-
-	/// <summary>
-	/// Edit Position Address View Model
-	/// </summary>
-	public class AddressViewModel
-	{
-		/// <summary>
-		/// Gets or sets the position's address.
-		/// </summary>
-		[DataType(DataType.Text)]
-		[Display(Name = "Address")]
-		public string Address { get; set; }
-
-		/// <summary>
-		/// Gets or sets the position's city.
-		/// </summary>
-		[DataType(DataType.Text)]
-		[Display(Name = "City")]
-		public string City { get; set; }
-
-		/// <summary>
-		/// Gets or sets the position's state.
-		/// </summary>
-		[Display(Name = "State")]
-		public string State { get; set; }
-
-		/// <summary>
-		/// Gets or sets the position's country or region.
-		/// </summary>
-		[Display(Name = "Country")]
-		public string Country { get; set; }
-
-		/// <summary>
-		/// Gets or sets the position's postal code.
-		/// </summary>
-		[DataType(DataType.PostalCode)]
-		[Display(Name = "Postal Code")]
-		public string PostalCode { get; set; }
-
-		/// <summary>
-		/// selected state id
-		/// </summary>
-		public int? SelectedStateId { get; set; }
-
-		/// <summary>
-		/// selected country code
-		/// </summary>
-		public string SelectedCountryCode { get; set; }
-
-		/// <summary>
-		/// country code and localized names
-		/// </summary>
-		public Dictionary<string, string> LocalizedCountries { get; set; }
-
-		/// <summary>
-		/// state id and localized names
 		/// </summary>
 		public Dictionary<string, string> LocalizedStates { get; set; }
 	}

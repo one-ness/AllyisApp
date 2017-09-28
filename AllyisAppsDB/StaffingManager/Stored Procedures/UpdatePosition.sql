@@ -51,7 +51,7 @@ BEGIN
 		[Address1] = @address,
 		[City] = @city,
 		[StateId] = @state,
-		[CountryId] = @country,
+		[CountryCode] = @country,
 		[PostalCode] = @postalCode
 	WHERE [AddressId] = @addressId
 END

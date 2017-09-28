@@ -26,6 +26,8 @@ BEGIN
 		[State].[StateName],
 		[Country].[CountryName],
 		[Address].[PostalCode],
+		[PositionCreatedUtc],
+		[PositionModifiedUtc],
 		[EmploymentType].[EmploymentTypeName],
 		[PositionStatus].[PositionStatusName],
 		[PositionLevel].[PositionLevelName]

@@ -402,26 +402,26 @@ namespace AllyisApps.Services
 
 			return new Position
 			{
-				OrganizationId = position.OrganizationId,
-				CustomerId = position.CustomerId,
-				AddressId = position.AddressId,
-				PositionStatusId = position.PositionStatusId,
-				PositionTitle = position.PositionTitle,
-				DurationMonths = position.DurationMonths,
-				EmploymentTypeId = position.EmploymentTypeId,
-				PositionCount = position.PositionCount,
-				RequiredSkills = position.RequiredSkills,
-				PositionLevelId = position.PositionLevelId,
-				PositionId = position.PositionId,
-				PositionCreatedUtc = position.PositionCreatedUtc,
-				PositionModifiedUtc = position.PositionModifiedUtc,
-				StartDate = position.StartDate,
-				BillingRateFrequency = position.BillingRateFrequency,
-				BillingRateAmount = position.BillingRateAmount,
-				JobResponsibilities = position.JobResponsibilities,
-				DesiredSkills = position.DesiredSkills,
-				HiringManager = position.HiringManager,
-				TeamName = position.TeamName,
+				OrganizationId = position.position.OrganizationId,
+				CustomerId = position.position.CustomerId,
+				AddressId = position.position.AddressId,
+				PositionStatusId = position.position.PositionStatusId,
+				PositionTitle = position.position.PositionTitle,
+				DurationMonths = position.position.DurationMonths,
+				EmploymentTypeId = position.position.EmploymentTypeId,
+				PositionCount = position.position.PositionCount,
+				RequiredSkills = position.position.RequiredSkills,
+				PositionLevelId = position.position.PositionLevelId,
+				PositionId = position.position.PositionId,
+				PositionCreatedUtc = position.position.PositionCreatedUtc,
+				PositionModifiedUtc = position.position.PositionModifiedUtc,
+				StartDate = position.position.StartDate,
+				BillingRateFrequency = position.position.BillingRateFrequency,
+				BillingRateAmount = position.position.BillingRateAmount,
+				JobResponsibilities = position.position.JobResponsibilities,
+				DesiredSkills = position.position.DesiredSkills,
+				HiringManager = position.position.HiringManager,
+				TeamName = position.position.TeamName,
 
 				Address = new Address
 				{
@@ -433,11 +433,11 @@ namespace AllyisApps.Services
 					PostalCode = position.position.PostalCodes
 				},
 
-				Tags = DBEntityToServiceObject(position.Tags),
+				Tags = DBDynamicToServiceObject(position.tags),
 
-				EmploymentTypeName = position.EmploymentType.EmploymentTypeName,
-				PositionLevelName = position.PositionLevel.PositionLevelName,
-				PositionStatusName = position.PositionStatus.PositionStatusName
+				EmploymentTypeName = position.position.EmploymentTypeName,
+				PositionLevelName = position.position.PositionLevelName,
+				PositionStatusName = position.position.PositionStatusName
 			};
 		}
 
@@ -521,6 +521,17 @@ namespace AllyisApps.Services
 			return taglist;
 		}
 
+		/// <summary>
+		/// Converts a list of TagDBEntity DB layer objects to a list of Tag service layer object.
+		/// </summary>
+		/// <param name="tags"> The List of tag DB layer objects to be converted. </param>
+		/// <returns> Returns a list of Tag service layer objects.  </returns>
+		public static List<Tag> DBDynamicToServiceObject(List<dynamic> tags)
+		{
+			var taglist = tags
+				.ConvertAll(x => new Tag { TagId = x.TagId, TagName = x.TagName });
+			return taglist;
+		}
 		/// <summary>
 		/// Converts a TagDBEntity DB layer object to a Tag service layer object.
 		/// </summary>

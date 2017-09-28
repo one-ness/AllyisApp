@@ -6,6 +6,11 @@
 		action = ActionConstants.SubmitCreatePosition;
 		Model.LocalizedStates = new Dictionary<string, string>();
 	}
+	else
+	{
+		action = ActionConstants.SubmitUpdatePosition;
+		Model.LocalizedStates = new Dictionary<string, string>();
+	}
 }
 
 <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
@@ -110,9 +115,11 @@
 					<div class="form-group">
 						<span class="fa fa-fw fa-calendar fa-pull-left"></span>
 						@Html.ReqLabelFor(m => m.StartDate, Strings.StartDate)
-						@Html.TextBoxFor(m => m.StartDate, new { @class = "updatable datepicker form-control item-control", @id = "datepicker" })
+						@Html.TextBoxFor(m => m.StartDate, new { @value = Model.StartDate, @class = "updatable datepicker form-control item-control", @id = "datepicker" })
 						@Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger" })
 					</div>
+					<input type="hidden" id="PositionId" name="PositionId" value="@Model.PositionId" />
+					<input type="hidden" id="AddressId" name="AddressId" value="@Model.AddressId" />
 					<input type="hidden" id="DefaultStatus" name="defaultStatus" value="@Model.defaultStatusId" />
 					@if (!Model.IsCreating)
 					{
@@ -122,16 +129,6 @@
 							@Html.ValidationMessageFor(m => m.PositionStatusId, "", new { @class = "text-danger" })
 						</div>
 					}
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.TeamName, Strings.TeamName)
-						@Html.TextBoxFor(m => m.TeamName, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.TeamName, "", new { @class = "text-danger" })
-					</div>
-					<div class="form-group">
-						<label>Hiring Manager</label>
-						@Html.TextBoxFor(m => m.HiringManager, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.HiringManager, "", new { @class = "text-danger" })
-					</div>
 					<div class="form-group">
 						@Html.ReqLabelFor(m => m.RequiredSkills, "Required Skills *")
 						@Html.TextAreaFor(m => m.RequiredSkills, new { @class = "form-control", @cols = "80", @rows = "7" })
@@ -158,7 +155,7 @@
 				<h3 class="panel-heading panel-title">Additional Information</h3>
 				<div class="panel panel-default">
 					<div class="form-group employment-type">
-						@Html.ReqLabelFor(m => m.EmploymentTypeId, "Employment Type")
+						<label>"Employment Type"</label>
 						@Html.DropDownListFor(m => m.EmploymentTypeId, new SelectList(Model.EmploymentTypes, "EmploymentTypeId", "EmploymentTypeName"), Strings.DropDownEmpty, new { @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.EmploymentTypeId, "", new { @class = "text-danger" })
 					</div>
@@ -168,7 +165,7 @@
 						@Html.ValidationMessageFor(m => m.DurationMonths, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group position-level">
-						@Html.ReqLabelFor(m => m.PositionLevelId, "Position Level")
+						<label>"Position level"</label>
 						@Html.DropDownListFor(m => m.PositionLevelId, new SelectList(Model.PositionLevels, "PositionLevelId", "PositionLevelName"), Strings.DropDownEmpty, new { @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.PositionLevelId, "", new { @class = "text-danger" })
 					</div>
@@ -186,6 +183,16 @@
 						<label>Billing Rate</label>
 						@Html.EnumDropDownListFor(m => m.BillingRateFrequency, Strings.DropDownEmpty, new { @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.BillingRateFrequency, "", new { @class = "text-danger" })
+					</div>
+					<div class="form-group">
+						@Html.ReqLabelFor(m => m.TeamName, Strings.TeamName)
+						@Html.TextBoxFor(m => m.TeamName, new { @value = Model.TeamName, @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.TeamName, "", new { @class = "text-danger" })
+					</div>
+					<div class="form-group">
+						<label>Hiring Manager</label>
+						@Html.TextBoxFor(m => m.HiringManager, new { @value = Model.HiringManager, @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.HiringManager, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
 						<label>Job Responsibilities</label>
