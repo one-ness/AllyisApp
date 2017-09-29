@@ -186,7 +186,8 @@ namespace AllyisApps.Services
 				email,
 				"Join Allyis Apps!",
 				msgbody);
-			task.RunSynchronously();
+			// TODO: how to indicate there was an error sending the email? how to send the invite email again in that case?
+			var mailSuccess = task.Result;
 
 			// Return invitation id
 			return result;
