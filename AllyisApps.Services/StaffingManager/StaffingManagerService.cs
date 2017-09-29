@@ -354,27 +354,6 @@ namespace AllyisApps.Services
 			};
 		}
 
-		public static Applicant DBApplicantToServiceObject(ApplicantAddressDBEntity applicant)
-		{
-			if (applicant == null)
-			{
-				throw new ArgumentNullException(nameof(applicant), nameof(applicant) + " must not be null.");
-			}
-
-			return new Applicant
-			{
-				ApplicantId = applicant.ApplicantId,
-				City = applicant.City,
-				Country = applicant.Country,
-				Email = applicant.Email,
-				FirstName = applicant.FirstName,
-				LastName = applicant.LastName,
-				Notes = applicant.Notes,
-				PhoneNumber = applicant.PhoneNumber,
-				PostalCode = applicant.PostalCode
-			};
-		}
-
 		public static Application DBApplicationToServiceObject(dynamic application)
 		{
 			if (application == null)
@@ -393,6 +372,27 @@ namespace AllyisApps.Services
 				ApplicationModifiedUtc = application.ApplicationModifiedUtc,
 				ApplicationStatus = (ApplicationStatusEnum)application.ApplicationStatusId,
 				PositionId = application.PositionId
+			};
+		}
+
+		public static Applicant DBApplicantToServiceObject(ApplicantAddressDBEntity applicant)
+		{
+			if (applicant == null)
+			{
+				throw new ArgumentNullException(nameof(applicant), nameof(applicant) + " must not be null.");
+			}
+
+			return new Applicant
+			{
+				ApplicantId = applicant.ApplicantId,
+				City = applicant.City,
+				Country = applicant.Country,
+				Email = applicant.Email,
+				FirstName = applicant.FirstName,
+				LastName = applicant.LastName,
+				Notes = applicant.Notes,
+				PhoneNumber = applicant.PhoneNumber,
+				PostalCode = applicant.PostalCode
 			};
 		}
 
