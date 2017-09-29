@@ -339,9 +339,30 @@ namespace AllyisApps.Services
 
 			return new Applicant
 			{
-				//Address = applicant.Address,
-				//State = applicant.State,
-				//AddressId = applicant.AddressId,
+				Address = applicant.Address,
+				State = applicant.State,
+				AddressId = applicant.AddressId,
+				ApplicantId = applicant.ApplicantId,
+				City = applicant.City,
+				Country = applicant.Country,
+				Email = applicant.Email,
+				FirstName = applicant.FirstName,
+				LastName = applicant.LastName,
+				Notes = applicant.Notes,
+				PhoneNumber = applicant.PhoneNumber,
+				PostalCode = applicant.PostalCode
+			};
+		}
+
+		public static Applicant DBApplicantToServiceObject(ApplicantDBEntity applicant)
+		{
+			if (applicant == null)
+			{
+				throw new ArgumentNullException(nameof(applicant), nameof(applicant) + " must not be null.");
+			}
+
+			return new Applicant
+			{
 				ApplicantId = applicant.ApplicantId,
 				City = applicant.City,
 				Country = applicant.Country,
@@ -365,9 +386,28 @@ namespace AllyisApps.Services
 			{
 				ApplicantId = application.ApplicantId,
 				Notes = application.Notes,
-				//Applicant = DBEntityToServiceObject(application.Applicant),
+				Applicant = DBEntityToServiceObject(application.Applicant),
 				ApplicationCreatedUtc = application.ApplicationCreatedUtc,
-				//ApplicationDocuments = DBApplicationDocumentsToServiceObject(application.ApplicationDocuments).ToList(),
+				ApplicationDocuments = DBApplicationDocumentsToServiceObject(application.ApplicationDocuments).ToList(),
+				ApplicationId = application.ApplicationId,
+				ApplicationModifiedUtc = application.ApplicationModifiedUtc,
+				ApplicationStatus = (ApplicationStatusEnum)application.ApplicationStatusId,
+				PositionId = application.PositionId
+			};
+		}
+
+		public static Application DBApplicationToServiceObject(ApplicationDBEntity application)
+		{
+			if (application == null)
+			{
+				throw new ArgumentNullException(nameof(application), nameof(application) + " must not be null.");
+			}
+
+			return new Application
+			{
+				ApplicantId = application.ApplicantId,
+				Notes = application.Notes,
+				ApplicationCreatedUtc = application.ApplicationCreatedUtc,
 				ApplicationId = application.ApplicationId,
 				ApplicationModifiedUtc = application.ApplicationModifiedUtc,
 				ApplicationStatus = (ApplicationStatusEnum)application.ApplicationStatusId,
