@@ -28,10 +28,10 @@ namespace AllyisApps.Controllers.Auth
 		[HttpGet]
 		public ActionResult Unsubscribe(int id, int idTwo)
 		{
-			UserContext.SubscriptionAndRole userSub = null;
-			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(id, out userSub);
-			int orgId = userSub.OrganizationId;
-			int productId = (int)userSub.ProductId;
+			var sub = AppService.GetSubscription(id);
+			int orgId = sub.OrganizationId;
+
+			int productId = (int)sub.ProductId;
 
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
 			var infos = AppService.GetProductSubscriptionInfo(orgId, (SkuIdEnum)idTwo);
