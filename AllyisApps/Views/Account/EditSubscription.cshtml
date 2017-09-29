@@ -40,7 +40,7 @@
 					}
 					<div class="pull-right" , style="margin-top:50px;">
 						<a href="@Url.Action(ActionConstants.Unsubscribe, new { id = Model.SubscriptionId, idTwo = Model.SkuId })" class="btn btn-danger">@Strings.Unsubscribe</a>
-						<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default"> @Strings.Cancel </a>
+						<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default"> @Strings.Cancel </a>
 						<input type="submit" value="@Strings.Save" class="btn btn-primary" id="save" />
 					</div>
 
