@@ -93,17 +93,48 @@ namespace AllyisApps.ViewModels.Auth
 	/// <summary>
 	/// Subscription Permission vView s
 	/// </summary>
-	public class SubscriptionPermissionsViewModel
+	public class PermissionsViewModel
 	{
 		/// <summary>
-		///
+		/// Users
 		/// </summary>
 		public List<UserPermssionViewModel> Users;
 
 		/// <summary>
-		/// Gets or sets availe Role
+		/// Subscription
 		/// </summary>
-		public SelectList Roles { get; set; }
+		public List<OrganizaionSubscriptionsViewModel> CurrentSubscriptions;
+
+		public class OrganizaionSubscriptionsViewModel
+		{
+			/// <summary>
+			///
+			/// </summary>
+			public int ProductId { get; set; }
+
+			public int SubscriptionId { get; set; }
+
+			public int SubscriptionName { get; set; }
+		}
+	}
+
+	/// <summary>
+	/// View Model for manage permssions for orgainzation
+	/// </summary>
+	public class OrganizaionPermissionsViewModel : PermissionsViewModel
+	{
+		public SelectList OrganizaionRoles { get; set; }
+	}
+
+	/// <summary>
+	/// View Model for manage permssions for subscription
+	/// </summary>
+	public class SubscriptionPermissionsViewModel : PermissionsViewModel
+	{
+		/// <summary>
+		/// Gets or sets available actions for the rows.
+		/// </summary>
+		public SelectList ProductRoles { get; set; }
 	}
 
 	/// <summary>
@@ -122,22 +153,27 @@ namespace AllyisApps.ViewModels.Auth
 		public ProductIdEnum productId { get; set; }
 
 		/// <summary>
+		/// Current product Role
+		/// </summary>
+		public int currentRole { get; set; }
+
+		/// <summary>
 		///
 		/// </summary>
 		public string currentRoleName { get; set; }
 
 		/// <summary>
-		///
+		/// User First Name
 		/// </summary>
 		public string FirstName { get; set; }
 
 		/// <summary>
-		///
+		/// User Last Name
 		/// </summary>
 		public string LastName { get; set; }
 
 		/// <summary>
-		///
+		/// Is selected for the action
 		/// </summary>
 		public bool isChecked { get; set; }
 	}

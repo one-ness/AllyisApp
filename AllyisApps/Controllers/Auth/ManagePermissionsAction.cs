@@ -97,6 +97,20 @@ namespace AllyisApps.Controllers.Auth
 		}
 
 		/// <summary>
+		///
+		/// </summary>
+		/// <param name="id">Organizaion Id.</param>
+		/// <returns></returns>
+		[HttpGet]
+		public ActionResult ManageOrgPermissions(int id)
+		{
+			//Get OrganizaionUser Rows
+
+			//
+			return null;
+		}
+
+		/// <summary>
 		/// Makes changes to users' permissions in the organization.
 		/// Called from Account/Permission do_it_submit().
 		/// </summary>
