@@ -134,7 +134,21 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId"></param>
 		/// <returns>The list of applicants in organization.</returns>
+		public List<Applicant> GetApplicantAddressesByOrgId(int orgId) => DBHelper.GetApplicantAddressesBySubscriptionId(orgId).Select(DBApplicantToServiceObject).ToList();
+
+		/// <summary>
+		/// Retrieves the applicants in an organization.
+		/// </summary>
+		/// <param name="orgId"></param>
+		/// <returns>The list of applicants in organization.</returns>
 		public List<Applicant> GetApplicantsByOrgId(int orgId) => DBHelper.GetApplicantsBySubscriptionId(orgId).Select(DBApplicantToServiceObject).ToList();
+
+		/// <summary>
+		/// Retrieves the applicant with a given id.
+		/// </summary>
+		/// <param name="applicantId">The id of the applicant.</param>
+		/// <returns>One applicant, if present.</returns>
+		public Applicant GetApplicantAddressById(int applicantId) => DBApplicantToServiceObject(DBHelper.GetApplicantAddressById(applicantId));
 
 		/// <summary>
 		/// Retrieves the applicant with a given id.

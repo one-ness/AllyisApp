@@ -396,6 +396,38 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// Retrieves the list of applicants.
+		/// </summary>
+		/// <param name="orgId"></param>
+		/// <returns>All the applicants in a subscription.</returns>
+		public List<ApplicantAddressDBEntity> GetApplicantAddressesBySubscriptionId(int orgId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@orgId", orgId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				return connection.Query<ApplicantAddressDBEntity>("[StaffingManager].[GetApplicantsByOrgId]", parameters, commandType: CommandType.StoredProcedure).ToList();
+			}
+		}
+
+		/// <summary>
+		/// Retrieves the applicant with a given id.
+		/// </summary>
+		/// <param name="applicantId">The id of the applicant.</param>
+		/// <returns>One applicant, if present.</returns>
+		public ApplicantAddressDBEntity GetApplicantAddressById(int applicantId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@applicantId", applicantId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				return connection.Query<ApplicantAddressDBEntity>("[StaffingManager].[GetApplicantById]", parameters, commandType: CommandType.StoredProcedure).Single();
+			}
+		}
+
+		/// <summary>
 		/// Retrieves the applicant with a given id.
 		/// </summary>
 		/// <param name="applicantId">The id of the applicant.</param>

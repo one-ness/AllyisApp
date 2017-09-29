@@ -33,7 +33,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			SetNavData(subscriptionId);
 
 			var subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
-			List<Applicant> applicants = this.AppService.GetApplicantsByOrgId(subInfo.OrganizationId);
+			List<Applicant> applicants = this.AppService.GetApplicantAddressesByOrgId(subInfo.OrganizationId);
 			ApplicantListViewModel model = new ApplicantListViewModel()
 			{
 				Applicants = applicants.Select(a => InitializeStaffingApplicantViewModel(a)).ToList()

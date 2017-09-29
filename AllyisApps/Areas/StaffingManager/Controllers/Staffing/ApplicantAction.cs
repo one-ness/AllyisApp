@@ -32,9 +32,14 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		{
 			SetNavData(subscriptionId);
 
-			Applicant applicant = this.AppService.GetApplicantById(applicantId);
+			Applicant applicant = this.AppService.GetApplicantAddressById(applicantId);
 			StaffingApplicantViewModel model = InitializeStaffingApplicantViewModel(applicant);
 			model.Applications = this.AppService.GetApplicationsByApplicantId(applicantId).Select(a => InitializeStaffingApplicationViewModel(a)).ToList();
+
+			foreach (var application in model.Applications)
+			{
+				application.Applicant = applicant;
+			}
 
 			return this.View(model);
 		}
