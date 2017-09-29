@@ -71,44 +71,5 @@ namespace AllyisApps.Controllers.Auth
 
 			return this.View(model);
 		}
-
-		/// <summary>
-		/// Builds an organizaion servie object form the view Model ensures that the built service object has all of its current propreties.
-		/// </summary>
-		/// <param name="model">An EditOrgViewModel.</param>
-		/// <param name="loadOrginal">Sets if the model loads the original organization model.</param>
-		/// <returns>Returns an Organization object.</returns>
-		private Organization BuildEditOrganizaiton(EditOrganizationViewModel model, bool loadOrginal = false)
-		{
-			Organization orginal = null;
-
-			if (loadOrginal)
-			{
-				orginal = AppService.GetOrganization(model.OrganizationId);
-			}
-
-			return new Organization()
-			{
-				OrganizationId = model.OrganizationId,
-				OrganizationName = model.OrganizationName,
-				SiteUrl = model.SiteUrl,
-				Address = new Address()
-				{
-					AddressId = model.AddressId,
-					City = model.City,
-					StateId = model.SelectedStateId,
-					CountryCode = model.SelectedCountryCode,
-					PostalCode = model.PostalCode,
-					Address1 = model.Address
-				},
-
-				PhoneNumber = model.PhoneNumber,
-				FaxNumber = model.FaxNumber,
-
-				// Properties not in model
-				Subdomain = orginal?.Subdomain,
-				CreatedUtc = orginal?.CreatedUtc
-			};
-		}
 	}
 }
