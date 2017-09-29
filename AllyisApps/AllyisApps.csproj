@@ -1039,15 +1039,6 @@
     <Content Include="Views\Shared\DisplayTemplates\SiteMapPathHelperModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\ExpenseTracker\Views\AccountAction\" />
-    <Folder Include="Areas\ExpenseTracker\Views\AccountPageViewModel\" />
-    <Folder Include="Areas\ExpenseTracker\Views\AdminAction\" />
-    <Folder Include="Areas\ExpenseTracker\Views\AdminReportAction\" />
-    <Folder Include="Areas\ExpenseTracker\Views\Admin\" />
-    <Folder Include="Areas\ExpenseTracker\Views\AttachmentDownload\" />
-    <Folder Include="Areas\ExpenseTracker\Views\CreateAccountAction\" />
-    <Folder Include="Areas\ExpenseTracker\Views\ReportAdmin\" />
-    <Folder Include="Areas\ExpenseTracker\Views\ViewAdminReport\" />
     <Folder Include="Areas\TimeTracker\ViewModels\Manage\" />
   </ItemGroup>
   <ItemGroup>

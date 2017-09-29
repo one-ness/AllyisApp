@@ -11,9 +11,9 @@ using System.Linq;
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.Lib;
+using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
-using AllyisApps.Services.Auth;
 
 namespace AllyisApps.Services
 {
@@ -573,7 +573,8 @@ namespace AllyisApps.Services
 				Price = sku.Price,
 				UserLimit = sku.UserLimit,
 				BillingFrequency = (BillingFrequencyEnum)sku.BillingFrequency,
-				Description = sku.Description
+				Description = sku.Description,
+				IconUrl = sku.IconUrl,
 			};
 		}
 
@@ -616,7 +617,6 @@ namespace AllyisApps.Services
 		/// <param name="productName">Product name.</param>
 		/// <param name="selectedSku">Selected sku id.</param>
 		/// <param name="subscriptionName">Subscription Name.</param>
-		/// <param name="previousSku">The previous sku id.</param>
 		/// <param name="billingAmount">Billing amount, as an int in cents.</param>
 		/// <param name="existingToken">The existing BillingServicesToken, if any.</param>
 		/// <param name="addingBillingCustomer">A value indicating whether a new billing customer is being added.</param>
@@ -625,24 +625,21 @@ namespace AllyisApps.Services
 		/// <param name="orgId">.</param>
 		/// <returns>.</returns>
 		[CLSCompliant(false)]
-		public void Subscribe(ProductIdEnum productId, string productName, SkuIdEnum selectedSku, string subscriptionName, SkuIdEnum previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
+		public void Subscribe(ProductIdEnum productId, string productName, SkuIdEnum selectedSku, string subscriptionName, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
 		{
 			// TODO: Split Subscribe into CreateSubscription and Update Subscription, called from SubscribeAction and EditSubscriptionAction
 
 			// This method is related to billing, which is not supported
 			// CreateAndUpdateAndDeleteSubscriptionPlan(productId, productName, selectedSku, previousSku, billingAmount, existingToken, addingBillingCustomer, newBillingEmail, newBillingToken, orgId);
 
-			this.InitializeSettingsForProduct(productId, orgId);
+			InitializeSettingsForProduct(productId, orgId);
 
-			if (previousSku == 0) // creating new subscription
-			{
-				DBHelper.CreateSubscription(orgId, (int)selectedSku, subscriptionName, UserContext.UserId);
-			}
-			else // upgrading or downgrading
-			{
-				// TODO: pass in subscriptionId as a parameter to simplify logic
-				DBHelper.UpdateSubscription(orgId, (int)selectedSku, subscriptionName);
-			}
+			DBHelper.CreateSubscription(orgId, (int)selectedSku, subscriptionName, UserContext.UserId);
+		}
+
+		public void UpdateSubscription(int orgId, int skuId, int subscriptionId, string subscriptionname)
+		{
+			DBHelper.UpdateSubscription(orgId, skuId, subscriptionId, subscriptionname);
 		}
 
 		public void CreateAndUpdateAndDeleteSubscriptionPlan(int productId, string productName, int selectedSku, int previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
@@ -835,12 +832,28 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Returns a list of active products and each product's active skus.
 		/// </summary>
-		public Tuple<List<Product>, List<SkuInfo>> GetAllActiveProductsAndSkus()
+		public List<Product> GetAllActiveProductsAndSkus()
 		{
 			var spResults = DBHelper.GetAllActiveProductsAndSkus();
-			return Tuple.Create(
-				spResults.Item1.Select(pdb => InitializeProduct(pdb)).ToList(),
-				spResults.Item2.Select(sdb => InitializeSkuInfo(sdb)).ToList());
+			var products = spResults.Item1.Select(pdb => InitializeProduct(pdb)).ToList();
+
+			foreach (Product prod in products)
+			{
+				prod.ProductSkus = new List<SkuInfo>();
+			}
+
+			foreach (SkuInfo sku in spResults.Item2.Select(sk => InitializeSkuInfo(sk)))
+			{
+				foreach (Product prod in products)
+				{
+					if (sku.ProductId == prod.ProductId)
+					{
+						prod.ProductSkus.Add(sku);
+						break;
+					}
+				}
+			}
+			return products;
 		}
 
 		#region Info-DBEntity Conversions
@@ -921,7 +934,8 @@ namespace AllyisApps.Services
 				SkuId = (SkuIdEnum)sku.SkuId,
 				SubscriptionId = sku.SubscriptionId,
 				UserLimit = sku.UserLimit,
-				Description = sku.Description
+				Description = sku.Description,
+				IconUrl = sku.IconUrl
 			};
 		}
 

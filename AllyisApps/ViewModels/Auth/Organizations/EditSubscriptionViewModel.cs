@@ -4,7 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
+using System.Collections.Generic;
+using System.Web.Mvc;
 using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Auth
@@ -43,6 +44,11 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the SkuId of the upgrade or downgrade version of the Product.
 		/// </summary>
 		public SkuIdEnum SkuIdNext { get; set; }
+
+		/// <summary>
+		/// IcornUrl
+		/// </summary>
+		public string SkuIconUrl { get; set; }
 
 		/// <summary>
 		/// Gets or sets all information relating to this product.
@@ -87,6 +93,11 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the type of edit being done (upgrade, downgrade, unsubscribe).
 		/// </summary>
-		public string ActionType { get; set; }
+		public SkuIdEnum? SelectedNewSkuEnum { get; set; }
+
+		/// <summary>
+		/// Gets or sets otherSkus for the edit being made.
+		/// </summary>
+		public IEnumerable<SkuIdEnum> OtherSkus { get; set; }
 	}
 }

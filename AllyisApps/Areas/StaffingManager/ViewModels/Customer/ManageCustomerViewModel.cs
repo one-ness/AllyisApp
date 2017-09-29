@@ -4,8 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.ViewModels.TimeTracker.Customer;
 using System.Collections.Generic;
+using AllyisApps.ViewModels.TimeTracker.Customer;
 
 namespace AllyisApps.ViewModels.Staffing.Customer
 {

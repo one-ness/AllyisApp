@@ -1,4 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Web.Mvc;
+using AllyisApps.Resources;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -27,12 +31,12 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the product id for TimeTracker.
 		/// </summary>
-		public int TimeTrackerId { get; set; }
+		public ProductIdEnum TimeTrackerId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the product id for ExpenseTracker.
 		/// </summary>
-		public int ExpenseTrackerId { get; set; }
+		public ProductIdEnum ExpenseTrackerId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the index of TimeTracker in the subscriptions list.
@@ -84,5 +88,57 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets this user's role in each product. List order should be same as in list of subscriptions.
 		/// </summary>
 		public List<int> ProductRoleIds { get; set; }
+	}
+
+	/// <summary>
+	/// Subscription Permission vView s
+	/// </summary>
+	public class SubscriptionPermissionsViewModel
+	{
+		/// <summary>
+		///
+		/// </summary>
+		public List<UserPermssionViewModel> Users;
+
+		/// <summary>
+		/// Gets or sets availe Role
+		/// </summary>
+		public SelectList Roles { get; set; }
+	}
+
+	/// <summary>
+	/// Row in
+	/// </summary>
+	public class UserPermssionViewModel
+	{
+		/// <summary>
+		/// UserId
+		/// </summary>
+		public int UserID { get; set; }
+
+		/// <summary>
+		///
+		/// </summary>
+		public ProductIdEnum productId { get; set; }
+
+		/// <summary>
+		///
+		/// </summary>
+		public string currentRoleName { get; set; }
+
+		/// <summary>
+		///
+		/// </summary>
+		public string FirstName { get; set; }
+
+		/// <summary>
+		///
+		/// </summary>
+		public string LastName { get; set; }
+
+		/// <summary>
+		///
+		/// </summary>
+		public bool isChecked { get; set; }
 	}
 }

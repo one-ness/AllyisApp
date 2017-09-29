@@ -10,9 +10,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Web;
-using AllyisApps.Services;
+
 using AllyisApps.Services.Auth;
-using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -68,7 +67,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets the subscriptionDisplay information.
 		/// </summary>
-		public IEnumerable<SubscriptionDisplay> Subscriptions { get; internal set; }
+		public IEnumerable<SubscriptionDisplayViewModel> Subscriptions { get; internal set; }
 	}
 
 	/// <summary>

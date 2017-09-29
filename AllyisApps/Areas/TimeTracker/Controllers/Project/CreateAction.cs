@@ -146,7 +146,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					ProjectOrgId = model.ProjectOrgId,
 
 					StartingDate = model.StartDate == -1 ? null : Utility.GetDateTimeFromDays(model.StartDate),
-					EndingDate = model.StartDate == -1 ? null : Utility.GetDateTimeFromDays(model.EndDate)
+					EndingDate = model.EndDate == -1 ? null : Utility.GetDateTimeFromDays(model.EndDate)
 				},
 				userIds);
 		}

@@ -13,8 +13,6 @@ namespace AllyisApps.Services.Crm
 	/// </summary>
 	public class CompleteProject : Project.Project
 	{
-		
-
 		/// <summary>
 		/// Gets or sets a value indicating whether or not the Customer is active.
 		/// </summary>
@@ -25,13 +23,10 @@ namespace AllyisApps.Services.Crm
 		/// </summary>
 		public DateTime CreatedUtc { get; set; }
 
-
 		/// <summary>
 		/// Gets or sets the Name of the organization.
 		/// </summary>
 		public string OrganizationName { get; set; }
-
-		
 
 		/// <summary>
 		/// Gets or sets a value indicating whether a user is active on the project, if that project was fetched via userId.

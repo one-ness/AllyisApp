@@ -28,6 +28,10 @@
 				@Html.ReqLabelFor(m => m.ParentAccounts, "Parent Account")
 				@Html.DropDownListFor(m => m.SelectedAccount, Model.ParentAccounts, new { @class = "form-control" })
 			</div>
+			<div class="form-group">
+				@Html.ReqLabelFor(m => m.SelectedStatus, "Status")
+				@Html.DropDownListFor(m => m.SelectedStatus, Model.AccountStatuses, new { @class = "form-control" })
+			</div>
 		</div>
 	</div>
 

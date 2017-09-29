@@ -24,8 +24,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			AccountPageViewModel model = new AccountPageViewModel();
 			var accounts = AppService.GetAccounts();
-			var results = accounts.Where(x => x.IsActive)
-				.Select(x =>
+			var results = accounts.Select(x =>
 				new AccountManagementViewModel()
 				{
 					AccountId = x.AccountId,
@@ -33,6 +32,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					AccountTypeId = x.AccountTypeId,
 					AccountTypeName = x.AccountTypeName,
 					IsActive = x.IsActive,
+					Status = x.IsActive ? "Active" : "Disabled",
 					ParentAccountId = x.ParentAccountId
 				}).ToList();
 

@@ -624,7 +624,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@status", StatusesTable.AsTableValuedParameter("[StaffingManager].[StatusesTable]"));
 			parameters.Add("@type", TypesTable.AsTableValuedParameter("[StaffingManager].[TypesTable]"));
 			parameters.Add("@tags", TagTable.AsTableValuedParameter("[Lookup].[TagTable]"));
-			
+
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
@@ -641,7 +641,7 @@ namespace AllyisApps.DBModel
 					results.Read<CustomerDBEntity>().ToList());
 			}
 		}
-		
+
 		/// <summary>
 		/// Updates an organizations staffing settings.
 		/// </summary>
@@ -659,7 +659,6 @@ namespace AllyisApps.DBModel
 				var result = connection.Query("[StaffingManager].[GetStaffingDefaultStatus]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
 				if (result.DefaultPositionStatusId == null) return returnInt;
 				else return result.DefaultPositionStatusId;
-
 			}
 		}
 

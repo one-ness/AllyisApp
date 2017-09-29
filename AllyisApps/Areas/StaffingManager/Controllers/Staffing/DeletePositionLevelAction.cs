@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -25,7 +24,6 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns>Redirects to the settings view.</returns>
 		public ActionResult DeletePositionLevel(int positionLevelId, int userId, int subscriptionId)
 		{
-
 			try
 			{
 				AppService.DeletePositionLevel(positionLevelId);
