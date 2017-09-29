@@ -103,9 +103,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 
 				// Add default project in case there are holiday entries
-				List<CompleteProjectViewModel> defaultProject = new List<CompleteProjectViewModel>();
-				defaultProject.Add(new CompleteProjectViewModel(AppService.GetProject(0)));
-				result.Projects = result.Projects.Concat(defaultProject);
+				//List<CompleteProjectViewModel> defaultProject = new List<CompleteProjectViewModel>();
+				////defaultProject.Add(new CompleteProjectViewModel(AppService.GetProject(0)));
+				//result.Projects = result.Projects.Concat(defaultProject);
 			}
 
 			return result;
