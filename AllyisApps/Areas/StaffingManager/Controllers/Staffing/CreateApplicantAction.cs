@@ -27,8 +27,10 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet]
-		public ActionResult CreateApplicant()
+		public ActionResult CreateApplicant(int subscriptionId)
 		{
+			SetNavData(subscriptionId);
+
 			StaffingApplicantViewModel model = new StaffingApplicantViewModel();
 			return this.View(model);
 		}
@@ -46,7 +48,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			var subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			Applicant applicant = InitializeApplicant(subInfo.OrganizationId, model);
 			this.AppService.CreateApplicant(applicant);
-			return this.RedirectToAction("Index");
+			return this.RedirectToAction("ApplicantList");
 		}
 
 		private static Applicant InitializeApplicant(int orgId, StaffingApplicantViewModel model)
@@ -54,8 +56,8 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			return new Applicant()
 			{
 				Address = model.Address,
-				AddressId = model.AddressId,
-				ApplicantId = model.ApplicantId,
+				//AddressId = model.AddressId,
+				//ApplicantId = model.ApplicantId,
 				City = model.City,
 				Country = model.Country,
 				Email = model.Email,

@@ -12,6 +12,7 @@ namespace AllyisApps
 		public const string Accounts = "accounts";
 		public const string AddMember = "addmember";
 		public const string AdminReport = "adminreport";
+		public const string ApplicantList = "applicantlist";
 		public const string ChangePassword = "changepassword";
 		public const string Charge = "charge";
 		public const string ConfirmEmail = "confirmemail";

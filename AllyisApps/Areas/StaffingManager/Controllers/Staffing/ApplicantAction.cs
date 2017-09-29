@@ -15,6 +15,7 @@ using AllyisApps.Services.Crm;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels.Staffing;
+using System;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -33,8 +34,36 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 
 			Applicant applicant = this.AppService.GetApplicantById(applicantId);
 			StaffingApplicantViewModel model = InitializeStaffingApplicantViewModel(applicant);
+			model.Applications = this.AppService.GetApplicationsByApplicantId(applicantId).Select(a => InitializeStaffingApplicationViewModel(a)).ToList();
 
 			return this.View(model);
+		}
+
+		private static StaffingApplicationViewModel InitializeStaffingApplicationViewModel(Application application)
+		{
+			return new StaffingApplicationViewModel()
+			{
+				//Applicant = application.Applicant,
+				ApplicantId = application.ApplicantId,
+				ApplicationCreatedUtc = application.ApplicationCreatedUtc,
+				//ApplicationDocuments = application.ApplicationDocuments.Select(d => InitializeApplicationDocumentViewModel(d)).ToList(),
+				ApplicationId = application.ApplicationId,
+				ApplicationModifiedUtc = application.ApplicationModifiedUtc,
+				ApplicationStatus = application.ApplicationStatus,
+				Notes = application.Notes,
+				PositionId = application.PositionId
+			};
+		}
+
+		private static ApplicationDocumentViewModel InitializeApplicationDocumentViewModel(ApplicationDocument document)
+		{
+			return new ApplicationDocumentViewModel()
+			{
+				ApplicationDocumentId = document.ApplicationDocumentId,
+				ApplicationId = document.ApplicationId,
+				DocumentLink = document.DocumentLink,
+				DocumentName = document.DocumentName
+			};
 		}
 
 		private static StaffingApplicantViewModel InitializeStaffingApplicantViewModel(Applicant applicant)

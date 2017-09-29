@@ -365,9 +365,9 @@ namespace AllyisApps.Services
 			{
 				ApplicantId = application.ApplicantId,
 				Notes = application.Notes,
-				Applicant = DBEntityToServiceObject(application.Applicant),
+				//Applicant = DBEntityToServiceObject(application.Applicant),
 				ApplicationCreatedUtc = application.ApplicationCreatedUtc,
-				ApplicationDocuments = DBApplicationDocumentsToServiceObject(application.ApplicationDocuments).ToList(),
+				//ApplicationDocuments = DBApplicationDocumentsToServiceObject(application.ApplicationDocuments).ToList(),
 				ApplicationId = application.ApplicationId,
 				ApplicationModifiedUtc = application.ApplicationModifiedUtc,
 				ApplicationStatus = (ApplicationStatusEnum)application.ApplicationStatusId,

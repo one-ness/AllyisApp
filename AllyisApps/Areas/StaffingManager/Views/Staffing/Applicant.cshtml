@@ -5,8 +5,8 @@
 @{
 	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/StaffingManager/Views/Shared/_BreadcrumbNavPartial.cshtml";
 	DisplayHints.LayoutThemeBundle = "~/Content/StaffingManager";
-	ViewBag.Title = "Applicant";
 	string name = Model.FirstName + " " + Model.LastName;
+	ViewBag.Title = name;
 }
 
 <!DOCTYPE html>
@@ -17,8 +17,7 @@
     <title>Applicant</title>
 </head>
 <body>
-	<h3>@name</h3>
-	<h3>@Model.Email</h3>
+	@Html.ActionLink("Create Application", "Application", new { applicantId = Model.ApplicantId }, new { @class = "btn btn-primary pull-right", style = "color: white !important; margin-bottom: 20px;" })
 	@Html.Partial("_ApplicationsPartial", Model.Applications ?? new List<StaffingApplicationViewModel>())
 </body>
 </html>

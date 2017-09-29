@@ -3,11 +3,13 @@
 @model IEnumerable<StaffingApplicationViewModel>
 
 <div>
-	<table>
+	<table class="table table-hover" style="clear: both;">
 		<thead>
 			<tr>
-				<th>Name</th>
-				<th>Status</th>
+				<th style="width: 25%">Name</th>
+				<th style="width: 25%">Status</th>
+				<th style="width: 25%">Last Modified</th>
+				<th style="width: 25%">Notes</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -17,6 +19,8 @@
 				<tr>
 					<td>@name</td>
 					<td>@application.ApplicationStatus.ToString()</td>
+					<td>@application.ApplicationModifiedUtc</td>
+					<td>@application.Notes</td>
 				</tr>
 			}
 		</tbody>

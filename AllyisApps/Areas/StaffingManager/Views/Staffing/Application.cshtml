@@ -1,0 +1,26 @@
+﻿@model AllyisApps.Areas.StaffingManager.ViewModels.Staffing.StaffingApplicationViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Application</title>
+</head>
+<body>
+    <div>
+		@using (Html.BeginForm("Application", "Staffing", FormMethod.Post, new { }))
+		{
+			@Html.AntiForgeryToken()
+			@Html.HiddenFor(m => m.ApplicantId)
+			@Html.EditorFor(m => m)
+			@Html.DropDownListFor(m => m.PositionId, Model.PositionList)
+			<input type="submit" value="Submit" />
+		}
+    </div>
+</body>
+</html>

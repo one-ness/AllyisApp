@@ -10,10 +10,11 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 	/// Staffing Application view model.
 	/// </summary>
 	public class StaffingApplicationViewModel
-	{       /// <summary>
-			/// Gets or sets the application's ID.
-			/// </summary>
-			[ScaffoldColumn(false)]
+	{
+		/// <summary>
+		/// Gets or sets the application's ID.
+		/// </summary>
+		[ScaffoldColumn(false)]
 		public int ApplicationId { get; set; }
 
 		/// <summary>

@@ -630,6 +630,7 @@
     <Content Include="Areas\StaffingManager\Views\Staffing\Applicant.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\_ApplicationsPartial.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\ApplicantList.cshtml" />
+    <Content Include="Areas\StaffingManager\Views\Staffing\Application.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
