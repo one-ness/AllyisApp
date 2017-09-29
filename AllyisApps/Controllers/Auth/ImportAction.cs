@@ -57,7 +57,7 @@ namespace AllyisApps.Controllers.Auth
 					else
 					{
 						Notifications.Add(new BootstrapAlert(Resources.Strings.FileFormatUnsupported, Variety.Danger));
-						return RedirectToAction(ActionConstants.AddMember, ControllerConstants.Account, new { organizationId = id });
+						return RedirectToAction(ActionConstants.AddMember, ControllerConstants.Account, new { id = id });
 					}
 
 					reader.IsFirstRowAsColumnNames = true;

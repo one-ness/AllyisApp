@@ -56,12 +56,12 @@
 					</div>
 					<div class="form-group">
 						@Html.ReqLabelFor(m => m.Country, Strings.Country)
-						@Html.DropDownListFor(m => m.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new {@id = ViewConstants.DdlCountriesId , @class = "form-control" })
+						@Html.DropDownListFor(m => m.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new { @id = ViewConstants.DdlCountriesId, @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.Country, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
 						@Html.ReqLabelFor(m => m.State, Strings.State)
-						@Html.DropDownListFor(m => m.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @id= ViewConstants.DdlStatesId, @class = "form-control" })
+						@Html.DropDownListFor(m => m.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @id = ViewConstants.DdlStatesId, @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.State, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
@@ -83,27 +83,27 @@
 
 			<div class="form-group allyis-action-buttons">
 				@if (Model.IsCreating)
-                {
-                    <a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account, null)" new { class = "btn btn-default" }>
-                        @Strings.Cancel
-                    </a>
-                }
-                else
-                {
-                    <a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId })" new { class = "btn btn-default" }>
-                        @Strings.Cancel
-                    </a>
-                }
+				{
+					<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account, null)" new { class="btn btn-default" }>
+						@Strings.Cancel
+					</a>
+				}
+				else
+				{
+					<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId })" new { class="btn btn-default" }>
+						@Strings.Cancel
+					</a>
+				}
 				<input type="submit" value="@Strings.Save" class="btn btn-primary" id="submit" />
 			</div>
 		}
 	</div>
 	@if (Model != null && Model.CanDelete)
-    {
-        using (Html.BeginForm(ActionConstants.DeleteOrg, ControllerConstants.Account, new { id = Model.OrganizationId }, FormMethod.Post, new { @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw(Strings.ConfirmDeleteOrg)) }))
-        {
+	{
+		using (Html.BeginForm(ActionConstants.DeleteOrg, ControllerConstants.Account, new { id = Model.OrganizationId }, FormMethod.Post, new { @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw(Strings.ConfirmDeleteOrg)) }))
+		{
 			@Html.AntiForgeryToken()
 			<input type="submit" value="@Strings.DeleteOrganization" class="btn btn-danger" style="margin-bottom: 15px;" id="submitDelete" />
-        }
-    }
+		}
+	}
 </div>
