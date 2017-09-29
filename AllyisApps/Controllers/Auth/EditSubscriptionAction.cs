@@ -28,8 +28,6 @@ namespace AllyisApps.Controllers.Auth
 
 			var skuId = AppService.GetSubscription(id).SkuId;
 
-			var productId = AppService.UserContext.SubscriptionsAndRoles[id].ProductId;
-
 			ProductSubscription infos = AppService.GetProductSubscriptionInfo(id, skuId);
 
 			//SkuInfo nextSku = GetNextName(id, skuId, productId);
@@ -38,16 +36,16 @@ namespace AllyisApps.Controllers.Auth
 			EditSubscriptionViewModel model = new EditSubscriptionViewModel
 			{
 				SkuId = sku.SkuId,
-				SkuIdNext = sku.SkuIdNext,
+				SkuIdNext = sku.SkuId,
 				Name = sku.SkuName,
 				NextName = sku.NextName,
-				Description = nextSku.Description,
+				Description = sku.Description,
 				SubscriptionId = id,
 				OrganizationId = sub.OrganizationId,
-				ProductId = nextSku.ProductId,
+				ProductId = sku.ProductId,
 				SubscriptionName = sub.SubscriptionName,
-				SkuIconUrl = nextSku.IconUrl,
-				OtherSkus = infos.SkuList.Where(sk => nextSku.SkuId != sk.SkuId).Select(sk => sk.SkuId)
+				SkuIconUrl = sku.IconUrl,
+				OtherSkus = infos.SkuList.Where(sk => sku.SkuId != sk.SkuId).Select(sk => sk.SkuId)
 			};
 			return this.View(ViewConstants.EditSubscription, model);
 		}
@@ -71,12 +69,15 @@ namespace AllyisApps.Controllers.Auth
 				{
 					AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, model.OrganizationId);
 
-					bool newSubscription = false;
 					if (model.SelectedNewSkuEnum.HasValue)
 					{
 						model.SkuIdNext = model.SelectedNewSkuEnum.Value;
-						newSubscription = true;
 					}
+					else
+					{
+						model.SkuIdNext = model.SkuId;
+					}
+					ProductSubscription oldProduct = AppService.GetProductSubscriptionInfo(model.OrganizationId, model.SkuId);
 
 					ProductSubscription infos = AppService.GetProductSubscriptionInfo(model.OrganizationId, model.SkuIdNext);
 

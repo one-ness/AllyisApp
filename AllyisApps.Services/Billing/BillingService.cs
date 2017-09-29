@@ -617,7 +617,6 @@ namespace AllyisApps.Services
 		/// <param name="productName">Product name.</param>
 		/// <param name="selectedSku">Selected sku id.</param>
 		/// <param name="subscriptionName">Subscription Name.</param>
-		/// <param name="newSubscription">If is editing a subscription.</param>
 		/// <param name="billingAmount">Billing amount, as an int in cents.</param>
 		/// <param name="existingToken">The existing BillingServicesToken, if any.</param>
 		/// <param name="addingBillingCustomer">A value indicating whether a new billing customer is being added.</param>

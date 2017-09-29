@@ -56,6 +56,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}),
 				Holidays = infos.Item3.AsParallel().Select(holiday => new SettingsViewModel.HolidayViewModel()
 				{
+					HolidayId = holiday.HolidayId,
+					HolidayName = holiday.HolidayName,
+					Date = holiday.Date
 				}),
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subName,

@@ -100,7 +100,7 @@ namespace AllyisApps.Controllers.Auth
 		public ActionResult Subscribe(ProductSubscriptionViewModel model)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, model.OrganizationId);
-			AppService.Subscribe(model.ProductId, model.ProductName, model.SelectedSku, model.SubscriptionName, model.PreviousSku, 0, model.Token, false, null, null, model.OrganizationId);
+			AppService.Subscribe(model.ProductId, model.ProductName, model.SelectedSku, model.SubscriptionName, 0, model.Token, false, null, null, model.OrganizationId);
 			Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.SubscribedSuccessfully, model.SelectedSkuName), Variety.Success));
 			return this.RedirectToAction(ActionConstants.ManageOrg, new { id = model.OrganizationId });
 		}
