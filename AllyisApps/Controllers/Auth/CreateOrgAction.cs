@@ -56,7 +56,7 @@ namespace AllyisApps.Controllers.Auth
 				else
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.OrganizationCreatedNotification, Variety.Success));
-					return this.RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { organizationId = orgId });
+					return this.RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id = orgId });
 				}
 			}
 

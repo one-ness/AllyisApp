@@ -3,6 +3,7 @@
 CREATE PROCEDURE [Billing].[UpdateSubscription]
 	@organizationId INT,
 	@skuId INT,
+	@subscriptionId INT,
 	@subscriptionName NVARCHAR(50)
 AS
 BEGIN
@@ -12,8 +13,5 @@ BEGIN
 	UPDATE [Billing].[Subscription] SET [SkuId] = @skuId, [SubscriptionName] = @subscriptionName
 		WHERE [OrganizationId] = @organizationId
 		AND [Subscription].[IsActive] = 1
-		AND [SkuId] IN (SELECT [SkuId] FROM [Billing].[Sku]
-						WHERE [SkuId] != @skuId
-						AND [ProductId] = (SELECT [ProductId] FROM [Billing].[Sku] WHERE [SkuId] = @skuId)
-						AND [OrganizationId] = @organizationId);
+		AND [Subscription].SubscriptionId = @subscriptionId;
 END

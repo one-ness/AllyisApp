@@ -20,13 +20,13 @@ namespace AllyisApps.Controllers.Auth
 		/// <summary>
 		/// GET: /account/skus/id.
 		/// </summary>
-		/// <param name="organizationId">The organization id.</param>
+		/// <param name="id">The organization id.</param>
 		/// <returns>The skus view.</returns>
-		public ActionResult Skus(int organizationId)
+		public ActionResult Skus(int id)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, organizationId);    // only org owner has permission
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, id);    // only org owner has permission
 
-			SkusListViewModel model = ConstructSkusListViewModel(organizationId);
+			SkusListViewModel model = ConstructSkusListViewModel(id);
 
 			return this.View("Skus", model);
 		}

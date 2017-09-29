@@ -617,7 +617,6 @@ namespace AllyisApps.Services
 		/// <param name="productName">Product name.</param>
 		/// <param name="selectedSku">Selected sku id.</param>
 		/// <param name="subscriptionName">Subscription Name.</param>
-		/// <param name="previousSku">The previous sku id.</param>
 		/// <param name="billingAmount">Billing amount, as an int in cents.</param>
 		/// <param name="existingToken">The existing BillingServicesToken, if any.</param>
 		/// <param name="addingBillingCustomer">A value indicating whether a new billing customer is being added.</param>
@@ -626,24 +625,21 @@ namespace AllyisApps.Services
 		/// <param name="orgId">.</param>
 		/// <returns>.</returns>
 		[CLSCompliant(false)]
-		public void Subscribe(ProductIdEnum productId, string productName, SkuIdEnum selectedSku, string subscriptionName, SkuIdEnum previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
+		public void Subscribe(ProductIdEnum productId, string productName, SkuIdEnum selectedSku, string subscriptionName, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
 		{
 			// TODO: Split Subscribe into CreateSubscription and Update Subscription, called from SubscribeAction and EditSubscriptionAction
 
 			// This method is related to billing, which is not supported
 			// CreateAndUpdateAndDeleteSubscriptionPlan(productId, productName, selectedSku, previousSku, billingAmount, existingToken, addingBillingCustomer, newBillingEmail, newBillingToken, orgId);
 
-			this.InitializeSettingsForProduct(productId, orgId);
+			InitializeSettingsForProduct(productId, orgId);
 
-			if (previousSku == 0) // creating new subscription
-			{
-				DBHelper.CreateSubscription(orgId, (int)selectedSku, subscriptionName, UserContext.UserId);
-			}
-			else // upgrading or downgrading
-			{
-				// TODO: pass in subscriptionId as a parameter to simplify logic
-				DBHelper.UpdateSubscription(orgId, (int)selectedSku, subscriptionName);
-			}
+			DBHelper.CreateSubscription(orgId, (int)selectedSku, subscriptionName, UserContext.UserId);
+		}
+
+		public void UpdateSubscription(int orgId, int skuId, int subscriptionId, string subscriptionname)
+		{
+			DBHelper.UpdateSubscription(orgId, skuId, subscriptionId, subscriptionname);
 		}
 
 		public void CreateAndUpdateAndDeleteSubscriptionPlan(int productId, string productName, int selectedSku, int previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)

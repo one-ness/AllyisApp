@@ -307,29 +307,21 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updates the specified organization with new information.
 		/// </summary>
-		/// <param name="organization">The organization table with updates.</param>
-		/// <param name="address"></param>
-		/// <returns>Number of rows changed.</returns>
-		public int UpdateOrganization(OrganizationDBEntity organization, AddressDBEntity address)
+		public int UpdateOrganization(int organizationId, string organizationName, string siteUrl, int? addressId, string address1, string city, int? stateId, string countryCode, string postalCode, string phoneNumber, string faxNumber, string subDomain)
 		{
-			if (organization == null)
-			{
-				throw new ArgumentException("organization cannot be null.");
-			}
-
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", organization.OrganizationId);
-			parameters.Add("@organizationName", organization.OrganizationName);
-			parameters.Add("@siteUrl", organization.SiteUrl);
-			parameters.Add("@addressId", organization.AddressId);
-			parameters.Add("@address1", address?.Address1);
-			parameters.Add("@city", address?.City);
-			parameters.Add("@stateId", address?.StateId);
-			parameters.Add("@countryCode", address?.CountryCode);
-			parameters.Add("@postalCode", address?.PostalCode);
-			parameters.Add("@phoneNumber", organization.PhoneNumber);
-			parameters.Add("@faxNumber", organization.FaxNumber);
-			parameters.Add("@subdomainName", organization.Subdomain);
+			parameters.Add("@organizationId", organizationId);
+			parameters.Add("@organizationName", organizationName);
+			parameters.Add("@siteUrl", siteUrl);
+			parameters.Add("@addressId", addressId);
+			parameters.Add("@address1", address1);
+			parameters.Add("@city", city);
+			parameters.Add("@stateId", stateId);
+			parameters.Add("@countryCode", countryCode);
+			parameters.Add("@postalCode", postalCode);
+			parameters.Add("@phoneNumber", phoneNumber);
+			parameters.Add("@faxNumber", faxNumber);
+			parameters.Add("@subdomainName", subDomain);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{

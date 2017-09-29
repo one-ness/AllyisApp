@@ -43,15 +43,7 @@ namespace AllyisApps.Services
 		/// <returns>The Organization.</returns>
 		public Organization GetOrganization(int orgId)
 		{
-			#region Validation
-
-			if (orgId < 0)
-			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
-			}
-
-			#endregion Validation
-
+			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
 			return InitializeOrganization(DBHelper.GetOrganization(orgId));
 		}
 
@@ -132,18 +124,14 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Updates an organization chosen by the current user.
 		/// </summary>
-		/// <param name="organization">Updated organization.</param>
-		/// <returns>Returns false if authorization fails.</returns>
-		public bool UpdateOrganization(Organization organization)
+		public bool UpdateOrganization(int organizationId, string organizationName, string siteUrl, int? addressId, string address1, string city, int? stateId, string countryCode, string postalCode, string phoneNumber, string faxNumber, string subDomain)
 		{
-			if (organization == null) throw new ArgumentException("organization");
-			this.CheckOrgAction(OrgAction.EditOrganization, organization.OrganizationId);
-			AddressDBEntity address = null;
-			if (organization.Address != null)
-			{
-				address = GetDBEntityFromAddress(organization.Address);
-			}
-			return DBHelper.UpdateOrganization(GetDBEntityFromOrganization(organization), address) > 0;
+			if (organizationId <= 0) throw new ArgumentOutOfRangeException("organizationId");
+			if (string.IsNullOrWhiteSpace(organizationName)) throw new ArgumentNullException("organizationName");
+
+			this.CheckOrgAction(OrgAction.EditOrganization, organizationId);
+
+			return this.DBHelper.UpdateOrganization(organizationId, organizationName, siteUrl, addressId, address1, city, stateId, countryCode, postalCode, phoneNumber, faxNumber, subDomain) > 0;
 		}
 
 		/// <summary>
@@ -152,8 +140,9 @@ namespace AllyisApps.Services
 		/// <returns>Returns false if permissions fail.</returns>
 		public void DeleteOrganization(int orgId)
 		{
+			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
 			this.CheckOrgAction(OrgAction.DeleteOrganization, orgId);
-			DBHelper.DeleteOrganization(orgId);
+			this.DBHelper.DeleteOrganization(orgId);
 		}
 
 		/// <summary>
@@ -558,21 +547,21 @@ namespace AllyisApps.Services
 		/// <summary>
 		///
 		/// </summary>
-		/// <param name="organizationEntity"></param>
+		/// <param name="entity"></param>
 		/// <param name="loadAddress"></param>
 		/// <returns></returns>
-		public Organization InitializeOrganization(OrganizationDBEntity organizationEntity, bool loadAddress = true)
+		public Organization InitializeOrganization(OrganizationDBEntity entity, bool loadAddress = true)
 		{
 			return new Organization
 			{
-				CreatedUtc = organizationEntity.CreatedUtc,
-				FaxNumber = organizationEntity.FaxNumber,
-				OrganizationName = organizationEntity.OrganizationName,
-				OrganizationId = organizationEntity.OrganizationId,
-				PhoneNumber = organizationEntity.PhoneNumber,
-				SiteUrl = organizationEntity.SiteUrl,
-				Subdomain = organizationEntity.Subdomain,
-				Address = loadAddress ? getAddress(organizationEntity.AddressId) : null
+				CreatedUtc = entity.CreatedUtc,
+				FaxNumber = entity.FaxNumber,
+				OrganizationName = entity.OrganizationName,
+				OrganizationId = entity.OrganizationId,
+				PhoneNumber = entity.PhoneNumber,
+				SiteUrl = entity.SiteUrl,
+				Subdomain = entity.Subdomain,
+				Address = loadAddress ? getAddress(entity.AddressId) : null
 			};
 		}
 
