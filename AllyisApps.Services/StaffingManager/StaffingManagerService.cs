@@ -354,7 +354,7 @@ namespace AllyisApps.Services
 			};
 		}
 
-		public static Applicant DBApplicantToServiceObject(ApplicantDBEntity applicant)
+		public static Applicant DBApplicantToServiceObject(ApplicantAddressDBEntity applicant)
 		{
 			if (applicant == null)
 			{
@@ -624,12 +624,7 @@ namespace AllyisApps.Services
 			return new ApplicantDBEntity
 			{
 				ApplicantId = applicant.ApplicantId,
-				Address1 = applicant.Address,
-				Address2 = "",
-				City = applicant.City,
-				Country = applicant.Country,
-				PostalCode = applicant.PostalCode,
-				StateId = 1, // change this to proper state id
+				AddressId = applicant.AddressId,
 				Email = applicant.Email,
 				FirstName = applicant.FirstName,
 				LastName = applicant.LastName,

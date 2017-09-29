@@ -9,7 +9,7 @@ namespace AllyisApps.DBModel.StaffingManager
 	/// <summary>
 	/// Represents the Applicant table in the database.
 	/// </summary>
-	public class ApplicantDBEntity : BaseDBEntity
+	public class ApplicantAddressDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets the applicant's ID.
@@ -75,5 +75,51 @@ namespace AllyisApps.DBModel.StaffingManager
 		/// Gets or sets OrganizationId.
 		/// </summary>
 		public int OrganizationId { get; set; }
+	}
+
+	/// <summary>
+	/// Represents the Applicant table in the database.
+	/// </summary>
+	public class ApplicantDBEntity : BaseDBEntity
+	{
+		/// <summary>
+		/// Gets or sets the applicant's ID.
+		/// </summary>
+		public int ApplicantId { get; set; }
+
+		/// <summary>
+		/// Gets or sets OrganizationId.
+		/// </summary>
+		public int OrganizationId { get; set; }
+
+		/// <summary>
+		/// Gets or sets AddressId.
+		/// </summary>
+		public int AddressId { get; set; }
+
+		/// <summary>
+		/// Gets or sets FirstName.
+		/// </summary>
+		public string FirstName { get; set; }
+
+		/// <summary>
+		/// Gets or sets LastName.
+		/// </summary>
+		public string LastName { get; set; }
+
+		/// <summary>
+		/// Gets or sets Email.
+		/// </summary>
+		public string Email { get; set; }
+
+		/// <summary>
+		/// Gets or sets PhoneNumber.
+		/// </summary>
+		public string PhoneNumber { get; set; }
+
+		/// <summary>
+		/// Gets or sets Notes.
+		/// </summary>
+		public string Notes { get; set; }
 	}
 }
