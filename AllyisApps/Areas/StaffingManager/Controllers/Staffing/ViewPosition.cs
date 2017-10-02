@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System.Dynamic;
 using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -46,6 +47,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			Position pos = AppService.GetPosition(positionId);
+			List<Application> applications = AppService.GetFullApplicationInfoByPositionId(positionId);
 
 			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
 			//TODO: this is piggy-backing off the get index action, create a new action that just gets items 3-5.
@@ -100,6 +102,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					CustomerId = cus.CustomerId,
 					CustomerName = cus.CustomerName
 				}).ToList(),
+				Applications = applications,
 				CustomerId = pos.CustomerId,
 				AddressId = pos.AddressId,
 				PositionTitle = pos.PositionTitle,

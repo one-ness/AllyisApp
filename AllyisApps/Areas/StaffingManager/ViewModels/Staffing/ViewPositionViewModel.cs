@@ -222,6 +222,11 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		public List<CustomerSelectViewModel> Customers { get; set; }
 
 		/// <summary>
+		/// applications information for all applications to the position
+		/// </summary>
+		public List<Application> Applications { get; set; }
+
+		/// <summary>
 		/// Localized Countries
 		/// </summary>
 		public Dictionary<string, string> LocalizedCountries { get; set; }
