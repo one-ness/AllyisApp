@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
@@ -29,6 +30,7 @@ namespace AllyisApps.Controllers.Auth
 		[ValidateAntiForgeryToken]
 		public ActionResult EditOrg(EditOrganizationViewModel model)
 		{
+			var modelStateErrors = this.ModelState.Keys.SelectMany(key => this.ModelState[key].Errors);
 			if (ModelState.IsValid)
 			{
 				this.AppService.UpdateOrganization(model.OrganizationId, model.OrganizationName, model.SiteUrl, model.AddressId, model.Address, model.City, model.SelectedStateId, model.SelectedCountryCode, model.PostalCode, model.PhoneNumber, model.FaxNumber, null);
@@ -45,6 +47,7 @@ namespace AllyisApps.Controllers.Auth
 		/// The page for editing an organization's information.
 		/// </summary>
 		/// <param name="id">The organization id.</param>
+		[HttpGet]
 		public ActionResult EditOrg(int id)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
@@ -65,6 +68,7 @@ namespace AllyisApps.Controllers.Auth
 				PhoneNumber = organization.PhoneNumber,
 				FaxNumber = organization.FaxNumber,
 				CanDelete = canDelete,
+				EmployeeId = "value",//Value needed for model TODO: Seperate Edit and Create
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
 				LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService, organization.Address?.CountryCode ?? string.Empty)
 			};

@@ -588,7 +588,9 @@ namespace AllyisApps.Services
 		/// <returns>A notification string, or null.</returns>
 		public string UnsubscribeAndRemoveBillingSubscription(SkuIdEnum SelectedSku, int? subscriptionId)
 		{
-			var orgId = this.UserContext.SubscriptionsAndRoles[subscriptionId.Value].OrganizationId;
+			var subscripiton = this.GetSubscription(subscriptionId.Value);
+			var orgId = subscripiton.OrganizationId;
+
 			BillingServicesCustomer custId = this.RetrieveCustomer(this.GetOrgBillingServicesCustomerId(orgId));
 			if (custId != null)
 			{

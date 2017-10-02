@@ -885,5 +885,16 @@ namespace AllyisApps.DBModel
 				return con.ExecuteScalar<int>("[Auth].[UpdateEmailConfirmed]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
+
+		/// <summary>
+		/// get the max employee id from the invitation table
+		/// </summary>
+		public async Task<string> GetMaxEmployeeId(int organizationId)
+		{
+			using (var con = new SqlConnection(this.SqlConnectionString))
+			{
+				return (await con.QueryAsync<string>("Auth.GetMaxEmployeeId @a", new { a = organizationId })).FirstOrDefault();
+			}
+		}
 	}
 }

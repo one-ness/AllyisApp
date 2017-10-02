@@ -588,5 +588,40 @@ namespace AllyisApps.Services
 		{
 			return DBHelper.GetUserOrgMaxAmount(userId, orgId);
 		}
+
+		/// <summary>
+		/// constructs the next unique employee id to be added to an invitation
+		/// </summary>
+		public async Task<string> GetNextEmployeeId(int organizationId)
+		{
+			if (organizationId <= 0) throw new ArgumentOutOfRangeException("organizationId");
+
+			string maxId = await this.DBHelper.GetMaxEmployeeId(organizationId);
+			char[] idchars = maxId.ToCharArray();
+
+			// define legal characters
+			var characters = new List<char>();
+			for (char c = '0'; c <= '9'; c++) characters.Add(c); // Add numeric characters first
+			for (char c = 'A'; c <= 'Z'; c++) characters.Add(c); // Add upper-case next
+			for (char c = 'a'; c <= 'z'; c++) characters.Add(c); // Add lower-case last
+
+			// increment the string
+			for (int i = maxId.Length - 1; i >= 0; --i)
+			{
+				if (idchars[i] == characters[characters.Count - 1])
+				{
+					// If last value, round it to the first one and continue the loop to the next index
+					idchars[i] = characters[0];
+				}
+				else 
+				{
+					// The value can simply be incremented, so break out of the loop
+					idchars[i] = characters[characters.IndexOf(idchars[i]) + 1];
+					break;
+				}
+			}
+
+			return new string(idchars);
+		}
 	}
 }

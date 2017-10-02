@@ -10,6 +10,7 @@ using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.Auth;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -22,14 +23,12 @@ namespace AllyisApps.Controllers.Auth
 		/// GET: /Add.
 		/// The page for adding members to an organization.
 		/// </summary>
-		/// <param name="id">Organization id.</param>
-		/// <param name="returnUrl">The return url to redirect to after form submit.</param>
-		/// <returns>The result of this action.</returns>
-		public ActionResult AddMember(int id, string returnUrl)
+		public async Task<ActionResult> AddMember(int id)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.AddUserToOrganization, id);
-			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(id);
-			ViewBag.returnUrl = returnUrl;
+			var model = new AddMemberViewModel();
+			model.OrganizationId = id;
+			model.EmployeeId = await this.AppService.GetNextEmployeeId(id);
 			return this.View(model);
 		}
 
@@ -38,11 +37,10 @@ namespace AllyisApps.Controllers.Auth
 		/// Adding a new member to an organization.
 		/// </summary>
 		/// <param name="model">The View Model of user info passed from Add.cshtml.</param>
-		/// <param name="organizationId">Organization id.</param>
 		/// <returns>The result of this action.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult AddMember(AddMemberViewModel model, int organizationId)
+		public ActionResult AddMember(AddMemberViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
@@ -72,24 +70,6 @@ namespace AllyisApps.Controllers.Auth
 
 			// Invalid model; try again
 			return this.View(model);
-		}
-
-		/// <summary>
-		/// Uses services to populate the lists of an <see cref="AddMemberViewModel"/> and returns it.
-		/// </summary>
-		/// <param name="organizationId">The Organization Id.</param>
-		/// <returns>The OrganizationAddMembersViewModel.</returns>
-		public AddMemberViewModel ConstructOrganizationAddMembersViewModel(int organizationId)
-		{
-			Organization infos = AppService.GetAddMemberInfo(organizationId);
-
-			AddMemberViewModel result = new AddMemberViewModel
-			{
-				OrganizationId = organizationId,
-				EmployeeId = new string(AppService.IncrementAlphanumericCharArray(infos.NextEmpolyeeID.ToCharArray())),
-			};
-
-			return result;
 		}
 	}
 }

@@ -47,7 +47,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					OvertimeHours = settings.OvertimeHours,
 					OvertimeMultiplier = settings.OvertimeMultiplier,
 					OvertimePeriod = settings.OvertimePeriod,
-					StartOfWeek = settings.StartOfWeek
+					StartOfWeek = settings.StartOfWeek,
+					Today = System.DateTime.UtcNow.Date
 				},
 				PayClasses = infos.Item2.AsParallel().Select(payClass => new SettingsViewModel.PayClassViewModel()
 				{
