@@ -19,7 +19,7 @@ namespace AllyisApps.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Strings {
@@ -2383,11 +2383,20 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are not a member of any organization yet. Please contact your employer to send you an invitation, or you can create your own, by clicking the Create Organization button..
+        ///   Looks up a localized string similar to You are not part of an organization yet..
         /// </summary>
         public static string NoOrganizationMessage {
             get {
                 return ResourceManager.GetString("NoOrganizationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please contact your employer to send you an invitation, or you can create your own, by clicking the Create Organization button..
+        /// </summary>
+        public static string NoOrganizationMessage2 {
+            get {
+                return ResourceManager.GetString("NoOrganizationMessage2", resourceCulture);
             }
         }
         
@@ -3668,15 +3677,6 @@ namespace AllyisApps.Resources {
                 return ResourceManager.GetString("Sunday", resourceCulture);
             }
         }
-
-		/// <summary>
-		///	  Looks up a localized string similar to SuperUser.
-		/// </summary>
-		public static string SuperUser {
-			get {
-				return ResourceManager.GetString("SuperUser", resourceCulture);
-			}
-		}
         
         /// <summary>
         ///   Looks up a localized string similar to Support.

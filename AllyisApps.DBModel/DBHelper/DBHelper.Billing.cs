@@ -224,14 +224,16 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">Sets OrganizationId.</param>
 		/// <param name="skuId">Sku to change to.</param>
+		/// <param name="subscriptionId">Subscripiton Id</param>
 		/// <param name="subscriptionName">The subscription name.</param>
 		/// <returns>Number of rows changed.</returns>
-		public int UpdateSubscription(int organizationId, int skuId, string subscriptionName)
+		public int UpdateSubscription(int organizationId, int skuId, int subscriptionId, string subscriptionName)
 		{
 			// TODO: pass in subscriptionId as a parameter to simplify logic
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@skuId", skuId);
+			parameters.Add("@subscriptionId", subscriptionId);
 			parameters.Add("@subscriptionName", subscriptionName);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))

@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using AllyisApps.Services.Project;
 
 namespace AllyisApps.ViewModels.TimeTracker.Customer
 {

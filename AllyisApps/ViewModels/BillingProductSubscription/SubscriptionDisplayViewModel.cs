@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
 using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Auth
@@ -27,7 +26,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <param name="sub">Subscription display.</param>
 		public SubscriptionDisplayViewModel(Subscription sub) : this()
 		{
-			this.ProductId = (int)sub.ProductId;
+			this.ProductId = sub.ProductId;
 			this.ProductName = sub.ProductName;
 			this.ProductDescription = sub.Description;
 			this.SubscriptionId = sub.SubscriptionId;
@@ -35,6 +34,7 @@ namespace AllyisApps.ViewModels.Auth
 			this.OrganizationId = sub.OrganizationId;
 			this.AreaUrl = sub.AreaUrl;
 			this.NumberofUsers = sub.NumberOfUsers;
+			this.SkuId = sub.SkuId;
 		}
 
 		/// <summary>
@@ -46,7 +46,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the id for the product this subscription is for.
 		/// Note: this is needed even though it also exists in SubscriptionDisplay. Sometimes that is null.
 		/// </summary>
-		public int ProductId { get; set; }
+		public ProductIdEnum ProductId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the name of the product this subscription is for.
@@ -82,5 +82,10 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets Number of users in the subscription.
 		/// </summary>
 		public int NumberofUsers { get; set; }
+
+		/// <summary>
+		/// SkuID enum
+		/// </summary>
+		public SkuIdEnum SkuId { get; private set; }
 	}
 }

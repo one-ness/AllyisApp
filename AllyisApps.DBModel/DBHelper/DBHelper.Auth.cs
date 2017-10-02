@@ -279,68 +279,49 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Adds an organization to the database and sets the owner's chosen organization to th.
+		/// create a new organization, add the user in the given role
 		/// </summary>
-		/// <param name="organization">The OrganizationDBEntity to create with address infomation.</param>
-		/// <param name="address"></param>
-		/// <param name="ownerId">The owner's user Id.</param>
-		/// <param name="roleId">The role associated with the creator of the organization.</param>
-		/// <param name="employeeId">The employee Id for the user creating the organization.</param>
-		/// <returns>The id of the created organization.</returns>
-		public int SetupOrganization(OrganizationDBEntity organization, AddressDBEntity address, int ownerId, int roleId, string employeeId)
+		public int SetupOrganization(int userId, int roleId, string employeeId, string organizationName, string phoneNumber, string faxNumber, string siteUrl, string subDomainName, string address1, string city, int? stateId, string postalCode, string countryCode)
 		{
-			if (organization == null)
-			{
-				throw new ArgumentException("organizationId cannot be null or empty.");
-			}
-
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@userId", ownerId);
+			parameters.Add("@userId", userId);
 			parameters.Add("@roleId", roleId);
-			parameters.Add("@organizationName", organization.OrganizationName);
-			parameters.Add("@siteUrl", organization.SiteUrl);
-			parameters.Add("@address", address?.Address1);
-			parameters.Add("@city", address?.City);
-			parameters.Add("@stateID", address?.StateId);
-			parameters.Add("@countryCode", address?.CountryCode);
-			parameters.Add("@postalCode", address?.PostalCode);
-			parameters.Add("@phoneNumber", organization.PhoneNumber);
-			parameters.Add("@faxNumber", organization.FaxNumber);
-			parameters.Add("@subdomainName", organization.Subdomain);
+			parameters.Add("@organizationName", organizationName);
+			parameters.Add("@siteUrl", siteUrl);
+			parameters.Add("@address", address1);
+			parameters.Add("@city", city);
+			parameters.Add("@stateID", stateId);
+			parameters.Add("@countryCode", countryCode);
+			parameters.Add("@postalCode", postalCode);
+			parameters.Add("@phoneNumber", phoneNumber);
+			parameters.Add("@faxNumber", faxNumber);
+			parameters.Add("@subdomainName", subDomainName);
 			parameters.Add("@employeeId", employeeId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<int>("[Auth].[SetupOrganization]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				return con.Query<int>("[Auth].[SetupOrganization]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
 		}
 
 		/// <summary>
 		/// Updates the specified organization with new information.
 		/// </summary>
-		/// <param name="organization">The organization table with updates.</param>
-		/// <param name="address"></param>
-		/// <returns>Number of rows changed.</returns>
-		public int UpdateOrganization(OrganizationDBEntity organization, AddressDBEntity address)
+		public int UpdateOrganization(int organizationId, string organizationName, string siteUrl, int? addressId, string address1, string city, int? stateId, string countryCode, string postalCode, string phoneNumber, string faxNumber, string subDomain)
 		{
-			if (organization == null)
-			{
-				throw new ArgumentException("organization cannot be null.");
-			}
-
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", organization.OrganizationId);
-			parameters.Add("@organizationName", organization.OrganizationName);
-			parameters.Add("@siteUrl", organization.SiteUrl);
-			parameters.Add("@addressId", organization.AddressId);
-			parameters.Add("@address1", address?.Address1);
-			parameters.Add("@city", address?.City);
-			parameters.Add("@stateId", address?.StateId);
-			parameters.Add("@countryCode", address?.CountryCode);
-			parameters.Add("@postalCode", address?.PostalCode);
-			parameters.Add("@phoneNumber", organization.PhoneNumber);
-			parameters.Add("@faxNumber", organization.FaxNumber);
-			parameters.Add("@subdomainName", organization.Subdomain);
+			parameters.Add("@organizationId", organizationId);
+			parameters.Add("@organizationName", organizationName);
+			parameters.Add("@siteUrl", siteUrl);
+			parameters.Add("@addressId", addressId);
+			parameters.Add("@address1", address1);
+			parameters.Add("@city", city);
+			parameters.Add("@stateId", stateId);
+			parameters.Add("@countryCode", countryCode);
+			parameters.Add("@postalCode", postalCode);
+			parameters.Add("@phoneNumber", phoneNumber);
+			parameters.Add("@faxNumber", faxNumber);
+			parameters.Add("@subdomainName", subDomain);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -587,37 +568,18 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Adds an Invitation to the invitations table and invitation sub roles table.
 		/// </summary>
-		/// <param name="invitingUserId">The id of the user sending the invitation.</param>
-		/// <param name="invitation">A representation of the invitation to create.</param>
-		/// <returns>The id of the newly created invitation (or -1 if the employee id is taken), and the
-		/// first and last name of the inviting user.</returns>
-		public Tuple<int, string, string> CreateInvitation(int invitingUserId, InvitationDBEntity invitation)
+		public int CreateInvitation(string email, string firstName, string lastName, int organizationId, int organizationRoleId, string employeedId)
 		{
-			if (invitation == null)
-			{
-				throw new ArgumentException("invitation cannot be null.");
-			}
-
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@userId", invitingUserId);
-			parameters.Add("@email", invitation.Email);
-			parameters.Add("@firstName", invitation.FirstName);
-			parameters.Add("@lastName", invitation.LastName);
-			parameters.Add("@organizationId", invitation.OrganizationId);
-			parameters.Add("@organizationRole", invitation.OrganizationRoleId);
-			parameters.Add("@employeeId", invitation.EmployeeId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			parameters.Add("@email", email);
+			parameters.Add("@firstName", firstName);
+			parameters.Add("@lastName", lastName);
+			parameters.Add("@organizationId", organizationId);
+			parameters.Add("@organizationRole", organizationRoleId);
+			parameters.Add("@employeeId", employeedId);
+			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				var results = connection.QueryMultiple("[Auth].[CreateInvitation]", parameters, commandType: CommandType.StoredProcedure);
-				int inviteId = results.Read<int>().FirstOrDefault();
-				if (inviteId < 0)
-				{
-					return new Tuple<int, string, string>(inviteId, null, null);
-				}
-				return Tuple.Create(
-					inviteId,
-					results.Read<string>().FirstOrDefault(),
-					results.Read<string>().FirstOrDefault());
+				return con.Query<int>("[Auth].[CreateInvitation]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
 		}
 
@@ -918,9 +880,20 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@emailConfirmCode", code);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Execute("[Auth].[UpdateEmailConfirmed]", parameters, commandType: CommandType.StoredProcedure);
+				return con.ExecuteScalar<int>("[Auth].[UpdateEmailConfirmed]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// get the max employee id from the invitation table
+		/// </summary>
+		public async Task<string> GetMaxEmployeeId(int organizationId)
+		{
+			using (var con = new SqlConnection(this.SqlConnectionString))
+			{
+				return (await con.QueryAsync<string>("Auth.GetMaxEmployeeId @a", new { a = organizationId })).FirstOrDefault();
 			}
 		}
 	}

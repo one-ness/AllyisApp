@@ -41,8 +41,8 @@ namespace AllyisApps.Controllers.Auth
 				OrganizationId = id,
 
 				// TODO: Get rid of this once product panes in Permissions page are genericized.
-				TimeTrackerId = (int)ProductIdEnum.TimeTracker,
-				ExpenseTrackerId = (int)ProductIdEnum.ExpenseTracker
+				TimeTrackerId = ProductIdEnum.TimeTracker,
+				ExpenseTrackerId = ProductIdEnum.ExpenseTracker
 			};
 
 			// This can also be axed after finding a good way to genericize products in the Permissions page.

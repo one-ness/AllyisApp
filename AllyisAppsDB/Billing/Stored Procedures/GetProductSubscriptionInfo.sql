@@ -45,7 +45,8 @@ SELECT
 		[PromoCostPerBlock],
 		[PromoDeadline],
 		[IsActive],
-		[Description]
+		[Description],
+		[IconUrl]
 	FROM [Billing].[Sku] WITH (NOLOCK) 
 	WHERE [Billing].[Sku].[ProductId] = @productId
 

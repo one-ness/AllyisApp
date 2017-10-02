@@ -44,12 +44,15 @@ namespace AllyisApps.ViewModels
 		{
 			var result = new Dictionary<string, string>();
 
-			var states = service.GetStates(countryCode);
-			foreach (var item in states)
+			if (!string.IsNullOrWhiteSpace(countryCode))
 			{
-				var stateName = Utility.AggregateSpaces(item.Value);
-				var localized = Resources.States.ResourceManager.GetString(stateName) ?? item.Value;
-				result.Add(item.Key.ToString(), localized);
+				var states = service.GetStates(countryCode);
+				foreach (var item in states)
+				{
+					var stateName = Utility.AggregateSpaces(item.Value);
+					var localized = Resources.States.ResourceManager.GetString(stateName) ?? item.Value;
+					result.Add(item.Key.ToString(), localized);
+				}
 			}
 
 			return result;

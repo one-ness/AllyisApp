@@ -142,7 +142,7 @@
 				   alert("There is no Customer that was chosen to Edit");
 			   }
 		   }
-		
+
 		   function DeleteCustomer()
 		   {
 			   if (selectedCust != null && confirm("Delete Customer" + $("#customer-" + selectedCust).text().trim() + "?"))
@@ -159,7 +159,6 @@
 		   {
 			   window.location = "@Url.Action(ActionConstants.Create, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId })"
 		   }
-		
 
 		   function ReactivateCustomer()
 		   {

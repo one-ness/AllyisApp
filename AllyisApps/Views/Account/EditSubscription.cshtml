@@ -1,17 +1,13 @@
 ﻿@model AllyisApps.ViewModels.Auth.EditSubscriptionViewModel
 @{
 	ViewBag.Title = Strings.EditSubscription;
-	List<SelectListItem> items = new List<SelectListItem>()
-	{
-		//new SelectListItem() { Text = "Time Tracker" }, //TODO: add back in once timetracker pro is supported
-		new SelectListItem() { Text = "Unsubscribe" },
-	};
+
 }
 
 <div class="row">
 	<div class="col-md-6 col-md-push-3">
 		<div class="col-md-12 text-center">
-			<img src="~/@string.Format("Content/icons/{0}.png", Model.Name.Replace(" ", ""))" alt="@Model.ProductName" style="margin-right:5px;" />
+			<img src="~/@Model.SkuIconUrl" alt="@Model.ProductName" style="margin-right:5px;" />
 			<h2 style="display:inline-block;">
 				@Model.ProductName
 			</h2>
@@ -22,7 +18,7 @@
 			</div>
 
 			<div>
-				@using (Html.BeginForm(ActionConstants.EditSubscription, ControllerConstants.Account, new { subscriptionId = Model.SubscriptionId, idTwo = Model.SkuId }, FormMethod.Post, new { @class = "col-md-12", @style = "margin-top:20px;display: inline-block" })) // , @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw(String.Format(Strings.WarningWhenUnsubscribing, Model.Name))) TODO: make this only fire on unsubscribe action.
+				@using (Html.BeginForm(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = Model.SubscriptionId, idTwo = Model.SkuId }, FormMethod.Post, new { @class = "col-md-12", @style = "margin-top:20px;display: inline-block" })) // , @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw(String.Format(Strings.WarningWhenUnsubscribing, Model.Name))) TODO: make this only fire on unsubscribe action.
 				{
 					@Html.ReqLabelFor(m => m.SubscriptionName, Strings.SubscriptionName)
 					@Html.TextBoxFor(m => m.SubscriptionName, new { @class = "form-control margined", @placeholder = Model.ProductName })
@@ -33,17 +29,19 @@
 					<input type="hidden" name="SkuIdNext" value="@Model.SkuIdNext" />
 					<input type="hidden" name="OrganizationId" value="@Model.OrganizationId" />
 					<input type="hidden" name="NextName" value="@Model.NextName" />
-					<div style="display:inline-block;">
-						<label for="subscriptionType">@Strings.ChangeSubscription: </label>
-					</div>
-
-					<div class= "form-group">
-						@Html.DropDownListFor(m => m.ActionType, items, new { @class = "form-control" })
-					</div>
-
-					<div class="pull-right", style="margin-top:50px;">
+					if (Model.OtherSkus.Count() != 0)
+					{
+						<div style="display:inline-block;">
+							<label for="subscriptionType">@Strings.ChangeSubscription: </label>
+						</div>
+						<div class="form-group">
+							@Html.DropDownListFor(m => m.SelectedNewSkuEnum, new SelectList(Model.OtherSkus), new { @class = "form-control" })
+						</div>
+					}
+					<div class="pull-right" , style="margin-top:50px;">
+						<a href="@Url.Action(ActionConstants.Unsubscribe, new { id = Model.SubscriptionId, idTwo = (int)Model.SkuId })" class="btn btn-danger">@Strings.Unsubscribe</a>
+						<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default"> @Strings.Cancel </a>
 						<input type="submit" value="@Strings.Save" class="btn btn-primary" id="save" />
-						<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default"> @Strings.Cancel </a>
 					</div>
 
 				}

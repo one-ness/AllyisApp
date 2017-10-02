@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
+﻿namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 {
 	/// <summary>
-	/// Position Level select View Model 
+	/// Position Level select View Model
 	/// </summary>
 	public class PositionLevelSelectViewModel
 	{
@@ -14,13 +9,15 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// Position Level id.
 		/// </summary>
 		public int PositionLevelId { get; set; }
+
 		/// <summary>
 		/// Position Level Status name.
 		/// </summary>
 		public string PositionLevelName { get; set; }
 	}
+
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class PositionStatusSelectViewModel
 	{
@@ -44,8 +41,9 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// Employment type identifier
 		/// </summary>
 		public int EmploymentTypeId { get; set; }
+
 		/// <summary>
-		/// Empolyent type Name 
+		/// Empolyent type Name
 		/// </summary>
 		public string EmploymentTypeName { get; set; }
 	}
