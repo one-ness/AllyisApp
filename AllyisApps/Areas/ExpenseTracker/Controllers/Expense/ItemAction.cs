@@ -15,11 +15,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <summary>
 		/// Adds a new item to the model and displays the items in the create report view.
 		/// </summary>
+		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="index">The item index.</param>
 		/// <returns>A partial view.</returns>
-		public ActionResult AddItem(int index)
+		public ActionResult AddItem(int subscriptionId, int index)
 		{
-			IEnumerable<Account> accountEntities = AppService.GetAccounts();
+			IEnumerable<Account> accountEntities = AppService.GetAccounts(subscriptionId);
 			List<AccountViewModel> accountViewModels = new List<AccountViewModel>();
 			foreach (Account account in accountEntities)
 			{

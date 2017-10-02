@@ -36,9 +36,10 @@ namespace AllyisApps.DBModel
 
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@accountName", account.AccountName);
+			parameters.Add("@subscriptionId", account.SubscriptionId);
 			parameters.Add("@isActive", account.IsActive);
 			parameters.Add("@accountTypeId", account.AccountTypeId);
-			parameters.Add("@parentAccountId", account.ParentAccountId != null ? account.ParentAccountId.Value : 0);
+			parameters.Add("@parentAccountId", account.ParentAccountId != null ? account.ParentAccountId.Value : account.ParentAccountId);
 			parameters.Add("@returnValue", -1, DbType.Int32, direction: ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
@@ -110,11 +111,14 @@ namespace AllyisApps.DBModel
 		/// Retrieves all of the accounts in the database.
 		/// </summary>
 		/// <returns></returns>
-		public IEnumerable<AccountDBEntity> GetAccounts()
+		public IEnumerable<AccountDBEntity> GetAccounts(int subId)
 		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@subscriptionId", subId);
+
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<AccountDBEntity>("[Finance].[GetAccounts]", commandType: CommandType.StoredProcedure).AsEnumerable();
+				return connection.Query<AccountDBEntity>("[Finance].[GetAccounts]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable();
 			}
 		}
 
@@ -156,9 +160,9 @@ namespace AllyisApps.DBModel
 		////////////////////////////
 
 		/// <summary>
-		/// Sets the given account (if exists) to inactive (IsActive == false).
+		/// Deletes and account from the database.
 		/// </summary>
-		/// <param name="accountId">Parameter @organizationId. .</param>
+		/// <param name="accountId">The.</param>
 		public void DeleteAccount(int accountId)
 		{
 			DynamicParameters parameters = new DynamicParameters();

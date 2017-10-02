@@ -23,7 +23,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			SetNavData(subscriptionId);
 
 			AccountPageViewModel model = new AccountPageViewModel();
-			var accounts = AppService.GetAccounts();
+			var accounts = AppService.GetAccounts(subscriptionId);
 			var results = accounts.Select(x =>
 				new AccountManagementViewModel()
 				{

@@ -8,6 +8,7 @@ BEGIN
 	SELECT 
 		[A].[AccountId],
 		[A].[AccountName],
+		[A].[SubscriptionId],
 		[A].[IsActive],
 		[A].[AccountTypeId],
 		[T].[AccountTypeName],

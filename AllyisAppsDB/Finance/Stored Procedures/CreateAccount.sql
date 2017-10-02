@@ -1,5 +1,6 @@
 ﻿CREATE PROCEDURE [Finance].[CreateAccount]
 	@accountName NVARCHAR(100),
+	@subscriptionId INT,
 	@isActive BIT,
 	@accountTypeId INT,
 	@parentAccountId INT,
@@ -20,11 +21,13 @@ BEGIN
 	BEGIN
 		-- Create account
 		INSERT INTO [Finance].[Account]
-				([AccountName], 
+				([AccountName],
+				[SubscriptionId],
 				[IsActive], 
 				[AccountTypeId], 
 				[ParentAccountId])
 		VALUES (@accountName,
+				@subscriptionId,
 				@isActive,
 				@accountTypeId,
 				@parentAccountId);
