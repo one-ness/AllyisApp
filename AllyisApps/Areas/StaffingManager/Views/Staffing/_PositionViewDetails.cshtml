@@ -242,7 +242,7 @@
 	<div class="panel panel-default col-md-12">
 		@foreach(var application in Model.Applications)
 		{
-
+			@Html.Partial("_ApplicationInfoPartial", application);
 		}
 	</div>
 </div>
