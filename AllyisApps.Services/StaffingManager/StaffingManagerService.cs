@@ -191,6 +191,13 @@ namespace AllyisApps.Services
 		public List<ApplicationDocument> GetApplicationDocumentsByApplicationId(int applicationId) => DBHelper.GetApplicationDocumentsByApplicationId(applicationId).Select(DBApplicationDocumentsToServiceObject).ToList();
 
 		/// <summary>
+		/// Gets full application list with applicant infor and documents for each.
+		/// </summary>
+		/// <param name="position"></param>
+		/// <returns></returns>
+		public List<Application> GetFullApplicationInfoByPositionId(int position) => SetupFullApplicationInfo(DBHelper.GetFullApplicationInfoByPositionId(position));
+
+		/// <summary>
 		/// Get Position method that pulls a position from the DB.
 		/// </summary>
 		/// <param name="positionId">ID of position to be pulled.</param>
@@ -389,6 +396,58 @@ namespace AllyisApps.Services
 				DocumentLink = applicationDocument.DocumentLink,
 				DocumentName = applicationDocument.DocumentName
 			};
+		}
+
+		/// <summary>
+		/// Builds an Application list which includes all relevant information for earch application (gets the applicant and documents too)
+		/// </summary>
+		/// <param name="applicationAndApplicantInfo"></param>
+		/// <returns></returns>
+		public static List<Application> SetupFullApplicationInfo(dynamic applicationAndApplicantInfo)
+		{
+			var applications = applicationAndApplicantInfo.applications;
+			var results = new List<Application>();
+			foreach(var application in applications)
+			{
+				var Applicant = new Applicant();
+				foreach (var applicant in applicationAndApplicantInfo.applicants)
+				{
+					if(applicant.ApplicantId == application.ApplicantId)
+					{
+						Applicant.ApplicantId = applicant.ApplicantId;
+						Applicant.FirstName = applicant.FirstName;
+						Applicant.LastName = applicant.LaseName;
+						Applicant.Email = applicant.Email;
+						Applicant.PhoneNumber = applicant.PhoneNumber;
+						Applicant.Notes = applicant.Notes;
+					}
+				}
+				var ApplicationDocuments = new List<ApplicationDocument>();
+				foreach (var document in applicationAndApplicantInfo.documents)
+				{
+					if (document.ApplicationId == application.ApplicationId)
+					{
+						ApplicationDocuments.Add( new ApplicationDocument() {
+							ApplicationId = document.ApplicationId,
+							ApplicationDocumentId = document.ApplicationDocumentId,
+							DocumentLink = document.DocumentLink,
+							DocumentName = document.DocumentName
+						});
+					}
+				}
+				results.Add( new Application() {
+
+					ApplicantId = application.ApplicantId,
+					ApplicationId = application.ApplicationId,
+					ApplicationStatus = application.ApplicationStatus,
+					ApplicationModifiedUtc = application.ApplicationModifiedUtc,
+					Notes = application.Notes,
+					Applicant = Applicant,
+					ApplicationDocuments = ApplicationDocuments
+				});
+
+			}
+			return results;
 		}
 
 		/// <summary>

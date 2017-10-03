@@ -426,6 +426,29 @@ namespace AllyisApps.DBModel
 				return connection.Query<ApplicantDBEntity>("[StaffingManager].[GetApplicantByApplicationId]", parameters, commandType: CommandType.StoredProcedure).Single();
 			}
 		}
+		
+		/// <summary>
+		/// Retrieves the all applications, the applicants and documents associated with those applications, for a position.
+		/// </summary>
+		/// <param name="PositionId">The id of the position.</param>
+		/// <returns>The applicant that submitted the given application.</returns>
+		public dynamic GetFullApplicationInfoByPositionId(int PositionId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@positionId", PositionId);
+
+			dynamic applicationsAndApplicantInfo = new ExpandoObject();
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				var results = connection.QueryMultiple("[StaffingManager].[GetApplicantByApplicationId]", parameters, commandType: CommandType.StoredProcedure);
+
+				applicationsAndApplicantInfo.applications = results.Read<dynamic>().ToList();
+				applicationsAndApplicantInfo.applicants = results.Read<dynamic>().ToList();
+				applicationsAndApplicantInfo.documents = results.Read<dynamic>().ToList();
+
+				return applicationsAndApplicantInfo;
+			}
+		}
 
 		/// <summary>
 		/// Retrieves the Position with a given id.
