@@ -14,12 +14,12 @@ namespace AllyisApps.ViewModels.Auth
 	public class EditMemberViewModel : BaseViewModel
 	{
 		/// <summary>
-		/// Gets or sets the user's info for display.
+		/// Gets or sets the logged in user id
 		/// </summary>
 		public int CurrentUserId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the user's info for display.
+		/// Gets or sets the info for the user being edited
 		/// </summary>
 		public UserInfoViewModel UserInfo { get; set; }
 
@@ -58,5 +58,16 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets a value indicating whether the user is invited.
 		/// </summary>
 		public bool IsInvited { get; set; }
+
+		/// <summary>
+		/// Gets a value indicating whether role dropdown should be shown in the UI
+		/// </summary>
+		public bool ShowRoleDropDown
+		{
+			get
+			{
+				return (this.CurrentUserId != this.UserInfo.UserId);
+			}
+		}
 	}
 }
