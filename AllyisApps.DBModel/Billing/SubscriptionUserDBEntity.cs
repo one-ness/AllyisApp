@@ -23,6 +23,11 @@ namespace AllyisApps.DBModel.Billing
 		public string LastName { get; set; }
 
 		/// <summary>
+		/// Gets or sets the emial of the User.
+		/// </summary>
+		public string Email { get; set; }
+
+		/// <summary>
 		/// gets or set the product role.
 		/// </summary>
 		public int ProductRoleId { get; set; }
@@ -41,5 +46,10 @@ namespace AllyisApps.DBModel.Billing
 		/// Gets or sets the id of the subscription.
 		/// </summary>
 		public int SubscriptionId { get; set; }
+
+		/// <summary>
+		///
+		/// </summary>
+		public int ProductId { get; set; }
 	}
 }

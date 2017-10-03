@@ -96,6 +96,38 @@ namespace AllyisApps.ViewModels.Auth
 	public class PermissionsViewModel
 	{
 		/// <summary>
+		/// Actions Role Choices
+		/// </summary>
+		public Dictionary<string, int> Actions { get; set; }
+
+		public Dictionary<int, string> PossibleRoles { get; set; }
+
+		/// <summary>
+		/// Organizaion Id
+		/// </summary>
+		public int OrganizationId;
+
+		/// <summary>
+		/// Subscription Id for
+		/// </summary>
+		public int? SubscriptionId;
+
+		/// <summary>
+		/// ProductID for subscription is null if on OrgmanagePage
+		/// </summary>
+		public int? ProductId;
+
+		/// <summary>
+		/// Header text for Role
+		/// </summary>
+		public string RoleHeader { get; set; }
+
+		/// <summary>
+		/// Gets Message used for remove
+		/// </summary>
+		public string RemoveUserMessage { get; set; }
+
+		/// <summary>
 		/// Users
 		/// </summary>
 		public List<UserPermssionViewModel> Users;
@@ -105,6 +137,9 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public List<OrganizaionSubscriptionsViewModel> CurrentSubscriptions;
 
+		/// <summary>
+		/// Organization Subscriptions
+		/// </summary>
 		public class OrganizaionSubscriptionsViewModel
 		{
 			/// <summary>
@@ -112,29 +147,21 @@ namespace AllyisApps.ViewModels.Auth
 			/// </summary>
 			public int ProductId { get; set; }
 
+			/// <summary>
+			/// SubscripitonId for subscription
+			/// </summary>
 			public int SubscriptionId { get; set; }
 
-			public int SubscriptionName { get; set; }
+			/// <summary>
+			/// Subscription Name
+			/// </summary>
+			public string SubscriptionName { get; set; }
+
+			/// <summary>
+			/// Product Name
+			/// </summary>
+			public string ProductName { get; set; }
 		}
-	}
-
-	/// <summary>
-	/// View Model for manage permssions for orgainzation
-	/// </summary>
-	public class OrganizaionPermissionsViewModel : PermissionsViewModel
-	{
-		public SelectList OrganizaionRoles { get; set; }
-	}
-
-	/// <summary>
-	/// View Model for manage permssions for subscription
-	/// </summary>
-	public class SubscriptionPermissionsViewModel : PermissionsViewModel
-	{
-		/// <summary>
-		/// Gets or sets available actions for the rows.
-		/// </summary>
-		public SelectList ProductRoles { get; set; }
 	}
 
 	/// <summary>
@@ -148,9 +175,9 @@ namespace AllyisApps.ViewModels.Auth
 		public int UserID { get; set; }
 
 		/// <summary>
-		///
+		/// Gets or sets the email of the user.
 		/// </summary>
-		public ProductIdEnum productId { get; set; }
+		public string Email { get; set; }
 
 		/// <summary>
 		/// Current product Role
@@ -165,12 +192,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// User First Name
 		/// </summary>
-		public string FirstName { get; set; }
-
-		/// <summary>
-		/// User Last Name
-		/// </summary>
-		public string LastName { get; set; }
+		public string FullName { get; set; }
 
 		/// <summary>
 		/// Is selected for the action

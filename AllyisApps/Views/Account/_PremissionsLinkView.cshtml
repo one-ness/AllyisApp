@@ -1,0 +1,13 @@
+﻿@using AllyisApps.ViewModels.Auth;
+@model AllyisApps.ViewModels.Auth.PermissionsViewModel
+
+<ul class="nav allyis-tabs">
+
+	<li class="selected" id="OrganizationTab">@Html.ActionLink(@Strings.Organization, "ManageOrgPermissions", new { id = Model.OrganizaionId })</li>
+
+	@foreach (var sub in Model.CurrentSubscriptions)
+	{
+		//Assume that only one subscripiotn per product or else add logic to controller
+		<li class="SubscriptionTab">@Html.ActionLink(sub.ProductName, "ManageSubPermissions", new { id = sub.SubscriptionId })</li>
+	}
+</ul>

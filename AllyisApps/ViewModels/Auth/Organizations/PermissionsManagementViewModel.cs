@@ -245,12 +245,19 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the actions to be performed.
 		/// </summary>
-		public PermissionsAction SelectedActions { get; set; }
+		public int? SelectedAction { get; set; }
+
+		public int? ProductId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Organization's Id.
 		/// </summary>
 		public int OrganizationId { get; set; }
+
+		/// <summary>
+		/// Gets or sets Subscription Id Used if modifing Product Role
+		/// </summary>
+		public int? SubscriptionId { get; set; }
 	}
 
 	/// <summary>
@@ -282,11 +289,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the subscription Id for Expensetracker if the organization has one.
 		/// </summary>
 		public int ExpenseTrackerSubscriptionId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the set of userIds who are members of the organization.
-		/// </summary>
-		public ISet<int> OrganizationMembers { get; set; }
 
 		/// <summary>
 		/// Gets or sets the target role to set the organization users to.

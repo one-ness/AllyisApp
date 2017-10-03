@@ -175,6 +175,22 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// Returns subscription users for a particlar subscription
+		/// </summary>
+		/// <param name="subscriptionId"></param>
+		/// <returns></returns>
+		public IEnumerable<SubscriptionUserDBEntity> GetSubscriptionUsersBySubscriptionId(int subscriptionId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@subscriptionId", subscriptionId);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				// default blank object
+				return connection.Query<SubscriptionUserDBEntity>("[Billing].[GetSubscriptionUsersBySubscriptionId]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
 		/// Get just subscription Name by subscriptionid.
 		/// </summary>
 		/// <param name="subscriptionId"></param>

@@ -335,6 +335,11 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("newProductRole", "Product role must match a value of the ProductRoleIdEnum enum.");
 			}
 
+			if (!Enum.IsDefined(typeof(ProductIdEnum), productId))
+			{
+				throw new ArgumentOutOfRangeException("newProductRole", "Product role must match a value of the ProductRoleIdEnum enum.");
+			}
+
 			if (userIds == null || userIds.Count == 0)
 			{
 				throw new ArgumentException("userIds", "No user ids provided.");
@@ -421,6 +426,12 @@ namespace AllyisApps.Services
 				IsActive = si.IsActive,
 				SubscriptionName = si.Name
 			};
+		}
+
+		public List<SubscriptionUser> GetSubscriptionUsers(int subscriptionId)
+		{
+			var subUsers = DBHelper.GetSubscriptionUsersBySubscriptionId(subscriptionId);
+			return subUsers.Select(su => InitializeSubscriptionUser(su)).ToList();
 		}
 
 		/// <summary>
@@ -515,7 +526,7 @@ namespace AllyisApps.Services
 		/// Gets a list of <see cref="SubscriptionDisplay"/>s for all subscriptions in the chosen organization.
 		/// </summary>
 		/// <returns>List of SubscriptionDisplayInfos.</returns>
-		public IEnumerable<Subscription> GetSubscriptionsDisplay(int organizationId)
+		public IEnumerable<Subscription> GetSubscriptionsByOrg(int organizationId)
 		{
 			return this.DBHelper.GetSubscriptionsDisplayByOrg(organizationId).Select(s => InitializeSubscription(s)).ToList();
 		}
