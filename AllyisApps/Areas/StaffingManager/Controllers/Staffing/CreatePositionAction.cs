@@ -90,7 +90,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					PositionStatusId = ps.PositionStatusId,
 					PositionStatusName = ps.PositionStatusName
 				}).ToList(),
-				Customers = infos.Item6.AsParallel().Select(cus => new CustomerSelectViewModel()
+				Customers = infos.Item7.AsParallel().Select(cus => new CustomerSelectViewModel()
 				{
 					CustomerId = cus.CustomerId,
 					CustomerName = cus.CustomerName
@@ -127,7 +127,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					}
 					if(model.PositionStatusId == 0)
 					{
-						model.PositionStatusId = AppService.GetStaffingDefaultStatus(subInfo.OrganizationId);
+						model.PositionStatusId = AppService.GetStaffingDefaultStatus(subInfo.OrganizationId)[0];
 					}
 				}
 				int? positionId = AppService.CreatePosition(

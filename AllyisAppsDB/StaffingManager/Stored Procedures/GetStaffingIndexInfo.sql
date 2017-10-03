@@ -67,6 +67,13 @@ BEGIN
 	FROM [StaffingManager].[PositionStatus]
 	WHERE [PositionStatus].[OrganizationId] = @organizationId
 	
+	-- Select all Position Status' from the org
+		SELECT [ApplicationStatusId],
+		[OrganizationId],
+		[ApplicationStatusName]
+	FROM [StaffingManager].[ApplicationStatus]
+	WHERE [ApplicationStatus].[OrganizationId] = @organizationId
+
 	-- Select all Customers for each position
 	SELECT 
 		[Customer].[CustomerId],

@@ -17,10 +17,8 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44326</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>
-    </IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>
-    </IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <NuGetPackageImportStamp>
@@ -258,9 +256,11 @@
     <Compile Include="Areas\StaffingManager\ViewModels\Customer\CustomerInfoViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Customer\EditCustomerInfoViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Customer\ManageCustomerViewModel.cs" />
+    <Compile Include="Areas\StaffingManager\ViewModels\Staffing\ApplicationInfoViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\CreateApplicationDocumentViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\CreateApplicationViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\CreateApplicantViewModel.cs" />
+    <Compile Include="Areas\StaffingManager\ViewModels\Staffing\ApplicantInfoViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\ViewPositionViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\PositionThumbnailInfoViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\PositionViewModel.cs" />
@@ -630,6 +630,7 @@
     <Content Include="Areas\StaffingManager\Views\Staffing\EditPosition.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\ViewPosition.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\_PositionViewDetails.cshtml" />
+    <Content Include="Areas\StaffingManager\Views\Staffing\_ApplicationInfoPartial.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
