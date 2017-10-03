@@ -22,7 +22,9 @@
 						</div>
 					</div>-->
 				</div>
-			} else {
+			}
+			else
+			{
 				<div class="col-md-6 min300">
 					<div class="form-group">
 						<label>@Strings.Email</label>
@@ -40,7 +42,7 @@
 						<label>@Strings.DateOfBirth</label>
 						<div class="text-box-padded">
 							@if (Model.UserInfo.DateOfBirth.HasValue)
-                            { Model.UserInfo.DateOfBirth.Value.ToShortDateString(); }
+							{ Model.UserInfo.DateOfBirth.Value.ToShortDateString(); }
 						</div>
 					</div>
 					<div class="form-group">
@@ -51,7 +53,7 @@
 				<div class="col-md-6 min300">
 					<div class="form-group">
 						<label>@Strings.Address</label>
-						<div class="text-box-padded">@(Model.UserInfo.Address == null ?  null : Model.UserInfo.Address)</div>
+						<div class="text-box-padded">@(Model.UserInfo.Address == null ? null : Model.UserInfo.Address)</div>
 					</div>
 					<div class="form-group">
 						<label>@Strings.Country</label>
@@ -71,7 +73,7 @@
 					</div>
 				</div>
 			}
-			</div>
+		</div>
 		@using (Html.BeginForm(ActionConstants.EditMember, ControllerConstants.Account, FormMethod.Post, new { @class = "form", role = "form" }))
 		{
 			@Html.AntiForgeryToken()
@@ -89,7 +91,10 @@
 							@Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
 							@Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
 						</div>
-					} else { @Html.HiddenFor(m => m.FirstName); }
+					}
+					else
+					{ @Html.HiddenFor(m => m.FirstName);
+					}
 					<div class="form-group">
 						@Html.ReqLabelFor(m => m.EmployeeId, Strings.EmployeeId)
 						@Html.TextBoxFor(m => m.EmployeeId, new { @class = "form-control" })
@@ -104,14 +109,15 @@
 							@Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
 							@Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
 						</div>
-					} else { @Html.HiddenFor(m => m.LastName); }
+					}
+					else
+					{ @Html.HiddenFor(m => m.LastName);
+					}
 					@if (Model.UserInfo.UserId != ViewBag.SignedInUserID)
 					{
 						<div class="form-group">
 							@Html.LabelFor(m => m.EmployeeRoleId, Strings.Role)
-							@Html.DropDownListFor(m => m.EmployeeRoleId, new List<SelectListItem>
-							{ new SelectListItem { Text=Strings.Member, Value="1" },
-								new SelectListItem { Text=Strings.Owner,  Value="2" }}, new { @id = "EmployeeRoleId", @class = "form-control" })
+							@Html.DropDownListFor(m => m.EmployeeRoleId, Model.EmployeeRole, new { @id = "EmployeeRoleId", @class = "form-control" })
 							@Html.ValidationMessageFor(m => m.EmployeeRoleId, "", new { @class = "text-danger" })
 						</div>
 					}

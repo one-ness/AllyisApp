@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -48,6 +49,11 @@ namespace AllyisApps.ViewModels.Auth
 		[DataType(DataType.Text)]
 		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "EmployeeIdValidation")]
 		public string EmployeeId { get; set; }
+
+		/// <summary>
+		///
+		/// </summary>
+		public SelectList EmployeeRole { get; set; }
 
 		/// <summary>
 		/// Gets or sets the employee role.

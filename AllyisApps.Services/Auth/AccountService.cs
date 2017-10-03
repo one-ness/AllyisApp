@@ -344,7 +344,7 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException("employeeId");
 			if (roleId <= 0) throw new ArgumentOutOfRangeException("roleId");
 
-			return DBHelper.UpdateMember(userId, orgId, employeeId, roleId, firstName, lastName, isInvited) == 1 ? false : true;
+			return DBHelper.UpdateMember(userId, orgId, employeeId, roleId, firstName, lastName, isInvited) == 1 ? true : false;
 		}
 
 		/// <summary>

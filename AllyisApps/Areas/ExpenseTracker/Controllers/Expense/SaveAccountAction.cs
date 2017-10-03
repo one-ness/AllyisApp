@@ -43,7 +43,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 				if (CheckAccountParent(subscriptionId, acc))
 				{
-					success = AppService.CreateAccount(acc);
+					if (acc.AccountId == 0)
+					{
+						success = AppService.CreateAccount(acc);
+					}
 
 					if (!success && canDisable)
 					{
