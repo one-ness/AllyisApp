@@ -15,6 +15,7 @@ using AllyisApps.Services.Crm;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels.Staffing;
+using System;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -24,22 +25,13 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 	public partial class StaffingController : BaseController
 	{
 		/// <summary>
-		/// Page for list of applicants.
+		/// Applicant page.
 		/// </summary>
-		/// <param name="subscriptionId"></param>
 		/// <returns></returns>
-		public ActionResult ApplicantList(int subscriptionId)
+		public ActionResult DeleteApplicant(int subscriptionId, int applicantId)
 		{
-			SetNavData(subscriptionId);
-
-			var subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
-			List<Applicant> applicants = this.AppService.GetApplicantAddressesByOrgId(subInfo.OrganizationId);
-			ApplicantListViewModel model = new ApplicantListViewModel()
-			{
-				Applicants = applicants.Select(a => InitializeStaffingApplicantViewModel(a)).ToList()
-			};
-
-			return this.View(model);
+			this.AppService.DeleteApplicant(applicantId);
+			return this.RedirectToAction("ApplicantList");
 		}
 	}
 }

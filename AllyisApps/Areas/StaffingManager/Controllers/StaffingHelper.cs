@@ -24,22 +24,13 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 	public partial class StaffingController : BaseController
 	{
 		/// <summary>
-		/// Page for list of applicants.
+		/// Sets the information for the nav viewdata.
 		/// </summary>
 		/// <param name="subscriptionId"></param>
-		/// <returns></returns>
-		public ActionResult ApplicantList(int subscriptionId)
+		public void SetNavData(int subscriptionId)
 		{
-			SetNavData(subscriptionId);
-
-			var subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
-			List<Applicant> applicants = this.AppService.GetApplicantAddressesByOrgId(subInfo.OrganizationId);
-			ApplicantListViewModel model = new ApplicantListViewModel()
-			{
-				Applicants = applicants.Select(a => InitializeStaffingApplicantViewModel(a)).ToList()
-			};
-
-			return this.View(model);
+			ViewData["subscriptionId"] = subscriptionId;
+			ViewData["subscriptionName"] = AppService.getSubscriptionName(subscriptionId);
 		}
 	}
 }

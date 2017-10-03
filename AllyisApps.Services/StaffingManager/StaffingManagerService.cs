@@ -134,7 +134,21 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId"></param>
 		/// <returns>The list of applicants in organization.</returns>
+		public List<Applicant> GetApplicantAddressesByOrgId(int orgId) => DBHelper.GetApplicantAddressesBySubscriptionId(orgId).Select(DBApplicantToServiceObject).ToList();
+
+		/// <summary>
+		/// Retrieves the applicants in an organization.
+		/// </summary>
+		/// <param name="orgId"></param>
+		/// <returns>The list of applicants in organization.</returns>
 		public List<Applicant> GetApplicantsByOrgId(int orgId) => DBHelper.GetApplicantsBySubscriptionId(orgId).Select(DBApplicantToServiceObject).ToList();
+
+		/// <summary>
+		/// Retrieves the applicant with a given id.
+		/// </summary>
+		/// <param name="applicantId">The id of the applicant.</param>
+		/// <returns>One applicant, if present.</returns>
+		public Applicant GetApplicantAddressById(int applicantId) => DBApplicantToServiceObject(DBHelper.GetApplicantAddressById(applicantId));
 
 		/// <summary>
 		/// Retrieves the applicant with a given id.
@@ -346,9 +360,9 @@ namespace AllyisApps.Services
 
 			return new Applicant
 			{
-				//Address = applicant.Address,
-				//State = applicant.State,
-				//AddressId = applicant.AddressId,
+				Address = applicant.Address,
+				State = applicant.State,
+				AddressId = applicant.AddressId,
 				ApplicantId = applicant.ApplicantId,
 				City = applicant.City,
 				Country = applicant.Country,
@@ -375,6 +389,46 @@ namespace AllyisApps.Services
 				Applicant = DBEntityToServiceObject(application.Applicant),
 				ApplicationCreatedUtc = application.ApplicationCreatedUtc,
 				ApplicationDocuments = DBApplicationDocumentsToServiceObject(application.ApplicationDocuments).ToList(),
+				ApplicationId = application.ApplicationId,
+				ApplicationModifiedUtc = application.ApplicationModifiedUtc,
+				ApplicationStatus = (ApplicationStatusEnum)application.ApplicationStatusId,
+				PositionId = application.PositionId
+			};
+		}
+
+		public static Applicant DBApplicantToServiceObject(ApplicantAddressDBEntity applicant)
+		{
+			if (applicant == null)
+			{
+				throw new ArgumentNullException(nameof(applicant), nameof(applicant) + " must not be null.");
+			}
+
+			return new Applicant
+			{
+				ApplicantId = applicant.ApplicantId,
+				City = applicant.City,
+				Country = applicant.Country,
+				Email = applicant.Email,
+				FirstName = applicant.FirstName,
+				LastName = applicant.LastName,
+				Notes = applicant.Notes,
+				PhoneNumber = applicant.PhoneNumber,
+				PostalCode = applicant.PostalCode
+			};
+		}
+
+		public static Application DBApplicationToServiceObject(ApplicationDBEntity application)
+		{
+			if (application == null)
+			{
+				throw new ArgumentNullException(nameof(application), nameof(application) + " must not be null.");
+			}
+
+			return new Application
+			{
+				ApplicantId = application.ApplicantId,
+				Notes = application.Notes,
+				ApplicationCreatedUtc = application.ApplicationCreatedUtc,
 				ApplicationId = application.ApplicationId,
 				ApplicationModifiedUtc = application.ApplicationModifiedUtc,
 				ApplicationStatus = (ApplicationStatusEnum)application.ApplicationStatusId,
@@ -656,12 +710,7 @@ namespace AllyisApps.Services
 			return new ApplicantDBEntity
 			{
 				ApplicantId = applicant.ApplicantId,
-				Address1 = applicant.Address,
-				Address2 = "",
-				City = applicant.City,
-				Country = applicant.Country,
-				PostalCode = applicant.PostalCode,
-				StateId = 1, // change this to proper state id
+				AddressId = applicant.AddressId,
 				Email = applicant.Email,
 				FirstName = applicant.FirstName,
 				LastName = applicant.LastName,

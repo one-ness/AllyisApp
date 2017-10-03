@@ -234,11 +234,13 @@
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\CreateReportAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Home\HomeController.cs" />
     <Compile Include="Areas\ExpenseTracker\ExpenseTrackerAreaRegistration.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\StaffingHelper.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Customer\CreateAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Customer\CustomerController.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Customer\EditAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Customer\IndexAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\AccountAction.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Staffing\ApplicantAction - Copy.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\ApplicantListAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\ApplicantAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\ViewPosition.cs" />
@@ -636,6 +638,7 @@
     <Content Include="Areas\StaffingManager\Views\Staffing\ViewPosition.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\_PositionViewDetails.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\_ApplicationInfoPartial.cshtml" />
+    <Content Include="Areas\StaffingManager\Views\Staffing\Application.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />

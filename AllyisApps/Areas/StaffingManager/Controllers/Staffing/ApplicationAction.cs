@@ -48,7 +48,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				PositionList = positionList
 			};
 
-			return this.View(model);
+			return this.PartialView(model);
 		}
 
 		/// <summary>
@@ -62,7 +62,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		{
 			Application application = InitializeApplication(model);
 			int applicationId = this.AppService.CreateApplication(application);
-			return this.RedirectToAction("Index");
+			return this.RedirectToAction("Applicant", new { applicantId = model.ApplicantId });
 		}
 
 		private static Application InitializeApplication(StaffingApplicationViewModel model)
