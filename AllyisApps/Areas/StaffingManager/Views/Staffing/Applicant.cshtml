@@ -17,7 +17,19 @@
     <title>Applicant</title>
 </head>
 <body>
-	@Html.ActionLink("Create Application", "Application", new { applicantId = Model.ApplicantId }, new { @class = "btn btn-primary pull-right", style = "color: white !important; margin-bottom: 20px;" })
-	@Html.Partial("_ApplicationsPartial", Model.Applications ?? new List<StaffingApplicationViewModel>())
+	<table class="table table-hover" style="clear: both;">
+		<thead>
+			<tr>
+				<th style="width: 25%">Name</th>
+				<th style="width: 25%">Status</th>
+				<th style="width: 25%">Last Modified</th>
+				<th style="width: 25%">Notes</th>
+			</tr>
+		</thead>
+		<tbody>
+			@Html.Partial("_ApplicationsPartial", Model.Applications ?? new List<StaffingApplicationViewModel>())
+		</tbody>
+	</table>
+	@Html.Action("Application", new { applicantId = Model.ApplicantId })
 </body>
 </html>

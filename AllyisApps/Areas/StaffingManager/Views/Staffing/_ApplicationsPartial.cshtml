@@ -2,27 +2,13 @@
 
 @model IEnumerable<StaffingApplicationViewModel>
 
-<div>
-	<table class="table table-hover" style="clear: both;">
-		<thead>
-			<tr>
-				<th style="width: 25%">Name</th>
-				<th style="width: 25%">Status</th>
-				<th style="width: 25%">Last Modified</th>
-				<th style="width: 25%">Notes</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (StaffingApplicationViewModel application in Model)
-			{
-				string name = application.Applicant.FirstName + " " + application.Applicant.LastName;
-				<tr>
-					<td>@name</td>
-					<td>@application.ApplicationStatus.ToString()</td>
-					<td>@application.ApplicationModifiedUtc</td>
-					<td>@application.Notes</td>
-				</tr>
-			}
-		</tbody>
-	</table>
-</div>
+@foreach (StaffingApplicationViewModel application in Model)
+{
+	string name = application.Applicant.FirstName + " " + application.Applicant.LastName;
+	<tr>
+		<td>@name</td>
+		<td>@application.ApplicationStatus.ToString()</td>
+		<td>@application.ApplicationModifiedUtc</td>
+		<td>@application.Notes</td>
+	</tr>
+}

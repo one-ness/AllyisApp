@@ -30,8 +30,6 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		[HttpGet]
 		public ActionResult Application(int subscriptionId, int applicantId)
 		{
-			SetNavData(subscriptionId);
-
 			var subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			List<Position> positions = this.AppService.GetPositionsByOrganizationId(subInfo.OrganizationId);
 			List<SelectListItem> positionList = new List<SelectListItem>();
@@ -50,7 +48,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				PositionList = positionList
 			};
 
-			return this.View(model);
+			return this.PartialView(model);
 		}
 
 		/// <summary>
@@ -64,7 +62,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		{
 			Application application = InitializeApplication(model);
 			int applicationId = this.AppService.CreateApplication(application);
-			return this.RedirectToAction("Index");
+			return this.RedirectToAction("Applicant", new { applicantId = model.ApplicantId });
 		}
 
 		private static Application InitializeApplication(StaffingApplicationViewModel model)

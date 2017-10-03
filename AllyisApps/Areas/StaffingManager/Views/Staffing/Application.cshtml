@@ -1,26 +1,29 @@
 ﻿@model AllyisApps.Areas.StaffingManager.ViewModels.Staffing.StaffingApplicationViewModel
 
-@{
-    Layout = null;
+
+@using (Html.BeginForm("Application", "Staffing", FormMethod.Post, new { }))
+{
+	<h3 class="text-center">New Application</h3>
+	@Html.AntiForgeryToken()
+	@Html.HiddenFor(m => m.ApplicantId)
+	<table class="table table-hover" style="clear: both;">
+		<thead>
+			<tr>
+				<th style="width: 25%">Position</th>
+				<th style="width: 25%">Notes</th>
+				<th style="width: 50%">Files</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>@Html.DropDownListFor(m => m.PositionId, Model.PositionList, new { @class = "form-control", style = "width: 150px" })</td>
+				<td>@Html.TextBoxFor(m => m.Notes, new { @class = "form-control" })</td>
+				<td></td>
+				<td>
+					<input type="submit" class="btn btn-primary" value="Create" />
+				</td>
+			</tr>
+		</tbody>
+	</table>
 }
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Application</title>
-</head>
-<body>
-    <div>
-		@using (Html.BeginForm("Application", "Staffing", FormMethod.Post, new { }))
-		{
-			@Html.AntiForgeryToken()
-			@Html.HiddenFor(m => m.ApplicantId)
-			@Html.EditorFor(m => m)
-			@Html.DropDownListFor(m => m.PositionId, Model.PositionList)
-			<input type="submit" value="Submit" />
-		}
-    </div>
-</body>
-</html>
