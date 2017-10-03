@@ -440,7 +440,7 @@ namespace AllyisApps.DBModel
 			dynamic applicationsAndApplicantInfo = new ExpandoObject();
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var results = connection.QueryMultiple("[StaffingManager].[GetApplicantByApplicationId]", parameters, commandType: CommandType.StoredProcedure);
+				var results = connection.QueryMultiple("[StaffingManager].[GetFullApplicationInfosByPositionId]", parameters, commandType: CommandType.StoredProcedure);
 
 				applicationsAndApplicantInfo.applications = results.Read<dynamic>().ToList();
 				applicationsAndApplicantInfo.applicants = results.Read<dynamic>().ToList();
@@ -613,7 +613,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>, List<CustomerDBEntity>>
+		public Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>, List<ApplicationStatusDBEntity>, List<CustomerDBEntity>>
 			GetStaffingIndexPageInfo(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -632,6 +632,7 @@ namespace AllyisApps.DBModel
 					results.Read<EmploymentTypeDBEntity>().ToList(),
 					results.Read<PositionLevelDBEntity>().ToList(),
 					results.Read<PositionStatusDBEntity>().ToList(),
+					results.Read<ApplicationStatusDBEntity>().ToList(),
 					results.Read<CustomerDBEntity>().ToList());
 			}
 		}
@@ -644,7 +645,7 @@ namespace AllyisApps.DBModel
 		/// <param name="types">Organization Id.</param>
 		/// <param name="tags">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>, List<CustomerDBEntity>>
+		public Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>, List<ApplicationStatusDBEntity>, List<CustomerDBEntity>>
 			GetStaffingIndexPageInfoFiltered(int orgId, List<string> statuses, List<string> types, List<string> tags = null)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -679,6 +680,7 @@ namespace AllyisApps.DBModel
 					results.Read<EmploymentTypeDBEntity>().ToList(),
 					results.Read<PositionLevelDBEntity>().ToList(),
 					results.Read<PositionStatusDBEntity>().ToList(),
+					results.Read<ApplicationStatusDBEntity>().ToList(),
 					results.Read<CustomerDBEntity>().ToList());
 			}
 		}
@@ -688,19 +690,16 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">org ID thats getting a new setting </param>
 		/// <returns>Creates an orgs staffing object</returns>
-		public int GetStaffingDefaultStatus(int orgId)
+		public List<int> GetStaffingDefaultStatus(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				// default -1
-				var returnInt = 0;
-				var result = connection.Query("[StaffingManager].[GetStaffingDefaultStatus]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
-				if (result.DefaultPositionStatusId == null) return returnInt;
-				else return result.DefaultPositionStatusId;
+				var result = connection.QueryMultiple("[StaffingManager].[GetStaffingDefaultStatus]", parameters, commandType: CommandType.StoredProcedure);
 
+				return result.Read<int>().ToList();
 			}
 		}
 

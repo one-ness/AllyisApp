@@ -37,7 +37,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			string subName = AppService.getSubscriptionName(subscriptionId);
 
-			System.Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<Customer>> infos;
+			System.Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<ApplicationStatus>, List<Customer>> infos;
 
 			if ((Statuses != null) || (Types != null) || (Tags != null))
 			{
@@ -71,7 +71,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 
 			foreach (PositionThumbnailInfoViewModel pos in model.Positions)
 			{
-				foreach (Customer cus in infos.Item6)
+				foreach (Customer cus in infos.Item7)
 				{
 					if (pos.CustomerId == cus.CustomerId) pos.CustomerName = cus.CustomerName;
 				}

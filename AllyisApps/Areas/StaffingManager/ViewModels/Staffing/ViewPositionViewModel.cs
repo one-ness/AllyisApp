@@ -224,7 +224,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// applications information for all applications to the position
 		/// </summary>
-		public List<Application> Applications { get; set; }
+		public List<ApplicationStatusSelectViewModel> Applications { get; set; }
 
 		/// <summary>
 		/// Localized Countries

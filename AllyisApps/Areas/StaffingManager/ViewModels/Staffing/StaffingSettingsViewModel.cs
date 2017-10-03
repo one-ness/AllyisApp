@@ -68,9 +68,19 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		public List<PositionStatusSelectViewModel> positionStatuses { get; set; }
 
 		/// <summary>
+		/// list of application statuses used by the organization
+		/// </summary>
+		public List<ApplicationStatusSelectViewModel> applicationStatuses { get; set; }
+
+		/// <summary>
 		/// deafult status identification number
 		/// </summary>
-		public int defaultPositionStatus { get; set; }
+		public int? defaultPositionStatus { get; set; }
+
+		/// <summary>
+		/// deafult status identification number
+		/// </summary>
+		public int? defaultApplicationStatus { get; set; }
 
 		/// <summary>
 		/// Gets information for the positions Address

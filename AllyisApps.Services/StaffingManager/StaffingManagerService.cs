@@ -229,7 +229,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId"></param>
 		/// <returns></returns>
-		public int GetStaffingDefaultStatus(int orgId) => DBHelper.GetStaffingDefaultStatus(orgId);
+		public List<int> GetStaffingDefaultStatus(int orgId) => DBHelper.GetStaffingDefaultStatus(orgId);
 
 		#endregion GetMethods
 

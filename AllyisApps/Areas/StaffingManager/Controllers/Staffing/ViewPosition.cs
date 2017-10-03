@@ -97,12 +97,16 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					PositionStatusId = ps.PositionStatusId,
 					PositionStatusName = ps.PositionStatusName
 				}).ToList(),
-				Customers = infos.Item6.AsParallel().Select(cus => new CustomerSelectViewModel()
+				Applications = infos.Item6.AsParallel().Select(appStat => new ApplicationStatusSelectViewModel()
+				{
+					ApplicationStatusId = appStat.ApplicationStatusId,
+					ApplicationStatusName = appStat.ApplicationStatusName
+				}).ToList(),
+				Customers = infos.Item7.AsParallel().Select(cus => new CustomerSelectViewModel()
 				{
 					CustomerId = cus.CustomerId,
 					CustomerName = cus.CustomerName
 				}).ToList(),
-				Applications = applications,
 				CustomerId = pos.CustomerId,
 				AddressId = pos.AddressId,
 				PositionTitle = pos.PositionTitle,

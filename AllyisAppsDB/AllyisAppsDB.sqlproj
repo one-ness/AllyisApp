@@ -327,7 +327,7 @@
     <Build Include="StaffingManager\Stored Procedures\DeleteApplication.sql" />
     <Build Include="StaffingManager\Stored Procedures\DeleteApplicationDocument.sql" />
     <Build Include="StaffingManager\Stored Procedures\GetApplicationById.sql" />
-    <Build Include="StaffingManager\Stored Procedures\GetApplicationsByPositionId.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetFullApplicationInfosByPositionId.sql" />
     <Build Include="StaffingManager\Stored Procedures\GetApplicationDocumentsByApplicationId.sql" />
     <Build Include="StaffingManager\Stored Procedures\GetApplicantById.sql" />
     <Build Include="StaffingManager\Stored Procedures\GetApplicationsByApplicantId.sql" />
@@ -395,6 +395,7 @@
     <Build Include="StaffingManager\Stored Procedures\UpdateStaffingSettings.sql" />
     <Build Include="StaffingManager\Stored Procedures\GetStaffingDefaultStatus.sql" />
     <Build Include="StaffingManager\Stored Procedures\GetApplicantsByOrgId.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetApplicationsByPositionId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

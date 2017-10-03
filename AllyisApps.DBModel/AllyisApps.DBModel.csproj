@@ -101,6 +101,7 @@
     <Compile Include="StaffingManager\EmploymentTypeDBEntity.cs" />
     <Compile Include="StaffingManager\PositionDBEntity.cs" />
     <Compile Include="StaffingManager\PositionLevelDBEntity.cs" />
+    <Compile Include="StaffingManager\ApplicationStatusDBEntity.cs" />
     <Compile Include="StaffingManager\PositionStatusDBEntity.cs" />
     <Compile Include="Lookup\TagDBEntity.cs" />
     <Compile Include="StaffingManager\PositionTagDBEntity.cs" />

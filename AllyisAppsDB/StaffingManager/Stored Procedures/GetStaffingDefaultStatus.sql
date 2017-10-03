@@ -3,7 +3,9 @@ CREATE PROCEDURE [StaffingManager].[GetStaffingDefaultStatus]
 AS
 BEGIN
 	SET NOCOUNT ON;
-	SELECT [DefaultPositionStatusId]
+	SELECT [DefaultPositionStatusId],
+		   [DefaultApplicationStatusId]
 	FROM [StaffingManager].[StaffingSettings]
 	WHERE [StaffingSettings].[OrganizationId] = @organizationId
+
 END

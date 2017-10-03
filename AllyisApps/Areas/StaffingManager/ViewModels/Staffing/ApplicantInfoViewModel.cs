@@ -34,7 +34,12 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// the phone number given by the applicant
 		/// </summary>
 		public string ApplicantPhone { get; set; }
-		
+
+		/// <summary>
+		/// the phone number given by the applicant
+		/// </summary>
+		public int ApplicationStatus { get; set; }
+
 		/// <summary>
 		/// notes about this application
 		/// </summary>
@@ -44,6 +49,11 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// Applicants Address
 		/// </summary>
 		public AddressViewModel ApplicantAddress { get; set; }
+
+		/// <summary>
+		/// last time application was edited
+		/// </summary>
+		public DateTime ApplicationModifiedUtc { get; set; }
 
 	}
 }

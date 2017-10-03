@@ -1,0 +1,29 @@
+﻿@model AllyisApps.Areas.StaffingManager.ViewModels.Staffing.ApplicantInfoViewModel
+
+@{
+
+}
+
+<div class="Panel Panel-Default">	
+	<div class="col-md-2 sm-control-width"><!--vvv - TODO: change that to Applicant Link   -->
+		<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Staffing, new { subscriptionId = ViewBag.subscriptionId } )">@Model.LastName, @Model.FirstName</a>
+		<br>
+		Notes:
+		<button type="button" data-toggle="collapse" data-target="#NotesArea"><i class="glyphicon glyphicon-chevron-down"></i></button>
+	</div>
+	<div class="col-md-3">
+		Email: @Model.ApplicantEmail
+		<br>
+		@Model.ApplicantAddress.City, @Model.ApplicantAddress.State, @Model.ApplicantAddress.Country
+	</div>
+	<div class="col-md-2 sm-control-width">
+		<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Staffing, new { subscriptionId = ViewBag.subscriptionId } )"><i class="glyphicon glyphicon-certificate"></i></a>
+		<span>@Model.ApplicationStatus</span>
+		<br>
+		Last Modified: @Model.ApplicationModifiedUtc
+	</div>
+</div>
+
+<div class="Panel Panel-Default collapse" id="NotesArea">
+	@Model.Notes
+</div>

@@ -19,6 +19,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// </summary>
 		public string PositionLevelName { get; set; }
 	}
+
 	/// <summary>
 	/// 
 	/// </summary>
@@ -48,6 +49,22 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// Empolyent type Name 
 		/// </summary>
 		public string EmploymentTypeName { get; set; }
+	}
+	
+	/// <summary>
+	/// Application Status types
+	/// </summary>
+	public class ApplicationStatusSelectViewModel
+	{
+		/// <summary>
+		/// Application Status Id
+		/// </summary>
+		public int ApplicationStatusId { get; set; }
+
+		/// <summary>
+		/// Application Status Name
+		/// </summary>
+		public string ApplicationStatusName { get; set; }
 	}
 
 	/// <summary>
