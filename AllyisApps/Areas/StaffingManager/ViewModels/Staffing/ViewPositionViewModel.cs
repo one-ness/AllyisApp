@@ -217,14 +217,19 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		public List<EmploymentTypeSelectViewModel> EmploymentTypes { get; set; }
 
 		/// <summary>
-		/// list of customers the org has used
+		/// applications information for all applications to the position
 		/// </summary>
-		public List<CustomerSelectViewModel> Customers { get; set; }
+		public List<ApplicationStatusSelectViewModel> ApplicationStatuses { get; set; }
 
 		/// <summary>
 		/// applications information for all applications to the position
 		/// </summary>
-		public List<ApplicationStatusSelectViewModel> Applications { get; set; }
+		public List<ApplicationInfoViewModel> Applications { get; set; }
+
+		/// <summary>
+		/// list of customers the org has used
+		/// </summary>
+		public List<CustomerSelectViewModel> Customers { get; set; }
 
 		/// <summary>
 		/// Localized Countries

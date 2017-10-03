@@ -16,6 +16,16 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		public string ApplicantName { get; set; }
 
 		/// <summary>
+		/// email for the applicant
+		/// </summary>
+		public string ApplicantEmail { get; set; }
+
+		/// <summary>
+		/// basic string address for the applicant
+		/// </summary>
+		public string ApplicantAddress { get; set; } 
+
+		/// <summary>
 		/// status enum id for this application
 		/// </summary>
 		public int AppliationStatusId { get; set; }
@@ -33,6 +43,6 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// the documents attached to this application (ie: resumes, CVs, etc)
 		/// </summary>
-		public ApplicationDocumentViewModel ApplicationDocuments { get; set; }
+		public List<ApplicationDocumentViewModel> ApplicationDocuments { get; set; }
 	}
 }

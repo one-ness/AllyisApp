@@ -47,7 +47,9 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			Position pos = AppService.GetPosition(positionId);
-			List<Application> applications = AppService.GetFullApplicationInfoByPositionId(positionId);
+			List<Application> applicationsSerive = AppService.GetFullApplicationInfoByPositionId(positionId);
+			List<ApplicationInfoViewModel> applications = new List<ApplicationInfoViewModel>();
+			foreach(Application app in applicationsSerive) applications.Add(BuildApplications(app));
 
 			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
 			//TODO: this is piggy-backing off the get index action, create a new action that just gets items 3-5.
@@ -97,7 +99,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					PositionStatusId = ps.PositionStatusId,
 					PositionStatusName = ps.PositionStatusName
 				}).ToList(),
-				Applications = infos.Item6.AsParallel().Select(appStat => new ApplicationStatusSelectViewModel()
+				ApplicationStatuses = infos.Item6.AsParallel().Select(appStat => new ApplicationStatusSelectViewModel()
 				{
 					ApplicationStatusId = appStat.ApplicationStatusId,
 					ApplicationStatusName = appStat.ApplicationStatusName
@@ -107,6 +109,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					CustomerId = cus.CustomerId,
 					CustomerName = cus.CustomerName
 				}).ToList(),
+				Applications = applications,
 				CustomerId = pos.CustomerId,
 				AddressId = pos.AddressId,
 				PositionTitle = pos.PositionTitle,
@@ -130,5 +133,37 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				}
 			};
 		}
+
+		/// <summary>
+		/// builds view models out for applications
+		/// </summary>
+		/// <param name="app"></param>
+		/// <returns></returns>
+		public ApplicationInfoViewModel BuildApplications(Application app)
+		{
+			List<ApplicationDocumentViewModel> docs = new List<ApplicationDocumentViewModel>();
+			foreach (ApplicationDocument doc in app.ApplicationDocuments)
+			{
+				docs.Add(new ApplicationDocumentViewModel()
+				{
+					ApplicationDocumentId = doc.ApplicationDocumentId,
+					ApplicationId = doc.ApplicationId,
+					DocumentLink = doc.DocumentLink,
+					DocumentName = doc.DocumentName
+				});
+			}
+
+			return new ApplicationInfoViewModel()
+			{
+				ApplicantName = app.Applicant.FirstName + " " + app.Applicant.LastName,
+				ApplicantAddress = app.Applicant.City + ", " + app.Applicant.State + " " + app.Applicant.Country,
+				ApplicantEmail = app.Applicant.Email,
+				AppliationStatusId = (int)app.ApplicationStatus,
+				ApplicationModifiedUTC = app.ApplicationModifiedUtc,
+				Notes = app.Notes,
+				ApplicationDocuments = docs
+			};
+		}
+
 	}
 }

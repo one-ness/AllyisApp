@@ -408,7 +408,7 @@ namespace AllyisApps.Services
 					{
 						Applicant.ApplicantId = applicant.ApplicantId;
 						Applicant.FirstName = applicant.FirstName;
-						Applicant.LastName = applicant.LaseName;
+						Applicant.LastName = applicant.LastName;
 						Applicant.Email = applicant.Email;
 						Applicant.PhoneNumber = applicant.PhoneNumber;
 						Applicant.Notes = applicant.Notes;
@@ -431,7 +431,7 @@ namespace AllyisApps.Services
 
 					ApplicantId = application.ApplicantId,
 					ApplicationId = application.ApplicationId,
-					ApplicationStatus = application.ApplicationStatus,
+					ApplicationStatus = (ApplicationStatusEnum)1,
 					ApplicationModifiedUtc = application.ApplicationModifiedUtc,
 					Notes = application.Notes,
 					Applicant = Applicant,
