@@ -37,6 +37,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
 			var defaultStatus = AppService.GetStaffingDefaultStatus(subInfo.OrganizationId); //[0] is default position status, [1] is default application status
 
+			int? defaultPosStat = null;
+			if (defaultStatus.Count >= 1) defaultPosStat = defaultStatus[0];
+			int? defaultAppStat = null;
+			if (defaultStatus.Count >= 2) defaultAppStat = defaultStatus[1];
+
 			var infos = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
 
 			//ViewBag.SignedInUserID = GetCookieData().UserId;
@@ -52,8 +57,8 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				infos.Item5,  //positionStatuses list
 				infos.Item6,
 				infos.Item7,
-				defaultStatus[0], //positionstatusdefault
-				defaultStatus[1]  //applicationStatusdefault
+				defaultPosStat, //positionstatusdefault
+				defaultAppStat  //applicationStatusdefault
 				);
 
 			return this.View(model);
@@ -76,7 +81,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns></returns>
 		public StaffingSettingsViewModel ConstructStaffingSettingsViewModel(int orgId, int subId, string subName,
 						List<Services.Lookup.Tag> tags, List<EmploymentType> employmentTypes, List<PositionLevel> positionLevelsList,
-						List<PositionStatus> positionStatuses, List<ApplicationStatus> applicationStatuses, List<Customer> customers, int defaultStatusId, int defaultAppStatusId)
+						List<PositionStatus> positionStatuses, List<ApplicationStatus> applicationStatuses, List<Customer> customers, int? defaultStatusId, int? defaultAppStatusId)
 		{
 			StaffingSettingsViewModel result = new StaffingSettingsViewModel()
 			{

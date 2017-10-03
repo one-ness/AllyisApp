@@ -7,4 +7,5 @@ BEGIN
 		   [DefaultApplicationStatusId]
 	FROM [StaffingManager].[StaffingSettings]
 	WHERE [StaffingSettings].[OrganizationId] = @organizationId
+
 END

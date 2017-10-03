@@ -680,19 +680,9 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				// default -1
-				var returnInts = new List<int>();
 				var result = connection.QueryMultiple("[StaffingManager].[GetStaffingDefaultStatus]", parameters, commandType: CommandType.StoredProcedure);
-				int? first = result.Read<int>().First();
-				int? second = result.Read<int>().First();
 
-				if (first == null) returnInts.Add(0);
-				else returnInts.Add((int)first);
-
-				if (second == null) returnInts.Add(0);
-				else returnInts.Add((int)second);
-
-				return returnInts;
+				return result.Read<int>().ToList();
 			}
 		}
 

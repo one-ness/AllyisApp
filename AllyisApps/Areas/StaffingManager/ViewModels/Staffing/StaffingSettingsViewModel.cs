@@ -75,12 +75,12 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// deafult status identification number
 		/// </summary>
-		public int defaultPositionStatus { get; set; }
+		public int? defaultPositionStatus { get; set; }
 
 		/// <summary>
 		/// deafult status identification number
 		/// </summary>
-		public int defaultApplicationStatus { get; set; }
+		public int? defaultApplicationStatus { get; set; }
 
 		/// <summary>
 		/// Gets information for the positions Address
