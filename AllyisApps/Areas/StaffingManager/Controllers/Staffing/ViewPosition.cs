@@ -33,6 +33,8 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns>Presents a page for the creation of a new position.</returns>
 		public ActionResult ViewPosition(int positionId, int subscriptionId)
 		{
+			SetNavData(subscriptionId);
+
 			var viewModel = setupViewPositionViewModel(positionId, subscriptionId);
 
 			return this.View(viewModel);

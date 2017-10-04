@@ -6,7 +6,7 @@
 {
 	string name = application.Applicant.FirstName + " " + application.Applicant.LastName;
 	<tr>
-		<td>@name</td>
+		<td>@application.PositionList.Where(p => p.Value == application.PositionId.ToString()).FirstOrDefault().Text</td>
 		<td>@application.ApplicationStatus.ToString()</td>
 		<td>@application.ApplicationModifiedUtc</td>
 		<td>@application.Notes</td>

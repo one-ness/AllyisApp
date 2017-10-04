@@ -700,23 +700,28 @@ namespace AllyisApps.Services
 			};
 		}
 
-		public static ApplicantDBEntity ServiceObjectToDBEntity(Applicant applicant)
+		public static ApplicantAddressDBEntity ServiceObjectToDBEntity(Applicant applicant)
 		{
 			if (applicant == null)
 			{
 				throw new ArgumentNullException(nameof(applicant), nameof(applicant) + " must not be null.");
 			}
 
-			return new ApplicantDBEntity
+			return new ApplicantAddressDBEntity
 			{
 				ApplicantId = applicant.ApplicantId,
-				AddressId = applicant.AddressId,
 				Email = applicant.Email,
 				FirstName = applicant.FirstName,
 				LastName = applicant.LastName,
 				Notes = applicant.Notes,
 				OrganizationId = applicant.OrgId,
-				PhoneNumber = applicant.PhoneNumber
+				PhoneNumber = applicant.PhoneNumber,
+				Address1 = applicant.Address,
+				Address2 = "",
+				City = applicant.City,
+				Country = applicant.Country,
+				PostalCode = applicant.PostalCode,
+				//StateId = applicant.State
 			};
 		}
 

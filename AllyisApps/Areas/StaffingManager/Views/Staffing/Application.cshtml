@@ -1,5 +1,17 @@
-﻿@model AllyisApps.Areas.StaffingManager.ViewModels.Staffing.StaffingApplicationViewModel
+﻿@using AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 
+@model StaffingApplicationViewModel
+
+@{ 
+	if (Model.ApplicationDocuments == null)
+	{
+		Model.ApplicationDocuments = new List<ApplicationDocumentViewModel>();
+	}
+	if (Model.ApplicationDocuments.Count == 0)
+	{
+		Model.ApplicationDocuments.Add(new ApplicationDocumentViewModel());
+	}
+}
 
 @using (Html.BeginForm("Application", "Staffing", FormMethod.Post, new { }))
 {
@@ -11,7 +23,8 @@
 			<tr>
 				<th style="width: 25%">Position</th>
 				<th style="width: 25%">Notes</th>
-				<th style="width: 50%">Files</th>
+				<th style="width: 40%">Files</th>
+				<th style="width: 10%"></th>
 				<th></th>
 			</tr>
 		</thead>
@@ -19,7 +32,18 @@
 			<tr>
 				<td>@Html.DropDownListFor(m => m.PositionId, Model.PositionList, new { @class = "form-control", style = "width: 150px" })</td>
 				<td>@Html.TextBoxFor(m => m.Notes, new { @class = "form-control" })</td>
-				<td></td>
+				<td class="files">
+					@foreach (ApplicationDocumentViewModel doc in Model.ApplicationDocuments)
+					{
+						@Html.Partial("ApplicationDocument", doc)
+					}
+				</td>
+				<td>
+					<a class="btn btn-fa hidden-create add-button"
+					   onclick="addFile()">
+						<span class="glyphicon glyphicon-plus"></span>
+					</a>
+				</td>
 				<td>
 					<input type="submit" class="btn btn-primary" value="Create" />
 				</td>

@@ -9,6 +9,11 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 	public class ApplicationDocumentViewModel
 	{
 		/// <summary>
+		/// Gets or sets the index of the file.
+		/// </summary>
+		public int Index { get; set; }
+
+		/// <summary>
 		/// Gets or sets the ApplicationDocumentId.
 		/// </summary>
 		public int ApplicationDocumentId { get; set; }

@@ -15,18 +15,21 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// Gets or sets the application's ID.
 		/// </summary>
 		[ScaffoldColumn(false)]
+		[Required]
 		public int ApplicationId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the applicant's ID.
 		/// </summary>
 		[ScaffoldColumn(false)]
+		[Required]
 		public int ApplicantId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the position's ID.
 		/// </summary>
 		[ScaffoldColumn(false)]
+		[Required]
 		public int PositionId { get; set; }
 
 		/// <summary>

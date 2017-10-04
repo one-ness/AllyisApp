@@ -95,43 +95,5 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				DocumentName = d.DocumentName
 			};
 		}
-
-		///// <summary>
-		///// Application page.
-		///// </summary>
-		///// <returns></returns>
-		//public ActionResult Application(int applicationId)
-		//{
-		//	Application application = this.AppService.GetApplicationById(applicationId);
-		//	StaffingApplicationViewModel model = InitializeStaffingApplicationViewModel(application);
-
-		//	return this.View(model);
-		//}
-
-		//private StaffingApplicationViewModel InitializeStaffingApplicationViewModel(Application application)
-		//{
-		//	return new StaffingApplicationViewModel()
-		//	{
-		//		ApplicantId = application.ApplicantId,
-		//		ApplicationCreatedUtc = application.ApplicationCreatedUtc,
-		//		ApplicationDocuments = application.ApplicationDocuments.Select(d => InitializeApplicationDocumentViewModel(d)).ToList(),
-		//		ApplicationId = application.ApplicationId,
-		//		ApplicationModifiedUtc = application.ApplicationModifiedUtc,
-		//		ApplicationStatus = application.ApplicationStatus,
-		//		Notes = application.Notes,
-		//		PositionId = application.PositionId
-		//	};
-		//}
-
-		//private ApplicationDocumentViewModel InitializeApplicationDocumentViewModel(ApplicationDocument document)
-		//{
-		//	return new ApplicationDocumentViewModel()
-		//	{
-		//		ApplicationDocumentId = document.ApplicationDocumentId,
-		//		ApplicationId = document.ApplicationId,
-		//		DocumentLink = document.DocumentLink,
-		//		DocumentName = document.DocumentName
-		//	};
-		//}
 	}
 }
