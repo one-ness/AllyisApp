@@ -74,16 +74,17 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Accepts an invitation, adding the user to the invitation's organization, subscriptions, and projects, then deletes the invitations.
 		/// </summary>
-		/// <param name="invitationId">The invitationId.</param>
-		/// <returns>The resulting action message if succeed, null if fail.</returns>
 		public bool AcceptUserInvitation(int invitationId)
 		{
 			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId");
 
-			var results = DBHelper.AcceptInvitation(invitationId, UserContext.UserId);
-			NotifyInviteAcceptAsync(invitationId);
+			var result = (this.DBHelper.AcceptInvitation(invitationId, this.UserContext.UserId) == 1);
+			if (result)
+			{
+				NotifyInviteAcceptAsync(invitationId);
+			}
 
-			return results;
+			return result;
 		}
 
 		/// <summary>
@@ -93,11 +94,12 @@ namespace AllyisApps.Services
 		/// <returns>The resulting message.</returns>
 		public bool RejectInvitation(int invitationId)
 		{
-			bool rejected = DBHelper.RejectInvitation(invitationId);
+			bool rejected = (DBHelper.RejectInvitation(invitationId) == 1);
 			if (rejected)
 			{
 				NotifyInviteRejectAsync(invitationId);
 			}
+
 			return rejected;
 		}
 

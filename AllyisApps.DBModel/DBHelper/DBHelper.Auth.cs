@@ -590,23 +590,15 @@ namespace AllyisApps.DBModel
 		/// <param name="invitationId">Invitation Id.</param>
 		/// <param name="userId">User Id for invited user.</param>
 		/// <returns>true or false based on the number of rows affected</returns>
-
-		public bool AcceptInvitation(int invitationId, int userId)
+		public int AcceptInvitation(int invitationId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@invitationId", invitationId);
 			parameters.Add("@callingUserId", userId);
-			var result = false;
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				var affected = con.Query<int>(
-					"[Auth].[AcceptInvitation]",
-					parameters,
-					commandType: CommandType.StoredProcedure).First();
-				result = (affected == 1);
+				return con.Query<int>("[Auth].[AcceptInvitation]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
-
-			return result;
 		}
 
 		/// <summary>
@@ -657,15 +649,14 @@ namespace AllyisApps.DBModel
 		/// Deletes the defined invitation.
 		/// </summary>
 		/// <param name="invitationId">The invitation's Id.</param>
-		public bool RejectInvitation(int invitationId)
+		public int RejectInvitation(int invitationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@invitationId", invitationId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				int ret = connection.QueryFirst<int>("[Auth].[RejectInvitation]", parameters, commandType: CommandType.StoredProcedure);
-				return ret == 1;
+				return connection.Query<int>("[Auth].[RejectInvitation]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
 		}
 
