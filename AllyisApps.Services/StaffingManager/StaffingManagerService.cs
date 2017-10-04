@@ -721,7 +721,7 @@ namespace AllyisApps.Services
 				City = applicant.City,
 				Country = applicant.Country,
 				PostalCode = applicant.PostalCode,
-				//StateId = applicant.State
+				StateId = 1 //applicant.State
 			};
 		}
 
