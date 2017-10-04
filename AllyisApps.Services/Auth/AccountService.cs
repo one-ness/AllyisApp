@@ -571,7 +571,9 @@ namespace AllyisApps.Services
 				LastName = subUser.LastName,
 				CreatedUtc = subUser.CreatedUtc,
 				SubscriptionId = subUser.SubscriptionId,
-				UserId = subUser.UserId
+				UserId = subUser.UserId,
+				ProductRoleId = subUser.ProductRoleId,
+				Email = subUser.Email
 			};
 		}
 
@@ -615,7 +617,7 @@ namespace AllyisApps.Services
 					// If last value, round it to the first one and continue the loop to the next index
 					idchars[i] = characters[0];
 				}
-				else 
+				else
 				{
 					// The value can simply be incremented, so break out of the loop
 					idchars[i] = characters[characters.IndexOf(idchars[i]) + 1];

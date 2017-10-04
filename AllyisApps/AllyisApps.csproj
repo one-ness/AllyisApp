@@ -691,6 +691,8 @@
     <Content Include="Views\Account\Skus.cshtml" />
     <Content Include="Views\Account\EditMember.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Collection.cshtml" />
+    <Content Include="Views\Account\_PremissionsLinkView.cshtml" />
+    <Content Include="Views\Account\PermissionsOrg.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\Dependencies\CodeAnalysis\CustomDictionary.xml">

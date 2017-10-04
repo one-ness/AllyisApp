@@ -41,7 +41,7 @@ namespace AllyisApps.Controllers.Auth
 			SkusListViewModel model = new SkusListViewModel { OrganizationId = orgId, ProductsList = new List<SkusListViewModel.ProductViewModel>() };
 
 			var result = AppService.GetAllActiveProductsAndSkus();
-			var activeSubscriptions = AppService.GetSubscriptionsDisplay(orgId);
+			var activeSubscriptions = AppService.GetSubscriptionsByOrg(orgId);
 
 			model.CurrentSubscriptions = activeSubscriptions.Select(sub => new SubscriptionDisplayViewModel(sub));
 

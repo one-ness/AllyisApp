@@ -92,7 +92,7 @@ namespace AllyisApps.Controllers.Auth
 				OrganizationId = organizationId,
 				BillingCustomer = customer,
 				SubscriptionCount = orgInfo.Subscriptions.Count,
-				Subscriptions = orgInfo.Subscriptions.Select(sub => new SubscriptionDisplayViewModel(sub))
+				Subscriptions = orgInfo.Subscriptions.Select(sub => new SubscriptionDisplayViewModel(sub)).OrderBy(sub => sub.ProductId)
 			};
 		}
 	}

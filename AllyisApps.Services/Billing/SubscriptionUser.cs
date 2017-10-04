@@ -23,10 +23,7 @@ namespace AllyisApps.Services.Billing
 		/// </summary>
 		public string LastName { get; set; }
 
-		/// <summary>
-		/// Gets or sets the name of the subscribed product.
-		/// </summary>
-		public string ProductRoleName { get; set; }
+		public int ProductRoleId { get; set; }
 
 		/// <summary>
 		/// Gets or sets UserId.
@@ -43,9 +40,6 @@ namespace AllyisApps.Services.Billing
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
-		/// <summary>
-		/// Gets or sets the SKU of the subscription.
-		/// </summary>
-		public int SkuId { get; set; }
+		public string Email { get; set; }
 	}
 }
