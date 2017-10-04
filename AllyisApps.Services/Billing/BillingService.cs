@@ -424,7 +424,8 @@ namespace AllyisApps.Services
 				Licenses = si.Licenses,
 				CreatedUtc = si.CreatedUtc,
 				IsActive = si.IsActive,
-				SubscriptionName = si.Name
+				SubscriptionName = si.Name,
+				ProductId = (ProductIdEnum)si.ProductId
 			};
 		}
 

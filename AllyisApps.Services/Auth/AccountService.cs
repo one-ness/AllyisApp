@@ -571,6 +571,7 @@ namespace AllyisApps.Services
 				SubscriptionId = subUser.SubscriptionId,
 				UserId = subUser.UserId,
 				ProductRoleId = subUser.ProductRoleId,
+				Email = subUser.Email
 			};
 		}
 

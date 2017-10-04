@@ -3,11 +3,18 @@
 
 <ul class="nav allyis-tabs">
 
-	<li class="selected" id="OrganizationTab">@Html.ActionLink(@Strings.Organization, "ManageOrgPermissions", new { id = Model.OrganizaionId })</li>
-
+	<li @(Model.SubscriptionId == null ? "class = \"selected\"" : "") id="OrganizationTab">
+		<a style="display: inline" href="@Url.Action(ActionConstants.ManageOrgPermissions, new { id = Model.OrganizationId })">
+			@Strings.Organization
+		</a>
+	</li>
 	@foreach (var sub in Model.CurrentSubscriptions)
 	{
-		//Assume that only one subscripiotn per product or else add logic to controller
-		<li class="SubscriptionTab">@Html.ActionLink(sub.ProductName, "ManageSubPermissions", new { id = sub.SubscriptionId })</li>
+		<li class="@(Model.SubscriptionId != null && sub.SubscriptionId == Model.SubscriptionId ?  "selected" : "") SubscriptionTab">
+			<a style="display: inline" href="@Url.Action(ActionConstants.ManageSubPermissions, new { id = sub.SubscriptionId })">
+				@sub.ProductName
+			</a>
+		</li>
+
 	}
 </ul>

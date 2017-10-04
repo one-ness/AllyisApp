@@ -39,5 +39,7 @@ namespace AllyisApps.Services.Billing
 		/// Gets or sets the id of the subscription.
 		/// </summary>
 		public int SubscriptionId { get; set; }
+
+		public string Email { get; set; }
 	}
 }

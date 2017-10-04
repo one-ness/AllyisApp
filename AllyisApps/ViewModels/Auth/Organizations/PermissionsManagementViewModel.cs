@@ -247,6 +247,9 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public int? SelectedAction { get; set; }
 
+		/// <summary>
+		/// Used to get what productId of the subscription updated if subscription user is updated.
+		/// </summary>
 		public int? ProductId { get; set; }
 
 		/// <summary>
@@ -258,6 +261,11 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets Subscription Id Used if modifing Product Role
 		/// </summary>
 		public int? SubscriptionId { get; set; }
+
+		/// <summary>
+		/// Url where post came from redirect back to same page to relaod edited permissions.
+		/// </summary>
+		public string FromUrl { get; set; }
 	}
 
 	/// <summary>

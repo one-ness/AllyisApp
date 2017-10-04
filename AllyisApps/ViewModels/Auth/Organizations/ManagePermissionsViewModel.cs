@@ -96,10 +96,18 @@ namespace AllyisApps.ViewModels.Auth
 	public class PermissionsViewModel
 	{
 		/// <summary>
+		/// Group label for action list
+		/// </summary>
+		public string ActionGroup { get; set; }
+
+		/// <summary>
 		/// Actions Role Choices
 		/// </summary>
 		public Dictionary<string, int> Actions { get; set; }
 
+		/// <summary>
+		/// Available roles to be printed on table
+		/// </summary>
 		public Dictionary<int, string> PossibleRoles { get; set; }
 
 		/// <summary>
@@ -108,7 +116,7 @@ namespace AllyisApps.ViewModels.Auth
 		public int OrganizationId;
 
 		/// <summary>
-		/// Subscription Id for
+		/// Subscription Id for is null if on OrgManagePage
 		/// </summary>
 		public int? SubscriptionId;
 
@@ -172,7 +180,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// UserId
 		/// </summary>
-		public int UserID { get; set; }
+		public int UserId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the email of the user.
@@ -187,7 +195,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		///
 		/// </summary>
-		public string currentRoleName { get; set; }
+		public string CurrentRoleName { get; set; }
 
 		/// <summary>
 		/// User First Name

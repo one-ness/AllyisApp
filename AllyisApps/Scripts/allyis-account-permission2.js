@@ -29,6 +29,7 @@ gatherData = function () {
 	result.SelectedAction = selectedAction;
 	result.OrganizationId = $("#OrganizationId").val();
 	result.SubscriptionId = $("#SubscriptionId").val();
+	result.FromUrl = FromUrl
 	result.ProductId = $("#ProductId").val();
 	result.isPermissions2 = true; // Delete this once there's only one permissions management page
 	return result;
@@ -36,7 +37,7 @@ gatherData = function () {
 
 // Creates a form element and submits it using data gathered from the page's state
 formSubmit = function () {
-	var form = $(document.createElement("form")).attr({ "method": "POST", "action": "ManagePermissions" });
+	var form = $(document.createElement("form")).attr({ "method": "POST", "action": formUrl });
 	var data = gatherData();
 	if (!data) { // gatherData() will return null if no one is checked or the user declines the confirmation prompt.
 		return;

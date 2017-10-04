@@ -32,9 +32,9 @@
 					<td class="tab-OrganizationTab">
 						<select id="RoleFilter" class="form-control">
 							<option>@Strings.Any</option>
-							@foreach (var role in Model.Actions)
+							@foreach (var role in Model.PossibleRoles.Values)
 							{
-								<option value="@role.Key">@role.Value</option>
+								<option>@role</option>
 							}
 						</select>
 					</td>
@@ -44,12 +44,12 @@
 			@foreach (var user in Model.Users)
 			{
 
-				<tr class="userRow" data-id="@user.UserID" data-name="@user.Email">
+				<tr class="userRow" data-id="@user.UserId" data-name="@user.Email">
 					<td class="checked">
 						<input type="checkbox" id="check" />
 					</td>
 					<td id="name">@user.FullName</td>
-					<td id="Role" class="tab-OrganizationTab">@user.currentRoleName</td>
+					<td id="Role" class="tab-OrganizationTab">@user.CurrentRoleName</td>
 				</tr>
 			}
 
@@ -70,38 +70,40 @@
 		</div>
 		<div class="col-xs-6 col-sm-6 col-md-5 col-lg-4">
 			<select class="form-control tab-OrganizationTab" id="ActionSelect">
-				<optgroup label="@Strings.Organization">
-					@foreach (var setOrganizationRole in Model.Actions)
+				<optgroup label="@Model.ActionGroup">
+					@foreach (var setActions in Model.Actions)
 					{
-						<option value="@setOrganizationRole.Va>@setOrganizationRole.Key</option>
-						}
-					</optgroup>
-				</select>
-			</div>
-			<div class="bottom-right">
-				<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default"> @Strings.Cancel </a>
-				<input type="submit" class="btn btn-primary" id="do-it" value="@Strings.Save" />
-			</div>
+						<option value="@setActions.Value">@setActions.Key</option>
+					}
+				</optgroup>
+			</select>
+		</div>
+		<div class="bottom-right">
+			<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default"> @Strings.Cancel </a>
+			<input type="submit" class="btn btn-primary" id="do-it" value="@Strings.Save" />
 		</div>
 	</div>
+</div>
 
-	@section scripts {
-		<script type="text/javascript">
-        confirmMessage = "@Html.Raw(Model.RemoveUserMessage)";
-		</script>
-		<script src="~/Scripts/allyis-account-permission2.js" type="text/javascript"></script>
-		<script src="~/Scripts/allyis-pages-with-filter.js" type="text/javascript"></script>
-		@*@Scripts.Render("~/bundles/AccountPermission2");*@
-		<script type="text/javascript">
+@section scripts {
+	<script type="text/javascript">
+		confirmMessage = "@Html.Raw(Model.RemoveUserMessage)";
+		formUrl = "@(Url.Action("ManagePermissions",ControllerConstants.Account))"
+		FromUrl = "@(HttpContext.Current.Request.Url.AbsoluteUri)"
+	</script>
+	<script src="~/Scripts/allyis-account-permission2.js" type="text/javascript"></script>
+	<script src="~/Scripts/allyis-pages-with-filter.js" type="text/javascript"></script>
+	@*@Scripts.Render("~/bundles/AccountPermission2");*@
+	<script type="text/javascript">
         @*Filters can only be set up after the above script is loaded*@
         pwf.setPageLimit(15);
         pwf.setRowClass("userRow");
         pwf.setCheckBoxSelector("#check");
         pwf.addFilter("#userSearch", "search", "#name");
-        pwf.addFilter('#RoleFilter', 'dropDown', "#organizationRole", "@Strings.Any");
+        pwf.addFilter('#RoleFilter', 'dropDown', "#Role", "@Strings.Any");
         if (sessionStorage.getItem("/ManagePermissionsPage") != null)
         {
             pwf.setPreviouslySelectedPage(sessionStorage.getItem("/ManagePermissionsPage"))
         }
-		</script>
-	}
+	</script>
+}
