@@ -40,17 +40,17 @@ namespace AllyisApps.Services.StaffingManager
 		/// <summary>
 		/// Gets when the position was created.
 		/// </summary>
-		public DateTime PositionCreatedUtc { get; set; }
+		public DateTime? PositionCreatedUtc { get; set; }
 
 		/// <summary>
 		/// Gets when the position was last modified.
 		/// </summary>
-		public DateTime PositionModifiedUtc { get; set; }
+		public DateTime? PositionModifiedUtc { get; set; }
 
 		/// <summary>
 		/// Get or sets the Start date of the position.
 		/// </summary>
-		public DateTime StartDate { get; set; }
+		public DateTime? StartDate { get; set; }
 
 		/// <summary>
 		/// Gets or sets the id int of the positionStatus.

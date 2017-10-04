@@ -1,9 +1,12 @@
-﻿@model AllyisApps.Areas.StaffingManager.ViewModels.Staffing.StaffingApplicantViewModel
+﻿@using AllyisApps.Areas.StaffingManager.ViewModels.Staffing
+
+@model AllyisApps.Areas.StaffingManager.ViewModels.Staffing.StaffingApplicantViewModel
 
 @{
 	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/StaffingManager/Views/Shared/_BreadcrumbNavPartial.cshtml";
 	DisplayHints.LayoutThemeBundle = "~/Content/StaffingManager";
-	ViewBag.Title = "Create Applicant";
+	string name = Model.FirstName + " " + Model.LastName;
+	ViewBag.Title = name;
 }
 
 <!DOCTYPE html>
@@ -14,11 +17,19 @@
     <title>Applicant</title>
 </head>
 <body>
-	@using (Html.BeginForm("Applicant", "Staffing", FormMethod.Post))
-	{
-		@Html.AntiForgeryToken()
-		@Html.EditorFor(m => m);
-		<input type="submit" value="Submit"/>
-	}
+	<table class="table table-hover" style="clear: both;">
+		<thead>
+			<tr>
+				<th style="width: 25%">Name</th>
+				<th style="width: 25%">Status</th>
+				<th style="width: 25%">Last Modified</th>
+				<th style="width: 25%">Notes</th>
+			</tr>
+		</thead>
+		<tbody>
+			@Html.Partial("_ApplicationsPartial", Model.Applications ?? new List<StaffingApplicationViewModel>())
+		</tbody>
+	</table>
+	@Html.Action("Application", new { applicantId = Model.ApplicantId })
 </body>
 </html>

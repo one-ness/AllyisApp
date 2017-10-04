@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using AllyisApps.Services.StaffingManager;
+using System.ComponentModel.DataAnnotations;
 
 namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 {
@@ -11,6 +12,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// Gets or sets the applicant's ID.
 		/// </summary>
+		[ScaffoldColumn(false)]
 		public int ApplicantId { get; set; }
 
 		/// <summary>
@@ -31,6 +33,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// Gets or sets user's Address Id.
 		/// </summary>
+		[ScaffoldColumn(false)]
 		public int AddressId { get; set; }
 
 		/// <summary>
@@ -67,5 +70,10 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// Gets or sets Notes.
 		/// </summary>
 		public string Notes { get; set; }
+
+		/// <summary>
+		/// Gets or sets Applications.
+		/// </summary>
+		public List<StaffingApplicationViewModel> Applications { get; set; }
 	}
 }

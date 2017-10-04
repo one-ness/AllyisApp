@@ -52,6 +52,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@countryCode", "US"); // add real country code
 			parameters.Add("@phoneNumber", applicant.PhoneNumber);
 			parameters.Add("@notes", applicant.Notes);
+			parameters.Add("@organizationId", applicant.OrganizationId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
@@ -379,6 +380,54 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// Retrieves the list of applicants.
+		/// </summary>
+		/// <param name="orgId"></param>
+		/// <returns>All the applicants in a subscription.</returns>
+		public List<ApplicantDBEntity> GetApplicantsBySubscriptionId(int orgId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@orgId", orgId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				return connection.Query<ApplicantDBEntity>("[StaffingManager].[GetApplicantsByOrgId]", parameters, commandType: CommandType.StoredProcedure).ToList();
+			}
+		}
+
+		/// <summary>
+		/// Retrieves the list of applicants.
+		/// </summary>
+		/// <param name="orgId"></param>
+		/// <returns>All the applicants in a subscription.</returns>
+		public List<ApplicantAddressDBEntity> GetApplicantAddressesBySubscriptionId(int orgId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@orgId", orgId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				return connection.Query<ApplicantAddressDBEntity>("[StaffingManager].[GetApplicantsByOrgId]", parameters, commandType: CommandType.StoredProcedure).ToList();
+			}
+		}
+
+		/// <summary>
+		/// Retrieves the applicant with a given id.
+		/// </summary>
+		/// <param name="applicantId">The id of the applicant.</param>
+		/// <returns>One applicant, if present.</returns>
+		public ApplicantAddressDBEntity GetApplicantAddressById(int applicantId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@applicantId", applicantId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				return connection.Query<ApplicantAddressDBEntity>("[StaffingManager].[GetApplicantById]", parameters, commandType: CommandType.StoredProcedure).Single();
+			}
+		}
+
+		/// <summary>
 		/// Retrieves the applicant with a given id.
 		/// </summary>
 		/// <param name="applicantId">The id of the applicant.</param>
@@ -468,7 +517,7 @@ namespace AllyisApps.DBModel
 			{
 				var results = connection.QueryMultiple("[StaffingManager].[GetPositionsByOrganizationId]", parameters, commandType: CommandType.StoredProcedure);
 				positionsAndTags.positions = results.Read<dynamic>().ToList();
-				positionsAndTags.tags = results.Read<dynamic>().ToDictionary(t => t.PositionId, t => t);
+				//positionsAndTags.tags = results.Read<dynamic>().ToDictionary(t => t.PositionId, t => t);
 			}
 			return positionsAndTags;
 		}

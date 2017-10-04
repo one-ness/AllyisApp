@@ -7,6 +7,7 @@
 @zone-color: @brand-primary;
 @zone-color-bg: lighten(@zone-color, 25%);
 @zone-body-bg: mix(white, @zone-color-bg, 50%);
+@zone-table-body-bg: lighten(@zone-body-bg, 25%);
 
 //@navbar-default-bg: @zone-color-bg;
 @navbar-default-border: darken(@btn-zone-bg, 6.5%);
@@ -131,6 +132,32 @@ a {
 .list-group {
 	color: @brand-primary !important;
 	border-color: @navbar-default-border !important;
+}
+
+thead tr {
+	background-color: @zone-body-bg !important;
+}
+
+tbody tr {
+	background-color: @zone-table-body-bg !important;
+}
+
+tfoot {
+	background-color: @zone-body-bg !important;
+}
+
+.panel {
+	color: @brand-primary !important;
+	border-color: @navbar-default-border !important;
+}
+
+.list-group {
+	color: @brand-primary !important;
+	border-color: @navbar-default-border !important;
+}
+
+.dropdown-toggle {
+	background-color: @zone-body-bg !important;
 }
 
 .status-1 {

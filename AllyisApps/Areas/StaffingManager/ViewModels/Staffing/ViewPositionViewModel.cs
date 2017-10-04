@@ -56,17 +56,17 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// Get or sets the Start date of the position
 		/// </summary>
-		public DateTime PositionCreatedUtc { get; set; }
+		public DateTime? PositionCreatedUtc { get; set; }
 
 		/// <summary>
 		/// Get or sets the Start date of the position
 		/// </summary>
-		public DateTime PositionModifiedUtc { get; set; }
+		public DateTime? PositionModifiedUtc { get; set; }
 
 		/// <summary>
 		/// Get or sets the Start date of the position
 		/// </summary>
-		public DateTime StartDate { get; set; }
+		public DateTime? StartDate { get; set; }
 
 		/// <summary>
 		/// Gets or sets the status int(enum) of the position

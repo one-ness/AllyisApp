@@ -14,6 +14,8 @@ using AllyisApps.Services.Auth;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.Services.Lookup;
+using AllyisApps.ViewModels.Staffing;
+using System;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -23,78 +25,69 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 	public partial class StaffingController : BaseController
 	{
 		/// <summary>
-		/// Create Applicant Page.
+		/// Applicant page.
 		/// </summary>
 		/// <returns></returns>
-		[HttpGet]
-		public ActionResult Applicant()
+		public ActionResult Applicant(int subscriptionId, int applicantId)
 		{
-			StaffingApplicantViewModel model = new StaffingApplicantViewModel();
+			SetNavData(subscriptionId);
+
+			Applicant applicant = this.AppService.GetApplicantAddressById(applicantId);
+			StaffingApplicantViewModel model = InitializeStaffingApplicantViewModel(applicant);
+			model.Applications = this.AppService.GetApplicationsByApplicantId(applicantId).Select(a => InitializeStaffingApplicationViewModel(a)).ToList();
+
+			foreach (var application in model.Applications)
+			{
+				application.Applicant = applicant;
+			}
+
 			return this.View(model);
 		}
 
-		/// <summary>
-		/// Create Applicant.
-		/// </summary>
-		/// <param name="model"></param>
-		/// <returns></returns>
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public ActionResult Applicant(StaffingApplicantViewModel model)
+		private static StaffingApplicationViewModel InitializeStaffingApplicationViewModel(Application application)
 		{
-			Applicant applicant = InitializeApplicant(model);
-			this.AppService.CreateApplicant(applicant);
-			return this.RedirectToAction("Index");
-		}
-
-		private static Applicant InitializeApplicant(StaffingApplicantViewModel model)
-		{
-			return new Applicant()
+			return new StaffingApplicationViewModel()
 			{
-				Address = model.Address,
-				AddressId = model.AddressId,
-				ApplicantId = model.ApplicantId,
-				City = model.City,
-				Country = model.Country,
-				Email = model.Email,
-				FirstName = model.FirstName,
-				LastName = model.LastName,
-				Notes = model.Notes,
-				PhoneNumber = model.PhoneNumber,
-				PostalCode = model.PostalCode,
-				State = model.State
+				//Applicant = application.Applicant,
+				ApplicantId = application.ApplicantId,
+				ApplicationCreatedUtc = application.ApplicationCreatedUtc,
+				//ApplicationDocuments = application.ApplicationDocuments.Select(d => InitializeApplicationDocumentViewModel(d)).ToList(),
+				ApplicationId = application.ApplicationId,
+				ApplicationModifiedUtc = application.ApplicationModifiedUtc,
+				ApplicationStatus = application.ApplicationStatus,
+				Notes = application.Notes,
+				PositionId = application.PositionId
 			};
 		}
 
-		///// <summary>
-		///// Applicant page.
-		///// </summary>
-		///// <returns></returns>
-		//public ActionResult Applicant(int applicantId)
-		//{
-		//	Applicant applicant = this.AppService.GetApplicantById(applicantId);
-		//	StaffingApplicantViewModel model = InitializeStaffingApplicantViewModel(applicant);
+		private static ApplicationDocumentViewModel InitializeApplicationDocumentViewModel(ApplicationDocument document)
+		{
+			return new ApplicationDocumentViewModel()
+			{
+				ApplicationDocumentId = document.ApplicationDocumentId,
+				ApplicationId = document.ApplicationId,
+				DocumentLink = document.DocumentLink,
+				DocumentName = document.DocumentName
+			};
+		}
 
-		//	return this.View(model);
-		//}
-
-		//private static StaffingApplicantViewModel InitializeStaffingApplicantViewModel(Applicant applicant)
-		//{
-		//	return new StaffingApplicantViewModel()
-		//	{
-		//		Address = applicant.Address,
-		//		AddressId = applicant.AddressId,
-		//		ApplicantId = applicant.ApplicantId,
-		//		City = applicant.City,
-		//		Country = applicant.Country,
-		//		Email = applicant.Email,
-		//		FirstName = applicant.FirstName,
-		//		LastName = applicant.LastName,
-		//		Notes = applicant.Notes,
-		//		PhoneNumber = applicant.PhoneNumber,
-		//		PostalCode = applicant.PostalCode,
-		//		State = applicant.State
-		//	};
-		//}
+		private static StaffingApplicantViewModel InitializeStaffingApplicantViewModel(Applicant applicant)
+		{
+			return new StaffingApplicantViewModel()
+			{
+				Address = applicant.Address,
+				AddressId = applicant.AddressId,
+				ApplicantId = applicant.ApplicantId,
+				City = applicant.City,
+				Country = applicant.Country,
+				Email = applicant.Email,
+				FirstName = applicant.FirstName,
+				LastName = applicant.LastName,
+				Notes = applicant.Notes,
+				PhoneNumber = applicant.PhoneNumber,
+				PostalCode = applicant.PostalCode,
+				State = applicant.State
+			};
+		}
 	}
 }
