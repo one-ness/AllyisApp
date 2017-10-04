@@ -3,7 +3,7 @@
 
 <ul class="nav allyis-tabs">
 
-	<li @(Model.SubscriptionId == null ? "class = \"selected\"" : "") id="OrganizationTab">
+	<li @(Model.SubscriptionId == null ? "class = selected" : "") id="OrganizationTab">
 		<a style="display: inline" href="@Url.Action(ActionConstants.ManageOrgPermissions, new { id = Model.OrganizationId })">
 			@Strings.Organization
 		</a>
