@@ -18,7 +18,7 @@ namespace AllyisApps.Services.StaffingManager
 		private int applicationId;
 		private int applicantId;
 		private int positionId;
-		private ApplicationStatusEnum applicationStatus;
+		private int applicationStatus;
 
 		/// <summary>
 		/// Gets or sets the application's ID.
@@ -71,12 +71,12 @@ namespace AllyisApps.Services.StaffingManager
 		/// <summary>
 		/// Gets or sets the application status ID.
 		/// </summary>
-		public ApplicationStatusEnum ApplicationStatus
+		public int ApplicationStatus
 		{
 			get => applicationStatus;
 			set
 			{
-				if (!Enum.IsDefined(typeof(ApplicationStatusEnum), value))
+				if (value == 0)
 				{
 					throw new ArgumentOutOfRangeException(nameof(ApplicationStatus), value, nameof(ApplicationStatus) + " is not a valid enum value.");
 				}

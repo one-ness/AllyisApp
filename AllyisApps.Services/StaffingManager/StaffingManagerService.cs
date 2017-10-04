@@ -369,7 +369,7 @@ namespace AllyisApps.Services
 				ApplicationDocuments = DBApplicationDocumentsToServiceObject(application.ApplicationDocuments).ToList(),
 				ApplicationId = application.ApplicationId,
 				ApplicationModifiedUtc = application.ApplicationModifiedUtc,
-				ApplicationStatus = (ApplicationStatusEnum)application.ApplicationStatusId,
+				ApplicationStatus = application.ApplicationStatusId,
 				PositionId = application.PositionId
 			};
 		}
@@ -409,6 +409,9 @@ namespace AllyisApps.Services
 						Applicant.ApplicantId = applicant.ApplicantId;
 						Applicant.FirstName = applicant.FirstName;
 						Applicant.LastName = applicant.LastName;
+						Applicant.City = applicant.City;
+						Applicant.Country = applicant.CountryCode;
+						Applicant.State = applicant.StateId;
 						Applicant.Email = applicant.Email;
 						Applicant.PhoneNumber = applicant.PhoneNumber;
 						Applicant.Notes = applicant.Notes;
@@ -431,7 +434,7 @@ namespace AllyisApps.Services
 
 					ApplicantId = application.ApplicantId,
 					ApplicationId = application.ApplicationId,
-					ApplicationStatus = (ApplicationStatusEnum)1,
+					ApplicationStatus = application.ApplicationStatusId,
 					ApplicationModifiedUtc = application.ApplicationModifiedUtc,
 					Notes = application.Notes,
 					Applicant = Applicant,

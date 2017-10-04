@@ -11,6 +11,11 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 	public class ApplicationInfoViewModel
 	{
 		/// <summary>
+		/// id of application
+		/// </summary>
+		public int ApplicationId { get; set; }
+
+		/// <summary>
 		/// name of applicant whom this application belongs
 		/// </summary>
 		public string ApplicantName { get; set; }
@@ -44,5 +49,10 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// the documents attached to this application (ie: resumes, CVs, etc)
 		/// </summary>
 		public List<ApplicationDocumentViewModel> ApplicationDocuments { get; set; }
+
+		/// <summary>
+		/// applications information for all applications to the position
+		/// </summary>
+		public List<ApplicationStatusSelectViewModel> ApplicationStatuses { get; set; }
 	}
 }

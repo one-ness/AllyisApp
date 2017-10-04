@@ -67,7 +67,7 @@ BEGIN
 	FROM [StaffingManager].[PositionStatus]
 	WHERE [PositionStatus].[OrganizationId] = @organizationId
 	
-	-- Select all Position Status' from the org
+	-- Select all application Status' from the org
 		SELECT [ApplicationStatusId],
 		[OrganizationId],
 		[ApplicationStatusName]

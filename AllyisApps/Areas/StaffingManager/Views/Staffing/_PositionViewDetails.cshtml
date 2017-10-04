@@ -1,8 +1,11 @@
 ﻿@model AllyisApps.Areas.StaffingManager.ViewModels.Staffing.ViewPositionViewModel
 @{
+	DisplayHints.ShowBreadcrumbs = true;
 	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/StaffingManager/Views/Shared/_BreadcrumbNavPartial.cshtml";
 	DisplayHints.LayoutThemeBundle = "~/Content/StaffingManager";
 	ViewBag.TitleBar = Strings.MyAccount;
+	ViewData["SubscriptionId"] = Model.SubscriptionId;
+	ViewData["SubscriptionName"] = Model.SubscriptionName;
 
 }
 
@@ -115,9 +118,12 @@
 					 @Model.StartDate.ToShortDateString()
 
 					<div>
-						<label>Expected Duration: &nbsp;</label>
-						@Model.DurationMonths &nbsp;
-						months
+						<span>
+							<label>
+								Expected Duration:&nbsp;
+							</label>
+							@Model.DurationMonths&nbsp;months
+						</span>
 					</div>
 				</div>
 			</div>
@@ -230,9 +236,6 @@
 					<p class="panel-default panel paragraph" width="100%">@Model.DesiredSkills</p>
 				</div>
 			}
-		</div>
-
-		<div class="panel-body list-group" id="Applications">
 		</div>
 	</div>
 </div>

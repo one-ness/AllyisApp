@@ -49,11 +49,20 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			Position pos = AppService.GetPosition(positionId);
 			List<Application> applicationsSerive = AppService.GetFullApplicationInfoByPositionId(positionId);
 			List<ApplicationInfoViewModel> applications = new List<ApplicationInfoViewModel>();
-			foreach(Application app in applicationsSerive) applications.Add(BuildApplications(app));
 
 			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
 			//TODO: this is piggy-backing off the get index action, create a new action that just gets items 3-5.
 			var infos = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
+			foreach (Application app in applicationsSerive)
+			{
+				var viewApp = BuildApplications(app);
+				viewApp.ApplicationStatuses = infos.Item6.AsParallel().Select(appStat => new ApplicationStatusSelectViewModel()
+				{
+					ApplicationStatusId = appStat.ApplicationStatusId,
+					ApplicationStatusName = appStat.ApplicationStatusName
+				}).ToList();
+				applications.Add(viewApp);
+			}
 			var temp = new string[infos.Item2.Count];
 			var count = 0;
 			var assignedTags = "";
@@ -64,7 +73,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				{
 					if (infos.Item2[i].TagName == temp[j] && !taken) taken = true;
 				}
-				if (!taken)
+				if (!taken && infos.Item2[i].PositionId == pos.PositionId)
 				{
 					temp[count] = infos.Item2[i].TagName;
 					count++;
@@ -155,13 +164,15 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 
 			return new ApplicationInfoViewModel()
 			{
-				ApplicantName = app.Applicant.FirstName + " " + app.Applicant.LastName,
+				ApplicationId = app.ApplicationId,
+				ApplicantName = app.Applicant.LastName + ", " + app.Applicant.FirstName,
 				ApplicantAddress = app.Applicant.City + ", " + app.Applicant.State + " " + app.Applicant.Country,
 				ApplicantEmail = app.Applicant.Email,
 				AppliationStatusId = (int)app.ApplicationStatus,
 				ApplicationModifiedUTC = app.ApplicationModifiedUtc,
 				Notes = app.Notes,
 				ApplicationDocuments = docs
+
 			};
 		}
 

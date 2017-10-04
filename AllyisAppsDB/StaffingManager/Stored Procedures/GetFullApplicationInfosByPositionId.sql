@@ -15,11 +15,15 @@ BEGIN
 		[Applicant].[ApplicantId],
 		[Applicant].[FirstName],
 		[Applicant].[LastName],
+		[Address].[City],
+		[Address].[CountryCode],
+		[Address].[StateId],
 		[Applicant].[Email],
 		[Applicant].[PhoneNumber],
 		[Applicant].[Notes]
 	FROM [StaffingManager].[Application] 
 		Join [StaffingManager].[Applicant] on [Application].[ApplicantId] = [Applicant].[ApplicantId]
+		Join [Lookup].[Address] on [Applicant].[AddressId] = [Address].[AddressId]
 		WHERE [Application].[PositionId] = @positionId
 		
 	SELECT 

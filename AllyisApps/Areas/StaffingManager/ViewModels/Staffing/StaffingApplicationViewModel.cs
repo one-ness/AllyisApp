@@ -26,7 +26,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// Gets or sets the application status ID.
 		/// </summary>
-		public ApplicationStatusEnum ApplicationStatus { get; set; }
+		public int ApplicationStatus { get; set; }
 
 		/// <summary>
 		/// Gets DateCreated.
