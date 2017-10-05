@@ -175,6 +175,22 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// Returns subscription users for a particlar subscription
+		/// </summary>
+		/// <param name="subscriptionId"></param>
+		/// <returns></returns>
+		public IEnumerable<SubscriptionUserDBEntity> GetSubscriptionUsersBySubscriptionId(int subscriptionId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@subscriptionId", subscriptionId);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				// default blank object
+				return connection.Query<SubscriptionUserDBEntity>("[Billing].[GetSubscriptionUsersBySubscriptionId]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
 		/// Get just subscription Name by subscriptionid.
 		/// </summary>
 		/// <param name="subscriptionId"></param>
@@ -224,14 +240,16 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">Sets OrganizationId.</param>
 		/// <param name="skuId">Sku to change to.</param>
+		/// <param name="subscriptionId">Subscripiton Id</param>
 		/// <param name="subscriptionName">The subscription name.</param>
 		/// <returns>Number of rows changed.</returns>
-		public int UpdateSubscription(int organizationId, int skuId, string subscriptionName)
+		public int UpdateSubscription(int organizationId, int skuId, int subscriptionId, string subscriptionName)
 		{
 			// TODO: pass in subscriptionId as a parameter to simplify logic
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@skuId", skuId);
+			parameters.Add("@subscriptionId", subscriptionId);
 			parameters.Add("@subscriptionName", subscriptionName);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))

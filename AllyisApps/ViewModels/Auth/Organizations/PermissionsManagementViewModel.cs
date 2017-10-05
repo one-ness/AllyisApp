@@ -10,16 +10,19 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Web;
-using AllyisApps.Services;
+
 using AllyisApps.Services.Auth;
-using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Auth
 {
-	/// <summary>
-	/// The Permissions Management model.
-	/// This view Model is not used but it is very well deveoloped so leaving here in case we reuse this logic.
-	/// </summary>
+	#region Old Permissions Page
+
+	//// <summary>
+	//// The Permissions Management model.
+	//// This view Model is not used but it is very well deveoloped so leaving here in case we reuse this logic.
+	//// </summary>
+
+	/*
 	public class PermissionsManagementViewModel : BaseViewModel
 	{
 		/// <summary>
@@ -68,7 +71,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets the subscriptionDisplay information.
 		/// </summary>
-		public IEnumerable<SubscriptionDisplay> Subscriptions { get; internal set; }
+		public IEnumerable<SubscriptionDisplayViewModel> Subscriptions { get; internal set; }
 	}
 
 	/// <summary>
@@ -224,6 +227,9 @@ namespace AllyisApps.ViewModels.Auth
 			return string.Empty;
 		}
 	}
+	*/
+
+	#endregion Old Permissions Page
 
 	/// <summary>
 	/// Object represnting a list of users and the actions to perform on them. The data in a permissions management POST is
@@ -246,12 +252,27 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the actions to be performed.
 		/// </summary>
-		public PermissionsAction SelectedActions { get; set; }
+		public int? SelectedAction { get; set; }
+
+		/// <summary>
+		/// Used to get what productId of the subscription updated if subscription user is updated.
+		/// </summary>
+		public int? ProductId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Organization's Id.
 		/// </summary>
 		public int OrganizationId { get; set; }
+
+		/// <summary>
+		/// Gets or sets Subscription Id Used if modifing Product Role
+		/// </summary>
+		public int? SubscriptionId { get; set; }
+
+		/// <summary>
+		/// Url where post came from redirect back to same page to relaod edited permissions.
+		/// </summary>
+		public string FromUrl { get; set; }
 	}
 
 	/// <summary>
@@ -283,11 +304,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the subscription Id for Expensetracker if the organization has one.
 		/// </summary>
 		public int ExpenseTrackerSubscriptionId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the set of userIds who are members of the organization.
-		/// </summary>
-		public ISet<int> OrganizationMembers { get; set; }
 
 		/// <summary>
 		/// Gets or sets the target role to set the organization users to.

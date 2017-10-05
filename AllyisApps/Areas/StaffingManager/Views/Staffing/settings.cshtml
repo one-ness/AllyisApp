@@ -169,9 +169,19 @@
 							}
 						</tr>
 					</table>
+								@using (Html.BeginForm(ActionConstants.CreatePositionStatus, ControllerConstants.Staffing, new { subscriptionId = Model.subscriptionId, orgId = Model.organizationId }, FormMethod.Post))
+								{
+									@Html.AntiForgeryToken();
+									@Html.HiddenFor(m => m.subscriptionId)
+									<td><input type="text" name="positionStatus" class="form-control" required /></td>
+									<td><span class="pull-right"></span></td>
+									<td><input class="btn btn-primary" type="submit" value="@Strings.Add" /></td>
+								}
+							</tr>
+						</table>
+					</div>
 				</div>
 			</div>
-		</div>
 
 		<div class="col-md-2 sm-control-width">
 			<div class="panel-heading">

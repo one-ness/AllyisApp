@@ -47,7 +47,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					OvertimeHours = settings.OvertimeHours,
 					OvertimeMultiplier = settings.OvertimeMultiplier,
 					OvertimePeriod = settings.OvertimePeriod,
-					StartOfWeek = settings.StartOfWeek
+					StartOfWeek = settings.StartOfWeek,
+					Today = System.DateTime.UtcNow.Date
 				},
 				PayClasses = infos.Item2.AsParallel().Select(payClass => new SettingsViewModel.PayClassViewModel()
 				{
@@ -56,6 +57,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}),
 				Holidays = infos.Item3.AsParallel().Select(holiday => new SettingsViewModel.HolidayViewModel()
 				{
+					Date = holiday.Date,
+					HolidayId = holiday.HolidayId,
+					HolidayName = holiday.HolidayName
 				}),
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subName,

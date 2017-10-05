@@ -19,7 +19,7 @@ namespace AllyisApps.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Strings {
@@ -1465,6 +1465,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to Find Product.
+        /// </summary>
+        public static string FailedToFindProduct {
+            get {
+                return ResourceManager.GetString("FailedToFindProduct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not create pay class: that pay class name already exists..
         /// </summary>
         public static string FailureCreatePayClassAlreadyExists {
@@ -1866,6 +1875,15 @@ namespace AllyisApps.Resources {
         public static string InviteMoreThanOne {
             get {
                 return ResourceManager.GetString("InviteMoreThanOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invite is resent to {0}.
+        /// </summary>
+        public static string InviteResentTo {
+            get {
+                return ResourceManager.GetString("InviteResentTo", resourceCulture);
             }
         }
         
@@ -2383,11 +2401,20 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are not a member of any organization yet. Please contact your employer to send you an invitation, or you can create your own, by clicking the Create Organization button..
+        ///   Looks up a localized string similar to You are not part of an organization yet..
         /// </summary>
         public static string NoOrganizationMessage {
             get {
                 return ResourceManager.GetString("NoOrganizationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please contact your employer to send you an invitation, or you can create your own, by clicking the Create Organization button..
+        /// </summary>
+        public static string NoOrganizationMessage2 {
+            get {
+                return ResourceManager.GetString("NoOrganizationMessage2", resourceCulture);
             }
         }
         
@@ -3229,6 +3256,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resend Invite.
+        /// </summary>
+        public static string ResendInvite {
+            get {
+                return ResourceManager.GetString("ResendInvite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reset.
         /// </summary>
         public static string Reset {
@@ -3668,15 +3704,6 @@ namespace AllyisApps.Resources {
                 return ResourceManager.GetString("Sunday", resourceCulture);
             }
         }
-
-		/// <summary>
-		///	  Looks up a localized string similar to SuperUser.
-		/// </summary>
-		public static string SuperUser {
-			get {
-				return ResourceManager.GetString("SuperUser", resourceCulture);
-			}
-		}
         
         /// <summary>
         ///   Looks up a localized string similar to Support.

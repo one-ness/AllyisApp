@@ -32,7 +32,7 @@ namespace AllyisApps.Controllers.Auth
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
 			ManageOrgViewModel model = this.ConstructOrganizationManageViewModel(id);
 
-			var sub = model.Subscriptions.Select(x => x).Where(y => y.ProductId == (int)ProductIdEnum.TimeTracker).FirstOrDefault();
+			var sub = model.Subscriptions.Select(x => x).Where(y => y.ProductId == ProductIdEnum.TimeTracker).FirstOrDefault();
 			if (sub != null && model.Subscriptions.Count() > 0)
 			{
 				int orgID = sub.OrganizationId;
@@ -92,7 +92,7 @@ namespace AllyisApps.Controllers.Auth
 				OrganizationId = organizationId,
 				BillingCustomer = customer,
 				SubscriptionCount = orgInfo.Subscriptions.Count,
-				Subscriptions = orgInfo.Subscriptions.Select(sub => new SubscriptionDisplayViewModel(sub))
+				Subscriptions = orgInfo.Subscriptions.Select(sub => new SubscriptionDisplayViewModel(sub)).OrderBy(sub => sub.ProductId)
 			};
 		}
 	}

@@ -8,8 +8,8 @@
 	<h1 class="panel-title">
 		@Strings.Members: @Model.TotalUsers
 		<span class="pull-right panel-title">
-			<a href="@Url.Action(ActionConstants.ManagePermissions, ControllerConstants.Account, new { id = Model.OrganizationId })" class="fa fa-fw fa-unlock" title="@Strings.ManagePermissions">  </a>
-			<a href="@Url.Action(ActionConstants.AddMember, ControllerConstants.Account, new { id = Model.OrganizationId })" class="fa fa-fw fa-user-plus" title="@Strings.AddMembers"> </a>
+			<a href="@Url.Action(ActionConstants.ManageOrgPermissions, ControllerConstants.Account, new { id = Model.OrganizationId })" class="fa fa-fw fa-unlock" title="@Strings.ManagePermissions"></a>&nbsp;
+			<a href="@Url.Action(ActionConstants.AddMember, ControllerConstants.Account, new { id = Model.OrganizationId })" class="fa fa-fw fa-user-plus" title="@Strings.AddMembers"></a>
 		</span>
 	</h1>
 </div>
@@ -44,6 +44,9 @@
 					<td class="memberSearchProperty">@invite.EmployeeId</td>
 					<td class="memberOrgRole">-</td>
 					<td class="text-right icon-strip">
+						<a href="@Url.Action(ActionConstants.ResendInvite, ControllerConstants.Account ,new { id = invite.InvitationId })" title="@Strings.ResendInvite">
+							<span class="fa fa-fw fa-envelope"></span>
+						</a>
 						<a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account)@pars" title="@Strings.EditEmployee">
 							<span class="fa fa-fw fa-edit"></span>
 						</a>
@@ -60,10 +63,10 @@
 					<td class="memberOrgRole">@Strings.ResourceManager.GetString(user.PermissionLevel)</td>
 					<td class="text-right icon-strip">
 						@*@if (Model.CurrentUserId != user.UserId)
-						{
-							<a href="javascript: void(0);" class="text-muted" title="@Strings.RemoveMember"
-								onclick='removeUser("@user.OrganizationId", "@user.UserId", "@user.FullName", false)'><span class="fa fa-fw fa-remove text-danger"></span></a>
-						}*@
+							{
+								<a href="javascript: void(0);" class="text-muted" title="@Strings.RemoveMember"
+									onclick='removeUser("@user.OrganizationId", "@user.UserId", "@user.FullName", false)'><span class="fa fa-fw fa-remove text-danger"></span></a>
+							}*@
 						<a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account)@pars" title="@Strings.EditEmployee">
 							<span class="fa fa-fw fa-edit"></span>
 						</a>

@@ -68,22 +68,23 @@ namespace AllyisApps.Services
 		/// <returns>Inviation info </returns>
 		public Invitation GetInvitationByID(int invitationId)
 		{
-			return InitializeInvitationInfo(DBHelper.GetUserInvitationByInviteId(invitationId));
+			return InitializeInvitationInfo(DBHelper.GetInvitation(invitationId));
 		}
 
 		/// <summary>
 		/// Accepts an invitation, adding the user to the invitation's organization, subscriptions, and projects, then deletes the invitations.
 		/// </summary>
-		/// <param name="invitationId">The invitationId.</param>
-		/// <returns>The resulting action message if succeed, null if fail.</returns>
 		public bool AcceptUserInvitation(int invitationId)
 		{
 			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId");
 
-			var results = DBHelper.AcceptInvitation(invitationId, UserContext.UserId);
-			NotifyInviteAcceptAsync(invitationId);
+			var result = (this.DBHelper.AcceptInvitation(invitationId, this.UserContext.UserId) == 1);
+			if (result)
+			{
+				NotifyInviteAcceptAsync(invitationId);
+			}
 
-			return results;
+			return result;
 		}
 
 		/// <summary>
@@ -93,11 +94,12 @@ namespace AllyisApps.Services
 		/// <returns>The resulting message.</returns>
 		public bool RejectInvitation(int invitationId)
 		{
-			bool rejected = DBHelper.RejectInvitation(invitationId);
+			bool rejected = (DBHelper.RejectInvitation(invitationId) == 1);
 			if (rejected)
 			{
 				NotifyInviteRejectAsync(invitationId);
 			}
+
 			return rejected;
 		}
 
@@ -453,7 +455,7 @@ namespace AllyisApps.Services
 		public bool ConfirmUserEmail(Guid code)
 		{
 			if (code == null) throw new ArgumentNullException("code");
-			return DBHelper.UpdateEmailConfirmed(code) > 0 ? true : false;
+			return DBHelper.UpdateEmailConfirmed(code) == 1 ? true : false;
 		}
 
 		public IEnumerable<Organization> GetOrganizationsByUserId(int userID)
@@ -569,7 +571,9 @@ namespace AllyisApps.Services
 				LastName = subUser.LastName,
 				CreatedUtc = subUser.CreatedUtc,
 				SubscriptionId = subUser.SubscriptionId,
-				UserId = subUser.UserId
+				UserId = subUser.UserId,
+				ProductRoleId = subUser.ProductRoleId,
+				Email = subUser.Email
 			};
 		}
 
@@ -587,6 +591,41 @@ namespace AllyisApps.Services
 		public decimal GetOrganizationUserMaxAmount(int userId, int orgId)
 		{
 			return DBHelper.GetUserOrgMaxAmount(userId, orgId);
+		}
+
+		/// <summary>
+		/// constructs the next unique employee id to be added to an invitation
+		/// </summary>
+		public async Task<string> GetNextEmployeeId(int organizationId)
+		{
+			if (organizationId <= 0) throw new ArgumentOutOfRangeException("organizationId");
+
+			string maxId = await this.DBHelper.GetMaxEmployeeId(organizationId);
+			char[] idchars = maxId.ToCharArray();
+
+			// define legal characters
+			var characters = new List<char>();
+			for (char c = '0'; c <= '9'; c++) characters.Add(c); // Add numeric characters first
+			for (char c = 'A'; c <= 'Z'; c++) characters.Add(c); // Add upper-case next
+			for (char c = 'a'; c <= 'z'; c++) characters.Add(c); // Add lower-case last
+
+			// increment the string
+			for (int i = maxId.Length - 1; i >= 0; --i)
+			{
+				if (idchars[i] == characters[characters.Count - 1])
+				{
+					// If last value, round it to the first one and continue the loop to the next index
+					idchars[i] = characters[0];
+				}
+				else
+				{
+					// The value can simply be incremented, so break out of the loop
+					idchars[i] = characters[characters.IndexOf(idchars[i]) + 1];
+					break;
+				}
+			}
+
+			return new string(idchars);
 		}
 	}
 }

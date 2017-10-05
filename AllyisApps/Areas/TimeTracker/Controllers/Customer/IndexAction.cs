@@ -12,6 +12,7 @@ using AllyisApps.Controllers;
 using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
+using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
 using AllyisApps.ViewModels.TimeTracker.Customer;
 
@@ -31,7 +32,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpGet]
 		public ActionResult Index(int subscriptionId)
 		{
-			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
+			if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
+			{
+				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
+			}
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			return this.View(this.ConstructManageCustomerViewModel(subscriptionId));
@@ -44,7 +48,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The index page.</returns>
 		public ActionResult IndexNoUserId(int subscriptionId)
 		{
-			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
+			if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
+			{
+				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
+			}
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 

@@ -5,8 +5,6 @@
 //------------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
-using AllyisApps.Services;
-using AllyisApps.Services.Auth;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -19,7 +17,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the user's password.
 		/// </summary>
 		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "CreatePasswordValidation")]
-		[StringLength(100, ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PasswordLengthValidation", MinimumLength = User.PasswordMinLength)]  // If you change this minimum length value, please update the string resource.
+		[StringLength(100, ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PasswordLengthValidation", MinimumLength = Services.Auth.User.PasswordMinLength)]  // If you change this minimum length value, please update the string resource.
 		[DataType(DataType.Password)]
 		[Display(Name = "Password")]
 		public string Password { get; set; }

@@ -28,6 +28,7 @@
     <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
     <UseGlobalApplicationHostFile>true</UseGlobalApplicationHostFile>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -360,6 +361,7 @@
     <Compile Include="Controllers\Auth\LogOnAction.cs" />
     <Compile Include="Controllers\Auth\RegisterAction.cs" />
     <Compile Include="Controllers\Auth\RejectInvitationAction.cs" />
+    <Compile Include="Controllers\Auth\ResendInviteAction.cs" />
     <Compile Include="Controllers\Auth\ResetPasswordAction.cs" />
     <Compile Include="Controllers\Auth\SkusAction.cs" />
     <Compile Include="Controllers\Auth\TemplateAction.cs" />
@@ -721,6 +723,8 @@
     <Content Include="Views\Account\Skus.cshtml" />
     <Content Include="Views\Account\EditMember.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Collection.cshtml" />
+    <Content Include="Views\Account\_PremissionsLinkView.cshtml" />
+    <Content Include="Views\Account\PermissionsOrg.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\Dependencies\CodeAnalysis\CustomDictionary.xml">
@@ -1069,15 +1073,6 @@
     <Content Include="Views\Shared\DisplayTemplates\SiteMapPathHelperModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\ExpenseTracker\Views\AccountAction\" />
-    <Folder Include="Areas\ExpenseTracker\Views\AccountPageViewModel\" />
-    <Folder Include="Areas\ExpenseTracker\Views\AdminAction\" />
-    <Folder Include="Areas\ExpenseTracker\Views\AdminReportAction\" />
-    <Folder Include="Areas\ExpenseTracker\Views\Admin\" />
-    <Folder Include="Areas\ExpenseTracker\Views\AttachmentDownload\" />
-    <Folder Include="Areas\ExpenseTracker\Views\CreateAccountAction\" />
-    <Folder Include="Areas\ExpenseTracker\Views\ReportAdmin\" />
-    <Folder Include="Areas\ExpenseTracker\Views\ViewAdminReport\" />
     <Folder Include="Areas\TimeTracker\ViewModels\Manage\" />
   </ItemGroup>
   <ItemGroup>

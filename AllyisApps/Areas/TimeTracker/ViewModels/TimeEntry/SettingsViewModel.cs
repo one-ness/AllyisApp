@@ -88,6 +88,11 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 			/// Gets or sets the lock date quantity.
 			/// </summary>
 			public int LockDateQuantity { get; set; }
+
+			/// <summary>
+			/// Get or sets todays date for holiday datepicker
+			/// </summary>
+			public DateTime Today { get; set; }
 		}
 
 		/// <summary>

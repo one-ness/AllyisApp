@@ -186,8 +186,8 @@
     <Build Include="Auth\Stored Procedures\GetSubdomainByOrgId.sql" />
     <Build Include="Auth\Stored Procedures\GetUserFromEmail.sql" />
     <Build Include="Auth\Stored Procedures\GetUserInfo.sql" />
-    <Build Include="Auth\Stored Procedures\GetUserInvitationsByOrgId.sql" />
-    <Build Include="Auth\Stored Procedures\GetUserInvitationsByUserData.sql" />
+    <Build Include="Auth\Stored Procedures\GetInvitations.sql" />
+    <Build Include="Auth\Stored Procedures\GetUserInvitationsByEmail.sql" />
     <Build Include="Auth\Stored Procedures\GetUsersWithSubscriptionToProductInOrganization.sql" />
     <Build Include="Auth\Stored Procedures\UpdateOrganization.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserActiveSub.sql" />
@@ -295,7 +295,7 @@
     <Build Include="Pjm\Stored Procedures\UpdateProjectUser.sql" />
     <Build Include="TimeTracker\Stored Procedures\CreateDefaultPayClass.sql" />
     <Build Include="Lookup\Tables\OrganizationLocation.sql" />
-    <Build Include="Auth\Stored Procedures\GetUserInvitationsByInviteId.sql" />
+    <Build Include="Auth\Stored Procedures\GetInvitation.sql" />
     <Build Include="Auth\Stored Procedures\GetOrganizationOwnerEmails.sql" />
     <Build Include="Auth\Stored Procedures\CreateOrganization.sql" />
     <Build Include="Auth\Stored Procedures\CreateOrganizationUser.sql" />
@@ -396,6 +396,8 @@
     <Build Include="StaffingManager\Stored Procedures\GetStaffingDefaultStatus.sql" />
     <Build Include="StaffingManager\Stored Procedures\GetApplicantsByOrgId.sql" />
     <Build Include="StaffingManager\Stored Procedures\GetApplicationsByPositionId.sql" />
+    <Build Include="Auth\Stored Procedures\GetMaxEmployeeId.sql" />
+    <Build Include="Billing\Stored Procedures\GetSubscriptionUsersBySubscriptionId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

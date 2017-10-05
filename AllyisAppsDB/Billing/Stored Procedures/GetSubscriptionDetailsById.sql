@@ -3,10 +3,13 @@ CREATE PROCEDURE [Billing].[GetSubscriptionDetailsById]
 AS
 	SET NOCOUNT ON;
 SELECT [OrganizationId]
-      ,[SkuId]
+      ,[Subscription].[SkuId]
+	  ,[Subscription].[SubscriptionId]
 	  ,[NumberOfUsers]
       ,[SubscriptionCreatedUtc]
-      ,[IsActive]
+      ,[Subscription].[IsActive]
 	  ,[SubscriptionName] As 'Name'
+	  ,[Sku].[ProductId]
 FROM [Billing].[Subscription] WITH (NOLOCK) 
-WHERE [SubscriptionId] = @subscriptionId AND [IsActive] = 1
+JOIN [Billing].[Sku] ON [Sku].SkuId = [Subscription].[SkuId]
+WHERE [SubscriptionId] = @subscriptionId AND [Subscription].[IsActive] = 1

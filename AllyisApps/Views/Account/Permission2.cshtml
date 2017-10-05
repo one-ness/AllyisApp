@@ -1,28 +1,28 @@
 ﻿@using AllyisApps.ViewModels.Auth;
 @using AllyisApps.Services.Auth;
 
-	@model ManagePermissionsViewModel
-	@Html.HiddenFor(m => m.OrganizationId)
-	@{
-		ViewBag.Title = Strings.Permissions;
-		Layout = "~/Views/Shared/_Layout.cshtml";
+@model ManagePermissionsViewModel
+@Html.HiddenFor(m => m.OrganizationId)
+@{
+	ViewBag.Title = Strings.Permissions;
+	Layout = "~/Views/Shared/_Layout.cshtml";
 
-		bool hasTimeTracker = Model.Subscriptions.Where(s => s.ProductId == Model.TimeTrackerId).Any();
-		bool hasExpenseTracker = Model.Subscriptions.Where(s => s.ProductId == Model.ExpenseTrackerId).Any();
+	bool hasTimeTracker = Model.Subscriptions.Where(s => s.ProductId == Model.TimeTrackerId).Any();
+	bool hasExpenseTracker = Model.Subscriptions.Where(s => s.ProductId == Model.ExpenseTrackerId).Any();
 
-		Dictionary<int, string> organizationRoles = new Dictionary<int, string>
+	Dictionary<int, string> organizationRoles = new Dictionary<int, string>
 	{
 		{ (int)OrganizationRole.Member, Strings.Member },
 		{ (int)OrganizationRole.Owner, Strings.Owner }
 	};
-		Dictionary<int, string> ttRoles = new Dictionary<int, string>
+	Dictionary<int, string> ttRoles = new Dictionary<int, string>
 	{
 		{ (int)TimeTrackerRole.User, Strings.User },
 		{ (int)TimeTrackerRole.Manager, Strings.Manager },
 		{ (int)TimeTrackerRole.NotInProduct, Strings.Unassigned }
 	};
 
-		Dictionary<int, string> etRoles = new Dictionary<int, string>
+	Dictionary<int, string> etRoles = new Dictionary<int, string>
 	{
 		{ (int)ExpenseTrackerRole.User, Strings.User },
 		{ (int)ExpenseTrackerRole.Manager, Strings.Manager },
@@ -36,115 +36,115 @@
 		{ Strings.SetMember, (int)OrganizationRole.Member },
 		{ Strings.SetOwner, (int)OrganizationRole.Owner }
 	};
-		Dictionary<string, int> setTTRoles = new Dictionary<string, int>
+	Dictionary<string, int> setTTRoles = new Dictionary<string, int>
 	{
 		{ Strings.RemoveFromSubscription, 0 },
 		{ Strings.SetUser, (int)TimeTrackerRole.User },
 		{ Strings.SetManager, (int)TimeTrackerRole.Manager }
 	};
 
-		Dictionary<string, int> setETRoles = new Dictionary<string, int>
+	Dictionary<string, int> setETRoles = new Dictionary<string, int>
 	{
 		{ Strings.RemoveFromSubscription, 0},
 		{ Strings.SetUser, (int)ExpenseTrackerRole.User },
 		{ Strings.SetManager, (int)ExpenseTrackerRole.Manager },
 		{ "Set Super User", (int)ExpenseTrackerRole.SuperUser }
 	};
+}
+
+@Html.AntiForgeryToken()
+
+<ul class="nav allyis-tabs">
+	<li class="selected" id="OrganizationTab">@Strings.Organization</li>
+	@if (hasTimeTracker)
+	{
+		<li id="TimeTrackerTab">@Strings.TimeTracker</li>
 	}
-
-	@Html.AntiForgeryToken()
-
-	<ul class="nav allyis-tabs">
-		<li class="selected" id="OrganizationTab">@Strings.Organization</li>
-		@if (hasTimeTracker)
-		{
-			<li id="TimeTrackerTab">@Strings.TimeTracker</li>
-		}
-		@if (hasExpenseTracker)
-		{
-			<li id="ExpenseTrackerTab">@Strings.ExpenseTracker</li>
-		}
-	</ul>
-	<div class="panel panel-default">
-		<div class="panel-body" style="padding: 0px;">
-			<table class="table table-hover table-condensed">
-				<thead class="panel-heading">
-					<tr class="no-border">
-						<th style="width: 6%;"></th>
-						<th style="width: 47%;">@Strings.User</th>
-						<th style="width: 47%;" class="tab-OrganizationTab">@Strings.OrganizationRole</th>
-						@if (hasTimeTracker)
-						{
-							<th class="tab-TimeTrackerTab" style="display: none; width: 47%;">@Strings.TimeTrackerRole</th>
-						}
-						@if (hasTimeTracker)
-						{
-							<th class="tab-TimeTrackerTab" style="display: none; width: 47%;">@Strings.ExpenseTrackerRole</th>
-						}
-					</tr>
-					<tr class="double-bottom-border">
-						<td class="checked">
-							<input type="checkbox" class="all-check" />
-						</td>
-						<td>
-							<input type="search" placeholder="@Strings.UserSearchPlaceholder" id="userSearch" class="form-control" />
-						</td>
-						<td class="tab-OrganizationTab">
-							<select id="organizationRoleFilter" class="form-control">
+	@if (hasExpenseTracker)
+	{
+		<li id="ExpenseTrackerTab">@Strings.ExpenseTracker</li>
+	}
+</ul>
+<div class="panel panel-default">
+	<div class="panel-body" style="padding: 0px;">
+		<table class="table table-hover table-condensed">
+			<thead class="panel-heading">
+				<tr class="no-border">
+					<th style="width: 6%;"></th>
+					<th style="width: 47%;">@Strings.User</th>
+					<th style="width: 47%;" class="tab-OrganizationTab">@Strings.OrganizationRole</th>
+					@if (hasTimeTracker)
+					{
+						<th class="tab-TimeTrackerTab" style="display: none; width: 47%;">@Strings.TimeTrackerRole</th>
+					}
+					@if (hasExpenseTracker)
+					{
+						<th class="tab-ExpenseTrackerTab" style="display: none; width: 47%;">@Strings.ExpenseTrackerRole</th>
+					}
+				</tr>
+				<tr class="double-bottom-border">
+					<td class="checked">
+						<input type="checkbox" class="all-check" />
+					</td>
+					<td>
+						<input type="search" placeholder="@Strings.UserSearchPlaceholder" id="userSearch" class="form-control" />
+					</td>
+					<td class="tab-OrganizationTab">
+						<select id="organizationRoleFilter" class="form-control">
+							<option>@Strings.Any</option>
+							@foreach (string role in organizationRoles.Values)
+							{
+								<option>@role</option>
+							}
+						</select>
+					</td>
+					@if (hasTimeTracker)
+					{
+						<td class="tab-TimeTrackerTab" style="display: none;">
+							<select id="ttRoleFilter" class="form-control">
 								<option>@Strings.Any</option>
-								@foreach (string role in organizationRoles.Values)
+								@foreach (string ttrole in ttRoles.Values)
 								{
-									<option>@role</option>
+									<option>@ttrole</option>
 								}
 							</select>
 						</td>
-						@if (hasTimeTracker)
-						{
-							<td class="tab-TimeTrackerTab" style="display: none;">
-								<select id="ttRoleFilter" class="form-control">
-									<option>@Strings.Any</option>
-									@foreach (string ttrole in ttRoles.Values)
-									{
-										<option>@ttrole</option>
-									}
-								</select>
-							</td>
-						}
-						@if (hasExpenseTracker)
-						{
-							<td class="tab-ExpenseTrackerTab" style="=" display: none;">
-								<select id="etRoleFilter" class=" = form-control">
-									<option>@Strings.Any</option>
-									@foreach (string etrole in etRoles.Values)
-									{
-										<option>@etrole</option>
-									}
-								</select>
-							</td>
-						}
-					</tr>
-				</thead>
-
-				@foreach (UserPermissionsViewModel user in Model.Users)
-				{
-					var fullName = string.Format("{0} {1}", user.FirstName, user.LastName);
-
-					<tr class="userRow" data-id="@user.UserId" data-name="@user.Email">
-						<td class="checked">
-							<input type="checkbox" id="check" />
+					}
+					@if (hasExpenseTracker)
+					{
+						<td class="tab-ExpenseTrackerTab" style="display: none;">
+							<select id="etRoleFilter" class=" = form-control">
+								<option>@Strings.Any</option>
+								@foreach (string etrole in etRoles.Values)
+								{
+									<option>@etrole</option>
+								}
+							</select>
 						</td>
-						<td id="name">@fullName</td>
-						<td id="organizationRole" class="tab-OrganizationTab">@organizationRoles[user.OrganizationRoleId]</td>
-						@if (hasTimeTracker)
-						{
-							<td id="ttRole" class="tab-TimeTrackerTab" style="display: none;">@ttRoles[user.ProductRoleIds[Model.TimeTrackerSubIndex]]</td>
-						}
-						@if (hasExpenseTracker)
-						{
-							<td id="etRole" class="tab-ExpenseTrackerTab" style="display: none;">@etRoles[user.ProductRoleIds[Model.ExpenseTrackerSubIndex]]</td>
-						}
-					</tr>
-				}
+					}
+				</tr>
+			</thead>
+
+			@foreach (UserPermissionsViewModel user in Model.Users)
+			{
+				var fullName = string.Format("{0} {1}", user.FirstName, user.LastName);
+
+				<tr class="userRow" data-id="@user.UserId" data-name="@user.Email">
+					<td class="checked">
+						<input type="checkbox" id="check" />
+					</td>
+					<td id="name">@fullName</td>
+					<td id="organizationRole" class="tab-OrganizationTab">@organizationRoles[user.OrganizationRoleId]</td>
+					@if (hasTimeTracker)
+					{
+						<td id="ttRole" class="tab-TimeTrackerTab" style="display: none;">@ttRoles[user.ProductRoleIds[Model.TimeTrackerSubIndex]]</td>
+					}
+					@if (hasExpenseTracker)
+					{
+						<td id="etRole" class="tab-ExpenseTrackerTab" style="display: none;">@etRoles[user.ProductRoleIds[Model.ExpenseTrackerSubIndex]]</td>
+					}
+				</tr>
+			}
 
 				@*This last blank row is just an easy way to have a border at the bottom of the table content*@
 				<tr id="tableEnd" class="nohover">
@@ -161,8 +161,8 @@
 			</div>
 		</div>
 		<div class="panel-footer" style="height: 54px; position: relative;">
-			<div class="col-xs-2 col-sm-1 col-md-1" style="text-align: right; vertical-align: middle; line-height: 33px; padding-right: 0px;">
-				@Strings.Actions
+			<div class="col-xs-6 col-sm-6 col-md-5" style="text-align: right; vertical-align: middle; line-height: 33px; padding-right: 0px;">
+				Please select user(s), choose an action, then click Save
 			</div>
 			<div class="col-xs-6 col-sm-6 col-md-5 col-lg-4">
 				<select class="form-control tab-OrganizationTab" id="orgActionSelect">
@@ -175,14 +175,14 @@
 				</select>
 				@if (hasTimeTracker)
 			{
-					<select class="form-control tab-TimeTrackerTab" id="ttActionSelect" style="display: none;">
-						<optgroup label="@Strings.TimeTracker">
-							@foreach (string setTTRole in setTTRoles.Keys)
-							{
-								<option>@setTTRole</option>
-							}
-						</optgroup>
-					</select>
+				<select class="form-control tab-TimeTrackerTab" id="ttActionSelect" style="display: none;">
+					<optgroup label="@Strings.TimeTracker">
+						@foreach (string setTTRole in setTTRoles.Keys)
+						{
+							<option>@setTTRole</option>
+						}
+					</optgroup>
+				</select>
 			}
 				@if (hasExpenseTracker)
 				{
@@ -196,7 +196,6 @@
 					</select>
 				}
 			</div>
-
 			<div class="bottom-right">
 				<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default"> @Strings.Cancel </a>
 				<input type="button" class="btn btn-primary" id="do-it" value="@Strings.Save" />
@@ -204,27 +203,28 @@
 		</div>
 	</div>
 
-	@section scripts {
-		<script type="text/javascript">
+@section scripts {
+	<script type="text/javascript">
         orgActions = @Html.Raw(Json.Encode(setOrganizationRoles));
         ttActions = @Html.Raw(Json.Encode(setTTRoles));
         etActions = @Html.Raw(Json.Encode(setETRoles));
         confirmMessage = "@Html.Raw(Strings.RemoveFromOrgNoName)";
-		</script>
-		<script src="~/Scripts/allyis-account-permission2.js" type="text/javascript"></script>
-		<script src="~/Scripts/allyis-pages-with-filter.js" type="text/javascript"></script>
-		@*@Scripts.Render("~/bundles/AccountPermission2");*@
-		<script type="text/javascript">
+	</script>
+	<script src="~/Scripts/allyis-account-permission2.js" type="text/javascript"></script>
+	<script src="~/Scripts/allyis-pages-with-filter.js" type="text/javascript"></script>
+	@*@Scripts.Render("~/bundles/AccountPermission2");*@
+	<script type="text/javascript">
         @*Filters can only be set up after the above script is loaded*@
         pwf.setPageLimit(15);
         pwf.setRowClass("userRow");
         pwf.setCheckBoxSelector("#check");
         pwf.addFilter("#userSearch", "search", "#name");
         pwf.addFilter('#organizationRoleFilter', 'dropDown', "#organizationRole", "@Strings.Any");
-        if('@hasTimeTracker' == 'True') pwf.addFilter('#ttRoleFilter', 'dropDown', "#ttRole", "@Strings.Any");
+		if ('@hasTimeTracker' == 'True') pwf.addFilter('#ttRoleFilter', 'dropDown', "#ttRole", "@Strings.Any");
+		if ('@hasExpenseTracker' == 'True') pwf.addFilter('#etRoleFilter', 'dropDown', "#etRole", "@Strings.Any");
         if (sessionStorage.getItem("/ManagePermissionsPage") != null)
         {
             pwf.setPreviouslySelectedPage(sessionStorage.getItem("/ManagePermissionsPage"))
         }
-    </script>
+	</script>
 }

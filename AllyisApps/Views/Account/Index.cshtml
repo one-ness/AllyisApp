@@ -95,7 +95,8 @@
 		{
 			<div class="row">
 				<div class="col-xs-12">
-					@Strings.NoOrganizationMessage
+					<p><i>@Strings.NoOrganizationMessage</i></p>
+					<p><i>@Strings.NoOrganizationMessage2</i></p>
 				</div>
 			</div>
 		}
@@ -162,7 +163,7 @@
 												<div class="panel panel-default">
 													<div class="btn default" style="text-align:center; margin:10px;">
 														<div class="center-block" text-align: center; vertical-align: middle;" style="margin-top:5px;">
-															<img src="@sub.IconUrl" alt="@sub.ProductName" />
+															<img src="@(Url.Content(sub.IconUrl))" alt="@sub.ProductName" />
 														</div>
 
 														<h3>
@@ -184,7 +185,7 @@
 
 				<div class="row">
 				</div>
-			}
-		}
+												}
+											}
 	</div>
 </div>

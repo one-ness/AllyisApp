@@ -6,7 +6,6 @@
 
 using System;
 using System.Collections.Generic;
-using AllyisApps.Services.StaffingManager;
 
 namespace AllyisApps.Services.StaffingManager
 {

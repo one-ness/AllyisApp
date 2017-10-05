@@ -7,7 +7,9 @@ SELECT	[Product].[ProductId],
 		[Subscription].[SubscriptionId],
 		[Organization].[OrganizationId],
 		[Subscription].[SkuId],
+		[Subscription].[SubscriptionCreatedUtc] as 'CreatedUtc',
 		[Subscription].[NumberOfUsers],
+		[Subscription].[SubscriptionName],
 		[Organization].[OrganizationName] AS [OrganizationName],
 		[Sku].[SkuName] AS [SkuName]
   FROM [Billing].[Subscription] WITH (NOLOCK) 

@@ -7,7 +7,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using AllyisApps.Services;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
 
@@ -100,7 +99,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the customer Id.
 		/// </summary>
-		public BillingServicesCustomerId CustomerId { get; set; }
+		public string CustomerId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the token.

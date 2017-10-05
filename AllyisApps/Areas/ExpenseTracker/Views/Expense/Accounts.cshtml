@@ -18,7 +18,8 @@
 				<th width="25%">Name</th>
 				<th width="25%">Account Type</th>
 				<th width="25%">Parent Account</th>
-				<th width="25%"></th>
+				<th width="15%">Status</th>
+				<th width="10%"></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -27,16 +28,17 @@
 				<tr>
 					<td>@account.AccountName</td>
 					<td>@account.AccountTypeName</td>
-					<td>@account.ParentAccountId</td>
+					<td>@account.ParentAccountName</td>
+					<td>@account.Status</td>
 					<td>
 						<a href="@Url.Action("CreateAccount", ControllerConstants.Expense, new { accountId = @account.AccountId })" title="Edit the report..">
 							<span class="btn btn-primary">Edit</span>
 						</a>
-						<a href="@Url.Action("DeleteAccount", ControllerConstants.Expense, new { accountId = @account.AccountId })" title="Delete the report...">
-							<span class="btn btn-primary " style="background-color:red">
-								<i class="fa fa-times" style="color:white" />
-							</span>
-						</a>
+						@*<a href="@Url.Action("DeleteAccount", ControllerConstants.Expense, new { accountId = @account.AccountId })" title="Delete the report...">
+								<span class="btn btn-primary " style="background-color:red">
+									<span class="fa fa-times" style="color:white;"></span>
+								</span>
+							</a>*@
 					</td>
 				</tr>
 			}

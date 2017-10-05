@@ -1,0 +1,20 @@
+﻿@using AllyisApps.ViewModels.Auth;
+@model AllyisApps.ViewModels.Auth.PermissionsViewModel
+
+<ul class="nav allyis-tabs">
+
+	<li @(Model.SubscriptionId == null ? "class = selected" : "") id="OrganizationTab">
+		<a style="display: inline" href="@Url.Action(ActionConstants.ManageOrgPermissions, new { id = Model.OrganizationId })">
+			@Strings.Organization
+		</a>
+	</li>
+	@foreach (var sub in Model.CurrentSubscriptions)
+	{
+		<li class="@(Model.SubscriptionId != null && sub.SubscriptionId == Model.SubscriptionId ?  "selected" : "") SubscriptionTab">
+			<a style="display: inline" href="@Url.Action(ActionConstants.ManageSubPermissions, new { id = sub.SubscriptionId })">
+				@sub.ProductName
+			</a>
+		</li>
+
+	}
+</ul>

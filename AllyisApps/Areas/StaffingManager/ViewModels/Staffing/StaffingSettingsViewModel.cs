@@ -1,9 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using AllyisApps.Services;
 using AllyisApps.Services.Crm;
-using AllyisApps.Services.Lookup;
-using AllyisApps.Services.StaffingManager;
 
 namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 {
@@ -83,7 +79,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		public int? defaultApplicationStatus { get; set; }
 
 		/// <summary>
-		/// Gets information for the positions Address
+		/// Gets or sets the position's address.
 		/// </summary>
 		public AddressViewModel PositionAddress { get; set; }
 

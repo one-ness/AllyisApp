@@ -1496,7 +1496,7 @@
     <value>Subscription Name</value>
   </data>
   <data name="NoOrganizationMessage" xml:space="preserve">
-    <value>You are not a member of any organization yet. Please contact your employer to send you an invitation, or you can create your own, by clicking the Create Organization button.</value>
+    <value>You are not part of an organization yet.</value>
   </data>
   <data name="MustSelectActiveProject" xml:space="preserve">
     <value>You cant edit a time entry on a project that is Deactivated</value>
@@ -1545,5 +1545,17 @@
   </data>
   <data name="PositionTitle" xml:space="preserve">
     <value>Position Title</value>
+  </data>
+  <data name="NoOrganizationMessage2" xml:space="preserve">
+    <value>Please contact your employer to send you an invitation, or you can create your own, by clicking the Create Organization button.</value>
+  </data>
+  <data name="FailedToFindProduct" xml:space="preserve">
+    <value>Failed to Find Product</value>
+  </data>
+  <data name="InviteResentTo" xml:space="preserve">
+    <value>Invite is resent to {0}</value>
+  </data>
+  <data name="ResendInvite" xml:space="preserve">
+    <value>Resend Invite</value>
   </data>
 </root>

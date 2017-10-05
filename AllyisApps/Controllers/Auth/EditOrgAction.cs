@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
@@ -31,24 +32,9 @@ namespace AllyisApps.Controllers.Auth
 		{
 			if (ModelState.IsValid)
 			{
-				try
-				{
-					if (AppService.UpdateOrganization(
-						BuildEditOrganizaiton(model)))
-					{
-						// Organization updated successfully
-						Notifications.Add(new BootstrapAlert(@Resources.Strings.OrganizationDetailsUpdated, Variety.Success));
-						return this.RedirectToAction(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = model.OrganizationId });
-					}
-				}
-				catch (ArgumentException)
-				{
-					Notifications.Add(new BootstrapAlert(Resources.Strings.SubdomainTaken, Variety.Danger));
-					return this.RedirectToAction(ActionConstants.Edit, ControllerConstants.Account, new { id = model.OrganizationId });
-				}
-
-				// Organization update failed due to invalid permissions
-				return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.CannotEditProfileMessage), ControllerConstants.Organization, ActionConstants.Edit));
+				this.AppService.UpdateOrganization(model.OrganizationId, model.OrganizationName, model.SiteUrl, model.AddressId, model.Address, model.City, model.SelectedStateId, model.SelectedCountryCode, model.PostalCode, model.PhoneNumber, model.FaxNumber, null);
+				Notifications.Add(new BootstrapAlert(@Resources.Strings.OrganizationDetailsUpdated, Variety.Success));
+				return this.RedirectToAction(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = model.OrganizationId });
 			}
 
 			// Model is invalid, try again
@@ -60,28 +46,13 @@ namespace AllyisApps.Controllers.Auth
 		/// The page for editing an organization's information.
 		/// </summary>
 		/// <param name="id">The organization id.</param>
-		/// <param name="returnUrl">The return url to redirect to after form submit.</param>
-		/// <returns>The result of this action.</returns>
-		public ActionResult EditOrg(int id, string returnUrl)
+		[HttpGet]
+		public ActionResult EditOrg(int id)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
-			bool candelete = this.AppService.CheckOrgAction(AppService.OrgAction.DeleteOrganization, id, false);
-			var infos = AppService.GetOrgWithNextEmployeeId(id);
-			EditOrganizationViewModel model = this.ConstructEditOrganizationViewModel(infos, candelete);
-			model.EmployeeId = infos.NextEmpolyeeID;
-			ViewBag.returnUrl = returnUrl;
-			return this.View(model);
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="EditOrganizationViewModel"/> class.
-		/// </summary>
-		/// <param name="organization">An <see cref="Organization"/> for the organization.</param>
-		/// <param name="canDelete">The users permission to delete.</param>
-		/// <returns>An initialized EditOrganizationViewModel.</returns>
-		public EditOrganizationViewModel ConstructEditOrganizationViewModel(Organization organization, bool canDelete)
-		{
-			var model = new EditOrganizationViewModel
+			bool canDelete = this.AppService.CheckOrgAction(AppService.OrgAction.DeleteOrganization, id, false);
+			var organization = this.AppService.GetOrganization(id);
+			var model = new EditOrganizationViewModel()
 			{
 				OrganizationId = organization.OrganizationId,
 				OrganizationName = organization.OrganizationName,
@@ -96,49 +67,12 @@ namespace AllyisApps.Controllers.Auth
 				PhoneNumber = organization.PhoneNumber,
 				FaxNumber = organization.FaxNumber,
 				CanDelete = canDelete,
-				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService)
+				EmployeeId = "value",//Value needed for model TODO: Seperate Edit and Create
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
+				LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService, organization.Address?.CountryCode ?? string.Empty)
 			};
-			model.LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService, model.SelectedCountryCode);
-			return model;
-		}
 
-		/// <summary>
-		/// Builds an organizaion servie object form the view Model ensures that the built service object has all of its current propreties.
-		/// </summary>
-		/// <param name="model">An EditOrgViewModel.</param>
-		/// <param name="loadOrginal">Sets if the model loads the original organization model.</param>
-		/// <returns>Returns an Organization object.</returns>
-		private Organization BuildEditOrganizaiton(EditOrganizationViewModel model, bool loadOrginal = false)
-		{
-			Organization orginal = null;
-
-			if (loadOrginal)
-			{
-				orginal = AppService.GetOrganization(model.OrganizationId);
-			}
-
-			return new Organization()
-			{
-				OrganizationId = model.OrganizationId,
-				OrganizationName = model.OrganizationName,
-				SiteUrl = model.SiteUrl,
-				Address = new Address()
-				{
-					AddressId = model.AddressId,
-					City = model.City,
-					StateId = model.SelectedStateId,
-					CountryCode = model.SelectedCountryCode,
-					PostalCode = model.PostalCode,
-					Address1 = model.Address
-				},
-
-				PhoneNumber = model.PhoneNumber,
-				FaxNumber = model.FaxNumber,
-
-				// Properties not in model
-				Subdomain = orginal?.Subdomain,
-				CreatedUtc = orginal?.CreatedUtc
-			};
+			return this.View(model);
 		}
 	}
 }

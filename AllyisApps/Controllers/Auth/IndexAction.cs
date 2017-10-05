@@ -89,11 +89,13 @@ namespace AllyisApps.Controllers.Auth
 					SiteUrl = item.Organization.SiteUrl,
 					FaxNumber = item.Organization.FaxNumber,
 					//// TODO: Infomation is dependent on curent user
-					IsManageAllowed = AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, item.Organization.OrganizationId, item.OrganizationRole, false)
+					IsManageAllowed = AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, item.Organization.OrganizationId, false)
 				};
 
 				// Add subscription info
-				foreach (var subItem in accountInfo.Subscriptions.Where(sub => sub.OrganizationId == item.Organization.OrganizationId))
+				foreach (var subItem in accountInfo.Subscriptions
+					.Where(sub => sub.OrganizationId == item.Organization.OrganizationId)
+					.OrderBy(sub => sub.ProductId))
 				{
 					string description =
 						subItem.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription :
@@ -151,7 +153,7 @@ namespace AllyisApps.Controllers.Auth
 							break;
 					}
 
-					subViewModel.IconUrl = subItem.IconUrl == null ? null : string.Format(subItem.IconUrl);
+					subViewModel.IconUrl = subItem.IconUrl == null ? null : "~/" + subItem.IconUrl;
 					orgViewModel.Subscriptions.Add(subViewModel);
 				}
 				indexViewModel.Organizations.Add(orgViewModel);

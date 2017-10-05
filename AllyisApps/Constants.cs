@@ -53,6 +53,8 @@ namespace AllyisApps
 		public const string LogOn = "logon";
 		public const string ManageOrg = "manageorg";
 		public const string ManagePermissions = "managepermissions";
+		public const string ManageOrgPermissions = "manageorgpermissions";
+		public const string ManageSubPermissions = "managesubpermissions";
 		public const string ManagePermissions2 = "managepermissions2";
 		public const string OrgIndex = "orgindex";
 		public const string Pending = "pending";
@@ -68,6 +70,7 @@ namespace AllyisApps
 		public const string RemoveUser = "removeuser";
 		public const string ResetPassword = "resetpassword";
 		public const string ResetPasswordConfirmation = "resetpasswordconfirmation";
+		public const string ResendInvite = "resendinvite";
 		public const string RouteHome = "routehome";
 		public const string Skus = "skus";
 		public const string Subscribe = "subscribe";

@@ -138,13 +138,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			return AppService.CreateProjectAndUpdateItsUserList(
 				new Services.Project.Project()
 				{
-					owningCustomer = new Customer(){
+					owningCustomer = new Customer()
+					{
 						CustomerId = model.ParentCustomerId,
 					},
 					ProjectName = model.ProjectName,
 					ProjectOrgId = model.ProjectOrgId,
-					StartingDate = Utility.GetDateTimeFromDays(model.StartDate),
-					EndingDate = Utility.GetDateTimeFromDays(model.EndDate)
+
+					StartingDate = model.StartDate == -1 ? null : Utility.GetDateTimeFromDays(model.StartDate),
+					EndingDate = model.EndDate == -1 ? null : Utility.GetDateTimeFromDays(model.EndDate)
 				},
 				userIds);
 		}
@@ -158,7 +160,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			return AppService.CreateProject(new Services.Project.Project()
 			{
-				owningCustomer = new Customer(){
+				owningCustomer = new Customer()
+				{
 					CustomerId = model.ParentCustomerId,
 				},
 				ProjectName = model.ProjectName,

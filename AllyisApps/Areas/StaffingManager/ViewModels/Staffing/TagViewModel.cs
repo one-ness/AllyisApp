@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
+﻿namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 {
 	/// <summary>
 	/// Tags View model.
@@ -13,7 +8,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// Gets or ste the TagName
 		/// </summary>
-		public string TagName { get; set;}
+		public string TagName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Tags Id

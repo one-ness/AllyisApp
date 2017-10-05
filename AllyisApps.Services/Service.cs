@@ -12,13 +12,13 @@ using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.Hrm;
 using AllyisApps.DBModel.StaffingManager;
 using AllyisApps.DBModel.TimeTracker;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Billing;
+using AllyisApps.Services.Crm;
+using AllyisApps.Services.Expense;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.Services.TimeTracker;
-using AllyisApps.Services.Billing;
-using AllyisApps.Services.Auth;
-using AllyisApps.Services.Crm;
-using AllyisApps.Services.Expense;
 
 namespace AllyisApps.Services
 {
@@ -858,7 +858,7 @@ namespace AllyisApps.Services
 				PositionId = tag.PositionId
 			};
 		}
-		
+
 		/// <summary>
 		/// initialize a base customer object
 		/// </summary>
