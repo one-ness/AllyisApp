@@ -18,16 +18,19 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// Gets or sets FirstName.
 		/// </summary>
+		[Required]
 		public string FirstName { get; set; }
 
 		/// <summary>
 		/// Gets or sets LastName.
 		/// </summary>
+		[Required]
 		public string LastName { get; set; }
 
 		/// <summary>
 		/// Gets or sets Email.
 		/// </summary>
+		[Required]
 		public string Email { get; set; }
 
 		/// <summary>
@@ -39,31 +42,37 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// Gets or sets Address.
 		/// </summary>
+		[Required]
 		public string Address { get; set; }
 
 		/// <summary>
 		/// Gets or sets City.
 		/// </summary>
+		[Required]
 		public string City { get; set; }
 
 		/// <summary>
 		/// Gets or sets State.
 		/// </summary>
+		[Required]
 		public string State { get; set; }
 
 		/// <summary>
 		/// Gets or sets Country.
 		/// </summary>
+		[Required]
 		public string Country { get; set; }
 
 		/// <summary>
 		/// Gets or sets PostalCode.
 		/// </summary>
+		[Required]
 		public string PostalCode { get; set; }
 
 		/// <summary>
 		/// Gets or sets PhoneNumber.
 		/// </summary>
+		[Required]
 		public string PhoneNumber { get; set; }
 
 		/// <summary>

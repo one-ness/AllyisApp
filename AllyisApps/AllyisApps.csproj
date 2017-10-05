@@ -17,8 +17,10 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44326</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <NuGetPackageImportStamp>
@@ -240,10 +242,13 @@
     <Compile Include="Areas\StaffingManager\Controllers\Customer\EditAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Customer\IndexAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\AccountAction.cs" />
-    <Compile Include="Areas\StaffingManager\Controllers\Staffing\ApplicantAction - Copy.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Staffing\ApplicationsPartialAction.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Staffing\DeleteApplicationAction.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Staffing\DeleteApplicantAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\ApplicantListAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\ApplicantAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\DeletePositionStatusAction.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Staffing\FileAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\ViewPosition.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\EditPositionAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\CreatePositionAction.cs" />
@@ -632,13 +637,14 @@
     <Content Include="Areas\ExpenseTracker\Views\Expense\CreateAccount.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\CreateApplicant.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\Applicant.cshtml" />
-    <Content Include="Areas\StaffingManager\Views\Staffing\_ApplicationsPartial.cshtml" />
+    <Content Include="Areas\StaffingManager\Views\Staffing\ApplicationsPartial.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\ApplicantList.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\EditPosition.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\ViewPosition.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\_PositionViewDetails.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\_ApplicationInfoPartial.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\Application.cshtml" />
+    <Content Include="Areas\StaffingManager\Views\Staffing\ApplicationDocument.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />

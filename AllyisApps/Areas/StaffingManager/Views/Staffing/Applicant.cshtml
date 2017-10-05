@@ -7,6 +7,7 @@
 	DisplayHints.LayoutThemeBundle = "~/Content/StaffingManager";
 	string name = Model.FirstName + " " + Model.LastName;
 	ViewBag.Title = name;
+	int fileIndex = 1;
 }
 
 <!DOCTYPE html>
@@ -20,16 +21,42 @@
 	<table class="table table-hover" style="clear: both;">
 		<thead>
 			<tr>
-				<th style="width: 25%">Name</th>
+				<th style="width: 25%">Position</th>
 				<th style="width: 25%">Status</th>
 				<th style="width: 25%">Last Modified</th>
 				<th style="width: 25%">Notes</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
-			@Html.Partial("_ApplicationsPartial", Model.Applications ?? new List<StaffingApplicationViewModel>())
+			@Html.Action("ApplicationsPartial", new { model = Model.Applications ?? new List<StaffingApplicationViewModel>() })
 		</tbody>
 	</table>
 	@Html.Action("Application", new { applicantId = Model.ApplicantId })
 </body>
 </html>
+
+@section scripts
+{
+	<script type="text/javascript">
+		var file_index = @fileIndex;
+
+		function addFile() {
+			var data = @Html.Raw(Json.Encode(new ApplicationDocumentViewModel() { Index = -1 }));
+			data.Index = file_index;
+			$.ajax({
+				url: '@Url.Action("DisplayFile")',
+				data: data,
+				type: 'POST',
+				success: function (response) {
+					$('.files').prepend(response);
+				}
+			});
+			file_index += 1;
+		}
+
+		function removeFile(index) {
+			$('#file-input_' + index).remove();
+		}
+	</script>
+}

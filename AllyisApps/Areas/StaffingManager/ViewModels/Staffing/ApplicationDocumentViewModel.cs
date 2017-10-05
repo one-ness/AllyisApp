@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using AllyisApps.Services.StaffingManager;
+using System.IO;
 
 namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 {
@@ -8,6 +9,11 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 	/// </summary>
 	public class ApplicationDocumentViewModel
 	{
+		/// <summary>
+		/// Gets or sets the index of the file.
+		/// </summary>
+		public int Index { get; set; }
+
 		/// <summary>
 		/// Gets or sets the ApplicationDocumentId.
 		/// </summary>
@@ -27,5 +33,10 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// Gets or sets the DocumentName.
 		/// </summary>
 		public string DocumentName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the InputStream
+		/// </summary>
+		public Stream InputStream { get; set; }
 	}
 }

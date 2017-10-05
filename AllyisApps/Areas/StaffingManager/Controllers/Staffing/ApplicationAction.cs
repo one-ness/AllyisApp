@@ -15,6 +15,7 @@ using AllyisApps.Services.Crm;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.Services.Lookup;
 using System;
+using AllyisApps.Lib;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -61,7 +62,8 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		public ActionResult Application(StaffingApplicationViewModel model)
 		{
 			Application application = InitializeApplication(model);
-			int applicationId = this.AppService.CreateApplication(application);
+			application.ApplicationId = this.AppService.CreateApplication(application);
+			UploadAttachments(model, application);
 			return this.RedirectToAction("Applicant", new { applicantId = model.ApplicantId });
 		}
 
@@ -95,43 +97,27 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				DocumentName = d.DocumentName
 			};
 		}
+		
+		private void UploadAttachments(StaffingApplicationViewModel model, Application application)
+		{
+			foreach (string name in AzureFiles.GetReportAttachments(application.ApplicationId))
+			{
+				if (model.ApplicationDocuments == null || !model.ApplicationDocuments.Select(d => d.DocumentName).Contains(name))
+				{
+					AzureFiles.DeleteApplicationDocument(application.ApplicationId, name);
+				}
+			}
 
-		///// <summary>
-		///// Application page.
-		///// </summary>
-		///// <returns></returns>
-		//public ActionResult Application(int applicationId)
-		//{
-		//	Application application = this.AppService.GetApplicationById(applicationId);
-		//	StaffingApplicationViewModel model = InitializeStaffingApplicationViewModel(application);
-
-		//	return this.View(model);
-		//}
-
-		//private StaffingApplicationViewModel InitializeStaffingApplicationViewModel(Application application)
-		//{
-		//	return new StaffingApplicationViewModel()
-		//	{
-		//		ApplicantId = application.ApplicantId,
-		//		ApplicationCreatedUtc = application.ApplicationCreatedUtc,
-		//		ApplicationDocuments = application.ApplicationDocuments.Select(d => InitializeApplicationDocumentViewModel(d)).ToList(),
-		//		ApplicationId = application.ApplicationId,
-		//		ApplicationModifiedUtc = application.ApplicationModifiedUtc,
-		//		ApplicationStatus = application.ApplicationStatus,
-		//		Notes = application.Notes,
-		//		PositionId = application.PositionId
-		//	};
-		//}
-
-		//private ApplicationDocumentViewModel InitializeApplicationDocumentViewModel(ApplicationDocument document)
-		//{
-		//	return new ApplicationDocumentViewModel()
-		//	{
-		//		ApplicationDocumentId = document.ApplicationDocumentId,
-		//		ApplicationId = document.ApplicationId,
-		//		DocumentLink = document.DocumentLink,
-		//		DocumentName = document.DocumentName
-		//	};
-		//}
+			if (model.ApplicationDocuments != null)
+			{
+				foreach (ApplicationDocumentViewModel document in model.ApplicationDocuments)
+				{
+					if (document != null)
+					{
+						AzureFiles.SaveReportAttachments(application.ApplicationId, document.InputStream, document.DocumentName);
+					}
+				}
+			}
+		}
 	}
 }
