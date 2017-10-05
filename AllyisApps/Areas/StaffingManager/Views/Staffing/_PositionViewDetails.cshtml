@@ -196,11 +196,11 @@
 					<span class="pull-right">
 						@if (Model.PositionAddress.City != "" && Model.PositionAddress.City != null)
 						{
-							@Model.PositionAddress.City@:,
+							@Model.PositionAddress.City
 						}
 						@if (Model.PositionAddress.State != "" && Model.PositionAddress.State != null)
 						{
-							@:&nbsp;@Model.PositionAddress.State
+							@:,&nbsp;@Model.PositionAddress.State
 						}
 						@if (Model.PositionAddress.Country != "" && Model.PositionAddress.Country != null)
 						{
@@ -211,6 +211,10 @@
 							@Model.PositionAddress.Country
 						}
 					</span>
+				</div>
+				<div class="form-group row">
+					<label>details:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+					<button type="button" data-toggle="collapse" data-target="#details">&nbsp;&nbsp;&nbsp;<i class="glyphicon glyphicon-chevron-down"></i>&nbsp;&nbsp;&nbsp;</button>
 				</div>
 			</div>
 			<div class="col-md-4 fa-pull-right row pad-right">
@@ -234,7 +238,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="pull-left col-md-12">
+		<div class="pull-left col-md-12 collapse" id="details">
 			@if (Model.RequiredSkills != "" && Model.RequiredSkills != null)
 			{
 				<div class="form-group">
@@ -264,7 +268,7 @@
 </div>
 
 <div>
-	<h3>Applications: </h3>
+	<h3 class="panel-heading panel-title">Applications: </h3>
 	<div class="panel panel-default col-md-12">
 		@foreach(var application in Model.Applications)
 		{

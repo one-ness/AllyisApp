@@ -243,11 +243,11 @@
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\ApplicantAction - Copy.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\ApplicantListAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\ApplicantAction.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Staffing\DeletePositionStatusAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\ViewPosition.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\EditPositionAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\CreatePositionAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\DeleteEmploymentTypeAction.cs" />
-    <Compile Include="Areas\StaffingManager\Controllers\Staffing\DeletePositionStatusAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\DeletePositionLevelAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\ApplicationAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\CreateApplicantAction.cs" />
