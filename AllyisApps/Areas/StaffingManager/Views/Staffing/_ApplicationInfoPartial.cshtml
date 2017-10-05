@@ -20,7 +20,7 @@
 <div class="row panel">
 	<div>	
 		<div class="col-md-2 sm-control-width"><!--vvv - TODO: change that to Applicant Link   -->
-			<a class="AppName" href="@Url.Action(ActionConstants.Index, ControllerConstants.Staffing, new { subscriptionId = ViewBag.subscriptionId } )">
+			<a class="AppName" href="@Url.Action(ActionConstants.ApplicantList, ControllerConstants.Staffing, new { subscriptionId = ViewBag.subscriptionId } )">
 				@Model.ApplicantName
 			</a>
 			<br>
@@ -49,7 +49,7 @@
 		</div>
 		<div class="col-md-3 pull-right">
 			<div class="row">
-					<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Staffing, new { subscriptionId = ViewBag.subscriptionId } )">
+					<a href="@Url.Action(ActionConstants.ApplicantList, ControllerConstants.Staffing, new { subscriptionId = ViewBag.subscriptionId } )">
 						<label>
 							Files:&nbsp;&nbsp;
 						</label>
