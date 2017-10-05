@@ -30,7 +30,7 @@ namespace AllyisApps.Controllers.Auth
 		{
 			bool isInvited = invited == 0 ? false : true;
 			EditMemberViewModel model;
-			ViewBag.SignedInUserId = GetCookieData().UserId;
+			ViewBag.SignedInUserId = this.AppService.UserContext.UserId;
 
 			if (!isInvited)
 			{

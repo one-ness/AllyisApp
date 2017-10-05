@@ -395,6 +395,7 @@
     <Build Include="StaffingManager\Stored Procedures\UpdateStaffingSettings.sql" />
     <Build Include="StaffingManager\Stored Procedures\GetStaffingDefaultStatus.sql" />
     <Build Include="Auth\Stored Procedures\GetMaxEmployeeId.sql" />
+    <Build Include="Billing\Stored Procedures\GetSubscriptionUsersBySubscriptionId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

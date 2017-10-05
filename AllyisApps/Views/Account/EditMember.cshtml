@@ -109,11 +109,8 @@
 							@Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
 							@Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
 						</div>
-					}
-					else
-					{ @Html.HiddenFor(m => m.LastName);
-					}
-					@if (Model.UserInfo.UserId != ViewBag.SignedInUserID)
+					} else { @Html.HiddenFor(m => m.LastName); }
+					@if (Model.ShowRoleDropDown)
 					{
 						<div class="form-group">
 							@Html.LabelFor(m => m.EmployeeRoleId, Strings.Role)

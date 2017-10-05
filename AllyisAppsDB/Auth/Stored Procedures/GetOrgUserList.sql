@@ -9,7 +9,10 @@ BEGIN
 		   [OU].[OrganizationRoleId],
 		   [O].[OrganizationName] AS [OrganizationName],
 		   [OU].[EmployeeId],
-		   [U].[Email]
+		   [U].[Email],
+		   [U].[FirstName],
+		   [U].[LastName],
+		   [OU].OrganizationUserCreatedUtc as 'CreatedUtc'
     FROM [Auth].[OrganizationUser]	AS [OU]
 	WITH (NOLOCK)
     INNER JOIN [Auth].[User]		AS [U] WITH (NOLOCK) 

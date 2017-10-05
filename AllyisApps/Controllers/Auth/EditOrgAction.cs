@@ -30,7 +30,6 @@ namespace AllyisApps.Controllers.Auth
 		[ValidateAntiForgeryToken]
 		public ActionResult EditOrg(EditOrganizationViewModel model)
 		{
-			var modelStateErrors = this.ModelState.Keys.SelectMany(key => this.ModelState[key].Errors);
 			if (ModelState.IsValid)
 			{
 				this.AppService.UpdateOrganization(model.OrganizationId, model.OrganizationName, model.SiteUrl, model.AddressId, model.Address, model.City, model.SelectedStateId, model.SelectedCountryCode, model.PostalCode, model.PhoneNumber, model.FaxNumber, null);

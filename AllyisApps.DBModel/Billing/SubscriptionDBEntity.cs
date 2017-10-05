@@ -19,6 +19,11 @@ namespace AllyisApps.DBModel.Billing
 		public int SubscriptionId { get; set; }
 
 		/// <summary>
+		/// Product id for sku
+		/// </summary>
+		public int ProductId { get; set; }
+
+		/// <summary>
 		/// Gets or sets OrganizationId.
 		/// </summary>
 		public int OrganizationId { get; set; }

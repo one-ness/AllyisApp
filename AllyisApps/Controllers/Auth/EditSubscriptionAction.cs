@@ -23,15 +23,9 @@ namespace AllyisApps.Controllers.Auth
 		public ActionResult EditSubscription(int id)
 		{
 			var sub = AppService.GetSubscription(id);
-
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, sub.OrganizationId);
-
-			var skuId = AppService.GetSubscription(id).SkuId;
-
-			ProductSubscription infos = AppService.GetProductSubscriptionInfo(id, skuId);
-
-			//SkuInfo nextSku = GetNextName(id, skuId, productId);
-			SkuInfo sku = AppService.GetSkuDetails(skuId);
+			ProductSubscription infos = AppService.GetProductSubscriptionInfo(id, sub.SkuId);
+			SkuInfo sku = AppService.GetSkuDetails(sub.SkuId);
 
 			EditSubscriptionViewModel model = new EditSubscriptionViewModel
 			{
@@ -47,6 +41,7 @@ namespace AllyisApps.Controllers.Auth
 				SkuIconUrl = sku.IconUrl,
 				OtherSkus = infos.SkuList.Where(sk => sku.SkuId != sk.SkuId).Select(sk => sk.SkuId)
 			};
+
 			return this.View(ViewConstants.EditSubscription, model);
 		}
 
@@ -77,8 +72,8 @@ namespace AllyisApps.Controllers.Auth
 					{
 						model.SkuIdNext = model.SkuId;
 					}
-					ProductSubscription oldProduct = AppService.GetProductSubscriptionInfo(model.OrganizationId, model.SkuId);
 
+					ProductSubscription oldProduct = AppService.GetProductSubscriptionInfo(model.OrganizationId, model.SkuId);
 					ProductSubscription infos = AppService.GetProductSubscriptionInfo(model.OrganizationId, model.SkuIdNext);
 
 					var id = infos.StripeTokenCustId;
@@ -98,16 +93,6 @@ namespace AllyisApps.Controllers.Auth
 			}
 
 			return this.View(model);
-		}
-
-		private SkuInfo GetNextName(int id, SkuIdEnum skuId, ProductIdEnum productId)
-		{
-			var infos = AppService.GetProductSubscriptionInfo(id, skuId);
-			SkuInfo sku = AppService.GetSkuDetails(skuId);
-			SkuInfo skuNext = infos.SkuList.Where(s => s.SkuId != skuId && s.ProductId == productId).SingleOrDefault();
-			sku.SkuIdNext = skuNext == null ? 0 : skuNext.SkuId;
-			sku.NextName = skuNext == null ? null : skuNext.SkuName;
-			return sku;
 		}
 	}
 }
