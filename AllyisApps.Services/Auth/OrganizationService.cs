@@ -195,7 +195,7 @@ namespace AllyisApps.Services
 
 		public async void NotifyInviteAcceptAsync(int inviteId)
 		{
-			InvitationDBEntity invitation = DBHelper.GetUserInvitationByInviteId(inviteId);
+			InvitationDBEntity invitation = DBHelper.GetInvitation(inviteId);
 			IEnumerable<dynamic> owners = DBHelper.GetOrgOwnerEmails(invitation.OrganizationId);
 
 			string htmlbody = string.Format(
@@ -216,7 +216,7 @@ namespace AllyisApps.Services
 
 		public async void NotifyInviteRejectAsync(int inviteId)
 		{
-			InvitationDBEntity invitation = DBHelper.GetUserInvitationByInviteId(inviteId);
+			InvitationDBEntity invitation = DBHelper.GetInvitation(inviteId);
 			IEnumerable<dynamic> owners = DBHelper.GetOrgOwnerEmails(invitation.OrganizationId);
 
 			string htmlbody = string.Format(

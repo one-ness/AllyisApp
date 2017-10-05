@@ -628,7 +628,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="user">A representation of the User's data.</param>
 		/// <returns>A list of invitations the user is a part of.</returns>
-		public IEnumerable<InvitationDBEntity> GetUserInvitationsByUserData(UserDBEntity user)
+		public IEnumerable<InvitationDBEntity> GetUserInvitations(UserDBEntity user)
 		{
 			if (user == null)
 			{
@@ -641,7 +641,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default empty list
-				return connection.Query<InvitationDBEntity>("[Auth].[GetUserInvitationsByUserData]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.Query<InvitationDBEntity>("[Auth].[GetUserInvitations]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -683,14 +683,14 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">The organization Id.</param>
 		/// <returns>List of all roles.</returns>
-		public IEnumerable<InvitationDBEntity> GetUserInvitationsByOrgId(int organizationId)
+		public IEnumerable<InvitationDBEntity> GetInvitations(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<InvitationDBEntity>("[Auth].[GetUserInvitationsByOrgId]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.Query<InvitationDBEntity>("[Auth].[GetInvitations]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -699,14 +699,14 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="inviteId">The invite Id.</param>
 		/// <returns>List of all roles.</returns>
-		public InvitationDBEntity GetUserInvitationByInviteId(int inviteId)
+		public InvitationDBEntity GetInvitation(int inviteId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@inviteId", inviteId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<InvitationDBEntity>("[Auth].[GetUserInvitationByInviteId]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				return connection.Query<InvitationDBEntity>("[Auth].[GetInvitation]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
 		}
 
