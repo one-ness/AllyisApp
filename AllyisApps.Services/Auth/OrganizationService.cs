@@ -171,6 +171,19 @@ namespace AllyisApps.Services
 				throw new InvalidOperationException("Employee Id is already taken.");
 			}
 
+			SendInviteEmail(url, email);
+
+			// Return invitation id
+			return result;
+		}
+
+		/// <summary>
+		/// Send email for invite.
+		/// </summary>
+		/// <param name="url"></param>
+		/// <param name="email"></param>
+		public void SendInviteEmail(string url, string email)
+		{
 			// Send invitation email
 			string orgName = string.Empty;
 			string htmlbody = string.Format(
@@ -188,9 +201,6 @@ namespace AllyisApps.Services
 				msgbody);
 			// TODO: how to indicate there was an error sending the email? how to send the invite email again in that case?
 			var mailSuccess = task.Result;
-
-			// Return invitation id
-			return result;
 		}
 
 		public async void NotifyInviteAcceptAsync(int inviteId)

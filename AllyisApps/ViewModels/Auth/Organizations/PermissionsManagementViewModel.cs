@@ -15,10 +15,14 @@ using AllyisApps.Services.Auth;
 
 namespace AllyisApps.ViewModels.Auth
 {
-	/// <summary>
-	/// The Permissions Management model.
-	/// This view Model is not used but it is very well deveoloped so leaving here in case we reuse this logic.
-	/// </summary>
+	#region Old Permissions Page
+
+	//// <summary>
+	//// The Permissions Management model.
+	//// This view Model is not used but it is very well deveoloped so leaving here in case we reuse this logic.
+	//// </summary>
+
+	/*
 	public class PermissionsManagementViewModel : BaseViewModel
 	{
 		/// <summary>
@@ -223,6 +227,9 @@ namespace AllyisApps.ViewModels.Auth
 			return string.Empty;
 		}
 	}
+	*/
+
+	#endregion Old Permissions Page
 
 	/// <summary>
 	/// Object represnting a list of users and the actions to perform on them. The data in a permissions management POST is
