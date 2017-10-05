@@ -243,6 +243,7 @@
     <Compile Include="Areas\StaffingManager\Controllers\Customer\IndexAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\AccountAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\ApplicationsPartialAction.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Staffing\DeleteApplicationAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\DeleteApplicantAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\ApplicantListAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\ApplicantAction.cs" />

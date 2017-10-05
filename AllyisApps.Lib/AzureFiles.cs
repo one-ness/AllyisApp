@@ -10,6 +10,32 @@ namespace AllyisApps.Lib
 {
 	public static class AzureFiles
 	{
+		public static List<string> GetApplicationDocuments(int applicationId)
+		{
+			List<string> blobInfo = new List<string>();
+
+			try
+			{
+				CloudStorageAccount account = CloudStorageAccount.Parse(
+				CloudConfigurationManager.GetSetting("StorageConnectionString"));
+
+				CloudBlobClient client = account.CreateCloudBlobClient();
+
+				CloudBlobContainer blobContainer = client.GetContainerReference("application_" + applicationId.ToString());
+
+				foreach (CloudBlockBlob blob in blobContainer.ListBlobs().OfType<CloudBlockBlob>())
+				{
+					blobInfo.Add(blob.Name);
+				}
+			}
+			catch
+			{
+				blobInfo = new List<string>();
+			}
+
+			return blobInfo;
+		}
+
 		/// <summary>
 		/// Gets a list of attachments used by the report.
 		/// </summary>
@@ -39,6 +65,29 @@ namespace AllyisApps.Lib
 			}
 
 			return blobInfo;
+		}
+
+		public static string DownloadApplicationDocument(int applicationId, string applicationName, Stream fileStream)
+		{
+			CloudStorageAccount account = CloudStorageAccount.Parse(
+				CloudConfigurationManager.GetSetting("StorageConnectionString"));
+
+			CloudBlobClient client = account.CreateCloudBlobClient();
+
+			CloudBlobContainer blobContainer = client.GetContainerReference("application_" + applicationId.ToString());
+
+			CloudBlockBlob blob = blobContainer.GetBlockBlobReference(applicationName);
+
+			blob.DownloadToStream(fileStream);
+
+			return blob.Properties.ContentType;
+		}
+
+		public static Tuple<Stream, string, string> GetDocument(int applicationId, string documentName)
+		{
+			Stream stream = new MemoryStream();
+			string contentType = DownloadApplicationDocument(applicationId, documentName, stream);
+			return new Tuple<Stream, string, string>(stream, contentType, documentName);
 		}
 
 		/// <summary>
@@ -71,6 +120,34 @@ namespace AllyisApps.Lib
 			return new Tuple<Stream, string, string>(stream, contentType, attName);
 		}
 
+		public static bool SaveApplicationDocument(int applicationId, Stream stream, string documentName)
+		{
+			try
+			{
+				CloudStorageAccount account = CloudStorageAccount.Parse(
+					CloudConfigurationManager.GetSetting("StorageConnectionString"));
+
+				CloudBlobClient client = account.CreateCloudBlobClient();
+
+				CloudBlobContainer blobContainer = client.GetContainerReference("application_" + applicationId.ToString());
+
+				blobContainer.CreateIfNotExists();
+
+				CloudBlockBlob blockBlob = blobContainer.GetBlockBlobReference(documentName);
+
+				using (var fileStream = stream)
+				{
+					blockBlob.UploadFromStream(stream);
+				}
+
+				return blockBlob.Exists();
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
 		/// <summary>
 		/// Save an attachment to the blob storage.
 		/// </summary>
@@ -99,6 +176,29 @@ namespace AllyisApps.Lib
 				}
 
 				return blockBlob.Exists();
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
+		public static bool DeleteApplicationDocument(int applicationId, string documentName)
+		{
+			try
+			{
+				CloudStorageAccount account = CloudStorageAccount.Parse(
+				  CloudConfigurationManager.GetSetting("StorageConnectionString"));
+
+				CloudBlobClient client = account.CreateCloudBlobClient();
+
+				CloudBlobContainer blobContainer = client.GetContainerReference("application_" + applicationId.ToString());
+
+				CloudBlockBlob blockBlob = blobContainer.GetBlockBlobReference(documentName);
+
+				blockBlob.Delete();
+
+				return !blockBlob.Exists();
 			}
 			catch
 			{

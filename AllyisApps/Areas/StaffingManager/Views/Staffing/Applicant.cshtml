@@ -25,6 +25,7 @@
 				<th style="width: 25%">Status</th>
 				<th style="width: 25%">Last Modified</th>
 				<th style="width: 25%">Notes</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -41,7 +42,6 @@
 		var file_index = @fileIndex;
 
 		function addFile() {
-			console.log('adding file');
 			var data = @Html.Raw(Json.Encode(new ApplicationDocumentViewModel() { Index = -1 }));
 			data.Index = file_index;
 			$.ajax({

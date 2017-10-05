@@ -171,6 +171,8 @@ namespace AllyisApps.Services
 		/// <returns>One application document, if present.</returns>
 		public ApplicationDocument GetApplicationDocumentById(int applicationDocumentId) => DBApplicationDocumentsToServiceObject(DBHelper.GetApplicationDocumentById(applicationDocumentId));
 
+		public Applicant GetApplicantAddressByApplicationId(int applicationId) => DBApplicantToServiceObject(DBHelper.GetApplicantAddressById(DBHelper.GetApplicantByApplicationId(applicationId).ApplicantId));
+
 		/// <summary>
 		/// Retrieves the applicant that submitted the given application.
 		/// </summary>
