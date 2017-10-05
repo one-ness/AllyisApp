@@ -11,6 +11,8 @@ using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.Auth;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -29,6 +31,38 @@ namespace AllyisApps.Controllers.Auth
 			var model = new AddMemberViewModel();
 			model.OrganizationId = id;
 			model.EmployeeId = await this.AppService.GetNextEmployeeId(id);
+
+			var etSubInfo = AppService.GetProductSubscriptionInfo(id, SkuIdEnum.ExpenseTrackerBasic);
+			var ttSubInfo = AppService.GetProductSubscriptionInfo(id, SkuIdEnum.TimeTrackerBasic);
+
+			model.hasET = etSubInfo != null ? true : false;
+			model.hasTT = ttSubInfo != null ? true : false;
+
+			List<SelectListItem> orgRoles = new List<SelectListItem>()
+			{
+				new SelectListItem() { Text = OrganizationRole.Member.ToString(), Value = "1"},
+				new SelectListItem() { Text = OrganizationRole.Owner.ToString(), Value = "2" }
+			};
+
+			List<SelectListItem> etRoles = new List<SelectListItem>()
+			{
+				new SelectListItem() { Text = ExpenseTrackerRole.NotInProduct.ToString(), Value = "0"},
+				new SelectListItem() { Text = ExpenseTrackerRole.User.ToString(), Value = "1"},
+				new SelectListItem() { Text = ExpenseTrackerRole.Manager.ToString(), Value = "2"},
+				new SelectListItem() { Text = ExpenseTrackerRole.SuperUser.ToString(), Value = "4"},
+			};
+
+			List<SelectListItem> ttRoles = new List<SelectListItem>()
+			{
+				new SelectListItem() { Text = TimeTrackerRole.NotInProduct.ToString(), Value = "0"},
+				new SelectListItem() { Text = TimeTrackerRole.User.ToString(), Value = "1"},
+				new SelectListItem() { Text = TimeTrackerRole.Manager.ToString(), Value = "2"}
+			};
+
+			model.OrgRole = new SelectList(orgRoles, "Value", "Text", "1");
+			model.TTRoles = new SelectList(ttRoles, "Value", "Text", "0");
+			model.ETRoles = new SelectList(etRoles, "Value", "Text", "0");
+
 			return this.View(model);
 		}
 
@@ -51,7 +85,9 @@ namespace AllyisApps.Controllers.Auth
 						Url.Action(ActionConstants.Index, ControllerConstants.Account, null, protocol: Request.Url.Scheme) :
 						Url.Action(ActionConstants.Register, ControllerConstants.Account, null, protocol: Request.Url.Scheme);
 
-					int invitationId = AppService.InviteUser(url, model.Email.Trim(), model.FirstName, model.LastName, model.OrganizationId, model.AddAsOwner ? OrganizationRole.Owner : OrganizationRole.Member, model.EmployeeId);
+					string prodJson = string.Format("{{ \"Time\" : {0}, \"Expense\" : {1}, \"Staffing\" : 0 }}", model.ttSelection, model.etSelection);
+
+					int invitationId = AppService.InviteUser(url, model.Email.Trim(), model.FirstName, model.LastName, model.OrganizationId, model.OrgRoleSelection == "2" ? OrganizationRole.Owner : OrganizationRole.Member, model.EmployeeId, prodJson);
 
 					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserEmailed, model.FirstName, model.LastName), Variety.Success));
 					return this.RedirectToAction(ActionConstants.ManageOrg, new { id = model.OrganizationId });

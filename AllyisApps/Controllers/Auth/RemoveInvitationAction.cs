@@ -19,23 +19,23 @@ namespace AllyisApps.Controllers.Auth
 		/// Removes the provided invitation from the invitations table.
 		/// </summary>
 		/// <param name="id">Organization's id.</param>
-		/// <param name="userId">User id.</param>
 		/// <returns>Redirects to the manage org action.</returns>
 		[HttpPost]
-		public ActionResult RemoveInvitation(int id, int userId)
+		public ActionResult RemoveInvitation(int id)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditInvitation, id);
-			var results = AppService.RemoveInvitation(id, userId);
+			var orgId = AppService.GetInvitationByID(id).OrganizationId;
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditInvitation, orgId);
+			var results = AppService.RemoveInvitation(id);
 
 			if (results)
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.InvitationDeleteNotification, Variety.Success));
-				return this.RedirectToAction(ActionConstants.ManageOrg, new { id = id });
+				return this.RedirectToAction(ActionConstants.ManageOrg, new { id = orgId });
 			}
 			else
 			{
 				Notifications.Add(new BootstrapAlert("Deleting Invitation Failed.", Variety.Warning));
-				return this.RedirectToAction(ActionConstants.ManageOrg, new { id = id });
+				return this.RedirectToAction(ActionConstants.ManageOrg, new { id = orgId });
 			}
 		}
 	}
