@@ -628,7 +628,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="user">A representation of the User's data.</param>
 		/// <returns>A list of invitations the user is a part of.</returns>
-		public IEnumerable<InvitationDBEntity> GetUserInvitations(UserDBEntity user)
+		public IEnumerable<InvitationDBEntity> GetUserInvitationsByEmail(UserDBEntity user)
 		{
 			if (user == null)
 			{
@@ -641,7 +641,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default empty list
-				return connection.Query<InvitationDBEntity>("[Auth].[GetUserInvitations]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.Query<InvitationDBEntity>("[Auth].[GetUserInvitationsByEmail]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
