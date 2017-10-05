@@ -17,6 +17,7 @@ using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.ViewModels;
 using System.Web.Script.Serialization;
+using System;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -81,6 +82,9 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			}
 			var tags = new string[count];
 			for (int k = 0; k < count; k++) tags[k] = temp[k];
+			DateTime formatingStartDate = new DateTime(); //this formating variable is nessicary if the view doesnt want to include time of day. You can't ToShortDateFormat a nullable DateTime
+			formatingStartDate = DateTime.Now;
+			if (pos.StartDate != null) formatingStartDate = (DateTime)pos.StartDate;
 			foreach(var tag in pos.Tags) assignedTags += "," + tag.TagName;
 			return new ViewPositionViewModel
 			{
@@ -92,6 +96,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				SubscriptionName = subscriptionNameToDisplay,
 				SubscriptionId = subInfo.SubscriptionId,
 				StartDate = pos.StartDate,
+				StartDateFormat = formatingStartDate,
 				Tags = tags,
 				EmploymentTypes = infos.Item3.AsParallel().Select(et => new EmploymentTypeSelectViewModel()
 				{

@@ -69,6 +69,11 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		public DateTime? StartDate { get; set; }
 
 		/// <summary>
+		/// Get or sets the Start date of the position
+		/// </summary>
+		public DateTime StartDateFormat { get; set; }
+
+		/// <summary>
 		/// Gets or sets the status int(enum) of the position
 		/// </summary>
 		public int PositionStatusId { get; set; }

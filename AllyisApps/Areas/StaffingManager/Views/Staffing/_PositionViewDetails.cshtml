@@ -89,6 +89,27 @@
 	.paragraph {
 		white-space: pre-wrap;
 	}
+
+	.status {
+		background-color: #F0D257;
+	}
+
+	.main-body {
+		line-height: 60%;
+		padding-top: 17px;
+	}
+
+	.pad-left {
+		padding-left: 33px;
+	}
+
+	.pad-right {
+		padding-right: 33px;
+	}
+
+	.pad-mid {
+		padding-left: 120px;
+	}
 </style>
 
 
@@ -109,21 +130,22 @@
 				{
 					if (sta.PositionStatusId == Model.PositionStatusId)
 					{
-						<span>@sta.PositionStatusName</span> 
+						<span class="status">&nbsp;&nbsp;@sta.PositionStatusName&nbsp;&nbsp;</span> 
 					}
 				}
 				<div class="form-group fa-pull-right">
-					<span class="fa fa-fw fa-calendar"></span>
-					<label>Start date: &nbsp;</label>
-					 @Model.StartDate.ToShortDateString()
-
-					<div>
-						<span>
-							<label>
-								Expected Duration:&nbsp;
-							</label>
-							@Model.DurationMonths&nbsp;months
-						</span>
+					@if (Model.StartDate != null)
+					{
+						<label>Start date: &nbsp;</label>
+						@Model.StartDateFormat.ToShortDateString()
+						<span class="fa fa-fw fa-calendar"></span>
+					}
+					<br>
+					<div class="pull-left">
+						<label>
+							Expected Duration:&nbsp;
+						</label>
+						@Model.DurationMonths&nbsp;months
 					</div>
 				</div>
 			</div>
@@ -131,83 +153,84 @@
 			<br>
 			<br>
 			<br>
+			<br>
 			<span class="fa-pull-right">Edit: &nbsp;<a href="@Url.Action(ActionConstants.EditPosition, ControllerConstants.Staffing, new { positionId = Model.PositionId, subscriptionId = Model.SubscriptionId })"><i class="glyphicon glyphicon-edit fa-pull-right"></i></a></span>
 		</div>
-		<div class="panel panel-default col-md-12">
-			<div class="col-md-6 fa-pull-left">
-				<div class="form-group">
+		<div class="panel panel-default col-md-12 main-body">
+			<div class="col-md-4 fa-pull-left row pad-left">
+				<div class="form-group row">
 					<label>Position Level: &nbsp;</label>
 					@foreach (var lev in Model.PositionLevels)
 					{
 						if (lev.PositionLevelId == Model.PositionLevelId)
 						{
-							<span>@lev.PositionLevelName</span>
+							<span class="pull-right">@lev.PositionLevelName</span>
 						}
 					}
 				</div>
-				<div class="form-group">
+				<div class="form-group  row">
 					<label>Employment Type: &nbsp;</label>
 					@foreach (var typ in Model.EmploymentTypes)
 					{
 						if (typ.EmploymentTypeId == Model.EmploymentTypeId)
 						{
-							<span>@typ.EmploymentTypeName</span>
+							<span class="pull-right">@typ.EmploymentTypeName</span>
 						}
 					}
 				</div>
-				<div class="form-group">
-					<label>Positions Available: &nbsp;</label>
-					@Model.PositionCount
-				</div>
-				<div class="form-group">
+				<div class="form-group row">
 					<label>Billing Rate: &nbsp;</label>
-					@Model.BillingRateAmount &nbsp;
-					@Model.BillingRateFrequency
+					<span class="pull-right">
+						@Model.BillingRateAmount &nbsp;
+						@Model.BillingRateFrequency
+					</span>
 				</div>
 			</div>
-			<div class="col-md-6 fa-pull-right">
-				<div class="form-group">
-					<label>Customer: &nbsp;</label>
+			<div class="col-md-4 row pad-mid">
+				<div class="form-group row">
+					<label>Positions Available: &nbsp;</label>
+					<span class="pull-right">@Model.PositionCount</span>
+				</div>
+				<div class="form-group row">
+					<label>Location:&nbsp;&nbsp;</label>
+					<span class="pull-right">
+						@if (Model.PositionAddress.City != "" && Model.PositionAddress.City != null)
+						{
+							@Model.PositionAddress.City@:,
+						}
+						@if (Model.PositionAddress.State != "" && Model.PositionAddress.State != null)
+						{
+							@:&nbsp;@Model.PositionAddress.State
+						}
+						@if (Model.PositionAddress.Country != "" && Model.PositionAddress.Country != null)
+						{
+							if (Model.PositionAddress.State != "" && Model.PositionAddress.State != null)
+							{
+								@:&nbsp;-&nbsp;
+							}
+							@Model.PositionAddress.Country
+						}
+					</span>
+				</div>
+			</div>
+			<div class="col-md-4 fa-pull-right row pad-right">
+				<div class="form-group row">
+					<label>Customer:&nbsp;&nbsp;</label>
 					@foreach(var cust in Model.Customers)
 					{
 						if (cust.CustomerId == Model.CustomerId)
 						{
-							<span>@cust.CustomerName</span>
+							<span class="pull-right">@cust.CustomerName</span>
 						}
 					}
 				</div>
-				<div class="form-group">
-						<label>Hiring Manager: &nbsp;</label>
-						@Model.HiringManager
+				<div class="form-group row">
+					<label>Hiring Manager:&nbsp;&nbsp;</label>
+					<span class="pull-right">@Model.HiringManager</span>
 				</div>
-				<div class="form-group">
-					<span>
-						<label>Team: &nbsp;</label>
-						@Model.TeamName
-					</span>
-				</div>
-				<div class="form-group">
-					<label>Location: &nbsp;</label>
-					@if (Model.PositionAddress.City != "" && Model.PositionAddress.City != null)
-					{
-						@Model.PositionAddress.City
-					}					
-					@if (Model.PositionAddress.State != "" && Model.PositionAddress.State != null)
-					{
-						if(Model.PositionAddress.City != "" && Model.PositionAddress.City != null)
-						{ 
-							@:, &nbsp;
-						}
-						@Model.PositionAddress.State
-					}
-					@if (Model.PositionAddress.Country != "" && Model.PositionAddress.Country != null)
-					{
-						if (Model.PositionAddress.State != "" && Model.PositionAddress.State != null)
-						{
-							@: &nbsp;-&nbsp;
-						}
-						@Model.PositionAddress.Country
-					}
+				<div class="form-group  row">
+					<label>Team:&nbsp;&nbsp;</label>
+					<span class="pull-right">@Model.TeamName</span>
 				</div>
 			</div>
 		</div>
