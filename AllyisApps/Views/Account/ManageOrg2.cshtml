@@ -1,0 +1,18 @@
+﻿@using AllyisApps.ViewModels.Auth;
+@using AllyisApps.Services
+@model ManageOrgViewModel
+@{
+	DisplayHints.PageBodyId = "org-manage";
+	//ViewBag.Title = Strings.ManageOrganization;
+}
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm-2">
+			@Html.Partial("_ManageOrgSideBar")
+		</div>
+		<div class="col-sm-10">
+			Main content goes here
+		</div>
+	</div>
+</div>

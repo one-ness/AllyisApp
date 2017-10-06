@@ -1,6 +1,6 @@
 ﻿@{
 	string title = Strings.ApplicationTitle;
-	if (ViewBag.Title != null)
+	if (!string.IsNullOrWhiteSpace(ViewBag.Title))
 	{
 		title = ViewBag.Title + " - " + title;
 	}
@@ -37,11 +37,11 @@
             <div class="col" id="main-col">
                 @Html.Partial("_NotificationPartial")
                         <div class="row" id="title-row">
-                            @if (!string.IsNullOrEmpty(ViewBag.Title))
+                            @if (!string.IsNullOrWhiteSpace(ViewBag.Title))
                                 {<h1 class="text-center">@ViewBag.Title</h1>}
-                            @if (!string.IsNullOrEmpty(ViewBag.Subtitle))
+                            @if (!string.IsNullOrWhiteSpace(ViewBag.Subtitle))
                                 {<h4 class="text-center">@ViewBag.Subtitle</h4>}
-                            @if (!string.IsNullOrEmpty(ViewBag.Description))
+                            @if (!string.IsNullOrWhiteSpace(ViewBag.Description))
                                 {<p class="text-center">@ViewBag.Description</p>}
                         </div>
                         @RenderBody()

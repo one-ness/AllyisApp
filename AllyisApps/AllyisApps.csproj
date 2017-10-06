@@ -17,10 +17,8 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44326</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>
-    </IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>
-    </IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <NuGetPackageImportStamp>
@@ -361,6 +359,7 @@
     <Compile Include="Controllers\Auth\IndexAction.cs" />
     <Compile Include="Controllers\Auth\LogOffAction.cs" />
     <Compile Include="Controllers\Auth\LogOnAction.cs" />
+    <Compile Include="Controllers\Auth\ManageOrgAction2.cs" />
     <Compile Include="Controllers\Auth\RegisterAction.cs" />
     <Compile Include="Controllers\Auth\RejectInvitationAction.cs" />
     <Compile Include="Controllers\Auth\ResendInviteAction.cs" />
@@ -727,6 +726,8 @@
     <Content Include="Views\Shared\EditorTemplates\Collection.cshtml" />
     <Content Include="Views\Account\_PremissionsLinkView.cshtml" />
     <Content Include="Views\Account\PermissionsOrg.cshtml" />
+    <Content Include="Views\Account\ManageOrg2.cshtml" />
+    <Content Include="Views\Account\_ManageOrgSideBar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\Dependencies\CodeAnalysis\CustomDictionary.xml">
