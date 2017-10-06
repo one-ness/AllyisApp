@@ -11,9 +11,9 @@ namespace AllyisApps.Services
 	/// </summary>
 	public partial class AppService : BaseService
 	{
-		public IList<Account> GetAccounts(int subId)
+		public IList<Account> GetAccounts(int orgId)
 		{
-			return DBHelper.GetAccounts(subId).Select(x => InitializeAccountModel(x)).ToList();
+			return DBHelper.GetAccounts(orgId).Select(x => InitializeAccountModel(x)).ToList();
 		}
 
 		public bool UpdateAccount(Account item)
@@ -42,7 +42,7 @@ namespace AllyisApps.Services
 			{
 				AccountId = account.AccountId,
 				AccountName = account.AccountName,
-				SubscriptionId = account.SubscriptionId,
+				OrganizationId = account.OrganizationId,
 				AccountTypeId = account.AccountTypeId,
 				AccountTypeName = account.AccountTypeName,
 				IsActive = account.IsActive,
@@ -56,7 +56,7 @@ namespace AllyisApps.Services
 			{
 				AccountId = account.AccountId,
 				AccountName = account.AccountName,
-				SubscriptionId = account.SubscriptionId,
+				OrganizationId = account.OrganizationId,
 				AccountTypeId = account.AccountTypeId,
 				AccountTypeName = account.AccountTypeName,
 				IsActive = account.IsActive,
@@ -70,9 +70,10 @@ namespace AllyisApps.Services
 		/// <returns></returns>
 		public bool CanDelete(int subId, int accId, out List<Account> associatedAccounts)
 		{
-			List<Account> accounts = GetAccounts(subId).ToList();
+			var subInfo = GetSubscription(subId);
+			List<Account> accounts = GetAccounts(subInfo.OrganizationId).ToList();
 
-			List<ExpenseReport> reports = GetExpenseReportByOrgId(GetSubscription(subId).OrganizationId).ToList();
+			List<ExpenseReport> reports = GetExpenseReportByOrgId(subInfo.OrganizationId).ToList();
 			List<ExpenseItem> items = new List<ExpenseItem>();
 
 			associatedAccounts = new List<Account>();

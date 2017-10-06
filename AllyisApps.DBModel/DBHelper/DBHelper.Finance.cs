@@ -36,7 +36,7 @@ namespace AllyisApps.DBModel
 
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@accountName", account.AccountName);
-			parameters.Add("@subscriptionId", account.SubscriptionId);
+			parameters.Add("@organizationId", account.OrganizationId);
 			parameters.Add("@isActive", account.IsActive);
 			parameters.Add("@accountTypeId", account.AccountTypeId);
 			parameters.Add("@parentAccountId", account.ParentAccountId != null ? account.ParentAccountId.Value : account.ParentAccountId);
@@ -111,10 +111,10 @@ namespace AllyisApps.DBModel
 		/// Retrieves all of the accounts in the database.
 		/// </summary>
 		/// <returns></returns>
-		public IEnumerable<AccountDBEntity> GetAccounts(int subId)
+		public IEnumerable<AccountDBEntity> GetAccounts(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@subscriptionId", subId);
+			parameters.Add("@organizationId", orgId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
