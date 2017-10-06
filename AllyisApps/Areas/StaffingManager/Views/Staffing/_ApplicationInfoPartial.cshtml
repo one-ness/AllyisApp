@@ -1,0 +1,78 @@
+﻿@model AllyisApps.Areas.StaffingManager.ViewModels.Staffing.ApplicationInfoViewModel
+
+@{
+
+}
+
+<style>
+	.Notes {
+		white-space: pre-wrap;
+	}
+
+	.AppName {
+		font-size: 18px;
+	}
+	.status {
+		background-color: #F0D257;
+	}
+</style>
+
+<div class="row panel">
+	<div>	
+		<div class="col-md-2 sm-control-width"><!--vvv - TODO: change that to Applicant Link   -->
+			<a class="AppName" href="@Url.Action(ActionConstants.ApplicantList, ControllerConstants.Staffing, new { subscriptionId = ViewBag.subscriptionId } )">
+				@Model.ApplicantName
+			</a>
+			<br>
+			<label>
+				Notes:&nbsp;&nbsp;
+			</label>
+			<button type="button" data-toggle="collapse" data-target="#@Model.ApplicationId"><i class="glyphicon glyphicon-chevron-down"></i></button>
+		</div>
+		<div class="col-md-3">
+			<div class="row">
+				<label class="pull-left">
+					Email:&nbsp;&nbsp;
+				</label> 
+				<span class="pull-right">
+					@Model.ApplicantEmail
+				</span>
+			</div>
+			<div class="row">
+				<label class="pull-left">
+					Location:&nbsp;&nbsp;
+				</label>
+				<span class="pull-right">
+					@Model.ApplicantAddress
+				</span>
+			</div>
+		</div>
+		<div class="col-md-3 pull-right">
+			<div class="row">
+					<a href="@Url.Action(ActionConstants.ApplicantList, ControllerConstants.Staffing, new { subscriptionId = ViewBag.subscriptionId } )">
+						<label>
+							Files:&nbsp;&nbsp;
+						</label>
+						<i class="glyphicon glyphicon-file"></i>
+					</a>
+				<div class="pull-right">
+					@foreach (var stat in Model.ApplicationStatuses)
+					{
+						if (stat.ApplicationStatusId == Model.AppliationStatusId)
+						{
+							<label>Status:&nbsp;&nbsp; </label>
+							<label class="status">&nbsp;@stat.ApplicationStatusName&nbsp;</label>
+						}
+					}
+				</div>
+			</div>
+			<div class="pull-right">
+				<label class="pull-left">Last Modified:&nbsp;&nbsp;</label> 
+				<span class="pull-right">@Model.ApplicationModifiedUTC.ToShortDateString()</span>
+			</div>
+		</div>
+	</div>
+	<div class="collapse col-md-12 Notes" width="100%" id="@Model.ApplicationId">
+		@Model.Notes
+	</div>
+</div>

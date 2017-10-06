@@ -47,5 +47,15 @@ namespace AllyisApps.DBModel.StaffingManager
 		/// Gets or sets Notes.
 		/// </summary>
 		public string Notes { get; set; }
+
+		/// <summary>
+		/// the applicant info of the application
+		/// </summary>
+		public ApplicantDBEntity Applicant { get; set; }
+
+		/// <summary>
+		/// Documents for the give application
+		/// </summary>
+		public ApplicationDocumentDBEntity Documents { get; set; }
 	}
 }

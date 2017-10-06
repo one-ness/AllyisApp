@@ -1529,7 +1529,7 @@
     <value>Registation is successful Please verify email address.</value>
   </data>
   <data name="YouMustRegisterYourEmailAddress" xml:space="preserve">
-    <value>You must Register Your Email Address</value>
+    <value>You must verify your email address. Please click on the verification link sent to you in the email.</value>
   </data>
   <data name="ExpenseTracker" xml:space="preserve">
     <value>ExpenseTracker</value>

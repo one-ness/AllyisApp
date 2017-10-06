@@ -54,17 +54,17 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// Get or sets the Start date of the position
 		/// </summary>
-		public DateTime PositionCreatedUtc { get; set; }
+		public DateTime? PositionCreatedUtc { get; set; }
 
 		/// <summary>
 		/// Get or sets the Start date of the position
 		/// </summary>
-		public DateTime PositionModifiedUtc { get; set; }
+		public DateTime? PositionModifiedUtc { get; set; }
 
 		/// <summary>
 		/// Get or sets the Start date of the position
 		/// </summary>
-		public DateTime StartDate { get; set; }
+		public DateTime? StartDate { get; set; }
 
 		/// <summary>
 		/// Gets or sets the status int(enum) of the position
@@ -154,6 +154,16 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		///
 		/// </summary>
 		public AddressViewModel PositionAddress { get; set; }
+
+		/// <summary>
+		/// Gets or sets Selected state id.
+		/// </summary>
+		public int? SelectedStateId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Selected country code.
+		/// </summary>
+		public string SelectedCountryCode { get; set; }
 
 		/// <summary>
 		/// CustomerInfo for View Model

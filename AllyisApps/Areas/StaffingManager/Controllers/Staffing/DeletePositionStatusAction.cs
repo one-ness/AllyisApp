@@ -1,9 +1,5 @@
-﻿//------------------------------------------------------------------------------
-// <copyright file="DeletPositionStatusAction.cs" company="Allyis, Inc.">
-//     Copyright (c) Allyis, Inc.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
-
+﻿
+using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;

@@ -29,7 +29,7 @@ BEGIN
 		[Address].[PostalCode]
 	FROM [StaffingManager].[Position]
 	LEFT JOIN [Lookup].[Address]	WITH (NOLOCK) ON [Address].[AddressId] = [Position].[AddressId]
-	LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryCode]
+	LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
 	LEFT JOIN [Lookup].[State]		WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
 	WHERE [Position].[OrganizationId] = @organizationId
 	ORDER BY [StaffingManager].[Position].[PositionCreatedUtc] DESC

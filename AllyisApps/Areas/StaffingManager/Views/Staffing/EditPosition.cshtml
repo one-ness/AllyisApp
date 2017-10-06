@@ -1,0 +1,54 @@
+﻿@model AllyisApps.Areas.StaffingManager.ViewModels.Staffing.EditPositionViewModel
+@{
+	ViewBag.Title = "Edit Position";
+	Html.RenderPartial("_PositionEditDetails", Model);
+	Model.IsCreating = false;
+	ViewData.Add(ControllerConstants.Controller, ControllerConstants.Staffing);
+	ViewData.Add(ActionConstants.Action, ActionConstants.SubmitUpdatePosition);
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/StaffingManager/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/StaffingManager";
+
+	ViewBag.OrganizationId = Model.OrganizationId;
+}
+
+@section scripts
+{
+	<script type="text/javascript">
+		var currentDay = "";
+		var ddlCountriesId = "@ViewConstants.DdlCountriesId";
+	</script>
+
+	@Scripts.Render("~/bundles/jquery")
+	@Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/jqueryui")
+	@Scripts.Render("~/bundles/moment")
+	@Scripts.Render("~/bundles/daterangepicker")
+	<script src="~/Scripts/allyis-pages-with-filter.js" type="text/javascript"></script>
+	<script>
+		$(document).ready(function () {
+			function setDatePickers() {
+				console.log('setting date picker');
+				$('.datepicker').each(function () {
+					$(this).datepicker({
+						changeMonth: true,
+						changeYear: true
+					});
+				});
+			}
+
+			setDatePickers();
+		});
+	</script>
+	<script type="text/javascript">
+        var preserveState = '@( (Model.PositionAddress != null && Model.PositionAddress.State != null) ? (States.ResourceManager.GetString(Model.PositionAddress.State) ?? Model.PositionAddress.State) : "")';
+		var dropdownempty = "@Strings.DropDownEmpty";
+		var ddlStatesId = "@ViewConstants.DdlStatesId";
+		var ddlStatesOptionsId = "@ViewConstants.DdlStatesOptionsId";
+		var getStatesUrl = "/Home/GetStates";
+		var selectedCountryCode = "@(Model.PositionAddress == null ? null : Model.PositionAddress.SelectedCountryCode)";
+		var selectedStateId = "@(Model.PositionAddress == null ? null : Model.PositionAddress.SelectedStateId)";
+		var mindate_shortstring = "@DateTime.Today.ToShortDateString()";
+		var maxdate_shortstring = "@DateTime.MaxValue.ToShortDateString()";
+	</script>
+	@Scripts.Render("~/bundles/UpdateStateDDL");
+}

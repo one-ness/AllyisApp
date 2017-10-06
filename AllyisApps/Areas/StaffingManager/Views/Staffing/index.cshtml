@@ -205,11 +205,11 @@
 				@foreach (var pos in Model.Positions)
 				{
 					<tr>
-						<td href="@Url.Action(ActionConstants.EditPosition, ControllerConstants.Staffing, new { id = pos.PositionId })">
-							@pos.PositionTitle
+						<td href="@Url.Action(ActionConstants.EditPosition, ControllerConstants.Staffing, new { positionId = pos.PositionId, subscriptionId = Model.SubscriptionId })">
+							<a href="@Url.Action(ActionConstants.ViewPosition, ControllerConstants.Staffing, new { positionId = pos.PositionId, subscriptionId = Model.SubscriptionId })">@pos.PositionTitle</a>
 							@if(pos.PositionModifiedUtc > DateTime.UtcNow.AddDays(-10))
 							{
-								<span class="newIndicator">NEW</span>
+								<span class="newIndicator pull-right">NEW</span>
 							}
 							<p style="font-size: 10px">
 								@foreach (var tag in pos.Tags)

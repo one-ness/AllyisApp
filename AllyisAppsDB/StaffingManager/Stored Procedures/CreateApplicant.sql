@@ -9,7 +9,8 @@
 	@city nvarchar(32),
 	@stateId smallint,
 	@postalCode nvarchar(16),
-	@countryCode varchar(8)
+	@countryCode varchar(8),
+	@organizationId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -29,14 +30,16 @@ BEGIN
 			[LastName],
 			[Email],
 			[PhoneNumber],
-			[Notes])
+			[Notes],
+			[OrganizationId])
 		VALUES
 			(IDENT_CURRENT('[Lookup].[Address]'),
 			@firstName,
 			@lastName,
 			@email,
 			@phoneNumber,
-			@notes);
+			@notes,
+			@organizationId);
 
 		SELECT IDENT_CURRENT('[StaffingManager].[Applicant]') AS [ApplicantId];
 	COMMIT TRANSACTION

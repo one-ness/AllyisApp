@@ -7,6 +7,7 @@
 @zone-color: @brand-primary;
 @zone-color-bg: lighten(@zone-color, 25%);
 @zone-body-bg: mix(white, @zone-color-bg, 50%);
+@zone-table-body-bg: lighten(@zone-body-bg, 25%);
 
 //@navbar-default-bg: @zone-color-bg;
 @navbar-default-border: darken(@btn-zone-bg, 6.5%);
@@ -57,7 +58,7 @@ body {
 // Push out the bottom of the page to make room for
 // footer height change
 .panel {
-	margin-bottom: 30px;
+	margin-bottom: 5px;
 	/*@media (max-width: @screen-sm-min) {
 		margin-bottom: 60px;
 	}*/
@@ -131,4 +132,46 @@ a {
 .list-group {
 	color: @brand-primary !important;
 	border-color: @navbar-default-border !important;
+}
+
+thead tr {
+	background-color: @zone-body-bg !important;
+}
+
+tbody tr {
+	background-color: @zone-table-body-bg !important;
+}
+
+tfoot {
+	background-color: @zone-body-bg !important;
+}
+
+.panel {
+	color: @brand-primary !important;
+	border-color: @navbar-default-border !important;
+}
+
+.list-group {
+	color: @brand-primary !important;
+	border-color: @navbar-default-border !important;
+}
+
+.dropdown-toggle {
+	background-color: @zone-body-bg !important;
+}
+
+.status-1 {
+	background-color: #8CA8B3;
+}
+
+.status-2 {
+	background-color: #F0D257;
+}
+
+.status-3 {
+	background-color: #886857;
+}
+
+.status-4 {
+	background-color: #362E70;
 }

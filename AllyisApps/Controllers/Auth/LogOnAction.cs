@@ -63,6 +63,8 @@ namespace AllyisApps.Controllers.Auth
 					else
 					{
 						Notifications.Add(new BootstrapAlert(Resources.Strings.YouMustRegisterYourEmailAddress, Variety.Danger));
+						this.SignIn(result.UserId, result.Email, model.RememberMe);
+						return this.RedirectToLocal(returnUrl);
 					}
 				}
 				else

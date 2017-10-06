@@ -108,7 +108,67 @@
 									</td>
 								</tr>
 							}
+						<tr>
+							@using (Html.BeginForm(ActionConstants.CreatePositionStatus, ControllerConstants.Staffing, new { subscriptionId = Model.subscriptionId, orgId = Model.organizationId }, FormMethod.Post))
+							{
+								@Html.AntiForgeryToken();
+								@Html.HiddenFor(m => m.subscriptionId)
+								<td><input type="text" name="positionStatus" class="form-control" required /></td>
+								<td><span class="pull-right"></span></td>
+								<td><input class="btn btn-primary" type="submit" value="@Strings.Add" /></td>
+							}
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<div class="panel-heading">
+				<h1 class="panel-title">Application Statuses</h1>
+			</div>
+			<div class="panel panel-info">
+				<div id="AppStatuses">
+					<table class="table table-condensed">
+						<thead>
 							<tr>
+								<th>Status Name</th>
+								<th><span class="pull-right">@Strings.Delete</span></th>
+								<th><span class="pull-right">Default</span></th>
+							</tr>
+						</thead>
+						@foreach (dynamic status in Model.applicationStatuses)
+						{
+							<tr>
+								@{
+									string _statusName = Strings.ResourceManager.GetString((status.ApplicationStatusName).Replace(" ", string.Empty)) ?? status.ApplicationStatusName;
+								}
+								<td>@_statusName</td>
+								<td>
+									<a href="javascript: void(0);" class="text-muted" title="Delete Position Status"
+										onclick='deletePositionStatus("@status.ApplicationStatusId", @Model.userId, @Model.organizationId, @Model.subscriptionId)'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
+								</td>
+								<td>
+									@if (status.ApplicationStatusId == Model.defaultApplicationStatus)
+									{
+										<input type="radio" name="statusRadio" class="pull-right" checked="checked" value="status.PositionStatusId" onclick="updateDefaultStatus(@Model.organizationId, @status.ApplicationStatusId, @Model.subscriptionId)">
+									}
+									else
+									{
+										<input type="radio" name="statusRadio" class="pull-right" value="status.PositionStatusId" onclick="updateDefaultStatus(@Model.organizationId, @status.ApplicationStatusId, @Model.subscriptionId)">
+									}
+								</td>
+							</tr>
+									}
+						<tr>
+							@using (Html.BeginForm(ActionConstants.CreateApplicationStatus, ControllerConstants.Staffing, new { subscriptionId = Model.subscriptionId, orgId = Model.organizationId }, FormMethod.Post))
+							{
+								@Html.AntiForgeryToken();
+								@Html.HiddenFor(m => m.subscriptionId)
+								<td><input type="text" name="positionStatus" class="form-control" required /></td>
+								<td><span class="pull-right"></span></td>
+								<td><input class="btn btn-primary" type="submit" value="@Strings.Add" /></td>
+							}
+						</tr>
+					</table>
 								@using (Html.BeginForm(ActionConstants.CreatePositionStatus, ControllerConstants.Staffing, new { subscriptionId = Model.subscriptionId, orgId = Model.organizationId }, FormMethod.Post))
 								{
 									@Html.AntiForgeryToken();

@@ -108,6 +108,7 @@
     <Compile Include="Service.cs" />
     <Compile Include="Crm\Customer.cs" />
     <Compile Include="ServiceSettings.cs" />
+    <Compile Include="StaffingManager\ApplicationStatus.cs" />
     <Compile Include="StaffingManager\PositionThumbnailInfo.cs" />
     <Compile Include="StaffingManager\Position.cs" />
     <Compile Include="StaffingManager\EmploymentType.cs" />

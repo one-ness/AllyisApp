@@ -12,6 +12,7 @@ namespace AllyisApps
 		public const string Accounts = "accounts";
 		public const string AddMember = "addmember";
 		public const string AdminReport = "adminreport";
+		public const string ApplicantList = "applicantlist";
 		public const string ChangePassword = "changepassword";
 		public const string Charge = "charge";
 		public const string ConfirmEmail = "confirmemail";
@@ -107,6 +108,10 @@ namespace AllyisApps
 		public const string DeleteEmploymentType = "deleteemploymenttype";
 		public const string CreateCustomer = "createcustomer";
 		public const string UpdatePositionStatus = "updatePositionStatus";
+		public const string SubmitUpdatePosition = "submitupdateposition";
+		public const string ViewPosition = "viewposition";
+		public const string CreateApplicationStatus = "createapplicationstatus";
+
 	}
 
 	/// <summary>

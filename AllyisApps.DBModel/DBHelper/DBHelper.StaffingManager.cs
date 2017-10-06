@@ -44,17 +44,19 @@ namespace AllyisApps.DBModel
 			parameters.Add("@email", applicant.Email);
 			parameters.Add("@firstName", applicant.FirstName);
 			parameters.Add("@lastName", applicant.LastName);
-			parameters.Add("@address", applicant.Address);
+			parameters.Add("@address1", applicant.Address1);
+			parameters.Add("@address2", applicant.Address2);
 			parameters.Add("@city", applicant.City);
-			parameters.Add("@state", applicant.State);
-			parameters.Add("@country", applicant.Country);
+			parameters.Add("@stateId", applicant.StateId);
 			parameters.Add("@postalCode", applicant.PostalCode);
+			parameters.Add("@countryCode", "US"); // add real country code
 			parameters.Add("@phoneNumber", applicant.PhoneNumber);
 			parameters.Add("@notes", applicant.Notes);
+			parameters.Add("@organizationId", applicant.OrganizationId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<int>("[StaffingManager].[CreateApplicant]", parameters, commandType: CommandType.StoredProcedure).Single();
+			return connection.Query<int>("[StaffingManager].[CreateApplicant]", parameters, commandType: CommandType.StoredProcedure).Single();
 			}
 		}
 
@@ -378,6 +380,54 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// Retrieves the list of applicants.
+		/// </summary>
+		/// <param name="orgId"></param>
+		/// <returns>All the applicants in a subscription.</returns>
+		public List<ApplicantDBEntity> GetApplicantsBySubscriptionId(int orgId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@orgId", orgId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				return connection.Query<ApplicantDBEntity>("[StaffingManager].[GetApplicantsByOrgId]", parameters, commandType: CommandType.StoredProcedure).ToList();
+			}
+		}
+
+		/// <summary>
+		/// Retrieves the list of applicants.
+		/// </summary>
+		/// <param name="orgId"></param>
+		/// <returns>All the applicants in a subscription.</returns>
+		public List<ApplicantAddressDBEntity> GetApplicantAddressesBySubscriptionId(int orgId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@orgId", orgId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				return connection.Query<ApplicantAddressDBEntity>("[StaffingManager].[GetApplicantsByOrgId]", parameters, commandType: CommandType.StoredProcedure).ToList();
+			}
+		}
+
+		/// <summary>
+		/// Retrieves the applicant with a given id.
+		/// </summary>
+		/// <param name="applicantId">The id of the applicant.</param>
+		/// <returns>One applicant, if present.</returns>
+		public ApplicantAddressDBEntity GetApplicantAddressById(int applicantId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@applicantId", applicantId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				return connection.Query<ApplicantAddressDBEntity>("[StaffingManager].[GetApplicantById]", parameters, commandType: CommandType.StoredProcedure).Single();
+			}
+		}
+
+		/// <summary>
 		/// Retrieves the applicant with a given id.
 		/// </summary>
 		/// <param name="applicantId">The id of the applicant.</param>
@@ -408,6 +458,29 @@ namespace AllyisApps.DBModel
 				return connection.Query<ApplicantDBEntity>("[StaffingManager].[GetApplicantByApplicationId]", parameters, commandType: CommandType.StoredProcedure).Single();
 			}
 		}
+		
+		/// <summary>
+		/// Retrieves the all applications, the applicants and documents associated with those applications, for a position.
+		/// </summary>
+		/// <param name="PositionId">The id of the position.</param>
+		/// <returns>The applicant that submitted the given application.</returns>
+		public dynamic GetFullApplicationInfoByPositionId(int PositionId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@positionId", PositionId);
+
+			dynamic applicationsAndApplicantInfo = new ExpandoObject();
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				var results = connection.QueryMultiple("[StaffingManager].[GetFullApplicationInfosByPositionId]", parameters, commandType: CommandType.StoredProcedure);
+
+				applicationsAndApplicantInfo.applications = results.Read<dynamic>().ToList();
+				applicationsAndApplicantInfo.applicants = results.Read<dynamic>().ToList();
+				applicationsAndApplicantInfo.documents = results.Read<dynamic>().ToList();
+
+				return applicationsAndApplicantInfo;
+			}
+		}
 
 		/// <summary>
 		/// Retrieves the Position with a given id.
@@ -422,8 +495,8 @@ namespace AllyisApps.DBModel
 			dynamic positionAndTags = new ExpandoObject();
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var results = connection.Query<dynamic>("[StaffingManager].[GetPosition]", parameters, commandType: CommandType.StoredProcedure).Single();
-				positionAndTags.position = results.Read<dynamic>().Single();
+				var results = connection.QueryMultiple("[StaffingManager].[GetPosition]", parameters, commandType: CommandType.StoredProcedure);
+				positionAndTags.position = results.Read<dynamic>().First();
 				positionAndTags.tags = results.Read<dynamic>().ToList();
 			}
 			return positionAndTags;
@@ -444,7 +517,7 @@ namespace AllyisApps.DBModel
 			{
 				var results = connection.QueryMultiple("[StaffingManager].[GetPositionsByOrganizationId]", parameters, commandType: CommandType.StoredProcedure);
 				positionsAndTags.positions = results.Read<dynamic>().ToList();
-				positionsAndTags.tags = results.Read<dynamic>().ToDictionary(t => t.PositionId, t => t);
+				//positionsAndTags.tags = results.Read<dynamic>().ToDictionary(t => t.PositionId, t => t);
 			}
 			return positionsAndTags;
 		}
@@ -572,7 +645,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>, List<CustomerDBEntity>>
+		public Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>, List<ApplicationStatusDBEntity>, List<CustomerDBEntity>>
 			GetStaffingIndexPageInfo(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -591,6 +664,7 @@ namespace AllyisApps.DBModel
 					results.Read<EmploymentTypeDBEntity>().ToList(),
 					results.Read<PositionLevelDBEntity>().ToList(),
 					results.Read<PositionStatusDBEntity>().ToList(),
+					results.Read<ApplicationStatusDBEntity>().ToList(),
 					results.Read<CustomerDBEntity>().ToList());
 			}
 		}
@@ -603,7 +677,7 @@ namespace AllyisApps.DBModel
 		/// <param name="types">Organization Id.</param>
 		/// <param name="tags">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>, List<CustomerDBEntity>>
+		public Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>, List<ApplicationStatusDBEntity>, List<CustomerDBEntity>>
 			GetStaffingIndexPageInfoFiltered(int orgId, List<string> statuses, List<string> types, List<string> tags = null)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -624,7 +698,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@status", StatusesTable.AsTableValuedParameter("[StaffingManager].[StatusesTable]"));
 			parameters.Add("@type", TypesTable.AsTableValuedParameter("[StaffingManager].[TypesTable]"));
 			parameters.Add("@tags", TagTable.AsTableValuedParameter("[Lookup].[TagTable]"));
-
+			
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
@@ -638,27 +712,26 @@ namespace AllyisApps.DBModel
 					results.Read<EmploymentTypeDBEntity>().ToList(),
 					results.Read<PositionLevelDBEntity>().ToList(),
 					results.Read<PositionStatusDBEntity>().ToList(),
+					results.Read<ApplicationStatusDBEntity>().ToList(),
 					results.Read<CustomerDBEntity>().ToList());
 			}
 		}
-
+		
 		/// <summary>
 		/// Updates an organizations staffing settings.
 		/// </summary>
 		/// <param name="orgId">org ID thats getting a new setting </param>
 		/// <returns>Creates an orgs staffing object</returns>
-		public int GetStaffingDefaultStatus(int orgId)
+		public List<int> GetStaffingDefaultStatus(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				// default -1
-				var returnInt = 0;
-				var result = connection.Query("[StaffingManager].[GetStaffingDefaultStatus]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
-				if (result.DefaultPositionStatusId == null) return returnInt;
-				else return result.DefaultPositionStatusId;
+				var result = connection.QueryMultiple("[StaffingManager].[GetStaffingDefaultStatus]", parameters, commandType: CommandType.StoredProcedure);
+
+				return result.Read<int>().ToList();
 			}
 		}
 
@@ -761,28 +834,30 @@ namespace AllyisApps.DBModel
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@positionId", position.PositionId);
-			parameters.Add("@organizationId", position.OrganizationId);
-			parameters.Add("@addressId", position.AddressId);
-			parameters.Add("@startDate", position.StartDate);
-			parameters.Add("@positionStatus", position.PositionStatus);
-			parameters.Add("@positionTitle", position.PositionTitle);
-			parameters.Add("@billingRateFrequency", position.BillingRateFrequency);
-			parameters.Add("@billingRateAmount", position.BillingRateAmount);
-			parameters.Add("@durationMonths", position.DurationMonths);
-			parameters.Add("@employmentType", position.EmploymentType);
-			parameters.Add("@positionCount", position.PositionCount);
-			parameters.Add("@requiredSkills", position.RequiredSkills);
-			parameters.Add("@jobResponsibilities", position.JobResponsibilities);
-			parameters.Add("@desiredSkills", position.DesiredSkills);
-			parameters.Add("@positionLevel", position.PositionLevel);
-			parameters.Add("@hiringManager", position.HiringManager);
-			parameters.Add("@teamName", position.TeamName);
-			parameters.Add("@address", position.Address);
-			parameters.Add("@city", position.City);
-			parameters.Add("@state", position.State);
-			parameters.Add("@country", position.Country);
-			parameters.Add("@postalCode ", position.PostalCode);
+			parameters.Add("@positionId", position.Position.PositionId);
+			parameters.Add("@organizationId", position.Position.OrganizationId);
+			parameters.Add("@customerId", position.Position.CustomerId);
+			parameters.Add("@addressId", position.Position.AddressId);
+			parameters.Add("@startDate", position.Position.StartDate);
+			parameters.Add("@positionStatus", position.Position.PositionStatusId);
+			parameters.Add("@positionTitle", position.Position.PositionTitle);
+			parameters.Add("@billingRateFrequency", position.Position.BillingRateFrequency);
+			parameters.Add("@billingRateAmount", position.Position.BillingRateAmount);
+			parameters.Add("@durationMonths", position.Position.DurationMonths);
+			parameters.Add("@employmentType", position.Position.EmploymentTypeId);
+			parameters.Add("@positionCount", position.Position.PositionCount);
+			parameters.Add("@requiredSkills", position.Position.RequiredSkills);
+			parameters.Add("@jobResponsibilities", position.Position.JobResponsibilities);
+			parameters.Add("@desiredSkills", position.Position.DesiredSkills);
+			parameters.Add("@positionLevel", position.Position.PositionLevelId);
+			parameters.Add("@hiringManager", position.Position.HiringManager);
+			parameters.Add("@teamName", position.Position.TeamName);
+			parameters.Add("@address1", position.Address.Address1);
+			parameters.Add("@address2", position.Address.Address2);
+			parameters.Add("@city", position.Address.City);
+			parameters.Add("@stateId", position.Address.StateId);
+			parameters.Add("@countryCode", position.Address.CountryCode);
+			parameters.Add("@postalCode ", position.Address.PostalCode);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{

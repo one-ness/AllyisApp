@@ -738,7 +738,7 @@ namespace AllyisApps.Services
 		/// <param name="userId">User Id.</param>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<Customer>>
+		public Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<ApplicationStatus>, List<Customer>>
 			GetStaffingIndexInfo(int orgId, int? userId = null)
 		{
 			#region Validation
@@ -766,7 +766,8 @@ namespace AllyisApps.Services
 				results.Item3.Select(typedb => InitializeEmploymentTypes(typedb)).ToList(),
 				results.Item4.Select(leveldb => InitializePositionLevel(leveldb)).ToList(),
 				results.Item5.Select(statdb => InitializePositionStatus(statdb)).ToList(),
-				results.Item6.Select(cusdb => InitializeBaseCustomer(cusdb)).ToList()
+				results.Item6.Select(Appstatdb => InitializeApplicationStatus(Appstatdb)).ToList(),
+				results.Item7.Select(cusdb => InitializeBaseCustomer(cusdb)).ToList()
 				);
 		}
 
@@ -779,7 +780,7 @@ namespace AllyisApps.Services
 		/// <param name="tags">tags.</param>
 		/// <param name="userId">User Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<Customer>>
+		public Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<ApplicationStatus>, List<Customer>>
 			GetStaffingIndexInfoFiltered(int orgId, List<string> statusName, List<string> typeName, List<string> tags = null, int? userId = 0)
 		{
 			#region Validation
@@ -807,7 +808,8 @@ namespace AllyisApps.Services
 				results.Item3.Select(typedb => InitializeEmploymentTypes(typedb)).ToList(),
 				results.Item4.Select(leveldb => InitializePositionLevel(leveldb)).ToList(),
 				results.Item5.Select(statdb => InitializePositionStatus(statdb)).ToList(),
-				results.Item6.Select(custdb => InitializeBaseCustomer(custdb)).ToList()
+				results.Item6.Select(appstatdb => InitializeApplicationStatus(appstatdb)).ToList(),
+				results.Item7.Select(custdb => InitializeBaseCustomer(custdb)).ToList()
 				);
 		}
 
@@ -919,6 +921,20 @@ namespace AllyisApps.Services
 			{
 				PositionStatusId = status.PositionStatusId,
 				PositionStatusName = status.PositionStatusName
+			};
+		}
+
+		/// <summary>
+		/// converts PositionStatusDBEntity to position status service obejct
+		/// </summary>
+		/// <param name="status"></param>
+		/// <returns></returns>
+		public static ApplicationStatus InitializeApplicationStatus(ApplicationStatusDBEntity status)
+		{
+			return new ApplicationStatus
+			{
+				ApplicationStatusId = status.ApplicationStatusId,
+				ApplicationStatusName = status.ApplicationStatusName
 			};
 		}
 	}

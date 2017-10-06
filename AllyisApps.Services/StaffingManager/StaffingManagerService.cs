@@ -13,6 +13,7 @@ using AllyisApps.DBModel.StaffingManager;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
+using Microsoft.CSharp.RuntimeBinder;
 
 namespace AllyisApps.Services
 {
@@ -129,6 +130,27 @@ namespace AllyisApps.Services
 		#region GetMethods
 
 		/// <summary>
+		/// Retrieves the applicants in an organization.
+		/// </summary>
+		/// <param name="orgId"></param>
+		/// <returns>The list of applicants in organization.</returns>
+		public List<Applicant> GetApplicantAddressesByOrgId(int orgId) => DBHelper.GetApplicantAddressesBySubscriptionId(orgId).Select(DBApplicantToServiceObject).ToList();
+
+		/// <summary>
+		/// Retrieves the applicants in an organization.
+		/// </summary>
+		/// <param name="orgId"></param>
+		/// <returns>The list of applicants in organization.</returns>
+		public List<Applicant> GetApplicantsByOrgId(int orgId) => DBHelper.GetApplicantsBySubscriptionId(orgId).Select(DBApplicantToServiceObject).ToList();
+
+		/// <summary>
+		/// Retrieves the applicant with a given id.
+		/// </summary>
+		/// <param name="applicantId">The id of the applicant.</param>
+		/// <returns>One applicant, if present.</returns>
+		public Applicant GetApplicantAddressById(int applicantId) => DBApplicantToServiceObject(DBHelper.GetApplicantAddressById(applicantId));
+
+		/// <summary>
 		/// Retrieves the applicant with a given id.
 		/// </summary>
 		/// <param name="applicantId">The id of the applicant.</param>
@@ -148,6 +170,8 @@ namespace AllyisApps.Services
 		/// <param name="applicationDocumentId">The id of the application document.</param>
 		/// <returns>One application document, if present.</returns>
 		public ApplicationDocument GetApplicationDocumentById(int applicationDocumentId) => DBApplicationDocumentsToServiceObject(DBHelper.GetApplicationDocumentById(applicationDocumentId));
+
+		public Applicant GetApplicantAddressByApplicationId(int applicationId) => DBApplicantToServiceObject(DBHelper.GetApplicantAddressById(DBHelper.GetApplicantByApplicationId(applicationId).ApplicantId));
 
 		/// <summary>
 		/// Retrieves the applicant that submitted the given application.
@@ -183,6 +207,13 @@ namespace AllyisApps.Services
 		public List<ApplicationDocument> GetApplicationDocumentsByApplicationId(int applicationId) => DBHelper.GetApplicationDocumentsByApplicationId(applicationId).Select(DBApplicationDocumentsToServiceObject).ToList();
 
 		/// <summary>
+		/// Gets full application list with applicant infor and documents for each.
+		/// </summary>
+		/// <param name="position"></param>
+		/// <returns></returns>
+		public List<Application> GetFullApplicationInfoByPositionId(int position) => SetupFullApplicationInfo(DBHelper.GetFullApplicationInfoByPositionId(position));
+
+		/// <summary>
 		/// Get Position method that pulls a position from the DB.
 		/// </summary>
 		/// <param name="positionId">ID of position to be pulled.</param>
@@ -214,7 +245,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId"></param>
 		/// <returns></returns>
-		public int GetStaffingDefaultStatus(int orgId) => DBHelper.GetStaffingDefaultStatus(orgId);
+		public List<int> GetStaffingDefaultStatus(int orgId) => DBHelper.GetStaffingDefaultStatus(orgId);
 
 		#endregion GetMethods
 
@@ -362,7 +393,47 @@ namespace AllyisApps.Services
 				ApplicationDocuments = DBApplicationDocumentsToServiceObject(application.ApplicationDocuments).ToList(),
 				ApplicationId = application.ApplicationId,
 				ApplicationModifiedUtc = application.ApplicationModifiedUtc,
-				ApplicationStatus = (ApplicationStatusEnum)application.ApplicationStatusId,
+				ApplicationStatus = application.ApplicationStatusId,
+				PositionId = application.PositionId
+			};
+		}
+
+		public static Applicant DBApplicantToServiceObject(ApplicantAddressDBEntity applicant)
+		{
+			if (applicant == null)
+			{
+				throw new ArgumentNullException(nameof(applicant), nameof(applicant) + " must not be null.");
+			}
+
+			return new Applicant
+			{
+				ApplicantId = applicant.ApplicantId,
+				City = applicant.City,
+				Country = applicant.Country,
+				Email = applicant.Email,
+				FirstName = applicant.FirstName,
+				LastName = applicant.LastName,
+				Notes = applicant.Notes,
+				PhoneNumber = applicant.PhoneNumber,
+				PostalCode = applicant.PostalCode
+			};
+		}
+
+		public static Application DBApplicationToServiceObject(ApplicationDBEntity application)
+		{
+			if (application == null)
+			{
+				throw new ArgumentNullException(nameof(application), nameof(application) + " must not be null.");
+			}
+
+			return new Application
+			{
+				ApplicantId = application.ApplicantId,
+				Notes = application.Notes,
+				ApplicationCreatedUtc = application.ApplicationCreatedUtc,
+				ApplicationId = application.ApplicationId,
+				ApplicationModifiedUtc = application.ApplicationModifiedUtc,
+				ApplicationStatus = application.ApplicationStatusId,
 				PositionId = application.PositionId
 			};
 		}
@@ -384,6 +455,61 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// Builds an Application list which includes all relevant information for earch application (gets the applicant and documents too)
+		/// </summary>
+		/// <param name="applicationAndApplicantInfo"></param>
+		/// <returns></returns>
+		public static List<Application> SetupFullApplicationInfo(dynamic applicationAndApplicantInfo)
+		{
+			var applications = applicationAndApplicantInfo.applications;
+			var results = new List<Application>();
+			foreach(var application in applications)
+			{
+				var Applicant = new Applicant();
+				foreach (var applicant in applicationAndApplicantInfo.applicants)
+				{
+					if(applicant.ApplicantId == application.ApplicantId)
+					{
+						Applicant.ApplicantId = applicant.ApplicantId;
+						Applicant.FirstName = applicant.FirstName;
+						Applicant.LastName = applicant.LastName;
+						Applicant.City = applicant.City;
+						Applicant.Country = applicant.CountryCode;
+						Applicant.State = applicant.StateId;
+						Applicant.Email = applicant.Email;
+						Applicant.PhoneNumber = applicant.PhoneNumber;
+						Applicant.Notes = applicant.Notes;
+					}
+				}
+				var ApplicationDocuments = new List<ApplicationDocument>();
+				foreach (var document in applicationAndApplicantInfo.documents)
+				{
+					if (document.ApplicationId == application.ApplicationId)
+					{
+						ApplicationDocuments.Add( new ApplicationDocument() {
+							ApplicationId = document.ApplicationId,
+							ApplicationDocumentId = document.ApplicationDocumentId,
+							DocumentLink = document.DocumentLink,
+							DocumentName = document.DocumentName
+						});
+					}
+				}
+				results.Add( new Application() {
+
+					ApplicantId = application.ApplicantId,
+					ApplicationId = application.ApplicationId,
+					ApplicationStatus = application.ApplicationStatusId,
+					ApplicationModifiedUtc = application.ApplicationModifiedUtc,
+					Notes = application.Notes,
+					Applicant = Applicant,
+					ApplicationDocuments = ApplicationDocuments
+				});
+
+			}
+			return results;
+		}
+
+		/// <summary>
 		/// Converts a DB Layer PositionDBEntity object to a service layer Position Object.
 		/// </summary>
 		/// <param name="position"> the PositionDBEntity to be converted to service layer object. </param>
@@ -394,26 +520,26 @@ namespace AllyisApps.Services
 
 			return new Position
 			{
-				OrganizationId = position.OrganizationId,
-				CustomerId = position.CustomerId,
-				AddressId = position.AddressId,
-				PositionStatusId = position.PositionStatusId,
-				PositionTitle = position.PositionTitle,
-				DurationMonths = position.DurationMonths,
-				EmploymentTypeId = position.EmploymentTypeId,
-				PositionCount = position.PositionCount,
-				RequiredSkills = position.RequiredSkills,
-				PositionLevelId = position.PositionLevelId,
-				PositionId = position.PositionId,
-				PositionCreatedUtc = position.PositionCreatedUtc,
-				PositionModifiedUtc = position.PositionModifiedUtc,
-				StartDate = position.StartDate,
-				BillingRateFrequency = position.BillingRateFrequency,
-				BillingRateAmount = position.BillingRateAmount,
-				JobResponsibilities = position.JobResponsibilities,
-				DesiredSkills = position.DesiredSkills,
-				HiringManager = position.HiringManager,
-				TeamName = position.TeamName,
+				OrganizationId = position.position.OrganizationId,
+				CustomerId = position.position.CustomerId,
+				AddressId = position.position.AddressId,
+				PositionStatusId = position.position.PositionStatusId,
+				PositionTitle = position.position.PositionTitle,
+				DurationMonths = position.position.DurationMonths,
+				EmploymentTypeId = position.position.EmploymentTypeId,
+				PositionCount = position.position.PositionCount,
+				RequiredSkills = position.position.RequiredSkills,
+				PositionLevelId = position.position.PositionLevelId,
+				PositionId = position.position.PositionId,
+				PositionCreatedUtc = position.position.PositionCreatedUtc,
+				PositionModifiedUtc = position.position.PositionModifiedUtc,
+				StartDate = position.position.StartDate,
+				BillingRateFrequency = position.position.BillingRateFrequency,
+				BillingRateAmount = position.position.BillingRateAmount,
+				JobResponsibilities = position.position.JobResponsibilities,
+				DesiredSkills = position.position.DesiredSkills,
+				HiringManager = position.position.HiringManager,
+				TeamName = position.position.TeamName,
 
 				Address = new Address
 				{
@@ -422,14 +548,16 @@ namespace AllyisApps.Services
 					City = position.position.City,
 					StateId = position.position.StateId,
 					CountryCode = position.position.CountryCode,
-					PostalCode = position.position.PostalCodes
+					PostalCode = position.position.PostalCodes,
+					StateName = position.position.StateName,
+					CountryName = position.position.CountryName
 				},
 
-				Tags = DBEntityToServiceObject(position.Tags),
+				Tags = DBDynamicToServiceObject(position.tags),
 
-				EmploymentTypeName = position.EmploymentType.EmploymentTypeName,
-				PositionLevelName = position.PositionLevel.PositionLevelName,
-				PositionStatusName = position.PositionStatus.PositionStatusName
+				EmploymentTypeName = position.position.EmploymentTypeName,
+				PositionLevelName = position.position.PositionLevelName,
+				PositionStatusName = position.position.PositionStatusName
 			};
 		}
 
@@ -468,24 +596,31 @@ namespace AllyisApps.Services
 
 					Address = new Address
 					{
-						Address1 = position.position.Address1,
-						Address2 = position.position.Address2,
-						City = position.position.City,
-						StateId = position.position.StateId,
-						CountryCode = position.position.CountryCode,
-						PostalCode = position.position.PostalCodes
+						Address1 = position.Address1,
+						Address2 = position.Address2,
+						City = position.City,
+						StateId = position.StateId,
+						CountryCode = position.CountryCode,
+						PostalCode = position.PostalCodes
 					},
 
 					Tags = new List<Tag>()
 				};
 
-				foreach (dynamic tag in positionsAndTags.tags[position.PositionId])
+				try
 				{
-					newPosition.Tags.Add(new Tag
+					foreach (dynamic tag in positionsAndTags.tags[position.PositionId])
 					{
-						TagId = tag.TagId,
-						TagName = tag.TagName
-					});
+						newPosition.Tags.Add(new Tag
+						{
+							TagId = tag.TagId,
+							TagName = tag.TagName
+						});
+					}
+				}
+				catch (RuntimeBinderException)
+				{
+
 				}
 
 				positions.Add(newPosition);
@@ -506,6 +641,17 @@ namespace AllyisApps.Services
 			return taglist;
 		}
 
+		/// <summary>
+		/// Converts a list of TagDBEntity DB layer objects to a list of Tag service layer object.
+		/// </summary>
+		/// <param name="tags"> The List of tag DB layer objects to be converted. </param>
+		/// <returns> Returns a list of Tag service layer objects.  </returns>
+		public static List<Tag> DBDynamicToServiceObject(List<dynamic> tags)
+		{
+			var taglist = tags
+				.ConvertAll(x => new Tag { TagId = x.TagId, TagName = x.TagName });
+			return taglist;
+		}
 		/// <summary>
 		/// Converts a TagDBEntity DB layer object to a Tag service layer object.
 		/// </summary>
@@ -559,21 +705,28 @@ namespace AllyisApps.Services
 			};
 		}
 
-		public static ApplicantDBEntity ServiceObjectToDBEntity(Applicant applicant)
+		public static ApplicantAddressDBEntity ServiceObjectToDBEntity(Applicant applicant)
 		{
 			if (applicant == null)
 			{
 				throw new ArgumentNullException(nameof(applicant), nameof(applicant) + " must not be null.");
 			}
 
-			return new ApplicantDBEntity
+			return new ApplicantAddressDBEntity
 			{
 				ApplicantId = applicant.ApplicantId,
 				Email = applicant.Email,
 				FirstName = applicant.FirstName,
 				LastName = applicant.LastName,
 				Notes = applicant.Notes,
-				PhoneNumber = applicant.PhoneNumber
+				OrganizationId = applicant.OrgId,
+				PhoneNumber = applicant.PhoneNumber,
+				Address1 = applicant.Address,
+				Address2 = "",
+				City = applicant.City,
+				Country = applicant.Country,
+				PostalCode = applicant.PostalCode,
+				StateId = 1 //applicant.State
 			};
 		}
 

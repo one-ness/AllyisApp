@@ -11,7 +11,6 @@ using System.Linq;
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
-using AllyisApps.DBModel.Lookup;
 using AllyisApps.Lib;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
@@ -207,42 +206,30 @@ namespace AllyisApps.Services
 		public async void NotifyInviteAcceptAsync(int inviteId)
 		{
 			InvitationDBEntity invitation = DBHelper.GetInvitation(inviteId);
-			IEnumerable<dynamic> owners = DBHelper.GetOrgOwnerEmails(invitation.OrganizationId);
+			string msgbody = new System.Web.HtmlString($"{invitation.FirstName} {invitation.LastName} has joined the organization {invitation.OrganizationName} on Allyis Apps.").ToString();
 
-			string htmlbody = string.Format(
-				"{0} has joined the organization {1} on Allyis Apps.",
-				invitation.FirstName + " " + invitation.LastName,
-				invitation.OrganizationName);
-
-			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
-			foreach (dynamic owner in owners)
+			foreach (string email in DBHelper.GetOrganizationOwnerEmails(invitation.OrganizationId))
 			{
 				await Mailer.SendEmailAsync(
-					this.ServiceSettings.SupportEmail,
-					owner.Email,
-					"Join Allyis Apps!",
-					msgbody);
+						ServiceSettings.SupportEmail,
+						email,
+						"Join Allyis Apps!",
+						msgbody);
 			}
 		}
 
 		public async void NotifyInviteRejectAsync(int inviteId)
 		{
 			InvitationDBEntity invitation = DBHelper.GetInvitation(inviteId);
-			IEnumerable<dynamic> owners = DBHelper.GetOrgOwnerEmails(invitation.OrganizationId);
+			string msgbody = new System.Web.HtmlString($"{invitation.FirstName} {invitation.LastName} has rejected joining the organization {invitation.OrganizationName} on Allyis Apps.").ToString();
 
-			string htmlbody = string.Format(
-				"{0} has rejected joining the organization {1} on Allyis Apps.",
-				invitation.FirstName + " " + invitation.LastName,
-				invitation.OrganizationName);
-
-			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
-			foreach (dynamic owner in owners)
+			foreach (string email in DBHelper.GetOrganizationOwnerEmails(invitation.OrganizationId))
 			{
 				await Mailer.SendEmailAsync(
-					this.ServiceSettings.SupportEmail,
-					owner.Email,
-					"User rejected invite Allyis Apps!",
-					msgbody);
+						ServiceSettings.SupportEmail,
+						email,
+						"User rejected invite Allyis Apps!",
+						msgbody);
 			}
 		}
 
@@ -396,7 +383,7 @@ namespace AllyisApps.Services
 				FirstName = organizationUser.FirstName,
 				LastName = organizationUser.LastName,
 				Email = organizationUser.Email,
-				CreatedUtc = organizationUser.CreatedUtc,
+				OrganizationUserCreatedUtc = organizationUser.CreatedUtc,
 				EmployeeId = organizationUser.EmployeeId,
 				OrganizationId = organizationUser.OrganizationId,
 				OrganizationRoleId = organizationUser.OrganizationRoleId,

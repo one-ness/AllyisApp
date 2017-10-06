@@ -39,6 +39,11 @@ namespace AllyisApps.Services
 			ChangePassword, // change password for others (change for self must always be allowed)
 		}
 
+		public enum StaffingManagerAction : int
+		{
+			EditCustomer
+		}
+
 		/// <summary>
 		/// time tracker actions.
 		/// </summary>
@@ -110,6 +115,34 @@ namespace AllyisApps.Services
 			if (!result && throwException)
 			{
 				string message = string.Format("action {0} denied for org {1}", action.ToString(), orgId);
+				throw new AccessViolationException(message);
+			}
+
+			return result;
+		}
+
+		public bool CheckStaffingManagerAction(StaffingManagerAction action, int subId, bool throwException = true)
+		{
+			bool result = false;
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.UserContext.SubscriptionsAndRoles.TryGetValue(subId, out subInfo);
+
+			if (subInfo != null && subInfo.ProductId == ProductIdEnum.StaffingManager)
+			{
+				StaffingManagerRole smRole = (StaffingManagerRole)subInfo.ProductRoleId;
+				switch (action)
+				{
+					case StaffingManagerAction.EditCustomer:
+						result = true;
+						break;
+					default:
+						break;
+				}
+			}
+
+			if (!result && throwException)
+			{
+				string message = string.Format("action {0} denied for subscription {1}", action.ToString(), subId);
 				throw new AccessViolationException(message);
 			}
 

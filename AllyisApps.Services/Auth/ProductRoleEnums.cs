@@ -6,6 +6,24 @@
 
 namespace AllyisApps.Services.Auth
 {
+	public enum StaffingManagerRole : int
+	{
+		/// <summary>
+		/// Staffing Manager Unavailable.
+		/// </summary>
+		NotInProduct = 0,
+
+		/// <summary>
+		/// Staffing Manager User.
+		/// </summary>
+		User = 1,
+
+		/// <summary>
+		/// Staffing Manager Manager.
+		/// </summary>
+		Manager = 2
+	}
+
 	/// <summary>
 	/// Product role aka Subscription role.
 	/// </summary>
