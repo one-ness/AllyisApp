@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Finance;
 using Dapper;
 
@@ -179,14 +180,14 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">.</param>
 		/// <returns>.</returns>
-		public IEnumerable<dynamic> GetOrgOwnerEmails(int organizationId)
+		public IEnumerable<UserDBEntity> GetOrganizationOwnerEmails(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query("[Auth].[GetOrganizationOwnerEmails]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.Query<UserDBEntity>("[Auth].[GetOrganizationOwnerEmails]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
