@@ -4363,7 +4363,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must Register Your Email Address.
+        ///   Looks up a localized string similar to You must verify your email address. Please click on the verification link sent to you in the email..
         /// </summary>
         public static string YouMustRegisterYourEmailAddress {
             get {
