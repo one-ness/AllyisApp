@@ -500,7 +500,8 @@ namespace AllyisApps.Services
 				OrganizationName = invitation.OrganizationName,
 				EmployeeId = invitation.EmployeeId,
 				DecisionDateUtc = invitation.DecisionDateUtc,
-				status = (InvitationStatusEnum)invitation.InvitationStatusId
+				status = (InvitationStatusEnum)invitation.InvitationStatusId,
+				RoleJson = invitation.RoleJson
 			};
 		}
 
@@ -547,7 +548,8 @@ namespace AllyisApps.Services
 				OrganizationRoleId = (int)invitation.OrganizationRole,
 				EmployeeId = invitation.EmployeeId,
 				DecisionDateUtc = invitation.DecisionDateUtc,
-				InvitationStatusId = (int)invitation.status
+				InvitationStatusId = (int)invitation.status,
+				RoleJson = invitation.RoleJson
 			};
 		}
 

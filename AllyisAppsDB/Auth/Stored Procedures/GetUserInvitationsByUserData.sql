@@ -10,7 +10,8 @@ SELECT
 	[LastName], 
 	[OrganizationId],  
 	[OrganizationRoleId],
-	[EmployeeId] 
+	[EmployeeId],
+	[RoleJson]
 FROM [Auth].[Invitation]
 WITH (NOLOCK)
 WHERE [Email] = @email AND [IsActive] = 1

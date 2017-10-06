@@ -1552,4 +1552,7 @@
   <data name="FailedToFindProduct" xml:space="preserve">
     <value>Failed to Find Product</value>
   </data>
+  <data name="SuperUser" xml:space="preserve">
+    <value>Super User</value>
+  </data>
 </root>

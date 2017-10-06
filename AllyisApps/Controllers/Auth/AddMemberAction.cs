@@ -13,6 +13,7 @@ using AllyisApps.ViewModels.Auth;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using AllyisApps.Services.Billing;
+using AllyisApps.Resources;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -46,17 +47,17 @@ namespace AllyisApps.Controllers.Auth
 
 			List<SelectListItem> etRoles = new List<SelectListItem>()
 			{
-				new SelectListItem() { Text = ExpenseTrackerRole.NotInProduct.ToString(), Value = "0"},
-				new SelectListItem() { Text = ExpenseTrackerRole.User.ToString(), Value = "1"},
-				new SelectListItem() { Text = ExpenseTrackerRole.Manager.ToString(), Value = "2"},
-				new SelectListItem() { Text = ExpenseTrackerRole.SuperUser.ToString(), Value = "4"},
+				new SelectListItem() { Text = Strings.Unassigned, Value = "0"},
+				new SelectListItem() { Text = Strings.User, Value = "1"},
+				new SelectListItem() { Text = Strings.Manager, Value = "2"},
+				new SelectListItem() { Text = Strings.SuperUser, Value = "4"},
 			};
 
 			List<SelectListItem> ttRoles = new List<SelectListItem>()
 			{
-				new SelectListItem() { Text = TimeTrackerRole.NotInProduct.ToString(), Value = "0"},
-				new SelectListItem() { Text = TimeTrackerRole.User.ToString(), Value = "1"},
-				new SelectListItem() { Text = TimeTrackerRole.Manager.ToString(), Value = "2"}
+				new SelectListItem() { Text = Strings.Unassigned, Value = "0"},
+				new SelectListItem() { Text = Strings.User, Value = "1"},
+				new SelectListItem() { Text = Strings.Manager, Value = "2"}
 			};
 
 			model.OrgRole = new SelectList(orgRoles, "Value", "Text", "1");
@@ -85,7 +86,7 @@ namespace AllyisApps.Controllers.Auth
 						Url.Action(ActionConstants.Index, ControllerConstants.Account, null, protocol: Request.Url.Scheme) :
 						Url.Action(ActionConstants.Register, ControllerConstants.Account, null, protocol: Request.Url.Scheme);
 
-					string prodJson = string.Format("{{ \"Time\" : {0}, \"Expense\" : {1}, \"Staffing\" : 0 }}", model.ttSelection, model.etSelection);
+					string prodJson = string.Format("{{ \"" + (int)SkuIdEnum.TimeTrackerBasic + "\" : {0}, \"" + (int)SkuIdEnum.ExpenseTrackerBasic + "\" : {1}, \"" + (int)SkuIdEnum.StaffingManagerBasic + "\" : 0 }}", model.ttSelection, model.etSelection);
 
 					int invitationId = AppService.InviteUser(url, model.Email.Trim(), model.FirstName, model.LastName, model.OrganizationId, model.OrgRoleSelection == "2" ? OrganizationRole.Owner : OrganizationRole.Member, model.EmployeeId, prodJson);
 
