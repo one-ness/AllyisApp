@@ -117,8 +117,11 @@
 									@title
 									@if (org.IsManageAllowed)
 									{
+										@*<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = org.OrganizationId })" title="@Strings.EditOrganization" class="pull-right text-muted">
+											<i class="fa fa-cog  fa-lg"></i>
+										</a>*@
 										<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = org.OrganizationId })" title="@Strings.EditOrganization" class="btn btn-default pull-right">
-											Manage
+											Manage <i class="fa fa-cog"></i>
 										</a>
 									}
 								</h2>
