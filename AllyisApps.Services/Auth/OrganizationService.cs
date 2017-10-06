@@ -148,7 +148,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Creates an invitation for a new user in the database, and also sends an email to the new user with their access code.
 		/// </summary>
-		public int InviteUser(string url, string email, string firstName, string lastName, int organizationId, OrganizationRole organizationRoleId, string employeedId)
+		public int InviteUser(string url, string email, string firstName, string lastName, int organizationId, OrganizationRole organizationRoleId, string employeedId, string prodJson)
 		{
 			if (organizationId <= 0) throw new ArgumentOutOfRangeException("organizationId");
 			this.CheckOrgAction(OrgAction.AddUserToOrganization, organizationId);
@@ -157,9 +157,10 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException("firstName");
 			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException("lastName");
 			if (string.IsNullOrWhiteSpace(employeedId)) throw new ArgumentNullException("employeedId");
+			if (string.IsNullOrWhiteSpace(prodJson)) throw new ArgumentNullException("employeedId");
 
 			// Creation of invitation
-			var result = DBHelper.CreateInvitation(email, firstName, lastName, organizationId, (int)organizationRoleId, employeedId);
+			var result = DBHelper.CreateInvitation(email, firstName, lastName, organizationId, (int)organizationRoleId, employeedId, prodJson);
 
 			if (result == -1)
 			{
@@ -248,14 +249,14 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Removes an invitation.
 		/// </summary>
-		/// <param name="orgId">Organization id.</param>
 		/// <param name="invitationId">Invitation Id.</param>
 		/// <returns>Returns false if permissions fail.</returns>
-		public bool RemoveInvitation(int orgId, int invitationId)
+		public bool RemoveInvitation(int invitationId)
 		{
-			if (orgId <= 0) throw new ArgumentException("orgId");
 			if (invitationId <= 0) throw new ArgumentException("invitationId");
-			this.CheckOrgAction(OrgAction.EditInvitation, orgId);
+
+			var invite = GetInvitationByID(invitationId);
+			this.CheckOrgAction(OrgAction.EditInvitation, invite.OrganizationId);
 			return DBHelper.DeleteInvitation(invitationId);
 		}
 
@@ -509,7 +510,8 @@ namespace AllyisApps.Services
 				OrganizationName = invitation.OrganizationName,
 				EmployeeId = invitation.EmployeeId,
 				DecisionDateUtc = invitation.DecisionDateUtc,
-				status = (InvitationStatusEnum)invitation.InvitationStatusId
+				status = (InvitationStatusEnum)invitation.InvitationStatusId,
+				RoleJson = invitation.RoleJson
 			};
 		}
 
@@ -556,7 +558,8 @@ namespace AllyisApps.Services
 				OrganizationRoleId = (int)invitation.OrganizationRole,
 				EmployeeId = invitation.EmployeeId,
 				DecisionDateUtc = invitation.DecisionDateUtc,
-				InvitationStatusId = (int)invitation.status
+				InvitationStatusId = (int)invitation.status,
+				RoleJson = invitation.RoleJson
 			};
 		}
 

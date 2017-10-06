@@ -22,6 +22,11 @@ namespace AllyisApps.Services
 		public string AccountName { get; set; }
 
 		/// <summary>
+		/// Gets or sets the SubscriptionId.
+		/// </summary>
+		public int SubscriptionId { get; set; }
+
+		/// <summary>
 		/// Gets or sets whether the account is active.
 		/// </summary>
 		public bool IsActive { get; set; }

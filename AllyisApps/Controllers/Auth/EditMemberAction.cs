@@ -4,8 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
+using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.Auth;
@@ -59,7 +61,12 @@ namespace AllyisApps.Controllers.Auth
 					OrganizationId = orgId,
 					EmployeeId = userOrgInfo.EmployeeId,
 					EmployeeRoleId = userOrgInfo.OrganizationRoleId,
-					IsInvited = isInvited
+					IsInvited = isInvited,
+					EmployeeRole = new SelectList(new List<SelectListItem>
+					{
+						new SelectListItem { Text = Strings.Member, Value="1" },
+						new SelectListItem { Text = Strings.Owner,  Value="2" }
+					}, "Value", "Text", userOrgInfo.OrganizationRoleId.ToString())
 				};
 			}
 			else
@@ -78,7 +85,12 @@ namespace AllyisApps.Controllers.Auth
 					OrganizationId = orgId,
 					EmployeeId = userOrgInfo.EmployeeId,
 					EmployeeRoleId = (int)userOrgInfo.OrganizationRole,
-					IsInvited = isInvited
+					IsInvited = isInvited,
+					EmployeeRole = new SelectList(new List<SelectListItem>
+					{
+						new SelectListItem { Text = Strings.Member, Value="1" },
+						new SelectListItem { Text = Strings.Owner,  Value="2" }
+					}, "Value", "Text", "1")
 				};
 			}
 

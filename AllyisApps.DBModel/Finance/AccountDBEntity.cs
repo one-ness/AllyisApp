@@ -22,6 +22,11 @@ namespace AllyisApps.DBModel.Finance
 		public string AccountName { get; set; }
 
 		/// <summary>
+		/// Gets or sets the subscriptionId.
+		/// </summary>
+		public int SubscriptionId { get; set; }
+
+		/// <summary>
 		/// Gets or sets whether the account is active.
 		/// </summary>
 		public bool IsActive { get; set; }

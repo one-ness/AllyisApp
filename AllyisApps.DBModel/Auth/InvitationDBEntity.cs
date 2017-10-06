@@ -59,8 +59,13 @@ namespace AllyisApps.DBModel.Auth
 		public string EmployeeId { get; set; }
 
 		/// <summary>
-		/// Gets or setOrganization Name
+		/// Gets or set Organization Name
 		/// </summary>
 		public string OrganizationName { get; set; }
+
+		/// <summary>
+		/// Get or set the Role Json string.
+		/// </summary>
+		public string RoleJson { get; set; }
 	}
 }

@@ -23,6 +23,35 @@
 						@Html.TextBoxFor(model => model.EmployeeId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.EmployeeId })
 						@Html.ValidationMessageFor(model => model.EmployeeId, "", new { @class = "text-danger" })
 					</div>
+					<div class="form-group">
+						<div class="form-group col-md-6">
+							@Html.ReqLabelFor(x => x.OrgRole, "Org Role")
+						</div>
+						<div class="form-group col-md-6">
+							@Html.DropDownListFor(x => x.OrgRoleSelection, Model.OrgRole, new { @class = "form-control" })
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="form-group col-md-6">
+							@if (Model.hasTT)
+							{ @Html.ReqLabelFor(x => x.TTRoles, "TimeTracker Role") }
+						</div>
+						<div class="form-group col-md-6">
+							@if (Model.hasTT)
+							{ @Html.DropDownListFor(x => x.ttSelection, Model.TTRoles, new { @class = "form-control" }) }
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="form-group col-md-6">
+							@if (Model.hasET)
+							{ @Html.ReqLabelFor(x => x.ETRoles, "ExpenseTracker Role") }
+						</div>
+						<div class="form-group col-md-6">
+							@if (Model.hasET)
+							{@Html.DropDownListFor(x => x.etSelection, Model.ETRoles, new { @class = "form-control" }) }
+						</div>
+					</div>
 				</div>
 				<div class="col-md-6 sm-control-width">
 
@@ -37,18 +66,18 @@
 						@Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
 					</div>
 
-					<div class="form-group">
-						<div class="text-right">
-							<span style="margin-right: 5px;">@Strings.AddAsOwner</span>
-							@Html.CheckBoxFor(m => m.AddAsOwner, new { @style = "display: inline;" })
-						</div>
-					</div>
+					@*<div class="form-group">
+							<div class="text-right">
+								<span style="margin-right: 5px;">@Strings.AddAsOwner</span>
+								@Html.CheckBoxFor(m => m.AddAsOwner, new { @style = "display: inline;" })
+							</div>
+						</div>*@
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-xs-12">
 					<div class="form-group allyis-action-buttons pull-right">
-						<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default">@Strings.Cancel</a>&nbsp;
+						<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { @id = Model.OrganizationId })" class="btn btn-default">@Strings.Cancel</a>&nbsp;
 						<input type="submit" id="addMember" value="@Strings.Add" class="btn btn-primary" />
 					</div>
 				</div>
