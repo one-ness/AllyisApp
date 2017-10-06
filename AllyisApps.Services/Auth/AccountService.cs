@@ -79,7 +79,7 @@ namespace AllyisApps.Services
 		{
 			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId");
 
-			Invitation inviteInfo = InitializeInvitationInfo(this.DBHelper.GetUserInvitationByInviteId(invitationId));
+			Invitation inviteInfo = InitializeInvitationInfo(this.DBHelper.GetInvitation(invitationId));
 
 			JObject roleString = JObject.Parse(inviteInfo.RoleJson);
 
