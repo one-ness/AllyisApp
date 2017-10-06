@@ -396,7 +396,7 @@ namespace AllyisApps.Services
 				FirstName = organizationUser.FirstName,
 				LastName = organizationUser.LastName,
 				Email = organizationUser.Email,
-				CreatedUtc = organizationUser.CreatedUtc,
+				OrganizationUserCreatedUtc = organizationUser.CreatedUtc,
 				EmployeeId = organizationUser.EmployeeId,
 				OrganizationId = organizationUser.OrganizationId,
 				OrganizationRoleId = organizationUser.OrganizationRoleId,
