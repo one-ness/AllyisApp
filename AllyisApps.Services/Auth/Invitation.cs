@@ -56,6 +56,11 @@ namespace AllyisApps.Services.Auth
 		public string EmployeeId { get; set; }
 
 		/// <summary>
+		/// Gets or sets the Role json string.
+		/// </summary>
+		public string RoleJson { get; set; }
+
+		/// <summary>
 		/// Date that user had accepted or rejected the invitation.
 		/// </summary>
 		public DateTime DecisionDateUtc { get; set; }

@@ -49,7 +49,8 @@ BEGIN
 		[Invitation].[OrganizationId],
 		[Organization].[OrganizationName] AS 'OrganizationName',
 		[OrganizationRoleId],
-		[EmployeeId] 
+		[EmployeeId],
+		[RoleJson]
 	FROM [Auth].[User] WITH (NOLOCK)
 	LEFT JOIN [Auth].[Invitation] WITH (NOLOCK) ON [User].[Email] = [Invitation].[Email]
 	LEFT JOIN [Auth].[Organization] WITH (NOLOCK) ON [Invitation].[OrganizationId] = [Organization].[OrganizationId]

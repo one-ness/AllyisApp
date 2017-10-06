@@ -3,8 +3,7 @@
 AS
 BEGIN
 	SET NOCOUNT ON;
-	UPDATE [Finance].[Account] 
-	SET [IsActive] = 0
-	WHERE [AccountId] = @accountId;
+	DELETE FROM [Finance].[Account]
+	WHERE [AccountId] = @accountId
 END
 

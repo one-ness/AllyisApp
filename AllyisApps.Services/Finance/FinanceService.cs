@@ -2,6 +2,7 @@
 using System.Linq;
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Finance;
+using AllyisApps.Services.Expense;
 
 namespace AllyisApps.Services
 {
@@ -10,9 +11,9 @@ namespace AllyisApps.Services
 	/// </summary>
 	public partial class AppService : BaseService
 	{
-		public IList<Account> GetAccounts()
+		public IList<Account> GetAccounts(int subId)
 		{
-			return DBHelper.GetAccounts().Select(x => InitializeAccountModel(x)).ToList();
+			return DBHelper.GetAccounts(subId).Select(x => InitializeAccountModel(x)).ToList();
 		}
 
 		public bool UpdateAccount(Account item)
@@ -41,6 +42,7 @@ namespace AllyisApps.Services
 			{
 				AccountId = account.AccountId,
 				AccountName = account.AccountName,
+				SubscriptionId = account.SubscriptionId,
 				AccountTypeId = account.AccountTypeId,
 				AccountTypeName = account.AccountTypeName,
 				IsActive = account.IsActive,
@@ -54,11 +56,60 @@ namespace AllyisApps.Services
 			{
 				AccountId = account.AccountId,
 				AccountName = account.AccountName,
+				SubscriptionId = account.SubscriptionId,
 				AccountTypeId = account.AccountTypeId,
 				AccountTypeName = account.AccountTypeName,
 				IsActive = account.IsActive,
 				ParentAccountId = account.ParentAccountId
 			};
+		}
+
+		/// <summary>
+		/// Checks if the supplied account can be deleted.
+		/// </summary>
+		/// <returns></returns>
+		public bool CanDelete(int subId, int accId, out List<Account> associatedAccounts)
+		{
+			List<Account> accounts = GetAccounts(subId).ToList();
+
+			List<ExpenseReport> reports = GetExpenseReportByOrgId(GetSubscription(subId).OrganizationId).ToList();
+			List<ExpenseItem> items = new List<ExpenseItem>();
+
+			associatedAccounts = new List<Account>();
+
+			//Get all report items to check their associated account.
+			foreach (var report in reports)
+			{
+				items.AddRange(GetExpenseItemsByReportId(report.ExpenseReportId));
+			}
+			List<Account> parentAccounts = accounts.Where(x => x.AccountId == accId).ToList();
+
+			while (parentAccounts.Count > 0)
+			{
+				List<Account> nextAccounts = new List<Account>();
+
+				foreach (var parent in parentAccounts)
+				{
+					var currentAccItem = items.Where(x => x.AccountId == parent.AccountId);
+
+					if (currentAccItem.Count() > 0)
+					{
+						return false;
+					}
+
+					nextAccounts.AddRange(accounts.Where(x => x.ParentAccountId == parent.AccountId));
+				}
+				associatedAccounts.AddRange(parentAccounts);
+				parentAccounts = nextAccounts;
+			}
+
+			//No reports means we can remove the account(s).
+			if (items.Count == 0)
+			{
+				return true;
+			}
+
+			return true;
 		}
 	}
 }

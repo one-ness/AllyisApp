@@ -1,8 +1,8 @@
 ﻿@{
-	string title = ViewBag.Title + " - " + Strings.ApplicationTitle;
-	if (ViewBag.Title == null)
+	string title = Strings.ApplicationTitle;
+	if (ViewBag.Title != null)
 	{
-		title = Strings.ApplicationTitle;
+		title = ViewBag.Title + " - " + title;
 	}
 }
 

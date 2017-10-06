@@ -12,7 +12,8 @@ AS
 		[Organization].[OrganizationName],
 		[Auth].[OrganizationRole].[OrganizationRoleName],
 		[EmployeeId],
-		[Invitation].[StatusId]
+		[Invitation].[StatusId],
+		[Invitation].[RoleJson]
 	FROM [Auth].[Invitation] WITH (NOLOCK)
 	LEFT JOIN [Auth].[OrganizationRole] WITH (NOLOCK) ON [OrganizationRole].[OrganizationRoleId] = [Invitation].[OrganizationRoleId]
 	LEFT JOIN [Auth].[Organization] WITH (NOLOCK) ON [Auth].[Organization].OrganizationId =  [Invitation].[OrganizationId] 

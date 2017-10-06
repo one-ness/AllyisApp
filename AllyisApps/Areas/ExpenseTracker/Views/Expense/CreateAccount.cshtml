@@ -20,10 +20,10 @@
 				@Html.ReqLabelFor(m => m.AccountName, "Account Name")
 				@Html.TextBoxFor(m => m.AccountName, new { @class = "form-control" })
 			</div>
-			<div class="form-group">
-				@Html.ReqLabelFor(m => m.AccountTypeName, "Account Type")
-				@Html.TextBoxFor(m => m.AccountTypeName, new { @class = "form-control" })
-			</div>
+			@*<div class="form-group">
+					@Html.ReqLabelFor(m => m.AccountTypeName, "Account Type")
+					@Html.TextBoxFor(m => m.AccountTypeName, new { @class = "form-control" })
+				</div>*@
 			<div class="form-group">
 				@Html.ReqLabelFor(m => m.ParentAccounts, "Parent Account")
 				@Html.DropDownListFor(m => m.SelectedAccount, Model.ParentAccounts, new { @class = "form-control" })

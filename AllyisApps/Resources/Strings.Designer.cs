@@ -3706,6 +3706,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Super User.
+        /// </summary>
+        public static string SuperUser {
+            get {
+                return ResourceManager.GetString("SuperUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Support.
         /// </summary>
         public static string Support {

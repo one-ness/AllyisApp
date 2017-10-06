@@ -4,7 +4,8 @@
 	@lastName NVARCHAR(40),
 	@organizationId INT,
 	@organizationRole INT,
-	@employeeId NVARCHAR(16)
+	@employeeId NVARCHAR(16),
+	@prodJson NVARCHAR(384)
 AS
 
 BEGIN
@@ -39,7 +40,8 @@ BEGIN
 				[OrganizationId],  
 				[IsActive], 
 				[OrganizationRoleId],
-				[EmployeeId]
+				[EmployeeId],
+				[RoleJson]
 				)
 			VALUES 
 				(@email, 
@@ -48,7 +50,8 @@ BEGIN
 				@organizationId,  
 				1, 
 				@organizationRole, 
-				@employeeId
+				@employeeId,
+				@prodJson
 				);
 
 			-- Return invitation id

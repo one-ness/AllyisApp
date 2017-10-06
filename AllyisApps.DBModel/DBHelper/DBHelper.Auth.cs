@@ -568,7 +568,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Adds an Invitation to the invitations table and invitation sub roles table.
 		/// </summary>
-		public int CreateInvitation(string email, string firstName, string lastName, int organizationId, int organizationRoleId, string employeedId)
+		public int CreateInvitation(string email, string firstName, string lastName, int organizationId, int organizationRoleId, string employeedId, string prodJson)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@email", email);
@@ -577,6 +577,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@organizationRole", organizationRoleId);
 			parameters.Add("@employeeId", employeedId);
+			parameters.Add("@prodJson", prodJson);
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
 				return con.Query<int>("[Auth].[CreateInvitation]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
