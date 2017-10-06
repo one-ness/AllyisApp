@@ -1,4 +1,4 @@
-CREATE PROCEDURE [Auth].[GetUserInvitationsByUserData]
+CREATE PROCEDURE [Auth].[GetUserInvitationsByEmail]
 	@email NVARCHAR(384)
 	
 AS

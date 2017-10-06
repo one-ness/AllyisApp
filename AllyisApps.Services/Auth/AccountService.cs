@@ -69,7 +69,7 @@ namespace AllyisApps.Services
 		/// <returns>Inviation info </returns>
 		public Invitation GetInvitationByID(int invitationId)
 		{
-			return InitializeInvitationInfo(DBHelper.GetUserInvitationByInviteId(invitationId));
+			return InitializeInvitationInfo(DBHelper.GetInvitation(invitationId));
 		}
 
 		/// <summary>
@@ -204,8 +204,11 @@ namespace AllyisApps.Services
 						DBHelper.UpdateUserPassword(result.UserId, passwordValidation.updatedHash);
 					}
 				}
+				else
+				{
+					return null;
+				}
 			}
-
 			return result;
 		}
 

@@ -69,6 +69,7 @@ namespace AllyisApps
 		public const string RemoveUser = "removeuser";
 		public const string ResetPassword = "resetpassword";
 		public const string ResetPasswordConfirmation = "resetpasswordconfirmation";
+		public const string ResendInvite = "resendinvite";
 		public const string RouteHome = "routehome";
 		public const string Skus = "skus";
 		public const string Subscribe = "subscribe";

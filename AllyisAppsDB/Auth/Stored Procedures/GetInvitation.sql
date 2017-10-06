@@ -1,4 +1,4 @@
-CREATE PROCEDURE [Auth].[GetUserInvitationByInviteId]
+CREATE PROCEDURE [Auth].[GetInvitation]
 	@inviteId INT
 AS
 	SET NOCOUNT ON;
