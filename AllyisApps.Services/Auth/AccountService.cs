@@ -178,8 +178,11 @@ namespace AllyisApps.Services
 						DBHelper.UpdateUserPassword(result.UserId, passwordValidation.updatedHash);
 					}
 				}
+				else
+				{
+					return null;
+				}
 			}
-
 			return result;
 		}
 
