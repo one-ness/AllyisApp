@@ -180,14 +180,14 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">.</param>
 		/// <returns>.</returns>
-		public IEnumerable<UserDBEntity> GetOrganizationOwnerEmails(int organizationId)
+		public IEnumerable<string> GetOrganizationOwnerEmails(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<UserDBEntity>("[Auth].[GetOrganizationOwnerEmails]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.Query<UserDBEntity>("[Auth].[GetOrganizationOwnerEmails]", parameters, commandType: CommandType.StoredProcedure).Select(x => x.Email);
 			}
 		}
 

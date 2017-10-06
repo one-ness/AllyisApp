@@ -208,7 +208,7 @@ namespace AllyisApps.Services
 			InvitationDBEntity invitation = DBHelper.GetInvitation(inviteId);
 			string msgbody = new System.Web.HtmlString($"{invitation.FirstName} {invitation.LastName} has joined the organization {invitation.OrganizationName} on Allyis Apps.").ToString();
 
-			foreach (string email in DBHelper.GetOrganizationOwnerEmails(invitation.OrganizationId).Select(x => x.Email))
+			foreach (string email in DBHelper.GetOrganizationOwnerEmails(invitation.OrganizationId))
 			{
 				await Mailer.SendEmailAsync(
 						ServiceSettings.SupportEmail,
@@ -223,7 +223,7 @@ namespace AllyisApps.Services
 			InvitationDBEntity invitation = DBHelper.GetInvitation(inviteId);
 			string msgbody = new System.Web.HtmlString($"{invitation.FirstName} {invitation.LastName} has rejected joining the organization {invitation.OrganizationName} on Allyis Apps.").ToString();
 
-			foreach (string email in DBHelper.GetOrganizationOwnerEmails(invitation.OrganizationId).Select(x => x.Email))
+			foreach (string email in DBHelper.GetOrganizationOwnerEmails(invitation.OrganizationId))
 			{
 				await Mailer.SendEmailAsync(
 						ServiceSettings.SupportEmail,
