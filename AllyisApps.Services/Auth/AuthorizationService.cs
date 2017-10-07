@@ -26,7 +26,8 @@ namespace AllyisApps.Services
 			EditOrganization,
 			EditSubscription,
 			EditBilling,
-			ViewUser, // view other users (view self must always be allowed)
+			ReadOrganization,
+			ReadUser, // view other users (view self must always be allowed)
 			DeleteUserFromOrganization,
 			DeleteUserFromSubscription,
 			DeleteOrganization,
@@ -108,6 +109,17 @@ namespace AllyisApps.Services
 						break;
 
 					default:
+						switch (action)
+						{
+							case OrgAction.ReadOrganization:
+								// all members have permission to read organization details
+								result = true;
+								break;
+
+							default:
+								break;
+						}
+
 						break;
 				}
 			}
