@@ -42,5 +42,13 @@
   {
     "outputFile": "Content/bootstrap/less/utilities.css",
     "inputFile": "Content/bootstrap/less/utilities.less"
+  },
+  {
+    "outputFile": "Content/StaffingManager.css",
+    "inputFile": "Content/StaffingManager.less"
+  },
+  {
+    "outputFile": "Content/ExpenseTracker.css",
+    "inputFile": "Content/ExpenseTracker.less"
   }
 ]
