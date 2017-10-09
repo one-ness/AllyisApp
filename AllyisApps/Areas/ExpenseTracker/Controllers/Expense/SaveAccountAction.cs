@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
 using AllyisApps.Services.Expense;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
@@ -25,7 +26,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		public ActionResult SaveAccount(int subscriptionId, CreateAccountViewModel model)
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Accounts, subscriptionId);
-
+			var subInfo = AppService.GetSubscription(subscriptionId);
 			var canDisable = CanDisableAccount(subscriptionId, model.AccountId, model.SelectedStatus);
 			bool success = false;
 			if (model != null)
@@ -34,7 +35,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				{
 					AccountId = model.AccountId,
 					AccountName = model.AccountName,
-					SubscriptionId = subscriptionId,
+					OrganizationId = subInfo.OrganizationId,
 					AccountTypeId = model.AccountTypeId,
 					AccountTypeName = model.AccountTypeName,
 					IsActive = !string.Equals(model.SelectedStatus, "0"),
@@ -71,6 +72,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 						}
 					}
 				}
+				else
+				{
+					Notifications.Add(new BootstrapAlert(string.Format("Account '{0}' cannot be have a child account as a parent.", acc.AccountName), Variety.Danger));
+				}
 			}
 
 			return RedirectToAction("Accounts");
@@ -85,12 +90,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		public bool CheckAccountParent(int subscriptionId, Account childAcc)
 		{
 			bool results = true;
-
+			var subInfo = AppService.GetSubscription(subscriptionId);
 			var childId = childAcc.AccountId;
 
 			var currentAccount = childAcc;
 
-			List<Account> accounts = AppService.GetAccounts(subscriptionId).ToList();
+			List<Account> accounts = AppService.GetAccounts(subInfo.OrganizationId).ToList();
 
 			while (currentAccount.ParentAccountId != null && accounts.Count != 0)
 			{
@@ -116,15 +121,15 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		public bool CanDisableAccount(int subId, int accId, string selectedStatus)
 		{
 			var results = true;
-
-			var account = AppService.GetAccounts(subId).Where(x => x.AccountId == accId).FirstOrDefault();
+			var subInfo = AppService.GetSubscription(subId);
+			var account = AppService.GetAccounts(subInfo.OrganizationId).Where(x => x.AccountId == accId).FirstOrDefault();
 
 			if (account != null && string.Equals(selectedStatus, "1"))
 			{
 				return results;
 			}
 
-			var orgReports = AppService.GetExpenseReportByOrgId(AppService.GetSubscription(subId).OrganizationId);
+			var orgReports = AppService.GetExpenseReportByOrgId(subInfo.OrganizationId);
 
 			foreach (var report in orgReports)
 			{

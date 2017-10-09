@@ -362,6 +362,7 @@
     <Compile Include="Controllers\Auth\IndexAction.cs" />
     <Compile Include="Controllers\Auth\LogOffAction.cs" />
     <Compile Include="Controllers\Auth\LogOnAction.cs" />
+    <Compile Include="Controllers\Auth\ManageOrgAction2.cs" />
     <Compile Include="Controllers\Auth\RegisterAction.cs" />
     <Compile Include="Controllers\Auth\RejectInvitationAction.cs" />
     <Compile Include="Controllers\Auth\ResendInviteAction.cs" />
@@ -653,6 +654,9 @@
     <Content Include="Areas\TimeTracker\Views\TimeEntry\StartOfWeek.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\PayClass.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\LockDate.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsOvertime.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsHoliday.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\_ManageSettingSideBar.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
@@ -731,6 +735,8 @@
     <Content Include="Views\Shared\EditorTemplates\Collection.cshtml" />
     <Content Include="Views\Account\_PremissionsLinkView.cshtml" />
     <Content Include="Views\Account\PermissionsOrg.cshtml" />
+    <Content Include="Views\Account\ManageOrg2.cshtml" />
+    <Content Include="Views\Account\_ManageOrgSideBar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\Dependencies\CodeAnalysis\CustomDictionary.xml">
@@ -1080,6 +1086,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\TimeTracker\ViewModels\Manage\" />
+    <Folder Include="Areas\TimeTracker\Views\Setting2Action\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

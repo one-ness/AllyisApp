@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Finance;
 using Dapper;
 
@@ -36,7 +37,7 @@ namespace AllyisApps.DBModel
 
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@accountName", account.AccountName);
-			parameters.Add("@subscriptionId", account.SubscriptionId);
+			parameters.Add("@organizationId", account.OrganizationId);
 			parameters.Add("@isActive", account.IsActive);
 			parameters.Add("@accountTypeId", account.AccountTypeId);
 			parameters.Add("@parentAccountId", account.ParentAccountId != null ? account.ParentAccountId.Value : account.ParentAccountId);
@@ -111,10 +112,10 @@ namespace AllyisApps.DBModel
 		/// Retrieves all of the accounts in the database.
 		/// </summary>
 		/// <returns></returns>
-		public IEnumerable<AccountDBEntity> GetAccounts(int subId)
+		public IEnumerable<AccountDBEntity> GetAccounts(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@subscriptionId", subId);
+			parameters.Add("@organizationId", orgId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -179,14 +180,14 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">.</param>
 		/// <returns>.</returns>
-		public IEnumerable<dynamic> GetOrgOwnerEmails(int organizationId)
+		public IEnumerable<string> GetOrganizationOwnerEmails(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query("[Auth].[GetOrganizationOwnerEmails]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.Query<UserDBEntity>("[Auth].[GetOrganizationOwnerEmails]", parameters, commandType: CommandType.StoredProcedure).Select(x => x.Email);
 			}
 		}
 
