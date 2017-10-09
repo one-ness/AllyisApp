@@ -1,0 +1,46 @@
+﻿[
+  {
+    "outputFile": "Content/less/allyis-tabs.css",
+    "inputFile": "Content/less/allyis-tabs.less"
+  },
+  {
+    "outputFile": "Content/less/allyis-pages-with-filter.css",
+    "inputFile": "Content/less/allyis-pages-with-filter.less"
+  },
+  {
+    "outputFile": "Content/less/_variables.css",
+    "inputFile": "Content/less/_variables.less"
+  },
+  {
+    "outputFile": "Content/less/_root.css",
+    "inputFile": "Content/less/_root.less"
+  },
+  {
+    "outputFile": "Content/less/_mixins.css",
+    "inputFile": "Content/less/_mixins.less"
+  },
+  {
+    "outputFile": "Content/Timetracker.css",
+    "inputFile": "Content/Timetracker.less"
+  },
+  {
+    "outputFile": "Content/font-awesome/less/variables.css",
+    "inputFile": "Content/font-awesome/less/variables.less"
+  },
+  {
+    "outputFile": "Content/font-awesome/less/stacked.css",
+    "inputFile": "Content/font-awesome/less/stacked.less"
+  },
+  {
+    "outputFile": "Content/bootstrap/less/wells.css",
+    "inputFile": "Content/bootstrap/less/wells.less"
+  },
+  {
+    "outputFile": "Content/bootstrap/less/variables.css",
+    "inputFile": "Content/bootstrap/less/variables.less"
+  },
+  {
+    "outputFile": "Content/bootstrap/less/utilities.css",
+    "inputFile": "Content/bootstrap/less/utilities.less"
+  }
+]
