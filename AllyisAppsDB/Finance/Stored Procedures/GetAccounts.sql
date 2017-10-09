@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [Finance].[GetAccounts]
-	@subscriptionId INT
+	@organizationId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -7,13 +7,13 @@ BEGIN
 	SELECT 
 		[A].[AccountId],
 		[A].[AccountName],
-		[A].[SubscriptionId],
+		[A].[OrganizationId],
 		[A].[IsActive],
 		[A].[AccountTypeId],
 		[T].[AccountTypeName],
 		[A].[ParentAccountId]
 	FROM [Finance].[Account] AS [A] WITH (NOLOCK)
 		LEFT JOIN [Finance].[AccountType] AS [T] WITH (NOLOCK) ON [T].[AccountTypeId] = [A].[AccountTypeId]
-	WHERE [SubscriptionId] = @subscriptionId
+	WHERE [OrganizationId] = @organizationId
 END
 

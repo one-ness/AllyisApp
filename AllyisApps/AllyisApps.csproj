@@ -426,6 +426,8 @@
     <Compile Include="Utilities\ApplicationExceptions.cs" />
     <Compile Include="Utilities\ImportMessageFormatter.cs" />
     <Compile Include="ViewModels\Auth\Organizations\AddMemberViewModel.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\ManageOrgSideBarViewModel.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\OrganizationDetailsViewModel.cs" />
     <Compile Include="ViewModels\Auth\User\ChangePasswordViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\EditMemberViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\EditSubscriptionViewModel.cs" />

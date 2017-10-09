@@ -24,7 +24,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the SubscriptionId.
 		/// </summary>
-		public int SubscriptionId { get; set; }
+		public int OrganizationId { get; set; }
 
 		/// <summary>
 		/// Gets or sets whether the account is active.
