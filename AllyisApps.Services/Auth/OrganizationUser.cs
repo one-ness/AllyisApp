@@ -23,12 +23,10 @@ namespace AllyisApps.Services.Auth
 		/// </summary>
 		public int OrganizationRoleId { get; set; }
 
-		public string OrganizationRoleName { get; set; }
-
 		/// <summary>
 		/// Gets or sets the Date this user was added to the organization.
 		/// </summary>
-		public DateTime CreatedUtc { get; set; }
+		public DateTime OrganizationUserCreatedUtc { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Employee Id.

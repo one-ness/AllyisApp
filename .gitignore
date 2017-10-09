@@ -258,3 +258,15 @@ paket-files/
 *.cache
 GitGuide.docx
 .gitignore
+AllyisApps/Content/less/allyis-tabs.css
+AllyisApps/Content/less/allyis-pages-with-filter.min.css
+AllyisApps/compilerconfig.json
+AllyisApps/Content/less/allyis-tabs.min.css
+AllyisApps/Content/less/_variables.css
+AllyisApps/Content/less/_root.min.css
+AllyisApps/Content/less/_root.css
+AllyisApps/Content/less/_mixins.css
+AllyisApps/compilerconfig.json.defaults
+AllyisApps/Content/less/allyis-pages-with-filter.css
+AllyisApps/Content/less/_variables.min.css
+AllyisApps/Content/less/_mixins.min.css

@@ -359,6 +359,7 @@
     <Compile Include="Controllers\Auth\IndexAction.cs" />
     <Compile Include="Controllers\Auth\LogOffAction.cs" />
     <Compile Include="Controllers\Auth\LogOnAction.cs" />
+    <Compile Include="Controllers\Auth\ManageOrgAction2.cs" />
     <Compile Include="Controllers\Auth\RegisterAction.cs" />
     <Compile Include="Controllers\Auth\RejectInvitationAction.cs" />
     <Compile Include="Controllers\Auth\ResendInviteAction.cs" />
@@ -423,6 +424,8 @@
     <Compile Include="Utilities\ApplicationExceptions.cs" />
     <Compile Include="Utilities\ImportMessageFormatter.cs" />
     <Compile Include="ViewModels\Auth\Organizations\AddMemberViewModel.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\ManageOrgSideBarViewModel.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\OrganizationDetailsViewModel.cs" />
     <Compile Include="ViewModels\Auth\User\ChangePasswordViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\EditMemberViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\EditSubscriptionViewModel.cs" />
@@ -677,6 +680,7 @@
     <Content Include="Areas\StaffingManager\Views\Staffing\_ApplicationInfoPartial.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\Application.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\ApplicationDocument.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\Index2.cshtml" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
@@ -759,6 +763,8 @@
     <Content Include="Views\Shared\EditorTemplates\Collection.cshtml" />
     <Content Include="Views\Account\_PremissionsLinkView.cshtml" />
     <Content Include="Views\Account\PermissionsOrg.cshtml" />
+    <Content Include="Views\Account\ManageOrg2.cshtml" />
+    <Content Include="Views\Account\_ManageOrgSideBar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\Dependencies\CodeAnalysis\CustomDictionary.xml">

@@ -24,7 +24,7 @@ namespace AllyisApps.DBModel.Finance
 		/// <summary>
 		/// Gets or sets the subscriptionId.
 		/// </summary>
-		public int SubscriptionId { get; set; }
+		public int OrganizationId { get; set; }
 
 		/// <summary>
 		/// Gets or sets whether the account is active.

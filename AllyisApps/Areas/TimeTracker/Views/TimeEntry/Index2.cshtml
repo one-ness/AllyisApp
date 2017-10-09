@@ -105,14 +105,14 @@
 		<table class="table table-condensed">
 			@foreach (ProjectHours ph in Model.ProjectHours)
 			{
-			<tr>
-				<td>
-					@ph.Project.ProjectName
-				</td>
-				<td id="@ph.Project.ProjectId">
-					@ph.GetHoursInHoursMinutes()
-				</td>
-			</tr>
+				<tr>
+					<td>
+						@ph.Project.ProjectName
+					</td>
+					<td id="@ph.Project.ProjectId">
+						@ph.GetHoursInHoursMinutes()
+					</td>
+				</tr>
 			}
 			<tr>
 				<td>
