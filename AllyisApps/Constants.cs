@@ -111,6 +111,9 @@ namespace AllyisApps
 		public const string SubmitUpdatePosition = "submitupdateposition";
 		public const string ViewPosition = "viewposition";
 		public const string CreateApplicationStatus = "createapplicationstatus";
+		public const string StartOfWeekSettings = "startofweeksettings";
+		public const string PayClassesSettings = "payclassessettings";
+		public const string LockDateSettings = "lockdatesettings";
 
 	}
 

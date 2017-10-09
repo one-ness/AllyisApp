@@ -17,10 +17,8 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44326</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>
-    </IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>
-    </IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <NuGetPackageImportStamp>
@@ -298,6 +296,9 @@
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\TemplateAction.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\Project\CompleteProjectViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\MergePayClassViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsLockDateViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsPayClassesViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsWeekStartViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\TimeEntryRangeForUserViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\TimeEntryViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\PayClassInfoViewModel.cs" />
@@ -649,6 +650,9 @@
     <Content Include="Areas\StaffingManager\Views\Staffing\_ApplicationInfoPartial.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\Application.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\ApplicationDocument.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\StartOfWeek.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\PayClass.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\LockDate.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
