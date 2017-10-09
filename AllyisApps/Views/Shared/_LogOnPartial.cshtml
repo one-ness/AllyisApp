@@ -3,13 +3,10 @@
 @if (User.Identity.IsAuthenticated)
 {
 	<li>
-		<span class="headerOrgName">@Model.CurrentOrganizationName</span>
+		<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)" style ="padding:6px 6px; line-height: 40px">@Model.UserName</a>
 	</li>
 	<li>
-		<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)">@Model.UserName</a>
-	</li>
-	<li>
-		<a href="@Url.Action(ActionConstants.LogOff, ControllerConstants.Account)" title="@Strings.SignOut" class="navbar-btn col-xs-push-2 col-xs-8 col-sm-12" onclick="@ViewExtensions.ConfirmDialog(Strings.LogOffPrompt)" style ="padding: 5px 5px;">
+		<a href="@Url.Action(ActionConstants.LogOff, ControllerConstants.Account)" title="@Strings.SignOut" class="navbar-btn col-xs-push-2 col-xs-8 col-sm-12" onclick="@ViewExtensions.ConfirmDialog(Strings.LogOffPrompt)" style ="padding:6px 6px; line-height:24px;">
 			@Strings.SignOut &nbsp;<i class="fa fa-sign-out"></i>
 		</a>
 	</li>
