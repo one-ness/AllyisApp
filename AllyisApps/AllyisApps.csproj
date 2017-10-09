@@ -426,7 +426,7 @@
     <Compile Include="Utilities\ApplicationExceptions.cs" />
     <Compile Include="Utilities\ImportMessageFormatter.cs" />
     <Compile Include="ViewModels\Auth\Organizations\AddMemberViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\ManageOrgSideBarViewModel.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\ManageOrgMenuBarViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\OrganizationDetailsViewModel.cs" />
     <Compile Include="ViewModels\Auth\User\ChangePasswordViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\EditMemberViewModel.cs" />
@@ -732,7 +732,7 @@
     <Content Include="Views\Account\_PremissionsLinkView.cshtml" />
     <Content Include="Views\Account\PermissionsOrg.cshtml" />
     <Content Include="Views\Account\ManageOrg2.cshtml" />
-    <Content Include="Views\Account\_ManageOrgSideBar.cshtml" />
+    <Content Include="Views\Account\_ManageOrgMenuBar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\Dependencies\CodeAnalysis\CustomDictionary.xml">
