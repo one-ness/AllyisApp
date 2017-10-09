@@ -50,5 +50,77 @@
   {
     "outputFile": "Content/ExpenseTracker.css",
     "inputFile": "Content/ExpenseTracker.less"
+  },
+  {
+    "outputFile": "Content/Site.css",
+    "inputFile": "Content/Site.less"
+  },
+  {
+    "outputFile": "Content/less/utilities.css",
+    "inputFile": "Content/less/utilities.less"
+  },
+  {
+    "outputFile": "Content/less/tt_customer.css",
+    "inputFile": "Content/less/tt_customer.less"
+  },
+  {
+    "outputFile": "Content/less/swapper-ui.css",
+    "inputFile": "Content/less/swapper-ui.less"
+  },
+  {
+    "outputFile": "Content/less/sticky_footer.css",
+    "inputFile": "Content/less/sticky_footer.less"
+  },
+  {
+    "outputFile": "Content/less/sale.css",
+    "inputFile": "Content/less/sale.less"
+  },
+  {
+    "outputFile": "Content/less/report.css",
+    "inputFile": "Content/less/report.less"
+  },
+  {
+    "outputFile": "Content/less/permissions.css",
+    "inputFile": "Content/less/permissions.less"
+  },
+  {
+    "outputFile": "Content/less/paneled_index.css",
+    "inputFile": "Content/less/paneled_index.less"
+  },
+  {
+    "outputFile": "Content/less/offcanvas.css",
+    "inputFile": "Content/less/offcanvas.less"
+  },
+  {
+    "outputFile": "Content/less/navigation.css",
+    "inputFile": "Content/less/navigation.less"
+  },
+  {
+    "outputFile": "Content/less/modal.css",
+    "inputFile": "Content/less/modal.less"
+  },
+  {
+    "outputFile": "Content/less/index.css",
+    "inputFile": "Content/less/index.less"
+  },
+  {
+    "outputFile": "Content/less/general.css",
+    "inputFile": "Content/less/general.less"
+  },
+  {
+    "outputFile": "Content/less/form.css",
+    "inputFile": "Content/less/form.less"
+  },
+  {
+    "outputFile": "Content/less/error.css",
+    "inputFile": "Content/less/error.less"
+  },
+  {
+    "outputFile": "Content/less/breadcrumbs.css",
+    "inputFile": "Content/less/breadcrumbs.less"
+  },
+  {
+    "outputFile": "Content/less/allyis-list-group-search.css",
+    "inputFile": "Content/less/allyis-list-group-search.less"
   }
 ]
