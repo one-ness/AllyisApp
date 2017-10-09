@@ -13,11 +13,11 @@
 		@*Adjust default margins for delete org button to keep it outside the border*@
 		<div class="panel panel-default org-panel" style="margin-bottom: 0px">
 			<div class="panel-heading">
-				<h1 class="panel-title">
+				<h2 class="panel-title" style="margin-top: 0px; margin-bottom: 0px;">
 					@Strings.OrganizationDetails
 					<a href="@Url.Action(ActionConstants.EditOrg, ControllerConstants.Account, new { id = Model.OrganizationId })"
 					   class="pull-right text-muted" title="@Strings.EditOrganization"><span class="fa fa-fw fa-edit"></span></a>
-				</h1>
+				</h2>
 			</div>
 			@Html.Partial("_ManageOrgDetails", Model.Details)
 		</div>

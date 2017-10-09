@@ -3,9 +3,9 @@
 namespace AllyisApps.ViewModels.Auth
 {
 	/// <summary>
-	/// view model for the sidebar shown in manage org pages
+	/// view model for the menu shown in manage org pages
 	/// </summary>
-	public class ManageOrgSideBarViewModel : BaseViewModel
+	public class ManageOrgMenuBarViewModel : BaseViewModel
 	{
 		public string DetailsActive { get; set; }
 		public string MembersActive { get; set; }

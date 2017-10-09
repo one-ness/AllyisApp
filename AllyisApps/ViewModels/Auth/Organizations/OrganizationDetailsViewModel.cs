@@ -63,15 +63,15 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// side bar view model
 		/// </summary>
-		public ManageOrgSideBarViewModel SideBarViewModel { get; set; }
+		public ManageOrgMenuBarViewModel MenuBarViewModel { get; set; }
 
 		/// <summary>
 		/// constructor
 		/// </summary>
 		public OrganizationDetailsViewModel()
 		{
-			this.SideBarViewModel = new ManageOrgSideBarViewModel();
-			this.SideBarViewModel.DetailsActive = "active";
+			this.MenuBarViewModel = new ManageOrgMenuBarViewModel();
+			this.MenuBarViewModel.DetailsActive = "active";
 		}
 	}
 }
