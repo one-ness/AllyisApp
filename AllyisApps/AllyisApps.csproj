@@ -648,6 +648,9 @@
     <Content Include="Areas\StaffingManager\Views\Staffing\_ApplicationInfoPartial.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\Application.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\ApplicationDocument.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsOvertime.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsHoliday.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\_ManageSettingSideBar.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
@@ -1077,6 +1080,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\TimeTracker\ViewModels\Manage\" />
+    <Folder Include="Areas\TimeTracker\Views\Setting2Action\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
