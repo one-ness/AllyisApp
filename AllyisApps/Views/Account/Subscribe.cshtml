@@ -57,7 +57,7 @@
 </div>
 @section Scripts {
 	<script type="text/javascript">
-		var model_previousSku = @Model.PreviousSku;
+		var model_previousSku = @((int)Model.PreviousSku);
 		var warningWhenSwitchingToFreeSubscription = "@Html.Raw(Strings.WarningWhenSwitchingToFreeSubscription)";
 		var cannotReduceUserCount = "@Html.Raw(Strings.CannotReduceUserCount)";
 	</script>

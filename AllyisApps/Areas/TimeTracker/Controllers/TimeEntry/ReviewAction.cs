@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
@@ -20,9 +21,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <returns>The action result.</returns>
-		public ActionResult ReviewEntries(int subscriptionId)
+		public ActionResult Review(int subscriptionId)
 		{
-			var model = new ReviewTimeEntriesViewModel();
+			var model = new ReviewViewModel
+			{
+				UserId = AppService.UserContext.UserId,
+				SubscriptionId = subscriptionId,
+				SubscriptionName = AppService.GetSubscription(subscriptionId).SubscriptionName,
+				PayClasses = AppService.GetPayClassesBySubscriptionId(subscriptionId).Select(x => new PayClassInfoViewModel(x))
+			};
 			return View(model);
 		}
 	}

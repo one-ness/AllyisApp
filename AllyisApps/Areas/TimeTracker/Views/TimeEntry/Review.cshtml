@@ -3,8 +3,69 @@
 @using AllyisApps.Services.Auth;
 @using AllyisApps.Utilities;
 @using System.Configuration;
-@model ReviewTimeEntriesViewModel
+@model ReviewViewModel
 
-<div class="row">
-	Hi
+@{
+	ViewBag.Title = Strings.Review;
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
+	ViewData["UserId"] = Model.UserId;
+	ViewData["SubscriptionId"] = Model.SubscriptionId;
+	ViewData["SubscriptionName"] = Model.SubscriptionName;
+}
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h1 class="panel-title">Time Entries</h1>
+	</div>
+	<div class="panel-body">
+		<span class="col-xs-9"><input id="org-members-search" type="search" placeholder="🔍 " class="form-control" /></span>
+		<span class="col-xs-2 col-xs-push-1" style="vertical-align: middle; padding: 0px;">
+			<select id="org-members-role" class="form-control">
+				<option>@Strings.Any</option>
+				<option>@Strings.Member</option>
+				<option>@Strings.Owner</option>
+			</select>
+		</span>
+	</div>
+	<table class="table table-hover table-condensed table-responsive">
+		<thead>
+			<tr class="double-bottom-border">
+				<th><input type="checkbox"></th>
+				<th>Name</th>
+				@foreach (string payClassName in Model.PayClasses.Select(x => x.PayClassName))
+				{
+					<th>@payClassName</th>
+				}
+				<th>Total</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (int number in new int[] { 1, 2, 3, 4, 5})
+			{
+				<tr>
+					<td><input type="checkbox"></td>
+					<td>Luke</td>
+					@foreach (string payClassName in Model.PayClasses.Select(x => x.PayClassName))
+					{
+						<td>8</td>
+					}
+					<td>57</td>
+				</tr>
+			}
+			<tr class="nohover" id="tableEnd">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="pageContainer"></div>
 </div>
+
+@section Scripts {
+	<script type="text/javascript" src="~/Scripts/allyis-pages-with-filter.js"></script>
+}

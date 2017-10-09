@@ -170,13 +170,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				},
 				CanManage = manager,
 				StartOfWeek = (StartOfWeekEnum)startOfWeek,
-				PayClasses = infos.Item2.Select(payclass => new PayClassInfoViewModel()
-				{
-					CreatedUtc = payclass.CreatedUtc,
-					OrganizationId = payclass.OrganizationId,
-					PayClassId = payclass.PayClassId,
-					PayClassName = payclass.PayClassName
-				}),
+				PayClasses = infos.Item2.Select(payclass => new PayClassInfoViewModel(payclass)),
 				GrandTotal = new ProjectHours { Project = new CompleteProjectViewModel { ProjectName = "Total" }, Hours = 0.0f },
 				Projects = allProjects.Where(x => x.IsActive == true && x.IsCustomerActive == true && x.IsUserActive == true).AsParallel()
 					.Select(proj => new CompleteProjectViewModel(proj)),

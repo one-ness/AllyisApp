@@ -111,7 +111,7 @@ namespace AllyisApps
 		public const string SubmitUpdatePosition = "submitupdateposition";
 		public const string ViewPosition = "viewposition";
 		public const string CreateApplicationStatus = "createapplicationstatus";
-		public const string ReviewEntries = "reviewentries";
+		public const string Review = "review";
 
 	}
 

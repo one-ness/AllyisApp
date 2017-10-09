@@ -1561,4 +1561,7 @@
   <data name="SuperUser" xml:space="preserve">
     <value>Super User</value>
   </data>
+  <data name="Review" xml:space="preserve">
+    <value>Review</value>
+  </data>
 </root>

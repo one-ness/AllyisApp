@@ -307,11 +307,17 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets a list of <see cref="PayClass"/>'s for an organization.
 		/// </summary>
-		public IEnumerable<PayClass> GetPayClasses(int subscriptionId)
+		public IEnumerable<PayClass> GetPayClassesBySubscriptionId(int subscriptionId)
 		{
-			UserContext.SubscriptionAndRole subInfo = null;
-			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			return DBHelper.GetPayClasses(subInfo.OrganizationId).Select(pc => InitializePayClassInfo(pc));
+			return DBHelper.GetPayClasses(UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId).Select(pc => InitializePayClassInfo(pc));
+		}
+
+		/// <summary>
+		/// Gets a list of <see cref="PayClass"/>'s for an organization.
+		/// </summary>
+		public IEnumerable<PayClass> GetPayClassesByOrganizationId(int organizationId)
+		{
+			return DBHelper.GetPayClasses(organizationId).Select(pc => InitializePayClassInfo(pc));
 		}
 
 		/// <summary>
