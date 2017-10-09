@@ -17,10 +17,8 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44326</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>
-    </IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>
-    </IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <NuGetPackageImportStamp>
@@ -458,6 +456,36 @@
     <Content Include="Areas\TimeTracker\Scripts\allyis-drp-init.js" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-settings.js" />
     <Content Include="Content\ExpenseTracker\icons\ExpenseTracker.png" />
+    <Content Include="Content\less\allyis-pages-with-filter.css">
+      <DependentUpon>allyis-pages-with-filter.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\allyis-pages-with-filter.min.css">
+      <DependentUpon>allyis-pages-with-filter.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\allyis-tabs.css">
+      <DependentUpon>allyis-tabs.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\allyis-tabs.min.css">
+      <DependentUpon>allyis-tabs.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\_mixins.css">
+      <DependentUpon>_mixins.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\_mixins.min.css">
+      <DependentUpon>_mixins.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\_root.css">
+      <DependentUpon>_root.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\_root.min.css">
+      <DependentUpon>_root.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\_variables.css">
+      <DependentUpon>_variables.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\_variables.min.css">
+      <DependentUpon>_variables.css</DependentUpon>
+    </Content>
     <Content Include="Content\StaffingManager\icons\StaffingManager.png" />
     <Content Include="Content\TimeTracker\icons\TimeTrackerPro.png" />
     <Content Include="Content\TimeTracker\icons\TimeTracker.png" />
@@ -649,6 +677,10 @@
     <Content Include="Areas\StaffingManager\Views\Staffing\_ApplicationInfoPartial.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\Application.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\ApplicationDocument.cshtml" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
