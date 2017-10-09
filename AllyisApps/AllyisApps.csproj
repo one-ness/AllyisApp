@@ -466,7 +466,7 @@
     <Content Include="Content\bootstrap\less\variables.min.css">
       <DependentUpon>variables.css</DependentUpon>
     </Content>
-    <Content Include="Content\ExpenseTracker\icons\ExpenseTracker.png" />
+    <Content Include="Content\icons\ExpenseTracker.png" />
     <Content Include="Content\font-awesome\less\variables.css">
       <DependentUpon>variables.less</DependentUpon>
     </Content>
@@ -513,10 +513,9 @@
     <Content Include="Content\less\_variables.min.css">
       <DependentUpon>_variables.css</DependentUpon>
     </Content>
-    <Content Include="Content\StaffingManager\icons\StaffingManager.png" />
-    <Content Include="Content\TimeTracker\icons\TimeTrackerPro.png" />
-    <Content Include="Content\TimeTracker\icons\TimeTracker.png" />
-    <Content Include="Content\TimeTracker\icons\TimeTrackerOld.png" />
+    <Content Include="Content\icons\StaffingManager.png" />
+    <Content Include="Content\icons\TimeTrackerPro.png" />
+    <Content Include="Content\icons\TimeTracker.png" />
     <Content Include="Content\Timetracker - Copy - Copy.css">
       <DependentUpon>StaffingManager.less</DependentUpon>
     </Content>
@@ -801,7 +800,7 @@
     <Content Include="Content\bootstrap\less\bootstrap.min.css">
       <DependentUpon>bootstrap.css</DependentUpon>
     </Content>
-    <Content Include="Content\ExpenseTracker\icons\ExpenseTrackerPro.png" />
+    <Content Include="Content\icons\ExpenseTrackerPro.png" />
     <Content Include="Content\icons\invoice.png" />
     <Content Include="Content\icons\tasks-list.png" />
     <Content Include="Content\less\breadcrumbs.css">
@@ -1161,6 +1160,7 @@
     <EmbeddedResource Include="Resources\Images.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Images.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\States.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
