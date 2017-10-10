@@ -108,7 +108,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId }); // Same destination regardless of creation success
+			return this.RedirectToAction(ActionConstants.SettingsHoliday, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId }); // Same destination regardless of creation success
 		}
 	}
 }
