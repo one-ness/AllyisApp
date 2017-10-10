@@ -91,7 +91,7 @@
 
 		$('document').ready(function () {
 			populateHolidayForSelectedYear(@DateTime.Now.Year);
-			document.getElementById("datePickerHoliday").val = @Model.Settings.Today;
+			document.getElementById("datePickerHoliday").val = @Model.Settings.Today.ToString("MM/dd/yyyy").;
 		});
 	</script>
 	@Scripts.Render("~/bundles/jqueryui");

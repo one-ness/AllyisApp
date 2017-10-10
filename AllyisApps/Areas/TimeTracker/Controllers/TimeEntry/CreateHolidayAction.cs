@@ -38,7 +38,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var infoOrg = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infoOrg.Item1.StartOfWeek));
 			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
-			Services.TimeTracker.Setting settings = infos.Item1;
+			Setting settings = infos.Item1;
+			DateTime formatDateTime = DateTime.Now;
 			return this.View(new SettingsViewModel()
 			{
 				Settings = new SettingsViewModel.SettingsInfoViewModel()
@@ -51,7 +52,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					OvertimeMultiplier = settings.OvertimeMultiplier,
 					OvertimePeriod = settings.OvertimePeriod,
 					StartOfWeek = settings.StartOfWeek,
-					Today = System.DateTime.UtcNow.Date
+					Today = formatDateTime
 				},
 				PayClasses = infos.Item2.AsParallel().Select(payClass => new SettingsViewModel.PayClassViewModel()
 				{
