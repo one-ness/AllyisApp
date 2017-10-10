@@ -1,21 +1,13 @@
 ﻿@model OrganizationDetailsViewModel
 @{
-	DisplayHints.PageBodyId = "org-manage";
+	//ViewBag.Title = Strings.OrganizationDetails;
 }
-
-<div class="row">
-	<div class="col-xs-12" style="padding-bottom: 10px;">
-		@Html.Partial("_ManageOrgMenuBar", Model.MenuBarViewModel)
-	</div>
-</div>
 <div class="row">
 	<div class="col-xs-12">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<h4>
+				<h4 style="margin-top:0px; margin-bottom:0px;">
 					@Strings.OrganizationDetails - @Model.OrganizationName
-					<a href="@Url.Action(ActionConstants.EditOrg, ControllerConstants.Account, new { id = Model.OrganizationId })"
-					   class="btn btn-default pull-right" title="@Strings.EditOrganization">Edit&nbsp;&nbsp;<span class="fa fa-fw fa-edit"></span></a>
 				</h4>
 			</div>
 			<div class="panel-body">
@@ -57,6 +49,14 @@
 						<td>@Html.DisplayFor(m => m.FaxNumber)</td>
 					</tr>
 				</table>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)"
+				   class="btn btn-default pull-left" title="@Strings.Back"><i class="fa fa-caret-left"></i> @Strings.Back</a>
+				<a href="@Url.Action(ActionConstants.EditOrg, ControllerConstants.Account, new { id = Model.OrganizationId })"
+					class="btn btn-default pull-right" title="@Strings.EditOrganization">@Strings.Edit <span class="fa fa-edit"></span></a>
 			</div>
 		</div>
 	</div>

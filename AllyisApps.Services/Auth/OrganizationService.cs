@@ -43,6 +43,7 @@ namespace AllyisApps.Services
 		public Organization GetOrganization(int orgId)
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
+			this.CheckOrgAction(OrgAction.ReadOrganization, orgId);
 			return InitializeOrganization(DBHelper.GetOrganization(orgId));
 		}
 

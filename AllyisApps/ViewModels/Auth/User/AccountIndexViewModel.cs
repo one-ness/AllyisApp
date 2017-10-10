@@ -180,10 +180,17 @@ namespace AllyisApps.ViewModels.Auth
 			/// </summary>
 			public string FaxNumber { get; set; }
 
-			/// <summary>
-			/// Gets or sets a value indicating whether the user has manage permissions.
-			/// </summary>
-			public bool IsManageAllowed { get; set; }
+			public bool IsReadOrgDetailsAllowed { get; set; }
+
+			public bool IsReadMembersListAllowed { get; set; }
+
+			public bool IsReadSubscriptionsListAllowed { get; set; }
+
+			public bool IsReadBillingDetailsAllowed { get; set; }
+
+			public bool IsReadPermissionsListAllowed { get; set; }
+
+			public bool IsCreateSubscriptionAllowed { get; set; }
 
 			/// <summary>
 			/// Gets or sets the subscriptions model list.
