@@ -22,10 +22,9 @@ namespace AllyisApps.Controllers.Auth
 	public partial class AccountController : BaseController
 	{
 		/// <summary>
-		/// Get: Account/Manage/id
-		/// The management page for an organization, displays billing, subscriptions, etc.
+		/// Get: Account/OrganizationDetails
 		/// </summary>
-		public ActionResult ManageOrg2(int id)
+		public ActionResult OrgDetails(int id)
 		{
 			var model = new OrganizationDetailsViewModel();
 			var org = this.AppService.GetOrganization(id);
