@@ -495,14 +495,8 @@
     <Content Include="Content\TimeTracker\icons\TimeTrackerPro.png" />
     <Content Include="Content\TimeTracker\icons\TimeTracker.png" />
     <Content Include="Content\TimeTracker\icons\TimeTrackerOld.png" />
-    <Content Include="Content\Timetracker - Copy - Copy.css">
-      <DependentUpon>StaffingManager.less</DependentUpon>
-    </Content>
     <Content Include="Content\Timetracker - Copy.css">
       <DependentUpon>ExpenseTracker.less</DependentUpon>
-    </Content>
-    <Content Include="Content\Timetracker - Copy.min - Copy.css">
-      <DependentUpon>Timetracker - Copy - Copy.css</DependentUpon>
     </Content>
     <Content Include="Content\Timetracker - Copy.min.css">
       <DependentUpon>Timetracker - Copy.css</DependentUpon>
@@ -660,9 +654,6 @@
     <Content Include="Areas\StaffingManager\Views\Staffing\CreatePosition.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\_PositionEditDetails.cshtml" />
     <Content Include="Content\StaffingManager.less" />
-    <Content Include="Content\Timetracker - Copy.css - Copy.map">
-      <DependentUpon>Timetracker - Copy - Copy.css</DependentUpon>
-    </Content>
     <Content Include="Areas\StaffingManager\Views\Staffing\settings.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\UserSettings.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Customer\Index.cshtml" />
