@@ -16,7 +16,7 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading row" style="margin: 0; padding-left: 0; padding-right: 0;">
-		<div class="col-xs-8"><h2 class="panel-title">Time Entries for:</h2></div>
+		<div class="col-xs-8"><h2 class="panel-title">Time Entry Totals for Date Range:</h2></div>
 		<div class="col-xs-4">
 			<div id="review-range" class="pull-right" style="display: inline; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc;">
 				<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
@@ -38,43 +38,97 @@
 			</tr>
 		</thead>
 		<tbody>
-			@for (DateTime date = Model.StartDate; date.Date <= Model.EndDate.Date; date = date.AddDays(1))
+			@foreach (var group in Model.TimeEntriesByUser)
 			{
 				<tr>
-					<td><input type="checkbox" class="check check-all" check-tier="0" check-all-tier="@number"></td>
-					<td><i class="fa fa-chevron-down toggle-on-click toggle-row-display-controller" rowId=@number style="cursor:pointer"></i></td>
-					<td>Luke</td>
-					@foreach (string payClassName in Model.PayClasses.Select(x => x.PayClassName))
+					<td><input type="checkbox" class="check check-all" check-tier="0" check-all-tier="@group.Key"></td>
+					<td><i class="fa fa-chevron-down toggle-on-click toggle-row-display-controller" rowId=@group.Key style="cursor:pointer"></i></td>
+					<td>@group.First().FirstName @group.First().LastName</td>
+					@foreach (int payClassId in Model.PayClasses.Select(x => x.PayClassId))
 					{
-						<td>8</td>
+						<td>@Model.TimeEntryTotalsByUserByPayClass[group.Key][payClassId]</td>
 					}
-					<td>57</td>
+					<td>@group.Sum(entry => entry.Duration)</td>
 				</tr>
-				foreach (int timeEntry in new int[] { 2, 3, 4, 5 })
+				foreach (var timeEntry in group)
 				{
-					<tr class="toggle-row-display hidden" rowId=@number>
+					<tr class="toggle-row-display hidden" rowId=@group.Key>
 						<td></td>
-						<td><input type="checkbox" class="check" check-tier="@number"></td>
-						<td>9/1/2017</td>
-						@foreach (string payClassName in Model.PayClasses.Select(x => x.PayClassName))
+						<td><input type="checkbox" class="check" check-tier="@group.Key"></td>
+						<td>
+							<button type="button"
+									class="btn btn-primary details-modal-input"
+									data-assigned-id='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(timeEntry))'>
+								@timeEntry.Date.ToShortDateString()
+							</button>
+						</td>
+						@foreach (int payClassId in Model.PayClasses.Select(x => x.PayClassId))
 						{
-							<td>
-								Hours
-							</td>
+							if (timeEntry.PayClassId == payClassId)
+							{
+								<td>@timeEntry.Duration</td>
+							}
+							else
+							{
+								<td>-</td>
+							}
 						}
-						<td>8</td>
+						<td>@timeEntry.Duration</td>
 					</tr>
 				}
 			}
-			<tr class="nohover" id="tableEnd">
-				<td></td>
-				<td></td>
-				@foreach (var payClassName in Model.PayClasses) { <td></td> }
-				<td></td>
-			</tr>
+			@if (Model.TimeEntriesByUser.Count == 0)
+			{
+				<tr><td colspan="@(Model.PayClasses.Count + 3)">There are no time entries in this date range, please select a different date range.</td></tr>
+			}
 		</tbody>
 	</table>
 	<div class="pageContainer"></div>
+</div>
+
+<div class="modal fade" id="time-entry-details-modal" tabindex="-1" role="dialog" aria-labelledby="details-modal-title" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="details-modal-title">Time Entry Details</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-6">User Name:</div>
+						<div class="col-md-6" id="modal-details-name"></div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">Customer:</div>
+						<div class="col-md-6" id="modal-details-customer"></div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">Project:</div>
+						<div class="col-md-6" id="modal-details-project"></div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">Pay Type:</div>
+						<div class="col-md-6" id="modal-details-pay-type"></div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">Duration:</div>
+						<div class="col-md-6" id="modal-details-duration"></div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">Description:</div>
+						<div class="col-md-6" id="modal-details-description"></div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 @section css {
@@ -110,11 +164,7 @@
 		});
 
 		$(".check-all").change(function () {
-			if ($(this).is(":checked")) {
-				$(".check[check-tier=" + $(this).attr("check-all-tier") + "]").prop("checked", true).change();
-			} else {
-				$(".check[check-tier=" + $(this).attr("check-all-tier") + "]").prop("checked", false).change();
-			}
+			$(".check[check-tier=" + $(this).attr("check-all-tier") + "]").prop("checked", $(this).is(":checked")).change();
 		});
 
 		$(function () {
@@ -157,6 +207,22 @@
 				'type': 'hidden'
 			}));
 			newForm.appendTo(document.body).submit();
+		});
+
+		$('#time-entry-details-modal').on('shown.bs.modal', function () {
+			$('#details-modal-input').focus();
+		});
+
+		$(".details-modal-input").click(function () {
+			var timeEntry = $(this).data("assigned-id");
+
+			$("#modal-details-name").text(timeEntry.FirstName + timeEntry.LastName);
+			$("#modal-details-customer").text(timeEntry.CustomerName);
+			$("#modal-details-project").text(timeEntry.ProjectName);
+			$("#modal-details-pay-type").text(timeEntry.PayClassName);
+			$("#modal-details-duration").text(timeEntry.Duration);
+			$("#modal-details-description").text(timeEntry.Description || "None");
+			$('#time-entry-details-modal').modal();
 		});
 	});
 </script>

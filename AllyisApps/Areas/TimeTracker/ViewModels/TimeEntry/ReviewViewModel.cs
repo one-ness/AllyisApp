@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
@@ -50,18 +51,15 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public DateTime EndDate { get; set; }
 
 		/// <summary>
-		/// Gets or sets the list of TimeEntries, containing user info too.
+		/// Gets or sets a lookup table of time entries where the key is userId and the value is all the time entries that the user id has
 		/// </summary>
-		public List<TimeEntryViewModel> TimeEntries { get; set; }
+		public ILookup<int, TimeEntryViewModel> TimeEntriesByUser { get; set; }
 
 		/// <summary>
-		/// Int version of start date
+		/// Gets or sets a dictionary where the key is userId and the value is
+		/// a dictionary where the key is PayClassId and the value is the total
+		/// number of hours of all the time entries for that pay class for that user
 		/// </summary>
-		public int StartDateInt { get; set; }
-
-		/// <summary>
-		/// Int version of end date
-		/// </summary>
-		public int EndDateInt { get; set; }
+		public Dictionary<int, Dictionary<int, float>> TimeEntryTotalsByUserByPayClass { get; set; }
 	}
 }

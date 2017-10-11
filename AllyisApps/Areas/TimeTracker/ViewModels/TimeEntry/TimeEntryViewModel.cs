@@ -8,6 +8,11 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 	public class TimeEntryViewModel
 	{
 		/// <summary>
+		/// Default constructor.
+		/// </summary>
+		public TimeEntryViewModel() { }
+
+		/// <summary>
 		/// Initializes the view model with the timeentry service object.
 		/// </summary>
 		/// <param name="timeEntry">The time entry service object to convert</param>
@@ -104,5 +109,15 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Gets or sets a value indicating whether the data has changed since being approved or dissaproved.
 		/// </summary>
 		public bool ModSinceApproval { get; set; }
+
+		/// <summary>
+		/// Gets or sets the customer name for the time entry
+		/// </summary>
+		public string CustomerName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the project name for the time entry
+		/// </summary>
+		public string ProjectName { get; set; }
 	}
 }

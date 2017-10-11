@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
@@ -29,9 +30,28 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			DateTime calculatedStartDate = startDate ?? DateTime.Now.AddMonths(-1);
 			DateTime calculatedEndDate = endDate ?? DateTime.Now;
 			var organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-			var allTimeEntries = AppService.GetTimeEntriesOverDateRange(organizationId, calculatedStartDate, calculatedEndDate).Select(x => new TimeEntryViewModel(x));
-			var timeEntriesByUser = allTimeEntries.ToLookup(entry => entry.UserId);
-			var dateRangeTotalsByUser = timeEntriesByUser.Select;
+			var payClasses = AppService.GetPayClassesByOrganizationId(organizationId).Select(x => new PayClassInfoViewModel(x));
+			var timeEntriesByUser = AppService.GetTimeEntriesOverDateRange(organizationId, calculatedStartDate, calculatedEndDate)
+				.Select(entry =>
+				{
+					var project = AppService.GetProject(entry.ProjectId);
+					return new TimeEntryViewModel(entry)
+					{
+						ProjectName = project.ProjectName,
+						CustomerName = project.owningCustomer.CustomerName
+					};
+				})
+				.ToLookup(entry => entry.UserId);
+
+			var timeEntryTotalsByUserByPayClass = new Dictionary<int, Dictionary<int, float>>();
+			foreach (var group in timeEntriesByUser)
+			{
+				timeEntryTotalsByUserByPayClass.Add(group.Key, new Dictionary<int, float>());
+				foreach (var payClassId in payClasses.Select(p => p.PayClassId))
+				{
+					timeEntryTotalsByUserByPayClass[group.Key].Add(payClassId, group.Where(e => e.PayClassId == payClassId).Sum(e => e.Duration));
+				}
+			}
 
 			var model = new ReviewViewModel
 			{
@@ -39,8 +59,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				SubscriptionId = subscriptionId,
 				OrganizationId = organizationId,
 				SubscriptionName = AppService.GetSubscription(subscriptionId).SubscriptionName,
-				PayClasses = AppService.GetPayClassesByOrganizationId(organizationId).Select(x => new PayClassInfoViewModel(x)).ToList(),
-				TimeEntries = allTimeEntries.ToList(),
+				PayClasses = payClasses.ToList(),
+				TimeEntriesByUser = timeEntriesByUser,
+				TimeEntryTotalsByUserByPayClass = timeEntryTotalsByUserByPayClass,
 				StartDate = calculatedStartDate,
 				EndDate = calculatedEndDate
 			};
