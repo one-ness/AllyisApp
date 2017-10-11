@@ -16,6 +16,7 @@ using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Services
 {
@@ -50,11 +51,30 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// get a list of subscriptions for the given organization
 		/// </summary>
-		public List<Subscription> GetSubscriptions(int orgId)
+		public async Task<List<Subscription>> GetSubscriptions(int orgId)
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
 			this.CheckOrgAction(OrgAction.ReadSubscriptionsList, orgId);
 			var result = new List<Subscription>();
+			dynamic entities = await this.DBHelper.GetSubscriptions(orgId);
+			foreach (var item in entities)
+			{
+				var data = new Subscription();
+				data.AreaUrl = item.ArealUrl;
+				data.IsActive = item.IsActive;
+				data.NumberOfUsers = item.NumberOfUsers ?? 0;
+				data.OrganizationId = item.OrganizationId;
+				data.ProductDescription = item.ProductDescription;
+				data.ProductId = (ProductIdEnum)item.ProductId;
+				data.ProductName = item.ProductName;
+				data.PromoExpirationDateUtc = item.PromoExpirationDateUtc;
+				data.SkuId = (SkuIdEnum)item.SkuId;
+				data.SkuName = item.SkuName;
+				data.SubscriptionCreatedUtc = item.SubscriptionCreatedUtc;
+				data.SubscriptionId = item.SubscriptionId;
+				data.SubscriptionName = item.SubscriptionName;
+				result.Add(data);
+			}
 
 			return result;
 		}

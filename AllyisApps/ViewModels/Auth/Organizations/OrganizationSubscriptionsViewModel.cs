@@ -67,6 +67,22 @@ namespace AllyisApps.ViewModels.Auth
 			/// Gets or sets Number of users in the subscription.
 			/// </summary>
 			public int NumberofUsers { get; set; }
+
+			/// <summary>
+			/// date subscription was created
+			/// </summary>
+			public DateTime SubscriptionCreatedUtc { get; set; }
+
+			/// <summary>
+			/// formatted as long date
+			/// </summary>
+			public string FormattedSubscriptionCreatedUtc
+			{
+				get
+				{
+					return this.SubscriptionCreatedUtc.ToString("d");
+				}
+			}
 		}
 	}
 }

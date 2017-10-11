@@ -10,8 +10,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using AllyisApps.DBModel.Billing;
-
-// using AllyisApps.DBModel.Cache;
+using System.Threading.Tasks;
 using Dapper;
 
 namespace AllyisApps.DBModel
@@ -171,6 +170,17 @@ namespace AllyisApps.DBModel
 			{
 				// default blank object
 				return connection.Query<SubscriptionDBEntity>("[Billing].[GetSubscriptionDetailsById]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
+			}
+		}
+
+		/// <summary>
+		/// get the list of subscriptions for the given organization
+		/// </summary>
+		public async Task<dynamic> GetSubscriptions(int orgId)
+		{
+			using (var con = new SqlConnection(this.SqlConnectionString))
+			{
+				return (await con.QueryAsync<dynamic>("Billing.GetSubscriptions @a", new { a = orgId })).ToList();
 			}
 		}
 
