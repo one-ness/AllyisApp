@@ -8,6 +8,29 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 	public class TimeEntryViewModel
 	{
 		/// <summary>
+		/// Initializes the view model with the timeentry service object.
+		/// </summary>
+		/// <param name="timeEntry">The time entry service object to convert</param>
+		public TimeEntryViewModel(Services.TimeTracker.TimeEntry timeEntry)
+		{
+			ApprovalState = timeEntry.ApprovalState;
+			Date = timeEntry.Date;
+			Description = timeEntry.Description;
+			Duration = timeEntry.Duration;
+			Email = timeEntry.Email;
+			EmployeeId = timeEntry.EmployeeId;
+			FirstName = timeEntry.FirstName;
+			IsLockSaved = timeEntry.IsLockSaved;
+			LastName = timeEntry.LastName;
+			ModSinceApproval = timeEntry.ModSinceApproval;
+			PayClassId = timeEntry.PayClassId;
+			PayClassName = timeEntry.PayClassName;
+			ProjectId = timeEntry.ProjectId;
+			TimeEntryId = timeEntry.TimeEntryId;
+			UserId = timeEntry.UserId;
+		}
+
+		/// <summary>
 		/// Gets or sets the TimeEntryId.
 		/// </summary>
 		public int TimeEntryId { get; set; }

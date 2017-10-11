@@ -11,7 +11,6 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
 using AllyisApps.Services;
-using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.Project;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
@@ -66,12 +65,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			if ((userIds == null) || (userIds[0] == -1))
 			{
 				result.Data = AppService.GetTimeEntriesOverDateRange(orgId, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1))
-				.AsParallel().Select(timeEntry => ConstuctTimeEntryViewModel(timeEntry)).AsEnumerable();
+				.AsParallel().Select(timeEntry => new TimeEntryViewModel(timeEntry)).AsEnumerable();
 			}
 			else
 			{
 				result.Data = AppService.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1), orgId)
-				.AsParallel().Select(timeEntry => ConstuctTimeEntryViewModel(timeEntry));
+				.AsParallel().Select(timeEntry => new TimeEntryViewModel(timeEntry));
 			}
 
 			if (projectId != 0)
@@ -109,33 +108,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			return result;
-		}
-
-		/// <summary>
-		/// Constucts Time entry View model for time entry info.
-		/// </summary>
-		/// <param name="timeEntry">Time entry service object.</param>
-		/// <returns>View Model for time entry.</returns>
-		public TimeEntryViewModel ConstuctTimeEntryViewModel(TimeEntry timeEntry)
-		{
-			return new TimeEntryViewModel()
-			{
-				ApprovalState = timeEntry.ApprovalState,
-				Date = timeEntry.Date,
-				Description = timeEntry.Description,
-				Duration = timeEntry.Duration,
-				Email = timeEntry.Email,
-				EmployeeId = timeEntry.EmployeeId,
-				FirstName = timeEntry.FirstName,
-				IsLockSaved = timeEntry.IsLockSaved,
-				LastName = timeEntry.LastName,
-				ModSinceApproval = timeEntry.ModSinceApproval,
-				PayClassId = timeEntry.PayClassId,
-				PayClassName = timeEntry.PayClassName,
-				ProjectId = timeEntry.ProjectId,
-				TimeEntryId = timeEntry.TimeEntryId,
-				UserId = timeEntry.UserId
-			};
 		}
 	}
 }

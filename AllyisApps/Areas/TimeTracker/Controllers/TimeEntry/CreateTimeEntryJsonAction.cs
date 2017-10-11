@@ -84,7 +84,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					UserId = model.UserId,
 					ProjectId = model.ProjectId,
 					PayClassId = model.PayClassId,
-					Date = Utility.GetDateTimeFromDays(model.Date) ?? DateTime.Now,
+					Date = Utility.GetNullableDateTimeFromDays(model.Date) ?? DateTime.Now,
 					Duration = durationResult.Value,
 					Description = model.Description
 				});

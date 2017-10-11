@@ -4,7 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
@@ -24,6 +26,11 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public int SubscriptionId { get; set; }
 
 		/// <summary>
+		/// Gets or sets the id of the organization this review belongs to
+		/// </summary>
+		public int OrganizationId { get; set; }
+
+		/// <summary>
 		/// Gets or sets the SubscriptionName.
 		/// </summary>
 		public string SubscriptionName { get; set; }
@@ -31,6 +38,23 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets or sets the list of pay classes that the organization has
 		/// </summary>
-		public IEnumerable<PayClassInfoViewModel> PayClasses { get; set; }
+		public List<PayClassInfoViewModel> PayClasses { get; set; }
+
+		/// <summary>
+		/// Gets or sets the start date of the time entries to pull
+		/// </summary>
+		[MinDateValidation]
+		public DateTime StartDate { get; set; }
+
+		/// <summary>
+		/// Gets or sets the end date of the time entries to pull
+		/// </summary>
+		[MinDateValidation]
+		public DateTime EndDate { get; set; }
+
+		/// <summary>
+		/// Gets or sets the list of TimeEntries, containing user info too.
+		/// </summary>
+		public List<TimeEntryViewModel> TimeEntries { get; set; }
 	}
 }

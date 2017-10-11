@@ -15,23 +15,23 @@
 }
 
 <div class="panel panel-default">
-	<div class="panel-heading">
-		<h1 class="panel-title">Time Entries</h1>
-	</div>
-	<div class="panel-body">
-		<span class="col-xs-9"><input id="org-members-search" type="search" placeholder="🔍 " class="form-control" /></span>
-		<span class="col-xs-2 col-xs-push-1" style="vertical-align: middle; padding: 0px;">
-			<select id="org-members-role" class="form-control">
-				<option>@Strings.Any</option>
-				<option>@Strings.Member</option>
-				<option>@Strings.Owner</option>
-			</select>
-		</span>
+	<div class="panel-heading row" style="margin: 0; padding-left: 0; padding-right: 0;">
+		<div class="col-xs-8"><h2 class="panel-title">Time Entries for:</h2></div>
+		<div class="col-xs-4">
+			@using (Html.BeginForm(ActionConstants.Review, ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId }, FormMethod.Get, new { id = "date-range-form" }))
+			{
+				<div id="review-range" class="pull-right" style="display: inline; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc;">
+					<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+					<span></span> <b class="caret"></b>
+				</div>
+			}
+		</div>
 	</div>
 	<table class="table table-hover table-condensed table-responsive">
 		<thead>
 			<tr class="double-bottom-border">
-				<th><input type="checkbox"></th>
+				<th><input type="checkbox" class="check-all" check-all-tier="0"></th>
+				<th></th>
 				<th>Name</th>
 				@foreach (string payClassName in Model.PayClasses.Select(x => x.PayClassName))
 				{
@@ -41,10 +41,11 @@
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (int number in new int[] { 1, 2, 3, 4, 5})
+			@foreach (int number in new int[] { 2, 3, 4, 5 })
 			{
 				<tr>
-					<td><input type="checkbox"></td>
+					<td><input type="checkbox" class="check check-all" check-tier="0" check-all-tier="@number"></td>
+					<td><i class="fa fa-chevron-down toggle-on-click toggle-row-display-controller" rowId=@number style="cursor:pointer"></i></td>
 					<td>Luke</td>
 					@foreach (string payClassName in Model.PayClasses.Select(x => x.PayClassName))
 					{
@@ -52,13 +53,26 @@
 					}
 					<td>57</td>
 				</tr>
+				foreach (int timeEntry in new int[] { 2, 3, 4, 5 })
+				{
+					<tr class="toggle-row-display hidden" rowId=@number>
+						<td></td>
+						<td><input type="checkbox" class="check" check-tier="@number"></td>
+						<td>9/1/2017</td>
+						@foreach (string payClassName in Model.PayClasses.Select(x => x.PayClassName))
+						{
+							<td>
+								Hours
+							</td>
+						}
+						<td>8</td>
+					</tr>
+				}
 			}
 			<tr class="nohover" id="tableEnd">
 				<td></td>
 				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
+				@foreach (var payClassName in Model.PayClasses) { <td></td> }
 				<td></td>
 			</tr>
 		</tbody>
@@ -66,6 +80,90 @@
 	<div class="pageContainer"></div>
 </div>
 
+@section css {
+	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+}
+
 @section Scripts {
-	<script type="text/javascript" src="~/Scripts/allyis-pages-with-filter.js"></script>
+@*Date range picker dependencies:*@
+@Scripts.Render("~/bundles/jqueryui")
+@Scripts.Render("~/bundles/moment")
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$(".toggle-on-click").click(function () {
+			if ($(this).hasClass("fa-chevron-down")) {
+				$(this).removeClass("fa-chevron-down");
+				$(this).addClass("fa-chevron-up");
+			} else {
+				$(this).removeClass("fa-chevron-up");
+				$(this).addClass("fa-chevron-down");
+			}
+		});
+
+		$(".toggle-row-display-controller").click(function () {
+			var rows = $(".toggle-row-display[rowId='" + $(this).attr("rowId") + "']");
+			if (rows.hasClass("hidden")) {
+				rows.removeClass("hidden");
+			} else {
+				rows.addClass("hidden")
+			}
+		});
+
+		$(".check-all").change(function () {
+			if ($(this).is(":checked")) {
+				$(".check[check-tier=" + $(this).attr("check-all-tier") + "]").prop("checked", true).change();
+			} else {
+				$(".check[check-tier=" + $(this).attr("check-all-tier") + "]").prop("checked", false).change();
+			}
+		});
+
+		$(function () {
+			var start = moment(@(Model.StartDate.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds));
+			var end = moment(@(Model.EndDate.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds));
+
+			function cb(start, end) {
+				$('#review-range span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+			}
+
+			$('#review-range').daterangepicker({
+				locale: "us",
+				startDate: start,
+				endDate: end,
+				ranges: {
+					'Today': [moment(), moment()],
+					'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+					'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+					'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+					'This Month': [moment().startOf('month'), moment().endOf('month')],
+					'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+				}
+			}, cb);
+
+			cb(start, end);
+		});
+
+		$("#review-range").on("apply.daterangepicker", function (dre, picker) {
+			var newForm = jQuery('<form>', {
+				'action': '/timetracker/@Model.SubscriptionId/timeentry/review',
+				'target': '_top',
+				'method': 'get'
+			}).append(jQuery('<input>', {
+				'name': 'StartDate',
+				'value': picker.startDate,
+				'type': 'hidden'
+			})).append(jQuery('<input>', {
+				'name': 'EndDate',
+				'value': picker.endDate,
+				'type': 'hidden'
+			})).append(jQuery('<input>', {
+				'name': 'SubscriptionId',
+				'value': @Model.SubscriptionId,
+				'type': 'hidden'
+			}));
+			newForm.appendTo(document.body).submit();
+		});
+	});
+</script>
 }
