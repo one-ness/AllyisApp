@@ -85,6 +85,11 @@
 	</div>
 </div>
 
+@section css {
+	@Styles.Render("~/Content/Site/edit_permissions.css");
+	@*@Styles.Render("~/Content/Site.css");*@
+}
+
 @section scripts {
 	<script type="text/javascript">
 		confirmMessage = "@Html.Raw(Model.RemoveUserMessage)";

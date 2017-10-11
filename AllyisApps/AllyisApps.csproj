@@ -571,6 +571,18 @@
     <Content Include="Content\Site.min.css">
       <DependentUpon>Site.css</DependentUpon>
     </Content>
+    <Content Include="Content\site\add_member.css" />
+    <Content Include="Content\site\change_password.css" />
+    <Content Include="Content\site\create_organization.css" />
+    <Content Include="Content\site\edit_permissions.css" />
+    <Content Include="Content\site\edit_profile.css" />
+    <Content Include="Content\site\edit_subscription.css" />
+    <Content Include="Content\site\index.css" />
+    <Content Include="Content\site\manage_organization.css" />
+    <Content Include="Content\site\organization_details.css" />
+    <Content Include="Content\site\register.css" />
+    <Content Include="Content\site\sign_in.css" />
+    <Content Include="Content\site\subscriptions.css" />
     <Content Include="Content\StaffingManager.css" />
     <Content Include="Content\StaffingManager.min.css">
       <DependentUpon>StaffingManager.css</DependentUpon>
@@ -679,10 +691,6 @@
     <Content Include="Areas\StaffingManager\Views\Staffing\_ApplicationInfoPartial.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\Application.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\ApplicationDocument.cshtml" />
-    <None Include="compilerconfig.json" />
-    <None Include="compilerconfig.json.defaults">
-      <DependentUpon>compilerconfig.json</DependentUpon>
-    </None>
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
@@ -721,7 +729,6 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js.map">
       <DependentUpon>jquery.validate.unobtrusive.min.js</DependentUpon>
     </Content>
-    <Content Include="Scripts\less.js" />
     <Content Include="Scripts\moment-2.14.1.js" />
     <Content Include="Scripts\moment-2.14.1.min.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js.map">
