@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="ManageOrgAction.cs" company="Allyis, Inc.">
+// <copyright file="OrgDetailsAction.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -22,7 +22,7 @@ namespace AllyisApps.Controllers.Auth
 	public partial class AccountController : BaseController
 	{
 		/// <summary>
-		/// Get: Account/OrganizationDetails
+		/// Get: Account/OrgDetails
 		/// </summary>
 		public ActionResult OrgDetails(int id)
 		{
