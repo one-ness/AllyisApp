@@ -657,6 +657,7 @@
     <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsOvertime.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsHoliday.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\_ManageSettingSideBar.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\_ManageSettingSideBar2.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />

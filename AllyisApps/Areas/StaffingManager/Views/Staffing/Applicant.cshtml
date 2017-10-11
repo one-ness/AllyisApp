@@ -6,32 +6,39 @@
 	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/StaffingManager/Views/Shared/_BreadcrumbNavPartial.cshtml";
 	DisplayHints.LayoutThemeBundle = "~/Content/StaffingManager";
 	string name = Model.FirstName + " " + Model.LastName;
-	ViewBag.Title = name;
+	//ViewBag.Title = name;
 	int fileIndex = 1;
 }
 
 <!DOCTYPE html>
 
 <html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Applicant</title>
-</head>
 <body>
-	<table class="table table-hover" style="clear: both;">
-		<thead>
-			<tr>
-				<th style="width: 25%">Position</th>
-				<th style="width: 25%">Status</th>
-				<th style="width: 25%">Last Modified</th>
-				<th style="width: 25%">Notes</th>
-				<th></th>
-			</tr>
-		</thead>
-		<tbody>
-			@Html.Action("ApplicationsPartial", new { model = Model.Applications ?? new List<StaffingApplicationViewModel>() })
-		</tbody>
-	</table>
+	<meta name="viewport" content="width=device-width" />
+	<div class="panel-heading panel-title">
+		<h1>@name</h1>
+	</div>
+	<div class="panel panel-default">
+		<table class="table table-hover" style="clear: both;">
+			<thead>
+				<tr>
+					<th style="width: 25%">Position</th>
+					<th style="width: 25%">Status</th>
+					<th style="width: 25%">Last Modified</th>
+					<th style="width: 25%">Notes</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@Html.Action("ApplicationsPartial", new { model = Model.Applications ?? new List<StaffingApplicationViewModel>() })
+			</tbody>
+		</table>
+		@if (Model.Applications.Count == 0)
+		{
+			@:<h3>No Active Applications</h3>
+		}
+	</div>
+	<hr noshade color="#583c87">
 	@Html.Action("Application", new { applicantId = Model.ApplicantId })
 </body>
 </html>
