@@ -19,6 +19,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	/// </summary>
 	public partial class TimeEntryController : BaseController
 	{
+
 		/// <summary>
 		/// Deletes a Time Entry.
 		/// </summary>
@@ -28,7 +29,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult DeleteTimeEntryJson(DeleteTimeEntryViewModel model)
 		{
 			// Check for permissions
-			TimeEntry entry = AppService.GetTimeEntry(model.TimeEntryId);
+			Services.TimeTracker.TimeEntry entry = AppService.GetTimeEntry(model.TimeEntryId);
 			if (entry.UserId != this.AppService.UserContext.UserId)
 			{
 				if (!this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId))
@@ -70,6 +71,27 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			AppService.DeleteTimeEntry(model.TimeEntryId);
 			return this.Json(new { status = "success", values = new { duration = this.GetDurationDisplay(model.Duration).Insert(0, "-"), projectId = entry.ProjectId } });
+		}
+
+		/// <summary>
+		/// Delete Time Entry from Save button.
+		/// </summary>
+		/// <param name="model"></param>
+		/// <returns></returns>
+		protected ActionResult DeleteTimeEntryJson(EditTimeEntryViewModel model)
+		{
+			if (!model.IsDeleted)
+			{
+				throw new Exception("Attempt to delete edited view that was not marked for deletion");
+			}
+
+			return DeleteTimeEntryJson(new DeleteTimeEntryViewModel()
+			{
+				ApprovalState = model.ApprovalState,
+				Duration = model.Duration,
+				SubscriptionId = model.SubscriptionId,
+				TimeEntryId = model.TimeEntryId.Value
+			});
 		}
 	}
 }

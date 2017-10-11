@@ -50,7 +50,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets or sets the id of the time entry.
 		/// </summary>
-		public int TimeEntryId { get; set; }
+		public int? TimeEntryId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the id of the project associated with this entry.
@@ -146,6 +146,26 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Gets or sets a value indicating whether the current user a manager and can approve time entries  [This needs logics].
 		/// </summary>
 		public bool IsManager { get; set; }
+
+		/// <summary>
+		/// Gets or sets a value indicating that the current user can manange this time entry determined at the view
+		/// </summary>
+		public bool CanManage { get; set; }
+
+		/// <summary>
+		/// Has the user clicked the deleted Button and thus we should delete the record.
+		/// </summary>
+		public bool IsDeleted { get; set; } = false;
+
+		/// <summary>
+		/// Bool if the element is updated
+		/// </summary>
+		public bool IsEdited { get; set; } = false;
+
+		/// <summary>
+		/// On Create of new record.
+		/// </summary>
+		public bool IsCreated { get; set; } = false;
 	}
 
 	/// <summary>

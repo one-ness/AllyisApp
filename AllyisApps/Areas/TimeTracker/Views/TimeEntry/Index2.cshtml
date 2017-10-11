@@ -87,7 +87,7 @@
 	}
 </div>
 
-@Html.Partial("_AjaxTimeEntries", Model.EntryRange)
+@Html.Partial("_AjaxTimeEntries2", Model.EntryRange)
 
 @{ViewBag.SidebarToggleText = Strings.Details;
 	ViewBag.RenderSidebar = true;}
@@ -271,8 +271,54 @@
 	</script>
 	@Scripts.Render("~/bundles/daterangepicker")
 	@Scripts.Render("~/bundles/pageswithsearch")
-	@Scripts.Render("~/bundles/TTTimeEntryIndex")
+	@*Scripts.Render("~/bundles/TTTimeEntryIndex")Disable old javascript*@
+	@Scripts.Render("~/Areas/TimeTracker/Scripts/allyis-timeentry-index2.js");
+	<script>
+		function gatherData() {
+			var jsonEntires = [];
+			$(".TimeEntryForm").each(function (i, ele) {
+				var element = {};
+				element.CanManage = $(ele).find("[name='CanManage']").val();
+				element.IsCreated = $(ele).find("[name='IsCreated']").val();
+				element.Sample = $(ele).find("[name='Sample']").val();
+				element.IsEdited = $(ele).find("[name='IsEdited']").val();
+				element.IsDeleted = $(ele).find("[name='IsDeleted']").val();
+				element.TimeEntryId = $(ele).find("[name='TimeEntryId']").val();
+				element.UserId = $(ele).find("[name='UserId']").val();
+				element.Date = $(ele).find("[name='Date']").val();
+				element.StartingDate = $(ele).find("[name='StartingDate']").val();
+				element.EndingDate = $(ele).find("[name='EndingDate']").val();
+				element.Duration = $(ele).find("[name='Duration']").val();
+				element.ProjectId = $(ele).find("[name='ProjectId']").val();
+				element.PayClassId = $(ele).find("[name='PayClassId']").val();
+				element.Description = $(ele).find("[name='Description']").val();
+				element.SubscriptionId = $(ele).find("[name='SubscriptionId']").val();
+				jsonEntires.push(element);
+			});
+			return jsonEntires;
+		}
+		formSubmit = function () {
+			var form = $(document.createElement("form")).attr({ "method": "POST", "action": '@Url.Action("TimeEntryCURD")' });
+			var data = gatherData();
+			if (!data) { // gatherData() will return null if no one is checked or the user declines the confirmation prompt.
+				return;
+			}
 
+			var result = {};
+			result.StartingDate = @(Model.EntryRange.StartDate);
+			result.EndingDate = @(Model.EntryRange.EndDate);
+			result.Entries = data;
+			result.SubscriptionId = @(Model.Subscriptionid);
+			var datajson = JSON.stringify(result);
+
+			$(document.createElement("input")).attr({ "type": "hidden", "name": "data", "value": datajson }).appendTo(form);
+			form.appendTo(document.body).submit();
+		}
+
+		function saveForm() {
+			formSubmit();
+		}
+	</script>
 	<script type="text/javascript">
 		showPage(1); // This is important to call at the very end; otherwise all pages will be shown until the user clicks a page button.
 	</script>
