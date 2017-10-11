@@ -360,6 +360,7 @@
     <Compile Include="Controllers\Auth\LogOffAction.cs" />
     <Compile Include="Controllers\Auth\LogOnAction.cs" />
     <Compile Include="Controllers\Auth\OrgDetailsAction.cs" />
+    <Compile Include="Controllers\Auth\OrgMembersAction.cs" />
     <Compile Include="Controllers\Auth\OrgSubscriptionsAction.cs" />
     <Compile Include="Controllers\Auth\RegisterAction.cs" />
     <Compile Include="Controllers\Auth\RejectInvitationAction.cs" />
@@ -427,6 +428,7 @@
     <Compile Include="ViewModels\Auth\Organizations\AddMemberViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\ManageOrgMenuBarViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\OrganizationDetailsViewModel.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\OrganizationMembersViewModel2.cs" />
     <Compile Include="ViewModels\Auth\Organizations\OrganizationSubscriptionsViewModel.cs" />
     <Compile Include="ViewModels\Auth\User\ChangePasswordViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\EditMemberViewModel.cs" />
@@ -733,6 +735,9 @@
     <Content Include="Views\Account\ManageOrg2.cshtml" />
     <Content Include="Views\Account\_ManageOrgMenuBar.cshtml" />
     <Content Include="Views\Account\OrgSubscriptions.cshtml" />
+    <Content Include="Views\Account\OrgMembers.cshtml" />
+    <Content Include="Views\Account\OrgInvitations.cshtml" />
+    <Content Include="Views\Account\_MembersAndInvitationsTab.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\Dependencies\CodeAnalysis\CustomDictionary.xml">

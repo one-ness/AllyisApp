@@ -51,12 +51,12 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// get a list of subscriptions for the given organization
 		/// </summary>
-		public async Task<List<Subscription>> GetSubscriptions(int orgId)
+		public async Task<List<Subscription>> GetSubscriptionsAsync(int orgId)
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
 			this.CheckOrgAction(OrgAction.ReadSubscriptionsList, orgId);
 			var result = new List<Subscription>();
-			dynamic entities = await this.DBHelper.GetSubscriptions(orgId);
+			dynamic entities = await this.DBHelper.GetSubscriptionsAsync(orgId);
 			foreach (var item in entities)
 			{
 				var data = new Subscription();
@@ -272,6 +272,24 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// get the list of users in the given organization
+		/// </summary>
+		public async Task<List<OrganizationUser>> GetOrganizationUsersAsync(int orgId)
+		{
+			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
+
+			this.CheckOrgAction(OrgAction.ReadUsersList, orgId);
+			var result = new List<OrganizationUser>();
+			var collection = await this.DBHelper.GetOrganizationUsersAsync(orgId);
+			foreach (var item in collection)
+			{
+				var data = this.InitializeUser(item);
+			}
+
+			return result;
+		}
+
+		/// <summary>
 		/// Removes an organization user.
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
@@ -397,7 +415,7 @@ namespace AllyisApps.Services
 				OrganizationId = organizationUser.OrganizationId,
 				OrganizationRoleId = organizationUser.OrganizationRoleId,
 				UserId = organizationUser.UserId,
-				MaxAmount = organizationUser.MaxAmount
+				MaxApprovalAmount = organizationUser.MaxAmount
 			};
 		}
 

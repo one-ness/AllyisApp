@@ -176,7 +176,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// get the list of subscriptions for the given organization
 		/// </summary>
-		public async Task<dynamic> GetSubscriptions(int orgId)
+		public async Task<dynamic> GetSubscriptionsAsync(int orgId)
 		{
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{

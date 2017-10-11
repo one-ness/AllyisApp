@@ -399,6 +399,7 @@
     <Build Include="Auth\Stored Procedures\GetMaxEmployeeId.sql" />
     <Build Include="Billing\Stored Procedures\GetSubscriptionUsersBySubscriptionId.sql" />
     <Build Include="Billing\Stored Procedures\GetSubscriptions.sql" />
+    <Build Include="Auth\Stored Procedures\GetOrganizationUsers.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
