@@ -567,13 +567,13 @@
     <Content Include="Content\less\_variables.min.css">
       <DependentUpon>_variables.css</DependentUpon>
     </Content>
-    <Content Include="Content\Site.css" />
+    <Content Include="Content\Site_old.css" />
     <Content Include="Content\Site - Copy.min.css">
-      <DependentUpon>Site.css</DependentUpon>
+      <DependentUpon>Site_old.css</DependentUpon>
     </Content>
-    <Content Include="Content\Site_new.css" />
+    <Content Include="Content\Site.css" />
     <Content Include="Content\Site.min.css">
-      <DependentUpon>Site_new.css</DependentUpon>
+      <DependentUpon>Site.css</DependentUpon>
     </Content>
     <Content Include="Content\site\add_member.css" />
     <Content Include="Content\site\change_password.css" />
