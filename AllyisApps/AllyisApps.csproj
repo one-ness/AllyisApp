@@ -732,6 +732,7 @@
     <Content Include="Views\Account\PermissionsOrg.cshtml" />
     <Content Include="Views\Account\ManageOrg2.cshtml" />
     <Content Include="Views\Account\_ManageOrgMenuBar.cshtml" />
+    <Content Include="Views\Account\OrgSubscriptions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\Dependencies\CodeAnalysis\CustomDictionary.xml">
