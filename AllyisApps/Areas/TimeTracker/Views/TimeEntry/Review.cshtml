@@ -18,13 +18,10 @@
 	<div class="panel-heading row" style="margin: 0; padding-left: 0; padding-right: 0;">
 		<div class="col-xs-8"><h2 class="panel-title">Time Entries for:</h2></div>
 		<div class="col-xs-4">
-			@using (Html.BeginForm(ActionConstants.Review, ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId }, FormMethod.Get, new { id = "date-range-form" }))
-			{
-				<div id="review-range" class="pull-right" style="display: inline; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc;">
-					<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-					<span></span> <b class="caret"></b>
-				</div>
-			}
+			<div id="review-range" class="pull-right" style="display: inline; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc;">
+				<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+				<span></span> <b class="caret"></b>
+			</div>
 		</div>
 	</div>
 	<table class="table table-hover table-condensed table-responsive">
@@ -92,6 +89,7 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
+		//toggles the expand icon up or down
 		$(".toggle-on-click").click(function () {
 			if ($(this).hasClass("fa-chevron-down")) {
 				$(this).removeClass("fa-chevron-down");
@@ -151,15 +149,11 @@
 				'method': 'get'
 			}).append(jQuery('<input>', {
 				'name': 'StartDate',
-				'value': picker.startDate,
+				'value': picker.startDate.toISOString(),
 				'type': 'hidden'
 			})).append(jQuery('<input>', {
 				'name': 'EndDate',
-				'value': picker.endDate,
-				'type': 'hidden'
-			})).append(jQuery('<input>', {
-				'name': 'SubscriptionId',
-				'value': @Model.SubscriptionId,
+				'value': picker.endDate.toISOString(),
 				'type': 'hidden'
 			}));
 			newForm.appendTo(document.body).submit();

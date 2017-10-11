@@ -8,7 +8,6 @@ using System;
 using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
-using AllyisApps.Lib;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -25,10 +24,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="startDate">The start date of the time entries to pull.</param>
 		/// <param name="endDate">The start date of the time entries to pull.</param>
 		/// <returns>The action result.</returns>
-		public ActionResult Review(int subscriptionId, int? startDate = null, int? endDate = null)
+		public ActionResult Review(int subscriptionId, DateTime? startDate = null, DateTime? endDate = null)
 		{
-			int calculatedStartDate = startDate ?? Utility.GetDaysFromDateTime(DateTime.Now.AddMonths(-1));
-			int calculatedEndDate = endDate ?? Utility.GetDaysFromDateTime(DateTime.Now);
+			DateTime calculatedStartDate = startDate ?? DateTime.Now.AddMonths(-1);
+			DateTime calculatedEndDate = endDate ?? DateTime.Now;
 			var organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 
 			var model = new ReviewViewModel
@@ -38,24 +37,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				OrganizationId = organizationId,
 				SubscriptionName = AppService.GetSubscription(subscriptionId).SubscriptionName,
 				PayClasses = AppService.GetPayClassesByOrganizationId(organizationId).Select(x => new PayClassInfoViewModel(x)).ToList(),
-				TimeEntries = AppService.GetTimeEntriesOverDateRange(organizationId, Utility.GetDateTimeFromDays(calculatedStartDate), Utility.GetDateTimeFromDays(calculatedEndDate)).Select(x => new TimeEntryViewModel(x)).ToList(),
-				StartDate = DateTime.Now.AddMonths(-1),
-				EndDate = DateTime.Now
+				TimeEntries = AppService.GetTimeEntriesOverDateRange(organizationId, calculatedStartDate, calculatedEndDate).Select(x => new TimeEntryViewModel(x)).ToList(),
+				StartDate = calculatedStartDate,
+				EndDate = calculatedEndDate
 			};
 			return View(model);
 		}
-
-		/*
-		/// <summary>
-		/// Returns a new view for approving time entries
-		/// </summary>
-		/// <param name="subscriptionId">The subscription we're on.</param>
-		/// <param name="startDate">The start date of the time entries to pull.</param>
-		/// <param name="endDate">The start date of the time entries to pull.</param>
-		/// <returns>The action result.</returns>
-		public ActionResult ReviewChangeDateRange(int subscriptionId, int startDate, int endDate)
-		{
-			return RedirectToAction("Review", new { subscriptionId = subscriptionId, startDate = startDate, endDate = endDate });
-		}*/
 	}
 }
