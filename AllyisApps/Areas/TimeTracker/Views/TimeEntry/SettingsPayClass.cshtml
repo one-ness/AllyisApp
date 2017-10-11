@@ -1,0 +1,123 @@
+﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+@using AllyisApps.Core;
+@using AllyisApps.Services;
+@using AllyisApps.Services.TimeTracker;
+@model SettingsPayClassesViewModel
+
+@{
+	ViewBag.Title = Strings.PClasses;
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
+	Layout = "~/Areas/TimeTracker/Views/Shared/_TimeTrackerSidebar.cshtml";
+	ViewData["UserId"] = Model.UserId;
+	ViewData["SubscriptionId"] = Model.SubscriptionId;
+	ViewData["SubscriptionName"] = Model.SubscriptionName;
+}
+
+@section css {
+	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+}
+
+
+<div class="row container">
+	<div class="col-md-12">
+		@Html.Partial("_ManageSettingSideBar2")
+	</div>
+	@*
+	<div class="col-sm-2">
+		@Html.Partial("_ManageSettingSideBar")
+	</div>
+	*@
+	<div class="col-md-12">
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<h1 class="panel-title">@Strings.PClasses</h1>
+			</div>
+			<div id="PayClasses">
+				<table class="table table-condensed">
+					<thead>
+						<tr>
+							<th>@Strings.PClass</th>
+							<th><span class="pull-right">@Strings.Merge</span></th>
+							<th><span class="pull-right">@Strings.Delete</span></th>
+						</tr>
+					</thead>
+					@foreach (SettingsPayClassesViewModel.PayClassViewModel PayClass in Model.PayClasses)
+				{
+						<tr>
+							@{
+							string _payClassName = Strings.ResourceManager.GetString((PayClass.PayClassName).Replace(" ", string.Empty)) ?? PayClass.PayClassName;
+							}
+							<td>@_payClassName</td>
+							@if (_payClassName != Strings.Regular && _payClassName != Strings.Overtime && _payClassName != Strings.Holiday && _payClassName != Strings.PaidTimeOff && _payClassName != Strings.UnpaidTimeOff)
+						{
+								<td>
+									<a href="javascript: void(0);" class="text-muted" title="@Strings.MergePayClass"
+									   onclick='mergePayClass("@PayClass.PayClassId")'><span class="fa fa-fw fa-object-group pull-right"></span></a>
+								</td>
+								<td>
+									<a href="javascript: void(0);" class="text-muted" title="@Strings.DeletePayClass"
+									   onclick='deletePayClass("@PayClass.PayClassId", "\"@_payClassName\"")'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
+								</td>
+						}
+						else
+						{
+								<td></td>
+								<td></td>
+						}
+						</tr>
+							}
+					<tr>
+						@using (Html.BeginForm(ActionConstants.CreatePayClass, ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId, id = Model.UserId }, FormMethod.Post))
+					{
+							@Html.AntiForgeryToken();
+							@Html.HiddenFor(m => m.SubscriptionId)
+							<td><input type="text" name="NewPayClass" class="form-control" required /></td>
+							<td><span class="pull-right"></span></td>
+							<td><input class="btn btn-primary pull-right" type="submit" value="@Strings.Add" /></td>
+					}
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section scripts{
+	<script type="text/javascript">
+		var model_holiday = "";
+		deletePayClassWarning = "@Html.Raw(Strings.ConfirmDeletePayClass)";
+		deleteHolidayWarning = "@Html.Raw(Strings.ConfirmDeleteHoliday)";
+
+		mergePayClassUrl = "@Url.Action(ActionConstants.MergePayClass , ControllerConstants.TimeEntry, new { subscriptionId = ViewData["SubscriptionId"], userId = -1 })";
+		deletePayClassUrl = "@Url.Action(ActionConstants.DeletePayClass, ControllerConstants.TimeEntry, new { subscriptionId = ViewData["SubscriptionId"], userId = -1 })";
+		deleteHolidayUrl = "@Url.Action(ActionConstants.DeleteHoliday , ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId, id = Model.UserId, HolidayId = -1 })";
+
+		function populateHolidayForSelectedYear(year)
+		{
+			@foreach (var yearC in Model.Holidays.Select(m => m.Date.Year).Distinct())
+			{
+				<text>
+					if (@yearC != year) {
+						$('.' + @yearC).hide();
+						$('#' + @yearC).css("font-weight", "Normal");
+					}
+					else {
+						$('.' + @yearC).show();
+						$('#' + @yearC).css("font-weight", "Bold");
+					}
+				</text>
+			}
+		};
+
+		$('document').ready(function () {
+			populateHolidayForSelectedYear(@DateTime.Now.Year);
+			document.getElementById("datePickerHoliday").val = @Model.Settings.Today;
+		});
+	</script>
+	@Scripts.Render("~/bundles/jqueryui");
+	@Scripts.Render("~/bundles/moment")
+	<script src="~/Scripts/allyis-holidayDatepicker.js"></script>
+
+	@Scripts.Render("~/bundles/TTTimeEntrySettings")
+}

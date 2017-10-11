@@ -16,46 +16,50 @@
 
 @using (Html.BeginForm("Application", "Staffing", FormMethod.Post))
 {
-	<h3 class="text-center">New Application</h3>
-	@Html.AntiForgeryToken()
-	@Html.HiddenFor(m => m.ApplicantId)
-	<table class="table table-hover" style="clear: both;">
-		<thead>
-			<tr>
-				<th style="width: 25%">Position</th>
-				<th style="width: 25%">Notes</th>
-				<th style="width: 40%">Files</th>
-				<th style="width: 10%"></th>
-				<th></th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>@Html.DropDownListFor(m => m.PositionId, Model.PositionList, new { @class = "form-control", style = "width: 150px" })</td>
-				<td>@Html.TextBoxFor(m => m.Notes, new { @class = "form-control" })</td>
-				<td class="files">
-					@foreach (ApplicationDocumentViewModel doc in Model.ApplicationDocuments)
-					{
-						doc.Index = fileIndex;
-						doc.ApplicationDocumentId = fileIndex;
-						doc.ApplicationId = Model.ApplicationId;
-						doc.DocumentLink = "";
-						@Html.Partial("ApplicationDocument", doc)
-						fileIndex++;
-					}
-				</td>
-				<td>
-					<a class="btn btn-fa hidden-create add-button"
-					   onclick="addFile()">
-						<span class="glyphicon glyphicon-plus"></span>
-					</a>
-				</td>
-				<td>
-					<input type="submit" class="btn btn-primary" value="Create" />
-				</td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="panel-heading panel-title">
+		<h2>New Application</h2>
+		@Html.AntiForgeryToken()
+		@Html.HiddenFor(m => m.ApplicantId)
+	</div>
+	<div class="panel panel-default">
+		<table class="table table-hover" style="clear: both;">
+			<thead>
+				<tr>
+					<th style="width: 25%">Position</th>
+					<th style="width: 25%">Notes</th>
+					<th style="width: 40%">Files</th>
+					<th style="width: 10%"></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>@Html.DropDownListFor(m => m.PositionId, Model.PositionList, new { @class = "form-control", style = "width: 250px" })</td>
+					<td>@Html.TextBoxFor(m => m.Notes, new { @class = "form-control" })</td>
+					<td class="files">
+						@foreach (ApplicationDocumentViewModel doc in Model.ApplicationDocuments)
+						{
+							doc.Index = fileIndex;
+							doc.ApplicationDocumentId = fileIndex;
+							doc.ApplicationId = Model.ApplicationId;
+							doc.DocumentLink = "";
+							@Html.Partial("ApplicationDocument", doc)
+							fileIndex++;
+						}
+					</td>
+					<td>
+						<a class="btn btn-fa hidden-create add-button"
+						   onclick="addFile()">
+							<span class="glyphicon glyphicon-plus"></span>
+						</a>
+					</td>
+					<td>
+						<input type="submit" class="btn btn-primary" value="Create" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 }
 
 <script type="text/javascript">
