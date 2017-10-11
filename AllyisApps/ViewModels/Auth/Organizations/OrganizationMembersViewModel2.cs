@@ -21,6 +21,14 @@ namespace AllyisApps.ViewModels.Auth
 		public List<ViewModelItem> Users { get; set; }
 
 		/// <summary>
+		/// constructor
+		/// </summary>
+		public OrganizationMembersViewModel2()
+		{
+			this.Users = new List<ViewModelItem>();
+		}
+
+		/// <summary>
 		/// view model for list of users
 		/// </summary>
 		public class ViewModelItem

@@ -283,7 +283,8 @@ namespace AllyisApps.Services
 			var collection = await this.DBHelper.GetOrganizationUsersAsync(orgId);
 			foreach (var item in collection)
 			{
-				var data = this.InitializeUser(item);
+				var data = this.InitializeOrganizationUser(item);
+				result.Add(data);
 			}
 
 			return result;
@@ -417,6 +418,31 @@ namespace AllyisApps.Services
 				UserId = organizationUser.UserId,
 				MaxApprovalAmount = organizationUser.MaxAmount
 			};
+		}
+
+		public OrganizationUser InitializeOrganizationUser(dynamic entity)
+		{
+			if (entity == null) return null;
+
+			var result = new OrganizationUser();
+			result.AccessFailedCount = entity.AccessFailedCount;
+			result.DateOfBirth = entity.DateOfBirth;
+			result.Email = entity.Email;
+			result.IsEmailConfirmed = entity.IsEmailConfirmed;
+			result.FirstName = entity.FirstName;
+			result.LastName = entity.LastName;
+			result.IsLockoutEnabled = entity.IsLockoutEnabled;
+			result.LockoutEndDateUtc = entity.LockoutEndDateUtc;
+			result.PasswordHash = entity.PasswordHash;
+			result.PasswordResetCode = entity.PasswordResetCode;
+			result.PhoneExtension = entity.PhoneExtension;
+			result.PhoneNumber = entity.PhoneNumber;
+			result.IsPhoneNumberConfirmed = entity.IsPhoneNumberConfirmed;
+			result.IsTwoFactorEnabled = entity.IsTwoFactorEnabled;
+			result.UserId = entity.UserId;
+			result.Address = InitializeAddress(entity);
+
+			return result;
 		}
 
 		/// <summary>
