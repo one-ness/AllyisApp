@@ -29,6 +29,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			DateTime calculatedStartDate = startDate ?? DateTime.Now.AddMonths(-1);
 			DateTime calculatedEndDate = endDate ?? DateTime.Now;
 			var organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			var allTimeEntries = AppService.GetTimeEntriesOverDateRange(organizationId, calculatedStartDate, calculatedEndDate).Select(x => new TimeEntryViewModel(x));
+			var timeEntriesByUser = allTimeEntries.ToLookup(entry => entry.UserId);
+			var dateRangeTotalsByUser = timeEntriesByUser.Select;
 
 			var model = new ReviewViewModel
 			{
@@ -37,7 +40,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				OrganizationId = organizationId,
 				SubscriptionName = AppService.GetSubscription(subscriptionId).SubscriptionName,
 				PayClasses = AppService.GetPayClassesByOrganizationId(organizationId).Select(x => new PayClassInfoViewModel(x)).ToList(),
-				TimeEntries = AppService.GetTimeEntriesOverDateRange(organizationId, calculatedStartDate, calculatedEndDate).Select(x => new TimeEntryViewModel(x)).ToList(),
+				TimeEntries = allTimeEntries.ToList(),
 				StartDate = calculatedStartDate,
 				EndDate = calculatedEndDate
 			};

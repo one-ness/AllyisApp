@@ -38,7 +38,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (int number in new int[] { 2, 3, 4, 5 })
+			@for (DateTime date = Model.StartDate; date.Date <= Model.EndDate.Date; date = date.AddDays(1))
 			{
 				<tr>
 					<td><input type="checkbox" class="check check-all" check-tier="0" check-all-tier="@number"></td>
