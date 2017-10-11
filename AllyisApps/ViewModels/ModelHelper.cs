@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AllyisApps.Lib;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
 
 namespace AllyisApps.ViewModels
 {
@@ -53,6 +54,25 @@ namespace AllyisApps.ViewModels
 					var localized = Resources.States.ResourceManager.GetString(stateName) ?? item.Value;
 					result.Add(item.Key.ToString(), localized);
 				}
+			}
+
+			return result;
+		}
+
+		/// <summary>
+		/// get the display name for the given organization role
+		/// </summary>
+		public static string GetOrganizationRoleName(OrganizationRole role)
+		{
+			string result = Resources.Strings.Member;
+			switch (role)
+			{
+				case OrganizationRole.Owner:
+					result = Resources.Strings.Owner;
+					break;
+
+				default:
+					break;
 			}
 
 			return result;

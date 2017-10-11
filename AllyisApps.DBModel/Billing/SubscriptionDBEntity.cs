@@ -19,11 +19,6 @@ namespace AllyisApps.DBModel.Billing
 		public int SubscriptionId { get; set; }
 
 		/// <summary>
-		/// Product id for sku
-		/// </summary>
-		public int ProductId { get; set; }
-
-		/// <summary>
 		/// Gets or sets OrganizationId.
 		/// </summary>
 		public int OrganizationId { get; set; }
@@ -39,19 +34,9 @@ namespace AllyisApps.DBModel.Billing
 		public int NumberOfUsers { get; set; }
 
 		/// <summary>
-		/// Gets or sets Licenses.
-		/// </summary>
-		public int Licenses { get; set; }
-
-		/// <summary>
 		/// Gets or sets CreatedDate.
 		/// </summary>
-		public DateTime CreatedUtc { get; set; }
-
-		/// <summary>
-		/// gets or sets modified date.
-		/// </summary>
-		public DateTime ModifiedUtc { get; set; }
+		public DateTime SubscriptionCreatedUtc { get; set; }
 
 		/// <summary>
 		/// gets or set promotion expiration date.
@@ -66,6 +51,6 @@ namespace AllyisApps.DBModel.Billing
 		/// <summary>
 		///  Gets or sets the name of the Sku.
 		/// </summary>
-		public string Name { get; set; }
+		public string SubscriptionName { get; set; }
 	}
 }

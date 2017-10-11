@@ -16,6 +16,7 @@ using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Services
 {
@@ -44,7 +45,38 @@ namespace AllyisApps.Services
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
 			this.CheckOrgAction(OrgAction.ReadOrganization, orgId);
-			return InitializeOrganization(DBHelper.GetOrganization(orgId));
+			return InitializeOrganization(this.DBHelper.GetOrganization(orgId));
+		}
+
+		/// <summary>
+		/// get a list of subscriptions for the given organization
+		/// </summary>
+		public async Task<List<Subscription>> GetSubscriptionsAsync(int orgId)
+		{
+			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
+			this.CheckOrgAction(OrgAction.ReadSubscriptionsList, orgId);
+			var result = new List<Subscription>();
+			dynamic entities = await this.DBHelper.GetSubscriptionsAsync(orgId);
+			foreach (var item in entities)
+			{
+				var data = new Subscription();
+				data.AreaUrl = item.ArealUrl;
+				data.IsActive = item.IsActive;
+				data.NumberOfUsers = item.NumberOfUsers ?? 0;
+				data.OrganizationId = item.OrganizationId;
+				data.ProductDescription = item.ProductDescription;
+				data.ProductId = (ProductIdEnum)item.ProductId;
+				data.ProductName = item.ProductName;
+				data.PromoExpirationDateUtc = item.PromoExpirationDateUtc;
+				data.SkuId = (SkuIdEnum)item.SkuId;
+				data.SkuName = item.SkuName;
+				data.SubscriptionCreatedUtc = item.SubscriptionCreatedUtc;
+				data.SubscriptionId = item.SubscriptionId;
+				data.SubscriptionName = item.SubscriptionName;
+				result.Add(data);
+			}
+
+			return result;
 		}
 
 		/// <summary>
@@ -75,30 +107,6 @@ namespace AllyisApps.Services
 			var spResults = DBHelper.GetOrgWithNextEmployeeId(orgId, UserContext.UserId);
 			Organization org = InitializeOrganization(spResults.Item1);
 			org.NextEmpolyeeID = spResults.Item2;
-			return org;
-		}
-
-		/// <summary>
-		/// Gets the next recommended employee id by existing users, a list of SubscriptionDisplayInfos for subscriptions in
-		/// the organization, a list of SubscriptionRoleInfos for roles within the subscriptions of the organization,
-		/// and the next recommended employee id by invitations.
-		/// </summary>
-		/// <param name="orgId">The Organization Id.</param>
-		/// <returns>.</returns>
-		public Organization GetAddMemberInfo(int orgId)
-		{
-			var spResults = DBHelper.GetAddMemberInfo(orgId);
-			Organization org = new Organization()
-			{
-				NextEmpolyeeID = string.Compare(spResults.Item1, spResults.Item4) > 0 ? spResults.Item1 : spResults.Item4,
-				Subscriptions = spResults.Item2.Select(sddb => InitializeSubscription(sddb)).ToList()
-			};
-			var productRoles = spResults.Item3.Select(srdb => InitializeSubscriptionRoleInfo(srdb)).ToList();
-
-			foreach (Subscription sub in org.Subscriptions)
-			{
-				sub.ProductRoles = productRoles.Where(pr => sub.ProductId == pr.ProductId).ToList();
-			}
 			return org;
 		}
 
@@ -264,6 +272,25 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// get the list of users in the given organization
+		/// </summary>
+		public async Task<List<OrganizationUser>> GetOrganizationUsersAsync(int orgId)
+		{
+			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
+
+			this.CheckOrgAction(OrgAction.ReadUsersList, orgId);
+			var result = new List<OrganizationUser>();
+			var collection = await this.DBHelper.GetOrganizationUsersAsync(orgId);
+			foreach (var item in collection)
+			{
+				var data = this.InitializeOrganizationUser(item);
+				result.Add(data);
+			}
+
+			return result;
+		}
+
+		/// <summary>
 		/// Removes an organization user.
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
@@ -389,8 +416,33 @@ namespace AllyisApps.Services
 				OrganizationId = organizationUser.OrganizationId,
 				OrganizationRoleId = organizationUser.OrganizationRoleId,
 				UserId = organizationUser.UserId,
-				MaxAmount = organizationUser.MaxAmount
+				MaxApprovalAmount = organizationUser.MaxAmount
 			};
+		}
+
+		public OrganizationUser InitializeOrganizationUser(dynamic entity)
+		{
+			if (entity == null) return null;
+
+			var result = new OrganizationUser();
+			result.AccessFailedCount = entity.AccessFailedCount;
+			result.DateOfBirth = entity.DateOfBirth;
+			result.Email = entity.Email;
+			result.IsEmailConfirmed = entity.IsEmailConfirmed;
+			result.FirstName = entity.FirstName;
+			result.LastName = entity.LastName;
+			result.IsLockoutEnabled = entity.IsLockoutEnabled;
+			result.LockoutEndDateUtc = entity.LockoutEndDateUtc;
+			result.PasswordHash = entity.PasswordHash;
+			result.PasswordResetCode = entity.PasswordResetCode;
+			result.PhoneExtension = entity.PhoneExtension;
+			result.PhoneNumber = entity.PhoneNumber;
+			result.IsPhoneNumberConfirmed = entity.IsPhoneNumberConfirmed;
+			result.IsTwoFactorEnabled = entity.IsTwoFactorEnabled;
+			result.UserId = entity.UserId;
+			result.Address = InitializeAddress(entity);
+
+			return result;
 		}
 
 		/// <summary>

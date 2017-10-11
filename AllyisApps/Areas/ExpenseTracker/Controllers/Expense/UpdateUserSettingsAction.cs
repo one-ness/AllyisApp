@@ -38,7 +38,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		{
 			return new OrganizationUser
 			{
-				MaxAmount = user.MaxAmount,
+				MaxApprovalAmount = user.MaxAmount,
 				FirstName = user.FirstName,
 				LastName = user.LastName,
 				UserId = user.UserId,

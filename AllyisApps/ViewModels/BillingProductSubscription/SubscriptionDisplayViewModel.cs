@@ -28,7 +28,6 @@ namespace AllyisApps.ViewModels.Auth
 		{
 			this.ProductId = sub.ProductId;
 			this.ProductName = sub.ProductName;
-			this.ProductDescription = sub.Description;
 			this.SubscriptionId = sub.SubscriptionId;
 			this.SubscriptionName = sub.SubscriptionName;
 			this.OrganizationId = sub.OrganizationId;

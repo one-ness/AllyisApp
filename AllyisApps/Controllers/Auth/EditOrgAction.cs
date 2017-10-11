@@ -34,7 +34,7 @@ namespace AllyisApps.Controllers.Auth
 			{
 				this.AppService.UpdateOrganization(model.OrganizationId, model.OrganizationName, model.SiteUrl, model.AddressId, model.Address, model.City, model.SelectedStateId, model.SelectedCountryCode, model.PostalCode, model.PhoneNumber, model.FaxNumber, null);
 				Notifications.Add(new BootstrapAlert(@Resources.Strings.OrganizationDetailsUpdated, Variety.Success));
-				return this.RedirectToAction(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = model.OrganizationId });
+				return this.RedirectToAction(ActionConstants.OrganizationDetails, ControllerConstants.Account, new { id = model.OrganizationId });
 			}
 
 			// Model is invalid, try again
