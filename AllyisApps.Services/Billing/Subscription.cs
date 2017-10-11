@@ -9,54 +9,56 @@ namespace AllyisApps.Services.Billing
 	/// </summary>
 	public class Subscription
 	{
+		/// <summary>
+		/// Gets or sets SubscriptionId.
+		/// </summary>
 		public int SubscriptionId { get; set; }
 
-		public string SubscriptionName { get; set; }
+		/// <summary>
+		/// Gets or sets OrganizationId.
+		/// </summary>
+		public int OrganizationId { get; set; }
 
-		//Product information
+		/// <summary>
+		/// Gets or sets SkuId.
+		/// </summary>
 		public SkuIdEnum SkuId { get; set; }
+
+		/// <summary>
+		/// Gets or sets number of users.
+		/// </summary>
+		public int NumberOfUsers { get; set; }
+
+		/// <summary>
+		/// Gets or sets CreatedDate.
+		/// </summary>
+		public DateTime SubscriptionCreatedUtc { get; set; }
+
+		/// <summary>
+		/// gets or set promotion expiration date.
+		/// </summary>
+		public DateTime? PromoExpirationDateUtc { get; set; }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this subscription is active.
+		/// </summary>
+		public bool IsActive { get; set; }
+
+		/// <summary>
+		///  Gets or sets the name of the Sku.
+		/// </summary>
+		public string SubscriptionName { get; set; }
 
 		public string SkuName { get; set; }
 
 		public ProductIdEnum ProductId { get; set; }
 
-		/// <summary>
-		/// Containes the possible ProductRoles for the Subscription
-		/// </summary>
-		public List<ProductRole> ProductRoles { get; set; }
-
 		public string ProductName { get; set; }
+
+		public string ProductDescription { get; set; }
 
 		public string AreaUrl { get; set; }
 
-		/// <summary>
-		/// Gets or sets Licenses.
-		/// </summary>
-		public int Licenses { get; set; }
-
-		/// <summary>
-		/// Gets or sets a String representing the tier of the subscription.
-		/// </summary>
-		public string Tier { get; set; }
-
-		public string Description { get; internal set; }
-
 		public string IconUrl { get; internal set; }
-
-		//Organizaion informaiton
-		public int NumberOfUsers { get; set; }
-
-		public int OrganizationId { get; set; }
-
-		/// <summary>
-		/// Gets or sets a Name of the organization.
-		/// </summary>
-		public string OrganizationName { get; set; }
-
-		public bool IsActive { get; set; }
-
-		public DateTime CreatedUtc { get; set; }
-
-		public DateTime? PromoExpirationDateUtc { get; set; }
 	}
 }

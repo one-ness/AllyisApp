@@ -552,8 +552,7 @@ namespace AllyisApps.Services
 				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
 				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
 				UserId = user.UserId,
-				Address = address,
-				MaxAmount = user.MaxAmount
+				Address = address
 			};
 		}
 
@@ -611,7 +610,6 @@ namespace AllyisApps.Services
 			OrganizationUserDBEntity entity = new OrganizationUserDBEntity()
 			{
 				UserId = userInfo.UserId,
-				MaxAmount = userInfo.MaxAmount,
 				OrganizationId = userInfo.OrganizationId
 			};
 			DBHelper.UpdateUserMaxAmount(entity);

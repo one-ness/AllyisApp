@@ -11,7 +11,7 @@
 
 		<div class="row">
 			<div class="col-xs-12">
-				<h1 style="float: left">@Strings.MyAccount</h1>
+				<h1 class="pull-left" style="margin-bottom:5px; margin-top:0px;">@Strings.MyAccount</h1>
 			</div>
 		</div>
 
@@ -37,8 +37,8 @@
 					</p>
 				</div>
 				<div class="col-sm-3 vertically-stacked-buttons text-right" style="padding-right:5px">
-					<a href="@Url.Action(ActionConstants.ChangePassword, ControllerConstants.Account)" class="btn btn-default"> @Strings.ChangePassword </a>
-					<a href="@Url.Action(ActionConstants.EditProfile, ControllerConstants.Account)" class="btn btn-default"> @Strings.EditProfile </a>
+					<a href="@Url.Action(ActionConstants.ChangePassword, ControllerConstants.Account)" class="btn btn-default">@Strings.ChangePassword <i class="fa fa-user-secret"></i></a>
+					<a href="@Url.Action(ActionConstants.EditProfile, ControllerConstants.Account)" class="btn btn-default">@Strings.EditProfile <i class="fa fa-info-circle"></i></a>
 				</div>
 			</div>
 
@@ -85,10 +85,12 @@
 
 <div class="row">
 	<div class="col-md-push-2 col-md-8">
-		<div class="row">
-			<div class="col-xs-12">
-				<h1 style="float: left">@Strings.YourOrganizations</h1>
-				<a href="@Url.Action(ActionConstants.CreateOrg, ControllerConstants.Account)" class="btn btn-default" style="float: right; margin-top: 20px; margin-bottom: 15px;">@Strings.CreateOrganization</a>
+		<div class="row" style="margin-bottom:5px;">
+			<div class="col-xs-6">
+				<h1 class="pull-left" style="margin-bottom:0px; margin-top:0px;">@Strings.YourOrganizations</h1>
+			</div>
+			<div class="col-xs-6">
+				<a href="@Url.Action(ActionConstants.CreateOrg, ControllerConstants.Account)" class="btn btn-default pull-right">@Strings.CreateOrganization <i class="fa fa-building"></i></a>
 			</div>
 		</div>
 		@if (Model.Organizations.Count <= 0)
@@ -104,7 +106,6 @@
 		{
 			foreach (var org in Model.Organizations)
 			{
-
 				string title = org.OrganizationName;
 				string subtitle = org.SiteUrl ?? "";
 				var OrgcityState = org.City != null && org.State != null ? org.City + ", " + org.State : org.City + org.State;
@@ -113,18 +114,39 @@
 					<div class="col-md-12">
 						<div class="panel panel-default">
 							<div class="panel-heading">
-								<h2 style="margin-top: 0px; margin-bottom: 0px;">
-									@title
-									@if (org.IsManageAllowed)
-									{
-										@*<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = org.OrganizationId })" title="@Strings.EditOrganization" class="pull-right text-muted">
-											<i class="fa fa-cog  fa-lg"></i>
-										</a>*@
-										<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = org.OrganizationId })" title="@Strings.EditOrganization" class="btn btn-default pull-right">
-											Manage <i class="fa fa-cog"></i>
-										</a>
-									}
-								</h2>
+								<div class="row">
+									<div class="col-xs-9">
+										<h2 style="margin-top:0px; margin-bottom:0px;">@title</h2>
+									</div>
+									<div class="col-xs-3">
+										<div class="dropdown pull-right">
+											<a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> @Strings.Manage <i class="fa fa-caret-down"></i></a>
+											<ul class="dropdown-menu">
+												@if (org.IsReadOrgDetailsAllowed)
+												{
+													<li><a href="@Url.Action(ActionConstants.OrganizationDetails, ControllerConstants.Account, new { @id = org.OrganizationId })" title="@Strings.OrganizationDetails">@Strings.Details <i class="fa fa-info-circle"></i></a></li>
+												}
+												@if (org.IsReadMembersListAllowed)
+												{
+													<li><a href="@Url.Action(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { @id = org.OrganizationId })" title="@Strings.MemberList">@Strings.Members <i class="fa fa-users"></i></a></li>
+												}
+												@if (org.IsReadPermissionsListAllowed)
+														{
+													<li><a href="@Url.Action(ActionConstants.OrganizationPermissions, ControllerConstants.Account, new { @id = org.OrganizationId })" title="@Strings.ManagePermissions">@Strings.Permissions <i class="fa fa-lock"></i></a></li>
+												}
+												@if (org.IsReadSubscriptionsListAllowed)
+													{
+													<li><a href="@Url.Action(ActionConstants.OrganizationSubscriptions, ControllerConstants.Account, new { @id = org.OrganizationId })" title="@Strings.Subscriptions">@Strings.Subscriptions <i class="fa fa-list"></i></a></li>
+												}
+												@if (org.IsReadBillingDetailsAllowed)
+													{
+													<li><a href="">@Strings.Billing <i class="fa fa-dollar"></i></a></li>
+												}
+											</ul>
+										</div>
+										@*}*@
+									</div>
+								</div>
 							</div>
 							<div class="panel-body">
 								<div class="col-sm-8 index-details">
@@ -159,26 +181,36 @@
 									</p>
 								</div>
 								<div class="col-md-12" style="height: 100%; margin-top:15px; display: flex; flex-wrap: wrap; justify-content: space-around; clear: both;">
-									@foreach (var sub in org.Subscriptions)
+									@if (org.Subscriptions.Count <= 0)
 									{
-										<div class="square-box">
-											<a href="@sub.ProductGoToUrl" style="text-decoration: none">
-												<div class="panel panel-default">
-													<div class="btn default" style="text-align:center; margin:10px;">
-														<div class="center-block" text-align: center; vertical-align: middle;" style="margin-top:5px;">
-															<img src="@(Url.Content(sub.IconUrl))" alt="@sub.ProductName" />
+										<p>@Strings.NoSubscriptionMessage</p>
+										if (org.IsCreateSubscriptionAllowed)
+										{
+											<p><i>Please visit the <a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { @id = org.OrganizationId })" style="color:cornflowerblue">subscriptions page</a> to subscribe to our products.</i></p>
+										}
+									}
+									else
+									{
+										foreach (var sub in org.Subscriptions)
+										{
+											<div class="square-box">
+												<a href="@sub.ProductGoToUrl" style="text-decoration: none">
+													<div class="panel panel-default">
+														<div class="btn default" style="text-align:center; margin:5px;">
+															<div class="center-block" style="text-align:center; vertical-align:middle;">
+																<img src="@(Url.Content(sub.IconUrl))" alt="@sub.ProductName" />
+															</div>
+															<h4>
+																@sub.ProductName
+															</h4>
+															<p>
+																@sub.SubscriptionName
+															</p>
 														</div>
-
-														<h3>
-															@sub.ProductName
-														</h3>
-														<p>
-															@sub.SubscriptionName
-														</p>
 													</div>
-												</div>
-											</a>
-										</div>
+												</a>
+											</div>
+										}
 									}
 								</div>
 							</div>

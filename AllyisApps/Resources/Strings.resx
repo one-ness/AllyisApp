@@ -120,7 +120,7 @@
   <data name="ActionUnauthorizedMessage" xml:space="preserve">
     <value>You are not authorized to perform this action.</value>
   </data>
-  <data name="Billing" xml:space="preserve">
+  <data name="BillingAccepted" xml:space="preserve">
     <value>Billing information accepted.</value>
   </data>
   <data name="BillingRemoved" xml:space="preserve">
@@ -996,7 +996,7 @@
   <data name="PClasses" xml:space="preserve">
     <value>Pay Classes</value>
   </data>
-  <data name="Permissions" xml:space="preserve">
+  <data name="EditPermissions" xml:space="preserve">
     <value>Edit Permissions</value>
   </data>
   <data name="PhoneFormatValidation" xml:space="preserve">
@@ -1563,5 +1563,17 @@
   </data>
   <data name="Review" xml:space="preserve">
     <value>Review</value>
+  </data>
+  <data name="Manage" xml:space="preserve">
+    <value>Manage</value>
+  </data>
+  <data name="Billing" xml:space="preserve">
+    <value>Billing</value>
+  </data>
+  <data name="Permissions" xml:space="preserve">
+    <value>Permissions</value>
+  </data>
+  <data name="NoSubscriptionMessage" xml:space="preserve">
+    <value>You are not part of a subscription yet. Please contact your employer to add you to a subscription.</value>
   </data>
 </root>
