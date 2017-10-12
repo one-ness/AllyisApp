@@ -16,6 +16,11 @@ namespace AllyisApps.ViewModels.Auth
 		public bool CanEditSubscriptions { get; set; }
 
 		/// <summary>
+		/// can manage permissions
+		/// </summary>
+		public bool CanManagePermissions { get; set; }
+
+		/// <summary>
 		/// list of subscriptions
 		/// </summary>
 		public List<ViewModelItem> Subscriptions { get; set; }

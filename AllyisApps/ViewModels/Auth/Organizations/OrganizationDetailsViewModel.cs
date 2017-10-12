@@ -63,6 +63,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// is edit allowed?
 		/// </summary>
-		public bool IsEditOrganizationAllowed { get; set; }
+		public bool CanEditOrganization { get; set; }
 	}
 }

@@ -2,6 +2,9 @@
 INSERT INTO [Auth].[OrganizationRole] (OrganizationRoleId, [OrganizationRoleName]) VALUES (1, 'Member');
 INSERT INTO [Auth].[OrganizationRole] (OrganizationRoleId, [OrganizationRoleName]) VALUES (2, 'Owner');
 
+-- Product roles aka Organization roles -- AllyisApps
+INSERT INTO [Auth].[ProductRole] (ProductRoleId, ProductId, [ProductRoleName]) VALUES (1, 100000, 'Member');
+INSERT INTO [Auth].[ProductRole] (ProductRoleId, ProductId, [ProductRoleName]) VALUES (2, 100000, 'Owner');
 
 -- Product roles -- Time Tracker
 INSERT INTO [Auth].[ProductRole] (ProductRoleId, ProductId, [ProductRoleName]) VALUES (1, 200000, 'User');

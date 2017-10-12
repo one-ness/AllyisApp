@@ -12,7 +12,7 @@
 	<div class="col-xs-12">
 		<h1 style="margin-top:0px; margin-bottom:0px; display:inline;">@ViewBag.TitleBar</h1>
 		<span class="pull-right">
-			@if (Model.IsEditOrganizationAllowed)
+			@if (Model.CanEditOrganization)
 			{
 				<a href="@Url.Action(ActionConstants.EditOrg, ControllerConstants.Account, new { id = Model.OrganizationId })"
 				   class="btn btn-default" title="@Strings.EditOrganization">@Strings.Edit <i class="fa fa-edit"></i></a>

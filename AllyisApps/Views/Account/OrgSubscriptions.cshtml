@@ -34,8 +34,14 @@
 						<td class="col-md-2">@item.FormattedSubscriptionCreatedUtc</td>
 						<td class="col-md-2">@item.NumberofUsers @Strings.Users</td>
 						<td class="col-md-2">
-							<a href="@Url.Action(ActionConstants.ManageSubPermissions, ControllerConstants.Account, new { @id = item.SubscriptionId })" title="@Strings.ManagePermissions" style="color:inherit"><i class="fa fa-fw fa-lock"></i></a>
-							<a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { @id = item.SubscriptionId })" title="@Strings.EditSubscription" style="color:inherit"><i class="fa fa-fw fa-edit"></i></a>
+							@if (Model.CanManagePermissions)
+							{
+								<a href="@Url.Action(ActionConstants.ManageSubPermissions, ControllerConstants.Account, new { @id = item.SubscriptionId })" title="@Strings.ManagePermissions" style="color:inherit"><i class="fa fa-fw fa-lock"></i></a>
+							}
+							@if (Model.CanEditSubscriptions)
+							{
+								<a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { @id = item.SubscriptionId })" title="@Strings.EditSubscription" style="color:inherit"><i class="fa fa-fw fa-edit"></i></a>
+							}
 						</td>
 					</tr>
 				}

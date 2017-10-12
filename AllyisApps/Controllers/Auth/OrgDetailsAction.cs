@@ -27,7 +27,7 @@ namespace AllyisApps.Controllers.Auth
 		public ActionResult OrgDetails(int id)
 		{
 			var model = new OrganizationDetailsViewModel();
-			model.IsEditOrganizationAllowed = this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id, false);
+			model.CanEditOrganization = this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id, false);
 			var org = this.AppService.GetOrganization(id);
 			if (org.Address != null)
 			{

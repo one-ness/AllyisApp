@@ -58,24 +58,5 @@ namespace AllyisApps.ViewModels
 
 			return result;
 		}
-
-		/// <summary>
-		/// get the display name for the given organization role
-		/// </summary>
-		public static string GetOrganizationRoleName(OrganizationRole role)
-		{
-			string result = Resources.Strings.Member;
-			switch (role)
-			{
-				case OrganizationRole.Owner:
-					result = Resources.Strings.Owner;
-					break;
-
-				default:
-					break;
-			}
-
-			return result;
-		}
 	}
 }

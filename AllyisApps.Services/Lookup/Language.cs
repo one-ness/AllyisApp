@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.Services.Auth
+namespace AllyisApps.Services.Lookup
 {
 	/// <summary>
 	/// Represents a language setting.
@@ -13,10 +13,6 @@ namespace AllyisApps.Services.Auth
 	{
 		public const string DefaultLanguageCultureName = "en-us";
 		public const string DefaultLanguageName = "English (US)";
-		///// <summary>
-		///// Gets or sets the language Id.
-		///// </summary>
-		// public int LanguageId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the language name.
