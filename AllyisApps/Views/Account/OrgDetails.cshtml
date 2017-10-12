@@ -1,62 +1,70 @@
 ﻿@model OrganizationDetailsViewModel
+
 @{
-	ViewBag.TitleBar = Strings.OrganizationDetails;
+	var sb = new System.Text.StringBuilder();
+	sb.Append(Strings.OrganizationDetails);
+	sb.Append(": ");
+	sb.Append(Model.OrganizationName);
+	ViewBag.TitleBar = sb.ToString();
 }
 
+<div class="row" style="margin-bottom:5px;">
+	<div class="col-xs-12">
+		<h1 style="margin-top:0px; margin-bottom:0px; display:inline;">@ViewBag.TitleBar</h1>
+		<span class="pull-right">
+			@if (Model.IsEditOrganizationAllowed)
+			{
+				<a href="@Url.Action(ActionConstants.EditOrg, ControllerConstants.Account, new { id = Model.OrganizationId })"
+				   class="btn btn-default" title="@Strings.EditOrganization">@Strings.Edit <i class="fa fa-edit"></i></a>
+			}
+		</span>
+	</div>
+</div>
 <div class="row">
 	<div class="col-xs-12">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h4 style="margin-top:0px; margin-bottom:0px;">@ViewBag.TitleBar</h4>
-			</div>
-			<div class="panel-body">
-				<table id="org-details" class="table table-striped table-condensed">
-					<tr>
-						<td><label>@Strings.Name</label></td>
-						<td>@Html.DisplayFor(m => m.OrganizationName)</td>
-					</tr>
-					<tr>
-						<td><label>@Strings.SiteURL</label></td>
-						<td>@Html.DisplayFor(m => m.SiteURL)</td>
-					</tr>
-					<tr>
-						<td><label>@Strings.Address</label></td>
-						<td>@Html.DisplayFor(m => m.Address)</td>
-					</tr>
-					<tr>
-						<td><label>@Strings.Country</label></td>
-						<td>@Html.DisplayFor(m => m.CountryName)</td>
-					</tr>
-					<tr>
-						<td><label>@Strings.State</label></td>
-						<td>@Html.DisplayFor(m => m.StateName)</td>
-					</tr>
-					<tr>
-						<td><label>@Strings.City</label></td>
-						<td>@Html.DisplayFor(m => m.City)</td>
-					</tr>
-					<tr>
-						<td><label>@Strings.PostalCode</label></td>
-						<td>@Html.DisplayFor(m => m.PostalCode)</td>
-					</tr>
-					<tr>
-						<td><label>@Strings.PhoneNumber</label></td>
-						<td>@Html.DisplayFor(m => m.PhoneNumber)</td>
-					</tr>
-					<tr>
-						<td><label>@Strings.FaxNumber</label></td>
-						<td>@Html.DisplayFor(m => m.FaxNumber)</td>
-					</tr>
-				</table>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-xs-12">
-				<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)"
-				   class="btn btn-default pull-left" title="@Strings.Back"><i class="fa fa-caret-left"></i> @Strings.Back</a>
-				<a href="@Url.Action(ActionConstants.EditOrg, ControllerConstants.Account, new { id = Model.OrganizationId })"
-					class="btn btn-default pull-right" title="@Strings.EditOrganization">@Strings.Edit <span class="fa fa-edit"></span></a>
-			</div>
-		</div>
+		<table id="org-details" class="table table-striped table-condensed">
+			<tr>
+				<td><label>@Strings.Name</label></td>
+				<td>@Html.DisplayFor(m => m.OrganizationName)</td>
+			</tr>
+			<tr>
+				<td><label>@Strings.SiteURL</label></td>
+				<td>@Html.DisplayFor(m => m.SiteURL)</td>
+			</tr>
+			<tr>
+				<td><label>@Strings.Address</label></td>
+				<td>@Html.DisplayFor(m => m.Address)</td>
+			</tr>
+			<tr>
+				<td><label>@Strings.Country</label></td>
+				<td>@Html.DisplayFor(m => m.CountryName)</td>
+			</tr>
+			<tr>
+				<td><label>@Strings.State</label></td>
+				<td>@Html.DisplayFor(m => m.StateName)</td>
+			</tr>
+			<tr>
+				<td><label>@Strings.City</label></td>
+				<td>@Html.DisplayFor(m => m.City)</td>
+			</tr>
+			<tr>
+				<td><label>@Strings.PostalCode</label></td>
+				<td>@Html.DisplayFor(m => m.PostalCode)</td>
+			</tr>
+			<tr>
+				<td><label>@Strings.PhoneNumber</label></td>
+				<td>@Html.DisplayFor(m => m.PhoneNumber)</td>
+			</tr>
+			<tr>
+				<td><label>@Strings.FaxNumber</label></td>
+				<td>@Html.DisplayFor(m => m.FaxNumber)</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)"
+		   class="btn btn-default pull-left" title="@Strings.Back"><i class="fa fa-caret-left"></i> @Strings.Back</a>
 	</div>
 </div>

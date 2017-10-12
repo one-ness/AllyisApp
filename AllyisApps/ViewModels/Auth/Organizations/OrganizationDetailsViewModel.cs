@@ -61,17 +61,8 @@ namespace AllyisApps.ViewModels.Auth
 		public string FaxNumber { get; set; }
 
 		/// <summary>
-		/// side bar view model
+		/// is edit allowed?
 		/// </summary>
-		public ManageOrgMenuBarViewModel MenuBarViewModel { get; set; }
-
-		/// <summary>
-		/// constructor
-		/// </summary>
-		public OrganizationDetailsViewModel()
-		{
-			this.MenuBarViewModel = new ManageOrgMenuBarViewModel();
-			this.MenuBarViewModel.DetailsActive = "active";
-		}
+		public bool IsEditOrganizationAllowed { get; set; }
 	}
 }
