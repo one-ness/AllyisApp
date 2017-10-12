@@ -516,6 +516,17 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// get the list of users in the given organization
+		/// </summary>
+		public async Task<List<dynamic>> GetOrganizationUsersAsync(int orgId)
+		{
+			using (var con = new SqlConnection(this.SqlConnectionString))
+			{
+				return (await con.QueryAsync<dynamic>("Auth.GetOrganizationUsers @a", new { a = orgId })).ToList();
+			}
+		}
+
+		/// <summary>
 		/// Retreives the id of the organization that registered the given subdomain.
 		/// </summary>
 		/// <param name="subdomain">The organization's subdomain.</param>

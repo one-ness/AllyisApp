@@ -421,11 +421,9 @@ namespace AllyisApps.Services
 				SubscriptionId = si.SubscriptionId,
 				SkuId = (SkuIdEnum)si.SkuId,
 				NumberOfUsers = si.NumberOfUsers,
-				Licenses = si.Licenses,
-				CreatedUtc = si.CreatedUtc,
+				SubscriptionCreatedUtc = si.SubscriptionCreatedUtc,
 				IsActive = si.IsActive,
-				SubscriptionName = si.Name,
-				ProductId = (ProductIdEnum)si.ProductId
+				SubscriptionName = si.SubscriptionName,
 			};
 		}
 
@@ -887,18 +885,15 @@ namespace AllyisApps.Services
 			return new Subscription
 			{
 				AreaUrl = subscriptionDisplay.AreaUrl,
-				CreatedUtc = subscriptionDisplay.CreatedUtc,
+				SubscriptionCreatedUtc = subscriptionDisplay.CreatedUtc,
 				NumberOfUsers = subscriptionDisplay.NumberOfUsers,
 				OrganizationId = subscriptionDisplay.OrganizationId,
-				OrganizationName = subscriptionDisplay.OrganizationName,
-				Description = subscriptionDisplay.Description,
 				ProductId = (ProductIdEnum)subscriptionDisplay.ProductId,
 				ProductName = subscriptionDisplay.ProductName,
 				SkuId = (SkuIdEnum)subscriptionDisplay.SkuId,
 				SkuName = subscriptionDisplay.SkuName,
 				SubscriptionId = subscriptionDisplay.SubscriptionId,
 				SubscriptionName = subscriptionDisplay.SubscriptionName,
-				Tier = subscriptionDisplay.Tier
 			};
 		}
 
@@ -916,10 +911,9 @@ namespace AllyisApps.Services
 
 			return new Subscription
 			{
-				CreatedUtc = subscription.CreatedUtc,
+				SubscriptionCreatedUtc = subscription.SubscriptionCreatedUtc,
 				IsActive = subscription.IsActive,
-				Licenses = subscription.Licenses,
-				SubscriptionName = subscription.Name,
+				SubscriptionName = subscription.SubscriptionName,
 				NumberOfUsers = subscription.NumberOfUsers,
 				OrganizationId = subscription.OrganizationId,
 				SkuId = (SkuIdEnum)subscription.SkuId,

@@ -127,11 +127,16 @@ namespace AllyisApps.Services.Auth
 		/// </summary>
 		public List<Invitation> Invitations { get; set; }
 
-		public decimal MaxAmount { get; set; }
 
-		public bool IsAddressLoaded => Address != null;
-		public bool IsInvitationsLoaded => Invitations != null;
-		public bool IsOrganizationsLoaded => Organizations != null;
-		public bool IsSubscriptionsLoaded => Subscriptions != null;
+		/// <summary>
+		/// constructor
+		/// </summary>
+		public User()
+		{
+			this.Address = new Address();
+			this.Invitations = new List<Invitation>();
+			this.Organizations = new List<UserOrganization>();
+			this.Subscriptions = new List<UserSubscription>();
+		}
 	}
 }
