@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using AllyisApps.DBModel;
 using AllyisApps.Services.Auth;
+using AllyisApps.Services.Cache;
 
 namespace AllyisApps.Services
 {
@@ -33,6 +34,7 @@ namespace AllyisApps.Services
 		{
 			this.ServiceSettings = settings ?? throw new ArgumentNullException("settings");
 			this.DBHelper = new DBHelper(this.ServiceSettings.SqlConnectionString);
+			CacheContainer.Init(this.ServiceSettings.SqlConnectionString);
 		}
 
 		/// <summary>

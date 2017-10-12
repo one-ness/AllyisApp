@@ -899,5 +899,16 @@ namespace AllyisApps.DBModel
 				return (await con.QueryAsync<string>("Auth.GetMaxEmployeeId @a", new { a = organizationId })).FirstOrDefault();
 			}
 		}
+		/// <summary>
+		/// get the product roles for the given org and given product
+		/// </summary>
+		public async Task<List<ProductRoleDBEntity>> GetProductRolesAsync(int orgId, int productId)
+		{
+			using (var con = new SqlConnection(this.SqlConnectionString))
+			{
+				return (await con.QueryAsync<ProductRoleDBEntity>("Auth.GetProductRoles @a, @b", new { a = orgId, b = productId })).ToList();
+			}
+		}
+
 	}
 }
