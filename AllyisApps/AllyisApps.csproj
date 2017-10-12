@@ -464,6 +464,12 @@
     <Content Include="Areas\TimeTracker\Scripts\allyis-drp-init.js" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-index2.js" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-settings.js" />
+    <Content Include="Content\ExpenseTracker.css">
+      <DependentUpon>ExpenseTracker.less</DependentUpon>
+    </Content>
+    <Content Include="Content\ExpenseTracker.min.css">
+      <DependentUpon>ExpenseTracker.css</DependentUpon>
+    </Content>
     <Content Include="Content\ExpenseTracker\icons\ExpenseTracker.png" />
     <Content Include="Content\less\allyis-pages-with-filter.css">
       <DependentUpon>allyis-pages-with-filter.less</DependentUpon>
@@ -494,6 +500,12 @@
     </Content>
     <Content Include="Content\less\_variables.min.css">
       <DependentUpon>_variables.css</DependentUpon>
+    </Content>
+    <Content Include="Content\StaffingManager.css">
+      <DependentUpon>StaffingManager.less</DependentUpon>
+    </Content>
+    <Content Include="Content\StaffingManager.min.css">
+      <DependentUpon>StaffingManager.css</DependentUpon>
     </Content>
     <Content Include="Content\StaffingManager\icons\StaffingManager.png" />
     <Content Include="Content\TimeTracker\icons\TimeTrackerPro.png" />
