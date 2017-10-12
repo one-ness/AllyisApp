@@ -577,13 +577,11 @@
     </Content>
     <Content Include="Content\site\add_member.css" />
     <Content Include="Content\site\change_password.css" />
-    <Content Include="Content\site\create_organization.css" />
     <Content Include="Content\site\edit_permissions.css" />
     <Content Include="Content\site\edit_profile.css" />
     <Content Include="Content\site\edit_subscription.css" />
     <Content Include="Content\site\index.css" />
     <Content Include="Content\site\manage_organization.css" />
-    <Content Include="Content\site\organization_details.css" />
     <Content Include="Content\site\register.css" />
     <Content Include="Content\site\sign_in.css" />
     <Content Include="Content\site\subscriptions.css" />
