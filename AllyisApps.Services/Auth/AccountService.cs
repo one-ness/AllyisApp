@@ -81,40 +81,37 @@ namespace AllyisApps.Services
 
 			Invitation inviteInfo = InitializeInvitationInfo(this.DBHelper.GetInvitation(invitationId));
 			var result = (this.DBHelper.AcceptInvitation(invitationId, this.UserContext.UserId) == 1);
-
-			if (inviteInfo.RoleJson != null)
+			if (result)
 			{
-				JObject roleString = JObject.Parse(inviteInfo.RoleJson);
-
-				var ttRole = roleString[((int)SkuIdEnum.TimeTrackerBasic).ToString()].Value<int>();
-				var etRole = roleString[((int)SkuIdEnum.ExpenseTrackerBasic).ToString()].Value<int>();
-				var smRole = roleString[((int)SkuIdEnum.StaffingManagerBasic).ToString()].Value<int>();
-
-				
-				if (ttRole > 0)
+				if (inviteInfo.RoleJson != null)
 				{
-					var result2 = (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, ttRole, (int)ProductIdEnum.TimeTracker));
-				}
+					JObject roleString = JObject.Parse(inviteInfo.RoleJson);
 
-				if (etRole > 0)
-				{
-					var prodId = GetProductSubscriptionInfo(inviteInfo.OrganizationId, SkuIdEnum.ExpenseTrackerBasic).Product.ProductId;
-					var result3 = (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, etRole, (int)ProductIdEnum.ExpenseTracker));
-				}
+					var ttRole = roleString[((int)SkuIdEnum.TimeTrackerBasic).ToString()].Value<int>();
+					var etRole = roleString[((int)SkuIdEnum.ExpenseTrackerBasic).ToString()].Value<int>();
+					var smRole = roleString[((int)SkuIdEnum.StaffingManagerBasic).ToString()].Value<int>();
 
-				if (smRole > 0)
-				{
-					var prodId = GetProductSubscriptionInfo(inviteInfo.OrganizationId, SkuIdEnum.StaffingManagerBasic).Product.ProductId;
-					var result4 = (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, smRole, (int)ProductIdEnum.StaffingManager));
-				}
 
+					if (ttRole > 0)
+					{
+						var result2 = (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, ttRole, (int)ProductIdEnum.TimeTracker));
+					}
+
+					if (etRole > 0)
+					{
+						var prodId = GetProductSubscriptionInfo(inviteInfo.OrganizationId, SkuIdEnum.ExpenseTrackerBasic).Product.ProductId;
+						var result3 = (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, etRole, (int)ProductIdEnum.ExpenseTracker));
+					}
+
+					if (smRole > 0)
+					{
+						var prodId = GetProductSubscriptionInfo(inviteInfo.OrganizationId, SkuIdEnum.StaffingManagerBasic).Product.ProductId;
+						var result4 = (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, smRole, (int)ProductIdEnum.StaffingManager));
+					}
+
+				}
+				NotifyInviteAcceptAsync(invitationId);
 			}
-				if (result)
-				{
-					NotifyInviteAcceptAsync(invitationId);
-				}
-			
-
 			return result;
 		}
 

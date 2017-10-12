@@ -438,7 +438,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="subscriptionId"></param>
 		/// <returns></returns>
-		public string getSubscriptionName(int subscriptionId)
+		public string GetSubscriptionName(int subscriptionId)
 		{
 			return DBHelper.GetSubscriptionName(subscriptionId);
 		}

@@ -45,7 +45,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				};
 
 				AdminReportModel adminReportVM = CreateAdminReportModel(subscriptionId);
-				adminReportVM.SubscriptionName = AppService.getSubscriptionName(subscriptionId);
+				adminReportVM.SubscriptionName = AppService.GetSubscriptionName(subscriptionId);
 				adminReportVM.Selection = adminRVMSelect;
 
 				ExpenseDataExportViewModel dataVM = null;
