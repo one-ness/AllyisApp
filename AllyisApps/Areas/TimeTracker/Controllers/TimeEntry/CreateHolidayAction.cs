@@ -5,11 +5,15 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
+using AllyisApps.Lib;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
 using AllyisApps.Services.TimeTracker;
+using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -18,6 +22,55 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	/// </summary>
 	public partial class TimeEntryController : BaseController
 	{
+		/// <summary>
+		/// Returns the settings holiday view.
+		/// </summary>
+		/// <param name="subscriptionId"></param>
+		/// <returns></returns>
+		public ActionResult SettingsHoliday(int subscriptionId)
+		{
+			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
+			int organizaionID = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			var infos = AppService.GetAllSettings(organizaionID);
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			string subName = AppService.getSubscriptionName(subscriptionId);
+			var infoOrg = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
+			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infoOrg.Item1.StartOfWeek));
+			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
+			Setting settings = infos.Item1;
+			DateTime formatDateTime = DateTime.Now;
+			return this.View(new SettingsViewModel()
+			{
+				Settings = new SettingsViewModel.SettingsInfoViewModel()
+				{
+					IsLockDateUsed = settings.IsLockDateUsed,
+					LockDatePeriod = settings.LockDatePeriod,
+					LockDateQuantity = settings.LockDateQuantity,
+					OrganizationId = settings.OrganizationId,
+					OvertimeHours = settings.OvertimeHours,
+					OvertimeMultiplier = settings.OvertimeMultiplier,
+					OvertimePeriod = settings.OvertimePeriod,
+					StartOfWeek = settings.StartOfWeek,
+					Today = formatDateTime
+				},
+				PayClasses = infos.Item2.AsParallel().Select(payClass => new SettingsViewModel.PayClassViewModel()
+				{
+					PayClassId = payClass.PayClassId,
+					PayClassName = payClass.PayClassName
+				}),
+				Holidays = infos.Item3.AsParallel().Select(holiday => new SettingsViewModel.HolidayViewModel()
+				{
+					Date = holiday.Date,
+					HolidayId = holiday.HolidayId,
+					HolidayName = holiday.HolidayName
+				}),
+				SubscriptionId = subscriptionId,
+				SubscriptionName = subName,
+				UserId = this.AppService.UserContext.UserId
+			});
+		}
+
 		/// <summary>
 		/// Creates a holiday for the current organization.
 		/// </summary>
@@ -55,7 +108,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId }); // Same destination regardless of creation success
+			return this.RedirectToAction(ActionConstants.SettingsHoliday, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId }); // Same destination regardless of creation success
 		}
 	}
 }

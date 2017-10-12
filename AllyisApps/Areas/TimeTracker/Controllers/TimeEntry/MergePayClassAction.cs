@@ -94,7 +94,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
 
-			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = model.SubscriptionId });
+			return this.RedirectToAction(ActionConstants.SettingsPayClass, new { subscriptionId = model.SubscriptionId });
 		}
 	}
 }
