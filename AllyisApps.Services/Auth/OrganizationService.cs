@@ -426,22 +426,32 @@ namespace AllyisApps.Services
 
 			var result = new OrganizationUser();
 			result.AccessFailedCount = entity.AccessFailedCount;
+			result.Address = InitializeAddress(entity);
 			result.DateOfBirth = entity.DateOfBirth;
 			result.Email = entity.Email;
-			result.IsEmailConfirmed = entity.IsEmailConfirmed;
+			result.EmailConfirmationCode = entity.EmailConfirmationCode;
+			result.EmployeeId = entity.EmployeeId;
+			//result.Invitations = 
 			result.FirstName = entity.FirstName;
-			result.LastName = entity.LastName;
+			result.IsEmailConfirmed = entity.IsEmailConfirmed;
 			result.IsLockoutEnabled = entity.IsLockoutEnabled;
+			result.IsPhoneNumberConfirmed = entity.IsPhoneNumberConfirmed;
+			result.IsTwoFactorEnabled = entity.IsTwoFactorEnabled;
+			result.LastName = entity.LastName;
+			result.LastUsedSubscriptionId = entity.LastUsedSubscriptionId;
 			result.LockoutEndDateUtc = entity.LockoutEndDateUtc;
+			result.MaxApprovalAmount = entity.MaxAmount;
+			result.OrganizationId = entity.OrganizationId;
+			result.OrganizationRoleId = entity.OrganizationRoleId;
+			//result.Organizations = 
+			result.OrganizationUserCreatedUtc = entity.OrganizationUserCreatedUtc;
 			result.PasswordHash = entity.PasswordHash;
 			result.PasswordResetCode = entity.PasswordResetCode;
 			result.PhoneExtension = entity.PhoneExtension;
 			result.PhoneNumber = entity.PhoneNumber;
-			result.IsPhoneNumberConfirmed = entity.IsPhoneNumberConfirmed;
-			result.IsTwoFactorEnabled = entity.IsTwoFactorEnabled;
+			//result.Subscriptions = 
+			result.UserCreatedUtc = entity.UserCreatedUtc;			
 			result.UserId = entity.UserId;
-			result.Address = InitializeAddress(entity);
-
 			return result;
 		}
 

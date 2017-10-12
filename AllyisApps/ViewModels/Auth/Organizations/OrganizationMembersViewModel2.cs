@@ -16,9 +16,34 @@ namespace AllyisApps.ViewModels.Auth
 		public int OrganizationId { get; set; }
 
 		/// <summary>
+		/// organization name
+		/// </summary>
+		public string OrganizationName { get; set; }
+
+		/// <summary>
 		/// list of users in the organization
 		/// </summary>
 		public List<ViewModelItem> Users { get; set; }
+
+		/// <summary>
+		/// is delete allowed?
+		/// </summary>
+		public bool IsDeleteUserAllowed { get; set; }
+
+		/// <summary>
+		/// is manage permissions allowed?
+		/// </summary>
+		public bool IsManagePermissionsAllowed { get; set; }
+
+		/// <summary>
+		/// is add user allowed?
+		/// </summary>
+		public bool IsAddUserAllowed { get; set; }
+
+		/// <summary>
+		/// is edit user allowed?
+		/// </summary>
+		public bool IsEditUserAllowed { get; set; }
 
 		/// <summary>
 		/// constructor

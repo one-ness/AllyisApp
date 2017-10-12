@@ -1,13 +1,17 @@
 ﻿@model OrganizationSubscriptionsViewModel
 @{
-//ViewBag.Title = Strings.Subscriptions;
+	var sb = new System.Text.StringBuilder();
+	sb.Append(Strings.Subscriptions);
+	sb.Append(": ");
+	sb.Append(Model.OrganizationName);
+	ViewBag.TitleBar = sb.ToString();
 }
 
 <div class="row">
 	<div class="col-xs-12">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<h4 style="margin-top:0px; margin-bottom:0px;">@Strings.Subscriptions</h4>
+				<h4 style="margin-top:0px; margin-bottom:0px;">@ViewBag.TitleBar</h4>
 			</div>
 			<div class="panel-body">
 				@if (Model.Subscriptions.Count > 0)
@@ -35,7 +39,6 @@
 								</td>
 							</tr>
 						}
-
 					</table>
 				}
 				else
