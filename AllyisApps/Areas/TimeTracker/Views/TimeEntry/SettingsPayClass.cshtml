@@ -20,15 +20,15 @@
 
 
 <div class="row container">
-	<div class="col-md-12">
+	@*<div class="col-md-12">
 		@Html.Partial("_ManageSettingSideBar2")
-	</div>
-	@*
+	</div>*@
+	
 	<div class="col-sm-2">
 		@Html.Partial("_ManageSettingSideBar")
 	</div>
-	*@
-	<div class="col-md-12">
+	
+	<div class="col-md-10">
 		<div class="panel panel-info">
 			<div class="panel-heading">
 				<h1 class="panel-title">@Strings.PClasses</h1>
@@ -111,8 +111,6 @@
 		};
 
 		$('document').ready(function () {
-			populateHolidayForSelectedYear(@DateTime.Now.Year);
-			document.getElementById("datePickerHoliday").val = @Model.Settings.Today;
 		});
 	</script>
 	@Scripts.Render("~/bundles/jqueryui");

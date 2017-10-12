@@ -13,7 +13,6 @@ using AllyisApps.Lib;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
-
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
 	/// <summary>
@@ -33,7 +32,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var infos = AppService.GetAllSettings(organizaionID);
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			string subName = AppService.GetSubscription(subscriptionId).SubscriptionName;
+			string subName = AppService.getSubscriptionName(subscriptionId);
 			var infoOrg = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infoOrg.Item1.StartOfWeek));
 			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
@@ -69,15 +68,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			});
 		}
 
-	/// <summary>
-	/// Sets the lock date for an organization.
-	/// </summary>
-	/// <param name="subscriptionId">The subscription's Id.</param>
-	/// <param name="LDsetting">Whether or not to use a lock date.</param>
-	/// <param name="LDperiod">The currently-selected period (days/weeks/months).</param>
-	/// <param name="LDquantity">The quantity of the selected period.</param>
-	/// <returns>Provides the view for the user.</returns>
-	[HttpPost]
+		/// <summary>
+		/// Sets the lock date for an organization.
+		/// </summary>
+		/// <param name="subscriptionId">The subscription's Id.</param>
+		/// <param name="LDsetting">Whether or not to use a lock date.</param>
+		/// <param name="LDperiod">The currently-selected period (days/weeks/months).</param>
+		/// <param name="LDquantity">The quantity of the selected period.</param>
+		/// <returns>Provides the view for the user.</returns>
+		[HttpPost]
 		public ActionResult SetLockDate(int subscriptionId, bool LDsetting, int LDperiod, int LDquantity)
 		{
 			this.AppService.CheckTimeTrackerAction(Services.AppService.TimeTrackerAction.EditOthers, subscriptionId);
@@ -98,7 +97,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Strings.LockDateUpdateFail + " " + ex.Message, Variety.Warning));
 			}
 
-			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId });
+			return this.RedirectToAction(ActionConstants.SettingsLockDate, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId });
 		}
 	}
 }
