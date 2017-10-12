@@ -30,7 +30,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		public ActionResult Edit(int subscriptionId, int userId)
 		{
 			var customer = AppService.GetCustomerInfo(userId);
-			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
+			string subscriptionNameToDisplay = AppService.GetSubscriptionName(subscriptionId);
 
 			return this.View(new EditCustomerInfoViewModel
 			{

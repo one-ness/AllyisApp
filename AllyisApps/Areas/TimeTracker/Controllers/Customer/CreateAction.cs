@@ -36,7 +36,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			int orgId = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 
 			var NextCustomerId = AppService.GetNextCustId(subscriptionId);
-			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
+			string subscriptionNameToDisplay = AppService.GetSubscriptionName(subscriptionId);
 			return this.View(new EditCustomerInfoViewModel
 			{
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),

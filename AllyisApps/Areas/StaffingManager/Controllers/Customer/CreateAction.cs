@@ -29,7 +29,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		public ActionResult Create(int subscriptionId)
 		{
 			var nextCustomerId = AppService.GetNextCustId(subscriptionId);
-			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
+			string subscriptionNameToDisplay = AppService.GetSubscriptionName(subscriptionId);
 			int orgID = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			return this.View(new EditCustomerInfoViewModel
 			{
