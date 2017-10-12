@@ -117,7 +117,7 @@ namespace AllyisApps
 		public const string ViewPosition = "viewposition";
 		public const string CreateApplicationStatus = "createapplicationstatus";
 		public const string Review = "review";
-
+		public const string UpdateTimeEntryStatus = "updatetimeentrystatus";
 	}
 
 	/// <summary>

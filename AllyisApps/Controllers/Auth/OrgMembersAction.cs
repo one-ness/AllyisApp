@@ -4,12 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
-using AllyisApps.ViewModels;
-using AllyisApps.ViewModels.Auth;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using System.Text;
+using AllyisApps.Services.Auth;
+using AllyisApps.ViewModels;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -32,7 +32,7 @@ namespace AllyisApps.Controllers.Auth
 				data.Email = item.Email;
 				data.EmployeeId = item.EmployeeId;
 				data.JoinedDate = item.OrganizationUserCreatedUtc;
-				data.RoleName = ModelHelper.GetOrganizationRoleName(item.OrganizationRoleId);
+				data.RoleName = ModelHelper.GetOrganizationRoleName((OrganizationRole)item.OrganizationRoleId);
 				data.UserId = item.UserId;
 				StringBuilder sb = new StringBuilder();
 				sb.Append(item.FirstName);

@@ -61,5 +61,10 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// number of hours of all the time entries for that pay class for that user
 		/// </summary>
 		public Dictionary<int, Dictionary<int, float>> TimeEntryTotalsByUserByPayClass { get; set; }
+
+		/// <summary>
+		/// Gets or sets the JSON stringified array of all the time entry ids
+		/// </summary>
+		public string TimeEntryIdsJSON { get; set; }
 	}
 }

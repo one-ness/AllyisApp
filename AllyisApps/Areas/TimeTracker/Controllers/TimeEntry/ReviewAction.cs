@@ -9,7 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
+using AllyisApps.Core.Alert;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+using Newtonsoft.Json;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -31,7 +33,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			DateTime calculatedEndDate = endDate ?? DateTime.Now;
 			var organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			var payClasses = AppService.GetPayClassesByOrganizationId(organizationId).Select(x => new PayClassInfoViewModel(x));
-			var timeEntriesByUser = AppService.GetTimeEntriesOverDateRange(organizationId, calculatedStartDate, calculatedEndDate)
+			var allTimeEntries = AppService.GetTimeEntriesOverDateRange(organizationId, calculatedStartDate, calculatedEndDate)
 				.Select(entry =>
 				{
 					var project = AppService.GetProject(entry.ProjectId);
@@ -40,8 +42,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						ProjectName = project.ProjectName,
 						CustomerName = project.owningCustomer.CustomerName
 					};
-				})
-				.ToLookup(entry => entry.UserId);
+				});
+			var timeEntriesByUser = allTimeEntries.ToLookup(entry => entry.UserId);
 
 			var timeEntryTotalsByUserByPayClass = new Dictionary<int, Dictionary<int, float>>();
 			foreach (var group in timeEntriesByUser)
@@ -62,10 +64,29 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				PayClasses = payClasses.ToList(),
 				TimeEntriesByUser = timeEntriesByUser,
 				TimeEntryTotalsByUserByPayClass = timeEntryTotalsByUserByPayClass,
+				TimeEntryIdsJSON = JsonConvert.SerializeObject(allTimeEntries.Select(entry => entry.TimeEntryId).ToArray()),
 				StartDate = calculatedStartDate,
 				EndDate = calculatedEndDate
 			};
 			return View(model);
+		}
+
+		/// <summary>
+		/// Changes the status of all the timeEntries provided.
+		/// </summary>
+		/// <param name="subscriptionId">Subscription that the time entries belong to.</param>
+		/// <param name="timeEntryIdsJSON">Int array of time entry ids to change, in JSON string format.</param>
+		/// <param name="timeEntryStatus">Status to change to.</param>
+		/// <param name="endDate">Date range for reloading the page.</param>
+		/// <param name="startDate">Date range for reloading the page.</param>
+		/// <returns>Redirect to same page</returns>
+		[HttpPost]
+		public ActionResult UpdateTimeEntryStatus(int subscriptionId, string timeEntryIdsJSON, string timeEntryStatus, DateTime startDate, DateTime endDate)
+		{
+			var timeEntryIds = JsonConvert.DeserializeObject<List<int>>(timeEntryIdsJSON);
+
+			Notifications.Add(new BootstrapAlert("Successfully updated selected time entry statuses", Variety.Success));
+			return RedirectToAction(ActionConstants.Review, new { subscriptionId = subscriptionId, startDate = startDate, endDate = endDate });
 		}
 	}
 }

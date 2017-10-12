@@ -15,14 +15,13 @@
 }
 
 <div class="panel panel-default">
-	<div class="panel-heading row" style="margin: 0; padding-left: 0; padding-right: 0;">
-		<div class="col-xs-8"><h2 class="panel-title">Time Entry Totals for Date Range:</h2></div>
-		<div class="col-xs-4">
-			<div id="review-range" class="pull-right" style="display: inline; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc;">
-				<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-				<span></span> <b class="caret"></b>
-			</div>
+	<div class="panel-heading">
+		<h3 class="panel-title pull-left">Time Entry Totals for Date Range:</h3>
+		<div id="review-range" class="panel-title pull-right" style="display: inline; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc;">
+			<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+			<span></span> <b class="caret"></b>
 		</div>
+		<div class="clearfix"></div>
 	</div>
 	<table class="table table-hover table-condensed table-responsive">
 		<thead>
@@ -54,11 +53,11 @@
 				{
 					<tr class="toggle-row-display hidden" rowId=@group.Key>
 						<td></td>
-						<td><input type="checkbox" class="check" check-tier="@group.Key"></td>
+						<td><input type="checkbox" class="check time-entry-check" check-tier="@group.Key" data-time-entry-id="@timeEntry.TimeEntryId"></td>
 						<td>
 							<button type="button"
 									class="btn btn-primary details-modal-input"
-									data-assigned-id='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(timeEntry))'>
+									data-time-entry-object='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(timeEntry))'>
 								@timeEntry.Date.ToShortDateString()
 							</button>
 						</td>
@@ -86,6 +85,66 @@
 	<div class="pageContainer"></div>
 </div>
 
+<div class="container-fluid" style="padding-left: 0; padding-right: 0">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Operations for entire date range</h3>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-sm-6">
+							<button type="button" class="btn btn-secondary">Lock Entries</button>
+						</div>
+						<div class="col-sm-6">
+							@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new { role = "form" }))
+							{
+								<button type="submit" class="btn btn-secondary">Mark as Payroll Processed</button>
+								<input type="hidden" name="timeEntryStatus" value="Payroll Processed" />
+								<input type="hidden" name="timeEntryIdsJSON" value="@Model.TimeEntryIdsJSON" />
+								@Html.HiddenFor(m => m.StartDate)
+								@Html.HiddenFor(m => m.EndDate)
+							}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Operations for selected entries</h3>
+				</div>
+				<div class="panel-body">
+					@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new { role = "form" }))
+					{
+						<div class="input-group">
+							<div class="input-group">
+								<select class="form-control" name="timeEntryStatus">
+									<option>Set status as..</option>
+									<option>Pending</option>
+									<option>Approved</option>
+									<option>Rejected</option>
+								</select>
+								<span class="input-group-btn">
+									<button id="submit-status" class="btn btn-primary" type="submit" tabindex="-1">@Strings.Save</button>
+								</span>
+							</div>
+							<div class="input-group-btn">
+								<a href="#" class="btn btn-secondary" role="button">@Strings.Back</a>
+							</div>
+						</div>
+						<input type="hidden" name="timeEntryIdsJSON" class="time-entries-input" value="[]"/>
+						@Html.HiddenFor(m => m.StartDate)
+						@Html.HiddenFor(m => m.EndDate)
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="modal fade" id="time-entry-details-modal" tabindex="-1" role="dialog" aria-labelledby="details-modal-title" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
@@ -98,34 +157,33 @@
 			<div class="modal-body">
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-md-6">User Name:</div>
-						<div class="col-md-6" id="modal-details-name"></div>
+						<div class="col-xs-6">User Name:</div>
+						<div class="col-xs-6" id="modal-details-name"></div>
 					</div>
 					<div class="row">
-						<div class="col-md-6">Customer:</div>
-						<div class="col-md-6" id="modal-details-customer"></div>
+						<div class="col-xs-6">Customer:</div>
+						<div class="col-xs-6" id="modal-details-customer"></div>
 					</div>
 					<div class="row">
-						<div class="col-md-6">Project:</div>
-						<div class="col-md-6" id="modal-details-project"></div>
+						<div class="col-xs-6">Project:</div>
+						<div class="col-xs-6" id="modal-details-project"></div>
 					</div>
 					<div class="row">
-						<div class="col-md-6">Pay Type:</div>
-						<div class="col-md-6" id="modal-details-pay-type"></div>
+						<div class="col-xs-6">Pay Type:</div>
+						<div class="col-xs-6" id="modal-details-pay-type"></div>
 					</div>
 					<div class="row">
-						<div class="col-md-6">Duration:</div>
-						<div class="col-md-6" id="modal-details-duration"></div>
+						<div class="col-xs-6">Duration:</div>
+						<div class="col-xs-6" id="modal-details-duration"></div>
 					</div>
 					<div class="row">
-						<div class="col-md-6">Description:</div>
-						<div class="col-md-6" id="modal-details-description"></div>
+						<div class="col-xs-6">Description:</div>
+						<div class="col-xs-6" id="modal-details-description"></div>
 					</div>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Save changes</button>
 			</div>
 		</div>
 	</div>
@@ -143,7 +201,7 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		//toggles the expand icon up or down
+		//toggles the expand row icon up or down
 		$(".toggle-on-click").click(function () {
 			if ($(this).hasClass("fa-chevron-down")) {
 				$(this).removeClass("fa-chevron-down");
@@ -154,6 +212,7 @@
 			}
 		});
 
+		//toggles the sub rows to be hidden or not
 		$(".toggle-row-display-controller").click(function () {
 			var rows = $(".toggle-row-display[rowId='" + $(this).attr("rowId") + "']");
 			if (rows.hasClass("hidden")) {
@@ -163,10 +222,24 @@
 			}
 		});
 
+		//logic for check-all check boxes
 		$(".check-all").change(function () {
 			$(".check[check-tier=" + $(this).attr("check-all-tier") + "]").prop("checked", $(this).is(":checked")).change();
 		});
 
+		//updates form hidden input values with all selected time entries
+		$(".time-entry-check").change(function () {
+			var timeEntryId = $(this).data("time-entry-id");
+			var timeEntries = JSON.parse($(".time-entries-input").val());
+			if ($(this).is(":checked")) {
+				timeEntries.push(timeEntryId);
+			} else {
+				timeEntries.splice(timeEntries.indexOf(parseInt(timeEntryId, 10)), 1);
+			}
+			$(".time-entries-input").val(JSON.stringify(timeEntries));
+		});
+
+		//initialize date range picker
 		$(function () {
 			var start = moment(@(Model.StartDate.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds));
 			var end = moment(@(Model.EndDate.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds));
@@ -192,31 +265,33 @@
 			cb(start, end);
 		});
 
+		//submit date range form to update the view with new date range
 		$("#review-range").on("apply.daterangepicker", function (dre, picker) {
 			var newForm = jQuery('<form>', {
-				'action': '/timetracker/@Model.SubscriptionId/timeentry/review',
+				'action': '/@ProductNameConstants.TimeTracker/@Model.SubscriptionId/@ControllerConstants.TimeEntry/@ActionConstants.Review',
 				'target': '_top',
 				'method': 'get'
 			}).append(jQuery('<input>', {
-				'name': 'StartDate',
-				'value': picker.startDate.toISOString(),
+				'name': 'startDate',
+				'value': picker.startDate.toISOString().slice(0,10),
 				'type': 'hidden'
 			})).append(jQuery('<input>', {
-				'name': 'EndDate',
-				'value': picker.endDate.toISOString(),
+				'name': 'endDate',
+				'value': picker.endDate.toISOString().slice(0, 10),
 				'type': 'hidden'
 			}));
 			newForm.appendTo(document.body).submit();
 		});
 
+		//html5 autofocus fix for model
 		$('#time-entry-details-modal').on('shown.bs.modal', function () {
 			$('#details-modal-input').focus();
 		});
 
+		//populates the details model with time entry data when the model needs to pop up
 		$(".details-modal-input").click(function () {
-			var timeEntry = $(this).data("assigned-id");
-
-			$("#modal-details-name").text(timeEntry.FirstName + timeEntry.LastName);
+			var timeEntry = $(this).data("time-entry-object");
+			$("#modal-details-name").text(timeEntry.FirstName + " " + timeEntry.LastName);
 			$("#modal-details-customer").text(timeEntry.CustomerName);
 			$("#modal-details-project").text(timeEntry.ProjectName);
 			$("#modal-details-pay-type").text(timeEntry.PayClassName);
