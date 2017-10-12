@@ -567,24 +567,15 @@
     <Content Include="Content\less\_variables.min.css">
       <DependentUpon>_variables.css</DependentUpon>
     </Content>
+    <Content Include="Content\Site.css" />
     <Content Include="Content\Site_old.css" />
     <Content Include="Content\Site - Copy.min.css">
       <DependentUpon>Site_old.css</DependentUpon>
     </Content>
-    <Content Include="Content\Site.css" />
+    <Content Include="Content\Site_newer.css" />
     <Content Include="Content\Site.min.css">
-      <DependentUpon>Site.css</DependentUpon>
+      <DependentUpon>Site_newer.css</DependentUpon>
     </Content>
-    <Content Include="Content\site\add_member.css" />
-    <Content Include="Content\site\change_password.css" />
-    <Content Include="Content\site\edit_permissions.css" />
-    <Content Include="Content\site\edit_profile.css" />
-    <Content Include="Content\site\edit_subscription.css" />
-    <Content Include="Content\site\index.css" />
-    <Content Include="Content\site\manage_organization.css" />
-    <Content Include="Content\site\register.css" />
-    <Content Include="Content\site\sign_in.css" />
-    <Content Include="Content\site\subscriptions.css" />
     <Content Include="Content\StaffingManager.css" />
     <Content Include="Content\StaffingManager.min.css">
       <DependentUpon>StaffingManager.css</DependentUpon>
