@@ -37,7 +37,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			var customer = AppService.GetCustomerInfo(userId);
-			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
+			string subscriptionNameToDisplay = AppService.GetSubscriptionName(subscriptionId);
 			return this.View(new EditCustomerInfoViewModel
 			{
 				ContactEmail = customer.ContactEmail,

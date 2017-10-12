@@ -17,7 +17,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		private void SetNavData(int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
-			ViewData["SubscriptionName"] = AppService.getSubscriptionName(subscriptionId);
+			ViewData["SubscriptionName"] = AppService.GetSubscriptionName(subscriptionId);
 			ViewData["SubscriptionId"] = subscriptionId;
 			ViewData["ProductRole"] = subInfo.ProductRoleId;
 			ViewData["MaxAmount"] = AppService.GetOrganizationUserMaxAmount(AppService.UserContext.UserId, subInfo.OrganizationId);
