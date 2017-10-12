@@ -19,6 +19,7 @@ using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Lookup;
 using Newtonsoft.Json.Linq;
+using AllyisApps.Services.Cache;
 
 namespace AllyisApps.Services
 {
@@ -656,5 +657,29 @@ namespace AllyisApps.Services
 
 			return new string(idchars);
 		}
+
+		/// <summary>
+		/// get the list of roles for the given product, for the given organization
+		/// </summary>
+		public async Task<List<ProductRole>> GetProductRolesAsync(int orgId, ProductIdEnum pid)
+		{
+			// NOTE: orgid is ignored for now
+			if ((int)pid < 0) throw new ArgumentOutOfRangeException("pid");
+
+			var collection = await this.DBHelper.GetProductRolesAsync(orgId, (int)pid);
+			var result = new List<ProductRole>();
+			foreach (var item in collection)
+			{
+				var role = new ProductRole();
+				role.OrganizationId = orgId;
+				role.ProductId = (ProductIdEnum)item.ProductId;
+				role.ProductRoleId = item.ProductRoleId;
+				role.ProductRoleName = item.ProductRoleName;
+				result.Add(role);
+			}
+
+			return result;
+		}
+
 	}
 }

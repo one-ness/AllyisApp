@@ -28,22 +28,22 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// is delete allowed?
 		/// </summary>
-		public bool IsDeleteUserAllowed { get; set; }
+		public bool CanDeleteUser { get; set; }
 
 		/// <summary>
 		/// is manage permissions allowed?
 		/// </summary>
-		public bool IsManagePermissionsAllowed { get; set; }
+		public bool CanManagePermissions { get; set; }
 
 		/// <summary>
 		/// is add user allowed?
 		/// </summary>
-		public bool IsAddUserAllowed { get; set; }
+		public bool CanAddUser { get; set; }
 
 		/// <summary>
 		/// is edit user allowed?
 		/// </summary>
-		public bool IsEditUserAllowed { get; set; }
+		public bool CanEditUser { get; set; }
 
 		/// <summary>
 		/// constructor
