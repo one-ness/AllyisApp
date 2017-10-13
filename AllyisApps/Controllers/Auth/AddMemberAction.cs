@@ -91,7 +91,7 @@ namespace AllyisApps.Controllers.Auth
 					int invitationId = AppService.InviteUser(url, model.Email.Trim(), model.FirstName, model.LastName, model.OrganizationId, model.OrgRoleSelection == "2" ? OrganizationRole.Owner : OrganizationRole.Member, model.EmployeeId, prodJson);
 
 					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserEmailed, model.FirstName, model.LastName), Variety.Success));
-					return this.RedirectToAction(ActionConstants.ManageOrg, new { id = model.OrganizationId });
+					return this.RedirectToAction(ActionConstants.OrganizationMembers, new { id = model.OrganizationId });
 				}
 				catch (InvalidOperationException)
 				{

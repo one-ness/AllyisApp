@@ -27,7 +27,7 @@ namespace AllyisApps.Controllers.Auth
 						Url.Action(ActionConstants.Register, ControllerConstants.Account, null, protocol: Request.Url.Scheme);
 			Notifications.Add(new BootstrapAlert(String.Format(Strings.InviteResentTo, invite.Email), Variety.Success));
 			AppService.SendInviteEmail(url, invite.Email.Trim());
-			return RedirectToAction(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = invite.OrganizationId });
+			return RedirectToAction(ActionConstants.OrganizationInvitations, ControllerConstants.Account, new { id = invite.OrganizationId });
 		}
 	}
 }

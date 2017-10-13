@@ -30,12 +30,12 @@ namespace AllyisApps.Controllers.Auth
 			if (results)
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.InvitationDeleteNotification, Variety.Success));
-				return this.RedirectToAction(ActionConstants.ManageOrg, new { id = orgId });
+				return this.RedirectToAction(ActionConstants.OrganizationInvitations, new { id = orgId });
 			}
 			else
 			{
 				Notifications.Add(new BootstrapAlert("Deleting Invitation Failed.", Variety.Warning));
-				return this.RedirectToAction(ActionConstants.ManageOrg, new { id = orgId });
+				return this.RedirectToAction(ActionConstants.OrganizationInvitations, new { id = orgId });
 			}
 		}
 	}
