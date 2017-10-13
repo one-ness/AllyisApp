@@ -5,6 +5,7 @@
     [Date]        DATE			 NOT NULL,
     [Duration]    FLOAT (53)     NOT NULL,
     [Description] NVARCHAR (128) NULL,
+	[TimeEntryStatusId] INT      NOT NULL,
     [IsLockSaved] BIT            CONSTRAINT [DF_TimeEntry_IsLockSaved] DEFAULT 0 NOT NULL,
     [PayClassId]  INT            CONSTRAINT [DF_TimeEntry_PayClassId] DEFAULT 1 NOT NULL,
     [TimeEntryCreatedUtc]  DATETIME2 (0) CONSTRAINT [DF_TimeEntry_CreatedUtc] DEFAULT getutcdate() NOT NULL,

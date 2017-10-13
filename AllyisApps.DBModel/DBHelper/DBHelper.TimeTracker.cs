@@ -172,11 +172,7 @@ namespace AllyisApps.DBModel
 		/// <param name="startingDate">The beginning date of the date range.</param>
 		/// <param name="endingDate">The ending date of the date range.</param>
 		/// <returns>A collection of time entries.</returns>
-		public IEnumerable<TimeEntryDBEntity> GetTimeEntriesByUserOverDateRange(
-			List<int> userId,
-			int orgId,
-			DateTime startingDate,
-			DateTime endingDate)
+		public IEnumerable<TimeEntryDBEntity> GetTimeEntriesByUserOverDateRange(List<int> userId, int orgId, DateTime startingDate, DateTime endingDate)
 		{
 			DataTable users = new DataTable();
 			users.Columns.Add("userId", typeof(string));
@@ -260,13 +256,12 @@ namespace AllyisApps.DBModel
 			parameters.Add("@date", entry.Date);
 			parameters.Add("@duration", entry.Duration);
 			parameters.Add("@description", entry.Description);
+			parameters.Add("@timeEntryStatusId", entry.TimeEntryStatusId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				entry.TimeEntryId = connection.Query<int>("[TimeTracker].[CreateTimeEntry]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				return connection.Query<int>("[TimeTracker].[CreateTimeEntry]", parameters, commandType: CommandType.StoredProcedure).Single();
 			}
-
-			return entry.TimeEntryId;
 		}
 
 		/// <summary>
@@ -282,6 +277,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@duration", entry.Duration);
 			parameters.Add("@description", entry.Description);
 			parameters.Add("@isLockSaved", entry.IsLockSaved);
+			parameters.Add("@timeEntryStatusId", entry.TimeEntryStatusId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -305,19 +301,19 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Sets the approval state of a time entry in the database.
+		/// Updates the status of a time entry.
 		/// </summary>
 		/// <param name="timeEntryId">The Id of the time entry to be updated.</param>
-		/// <param name="approvalState">The new approval state.</param>
-		public void SetTimeEntryApprovalStateById(int timeEntryId, int approvalState)
+		/// <param name="timeEntryStatusId">The new status.</param>
+		public int UpdateTimeEntryStatusById(int timeEntryId, int timeEntryStatusId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@timeEntryId", timeEntryId);
-			parameters.Add("@approvalState", approvalState);
+			parameters.Add("@timeEntryStatusId", timeEntryStatusId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[TimeTracker].[SetTimeEntryApprovalStateById]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.Execute("[TimeTracker].[UpdateTimeEntryStatusById]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 

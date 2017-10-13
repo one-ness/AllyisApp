@@ -86,7 +86,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					PayClassId = model.PayClassId,
 					Date = Utility.GetNullableDateTimeFromDays(model.Date) ?? DateTime.Now,
 					Duration = durationResult.Value,
-					Description = model.Description
+					Description = model.Description,
+					TimeEntryStatusId = (int)TimeEntryStatus.Pending
 				});
 
 				return this.Json(new { status = "success", values = new { duration = this.GetDurationDisplay(model.Duration), description = model.Description, projectId = model.ProjectId, id = id, projectName = AppService.GetProject(model.ProjectId).ProjectName } });

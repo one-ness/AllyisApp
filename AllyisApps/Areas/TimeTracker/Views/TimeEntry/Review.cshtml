@@ -120,20 +120,10 @@
 					@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new { role = "form" }))
 					{
 						<div class="input-group">
-							<div class="input-group">
-								<select class="form-control" name="timeEntryStatus">
-									<option>Set status as..</option>
-									<option>Pending</option>
-									<option>Approved</option>
-									<option>Rejected</option>
-								</select>
-								<span class="input-group-btn">
-									<button id="submit-status" class="btn btn-primary" type="submit" tabindex="-1">@Strings.Save</button>
-								</span>
-							</div>
-							<div class="input-group-btn">
-								<a href="#" class="btn btn-secondary" role="button">@Strings.Back</a>
-							</div>
+							<span class="input-group-btn">
+								<button id="submit-status" class="btn btn-primary" type="submit" tabindex="-1">Set status:</button>
+							</span>
+							@Html.DropDownList("timeEntryStatusId", new SelectList(Model.TimeEntryStatusOptions, "Key", "Value"), new { @class = "form-control" })
 						</div>
 						<input type="hidden" name="timeEntryIdsJSON" class="time-entries-input" value="[]"/>
 						@Html.HiddenFor(m => m.StartDate)
@@ -179,6 +169,10 @@
 					<div class="row">
 						<div class="col-xs-6">Description:</div>
 						<div class="col-xs-6" id="modal-details-description"></div>
+					</div>
+					<div class="row">
+						<div class="col-xs-6">Status:</div>
+						<div class="col-xs-6" id="modal-details-status"></div>
 					</div>
 				</div>
 			</div>
@@ -297,6 +291,7 @@
 			$("#modal-details-pay-type").text(timeEntry.PayClassName);
 			$("#modal-details-duration").text(timeEntry.Duration);
 			$("#modal-details-description").text(timeEntry.Description || "None");
+			$("#modal-details-status").text(timeEntry.TimeEntryStatusName);
 			$('#time-entry-details-modal').modal();
 		});
 	});

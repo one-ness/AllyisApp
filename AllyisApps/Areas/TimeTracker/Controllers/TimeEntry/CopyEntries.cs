@@ -113,7 +113,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 							PayClassId = entry.PayClassId,
 							Date = startDateTarget.Date.AddDays(i),
 							Duration = entry.Duration,
-							Description = entry.Description
+							Description = entry.Description,
+							TimeEntryStatusId = entry.TimeEntryStatusId
 						});
 					}
 				}

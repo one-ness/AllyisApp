@@ -91,6 +91,26 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// Sets the approval state of a time entry in the database.
+		/// </summary>
+		/// <param name="timeEntryId">The Id of the time entry to be updated.</param>
+		/// <param name="timeEntryStatusId">The new status.</param>
+		public int UpdateTimeEntryStatusById(int timeEntryId, int timeEntryStatusId)
+		{
+			if (timeEntryId <= 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(timeEntryId), $"{nameof(timeEntryId)} must be greater than 0.");
+			}
+
+			if (timeEntryStatusId < 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(timeEntryStatusId), $"{nameof(timeEntryStatusId)} must not be negative.");
+			}
+
+			return DBHelper.UpdateTimeEntryStatusById(timeEntryId, timeEntryStatusId);
+		}
+
+		/// <summary>
 		/// Deletes a time entry.
 		/// </summary>
 		/// <param name="timeEntryId">Time entry Id.</param>
@@ -445,7 +465,8 @@ namespace AllyisApps.Services
 					ColumnHeaders.ProjectId,
 					ColumnHeaders.CustomerName,
 					ColumnHeaders.CustomerId,
-					ColumnHeaders.Description
+					ColumnHeaders.Description,
+					ColumnHeaders.Status
 				));
 
 			foreach (TimeEntry entry in data)
@@ -468,7 +489,8 @@ namespace AllyisApps.Services
 							project != null ? (project.ProjectOrgId ?? string.Empty) : string.Empty,
 							project != null ? (project.owningCustomer.CustomerName ?? string.Empty) : string.Empty,
 							project != null ? (project.owningCustomer.CustomerOrgId ?? string.Empty) : string.Empty,
-							entry.Description));
+							entry.Description,
+							((TimeEntryStatus)entry.TimeEntryStatusId).ToString()));
 				}
 				catch (Exception ex)
 				{
@@ -691,7 +713,8 @@ namespace AllyisApps.Services
 				TimeEntryId = entity.TimeEntryId,
 				UserId = entity.UserId,
 				EmployeeId = entity.EmployeeId,
-				Email = entity.Email
+				Email = entity.Email,
+				TimeEntryStatusId = entity.TimeEntryStatusId
 			};
 		}
 

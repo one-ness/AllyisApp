@@ -33,6 +33,8 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 			ProjectId = timeEntry.ProjectId;
 			TimeEntryId = timeEntry.TimeEntryId;
 			UserId = timeEntry.UserId;
+			TimeEntryStatusId = timeEntry.TimeEntryStatusId;
+			TimeEntryStatusName = timeEntry.getTimeEntryStatusName();
 		}
 
 		/// <summary>
@@ -119,5 +121,15 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Gets or sets the project name for the time entry
 		/// </summary>
 		public string ProjectName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the status of the time entry, e.g. "Pending", "Approved", "Rejected", "Payroll Processed".
+		/// </summary>
+		public int TimeEntryStatusId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the status of the time entry, e.g. "Pending", "Approved", "Rejected", "Payroll Processed".
+		/// </summary>
+		public string TimeEntryStatusName { get; set; }
 	}
 }

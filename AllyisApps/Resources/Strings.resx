@@ -1576,4 +1576,16 @@
   <data name="NoSubscriptionMessage" xml:space="preserve">
     <value>You are not part of a subscription yet. Please contact your employer to add you to a subscription.</value>
   </data>
+  <data name="Pending" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Approved</value>
+  </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>Rejected</value>
+  </data>
+  <data name="PayrollProcessed" xml:space="preserve">
+    <value>Payroll Processed</value>
+  </data>
 </root>
