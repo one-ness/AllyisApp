@@ -352,6 +352,7 @@
     <Compile Include="Controllers\Auth\ConfirmEmailAction.cs" />
     <Compile Include="Controllers\Auth\CreateOrgAction.cs" />
     <Compile Include="Controllers\Auth\EditMemberAction.cs" />
+    <Compile Include="Controllers\Auth\EditMemberAction2.cs" />
     <Compile Include="Controllers\Auth\EditProfileAction.cs" />
     <Compile Include="Controllers\Auth\EditSubscriptionAction.cs" />
     <Compile Include="Controllers\Auth\ForgotPasswordAction.cs" />
@@ -427,6 +428,7 @@
     <Compile Include="Utilities\ApplicationExceptions.cs" />
     <Compile Include="Utilities\ImportMessageFormatter.cs" />
     <Compile Include="ViewModels\Auth\Organizations\AddMemberViewModel.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\EditMemberViewModel2.cs" />
     <Compile Include="ViewModels\Auth\Organizations\ManageOrgMenuBarViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\MembersAndInvitationsTabViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\OrganizationDetailsViewModel.cs" />
