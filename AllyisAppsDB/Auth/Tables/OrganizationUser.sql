@@ -7,9 +7,10 @@
     [OrganizationUserCreatedUtc] DATETIME2 (0) CONSTRAINT [DF_OrganizationUser_CreatedUtc] DEFAULT (getutcdate()) NOT NULL,
     CONSTRAINT [PK_OrganizationUser] PRIMARY KEY CLUSTERED ([UserId] ASC, [OrganizationId] ASC),
     CONSTRAINT [FK_OrganizationUser_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId]),
-    CONSTRAINT [FK_OrganizationUser_OrganizationRole] FOREIGN KEY ([OrganizationRoleId]) REFERENCES [Auth].[OrganizationRole] ([OrganizationRoleId]),
     CONSTRAINT [FK_OrganizationUser_User] FOREIGN KEY ([UserId]) REFERENCES [Auth].[User] ([UserId])
 );
+
+
 
 
 

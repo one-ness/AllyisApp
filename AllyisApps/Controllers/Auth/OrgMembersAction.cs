@@ -29,7 +29,6 @@ namespace AllyisApps.Controllers.Auth
 			model.CanEditUser = this.AppService.CheckOrgAction(AppService.OrgAction.EditUser, id, false);
 			model.CanManagePermissions = this.AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id, false);
 			model.OrganizationId = id;
-			model.TabInfo.MembersTabActive = "active";
 			var collection = await this.AppService.GetOrganizationUsersAsync(id);
 			foreach (var item in collection)
 			{

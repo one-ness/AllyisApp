@@ -427,12 +427,12 @@
     </Compile>
     <Compile Include="Utilities\ApplicationExceptions.cs" />
     <Compile Include="Utilities\ImportMessageFormatter.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\OrganizationInvitationsViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\AddMemberViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\EditMemberViewModel2.cs" />
     <Compile Include="ViewModels\Auth\Organizations\ManageOrgMenuBarViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\MembersAndInvitationsTabViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\OrganizationDetailsViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\OrganizationInvitationsViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\OrganizationMembersViewModel2.cs" />
     <Compile Include="ViewModels\Auth\Organizations\OrganizationSubscriptionsViewModel.cs" />
     <Compile Include="ViewModels\Auth\User\ChangePasswordViewModel.cs" />

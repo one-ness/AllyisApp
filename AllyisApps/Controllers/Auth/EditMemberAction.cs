@@ -84,7 +84,6 @@ namespace AllyisApps.Controllers.Auth
 					LastName = userOrgInfo.LastName,
 					OrganizationId = orgId,
 					EmployeeId = userOrgInfo.EmployeeId,
-					EmployeeRoleId = (int)userOrgInfo.OrganizationRole,
 					IsInvited = isInvited,
 					EmployeeRole = new SelectList(new List<SelectListItem>
 					{

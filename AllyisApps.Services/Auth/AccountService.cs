@@ -84,9 +84,9 @@ namespace AllyisApps.Services
 			var result = (this.DBHelper.AcceptInvitation(invitationId, this.UserContext.UserId) == 1);
 			if (result)
 			{
-				if (inviteInfo.RoleJson != null)
+				if (inviteInfo.ProductRolesJson != null)
 				{
-					JObject roleString = JObject.Parse(inviteInfo.RoleJson);
+					JObject roleString = JObject.Parse(inviteInfo.ProductRolesJson);
 
 					var ttRole = roleString[((int)SkuIdEnum.TimeTrackerBasic).ToString()].Value<int>();
 					var etRole = roleString[((int)SkuIdEnum.ExpenseTrackerBasic).ToString()].Value<int>();
@@ -333,8 +333,6 @@ namespace AllyisApps.Services
 						LastName = inv.LastName,
 						InvitationId = inv.InvitationId,
 						OrganizationId = inv.OrganizationId,
-						OrganizationRole = (OrganizationRole)inv.OrganizationRoleId,
-						OrganizationName = inv.OrganizationName
 					}
 				).ToList();
 			return userInfo;

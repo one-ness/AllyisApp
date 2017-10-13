@@ -13,7 +13,7 @@ BEGIN
 			WHERE [OrganizationId] = @orgId AND [EmployeeId] = @employeeId AND [UserId] != @userId
 		) OR EXISTS (
 			SELECT * FROM [Auth].[Invitation] WITH (NOLOCK)
-			WHERE [OrganizationId] = @orgId AND [IsActive] = 1 AND [EmployeeId] = @employeeId AND [InvitationId] != @userId
+			WHERE [OrganizationId] = @orgId AND [EmployeeId] = @employeeId AND [InvitationId] != @userId
 		)
 	BEGIN
 		IF @isInvited = 0
@@ -26,11 +26,11 @@ BEGIN
 		ELSE
 		BEGIN
 			SET NOCOUNT ON;
-			UPDATE [Auth].[Invitation]
-			SET [OrganizationRoleId] = @employeeRoleId,
-				[FirstName] = @firstName,
-				[LastName] = @lastName
-			WHERE [InvitationId] = @userId AND [OrganizationId] = @orgId;
+			--UPDATE [Auth].[Invitation]
+			--SET [OrganizationRoleId] = @employeeRoleId,
+			--	[FirstName] = @firstName,
+			--	[LastName] = @lastName
+			--WHERE [InvitationId] = @userId AND [OrganizationId] = @orgId;
 		END
 		SELECT 1;
 	END
@@ -49,7 +49,6 @@ BEGIN
 			SET NOCOUNT ON;
 			UPDATE [Auth].[Invitation]
 			SET [EmployeeId] = @employeeId,
-				[OrganizationRoleId] = @employeeRoleId,
 				[FirstName] = @firstName,
 				[LastName] = @lastName
 			WHERE [InvitationId] = @userId AND [OrganizationId] = @orgId;

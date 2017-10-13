@@ -28,18 +28,9 @@ begin
 	inner join Billing.Product p with (nolock) on p.ProductId = sku.ProductId
 	where ou.UserId = @userId and su.UserId = @userId and o.IsActive = 1 and s.IsActive = 1
 
-	SELECT 
-		[InvitationId], 
-		[Invitation].[Email], 
-		[Invitation].[FirstName], 
-		[Invitation].[LastName],  
-		[Invitation].[OrganizationId],
-		[Organization].[OrganizationName] AS 'OrganizationName', 
-		[OrganizationRoleId],
-		[EmployeeId] 
-	FROM [Auth].[User] WITH (NOLOCK)
-	LEFT JOIN [Auth].[Invitation] WITH (NOLOCK) ON [User].[Email] = [Invitation].[Email]
-	LEFT JOIN [Auth].[Organization] WITH (NOLOCK) ON [Invitation].[OrganizationId] = [Organization].[OrganizationId]
-	WHERE [User].[UserId] = @userId AND [Invitation].[IsActive] = 1 and [Invitation].[DecisionDateUtc] is null
-
+	-- get list of invitations for the user
+	select i.*, o.OrganizationName from [User] u with (nolock)
+	left join Invitation i with (nolock) on i.Email = u.Email
+	inner join Organization o with (nolock) on o.OrganizationId = i.OrganizationId
+	where u.UserId = @userId and i.DecisionDateUtc is null
 end

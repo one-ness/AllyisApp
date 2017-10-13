@@ -24,7 +24,7 @@ namespace AllyisApps.Controllers.Auth
 		public ActionResult RemoveInvitation(int id)
 		{
 			var orgId = AppService.GetInvitationByID(id).OrganizationId;
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditInvitation, orgId);
+			this.AppService.CheckOrgAction(AppService.OrgAction.DeleteInvitation, orgId);
 			var results = AppService.RemoveInvitation(id);
 
 			if (results)

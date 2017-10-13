@@ -26,7 +26,7 @@ BEGIN
 			WHERE [OrganizationId] = @organizationId AND [EmployeeId] = @employeeId
 		) OR EXISTS (
 			SELECT * FROM [Auth].[Invitation] WITH (NOLOCK)
-			WHERE [OrganizationId] = @organizationId AND [IsActive] = 1 AND [EmployeeId] = @employeeId
+			WHERE [OrganizationId] = @organizationId AND [EmployeeId] = @employeeId
 		)
 		BEGIN
 			SELECT -2 -- Indicates employee id already taken
@@ -38,18 +38,14 @@ BEGIN
 				[FirstName], 
 				[LastName], 
 				[OrganizationId],  
-				[IsActive], 
-				[OrganizationRoleId],
 				[EmployeeId],
-				[RoleJson]
+				[ProductRolesJson]
 				)
 			VALUES 
 				(@email, 
 				@firstName, 
 				@lastName, 
 				@organizationId,  
-				1, 
-				@organizationRole, 
 				@employeeId,
 				@prodJson
 				);

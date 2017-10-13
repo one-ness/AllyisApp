@@ -56,6 +56,7 @@ namespace AllyisApps.ViewModels.Auth
 		public OrganizationMembersViewModel2()
 		{
 			this.TabInfo = new MembersAndInvitationsTabViewModel();
+			this.TabInfo.MembersTabActive = "active";
 			this.Users = new List<ViewModelItem>();
 		}
 

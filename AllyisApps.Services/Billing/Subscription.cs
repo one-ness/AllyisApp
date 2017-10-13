@@ -47,9 +47,9 @@ namespace AllyisApps.Services.Billing
 		/// <summary>
 		///  Gets or sets the name of the Sku.
 		/// </summary>
-		public string SubscriptionName { get; set; }
-
 		public string SkuName { get; set; }
+
+		public string SubscriptionName { get; set; }
 
 		public ProductIdEnum ProductId { get; set; }
 

@@ -691,18 +691,13 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Gets the roles for each subscription the organization has.
+		/// Gets all the invitations for the given organization
 		/// </summary>
-		/// <param name="organizationId">The organization Id.</param>
-		/// <returns>List of all roles.</returns>
-		public IEnumerable<InvitationDBEntity> GetInvitations(int organizationId)
+		public async Task<List<InvitationDBEntity>> GetInvitationsAsync(int organizationId, int statusMask)
 		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", organizationId);
-
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<InvitationDBEntity>("[Auth].[GetInvitations]", parameters, commandType: CommandType.StoredProcedure);
+				return (await con.QueryAsync<InvitationDBEntity>("[Auth].[GetInvitations] @a, @b", new { a = organizationId, b = statusMask })).ToList();
 			}
 		}
 
