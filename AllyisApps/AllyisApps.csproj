@@ -580,11 +580,12 @@
     <Content Include="Content\StaffingManager.min.css">
       <DependentUpon>StaffingManager.css</DependentUpon>
     </Content>
-    <Content Include="Content\Timetracker.css" />
+    <Content Include="Content\Old_Timetracker.css" />
     <Content Include="Content\Timetracker.min.css">
-      <DependentUpon>Timetracker.css</DependentUpon>
+      <DependentUpon>Old_Timetracker.css</DependentUpon>
     </Content>
     <Content Include="Content\less\utilities.css" />
+    <Content Include="Content\Timetracker.css" />
     <Content Include="Scripts\allyis-account-permission2.js" />
     <Content Include="Scripts\allyis-holidayDatepicker.js" />
     <Content Include="Scripts\allyis-birthDatepicker.js" />
