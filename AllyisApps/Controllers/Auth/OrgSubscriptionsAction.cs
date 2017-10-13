@@ -23,6 +23,7 @@ namespace AllyisApps.Controllers.Auth
 		{
 			var model = new OrganizationSubscriptionsViewModel();
 			model.CanEditSubscriptions = this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, id, false);
+			model.CanManagePermissions = this.AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id, false);
 			model.OrganizationId = id;
 			var collection = await this.AppService.GetSubscriptionsAsync(id);
 			foreach (var item in collection)
@@ -37,6 +38,9 @@ namespace AllyisApps.Controllers.Auth
 				data.SubscriptionName = item.SubscriptionName;
 				model.Subscriptions.Add(data);
 			}
+
+			var org = this.AppService.GetOrganization(id);
+			model.OrganizationName = org.OrganizationName;
 
 			return View(model);
 		}

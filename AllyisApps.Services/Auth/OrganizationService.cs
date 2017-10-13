@@ -44,8 +44,35 @@ namespace AllyisApps.Services
 		public Organization GetOrganization(int orgId)
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
+
 			this.CheckOrgAction(OrgAction.ReadOrganization, orgId);
 			return InitializeOrganization(this.DBHelper.GetOrganization(orgId));
+		}
+
+		public async Task<List<Invitation>> GetInvitationsAsync(int orgId)
+		{
+			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
+
+			this.CheckOrgAction(OrgAction.ReadInvitationsList, orgId);
+			var collection = await this.DBHelper.GetInvitationsAsync(orgId, (int)InvitationStatusEnum.Any);
+			var result = new List<Invitation>();
+			foreach (var item in collection)
+			{
+				var data = new Invitation();
+				data.DecisionDateUtc = item.DecisionDateUtc;
+				data.Email = item.Email;
+				data.EmployeeId = item.EmployeeId;
+				data.FirstName = item.FirstName;
+				data.InvitationCreatedUtc = item.InvitationCreatedUtc;
+				data.InvitationId = item.InvitationId;
+				data.InvitationStatus = (InvitationStatusEnum)item.InvitationStatus;
+				data.LastName = item.LastName;
+				data.OrganizationId = orgId;
+				data.ProductRolesJson = item.ProductRolesJson;
+				result.Add(data);
+			}
+
+			return result;
 		}
 
 		/// <summary>
@@ -215,7 +242,7 @@ namespace AllyisApps.Services
 		public async void NotifyInviteAcceptAsync(int inviteId)
 		{
 			InvitationDBEntity invitation = DBHelper.GetInvitation(inviteId);
-			string msgbody = new System.Web.HtmlString($"{invitation.FirstName} {invitation.LastName} has joined the organization {invitation.OrganizationName} on Allyis Apps.").ToString();
+			string msgbody = new System.Web.HtmlString($"{invitation.FirstName} {invitation.LastName} has joined the organization <organization name> on Allyis Apps.").ToString();
 
 			foreach (string email in DBHelper.GetOrganizationOwnerEmails(invitation.OrganizationId))
 			{
@@ -230,7 +257,7 @@ namespace AllyisApps.Services
 		public async void NotifyInviteRejectAsync(int inviteId)
 		{
 			InvitationDBEntity invitation = DBHelper.GetInvitation(inviteId);
-			string msgbody = new System.Web.HtmlString($"{invitation.FirstName} {invitation.LastName} has rejected joining the organization {invitation.OrganizationName} on Allyis Apps.").ToString();
+			string msgbody = new System.Web.HtmlString($"{invitation.FirstName} {invitation.LastName} has rejected joining the organization <organization name> on Allyis Apps.").ToString();
 
 			foreach (string email in DBHelper.GetOrganizationOwnerEmails(invitation.OrganizationId))
 			{
@@ -252,7 +279,7 @@ namespace AllyisApps.Services
 			if (invitationId <= 0) throw new ArgumentException("invitationId");
 
 			var invite = GetInvitationByID(invitationId);
-			this.CheckOrgAction(OrgAction.EditInvitation, invite.OrganizationId);
+			this.CheckOrgAction(OrgAction.DeleteInvitation, invite.OrganizationId);
 			return DBHelper.DeleteInvitation(invitationId);
 		}
 
@@ -426,22 +453,32 @@ namespace AllyisApps.Services
 
 			var result = new OrganizationUser();
 			result.AccessFailedCount = entity.AccessFailedCount;
+			result.Address = InitializeAddress(entity);
 			result.DateOfBirth = entity.DateOfBirth;
 			result.Email = entity.Email;
-			result.IsEmailConfirmed = entity.IsEmailConfirmed;
+			result.EmailConfirmationCode = entity.EmailConfirmationCode;
+			result.EmployeeId = entity.EmployeeId;
+			//result.Invitations = 
 			result.FirstName = entity.FirstName;
-			result.LastName = entity.LastName;
+			result.IsEmailConfirmed = entity.IsEmailConfirmed;
 			result.IsLockoutEnabled = entity.IsLockoutEnabled;
+			result.IsPhoneNumberConfirmed = entity.IsPhoneNumberConfirmed;
+			result.IsTwoFactorEnabled = entity.IsTwoFactorEnabled;
+			result.LastName = entity.LastName;
+			result.LastUsedSubscriptionId = entity.LastUsedSubscriptionId;
 			result.LockoutEndDateUtc = entity.LockoutEndDateUtc;
+			result.MaxApprovalAmount = entity.MaxAmount;
+			result.OrganizationId = entity.OrganizationId;
+			result.OrganizationRoleId = entity.OrganizationRoleId;
+			//result.Organizations = 
+			result.OrganizationUserCreatedUtc = entity.OrganizationUserCreatedUtc;
 			result.PasswordHash = entity.PasswordHash;
 			result.PasswordResetCode = entity.PasswordResetCode;
 			result.PhoneExtension = entity.PhoneExtension;
 			result.PhoneNumber = entity.PhoneNumber;
-			result.IsPhoneNumberConfirmed = entity.IsPhoneNumberConfirmed;
-			result.IsTwoFactorEnabled = entity.IsTwoFactorEnabled;
+			//result.Subscriptions = 
+			result.UserCreatedUtc = entity.UserCreatedUtc;			
 			result.UserId = entity.UserId;
-			result.Address = InitializeAddress(entity);
-
 			return result;
 		}
 
@@ -546,12 +583,10 @@ namespace AllyisApps.Services
 				InvitationId = invitation.InvitationId,
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
-				OrganizationRole = (OrganizationRole)invitation.OrganizationRoleId,
-				OrganizationName = invitation.OrganizationName,
 				EmployeeId = invitation.EmployeeId,
 				DecisionDateUtc = invitation.DecisionDateUtc,
-				status = (InvitationStatusEnum)invitation.InvitationStatusId,
-				RoleJson = invitation.RoleJson
+				InvitationStatus = (InvitationStatusEnum)invitation.InvitationStatus,
+				ProductRolesJson = invitation.ProductRolesJson
 			};
 		}
 
@@ -595,11 +630,10 @@ namespace AllyisApps.Services
 				InvitationId = invitation.InvitationId,
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
-				OrganizationRoleId = (int)invitation.OrganizationRole,
 				EmployeeId = invitation.EmployeeId,
 				DecisionDateUtc = invitation.DecisionDateUtc,
-				InvitationStatusId = (int)invitation.status,
-				RoleJson = invitation.RoleJson
+				InvitationStatus = (int)invitation.InvitationStatus,
+				ProductRolesJson = invitation.ProductRolesJson
 			};
 		}
 

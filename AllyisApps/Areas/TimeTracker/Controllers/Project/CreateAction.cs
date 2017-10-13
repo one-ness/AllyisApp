@@ -45,7 +45,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
 			}
 
-			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
+			string subscriptionNameToDisplay = AppService.GetSubscriptionName(subscriptionId);
 			return this.View(
 				new EditProjectViewModel()
 				{

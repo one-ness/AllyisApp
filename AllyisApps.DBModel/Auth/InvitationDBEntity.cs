@@ -36,12 +36,17 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Date invitation is accepted or Rejected
 		/// </summary>
-		public DateTime DecisionDateUtc { get; set; }
+		public DateTime? DecisionDateUtc { get; set; }
+
+		/// <summary>
+		/// invitation created date
+		/// </summary>
+		public DateTime InvitationCreatedUtc { get; set; }
 
 		/// <summary>
 		/// Invitation stauts of accepted pending or rejected
 		/// </summary>
-		public int InvitationStatusId { get; set; }
+		public int InvitationStatus { get; set; }
 
 		/// <summary>
 		/// Gets or sets the id of the inviting organization.
@@ -49,23 +54,13 @@ namespace AllyisApps.DBModel.Auth
 		public int OrganizationId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the id of the org role the user will be assigned.
-		/// </summary>
-		public int OrganizationRoleId { get; set; }
-
-		/// <summary>
 		/// Gets or sets the employee id of the user.
 		/// </summary>
 		public string EmployeeId { get; set; }
 
 		/// <summary>
-		/// Gets or set Organization Name
-		/// </summary>
-		public string OrganizationName { get; set; }
-
-		/// <summary>
 		/// Get or set the Role Json string.
 		/// </summary>
-		public string RoleJson { get; set; }
+		public string ProductRolesJson { get; set; }
 	}
 }

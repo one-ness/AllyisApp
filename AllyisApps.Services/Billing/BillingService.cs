@@ -14,6 +14,7 @@ using AllyisApps.Lib;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Services
 {
@@ -93,20 +94,6 @@ namespace AllyisApps.Services
 				this.AddBillingHistory(string.Format("Updating {0} customer data", serviceType), null, orgId);
 			}
 		}
-
-		///// <summary>
-		///// Deletes a billing services subscription.
-		///// </summary>
-		///// <param name="id">The customer id associated with the subscription to be deleted.</param>
-		///// <param name="subscriptionId">The id of the subscription to delete.</param>
-		//[CLSCompliant(false)]
-		// public void DeleteSubscription(BillingServicesCustomerId id, string subscriptionId)
-		//{
-		//	string serviceType = "Stripe";
-		//	BillingServicesHandler handler = new BillingServicesHandler(serviceType);
-
-		//	// TODO complete this
-		//}
 
 		/// <summary>
 		/// Deletes a subscription plan for the current organization with the given stripe customer id, if one exists.
@@ -438,7 +425,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="subscriptionId"></param>
 		/// <returns></returns>
-		public string getSubscriptionName(int subscriptionId)
+		public string GetSubscriptionName(int subscriptionId)
 		{
 			return DBHelper.GetSubscriptionName(subscriptionId);
 		}

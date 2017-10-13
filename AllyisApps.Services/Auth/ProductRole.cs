@@ -9,7 +9,7 @@ using AllyisApps.Services.Billing;
 namespace AllyisApps.Services.Auth
 {
 	/// <summary>
-	/// Subscription Role obj.
+	/// product role obj.
 	/// </summary>
 	public class ProductRole
 	{
@@ -32,5 +32,10 @@ namespace AllyisApps.Services.Auth
 		/// Gets or sets the Product Id.
 		/// </summary>
 		public ProductIdEnum ProductId { get; set; }
+
+		/// <summary>
+		/// the organization this role belongs to
+		/// </summary>
+		public int OrganizationId { get; set; }
 	}
 }

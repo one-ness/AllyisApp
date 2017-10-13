@@ -60,5 +60,5 @@ AS
 	SELECT TOP 1
 		[EmployeeId]
 	FROM [Auth].[Invitation] WITH (NOLOCK)
-	WHERE [OrganizationId] = @organizationId AND [IsActive] = 1
+	WHERE [OrganizationId] = @organizationId
 	ORDER BY [EmployeeId] DESC

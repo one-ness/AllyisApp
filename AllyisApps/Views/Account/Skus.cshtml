@@ -82,5 +82,5 @@
 }
 
 <div>
-	<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default">@Strings.Back</a>
+	<a href="@Url.Action(ActionConstants.OrganizationSubscriptions, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default" title="@Strings.Back"><i class="fa fa-caret-left"></i> @Strings.Back</a>
 </div>

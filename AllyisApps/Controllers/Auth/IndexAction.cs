@@ -67,7 +67,6 @@ namespace AllyisApps.Controllers.Auth
 				indexViewModel.Invitations.Add(new AccountIndexViewModel.InvitationViewModel()
 				{
 					InvitationId = item.InvitationId,
-					OrganizationName = item.OrganizationName,
 				});
 			}
 

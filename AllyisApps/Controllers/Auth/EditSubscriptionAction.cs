@@ -82,13 +82,13 @@ namespace AllyisApps.Controllers.Auth
 
 					AppService.UpdateSubscription(model.OrganizationId, (int)model.SkuIdNext, model.SubscriptionId, model.SubscriptionName);
 					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.SubscribedSuccessfully, model.NextName), Variety.Success));
-					return this.RedirectToAction(ActionConstants.ManageOrg, new { id = model.OrganizationId });
+					return this.RedirectToAction(ActionConstants.OrganizationSubscriptions, new { id = model.OrganizationId });
 				}
 				catch (Exception ex)
 				{
 					var thing = ex;
 					Notifications.Add(new BootstrapAlert(@Resources.Strings.CannotEditSubscriptionsMessage, Variety.Warning));
-					return this.RedirectToAction(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = model.OrganizationId });
+					return this.RedirectToAction(ActionConstants.OrganizationSubscriptions, ControllerConstants.Account, new { id = model.OrganizationId });
 				}
 			}
 

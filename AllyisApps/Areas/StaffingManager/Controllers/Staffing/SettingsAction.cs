@@ -35,7 +35,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
+			string subscriptionNameToDisplay = AppService.GetSubscriptionName(subscriptionId);
 			var defaultStatus = AppService.GetStaffingDefaultStatus(subInfo.OrganizationId); //[0] is default position status, [1] is default application status
 
 			int? defaultPosStat = null;

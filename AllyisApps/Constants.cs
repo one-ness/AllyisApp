@@ -58,9 +58,9 @@ namespace AllyisApps
 		public const string ManagePermissions2 = "managepermissions2";
 		public const string OrgIndex = "orgindex";
 		public const string OrganizationDetails = "orgdetails";
+		public const string OrganizationInvitations = "orginvitations";
 		public const string OrganizationMembers = "orgmembers";
 		public const string OrganizationSubscriptions = "orgsubscriptions";
-		public const string OrganizationPermissions = "orgpermissions";
 		public const string OrganizationBilling = "orgbilling";
 		public const string Pending = "pending";
 		public const string PrivacyPolicy = "privacypolicy";

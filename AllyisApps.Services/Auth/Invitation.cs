@@ -46,11 +46,6 @@ namespace AllyisApps.Services.Auth
 		public int OrganizationId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Organization Role Id.
-		/// </summary>
-		public OrganizationRole OrganizationRole { get; set; }
-
-		/// <summary>
 		/// Gets or sets the Employee Id.
 		/// </summary>
 		public string EmployeeId { get; set; }
@@ -58,15 +53,21 @@ namespace AllyisApps.Services.Auth
 		/// <summary>
 		/// Gets or sets the Role json string.
 		/// </summary>
-		public string RoleJson { get; set; }
+		public string ProductRolesJson { get; set; }
 
 		/// <summary>
 		/// Date that user had accepted or rejected the invitation.
 		/// </summary>
-		public DateTime DecisionDateUtc { get; set; }
+		public DateTime? DecisionDateUtc { get; set; }
 
-		public InvitationStatusEnum status { get; set; }
+		/// <summary>
+		/// invitation created
+		/// </summary>
+		public DateTime InvitationCreatedUtc { get; set; }
 
-		public string OrganizationName { get; internal set; }
+		/// <summary>
+		/// invitation status
+		/// </summary>
+		public InvitationStatusEnum InvitationStatus { get; set; }
 	}
 }

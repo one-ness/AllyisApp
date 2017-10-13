@@ -24,6 +24,7 @@ namespace AllyisApps.Services
 			CreateBilling,
 
 			ReadBilling = 200000,
+			ReadInvitationsList,
 			ReadOrganization,
 			ReadPermissionsList, // view list of users and their permissions
 			ReadSubscriptionsList, // view list of subscriptions
@@ -32,16 +33,17 @@ namespace AllyisApps.Services
 
 			EditUser = 300000, // edit other users (edit self must always be allowed)
 			EditUserPermission,
-			EditInvitation,
 			EditOrganization,
 			EditSubscription,
 			EditBilling,
 			AddUserToOrganization, // same as create invitation
 			AddUserToSubscription,
 			ChangePassword, // change password for others (change for self must always be allowed)
+			ResendInvitation,
 
 			DeleteUserFromOrganization = 400000,
 			DeleteUserFromSubscription,
+			DeleteInvitation,
 			DeleteOrganization,
 			DeleteSubscritpion,
 			DeleteBilling,

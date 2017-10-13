@@ -44,7 +44,7 @@ namespace AllyisApps.Controllers.Auth
 				Notifications.Add(new BootstrapAlert(notificationString, Variety.Success));
 			}
 
-			return this.RedirectToAction(ActionConstants.ManageOrg, new { id = model.OrganizationId });
+			return this.RedirectToAction(ActionConstants.OrganizationSubscriptions, new { id = model.OrganizationId });
 		}
 
 		/// <summary>
@@ -63,7 +63,7 @@ namespace AllyisApps.Controllers.Auth
 				Notifications.Add(new BootstrapAlert(notificationString, Variety.Success));
 			}
 
-			return this.RedirectToAction(ActionConstants.ManageOrg, new { id = model.OrganizationId });
+			return this.RedirectToAction(ActionConstants.OrganizationSubscriptions, new { id = model.OrganizationId });
 		}
 	}
 }

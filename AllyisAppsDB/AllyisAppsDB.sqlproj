@@ -401,6 +401,7 @@
     <Build Include="Billing\Stored Procedures\GetSubscriptions.sql" />
     <Build Include="Auth\Stored Procedures\GetOrganizationUsers.sql" />
     <Build Include="TimeTracker\Stored Procedures\UpdateTimeEntryStatusById.sql" />
+    <Build Include="Auth\Stored Procedures\GetProductRoles.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

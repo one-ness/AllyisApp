@@ -2689,7 +2689,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have successfully created the organization.
+        ///   Looks up a localized string similar to Your organization has been created successfully! Please choose a subscription..
         /// </summary>
         public static string OrganizationCreatedNotification {
             get {
@@ -3166,7 +3166,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Registation is successful Please verify email address..
+        ///   Looks up a localized string similar to You have registered successfully! Please verify your email address by clicking on the link sent to you..
         /// </summary>
         public static string RegistationSucessful {
             get {

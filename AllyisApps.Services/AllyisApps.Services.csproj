@@ -91,8 +91,10 @@
     <Compile Include="Billing\BillingHistoryItemInfo.cs" />
     <Compile Include="Billing\BillingService.cs" />
     <Compile Include="Billing\BlockBasedOnEnum.cs" />
+    <Compile Include="Billing\Sku.cs" />
     <Compile Include="Billing\Subscription.cs" />
     <Compile Include="Billing\UpdateSubscriptionUserRolesResuts.cs" />
+    <Compile Include="Cache\CacheContainer.cs" />
     <Compile Include="Expense\ExpenseHistory.cs" />
     <Compile Include="Expense\ExpenseFile.cs" />
     <Compile Include="Expense\ExpenseItem.cs" />
@@ -102,6 +104,8 @@
     <Compile Include="Finance\FinanceService.cs" />
     <Compile Include="Lookup\Address.cs" />
     <Compile Include="Lookup\AddressService.cs" />
+    <Compile Include="Lookup\Country.cs" />
+    <Compile Include="Lookup\State.cs" />
     <Compile Include="Project\PjmService.cs" />
     <Compile Include="Project\Project.cs" />
     <Compile Include="ServiceConstants.cs" />
@@ -124,7 +128,7 @@
     <Compile Include="Lookup\Tag.cs" />
     <Compile Include="TimeTracker\Holiday.cs" />
     <Compile Include="Auth\Invitation.cs" />
-    <Compile Include="Auth\Language.cs" />
+    <Compile Include="Lookup\Language.cs" />
     <Compile Include="TimeTracker\LockDatePeriodEnum.cs" />
     <Compile Include="TimeTracker\PayClass.cs" />
     <Compile Include="Crm\CompleteProject.cs" />
