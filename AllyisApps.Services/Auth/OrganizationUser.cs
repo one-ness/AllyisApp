@@ -32,5 +32,10 @@ namespace AllyisApps.Services.Auth
 		/// Gets or sets the Employee Id.
 		/// </summary>
 		public string EmployeeId { get; set; }
+
+		/// <summary>
+		/// approval limit for this user in expense tracker
+		/// </summary>
+		public decimal MaxApprovalAmount { get; set; }
 	}
 }

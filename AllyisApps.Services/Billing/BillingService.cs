@@ -14,6 +14,7 @@ using AllyisApps.Lib;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Services
 {
@@ -93,20 +94,6 @@ namespace AllyisApps.Services
 				this.AddBillingHistory(string.Format("Updating {0} customer data", serviceType), null, orgId);
 			}
 		}
-
-		///// <summary>
-		///// Deletes a billing services subscription.
-		///// </summary>
-		///// <param name="id">The customer id associated with the subscription to be deleted.</param>
-		///// <param name="subscriptionId">The id of the subscription to delete.</param>
-		//[CLSCompliant(false)]
-		// public void DeleteSubscription(BillingServicesCustomerId id, string subscriptionId)
-		//{
-		//	string serviceType = "Stripe";
-		//	BillingServicesHandler handler = new BillingServicesHandler(serviceType);
-
-		//	// TODO complete this
-		//}
 
 		/// <summary>
 		/// Deletes a subscription plan for the current organization with the given stripe customer id, if one exists.
@@ -421,11 +408,9 @@ namespace AllyisApps.Services
 				SubscriptionId = si.SubscriptionId,
 				SkuId = (SkuIdEnum)si.SkuId,
 				NumberOfUsers = si.NumberOfUsers,
-				Licenses = si.Licenses,
-				CreatedUtc = si.CreatedUtc,
+				SubscriptionCreatedUtc = si.SubscriptionCreatedUtc,
 				IsActive = si.IsActive,
-				SubscriptionName = si.Name,
-				ProductId = (ProductIdEnum)si.ProductId
+				SubscriptionName = si.SubscriptionName,
 			};
 		}
 
@@ -440,7 +425,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="subscriptionId"></param>
 		/// <returns></returns>
-		public string getSubscriptionName(int subscriptionId)
+		public string GetSubscriptionName(int subscriptionId)
 		{
 			return DBHelper.GetSubscriptionName(subscriptionId);
 		}
@@ -887,18 +872,15 @@ namespace AllyisApps.Services
 			return new Subscription
 			{
 				AreaUrl = subscriptionDisplay.AreaUrl,
-				CreatedUtc = subscriptionDisplay.CreatedUtc,
+				SubscriptionCreatedUtc = subscriptionDisplay.CreatedUtc,
 				NumberOfUsers = subscriptionDisplay.NumberOfUsers,
 				OrganizationId = subscriptionDisplay.OrganizationId,
-				OrganizationName = subscriptionDisplay.OrganizationName,
-				Description = subscriptionDisplay.Description,
 				ProductId = (ProductIdEnum)subscriptionDisplay.ProductId,
 				ProductName = subscriptionDisplay.ProductName,
 				SkuId = (SkuIdEnum)subscriptionDisplay.SkuId,
 				SkuName = subscriptionDisplay.SkuName,
 				SubscriptionId = subscriptionDisplay.SubscriptionId,
 				SubscriptionName = subscriptionDisplay.SubscriptionName,
-				Tier = subscriptionDisplay.Tier
 			};
 		}
 
@@ -916,10 +898,9 @@ namespace AllyisApps.Services
 
 			return new Subscription
 			{
-				CreatedUtc = subscription.CreatedUtc,
+				SubscriptionCreatedUtc = subscription.SubscriptionCreatedUtc,
 				IsActive = subscription.IsActive,
-				Licenses = subscription.Licenses,
-				SubscriptionName = subscription.Name,
+				SubscriptionName = subscription.SubscriptionName,
 				NumberOfUsers = subscription.NumberOfUsers,
 				OrganizationId = subscription.OrganizationId,
 				SkuId = (SkuIdEnum)subscription.SkuId,

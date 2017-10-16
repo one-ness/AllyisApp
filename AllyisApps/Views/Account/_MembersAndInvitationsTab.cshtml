@@ -1,0 +1,6 @@
+﻿@model MembersAndInvitationsTabViewModel
+
+<ul class="nav nav-tabs">
+	<li class="@Model.MembersTabActive"><a href="@Url.Action(ActionConstants.OrganizationMembers, ControllerConstants.Account)">@Strings.Members</a></li>
+	<li class="@Model.InvitationsTabActive"><a href="@Url.Action(ActionConstants.OrganizationInvitations, ControllerConstants.Account)">@Strings.Invitations</a></li>
+</ul>

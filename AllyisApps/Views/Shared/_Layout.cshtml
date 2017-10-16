@@ -4,6 +4,10 @@
 	{
 		title = ViewBag.Title + " - " + title;
 	}
+	else if (!string.IsNullOrWhiteSpace(ViewBag.TitleBar))
+	{
+		title = ViewBag.TitleBar + " - " + title;
+	}
 }
 
 <!DOCTYPE html>

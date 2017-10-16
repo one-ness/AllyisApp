@@ -16,6 +16,7 @@ using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Services
 {
@@ -43,7 +44,66 @@ namespace AllyisApps.Services
 		public Organization GetOrganization(int orgId)
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
-			return InitializeOrganization(DBHelper.GetOrganization(orgId));
+
+			this.CheckOrgAction(OrgAction.ReadOrganization, orgId);
+			return InitializeOrganization(this.DBHelper.GetOrganization(orgId));
+		}
+
+		public async Task<List<Invitation>> GetInvitationsAsync(int orgId)
+		{
+			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
+
+			this.CheckOrgAction(OrgAction.ReadInvitationsList, orgId);
+			var collection = await this.DBHelper.GetInvitationsAsync(orgId, (int)InvitationStatusEnum.Any);
+			var result = new List<Invitation>();
+			foreach (var item in collection)
+			{
+				var data = new Invitation();
+				data.DecisionDateUtc = item.DecisionDateUtc;
+				data.Email = item.Email;
+				data.EmployeeId = item.EmployeeId;
+				data.FirstName = item.FirstName;
+				data.InvitationCreatedUtc = item.InvitationCreatedUtc;
+				data.InvitationId = item.InvitationId;
+				data.InvitationStatus = (InvitationStatusEnum)item.InvitationStatus;
+				data.LastName = item.LastName;
+				data.OrganizationId = orgId;
+				data.ProductRolesJson = item.ProductRolesJson;
+				result.Add(data);
+			}
+
+			return result;
+		}
+
+		/// <summary>
+		/// get a list of subscriptions for the given organization
+		/// </summary>
+		public async Task<List<Subscription>> GetSubscriptionsAsync(int orgId)
+		{
+			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
+			this.CheckOrgAction(OrgAction.ReadSubscriptionsList, orgId);
+			var result = new List<Subscription>();
+			dynamic entities = await this.DBHelper.GetSubscriptionsAsync(orgId);
+			foreach (var item in entities)
+			{
+				var data = new Subscription();
+				data.AreaUrl = item.ArealUrl;
+				data.IsActive = item.IsActive;
+				data.NumberOfUsers = item.NumberOfUsers ?? 0;
+				data.OrganizationId = item.OrganizationId;
+				data.ProductDescription = item.ProductDescription;
+				data.ProductId = (ProductIdEnum)item.ProductId;
+				data.ProductName = item.ProductName;
+				data.PromoExpirationDateUtc = item.PromoExpirationDateUtc;
+				data.SkuId = (SkuIdEnum)item.SkuId;
+				data.SkuName = item.SkuName;
+				data.SubscriptionCreatedUtc = item.SubscriptionCreatedUtc;
+				data.SubscriptionId = item.SubscriptionId;
+				data.SubscriptionName = item.SubscriptionName;
+				result.Add(data);
+			}
+
+			return result;
 		}
 
 		/// <summary>
@@ -74,30 +134,6 @@ namespace AllyisApps.Services
 			var spResults = DBHelper.GetOrgWithNextEmployeeId(orgId, UserContext.UserId);
 			Organization org = InitializeOrganization(spResults.Item1);
 			org.NextEmpolyeeID = spResults.Item2;
-			return org;
-		}
-
-		/// <summary>
-		/// Gets the next recommended employee id by existing users, a list of SubscriptionDisplayInfos for subscriptions in
-		/// the organization, a list of SubscriptionRoleInfos for roles within the subscriptions of the organization,
-		/// and the next recommended employee id by invitations.
-		/// </summary>
-		/// <param name="orgId">The Organization Id.</param>
-		/// <returns>.</returns>
-		public Organization GetAddMemberInfo(int orgId)
-		{
-			var spResults = DBHelper.GetAddMemberInfo(orgId);
-			Organization org = new Organization()
-			{
-				NextEmpolyeeID = string.Compare(spResults.Item1, spResults.Item4) > 0 ? spResults.Item1 : spResults.Item4,
-				Subscriptions = spResults.Item2.Select(sddb => InitializeSubscription(sddb)).ToList()
-			};
-			var productRoles = spResults.Item3.Select(srdb => InitializeSubscriptionRoleInfo(srdb)).ToList();
-
-			foreach (Subscription sub in org.Subscriptions)
-			{
-				sub.ProductRoles = productRoles.Where(pr => sub.ProductId == pr.ProductId).ToList();
-			}
 			return org;
 		}
 
@@ -206,7 +242,7 @@ namespace AllyisApps.Services
 		public async void NotifyInviteAcceptAsync(int inviteId)
 		{
 			InvitationDBEntity invitation = DBHelper.GetInvitation(inviteId);
-			string msgbody = new System.Web.HtmlString($"{invitation.FirstName} {invitation.LastName} has joined the organization {invitation.OrganizationName} on Allyis Apps.").ToString();
+			string msgbody = new System.Web.HtmlString($"{invitation.FirstName} {invitation.LastName} has joined the organization <organization name> on Allyis Apps.").ToString();
 
 			foreach (string email in DBHelper.GetOrganizationOwnerEmails(invitation.OrganizationId))
 			{
@@ -221,7 +257,7 @@ namespace AllyisApps.Services
 		public async void NotifyInviteRejectAsync(int inviteId)
 		{
 			InvitationDBEntity invitation = DBHelper.GetInvitation(inviteId);
-			string msgbody = new System.Web.HtmlString($"{invitation.FirstName} {invitation.LastName} has rejected joining the organization {invitation.OrganizationName} on Allyis Apps.").ToString();
+			string msgbody = new System.Web.HtmlString($"{invitation.FirstName} {invitation.LastName} has rejected joining the organization <organization name> on Allyis Apps.").ToString();
 
 			foreach (string email in DBHelper.GetOrganizationOwnerEmails(invitation.OrganizationId))
 			{
@@ -243,7 +279,7 @@ namespace AllyisApps.Services
 			if (invitationId <= 0) throw new ArgumentException("invitationId");
 
 			var invite = GetInvitationByID(invitationId);
-			this.CheckOrgAction(OrgAction.EditInvitation, invite.OrganizationId);
+			this.CheckOrgAction(OrgAction.DeleteInvitation, invite.OrganizationId);
 			return DBHelper.DeleteInvitation(invitationId);
 		}
 
@@ -260,6 +296,25 @@ namespace AllyisApps.Services
 			}
 
 			return DBHelper.GetOrganizationMemberList(orgId).Select(o => InitializeOrganizationUser(o));
+		}
+
+		/// <summary>
+		/// get the list of users in the given organization
+		/// </summary>
+		public async Task<List<OrganizationUser>> GetOrganizationUsersAsync(int orgId)
+		{
+			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
+
+			this.CheckOrgAction(OrgAction.ReadUsersList, orgId);
+			var result = new List<OrganizationUser>();
+			var collection = await this.DBHelper.GetOrganizationUsersAsync(orgId);
+			foreach (var item in collection)
+			{
+				var data = this.InitializeOrganizationUser(item);
+				result.Add(data);
+			}
+
+			return result;
 		}
 
 		/// <summary>
@@ -388,8 +443,43 @@ namespace AllyisApps.Services
 				OrganizationId = organizationUser.OrganizationId,
 				OrganizationRoleId = organizationUser.OrganizationRoleId,
 				UserId = organizationUser.UserId,
-				MaxAmount = organizationUser.MaxAmount
+				MaxApprovalAmount = organizationUser.MaxAmount
 			};
+		}
+
+		public OrganizationUser InitializeOrganizationUser(dynamic entity)
+		{
+			if (entity == null) return null;
+
+			var result = new OrganizationUser();
+			result.AccessFailedCount = entity.AccessFailedCount;
+			result.Address = InitializeAddress(entity);
+			result.DateOfBirth = entity.DateOfBirth;
+			result.Email = entity.Email;
+			result.EmailConfirmationCode = entity.EmailConfirmationCode;
+			result.EmployeeId = entity.EmployeeId;
+			//result.Invitations = 
+			result.FirstName = entity.FirstName;
+			result.IsEmailConfirmed = entity.IsEmailConfirmed;
+			result.IsLockoutEnabled = entity.IsLockoutEnabled;
+			result.IsPhoneNumberConfirmed = entity.IsPhoneNumberConfirmed;
+			result.IsTwoFactorEnabled = entity.IsTwoFactorEnabled;
+			result.LastName = entity.LastName;
+			result.LastUsedSubscriptionId = entity.LastUsedSubscriptionId;
+			result.LockoutEndDateUtc = entity.LockoutEndDateUtc;
+			result.MaxApprovalAmount = entity.MaxAmount;
+			result.OrganizationId = entity.OrganizationId;
+			result.OrganizationRoleId = entity.OrganizationRoleId;
+			//result.Organizations = 
+			result.OrganizationUserCreatedUtc = entity.OrganizationUserCreatedUtc;
+			result.PasswordHash = entity.PasswordHash;
+			result.PasswordResetCode = entity.PasswordResetCode;
+			result.PhoneExtension = entity.PhoneExtension;
+			result.PhoneNumber = entity.PhoneNumber;
+			//result.Subscriptions = 
+			result.UserCreatedUtc = entity.UserCreatedUtc;			
+			result.UserId = entity.UserId;
+			return result;
 		}
 
 		/// <summary>
@@ -493,12 +583,10 @@ namespace AllyisApps.Services
 				InvitationId = invitation.InvitationId,
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
-				OrganizationRole = (OrganizationRole)invitation.OrganizationRoleId,
-				OrganizationName = invitation.OrganizationName,
 				EmployeeId = invitation.EmployeeId,
 				DecisionDateUtc = invitation.DecisionDateUtc,
-				status = (InvitationStatusEnum)invitation.InvitationStatusId,
-				RoleJson = invitation.RoleJson
+				InvitationStatus = (InvitationStatusEnum)invitation.InvitationStatus,
+				ProductRolesJson = invitation.ProductRolesJson
 			};
 		}
 
@@ -542,11 +630,10 @@ namespace AllyisApps.Services
 				InvitationId = invitation.InvitationId,
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
-				OrganizationRoleId = (int)invitation.OrganizationRole,
 				EmployeeId = invitation.EmployeeId,
 				DecisionDateUtc = invitation.DecisionDateUtc,
-				InvitationStatusId = (int)invitation.status,
-				RoleJson = invitation.RoleJson
+				InvitationStatus = (int)invitation.InvitationStatus,
+				ProductRolesJson = invitation.ProductRolesJson
 			};
 		}
 

@@ -49,7 +49,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			Position pos = AppService.GetPosition(positionId);
 
-			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
+			string subscriptionNameToDisplay = AppService.GetSubscriptionName(subscriptionId);
 			//TODO: this is piggy-backing off the get index action, create a new action that just gets items 3-5.
 			var infos = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
 			var temp = new string[infos.Item2.Count];

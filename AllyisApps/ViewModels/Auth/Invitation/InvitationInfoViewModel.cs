@@ -63,6 +63,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets Date that user had accepted or rejected the invitation.
 		/// </summary>
-		public DateTime DecisionDateUtc { get; set; }
+		public DateTime? DecisionDateUtc { get; set; }
 	}
 }

@@ -54,7 +54,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		{
 			return new UserMaxAmountViewModel()
 			{
-				MaxAmount = user.MaxAmount,
+				MaxAmount = user.MaxApprovalAmount,
 				FirstName = user.FirstName,
 				LastName = user.LastName,
 				UserId = user.UserId

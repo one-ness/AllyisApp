@@ -516,6 +516,17 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// get the list of users in the given organization
+		/// </summary>
+		public async Task<List<dynamic>> GetOrganizationUsersAsync(int orgId)
+		{
+			using (var con = new SqlConnection(this.SqlConnectionString))
+			{
+				return (await con.QueryAsync<dynamic>("Auth.GetOrganizationUsers @a", new { a = orgId })).ToList();
+			}
+		}
+
+		/// <summary>
 		/// Retreives the id of the organization that registered the given subdomain.
 		/// </summary>
 		/// <param name="subdomain">The organization's subdomain.</param>
@@ -680,18 +691,13 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Gets the roles for each subscription the organization has.
+		/// Gets all the invitations for the given organization
 		/// </summary>
-		/// <param name="organizationId">The organization Id.</param>
-		/// <returns>List of all roles.</returns>
-		public IEnumerable<InvitationDBEntity> GetInvitations(int organizationId)
+		public async Task<List<InvitationDBEntity>> GetInvitationsAsync(int organizationId, int statusMask)
 		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", organizationId);
-
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<InvitationDBEntity>("[Auth].[GetInvitations]", parameters, commandType: CommandType.StoredProcedure);
+				return (await con.QueryAsync<InvitationDBEntity>("[Auth].[GetInvitations] @a, @b", new { a = organizationId, b = statusMask })).ToList();
 			}
 		}
 
@@ -888,5 +894,16 @@ namespace AllyisApps.DBModel
 				return (await con.QueryAsync<string>("Auth.GetMaxEmployeeId @a", new { a = organizationId })).FirstOrDefault();
 			}
 		}
+		/// <summary>
+		/// get the product roles for the given org and given product
+		/// </summary>
+		public async Task<List<ProductRoleDBEntity>> GetProductRolesAsync(int orgId, int productId)
+		{
+			using (var con = new SqlConnection(this.SqlConnectionString))
+			{
+				return (await con.QueryAsync<ProductRoleDBEntity>("Auth.GetProductRoles @a, @b", new { a = orgId, b = productId })).ToList();
+			}
+		}
+
 	}
 }

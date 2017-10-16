@@ -1,18 +1,17 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="ManageOrgAction.cs" company="Allyis, Inc.">
+// <copyright file="EditMemberAction.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Web.Mvc;
-using AllyisApps.Lib;
+using AllyisApps.Core.Alert;
+using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
-using AllyisApps.Services.Billing;
-using AllyisApps.Services.Common.Types;
 using AllyisApps.ViewModels.Auth;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -22,14 +21,12 @@ namespace AllyisApps.Controllers.Auth
 	public partial class AccountController : BaseController
 	{
 		/// <summary>
-		/// Get: Account/Manage/id
-		/// The management page for an organization, displays billing, subscriptions, etc.
+		/// GET: /Account/EditMember.
 		/// </summary>
-		/// <param name="id">The organization Id.</param>
-		/// <returns>The organization's management page.</returns>
-		public ActionResult ManageOrg2(int id)
+		public async Task<ActionResult> EditMember2(int id)
 		{
-			return View();
+			var model = await Task.Run(() => new EditMemberViewModel2());
+			return View(model);
 		}
 	}
 }

@@ -67,7 +67,6 @@ namespace AllyisApps.Controllers.Auth
 				indexViewModel.Invitations.Add(new AccountIndexViewModel.InvitationViewModel()
 				{
 					InvitationId = item.InvitationId,
-					OrganizationName = item.OrganizationName,
 				});
 			}
 
@@ -88,8 +87,12 @@ namespace AllyisApps.Controllers.Auth
 					Country = item.Organization.Address?.CountryName,
 					SiteUrl = item.Organization.SiteUrl,
 					FaxNumber = item.Organization.FaxNumber,
-					//// TODO: Infomation is dependent on curent user
-					IsManageAllowed = AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, item.Organization.OrganizationId, false)
+					IsCreateSubscriptionAllowed = this.AppService.CheckOrgAction(AppService.OrgAction.CreateSubscription, item.Organization.OrganizationId, false),
+					IsReadBillingDetailsAllowed = this.AppService.CheckOrgAction(AppService.OrgAction.ReadBilling, item.Organization.OrganizationId, false),
+					IsReadMembersListAllowed = this.AppService.CheckOrgAction(AppService.OrgAction.ReadUsersList, item.Organization.OrganizationId, false),
+					IsReadOrgDetailsAllowed = this.AppService.CheckOrgAction(AppService.OrgAction.ReadOrganization, item.Organization.OrganizationId, false),
+					IsReadPermissionsListAllowed = this.AppService.CheckOrgAction(AppService.OrgAction.ReadPermissionsList, item.Organization.OrganizationId, false),
+					IsReadSubscriptionsListAllowed = this.AppService.CheckOrgAction(AppService.OrgAction.ReadSubscriptionsList, item.Organization.OrganizationId, false)
 				};
 
 				// Add subscription info
@@ -97,53 +100,42 @@ namespace AllyisApps.Controllers.Auth
 					.Where(sub => sub.OrganizationId == item.Organization.OrganizationId)
 					.OrderBy(sub => sub.ProductId))
 				{
-					string description =
-						subItem.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription :
-						subItem.ProductId == ProductIdEnum.ExpenseTracker ? Resources.Strings.ExpenseTrackerDescription :
-						string.Empty;
-					var subViewModel = new AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel()
-					{
-						ProductName = subItem.ProductName,
-						SubscriptionId = subItem.SubscriptionId,
-						SubscriptionName = subItem.SubscriptionName,
-						ProductDescription = description,
-						ProductId = subItem.ProductId,
-						AreaUrl = subItem.AreaUrl
-					};
+					string description = string.Empty;
+					var subViewModel = new AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel();
 					switch (subItem.ProductId)
 					{
 						case ProductIdEnum.TimeTracker:
-							{
-								int? sDate = null;
-								int? eDate = null;
-								int startOfWeek = AppService.GetAllSettings(subItem.OrganizationId).Item1.StartOfWeek;
-								sDate = Utility.GetDaysFromDateTime(SetStartingDate(startOfWeek));
-								eDate = Utility.GetDaysFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
-								subViewModel.ProductGoToUrl = Url.RouteUrl(
-									"TimeTracker_NoUserId",
-									new
-									{
-										subscriptionId =
-										subItem.SubscriptionId,
-										controller = ControllerConstants.TimeEntry,
-										startDate = sDate,
-										endDate = eDate
-									});
-								break;
-							}
-						case ProductIdEnum.ExpenseTracker:
-							{
-								subViewModel.ProductGoToUrl = Url.RouteUrl(
-									"ExpenseTracker_Default",
-									new
-									{
-										subscriptionId = subItem.SubscriptionId,
-										controller = ControllerConstants.Expense
-									});
-								break;
-							}
-						case ProductIdEnum.StaffingManager:
+							description = Resources.Strings.TimeTrackerDescription;
+							int? sDate = null;
+							int? eDate = null;
+							int startOfWeek = AppService.GetAllSettings(subItem.OrganizationId).Item1.StartOfWeek;
+							sDate = Utility.GetDaysFromDateTime(SetStartingDate(startOfWeek));
+							eDate = Utility.GetDaysFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
+							subViewModel.ProductGoToUrl = Url.RouteUrl(
+								"TimeTracker_NoUserId",
+								new
+								{
+									subscriptionId =
+									subItem.SubscriptionId,
+									controller = ControllerConstants.TimeEntry,
+									startDate = sDate,
+									endDate = eDate
+								});
+							break;
 
+
+						case ProductIdEnum.ExpenseTracker:
+							description = Resources.Strings.ExpenseTrackerDescription;
+							subViewModel.ProductGoToUrl = Url.RouteUrl(
+								"ExpenseTracker_Default",
+								new
+								{
+									subscriptionId = subItem.SubscriptionId,
+									controller = ControllerConstants.Expense
+								});
+							break;
+
+						case ProductIdEnum.StaffingManager:
 							subViewModel.ProductGoToUrl = Url.RouteUrl("StaffingManager_default",
 								new
 								{
@@ -151,11 +143,21 @@ namespace AllyisApps.Controllers.Auth
 									controller = ControllerConstants.Staffing
 								});
 							break;
+
+						default:
+							break;
 					}
 
+					subViewModel.ProductName = subItem.ProductName;
+					subViewModel.SubscriptionId = subItem.SubscriptionId;
+					subViewModel.SubscriptionName = subItem.SubscriptionName;
+					subViewModel.ProductDescription = description;
+					subViewModel.ProductId = subItem.ProductId;
+					subViewModel.AreaUrl = subItem.AreaUrl;
 					subViewModel.IconUrl = subItem.IconUrl == null ? null : "~/" + subItem.IconUrl;
 					orgViewModel.Subscriptions.Add(subViewModel);
 				}
+
 				indexViewModel.Organizations.Add(orgViewModel);
 			}
 

@@ -14,6 +14,10 @@ using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
 using AllyisApps.ViewModels.Auth;
 using System.Threading.Tasks;
+using AllyisApps.Services;
+using AllyisApps.ViewModels.Auth;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -31,6 +35,9 @@ namespace AllyisApps.Controllers.Auth
 			model.CanEditSubscriptions = this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, id, false);
 			model.OrganizationId = id;
 			var collection = await this.AppService.GetSubscriptions(id);
+			model.CanManagePermissions = this.AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id, false);
+			model.OrganizationId = id;
+			var collection = await this.AppService.GetSubscriptionsAsync(id);
 			foreach (var item in collection)
 			{
 				var data = new OrganizationSubscriptionsViewModel.ViewModelItem();
@@ -43,6 +50,9 @@ namespace AllyisApps.Controllers.Auth
 				data.SubscriptionName = item.SubscriptionName;
 				model.Subscriptions.Add(data);
 			}
+
+			var org = this.AppService.GetOrganization(id);
+			model.OrganizationName = org.OrganizationName;
 
 			return View(model);
 		}

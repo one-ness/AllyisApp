@@ -30,7 +30,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		public void SetNavData(int subscriptionId)
 		{
 			ViewData["subscriptionId"] = subscriptionId;
-			ViewData["subscriptionName"] = AppService.getSubscriptionName(subscriptionId);
+			ViewData["subscriptionName"] = AppService.GetSubscriptionName(subscriptionId);
 		}
 	}
 }

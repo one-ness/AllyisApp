@@ -29,6 +29,11 @@ namespace AllyisApps.Services.Billing
 		public string ProductDescription { get; set; }
 
 		/// <summary>
+		/// is active
+		/// </summary>
+		public bool IsActive { get; set; }
+
+		/// <summary>
 		/// Gets or sets the list of Skus under this product.
 		/// </summary>
 		public List<SkuInfo> ProductSkus { get; set; }

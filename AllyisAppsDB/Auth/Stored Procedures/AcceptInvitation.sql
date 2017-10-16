@@ -12,11 +12,10 @@ BEGIN
 	DECLARE @employeeId NVARCHAR(16);
 	SELECT
 		@organizationId = [OrganizationId],
-		@organizationRole = [OrganizationRoleId],
 		@email = [Email],
 		@employeeId = [EmployeeId]
 	FROM [Auth].[Invitation] WITH (NOLOCK)
-	WHERE [Invitation].[InvitationId] = @invitationId AND [Invitation].[IsActive] = 1 AND [Invitation].StatusId = 0;
+	WHERE [Invitation].[InvitationId] = @invitationId AND [Invitation].InvitationStatus = 1;
 
 	IF @organizationId IS NOT NULL
 	BEGIN -- Invitation found
@@ -62,7 +61,7 @@ BEGIN
 			END
 
 			UPDAtE [Auth].[Invitation]
-			SET StatusId = 1, DecisionDateUtc = GETUTCDATE()
+			SET InvitationStatus = 1, DecisionDateUtc = GETUTCDATE()
 			WHERE [InvitationId] = @invitationId;
 			
 			SELECT @@ROWCOUNT;

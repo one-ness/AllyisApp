@@ -1,17 +1,10 @@
-CREATE PROCEDURE [Auth].[GetInvitations]
-	@organizationId INT
+﻿CREATE PROCEDURE [Auth].[GetInvitations]
+	@organizationId INT,
+	@statusMask int
 AS
+begin
 	SET NOCOUNT ON;
-	SELECT 
-		[InvitationId],
-		[Email],
-		[FirstName],
-		[LastName],  
-		[OrganizationId], 
-		[Invitation].[OrganizationRoleId],
-		[OrganizationRoleName] AS [OrganizationRoleName],
-		[EmployeeId],
-		[Invitation].[RoleJson]
-	FROM [Auth].[Invitation] WITH (NOLOCK)
-	LEFT JOIN [Auth].[OrganizationRole] WITH (NOLOCK) ON [OrganizationRole].[OrganizationRoleId] = [Invitation].[OrganizationRoleId]
-	WHERE [OrganizationId] = @organizationId AND [IsActive] = 1
+	select * from Invitation with (nolock)
+	where OrganizationId = @organizationId
+	and (InvitationStatus & @statusMask) > 0
+end
