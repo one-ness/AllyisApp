@@ -104,10 +104,10 @@
 		@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
 		<div class="row">
 			<div class="col-md-6">
-				<h3 class="panel-heading panel-title">Position Details</h3>
+				<h3 class="panel-heading panel-title">@Strings.PositionDetails</h3>
 				<div class="panel panel-default">
 					<div class="form-group">
-						@Html.ReqLabelFor(m => m.PositionTitle, "Position Title *")
+						@Html.ReqLabelFor(m => m.PositionTitle, @Strings.PositionTitle)
 						@Html.TextBoxFor(m => m.PositionTitle, new { @class = "form-control required" })
 						@Html.ValidationMessageFor(m => m.PositionTitle, "", new { @class = "text-danger" })
 					</div>
@@ -128,13 +128,13 @@
 					@if (!Model.IsCreating)
 					{
 						<div class="form-group">
-							@Html.ReqLabelFor(m => m.PositionStatusId, "Position Status")
+							@Html.ReqLabelFor(m => m.PositionStatusId, @Strings.PositionStatus)
 							@Html.DropDownListFor(m => m.PositionStatusId, new SelectList(Model.PositionStatuses, "PositionStatusId", "PositionStatusName"), Strings.DropDownEmpty, new { @class = "form-control" })
 							@Html.ValidationMessageFor(m => m.PositionStatusId, "", new { @class = "text-danger" })
 						</div>
 					}
 					<div class="form-group">
-						@Html.ReqLabelFor(m => m.RequiredSkills, "Required Skills *")
+						@Html.ReqLabelFor(m => m.RequiredSkills, @Strings.RequiredSkills)
 						@Html.TextAreaFor(m => m.RequiredSkills, new { @class = "form-control paragraph_input", @cols = "80", @rows = "7" })
 						@Html.ValidationMessageFor(m => m.RequiredSkills, "", new { @class = "text-danger" })
 					</div>
@@ -156,35 +156,35 @@
 				</div>
 			</div>
 			<div class="col-md-6">
-				<h3 class="panel-heading panel-title">Additional Information</h3>
+				<h3 class="panel-heading panel-title">@Strings.AdditionalInformation</h3>
 				<div class="panel panel-default">
 					<div class="form-group employment-type">
-						<label>"Employment Type"</label>
+						<label>@Strings.EmploymentType</label>
 						@Html.DropDownListFor(m => m.EmploymentTypeId, new SelectList(Model.EmploymentTypes, "EmploymentTypeId", "EmploymentTypeName"), Strings.DropDownEmpty, new { @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.EmploymentTypeId, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group duration">
-						<label>Duration (Months)</label>
+						<label>@Strings.DurationMonths</label>
 						@Html.TextBoxFor(m => m.DurationMonths, new { @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.DurationMonths, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group position-level">
-						<label>"Position level"</label>
+						<label>@Strings.PositionLevel</label>
 						@Html.DropDownListFor(m => m.PositionLevelId, new SelectList(Model.PositionLevels, "PositionLevelId", "PositionLevelName"), Strings.DropDownEmpty, new { @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.PositionLevelId, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group position-count">
-						<label>Position Count</label>
+						<label>@Strings.PositionCount</label>
 						@Html.TextBoxFor(m => m.PositionCount, new { @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.PositionCount, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group billing-amount">
-						<label>Billing Amount</label>
+						<label>@Strings.BillingAmount</label>
 						@Html.TextBoxFor(m => m.BillingRateAmount, new { @class = "form-control", type = "number", min = "0.00", step = "0.01" })
 						@Html.ValidationMessageFor(m => m.BillingRateAmount, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group billing-frequency">
-						<label>Billing Rate</label>
+						<label>@Strings.BillingRate</label>
 						@Html.EnumDropDownListFor(m => m.BillingRateFrequency, Strings.DropDownEmpty, new { @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.BillingRateFrequency, "", new { @class = "text-danger" })
 					</div>
@@ -194,24 +194,24 @@
 						@Html.ValidationMessageFor(m => m.TeamName, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
-						<label>Hiring Manager</label>
+						<label>@Strings.HiringManager</label>
 						@Html.TextBoxFor(m => m.HiringManager, new { @value = Model.HiringManager, @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.HiringManager, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
-						<label>Job Responsibilities</label>
+						<label>@Strings.JobResponsibilities</label>
 						@Html.TextAreaFor(m => m.JobResponsibilities, new { @class = "form-control  paragraph_input", @cols = "80", @rows = "7" })
 						@Html.ValidationMessageFor(m => m.JobResponsibilities, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
-						<label>Desired Skills</label>
+						<label>@Strings.DesiredSkills</label>
 						@Html.TextAreaFor(m => m.DesiredSkills, new { @class = "form-control  paragraph_input", @cols = "80", @rows = "7" })
 						@Html.ValidationMessageFor(m => m.DesiredSkills, "", new { @class = "text-danger" })
 					</div>
 				</div>
 				<div class="form-group panel panel-default">
 					<input type="hidden" id="TagsToSubmit" name="TagsToSubmit" value="[]" />
-					<Label class="panel-info">Tags</Label>
+					<Label class="panel-info">@Strings.Tags</Label>
 					<div>
 						<div id="tags">
 							<input type="text" data-role="tagsinput" placeholder="Add a tag" size="65" list="orgTags" />

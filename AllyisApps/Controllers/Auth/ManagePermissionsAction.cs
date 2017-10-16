@@ -40,34 +40,48 @@ namespace AllyisApps.Controllers.Auth
 		};
 
 		private Dictionary<int, string> etRoles = new Dictionary<int, string>
-	{
-		{ (int)ExpenseTrackerRole.User, Strings.User },
-		{ (int)ExpenseTrackerRole.Manager, Strings.Manager },
-		{ (int)ExpenseTrackerRole.SuperUser, "Super User" },
-		{ (int)ExpenseTrackerRole.NotInProduct, Strings.Unassigned }
-	};
+		{
+			{ (int)ExpenseTrackerRole.User, Strings.User },
+			{ (int)ExpenseTrackerRole.Manager, Strings.Manager },
+			{ (int)ExpenseTrackerRole.SuperUser, "Super User" },
+			{ (int)ExpenseTrackerRole.NotInProduct, Strings.Unassigned }
+		};
+
+		private Dictionary<int, string> smRoles = new Dictionary<int, string>
+		{
+			{ (int)StaffingManagerRole.User, Strings.User },
+			{ (int)StaffingManagerRole.Manager, Strings.Manager },
+			{ (int)StaffingManagerRole.NotInProduct, Strings.Unassigned }
+		};
 
 		private Dictionary<string, int> setOrganizationRoles = new Dictionary<string, int>
-	{
-		{ Strings.RemoveOrg, -1 },
-		{ Strings.SetMember, (int)OrganizationRole.Member },
-		{ Strings.SetOwner, (int)OrganizationRole.Owner }
-	};
+		{
+			{ Strings.RemoveOrg, -1 },
+			{ Strings.SetMember, (int)OrganizationRole.Member },
+			{ Strings.SetOwner, (int)OrganizationRole.Owner }
+		};
 
 		private Dictionary<string, int> setTTRoles = new Dictionary<string, int>
-	{
-		{ Strings.RemoveFromSubscription, -1 },
-		{ Strings.SetUser, (int)TimeTrackerRole.User },
-		{ Strings.SetManager, (int)TimeTrackerRole.Manager }
-	};
+		{
+			{ Strings.RemoveFromSubscription, -1 },
+			{ Strings.SetUser, (int)TimeTrackerRole.User },
+			{ Strings.SetManager, (int)TimeTrackerRole.Manager }
+		};
 
 		private Dictionary<string, int> setETRoles = new Dictionary<string, int>
-	{
-		{ Strings.RemoveFromSubscription, -1},
-		{ Strings.SetUser, (int)ExpenseTrackerRole.User },
-		{ Strings.SetManager, (int)ExpenseTrackerRole.Manager },
-		{ "Set Super User", (int)ExpenseTrackerRole.SuperUser }
-	};
+		{
+			{ Strings.RemoveFromSubscription, -1},
+			{ Strings.SetUser, (int)ExpenseTrackerRole.User },
+			{ Strings.SetManager, (int)ExpenseTrackerRole.Manager },
+			{ "Set Super User", (int)ExpenseTrackerRole.SuperUser }
+		};
+
+		private Dictionary<string, int> setSMRoles = new Dictionary<string, int>
+		{
+			{ Strings.RemoveFromSubscription, -1 },
+			{ Strings.SetUser, (int)StaffingManagerRole.User },
+			{ Strings.SetManager, (int)StaffingManagerRole.Manager }
+		};
 
 		/// <summary>
 		/// GET Account/ManagePermissions.
@@ -225,7 +239,11 @@ namespace AllyisApps.Controllers.Auth
 					break;
 
 				case ProductIdEnum.StaffingManager:
-					throw new NotImplementedException("StaffingManager permissions not implmented");
+					roles = smRoles;
+					actions = setSMRoles;
+					roleHeader = Strings.StaffingManagerRole;
+					ActionGroup = Strings.StaffingManager;
+					break;
 			}
 
 			List<UserPermssionViewModel> OrgUsers = organizationMembers.Select(orgU => new UserPermssionViewModel()
@@ -364,17 +382,19 @@ namespace AllyisApps.Controllers.Auth
 						}
 
 						break;
-					/*
+					
 					case ProductIdEnum.StaffingManager:
-						/*Staffing Manager needs Roles
-						if (!Enum.IsDefined(typeof(StaffingMan), model.SelectedAction.Value) && model.SelectedAction != -1)
+						
+						UsersModifiedMessage = Strings.UserChangedRolesInStaffingManager;
+						UsersAddedMessage = Strings.UserAddedToStaffingManager;
+						if (!Enum.IsDefined(typeof(StaffingManagerRole), model.SelectedAction.Value) && model.SelectedAction != -1)
 						{
 							Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDidNotDefineATargetRole, Variety.Danger));
-							return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
+							return Redirect(model.FromUrl);
 						}
 
 						break;
-					*/
+					
 					default:
 						//Should not happen
 						throw new ArgumentOutOfRangeException("Failed to Find product for produtID: " + model.ProductId.Value);
