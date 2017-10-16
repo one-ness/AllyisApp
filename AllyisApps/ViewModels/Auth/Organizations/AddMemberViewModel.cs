@@ -49,7 +49,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the organization role selection.
 		/// </summary>
-		public string OrgRoleSelection { get; set; }
+		public int OrgRoleSelection { get; set; }
 
 		/// <summary>
 		/// Flags if the organization has a subscription to expense tracker.
@@ -64,7 +64,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the expense tracker selection value.
 		/// </summary>
-		public string etSelection { get; set; }
+		public int etSelection { get; set; }
 
 		/// <summary>
 		/// Flags if the organization has a subscription to time tracker.
@@ -79,7 +79,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the time tracker selection value.
 		/// </summary>
-		public string ttSelection { get; set; }
+		public int ttSelection { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Staffing manager roles.
@@ -89,7 +89,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the staffing manager selection value.
 		/// </summary>
-		public string smSelection { get; set; }
+		public int smSelection { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether to add as an owner.

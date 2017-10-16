@@ -24,19 +24,19 @@
 						@Html.ValidationMessageFor(model => model.EmployeeId, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
-						<div class="form-group col-md-6">
-							@Html.ReqLabelFor(x => x.OrgRole, "Org Role")
+						<div class="form-group col-md-6" style="padding: 0px">
+							@Html.ReqLabelFor(x => x.OrgRole, "Organization Role")
 						</div>
-						<div class="form-group col-md-6">
+						<div class="form-group col-md-6" style="padding: 0px">
 							@Html.DropDownListFor(x => x.OrgRoleSelection, Model.OrgRole, new { @class = "form-control" })
 						</div>
 					</div>
 					<div class="form-group">
-						<div class="form-group col-md-6">
+						<div class="form-group col-md-6" style="padding: 0px">
 							@if (Model.hasTT)
 							{ @Html.ReqLabelFor(x => x.TTRoles, "TimeTracker Role") }
 						</div>
-						<div class="form-group col-md-6">
+						<div class="form-group col-md-6" style="padding: 0px">
 							@if (Model.hasTT)
 							{ @Html.DropDownListFor(x => x.ttSelection, Model.TTRoles, new { @class = "form-control" }) }
 						</div>
