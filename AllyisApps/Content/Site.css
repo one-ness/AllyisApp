@@ -229,123 +229,123 @@ ul {
 	margin-right: -15px;
 }
 
-.col-xs-2, .col-md-2, .col-sm-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-md-5, .col-xs-6, .col-sm-6, .col-md-6, .col-xs-8, .col-sm-8, col-md-8, .col-xs-9, .col-sm-9, .col-xs-10, .col-md-10, .col-xs-12, .col-sm-12, .col-md-12 {
+.col{
 	position: relative;
 	min-height: 1px;
 	padding-left: 15px;
 	padding-right: 15px;
 }
 
-.col-xs-2, .col-xs-4, .col-sx-6, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-12 {
+.ovrd-col-xs-2, .ovrd-col-xs-4, .ovrd-col-sx-6, .ovrd-col-xs-8, .ovrd-col-xs-9, .ovrd-col-xs-10, .ovrd-col-xs-12 {
 	float: left;
 }
 
-.col-xs-12 {
+.ovrd-col-xs-12 {
 	width: 100%;
 }
 
-.col-xs-8 {
+.ovrd-col-xs-8 {
 	width: 66.66666667%;
 }
 
-.col-xs-4 {
+.ovrd-col-xs-4 {
 	width: 33.33333333%;
 }
 
-.col-xs-push-2 {
+.ovrd-col-xs-push-2 {
 	left: 16.66666667%;
 }
 
 @media (min-width: 768px) {
-	.col-sm-3, .col-sm-4, .col-sm-6, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-12 {
+	.ovrd-col-sm-3, .ovrd-col-sm-4, .ovrd-col-sm-6, .ovrd-col-sm-8, .ovrd-col-sm-9, .ovrd-col-sm-10, .ovrd-col-sm-12 {
 		float: left;
 	}
 
-	.col-sm-12 {
+	.ovrd-col-sm-12 {
 		width: 100%;
 	}
 
-	.col-sm-10 {
+	.ovrd-col-sm-10 {
 		width: 83.33333333%;
 	}
 
-	.col-sm-9 {
+	.ovrd-col-sm-9 {
 		width: 75%;
 	}
 
-	.col-sm-8 {
+	.ovrd-col-sm-8 {
 		width: 66.66666667%;
 	}
 
-	.col-sm-6 {
+	.ovrd-col-sm-6 {
 		width: 50%;
 	}
 
-	.col-sm-4 {
+	.ovrd-col-sm-4 {
 		width: 33.33333333%;
 	}
 
-	.col-sm-3 {
+	.ovrd-col-sm-3 {
 		width: 25%;
 	}
 }
 
 @media (min-width: 992px) {
-	.col-md-2, .col-md-4, .col-md-5, .col-md-6, .col-md-8, .col-md-10, .col-md-12 {
+	.ovrd-col-md-2, .ovrd-col-md-4, .ovrd-col-md-5, .ovrd-col-md-6, .ovrd-col-md-8, .ovrd-col-md-10, .ovrd-col-md-12 {
 		float: left;
 	}
 
-	.col-md-12 {
+	.ovrd-col-md-12 {
 		width: 100%;
 	}
 
-	.col-md-10 {
+	.ovrd-col-md-10 {
 		width: 83.33333333%;
 	}
 
-	.col-md-8 {
+	.ovrd-col-md-8 {
 		width: 66.66666667%;
 	}
 
-	.col-md-6 {
+	.ovrd-col-md-6 {
 		width: 50%;
 	}
 
-	.col-md-5 {
+	.ovrd-col-md-5 {
 		width: 41.66666667%;
 	}
 
-	.col-md-4 {
+	.ovrd-col-md-4 {
 		width: 33.33333333%;
 	}
 
-	.col-md-2 {
+	.ovrd-col-md-2 {
 		width: 16.66666667%;
 	}
 
-	.col-md-push-3 {
+	.ovrd-col-md-push-3 {
 		left: 25%;
 	}
 
-	.col-md-push-2 {
+	.ovrd-col-md-push-2 {
 		left: 16.66666667%;
 	}
 
-	.col-md-push-1 {
+	.ovrd-col-md-push-1 {
 		left: 8.33333333%;
 	}
 
-	.col-md-offset-1 {
+	.ovrd-col-md-offset-1 {
 		margin-left: 8.33333333%;
 	}
 }
 
 @media (min-width: 1200px) {
-	.col-lg-4 {
+	.ovrd-col-lg-4 {
 		float: left;
 	}
 
-	.col-lg-4 {
+	.ovrd-col-lg-4 {
 		width: 33.33333333%;
 	}
 }
@@ -724,7 +724,7 @@ input[type="file"]:focus {
 	float: right !important;
 }
 
-.fa {
+.ovrd-fa {
 	display: inline-block;
 	font: normal normal normal 14px/1 FontAwesome;
 	font-size: inherit;
@@ -737,7 +737,7 @@ input[type="file"]:focus {
 	float: right;
 }
 
-.fa-sign-out:before {
+.ovrd-fa-sign-out:before {
 	content: "\f08b";
 }
 
@@ -967,7 +967,7 @@ td, th {
 	padding: 0;
 }
 
-.col-xs-6 {
+.ovrd-col-xs-6 {
 	width: 50%;
 }
 
@@ -1283,7 +1283,7 @@ h3 {
 	margin-right: auto;
 }
 
-.fa-cog:before {
+.ovrd-fa-cog:before {
 	content: "\f013";
 }
 
@@ -1308,15 +1308,15 @@ button, html input[type="button"] {
 	cursor: pointer;
 }
 
-.col-xs-9 {
+.ovrd-col-xs-9 {
 	width: 75%;
 }
 
-.col-xs-2 {
+.ovrd-col-xs-2 {
 	width: 16.66666667%;
 }
 
-.col-xs-push-1 {
+.ovrd-col-xs-push-1 {
 	left: 8.33333333%;
 }
 
@@ -1379,15 +1379,15 @@ table td[class*="col-"] {
 	border-top: 0;
 }
 
-.fa-edit:before {
+.ovrd-fa-edit:before {
 	content: "\f044";
 }
 
-.fa-unlock:before {
+.ovrd-fa-unlock:before {
 	content: "\f09c";
 }
 
-.fa-user-plus:before {
+.ovrd-fa-user-plus:before {
 	content: "\f234";
 }
 
@@ -1464,11 +1464,11 @@ h4 {
 	background-color: #dff0d8;
 }
 
-.col-xs-10 {
+.ovrd-col-xs-10 {
 	width: 83.33333333%;
 }
 
-.col-xs-offset-1 {
+.ovrd-col-xs-offset-1 {
 	margin-left: 8.33333333%;
 }
 
@@ -1528,16 +1528,16 @@ button {
 	opacity: 1;
 }
 
-.fa-fw {
+.ovrd-fa-fw {
 	width: 1.28571429em;
 	text-align: center;
 }
 
-.fa-calendar:before {
+.ovrd-fa-calendar:before {
 	content: "\f073";
 }
 
-.fa-calendar {
+.ovrd-fa-calendar {
 	cursor: pointer;
 }
 

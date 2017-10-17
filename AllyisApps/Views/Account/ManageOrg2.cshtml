@@ -4,19 +4,19 @@
 	//ViewBag.Title = Strings.ManageOrganization;
 }
 
-<div class="container">
+<div>
 	<div class="row">
-		<div class="col-xs-2">
+		<div class="ovrd-col-xs-2 col-xs-2 col">
 			@Html.Partial("_ManageOrgSideBar", Model.SideBarViewModel)
 		</div>
-		<div class="col-xs-10">
+		<div class="ovrd-col-xs-10 col-xs-10 col">
 			<div class="row">
-				<div class="col-xs-9">
+				<div class="ovrd-col-xs-9 col-xs-9 col">
 					<h4>@Strings.OrganizationDetails - @Model.OrganizationName</h4>
 				</div>
-				<div class="col-xs-3">
+				<div class="ovrd-col-xs-3 col-xs-3 col">
 					<a href="@Url.Action(ActionConstants.EditOrg, ControllerConstants.Account, new { id = Model.OrganizationId })"
-					   class="btn btn-default pull-right" title="@Strings.EditOrganization">Edit&nbsp;&nbsp;<span class="fa fa-fw fa-edit"></span></a>
+					   class="btn btn-default pull-right" title="@Strings.EditOrganization">Edit&nbsp;&nbsp;<span class="ovrd-fa fa ovrd-fa-fw fa-fw ovrd-fa-edit fa-edit"></span></a>
 				</div>
 			</div>
 			<table id="org-details" class="table table-striped table-condensed">

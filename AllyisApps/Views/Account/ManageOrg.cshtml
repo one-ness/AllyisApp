@@ -16,7 +16,7 @@
 				<h1 class="panel-title">
 					@Strings.OrganizationDetails
 					<a href="@Url.Action(ActionConstants.EditOrg, ControllerConstants.Account, new { id = Model.OrganizationId })"
-					   class="pull-right text-muted" title="@Strings.EditOrganization"><span class="fa fa-fw fa-edit"></span></a>
+					   class="pull-right text-muted" title="@Strings.EditOrganization"><span class="ovrd-fa fa ovrd-fa-fw fa-fw ovrd-fa-edit fa-edit"></span></a>
 				</h1>
 			</div>
 			@Html.Partial("_ManageOrgDetails", Model.Details)

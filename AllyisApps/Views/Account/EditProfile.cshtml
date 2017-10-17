@@ -11,7 +11,7 @@
 			@Html.AntiForgeryToken()
 			@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" });
 			<div class="row">
-				<div class="col-md-6 min300">
+				<div class="ovrd-col-md-6 col-md-6 col min300">
 					<div class="form-group">
 						@Html.ReqLabelFor(m => m.Email, Strings.Email)
 						@Html.ValidationMessageFor(m => m.Email)
@@ -31,7 +31,7 @@
 						<label>@Strings.DateOfBirth</label>
 						@Html.HiddenFor(m => m.DateOfBirth)
 						<input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerBirth" />@*Needs to be <input /> tag, not Html.EditorFor or a NULL birthday will show up as -1*@
-						<span class="fa fa-fw fa-calendar" id="datePickerBirthButton"></span>
+						<span class="ovrd-fa fa ovrd-fa-fw fa-fw ovrd-fa-calendar fa-calendar" id="datePickerBirthButton"></span>
 						@Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
@@ -40,7 +40,7 @@
 						@Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
 					</div>
 				</div>
-				<div class="col-md-6 min300">
+				<div class="ovrd-col-md-6 col-md-6 col min300">
 					<div class="form-group">
 						@Html.LabelFor(m => m.Address, Strings.Address)
 						@Html.TextBoxFor(m => m.Address, new { @class = "form-control" })

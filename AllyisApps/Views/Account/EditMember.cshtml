@@ -8,13 +8,13 @@
 		<div class="row">
 			@if (Model.IsInvited)
 			{
-				<div class="col-md-6 min300">
+				<div class="ovrd-col-md-6 col-md-6 col min300">
 					<div class="form-group">
 						<label>@Strings.Email</label>
 						<div class="text-box-padded">@Model.UserInfo.Email</div>
 					</div>
 				</div>
-				<div class="col-md-6 min300">
+				<div class="ovrd-col-md-6 col-md-6 col min300">
 					<!--<div class="form-group">
 						<label>@Strings.DateOfBirth</label>
 						<div class="text-box-padded">
@@ -25,7 +25,7 @@
 			}
 			else
 			{
-				<div class="col-md-6 min300">
+				<div class="ovrd-col-md-6 col-md-6 col min300">
 					<div class="form-group">
 						<label>@Strings.Email</label>
 						<div class="text-box-padded">@(Model.UserInfo.Email)</div>
@@ -50,7 +50,7 @@
 						<div class="text-box-padded">@(Model.UserInfo.PhoneNumber)</div>
 					</div>
 				</div>
-				<div class="col-md-6 min300">
+				<div class="ovrd-col-md-6 col-md-6 col min300">
 					<div class="form-group">
 						<label>@Strings.Address</label>
 						<div class="text-box-padded">@(Model.UserInfo.Address == null ? null : Model.UserInfo.Address)</div>
@@ -83,7 +83,7 @@
 			@Html.HiddenFor(m => m.IsInvited);
 
 			<div class="row">
-				<div class="col-md-6 min300">
+				<div class="ovrd-col-md-6 col-md-6 col min300">
 					@if (Model.IsInvited)
 					{
 						<div class="form-group">
@@ -101,7 +101,7 @@
 						@Html.ValidationMessageFor(m => m.EmployeeId, "", new { @class = "text-danger" })
 					</div>
 				</div>
-				<div class="col-md-6 min300">
+				<div class="ovrd-col-md-6 col-md-6 col min300">
 					@if (Model.IsInvited)
 					{
 						<div class="form-group">

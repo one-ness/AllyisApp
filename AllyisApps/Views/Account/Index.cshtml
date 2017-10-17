@@ -7,10 +7,10 @@
 }
 
 <div class="row">
-	<div class="col-md-8 col-md-push-2">
+	<div class="ovrd-col-md-8 col-md-8 ovrd-col-md-push-2 col-md-push-2 col">
 
 		<div class="row">
-			<div class="col-xs-12">
+			<div class="ovrd-col-xs-12 col-xs-12 col">
 				<h1 style="float: left">@Strings.MyAccount</h1>
 			</div>
 		</div>
@@ -25,7 +25,7 @@
 				</h2>
 			</div>
 			<div class="panel-body">
-				<div class="col-sm-9 index-details">
+				<div class="ovrd-col-sm-9 col-sm-9 col index-details">
 					<p>
 						<label>@Strings.PhoneNumber:</label>
 						@Model.UserInfo.PhoneNumber @Model.UserInfo.PhoneExtension
@@ -36,7 +36,7 @@
 						<span class="address-row">@cityState @Model.UserInfo.PostalCode</span>
 					</p>
 				</div>
-				<div class="col-sm-3 vertically-stacked-buttons text-right" style="padding-right:5px">
+				<div class="ovrd-col-sm-3 col-sm-3 col vertically-stacked-buttons text-right" style="padding-right:5px">
 					<a href="@Url.Action(ActionConstants.ChangePassword, ControllerConstants.Account)" class="btn btn-default"> @Strings.ChangePassword </a>
 					<a href="@Url.Action(ActionConstants.EditProfile, ControllerConstants.Account)" class="btn btn-default"> @Strings.EditProfile </a>
 				</div>
@@ -60,18 +60,18 @@
 						@foreach (var invite in Model.Invitations)
 						{
 							<div class="invites">
-								<span class="col-xs-4 col-xs-6" style="margin-top:25px;">@invite.OrganizationName</span>
+								<span class="ovrd-col-xs-4 col-xs-4 ovrd-col-xs-6 col-xs-6 col" style="margin-top:25px;">@invite.OrganizationName</span>
 								@using (Html.BeginForm(ActionConstants.AcceptInvitation, ControllerConstants.Account, new { id = @invite.InvitationId }, FormMethod.Post))
 								{
 
-									<span class="col-xs-4 col-xs-3 pull-right" style="margin-top:15px;">
-										<input type="submit" value="@Strings.Accept" class="btn btn-primary col-xs-12" />
+									<span class="ovrd-col-xs-4 col-xs-4 ovrd-col-xs-3 col-xs-3 col pull-right" style="margin-top:15px;">
+										<input type="submit" value="@Strings.Accept" class="btn btn-primary ovrd-col-xs-12 col-xs-12 col" />
 									</span>
 								}
 								@using (Html.BeginForm(ActionConstants.RejectInvitation, ControllerConstants.Account, new { id = @invite.InvitationId }, FormMethod.Post))
 								{
-									<span class="col-xs-4 col-xs-3 pull-right" style="margin-top:15px;">
-										<input type="submit" value="@Strings.Reject" class="btn btn-primary col-xs-12" />
+									<span class="ovrd-col-xs-4 col-xs-4 ovrd-col-xs-3 col-xs-3 col pull-right" style="margin-top:15px;">
+										<input type="submit" value="@Strings.Reject" class="btn btn-primary ovrd-col-xs-12 col-xs-12 col" />
 									</span>
 								}
 							</div>
@@ -84,9 +84,9 @@
 </div>
 
 <div class="row">
-	<div class="col-md-push-2 col-md-8">
+	<div class="ovrd-col-md-push-2 col-md-push-2 ovrd-col-md-8 col-md-8 col">
 		<div class="row">
-			<div class="col-xs-12">
+			<div class="ovrd-col-xs-12 col-xs-12 col">
 				<h1 style="float: left">@Strings.YourOrganizations</h1>
 				<a href="@Url.Action(ActionConstants.CreateOrg, ControllerConstants.Account)" class="btn btn-default" style="float: right; margin-top: 20px; margin-bottom: 15px;">@Strings.CreateOrganization</a>
 			</div>
@@ -94,7 +94,7 @@
 		@if (Model.Organizations.Count <= 0)
 		{
 			<div class="row">
-				<div class="col-xs-12">
+				<div class="ovrd-col-xs-12 col-xs-12 col">
 					<p><i>@Strings.NoOrganizationMessage</i></p>
 					<p><i>@Strings.NoOrganizationMessage2</i></p>
 				</div>
@@ -110,7 +110,7 @@
 				var OrgcityState = org.City != null && org.State != null ? org.City + ", " + org.State : org.City + org.State;
 
 				<div class="row">
-					<div class="col-md-12">
+					<div class="ovrd-col-md-12 col-md-12 col">
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<h2 style="margin-top: 0px; margin-bottom: 0px;">
@@ -121,13 +121,13 @@
 											<i class="fa fa-cog  fa-lg"></i>
 										</a>*@
 										<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = org.OrganizationId })" title="@Strings.EditOrganization" class="btn btn-default pull-right">
-											Manage <i class="fa fa-cog"></i>
+											Manage <i class="ovrd-fa fa ovrd-fa-cog fa-cog"></i>
 										</a>
 									}
 								</h2>
 							</div>
 							<div class="panel-body">
-								<div class="col-sm-8 index-details">
+								<div class="ovrd-col-sm-8 col-sm-8 col index-details">
 									<p>
 										<label>@Strings.PhoneNumber:</label>
 										@org.PhoneNumber
@@ -138,7 +138,7 @@
 										<span class="address-row">@OrgcityState @org.PostalCode</span>
 									</p>
 								</div>
-								<div class="col-sm-4 index-details">
+								<div class="ovrd-col-sm-4 col-sm-4 col index-details">
 									<p>
 										<label>@Strings.Website:</label>
 										@{
@@ -158,7 +158,7 @@
 										@org.FaxNumber
 									</p>
 								</div>
-								<div class="col-md-12" style="height: 100%; margin-top:15px; display: flex; flex-wrap: wrap; justify-content: space-around; clear: both;">
+								<div class="ovrd-col-md-12 col-md-12 col" style="height: 100%; margin-top:15px; display: flex; flex-wrap: wrap; justify-content: space-around; clear: both;">
 									@foreach (var sub in org.Subscriptions)
 									{
 										<div class="square-box">
