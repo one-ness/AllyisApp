@@ -5,7 +5,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 	UPDATE [Auth].[Invitation] 
-	SET    [StatusId] = -1, DecisionDateUtc = GETUTCDATE()
+	SET    [InvitationStatus] = 2, DecisionDateUtc = GETUTCDATE()
 	WHERE [InvitationId] = @invitationId;
 
 	SELECT @@ROWCOUNT;

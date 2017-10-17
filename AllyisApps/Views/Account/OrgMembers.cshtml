@@ -13,9 +13,11 @@
 	string title = sb.ToString();
 }
 
-<div class="row" style="margin-bottom:5px;">
+@Html.Partial("_MembersAndInvitationsTab", Model.TabInfo)
+
+<div class="row" style="margin-bottom:10px; margin-top:10px;">
 	<div class="col-xs-12">
-		<h2 style="margin-top:0px; margin-bottom:0px; display:inline;">@ViewBag.TitleBar</h2>
+		<h1 style="margin-top:0px; margin-bottom:0px; display:inline;">@ViewBag.TitleBar</h1>
 		<span class="pull-right">
 			@if (Model.CanManagePermissions)
 			{
@@ -54,7 +56,12 @@
 							<td class="col-md-2">@item.EmployeeId</td>
 							<td class="col-md-2">@item.FormattedJoinedDate</td>
 							<td class="col-md-2">@item.RoleName</td>
-							<td class="col-md-1"><i class="fa fa-fw fa-edit"></i></td>
+							<td class="col-md-1">
+								@if (Model.CanEditUser)
+								{
+									<a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account, new { @id = item.UserId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a>
+								}
+							</td>
 						</tr>
 					}
 				</table>

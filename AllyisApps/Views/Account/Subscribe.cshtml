@@ -38,7 +38,7 @@
 							<div class="form-group">
 								<p>@Html.DisplayTextFor(m => m.SelectedSkuDescription)</p>
 								@Html.ReqLabelFor(m => m.SubscriptionName, "Subscription Name")
-								@Html.TextBoxFor(m => m.SubscriptionName, new { @class = "form-control", @placeholder = Model.SubscriptionNameToDisplayForSubscribing() })
+								@Html.TextBoxFor(m => m.SubscriptionName, new { @class = "form-control", @placeholder = "Subscription name" })
 								@Html.ValidationMessageFor(m => m.SubscriptionName)
 							</div>
 						</div>

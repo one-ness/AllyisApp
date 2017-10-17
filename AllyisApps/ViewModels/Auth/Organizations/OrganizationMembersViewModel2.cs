@@ -46,10 +46,17 @@ namespace AllyisApps.ViewModels.Auth
 		public bool CanEditUser { get; set; }
 
 		/// <summary>
+		/// information for members and invitations tab
+		/// </summary>
+		public MembersAndInvitationsTabViewModel TabInfo { get; set; }
+
+		/// <summary>
 		/// constructor
 		/// </summary>
 		public OrganizationMembersViewModel2()
 		{
+			this.TabInfo = new MembersAndInvitationsTabViewModel();
+			this.TabInfo.MembersTabActive = "active";
 			this.Users = new List<ViewModelItem>();
 		}
 

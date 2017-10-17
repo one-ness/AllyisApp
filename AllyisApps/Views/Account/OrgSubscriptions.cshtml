@@ -10,6 +10,9 @@
 <div class="row" style="margin-bottom:5px;">
 	<div class="col-xs-12">
 		<h1 style="margin-top:0px; margin-bottom:0px; display:inline;">@ViewBag.TitleBar</h1>
+		<span class="pull-right">
+			<a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default" title="Add/Upgrade Subscriptions">Add Subscriptions</a>
+		</span>
 	</div>
 </div>
 <div class="row">
@@ -46,12 +49,15 @@
 					</tr>
 				}
 			</table>
+			<div>
+				<p><i>Please click on add subscriptions button to subscribe to other products.</i></p>
+			</div>
 		}
 		else
 		{
-			<h4>No Subscriptions</h4>
+			<h1>No Subscriptions</h1>
 			<p><i>You have not subscribed to any of our products yet.</i></p>
-			<p><i>Please visit the <a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { id = Model.OrganizationId })" style="color:cornflowerblue">subscriptions page</a> to subscribe to our products.</i></p>
+			<p><i>Please click on add subscriptions button to subscribe to our products.</i></p>
 		}
 	</div>
 </div>

@@ -84,7 +84,6 @@ namespace AllyisApps.Controllers.Auth
 					LastName = userOrgInfo.LastName,
 					OrganizationId = orgId,
 					EmployeeId = userOrgInfo.EmployeeId,
-					EmployeeRoleId = (int)userOrgInfo.OrganizationRole,
 					IsInvited = isInvited,
 					EmployeeRole = new SelectList(new List<SelectListItem>
 					{
@@ -115,7 +114,7 @@ namespace AllyisApps.Controllers.Auth
 					Notifications.Add(new BootstrapAlert(Resources.Strings.CannotEditEmployeeId, Variety.Danger));
 				}
 
-				return this.RedirectToAction(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = model.OrganizationId });
+				return this.RedirectToAction(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { id = model.OrganizationId });
 			}
 
 			return View(model);

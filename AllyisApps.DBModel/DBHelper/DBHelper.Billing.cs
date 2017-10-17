@@ -160,16 +160,12 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Get Subscription Details by Id.
 		/// </summary>
-		/// <param name="subscriptionId"> Subscription Id.</param>
-		/// <returns>SubscriptionDBEntity obj.</returns>
-		public SubscriptionDBEntity GetSubscriptionDetailsById(int subscriptionId)
+		public dynamic GetSubscriptionDetailsById(int subscriptionId)
 		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@subscriptionId", subscriptionId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
 				// default blank object
-				return connection.Query<SubscriptionDBEntity>("[Billing].[GetSubscriptionDetailsById]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				return con.Query<dynamic>("[Billing].[GetSubscriptionDetailsById] @a", new { a = subscriptionId }).FirstOrDefault();
 			}
 		}
 
@@ -245,26 +241,13 @@ namespace AllyisApps.DBModel
 
 		/// <summary>
 		/// Updates subscription:
-		///  - upgrades or downgrades the subscription (sku id)
 		///  - changes the subscription name.
 		/// </summary>
-		/// <param name="organizationId">Sets OrganizationId.</param>
-		/// <param name="skuId">Sku to change to.</param>
-		/// <param name="subscriptionId">Subscripiton Id</param>
-		/// <param name="subscriptionName">The subscription name.</param>
-		/// <returns>Number of rows changed.</returns>
-		public int UpdateSubscription(int organizationId, int skuId, int subscriptionId, string subscriptionName)
+		public void UpdateSubscriptionName(int subscriptionId, string subscriptionName)
 		{
-			// TODO: pass in subscriptionId as a parameter to simplify logic
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", organizationId);
-			parameters.Add("@skuId", skuId);
-			parameters.Add("@subscriptionId", subscriptionId);
-			parameters.Add("@subscriptionName", subscriptionName);
-
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Execute("[Billing].[UpdateSubscription]", parameters, commandType: CommandType.StoredProcedure);
+				con.Execute("Billing.UpdateSubscriptionName @a, @b", new { a = subscriptionId, b = subscriptionName });
 			}
 		}
 
@@ -463,21 +446,13 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Deletes a customer subscription.
+		/// Deletes a subscription.
 		/// </summary>
-		/// <param name="subscriptionid">The id of the subscription plan to be deleted.</param>
-		/// <returns>The deleted subscription plan Id, or -1 on failure.</returns>
-		public string DeleteSubscriptionPlan(string subscriptionid)
+		public void DeleteSubscription(int subscriptionid)
 		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@stripeTokenSubId", subscriptionid);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				// default -1
-				return connection.Query<string>(
-				   "[Billing].[DeleteCustomerSubscription]",
-				   parameters,
-				   commandType: CommandType.StoredProcedure).SingleOrDefault();
+				con.Execute("Billing.DeleteSubscription @a", new { a = subscriptionid });
 			}
 		}
 

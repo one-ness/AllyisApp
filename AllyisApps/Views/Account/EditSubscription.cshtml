@@ -14,33 +14,20 @@
 		</div>
 		<div class="col-md-10 col-md-push-1" style="margin-top:20px;">
 			<div class="col-md-12">
-				@Model.Description
+				@Model.SkuDescription
 			</div>
 
 			<div>
-				@using (Html.BeginForm(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = Model.SubscriptionId, idTwo = Model.SkuId }, FormMethod.Post, new { @class = "col-md-12", @style = "margin-top:20px;display: inline-block" })) // , @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw(String.Format(Strings.WarningWhenUnsubscribing, Model.Name))) TODO: make this only fire on unsubscribe action.
+				@using (Html.BeginForm(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = Model.SubscriptionId }, FormMethod.Post, new { @class = "col-md-12", @style = "margin-top:20px;display: inline-block" })) // , @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw(String.Format(Strings.WarningWhenUnsubscribing, Model.Name))) TODO: make this only fire on unsubscribe action.
 				{
+					@Html.HiddenFor(m => m.OrganizationId)
+					@Html.HiddenFor(m => m.SubscriptionId)
 					@Html.ReqLabelFor(m => m.SubscriptionName, Strings.SubscriptionName)
-					@Html.TextBoxFor(m => m.SubscriptionName, new { @class = "form-control margined", @placeholder = Model.ProductName })
+					@Html.TextBoxFor(m => m.SubscriptionName, new { @class = "form-control margined" })
 					@Html.AntiForgeryToken()
-					<input type="hidden" name="SubscriptionId" value="@Model.SubscriptionId" />
-					<input type="hidden" name="SkuId" value="@Model.SkuId" />
-					<input type="hidden" name="ProductId" value="@Model.ProductId" />
-					<input type="hidden" name="SkuIdNext" value="@Model.SkuIdNext" />
-					<input type="hidden" name="OrganizationId" value="@Model.OrganizationId" />
-					<input type="hidden" name="NextName" value="@Model.NextName" />
-					if (Model.OtherSkus.Count() != 0)
-					{
-						<div style="display:inline-block;">
-							<label for="subscriptionType">@Strings.ChangeSubscription: </label>
-						</div>
-						<div class="form-group">
-							@Html.DropDownListFor(m => m.SelectedNewSkuEnum, new SelectList(Model.OtherSkus), new { @class = "form-control" })
-						</div>
-					}
 					<div class="pull-right" , style="margin-top:50px;">
-						<a href="@Url.Action(ActionConstants.Unsubscribe, new { id = Model.SubscriptionId, idTwo = (int)Model.SkuId })" class="btn btn-danger">@Strings.Unsubscribe</a>
-						<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default"> @Strings.Cancel </a>
+						<a href="@Url.Action(ActionConstants.Unsubscribe, new { id = Model.SubscriptionId })" class="btn btn-danger">@Strings.Unsubscribe</a>
+						<a href="@Url.Action(ActionConstants.OrganizationSubscriptions, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default"> @Strings.Cancel </a>
 						<input type="submit" value="@Strings.Save" class="btn btn-primary" id="save" />
 					</div>
 

@@ -67,7 +67,6 @@ namespace AllyisApps.Controllers.Auth
 				indexViewModel.Invitations.Add(new AccountIndexViewModel.InvitationViewModel()
 				{
 					InvitationId = item.InvitationId,
-					OrganizationName = item.OrganizationName,
 				});
 			}
 
@@ -154,8 +153,8 @@ namespace AllyisApps.Controllers.Auth
 					subViewModel.SubscriptionName = subItem.SubscriptionName;
 					subViewModel.ProductDescription = description;
 					subViewModel.ProductId = subItem.ProductId;
-					subViewModel.AreaUrl = subItem.AreaUrl;
-					subViewModel.IconUrl = subItem.IconUrl == null ? null : "~/" + subItem.IconUrl;
+					subViewModel.AreaUrl = subItem.ProductAreaUrl;
+					subViewModel.IconUrl = subItem.SkuIconUrl == null ? null : "~/" + subItem.SkuIconUrl;
 					orgViewModel.Subscriptions.Add(subViewModel);
 				}
 

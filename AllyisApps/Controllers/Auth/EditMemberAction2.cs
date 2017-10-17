@@ -1,16 +1,17 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="UnsubscribeAction.cs" company="Allyis, Inc.">
+// <copyright file="EditMemberAction.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
+using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
-using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.Auth;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -20,14 +21,12 @@ namespace AllyisApps.Controllers.Auth
 	public partial class AccountController : BaseController
 	{
 		/// <summary>
-		/// Removes the selected subscription from the database.
+		/// GET: /Account/EditMember.
 		/// </summary>
-		[HttpGet]
-		public ActionResult Unsubscribe(int id)
+		public async Task<ActionResult> EditMember2(int id)
 		{
-			int orgId = this.AppService.DeleteSubscription(id);
-			Notifications.Add(new BootstrapAlert("Your subscription was deleted successfully.", Variety.Success));
-			return this.RedirectToAction(ActionConstants.OrganizationSubscriptions, new { id = orgId });
+			var model = await Task.Run(() => new EditMemberViewModel2());
+			return View(model);
 		}
 	}
 }
