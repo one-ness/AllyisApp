@@ -11,8 +11,8 @@
     <div class="container-fluid text-center text-muted">*@
 <div class="footer container" style="max-height:55px">
     <div class="row">
-        <p class="footer-links col-xs-8 col-sm-6">
-            @*<select class="col-xs-12 col-sm-6 form-control" id="languageSelect" onchange="OnLanguageSelect()" value=@ViewBag.language style="width: inherit;">
+        <p class="footer-links ovrd-col-xs-8 col-xs-8 ovrd-col-sm-6 col-sm-6 col">
+            @*<select class="col-xs-12 col-sm-6 col form-control" id="languageSelect" onchange="OnLanguageSelect()" value=@ViewBag.language style="width: inherit;">
                 @foreach (LanguageViewModel language in Model.Item1)
                 {
                     string languageKey = LanguageViewModel.Clean(language.LanguageName);
@@ -26,12 +26,12 @@
                     }
                 }
             </select >*@
-            <span class="col-xs-12 col-sm-6 footer-text">
+            <span class="ovrd-col-xs-12 col-xs-12 ovrd-col-sm-6 col-sm-6 col footer-text">
                 <a href="@Url.Action(ActionConstants.PrivacyPolicy, ControllerConstants.Home)">@Strings.PrivacyPolicy</a>
                 <a href="@Url.Action(ActionConstants.Help, ControllerConstants.Home)">@Strings.Help</a>
             </span>
         </p>
-        <p class="col-xs-4 col-sm-6 footer-text" style="text-align: right">
+        <p class="ovrd-col-xs-4 col-xs-4 ovrd-col-sm-6 col-sm-6 col footer-text" style="text-align: right">
             &copy; @DateTime.Now.Year - Allyis, Inc.
         </p>
     </div>

@@ -17,8 +17,10 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44326</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <NuGetPackageImportStamp>
@@ -473,59 +475,132 @@
     <Content Include="Areas\TimeTracker\Scripts\allyis-drp-init.js" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-index2.js" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-settings.js" />
-    <Content Include="Content\ExpenseTracker.css">
-      <DependentUpon>ExpenseTracker.less</DependentUpon>
+    <Content Include="Content\bootstrap\less\variables.css">
+      <DependentUpon>variables.less</DependentUpon>
     </Content>
+    <Content Include="Content\bootstrap\less\variables.min.css">
+      <DependentUpon>variables.css</DependentUpon>
+    </Content>
+    <Content Include="Content\ExpenseTracker.css" />
     <Content Include="Content\ExpenseTracker.min.css">
       <DependentUpon>ExpenseTracker.css</DependentUpon>
     </Content>
-    <Content Include="Content\ExpenseTracker\icons\ExpenseTracker.png" />
-    <Content Include="Content\less\allyis-pages-with-filter.css">
-      <DependentUpon>allyis-pages-with-filter.less</DependentUpon>
+    <Content Include="Content\icons\ExpenseTracker.png" />
+    <Content Include="Content\font-awesome\less\variables.css">
+      <DependentUpon>variables.less</DependentUpon>
     </Content>
+    <Content Include="Content\font-awesome\less\variables.min.css">
+      <DependentUpon>variables.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\allyis-list-group-search.css" />
+    <Content Include="Content\less\allyis-list-group-search.min.css">
+      <DependentUpon>allyis-list-group-search.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\allyis-pages-with-filter.css" />
     <Content Include="Content\less\allyis-pages-with-filter.min.css">
       <DependentUpon>allyis-pages-with-filter.css</DependentUpon>
     </Content>
-    <Content Include="Content\less\allyis-tabs.css">
-      <DependentUpon>allyis-tabs.less</DependentUpon>
-    </Content>
+    <Content Include="Content\less\allyis-tabs.css" />
     <Content Include="Content\less\allyis-tabs.min.css">
       <DependentUpon>allyis-tabs.css</DependentUpon>
     </Content>
-    <Content Include="Content\less\_mixins.css">
-      <DependentUpon>_mixins.less</DependentUpon>
+    <Content Include="Content\less\breadcrumbs.css" />
+    <Content Include="Content\less\breadcrumbs.min.css">
+      <DependentUpon>breadcrumbs.css</DependentUpon>
     </Content>
+    <Content Include="Content\less\error.css" />
+    <Content Include="Content\less\error.min.css">
+      <DependentUpon>error.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\form.css" />
+    <Content Include="Content\icons\StaffingManager.png" />
+    <Content Include="Content\icons\TimeTrackerPro.png" />
+    <Content Include="Content\icons\TimeTracker.png" />
+    <Content Include="Content\less\form.min.css">
+      <DependentUpon>form.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\general.css" />
+    <Content Include="Content\less\general.min.css">
+      <DependentUpon>general.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\index.css" />
+    <Content Include="Content\less\index.min.css">
+      <DependentUpon>index.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\modal.css" />
+    <Content Include="Content\less\modal.min.css">
+      <DependentUpon>modal.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\navigation.css" />
+    <Content Include="Content\less\navigation.min.css">
+      <DependentUpon>navigation.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\offcanvas.css" />
+    <Content Include="Content\less\offcanvas.min.css">
+      <DependentUpon>offcanvas.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\paneled_index.css" />
+    <Content Include="Content\less\paneled_index.min.css">
+      <DependentUpon>paneled_index.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\permissions.css" />
+    <Content Include="Content\less\permissions.min.css">
+      <DependentUpon>permissions.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\report.css" />
+    <Content Include="Content\less\report.min.css">
+      <DependentUpon>report.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\sale.css" />
+    <Content Include="Content\less\sale.min.css">
+      <DependentUpon>sale.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\sticky_footer.css" />
+    <Content Include="Content\less\sticky_footer.min.css">
+      <DependentUpon>sticky_footer.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\swapper-ui.css" />
+    <Content Include="Content\less\swapper-ui.min.css">
+      <DependentUpon>swapper-ui.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\tt_customer.css" />
+    <Content Include="Content\less\tt_customer.min.css">
+      <DependentUpon>tt_customer.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\utilities.min.css">
+      <DependentUpon>utilities.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\_mixins.css" />
     <Content Include="Content\less\_mixins.min.css">
       <DependentUpon>_mixins.css</DependentUpon>
     </Content>
-    <Content Include="Content\less\_root.css">
-      <DependentUpon>_root.less</DependentUpon>
-    </Content>
+    <Content Include="Content\less\_root.css" />
     <Content Include="Content\less\_root.min.css">
       <DependentUpon>_root.css</DependentUpon>
     </Content>
-    <Content Include="Content\less\_variables.css">
-      <DependentUpon>_variables.less</DependentUpon>
-    </Content>
+    <Content Include="Content\less\_variables.css" />
     <Content Include="Content\less\_variables.min.css">
       <DependentUpon>_variables.css</DependentUpon>
     </Content>
-    <Content Include="Content\StaffingManager.css">
-      <DependentUpon>StaffingManager.less</DependentUpon>
+    <Content Include="Content\Site.css" />
+    <Content Include="Content\Site_old.css" />
+    <Content Include="Content\Site - Copy.min.css">
+      <DependentUpon>Site_old.css</DependentUpon>
     </Content>
+    <Content Include="Content\Site_newer.css" />
+    <Content Include="Content\Site.min.css">
+      <DependentUpon>Site_newer.css</DependentUpon>
+    </Content>
+    <Content Include="Content\StaffingManager.css" />
     <Content Include="Content\StaffingManager.min.css">
       <DependentUpon>StaffingManager.css</DependentUpon>
     </Content>
-    <Content Include="Content\StaffingManager\icons\StaffingManager.png" />
-    <Content Include="Content\TimeTracker\icons\TimeTrackerPro.png" />
-    <Content Include="Content\TimeTracker\icons\TimeTracker.png" />
-    <Content Include="Content\TimeTracker\icons\TimeTrackerOld.png" />
-    <Content Include="Content\Timetracker - Copy.css">
-      <DependentUpon>ExpenseTracker.less</DependentUpon>
+    <Content Include="Content\Old_Timetracker.css" />
+    <Content Include="Content\Timetracker.min.css">
+      <DependentUpon>Old_Timetracker.css</DependentUpon>
     </Content>
-    <Content Include="Content\Timetracker - Copy.min.css">
-      <DependentUpon>Timetracker - Copy.css</DependentUpon>
-    </Content>
+    <Content Include="Content\less\utilities.css" />
+    <Content Include="Content\TimeTracker.css" />
     <Content Include="Scripts\allyis-account-permission2.js" />
     <Content Include="Scripts\allyis-holidayDatepicker.js" />
     <Content Include="Scripts\allyis-birthDatepicker.js" />
@@ -569,80 +644,12 @@
     <Content Include="Content\icons\fav64.png" />
     <Content Include="Content\icons\poweredbystripe.png" />
     <Content Include="Content\jquery.comiseo.daterangepicker.css" />
-    <Content Include="Content\less\allyis-list-group-search.css">
-      <DependentUpon>allyis-list-group-search.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\allyis-list-group-search.min.css">
-      <DependentUpon>allyis-list-group-search.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\error.css">
-      <DependentUpon>error.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\error.min.css">
-      <DependentUpon>error.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\index.css">
-      <DependentUpon>index.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\index.min.css">
-      <DependentUpon>index.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\modal.css">
-      <DependentUpon>modal.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\modal.min.css">
-      <DependentUpon>modal.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\navigation.css">
-      <DependentUpon>navigation.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\navigation.min.css">
-      <DependentUpon>navigation.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\paneled_index.css">
-      <DependentUpon>paneled_index.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\paneled_index.min.css">
-      <DependentUpon>paneled_index.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\permissions.css">
-      <DependentUpon>permissions.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\permissions.min.css">
-      <DependentUpon>permissions.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\report.css">
-      <DependentUpon>report.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\report.min.css">
-      <DependentUpon>report.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\sale.css">
-      <DependentUpon>sale.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\sale.min.css">
-      <DependentUpon>sale.css</DependentUpon>
-    </Content>
     <Content Include="Content\icons\allyislogo.png" />
-    <Content Include="Content\less\swapper-ui.css">
-      <DependentUpon>swapper-ui.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\swapper-ui.min.css">
-      <DependentUpon>swapper-ui.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\tt_customer.css">
-      <DependentUpon>tt_customer.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\tt_customer.min.css">
-      <DependentUpon>tt_customer.css</DependentUpon>
-    </Content>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Areas\TimeTracker\Views\Customer\_CustomerEdit.cshtml" />
-    <Content Include="Content\less\allyis-pages-with-filter.less" />
-    <Content Include="Content\less\allyis-tabs.less" />
     <Content Include="Areas\TimeTracker\Views\Customer\Details.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\MergePayClass.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Shared\_TimeTrackerSidebar.cshtml" />
@@ -651,10 +658,6 @@
     <Content Include="Areas\TimeTracker\Views\Customer\_ProjectsByCustomer.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\_IndexPartial_Active.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\_IndexPartial_Inactive.cshtml" />
-    <Content Include="Content\ExpenseTracker.less" />
-    <Content Include="Content\Timetracker - Copy.css.map">
-      <DependentUpon>Timetracker - Copy.css</DependentUpon>
-    </Content>
     <Content Include="Areas\ExpenseTracker\Views\_ViewStart.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\Index.cshtml" />
@@ -678,7 +681,6 @@
     <Content Include="Areas\ExpenseTracker\Views\Expense\AdminReport.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\CreatePosition.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\_PositionEditDetails.cshtml" />
-    <Content Include="Content\StaffingManager.less" />
     <Content Include="Areas\StaffingManager\Views\Staffing\settings.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\UserSettings.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Customer\Index.cshtml" />
@@ -750,7 +752,6 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js.map">
       <DependentUpon>jquery.validate.unobtrusive.min.js</DependentUpon>
     </Content>
-    <Content Include="Scripts\less.js" />
     <Content Include="Scripts\moment-2.14.1.js" />
     <Content Include="Scripts\moment-2.14.1.min.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js.map">
@@ -809,57 +810,9 @@
     <Content Include="Content\bootstrap\less\bootstrap.min.css">
       <DependentUpon>bootstrap.css</DependentUpon>
     </Content>
-    <Content Include="Content\ExpenseTracker\icons\ExpenseTrackerPro.png" />
+    <Content Include="Content\icons\ExpenseTrackerPro.png" />
     <Content Include="Content\icons\invoice.png" />
     <Content Include="Content\icons\tasks-list.png" />
-    <Content Include="Content\less\breadcrumbs.css">
-      <DependentUpon>breadcrumbs.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\breadcrumbs.min.css">
-      <DependentUpon>breadcrumbs.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\form.css">
-      <DependentUpon>form.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\form.min.css">
-      <DependentUpon>form.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\general.css">
-      <DependentUpon>general.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\general.min.css">
-      <DependentUpon>general.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\offcanvas.css">
-      <DependentUpon>offcanvas.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\offcanvas.min.css">
-      <DependentUpon>offcanvas.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\sticky_footer.css">
-      <DependentUpon>sticky_footer.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\sticky_footer.min.css">
-      <DependentUpon>sticky_footer.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\utilities.css">
-      <DependentUpon>utilities.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\utilities.min.css">
-      <DependentUpon>utilities.css</DependentUpon>
-    </Content>
-    <Content Include="Content\Site.css">
-      <DependentUpon>Site.less</DependentUpon>
-    </Content>
-    <Content Include="Content\Site.min.css">
-      <DependentUpon>Site.css</DependentUpon>
-    </Content>
-    <Content Include="Content\Timetracker.css">
-      <DependentUpon>Timetracker.less</DependentUpon>
-    </Content>
-    <Content Include="Content\Timetracker.min.css">
-      <DependentUpon>Timetracker.css</DependentUpon>
-    </Content>
     <Content Include="Scripts\bootstrap\affix.js" />
     <Content Include="Scripts\bootstrap\alert.js" />
     <Content Include="Scripts\bootstrap\button.js" />
@@ -905,7 +858,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Areas\TimeTracker\Views\_ViewStart.cshtml" />
-    <Content Include="Content\Site.less" />
     <Content Include="Content\bootstrap\less\.csscomb.json" />
     <Content Include="Content\bootstrap\less\.csslintrc" />
     <Content Include="Content\bootstrap\less\alerts.less" />
@@ -987,48 +939,14 @@
     <Content Include="Scripts\bootstrap\.jshintrc" />
     <Content Include="Scripts\bootstrap\tests\README.md" />
     <Content Include="Scripts\bootstrap\tests\unit\.jshintrc" />
-    <Content Include="Content\less\_root.less" />
-    <Content Include="Content\less\sticky_footer.less" />
-    <Content Include="Content\less\sticky_footer.css.map">
-      <DependentUpon>sticky_footer.css</DependentUpon>
-    </Content>
-    <Content Include="Content\Site.css.map">
-      <DependentUpon>Site.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\_variables.less" />
-    <Content Include="Content\less\_mixins.less" />
     <Content Include="Content\bootstrap\less\bootstrap.css.map">
       <DependentUpon>bootstrap.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\utilities.less" />
-    <Content Include="Content\less\utilities.css.map">
-      <DependentUpon>utilities.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\form.less" />
-    <Content Include="Content\less\form.css.map">
-      <DependentUpon>form.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\general.less" />
-    <Content Include="Content\less\general.css.map">
-      <DependentUpon>general.css</DependentUpon>
     </Content>
     <Content Include="Content\bootstrap\LICENSE" />
     <Content Include="Content\bootstrap\README.md" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\_ClearRow.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
-    <Content Include="Content\less\offcanvas.less" />
-    <Content Include="Content\less\offcanvas.css.map">
-      <DependentUpon>offcanvas.css</DependentUpon>
-    </Content>
     <Content Include="Areas\TimeTracker\Views\TimeEntry\Report.cshtml" />
-    <Content Include="Content\less\breadcrumbs.less" />
-    <Content Include="Content\less\breadcrumbs.css.map">
-      <DependentUpon>breadcrumbs.css</DependentUpon>
-    </Content>
-    <Content Include="Content\Timetracker.less" />
-    <Content Include="Content\Timetracker.css.map">
-      <DependentUpon>Timetracker.css</DependentUpon>
-    </Content>
     <Content Include="Areas\TimeTracker\Views\Shared\_BreadcrumbNavPartial.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\Index.cshtml" />
@@ -1050,52 +968,8 @@
     <Content Include="Content\font-awesome\less\rotated-flipped.less" />
     <Content Include="Content\font-awesome\less\stacked.less" />
     <Content Include="Content\font-awesome\less\variables.less" />
-    <Content Include="Content\less\report.less" />
-    <Content Include="Content\less\report.css.map">
-      <DependentUpon>report.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\error.less" />
-    <Content Include="Content\less\error.css.map">
-      <DependentUpon>error.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\paneled_index.less" />
-    <Content Include="Content\less\paneled_index.css.map">
-      <DependentUpon>paneled_index.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\sale.less" />
-    <Content Include="Content\less\sale.css.map">
-      <DependentUpon>sale.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\navigation.less" />
-    <Content Include="Content\less\navigation.css.map">
-      <DependentUpon>navigation.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\tt_customer.less" />
-    <Content Include="Content\less\tt_customer.css.map">
-      <DependentUpon>tt_customer.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\index.less" />
-    <Content Include="Content\less\index.css.map">
-      <DependentUpon>index.css</DependentUpon>
-    </Content>
     <Content Include="Scripts\bootstrap.min.js.map">
       <DependentUpon>bootstrap.min.js</DependentUpon>
-    </Content>
-    <Content Include="Content\less\allyis-list-group-search.less" />
-    <Content Include="Content\less\allyis-list-group-search.css.map">
-      <DependentUpon>allyis-list-group-search.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\modal.less" />
-    <Content Include="Content\less\modal.css.map">
-      <DependentUpon>modal.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\swapper-ui.less" />
-    <Content Include="Content\less\swapper-ui.css.map">
-      <DependentUpon>swapper-ui.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\permissions.less" />
-    <Content Include="Content\less\permissions.css.map">
-      <DependentUpon>permissions.css</DependentUpon>
     </Content>
     <None Include="Resources\Files\ImportUserTemplate.csv" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -1180,6 +1054,7 @@
     <EmbeddedResource Include="Resources\Images.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Images.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\States.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

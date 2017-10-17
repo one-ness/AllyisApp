@@ -8,7 +8,7 @@
 	var OrgcityState = Model.City != null && Model.State != null ? Model.City + ", " + Model.State : Model.City + Model.State;
 }
 <div class="row">
-	<div class="col-md-12">
+	<div class="ovrd-col-md-12 col-md-12 col">
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h2 style="margin-top: 0px; margin-bottom: 0px;">
@@ -16,13 +16,13 @@
 					@if (Model.IsManageAllowed)
 					{
 						<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId })" title="@Strings.EditOrganization" class="pull-right text-muted">
-							<i class="fa fa-cog  fa-lg"></i>
+							<i class="ovrd-fa fa ovrd-fa-cog fa-cog ovrd-fa-lg fa-lg"></i>
 						</a>
 					}
 				</h2>
 			</div>
 			<div class="panel-body">
-				<div class="col-sm-8 index-details">
+				<div class="ovrd-col-sm-8 col-sm-8 col index-details">
 					<p>
 						<label>@Strings.PhoneNumber:</label>
 						@Model.PhoneNumber
@@ -33,7 +33,7 @@
 						<span class="address-row">@OrgcityState @Model.PostalCode</span>
 					</p>
 				</div>
-				<div class="col-sm-4 index-details">
+				<div class="ovrd-col-sm-4 col-sm-4 col index-details">
 					<p>
 						<label>@Strings.Website:</label>
 						@{
@@ -53,7 +53,7 @@
 						@Model.FaxNumber
 					</p>
 				</div>
-				<div class="col-md-12" style="height: 100%; margin-top:15px; display: flex; flex-wrap: wrap; justify-content: space-around; clear: both;">
+				<div class="ovrd-col-md-12 col-md-12 col" style="height: 100%; margin-top:15px; display: flex; flex-wrap: wrap; justify-content: space-around; clear: both;">
 					@foreach (AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel sub in Model.Subscriptions)
 					{
 						<div class="square-box">

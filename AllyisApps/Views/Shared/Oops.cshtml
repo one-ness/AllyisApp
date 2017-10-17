@@ -5,11 +5,11 @@
 
 <div class="jumbotron error">
     <div class="row">
-        <div class="col-md-6">
+        <div class="ovrd-col-md-6 col-md-6 col">
             <h1>@Strings.Oops</h1>
             <h1 style="COLOR: black; FONT: 13pt/15pt verdana" id="errortype"><span id="errorText">@Response.Status</span></h1>
         </div>
-        <div class="col-md-6">
+        <div class="ovrd-col-md-6 col-md-6 col">
             <h1 style="COLOR: black; FONT: 13pt/15pt verdana"><br /><br />(\/)<br />( . .)<br />c(")(")</h1>
         </div>
     </div>
@@ -19,7 +19,7 @@
     </p>
 
     <div class="redirect button" align="center">
-        <a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account,new { area = "" })" class="btn btn-default">@Strings.GoHome <i class="fa fa-home"></i></a>
+        <a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account,new { area = "" })" class="btn btn-default">@Strings.GoHome <i class="ovrd-fa fa ovrd-fa-home fa-home"></i></a>
     </div>
 
     @if (Model != null && HttpContext.Current.IsDebuggingEnabled)

@@ -14,7 +14,7 @@
 			@Html.AntiForgeryToken()
 			@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
 			<div class="row">
-				<div class="col-md-6 sm-control-width">
+				<div class="ovrd-col-md-6 col-md-6 col sm-control-width">
 					<div class="form-group">
 						@Html.ReqLabelFor(m => m.OrganizationName, Strings.Name)
 						@Html.TextBoxFor(m => m.OrganizationName, new { @class = "form-control" })
@@ -48,7 +48,7 @@
 						@Html.HiddenFor(m => m.EmployeeId);
 					}
 				</div>
-				<div class="col-md-6 sm-control-width">
+				<div class="ovrd-col-md-6 col-md-6 col sm-control-width">
 					<div class="form-group">
 						@Html.ReqLabelFor(m => m.Address, Strings.Address)
 						@Html.TextBoxFor(m => m.Address, new { @class = "form-control" })

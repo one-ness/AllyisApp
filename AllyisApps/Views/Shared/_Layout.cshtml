@@ -4,10 +4,6 @@
 	{
 		title = ViewBag.Title + " - " + title;
 	}
-	else if (!string.IsNullOrWhiteSpace(ViewBag.TitleBar))
-	{
-		title = ViewBag.TitleBar + " - " + title;
-	}
 }
 
 <!DOCTYPE html>
@@ -26,8 +22,7 @@
     @Scripts.Render("~/bundles/underscore")
     @RenderSection("css", required: false)
     @*@Styles.Render(DisplayHints.LayoutThemeBundle)*@
-    <link href="@Url.Content(DisplayHints.LayoutThemeBundle + ".min.css")" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="@Url.Content("~/Scripts/less.js")"></script>
+    <link href="@Url.Content(DisplayHints.LayoutThemeBundle + ".css")" rel="stylesheet" type="text/css" />
     <meta name="description" content="@Strings.MetaDescription" />
 </head>
 <body id="@DisplayHints.PageBodyId" class="@DisplayHints.PageBodyClasses">

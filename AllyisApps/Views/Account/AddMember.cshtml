@@ -12,7 +12,7 @@
 			@Html.HiddenFor(m => m.OrganizationId)
 			@Html.ValidationSummary(true)
 			<div class="row">
-				<div class="col-md-6 sm-control-width">
+				<div class="ovrd-col-md-6 col-md-6 col sm-control-width">
 					<div class="form-group">
 						@Html.ReqLabelFor(model => model.Email, Strings.Email)
 						@Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
@@ -24,36 +24,36 @@
 						@Html.ValidationMessageFor(model => model.EmployeeId, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
-						<div class="form-group col-md-6" style="padding: 0px">
-							@Html.ReqLabelFor(x => x.OrgRole, "Organization Role")
+						<div class="form-group ovrd-col-md-6 col-md-6 col">
+							@Html.ReqLabelFor(x => x.OrgRole, "Org Role")
 						</div>
-						<div class="form-group col-md-6" style="padding: 0px">
+						<div class="form-group ovrd-col-md-6 col-md-6 col">
 							@Html.DropDownListFor(x => x.OrgRoleSelection, Model.OrgRole, new { @class = "form-control" })
 						</div>
 					</div>
 					<div class="form-group">
-						<div class="form-group col-md-6" style="padding: 0px">
+						<div class="form-group ovrd-col-md-6 col-md-6 col">
 							@if (Model.hasTT)
 							{ @Html.ReqLabelFor(x => x.TTRoles, "TimeTracker Role") }
 						</div>
-						<div class="form-group col-md-6" style="padding: 0px">
+						<div class="form-group ovrd-col-md-6 col-md-6 col">
 							@if (Model.hasTT)
 							{ @Html.DropDownListFor(x => x.ttSelection, Model.TTRoles, new { @class = "form-control" }) }
 						</div>
 					</div>
 
 					<div class="form-group">
-						<div class="form-group col-md-6">
+						<div class="form-group ovrd-col-md-6 col-md-6 col">
 							@if (Model.hasET)
 							{ @Html.ReqLabelFor(x => x.ETRoles, "ExpenseTracker Role") }
 						</div>
-						<div class="form-group col-md-6">
+						<div class="form-group ovrd-col-md-6 col-md-6 col">
 							@if (Model.hasET)
 							{@Html.DropDownListFor(x => x.etSelection, Model.ETRoles, new { @class = "form-control" }) }
 						</div>
 					</div>
 				</div>
-				<div class="col-md-6 sm-control-width">
+				<div class="ovrd-col-md-6 col-md-6 col sm-control-width">
 
 					<div class="form-group">
 						@Html.ReqLabelFor(model => model.FirstName, Strings.FirstName)
@@ -75,16 +75,16 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-xs-12">
+				<div class="ovrd-col-xs-12 col-xs-12 col">
 					<div class="form-group allyis-action-buttons pull-right">
-						<a href="@Url.Action(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { @id = Model.OrganizationId })" class="btn btn-default">@Strings.Cancel</a>&nbsp;
+						<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { @id = Model.OrganizationId })" class="btn btn-default">@Strings.Cancel</a>&nbsp;
 						<input type="submit" id="addMember" value="@Strings.Add" class="btn btn-primary" />
 					</div>
 				</div>
 			</div>
 		}
 		<div class="row">
-			<div class="col-md-6 sm-control-width">
+			<div class="ovrd-col-md-6 col-md-6 col sm-control-width">
 				<label>@Strings.AddMultipleMembers</label>
 				@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Account, new { id = Model.OrganizationId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
 				{
