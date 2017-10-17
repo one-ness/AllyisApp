@@ -25,6 +25,11 @@ namespace AllyisApps.Services.Billing
 		public SkuIdEnum SkuId { get; set; }
 
 		/// <summary>
+		/// subscription name
+		/// </summary>
+		public string SubscriptionName { get; set; }
+
+		/// <summary>
 		/// Gets or sets number of users.
 		/// </summary>
 		public int NumberOfUsers { get; set; }
@@ -49,7 +54,7 @@ namespace AllyisApps.Services.Billing
 		/// </summary>
 		public string SkuName { get; set; }
 
-		public string SubscriptionName { get; set; }
+		public string SkuDescription { get; set; }
 
 		public ProductIdEnum ProductId { get; set; }
 
@@ -57,8 +62,8 @@ namespace AllyisApps.Services.Billing
 
 		public string ProductDescription { get; set; }
 
-		public string AreaUrl { get; set; }
+		public string ProductAreaUrl { get; set; }
 
-		public string IconUrl { get; internal set; }
+		public string SkuIconUrl { get; internal set; }
 	}
 }

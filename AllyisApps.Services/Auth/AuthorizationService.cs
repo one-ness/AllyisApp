@@ -26,6 +26,7 @@ namespace AllyisApps.Services
 			ReadBilling = 200000,
 			ReadInvitationsList,
 			ReadOrganization,
+			ReadSubscription,
 			ReadPermissionsList, // view list of users and their permissions
 			ReadSubscriptionsList, // view list of subscriptions
 			ReadUser, // view other users (view self must always be allowed)

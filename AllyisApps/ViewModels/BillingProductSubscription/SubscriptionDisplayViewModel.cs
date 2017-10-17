@@ -31,7 +31,7 @@ namespace AllyisApps.ViewModels.Auth
 			this.SubscriptionId = sub.SubscriptionId;
 			this.SubscriptionName = sub.SubscriptionName;
 			this.OrganizationId = sub.OrganizationId;
-			this.AreaUrl = sub.AreaUrl;
+			this.AreaUrl = sub.ProductAreaUrl;
 			this.NumberofUsers = sub.NumberOfUsers;
 			this.SkuId = sub.SkuId;
 		}

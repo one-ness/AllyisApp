@@ -391,27 +391,36 @@ namespace AllyisApps.Services
 		/// <returns>A SubscriptionDBEntity.</returns>
 		public Subscription GetSubscription(int subscriptionId)
 		{
-			if (subscriptionId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("subscriptionId", "Subscription Id cannot be 0 or negative.");
-			}
+			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException("subscriptionId");
 
-			SubscriptionDBEntity si = DBHelper.GetSubscriptionDetailsById(subscriptionId);
-			if (si == null)
-			{
-				return null;
-			}
+			// get from db
+			Task<dynamic> task = this.DBHelper.GetSubscriptionDetailsById(subscriptionId);
+			var sub = task.Result;
+			if (sub == null) throw new InvalidOperationException("subscriptionId");
 
-			return new Subscription
-			{
-				OrganizationId = si.OrganizationId,
-				SubscriptionId = si.SubscriptionId,
-				SkuId = (SkuIdEnum)si.SkuId,
-				NumberOfUsers = si.NumberOfUsers,
-				SubscriptionCreatedUtc = si.SubscriptionCreatedUtc,
-				IsActive = si.IsActive,
-				SubscriptionName = si.SubscriptionName,
-			};
+			// copy to subscription
+			var result = new Subscription();
+			result.ProductAreaUrl = sub.ArealUrl;
+			result.SkuIconUrl = sub.IconUrl;
+			result.IsActive = sub.IsActive;
+			result.NumberOfUsers = sub.NumberOfUsers;
+			result.OrganizationId = sub.OrganizationId;
+			result.ProductDescription = sub.ProductDescription;
+			result.ProductId = sub.ProductId;
+			result.ProductName = sub.ProductName;
+			result.PromoExpirationDateUtc = sub.PromoExpirationDateUtc;
+			result.SkuDescription = sub.SkuDescription;
+			result.SkuId = sub.SkuId;
+			result.SkuName = sub.SkuName;
+			result.SubscriptionCreatedUtc = sub.SubscriptionCreatedUtc;
+			result.SubscriptionId = subscriptionId;
+			result.SubscriptionName = sub.SubscriptionName;
+
+			// check permission
+			this.CheckOrgAction(OrgAction.ReadSubscription, result.OrganizationId);
+
+			// return sub
+			return result;
 		}
 
 		public List<SubscriptionUser> GetSubscriptionUsers(int subscriptionId)
@@ -636,9 +645,11 @@ namespace AllyisApps.Services
 			DBHelper.CreateSubscription(orgId, (int)selectedSku, subscriptionName, UserContext.UserId);
 		}
 
-		public void UpdateSubscription(int orgId, int skuId, int subscriptionId, string subscriptionname)
+		public void UpdateSubscriptionName(int subscriptionId, string subscriptionname)
 		{
-			DBHelper.UpdateSubscription(orgId, skuId, subscriptionId, subscriptionname);
+			var sub = this.GetSubscription(subscriptionId);
+			this.CheckOrgAction(OrgAction.EditSubscription, sub.OrganizationId);
+			this.DBHelper.UpdateSubscriptionName(subscriptionId, subscriptionname);
 		}
 
 		public void CreateAndUpdateAndDeleteSubscriptionPlan(int productId, string productName, int selectedSku, int previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
@@ -871,7 +882,7 @@ namespace AllyisApps.Services
 
 			return new Subscription
 			{
-				AreaUrl = subscriptionDisplay.AreaUrl,
+				ProductAreaUrl = subscriptionDisplay.AreaUrl,
 				SubscriptionCreatedUtc = subscriptionDisplay.CreatedUtc,
 				NumberOfUsers = subscriptionDisplay.NumberOfUsers,
 				OrganizationId = subscriptionDisplay.OrganizationId,

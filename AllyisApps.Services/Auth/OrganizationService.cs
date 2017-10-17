@@ -87,7 +87,7 @@ namespace AllyisApps.Services
 			foreach (var item in entities)
 			{
 				var data = new Subscription();
-				data.AreaUrl = item.ArealUrl;
+				data.ProductAreaUrl = item.ArealUrl;
 				data.IsActive = item.IsActive;
 				data.NumberOfUsers = item.NumberOfUsers ?? 0;
 				data.OrganizationId = item.OrganizationId;
