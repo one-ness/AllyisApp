@@ -1,0 +1,188 @@
+﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+@using AllyisApps.Areas.TimeTracker.Core;
+@using AllyisApps.Lib;
+@using System.Globalization;
+@model TimeEntryRangeForUserViewModel
+
+@{
+	System.DayOfWeek startOfWeek = (System.DayOfWeek)ViewBag.startOfWeek;
+	Func<int, int> weekProjector =
+		d => CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(
+			Utility.GetDateTimeFromDays(d).Value.Date,
+			CalendarWeekRule.FirstFourDayWeek,
+			startOfWeek);
+	var query2 = from entry in Model.Entries orderby entry.Date group entry by entry.Date;
+	var weekQuery = from entry in Model.Entries orderby entry.Date group entry by weekProjector(entry.Date);
+}
+
+@foreach (var weekGroup in weekQuery)
+{
+	var dateQuery = from entry in weekGroup orderby entry.Date group entry by entry.Date;
+	<div class="panel panel-default timesheet-grouping">
+		@foreach (var dateGroup in dateQuery)
+		{
+			var theEntries = from entry in dateGroup where !entry.Sample select entry;
+			var theSample = (from entry in dateGroup where entry.Sample select entry).FirstOrDefault();
+			int totalCount = theEntries.Count();
+			int allVotedCount = (from e in theEntries where e.ApprovalState != (int)ApprovalState.NoApprovalState select e).Count();
+			int allApprovedCount = (from e in theEntries where e.ApprovalState == (int)ApprovalState.Approved select e).Count();
+			int allRejectedCount = (from e in theEntries where e.ApprovalState == (int)ApprovalState.NotApproved select e).Count();
+			bool noneExist = totalCount == 0;
+			bool noneWereVoted = allVotedCount == 0;
+			bool allVotedWereApproved = allVotedCount > 0 && allVotedCount == allApprovedCount;
+			bool allVotedWereRejected = allVotedCount > 0 && allVotedCount == allRejectedCount;
+			bool allWereApproved = allVotedCount > 0 && totalCount == allApprovedCount;
+			bool allWereRejected = allVotedCount > 0 && totalCount == allRejectedCount;
+			bool anyWereChanged = (from e in theEntries where e.ModSinceApproval == true select e).Any();
+			string containerClass = noneExist ? "" :
+								noneWereVoted ? "" :
+								anyWereChanged ? "pending" :
+								allWereApproved ? "approved" :
+								allWereRejected ? "rejected" : "pending";
+			string headerClass = containerClass;
+			string selectorClass = allVotedWereApproved ? "approved" :
+								allVotedWereRejected ? "rejected" : "";
+
+			var currentDate = Utility.GetDateTimeFromDays(dateGroup.First().Date).Value.Date;
+			string dateStringNums = currentDate.ToShortDateString();
+			string dateStringDayLong = currentDate.DayOfWeek.ToString();
+			string dateStringDayShort = DateTimeFormatInfo.CurrentInfo.AbbreviatedDayNames[(int)currentDate.DayOfWeek].ToString();
+
+			string offDayClass = "";
+			string holidayClass = "";
+
+			if (theSample.IsOffDay)
+			{ // Note: To change the color of offdays/offday entries, edit TimeTracker.css rules for '.table-row .offDay'/'.offDay .form-control', respectively.
+				offDayClass = "offDay";
+			}
+			if (theSample.IsHoliday && !theSample.IsOffDay)
+			{
+				holidayClass = "holiday";
+			}
+
+			<div class="panel-heading hidden visible-xs @(headerClass)">
+				<div class="panel-right table-col @offDayClass @holidayClass" style="display: block; background-color:transparent;">
+
+					<label style="margin-right:2em;">@(dateStringNums) @(dateStringDayLong)</label>
+					<!-- Remove Copy Buttons
+					@*if (currentDate.DayOfWeek == startOfWeek)
+					{
+						<span style="padding-right:5px; padding-bottom:5px;">
+							<a class="btn btn-primary weekcopier" name='@((theSample.Date <= theSample.LockDate && !theSample.IsManager) ? "disabledButton" : "")'
+							   href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
+									{
+										startDateTarget=currentDate,
+										startDateCopy=currentDate.AddDays(-7),
+										endDateCopy = currentDate.AddDays(-1),
+										userId = Model.UserId,
+										subscriptionId = Model.SubscriptionId,
+										startDate = Model.StartDate,
+										endDate = Model.EndDate
+									}
+								)"
+							   title="@Strings.CopyWeek">
+								<i class="fa fa-files-o"></i> @Strings.WeekInitial
+							</a>
+						</span>
+					}
+					<span style="padding-bottom:5px;">
+						<a class="btn btn-primary daycopier" name='@((theSample.Date <= theSample.LockDate && !theSample.IsManager) ? "disabledButton" : "")'
+						   href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
+								{
+									startDateTarget=currentDate,
+									startDateCopy=currentDate.AddDays(-1),
+									endDateCopy = currentDate.AddDays(-1),
+									userId = Model.UserId,
+									subscriptionId = Model.SubscriptionId,
+									startDate = Model.StartDate,
+									endDate = Model.EndDate
+								}
+							)"
+						   title="@Strings.CopyDay">
+							<i class="fa fa-files-o"></i> @Strings.DayInitial
+						</a>
+					</span>
+					*@-->
+				</div>
+			</div>
+			<div class="table-container @(containerClass)">
+				<div class="table-row">
+					<div class="panel-left hidden-xs table-col text-center @offDayClass @holidayClass">
+						<label style="margin: 0px 5px;">@dateStringNums</label>
+						<label style="margin: 0px 5px;">@dateStringDayShort</label>
+						<div class="panel-right table-col @offDayClass @holidayClass" style="display: block; background-color:transparent;">
+							<table align="center">
+								<tr>
+									<!--
+									@if (currentDate.DayOfWeek == startOfWeek)
+									{
+										<td style="padding-right:5px; padding-bottom:5px;">
+											<a class="btn btn-primary weekcopier" name='@((theSample.Date <= theSample.LockDate && !theSample.IsManager) ? "disabledButton" : "")'
+											   href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
+														{
+															startDateTarget=currentDate,
+															startDateCopy=currentDate.AddDays(-7),
+															endDateCopy = currentDate.AddDays(-1),
+															userId = Model.UserId,
+															subscriptionid = Model.SubscriptionId,
+															startDate = Model.StartDate,
+															endDate = Model.EndDate
+														}
+													)"
+											   style="width:100%; padding: 5px 7px;"
+											   title="@Strings.CopyWeek">
+												<i class="fa fa-files-o"></i> @Strings.WeekInitial
+											</a>
+										</td>
+									}
+									<td style="padding-bottom:5px;">
+										<a class="btn btn-primary daycopier" name='@((theSample.Date <= theSample.LockDate && !theSample.IsManager) ? "disabledButton" : "")'
+										   href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
+													{
+														startDateTarget=currentDate,
+														startDateCopy=currentDate.AddDays(-1),
+														endDateCopy = currentDate.AddDays(-1),
+														userId = Model.UserId,
+														subscriptionId = Model.SubscriptionId,
+														startDate = Model.StartDate,
+														endDate = Model.EndDate
+													}
+												)"
+										   style="width:100%; padding: 5px 7px;"
+										   title="@Strings.CopyDay">
+											<i class="fa fa-files-o"></i> @Strings.DayInitial
+										</a>
+									</td>
+									-->
+								</tr>
+							</table>
+						</div>
+					</div>
+					<div class="panel-right table-col @offDayClass @holidayClass">
+						@{
+							foreach (var entry in theEntries)
+							{
+								@Html.Partial("_AjaxTimeEntryBody2", entry);
+							}
+							@Html.Partial("_AjaxTimeEntryBody2", theSample);
+							if (theSample.Date > theSample.LockDate || theSample.IsManager) //if the date is not locked because of lock date or logged in user is manager
+							{
+								theSample.Hidden = true;
+								@Html.Partial("_AjaxTimeEntryBody2", theSample);
+							}
+							else if (theEntries.Count() <= 0)//date is locked for regular user, there is no existing entry so we need 2 sample entries for styling purpose
+							{
+								@Html.Partial("_AjaxTimeEntryBody2", theSample);
+							}
+						}
+					</div>
+				</div>
+			</div>
+							}
+	</div>
+							}
+<div class="pull-right">
+	<a href=@Context.Request.RawUrl
+	<span class="btn btn-danger" >@Strings.Cancel</span></a>
+	<span class="btn btn-primary" onclick="saveForm()" style="margin-right: 15px;">@Strings.Save</span>
+</div>

@@ -116,7 +116,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="timeEntry">Time entry service object.</param>
 		/// <returns>View Model for time entry.</returns>
-		public TimeEntryViewModel ConstuctTimeEntryViewModel(TimeEntry timeEntry)
+		public TimeEntryViewModel ConstuctTimeEntryViewModel(Services.TimeTracker.TimeEntry timeEntry)
 		{
 			return new TimeEntryViewModel()
 			{

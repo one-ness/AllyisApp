@@ -294,8 +294,12 @@
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\MergePayClassAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ImportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\TemplateAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\TimeEntryCURDAction.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\Project\CompleteProjectViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\MergePayClassViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsLockDateViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsPayClassesViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsWeekStartViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\TimeEntryRangeForUserViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\TimeEntryViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\PayClassInfoViewModel.cs" />
@@ -467,20 +471,57 @@
     <Compile Include="ViewModels\Shared\LogOnPartialViewModel.cs" />
     <Compile Include="ViewModels\Shared\SubscriptionsViewModel.cs" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-drp-init.js" />
+    <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-index2.js" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-settings.js" />
+    <Content Include="Content\ExpenseTracker.css">
+      <DependentUpon>ExpenseTracker.less</DependentUpon>
+    </Content>
+    <Content Include="Content\ExpenseTracker.min.css">
+      <DependentUpon>ExpenseTracker.css</DependentUpon>
+    </Content>
     <Content Include="Content\ExpenseTracker\icons\ExpenseTracker.png" />
+    <Content Include="Content\less\allyis-pages-with-filter.css">
+      <DependentUpon>allyis-pages-with-filter.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\allyis-pages-with-filter.min.css">
+      <DependentUpon>allyis-pages-with-filter.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\allyis-tabs.css">
+      <DependentUpon>allyis-tabs.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\allyis-tabs.min.css">
+      <DependentUpon>allyis-tabs.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\_mixins.css">
+      <DependentUpon>_mixins.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\_mixins.min.css">
+      <DependentUpon>_mixins.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\_root.css">
+      <DependentUpon>_root.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\_root.min.css">
+      <DependentUpon>_root.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\_variables.css">
+      <DependentUpon>_variables.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\_variables.min.css">
+      <DependentUpon>_variables.css</DependentUpon>
+    </Content>
+    <Content Include="Content\StaffingManager.css">
+      <DependentUpon>StaffingManager.less</DependentUpon>
+    </Content>
+    <Content Include="Content\StaffingManager.min.css">
+      <DependentUpon>StaffingManager.css</DependentUpon>
+    </Content>
     <Content Include="Content\StaffingManager\icons\StaffingManager.png" />
     <Content Include="Content\TimeTracker\icons\TimeTrackerPro.png" />
     <Content Include="Content\TimeTracker\icons\TimeTracker.png" />
     <Content Include="Content\TimeTracker\icons\TimeTrackerOld.png" />
-    <Content Include="Content\Timetracker - Copy - Copy.css">
-      <DependentUpon>StaffingManager.less</DependentUpon>
-    </Content>
     <Content Include="Content\Timetracker - Copy.css">
       <DependentUpon>ExpenseTracker.less</DependentUpon>
-    </Content>
-    <Content Include="Content\Timetracker - Copy.min - Copy.css">
-      <DependentUpon>Timetracker - Copy - Copy.css</DependentUpon>
     </Content>
     <Content Include="Content\Timetracker - Copy.min.css">
       <DependentUpon>Timetracker - Copy.css</DependentUpon>
@@ -638,9 +679,6 @@
     <Content Include="Areas\StaffingManager\Views\Staffing\CreatePosition.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\_PositionEditDetails.cshtml" />
     <Content Include="Content\StaffingManager.less" />
-    <Content Include="Content\Timetracker - Copy.css - Copy.map">
-      <DependentUpon>Timetracker - Copy - Copy.css</DependentUpon>
-    </Content>
     <Content Include="Areas\StaffingManager\Views\Staffing\settings.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\UserSettings.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Customer\Index.cshtml" />
@@ -660,6 +698,20 @@
     <Content Include="Areas\StaffingManager\Views\Staffing\_ApplicationInfoPartial.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\Application.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\ApplicationDocument.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\Index2.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\_AjaxTimeEntries2.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\_AjaxTimeEntryBody2.cshtml" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsStartOfWeek.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsPayClass.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsLockDate.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsOvertime.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsHoliday.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\_ManageSettingSideBar.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\_ManageSettingSideBar2.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
@@ -1093,6 +1145,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\TimeTracker\ViewModels\Manage\" />
+    <Folder Include="Areas\TimeTracker\Views\Setting2Action\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

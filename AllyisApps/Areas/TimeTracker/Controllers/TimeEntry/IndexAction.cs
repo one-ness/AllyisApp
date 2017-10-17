@@ -60,7 +60,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				manager,
 				startDate,
 				endDate);
-			return this.View(model);
+			return this.View("Index2",model);
 		}
 
 		/// <summary>
@@ -98,7 +98,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				manager,
 				startDate,
 				endDate);
-			return this.View("Index", model);
+			return this.View("Index2", model);
 		}
 
 		/// <summary>
@@ -193,8 +193,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			};
 
 			// Initialize the starting dates and get all of the time entries within that date range.
-			IEnumerable<TimeEntry> timeEntries = infos.Item6; // Service.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDate, endDate);
-			IEnumerator<TimeEntry> iter = timeEntries.GetEnumerator();
+			IEnumerable<Services.TimeTracker.TimeEntry> timeEntries = infos.Item6; // Service.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDate, endDate);
+			IEnumerator<Services.TimeTracker.TimeEntry> iter = timeEntries.GetEnumerator();
 			iter.MoveNext();
 
 			// Note: Setting this directly insures the weekend highlighting will always be Saturday/Sunday. This makes sense if weekend days are not treated

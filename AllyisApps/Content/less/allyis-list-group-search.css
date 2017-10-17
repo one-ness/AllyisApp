@@ -1,17 +1,13 @@
 ﻿.allyis-search.searching > .excluded {
-	display: none;
+  display: none;
 }
-
 .allyis-search.searching .included ~ .none-found {
-	display: none;
+  display: none;
 }
-
 .allyis-search:not(.searching) .none-found {
-	display: none;
+  display: none;
 }
-
 .included .searchable::after {
-	color: red;
-	content: " *";
+  color: red;
+  content: " *";
 }
-/*# sourceMappingURL=allyis-list-group-search.css.map */

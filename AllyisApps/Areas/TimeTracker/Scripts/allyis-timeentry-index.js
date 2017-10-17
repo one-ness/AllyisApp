@@ -185,7 +185,7 @@ function updateTimes(values) {
 		minuteUpdate = parseInt(updateVal[1]);
 
 	var projHour = projectHours + hourUpdate;
-	var projMinute = projectMinutes + (hourUpdate < 0 ? minuteUpdate * -1 : minuteUpdate);
+	var projMinute = projectMinutes + (hourUpdate < 0 ? minuteUpdate * -1 : minuteUpdate);//What do do if negative minites more then current.
 	if (projMinute >= 60) {
 		projHour += projMinute / 60;
 		projMinute = projMinute % 60;

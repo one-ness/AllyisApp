@@ -68,10 +68,17 @@ namespace AllyisApps.Services
 		/// <returns>Customer id.</returns>
 		public int? CreateCustomer(Customer customer, int subscriptionId)
 		{
-			this.CheckStaffingManagerAction(StaffingManagerAction.EditCustomer, subscriptionId);
-			// TODO: ensure valid countries and states during import
-			//customer.Address?.EnsureDBRef(this);
-			return DBHelper.CreateCustomerInfo(GetDBEntitiesFromCustomerInfo(customer));
+			if (this.CheckStaffingManagerAction(StaffingManagerAction.EditCustomer, subscriptionId, false) || this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId, false))
+			{
+				// TODO: make sure valid countries and states are added during import
+				//customer.Address?.EnsureDBRef(this);
+				return DBHelper.CreateCustomerInfo(GetDBEntitiesFromCustomerInfo(customer));
+			}
+			else
+			{
+				string message = string.Format("action {0} denied for subscription {1}", TimeTrackerAction.EditCustomer.ToString(), subscriptionId);
+				throw new AccessViolationException(message);
+			}
 		}
 
 		/// <summary>
