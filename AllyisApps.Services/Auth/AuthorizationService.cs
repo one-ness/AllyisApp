@@ -148,6 +148,27 @@ namespace AllyisApps.Services
 			return result;
 		}
 
+		public bool CheckSubscriptionAction(OrgAction action, int subscriptionId, out int organizationId, bool throwException = true)
+		{
+			bool result = false;
+			organizationId = 0;
+
+			UserContext.SubscriptionAndRole sar = null;
+			if (this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out sar))
+			{
+				organizationId = sar.OrganizationId;
+				result = this.CheckOrgAction(action, organizationId, throwException);
+			}
+
+			if (!result && throwException)
+			{
+				string message = string.Format("action {0} denied for subscription {1}", action.ToString(), subscriptionId);
+				throw new AccessViolationException(message);
+			}
+
+			return result;
+		}
+
 		public bool CheckStaffingManagerAction(StaffingManagerAction action, int subId, bool throwException = true)
 		{
 			bool result = false;

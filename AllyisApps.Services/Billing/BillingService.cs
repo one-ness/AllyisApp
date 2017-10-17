@@ -393,6 +393,9 @@ namespace AllyisApps.Services
 		{
 			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException("subscriptionId");
 
+			int orgId = 0;
+			this.CheckSubscriptionAction(OrgAction.ReadSubscription, subscriptionId, out orgId);
+
 			// get from db
 			var sub = this.DBHelper.GetSubscriptionDetailsById(subscriptionId);
 			if (sub == null) throw new InvalidOperationException("subscriptionId");
@@ -414,9 +417,6 @@ namespace AllyisApps.Services
 			result.SubscriptionCreatedUtc = sub.SubscriptionCreatedUtc;
 			result.SubscriptionId = subscriptionId;
 			result.SubscriptionName = sub.SubscriptionName;
-
-			// check permission
-			this.CheckOrgAction(OrgAction.ReadSubscription, result.OrganizationId);
 
 			// return sub
 			return result;
@@ -493,6 +493,24 @@ namespace AllyisApps.Services
 			handler.DeleteSubscription(customerId, subscriptionId);
 			// DBHelper.DeleteSubscriptionPlan(subscriptionId);
 			DBHelper.DeleteSubscriptionPlanAndAddHistory(orgId, customerId.Id, UserContext.UserId, skuId, "Switching to free subscription, canceling stripe susbcription");
+		}
+
+		/// <summary>
+		/// delete the given subscription
+		/// </summary>
+		public int DeleteSubscription(int subscriptionId)
+		{
+			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException("subscriptionId");
+
+			// TODO: after deleting (setting isactive = 0) subscription:
+			/*
+			 * - bill for the last partial month
+			 * - stop future billing
+			 */
+			int orgId = 0;
+			this.CheckSubscriptionAction(OrgAction.DeleteSubscritpion, subscriptionId, out orgId);
+			this.DBHelper.DeleteSubscription(subscriptionId);
+			return orgId;
 		}
 
 		/// <summary>
@@ -646,8 +664,11 @@ namespace AllyisApps.Services
 
 		public void UpdateSubscriptionName(int subscriptionId, string subscriptionname)
 		{
-			var sub = this.GetSubscription(subscriptionId);
-			this.CheckOrgAction(OrgAction.EditSubscription, sub.OrganizationId);
+			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException("subscriptionId");
+			if (string.IsNullOrWhiteSpace(subscriptionname)) throw new ArgumentNullException("subscriptionName");
+
+			int orgId = 0;
+			this.CheckSubscriptionAction(OrgAction.EditSubscription, subscriptionId, out orgId);
 			this.DBHelper.UpdateSubscriptionName(subscriptionId, subscriptionname);
 		}
 

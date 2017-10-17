@@ -446,21 +446,13 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Deletes a customer subscription.
+		/// Deletes a subscription.
 		/// </summary>
-		/// <param name="subscriptionid">The id of the subscription plan to be deleted.</param>
-		/// <returns>The deleted subscription plan Id, or -1 on failure.</returns>
-		public string DeleteSubscriptionPlan(string subscriptionid)
+		public void DeleteSubscription(int subscriptionid)
 		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@stripeTokenSubId", subscriptionid);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				// default -1
-				return connection.Query<string>(
-				   "[Billing].[DeleteCustomerSubscription]",
-				   parameters,
-				   commandType: CommandType.StoredProcedure).SingleOrDefault();
+				con.Execute("Billing.DeleteSubscription @a", new { a = subscriptionid });
 			}
 		}
 
