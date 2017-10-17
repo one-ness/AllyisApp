@@ -8,6 +8,11 @@ namespace AllyisApps.ViewModels.Billing
 	public class SkusViewModel
 	{
 		/// <summary>
+		/// organization id
+		/// </summary>
+		public int OrganizationId { get; set; }
+
+		/// <summary>
 		/// has permission to subscribe?
 		/// </summary>
 		public bool CanSubscribe { get; set; }

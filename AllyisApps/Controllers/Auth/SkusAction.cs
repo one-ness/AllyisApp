@@ -27,6 +27,7 @@ namespace AllyisApps.Controllers.Auth
 		{
 			var model = new SkusViewModel();
 			model.CanSubscribe = this.AppService.CheckOrgAction(AppService.OrgAction.CreateSubscription, id);
+			model.OrganizationId = id;
 			var collection = this.AppService.GetAllActiveProductsAndSkus();
 			foreach (var item in collection)
 			{

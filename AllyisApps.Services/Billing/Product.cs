@@ -42,5 +42,13 @@ namespace AllyisApps.Services.Billing
 		/// Gets or sets the area url.
 		/// </summary>
 		public string AreaUrl { get; set; }
+
+		/// <summary>
+		/// constructor
+		/// </summary>
+		public Product()
+		{
+			this.Skus = new List<Sku>();
+		}
 	}
 }

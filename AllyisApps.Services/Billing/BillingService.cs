@@ -379,7 +379,7 @@ namespace AllyisApps.Services
 			return new Product
 			{
 				ProductId = (ProductIdEnum)product.ProductId,
-				ProductName = product.Name,
+				ProductName = product.ProductName,
 				ProductDescription = product.Description,
 				AreaUrl = product.AreaUrl
 			};
@@ -865,8 +865,10 @@ namespace AllyisApps.Services
 		/// </summary>
 		public List<Product> GetAllActiveProductsAndSkus()
 		{
-			// get only active products
-			var result = CacheContainer.ProductsCache.Values.Where(x => x.IsActive).ToList();
+			// get only active products and with sku products
+			var result = CacheContainer.ProductsCache.Values.Where(x => x.IsActive && x.Skus.Count > 0).ToList();
+
+			// reduce to show products
 			foreach (var item in result)
 			{
 				// reduce the skus list to only active skus

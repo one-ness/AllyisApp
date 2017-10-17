@@ -34,7 +34,6 @@ namespace AllyisApps.Services
 		{
 			this.ServiceSettings = settings ?? throw new ArgumentNullException("settings");
 			this.DBHelper = new DBHelper(this.ServiceSettings.SqlConnectionString);
-			CacheContainer.Init(this.ServiceSettings.SqlConnectionString);
 		}
 
 		/// <summary>

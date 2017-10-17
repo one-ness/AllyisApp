@@ -85,7 +85,12 @@ namespace AllyisApps.Services.Cache
 				country.CountryCode = item.Value.CountryCode;
 				country.CountryId = item.Value.CountryId;
 				country.CountryName = item.Value.CountryName;
-				country.States = StatesCache[country.CountryCode];
+				List<State> states = null;
+				if (StatesCache.TryGetValue(country.CountryCode, out states))
+				{
+					country.States = states;
+				}
+
 				CountriesCache.Add(country.CountryCode, country);
 			}
 
@@ -133,7 +138,7 @@ namespace AllyisApps.Services.Cache
 					// no
 					list = new List<Sku>();
 					list.Add(sku);
-					SkusCache.Add(sku.ProductId, new List<Sku>());
+					SkusCache.Add(sku.ProductId, list);
 				}
 			}
 
@@ -147,8 +152,13 @@ namespace AllyisApps.Services.Cache
 				prod.IsActive = item.IsActive;
 				prod.ProductDescription = item.Description;
 				prod.ProductId = (ProductIdEnum)item.ProductId;
-				prod.ProductName = item.Name;
-				prod.Skus = SkusCache[prod.ProductId];
+				prod.ProductName = item.ProductName;
+				List<Sku> skus = null;
+				if (SkusCache.TryGetValue(prod.ProductId, out skus))
+				{
+					prod.Skus = skus;
+				}
+
 				ProductsCache.Add(prod.ProductId, prod);
 			}
 		}
