@@ -1489,4 +1489,7 @@
   <data name="PayrollProcessed" xml:space="preserve">
     <value>Nómina procesada</value>
   </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
 </root>

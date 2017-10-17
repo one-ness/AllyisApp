@@ -1477,4 +1477,7 @@
   <data name="Review" xml:space="preserve">
     <value>Revisión</value>
   </data>
+  <data name="Status" xml:space="preserve">
+    <value>Estado</value>
+  </data>
 </root>

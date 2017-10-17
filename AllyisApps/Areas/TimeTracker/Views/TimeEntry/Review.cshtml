@@ -10,20 +10,36 @@
 	ViewData["SubscriptionName"] = Model.SubscriptionName;
 }
 
+
+
 <div class="panel panel-default">
-	<div class="panel-heading">
-		<h4 class="pull-left">Time Entry Totals for Date Range:</h4>
-		<div id="review-range" class="panel-title pull-right" style="display: inline; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px;">
-			<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-			<span></span> <b class="caret"></b>
+	<div class="panel-heading row" style="margin: 0; padding-left: 0; padding-right: 0;">
+		<div class="col-lg-4">
+			<h4 class="pull-left">Time Entry Totals for Date Range:</h4>
 		</div>
-		<button type="button" class="btn btn-primary pull-right" style="margin-right:15px">Lock Entries</button>
-		<div class="clearfix"></div>
+		<div class="col-lg-8">
+			<div id="review-range" class="panel-title pull-right" style="display: inline; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px; margin-left: 15px;">
+				<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+				<span></span> <b class="caret"></b>
+			</div>
+			@Html.DropDownList("statusFilter",
+				new SelectList(Model.TimeEntryStatusOptions, "Key", "Value"),
+				new
+				{
+					@class = "selectpicker pull-right filter-status-select",
+					@title = "Filter by status",
+					@multiple = "multiple",
+					@data_selected_text_format = "count > 2"
+				})
+
+			<button type="button" class="btn btn-primary pull-right" style="margin-right:15px">Lock Entries</button>
+			<div class="clearfix"></div>
+		</div>
 	</div>
 	<table class="table table-hover table-condensed table-responsive">
 		<thead>
 			<tr class="double-bottom-border">
-				<th><input type="checkbox" class="check-all" check-all-tier="0"></th>
+				<th><input type="checkbox" class="check-all" check-all-id="0"></th>
 				<th></th>
 				<th>Name</th>
 				@foreach (string payClassName in Model.PayClasses.Select(x => x.PayClassName))
@@ -36,9 +52,9 @@
 		<tbody>
 			@foreach (var group in Model.TimeEntriesByUser)
 			{
-				<tr>
-					<td><input type="checkbox" class="check check-all" check-tier="0" check-all-tier="@group.Key"></td>
-					<td><i class="fa fa-chevron-down toggle-on-click toggle-row-display-controller" rowId=@group.Key style="cursor:pointer"></i></td>
+				<tr class="parent-row">
+					<td><input type="checkbox" class="check check-all" check-id="0" check-all-id="@group.Key"></td>
+					<td><i class="fa fa-chevron-down toggle-on-click child-row-controller" rowId=@group.Key style="cursor:pointer"></i></td>
 					<td>@group.First().FirstName @group.First().LastName</td>
 					@foreach (int payClassId in Model.PayClasses.Select(x => x.PayClassId))
 					{
@@ -48,9 +64,9 @@
 				</tr>
 				foreach (var timeEntry in group)
 				{
-					<tr class="toggle-row-display hidden" rowId=@group.Key>
+					<tr class="child-row hidden" rowId=@group.Key data-time-entry-status-id="@timeEntry.TimeEntryStatusId">
 						<td></td>
-						<td><input type="checkbox" class="check time-entry-check" check-tier="@group.Key" data-time-entry-id="@timeEntry.TimeEntryId"></td>
+						<td><input type="checkbox" class="check time-entry-check" check-id="@group.Key" data-time-entry-id="@timeEntry.TimeEntryId"></td>
 						<td>
 							<a class="details-modal-input" data-time-entry-object='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(timeEntry))' style="cursor:pointer">
 								@timeEntry.Date.ToShortDateString()
@@ -81,25 +97,16 @@
 </div>
 
 <div class="row">
-	<div class="col-md-6 col-md-offset-6">
+	<div class="col-sm-6 col-sm-offset-6">
 		@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "form-inline pull-right", role = "form" }))
 		{
-			<label>Set status for selected entries as </label>
+			<label>Set status for selected entries as: </label>
 			<div class="input-group">
 				@Html.DropDownList("timeEntryStatusId",
 				new SelectList(Model.TimeEntryStatusOptions, "Key", "Value"),
 				new {
-					@class = "form-control",
-					@style = @"
-						border: none;
-						box-shadow: none;
-						background: transparent;
-						-webkit-appearance: none;
-						-moz-appearance: none;
-						appearance: none;
-						font-weight: bold;
-						color: #337ab7
-					"
+					@class = "form-control selectpicker set-status-select",
+					@data_width = "fit"
 				})
 				<span class="input-group-btn">
 					<button id="submit-status" class="btn btn-primary" type="submit" tabindex="-1">Save</button>
@@ -162,12 +169,20 @@
 
 @section css {
 	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+	<link rel="stylesheet" type="text/css" href="~/Content/BootstrapSelect" />
+
+	<style>
+		.filtered {
+			display: none;
+		}
+	</style>
 }
 
-				@section Scripts {
+@section Scripts {
 @*Date range picker dependencies:*@
 @Scripts.Render("~/bundles/jqueryui")
 @Scripts.Render("~/bundles/moment")
+@Scripts.Render("~/bundles/BootstrapSelect")
 <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
 
 <script type="text/javascript">
@@ -184,8 +199,8 @@
 		});
 
 		//toggles the sub rows to be hidden or not
-		$(".toggle-row-display-controller").click(function () {
-			var rows = $(".toggle-row-display[rowId='" + $(this).attr("rowId") + "']");
+		$(".child-row-controller").click(function () {
+			var rows = $(".child-row[rowId='" + $(this).attr("rowId") + "']");
 			if (rows.hasClass("hidden")) {
 				rows.removeClass("hidden");
 			} else {
@@ -195,7 +210,7 @@
 
 		//logic for check-all check boxes
 		$(".check-all").change(function () {
-			$(".check[check-tier=" + $(this).attr("check-all-tier") + "]").prop("checked", $(this).is(":checked")).change();
+			$(".check[check-id=" + $(this).attr("check-all-id") + "]").prop("checked", $(this).is(":checked")).change();
 		});
 
 		//updates form hidden input values with all selected time entries
@@ -270,6 +285,26 @@
 			$("#modal-details-description").text(timeEntry.Description || "None");
 			$("#modal-details-status").text(timeEntry.TimeEntryStatusName);
 			$('#time-entry-details-modal').modal();
+		});
+
+		//filter out rows based on filter select
+		$(".selectpicker.filter-status-select").on("changed.bs.select", function () {
+			var selectionValues = $(this).selectpicker("val");
+
+			if (selectionValues.length > 0) {
+				$(".child-row").addClass("filtered");
+				for (let i = 0; i < selectionValues.length; i++) {
+					$(".child-row[data-time-entry-status-id='" + selectionValues[i] + "']").removeClass("filtered");
+				}
+			} else {
+				$(".child-row").removeClass("filtered");
+			}
+
+			//if a parent row has no children, filter that out too
+			$(".parent-row").removeClass("filtered");
+			$(".parent-row").filter(function () {
+				return !$(this).nextAll(":not(.filtered)").hasClass("child-row");
+			}).addClass("filtered");
 		});
 	});
 </script>
