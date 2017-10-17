@@ -97,7 +97,8 @@ label.required:after {
 		}
 
 		.allyisicon-submit {
-			.fa-mixin(@fa-var-check);
+			//.fa-mixin(@fa-var-check);
+			.fa-mixin(@fa-var-plus)
 		}
 
 		.allyisicon-delete {
@@ -275,29 +276,30 @@ label.required:after {
 }
 
 // Style for text fields in UserPageView
-.text-box-padded{
-    padding: 5px;
-    padding-left: 0;
-    border-radius: 6px;
-    cursor: default;
-    word-break: break-all;
-    height:2em;
+.text-box-padded {
+	padding: 5px;
+	padding-left: 0;
+	border-radius: 6px;
+	cursor: default;
+	word-break: break-all;
+	height: 2em;
 }
 
 // dynamic width control of form columns
-.sm-control-width{
-    width: 320px;
+.sm-control-width {
+	width: 320px;
 }
-@media (min-width: @screen-md-min){
-    .sm-control-width{
-        width: 420px;
-    }
+
+@media (min-width: @screen-md-min) {
+	.sm-control-width {
+		width: 420px;
+	}
 }
 
 // width control for column in Edit User Form
-#user-edit-div{
-    display: block;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+#user-edit-div {
+	display: block;
+	max-width: 600px;
+	margin-left: auto;
+	margin-right: auto;
 }
