@@ -1,8 +1,4 @@
-﻿@using AllyisApps.Areas.TimeTracker.Core;
-@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-@using AllyisApps.Services.Auth;
-@using AllyisApps.Utilities;
-@using System.Configuration;
+﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 @model ReviewViewModel
 
 @{
@@ -16,11 +12,12 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title pull-left">Time Entry Totals for Date Range:</h3>
-		<div id="review-range" class="panel-title pull-right" style="display: inline; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc;">
+		<h4 class="pull-left">Time Entry Totals for Date Range:</h4>
+		<div id="review-range" class="panel-title pull-right" style="display: inline; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px;">
 			<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
 			<span></span> <b class="caret"></b>
 		</div>
+		<button type="button" class="btn btn-primary pull-right" style="margin-right:15px">Lock Entries</button>
 		<div class="clearfix"></div>
 	</div>
 	<table class="table table-hover table-condensed table-responsive">
@@ -55,11 +52,9 @@
 						<td></td>
 						<td><input type="checkbox" class="check time-entry-check" check-tier="@group.Key" data-time-entry-id="@timeEntry.TimeEntryId"></td>
 						<td>
-							<button type="button"
-									class="btn btn-primary details-modal-input"
-									data-time-entry-object='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(timeEntry))'>
+							<a class="details-modal-input" data-time-entry-object='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(timeEntry))' style="cursor:pointer">
 								@timeEntry.Date.ToShortDateString()
-							</button>
+							</a>
 						</td>
 						@foreach (int payClassId in Model.PayClasses.Select(x => x.PayClassId))
 						{
@@ -85,53 +80,35 @@
 	<div class="pageContainer"></div>
 </div>
 
-<div class="container-fluid" style="padding-left: 0; padding-right: 0">
-	<div class="row">
-		<div class="col-md-6">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title">Operations for entire date range</h3>
-				</div>
-				<div class="panel-body">
-					<div class="row">
-						<div class="col-sm-6">
-							<button type="button" class="btn btn-secondary">Lock Entries</button>
-						</div>
-						<div class="col-sm-6">
-							@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new { role = "form" }))
-							{
-								<button type="submit" class="btn btn-secondary">Mark as Payroll Processed</button>
-								<input type="hidden" name="timeEntryStatus" value="Payroll Processed" />
-								<input type="hidden" name="timeEntryIdsJSON" value="@Model.TimeEntryIdsJSON" />
-								@Html.HiddenFor(m => m.StartDate)
-								@Html.HiddenFor(m => m.EndDate)
-							}
-						</div>
-					</div>
-				</div>
+<div class="row">
+	<div class="col-md-6 col-md-offset-6">
+		@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "form-inline pull-right", role = "form" }))
+		{
+			<label>Set status for selected entries as </label>
+			<div class="input-group">
+				@Html.DropDownList("timeEntryStatusId",
+				new SelectList(Model.TimeEntryStatusOptions, "Key", "Value"),
+				new {
+					@class = "form-control",
+					@style = @"
+						border: none;
+						box-shadow: none;
+						background: transparent;
+						-webkit-appearance: none;
+						-moz-appearance: none;
+						appearance: none;
+						font-weight: bold;
+						color: #337ab7
+					"
+				})
+				<span class="input-group-btn">
+					<button id="submit-status" class="btn btn-primary" type="submit" tabindex="-1">Save</button>
+				</span>
 			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title">Operations for selected entries</h3>
-				</div>
-				<div class="panel-body">
-					@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new { role = "form" }))
-					{
-						<div class="input-group">
-							<span class="input-group-btn">
-								<button id="submit-status" class="btn btn-primary" type="submit" tabindex="-1">Set status:</button>
-							</span>
-							@Html.DropDownList("timeEntryStatusId", new SelectList(Model.TimeEntryStatusOptions, "Key", "Value"), new { @class = "form-control" })
-						</div>
-						<input type="hidden" name="timeEntryIdsJSON" class="time-entries-input" value="[]"/>
-						@Html.HiddenFor(m => m.StartDate)
-						@Html.HiddenFor(m => m.EndDate)
-					}
-				</div>
-			</div>
-		</div>
+			<input type="hidden" name="timeEntryIdsJSON" class="time-entries-input" value="[]"/>
+			@Html.HiddenFor(m => m.StartDate)
+			@Html.HiddenFor(m => m.EndDate)
+		}
 	</div>
 </div>
 
@@ -187,7 +164,7 @@
 	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
 }
 
-@section Scripts {
+				@section Scripts {
 @*Date range picker dependencies:*@
 @Scripts.Render("~/bundles/jqueryui")
 @Scripts.Render("~/bundles/moment")
