@@ -15,6 +15,7 @@ using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
 using System.Threading.Tasks;
+using AllyisApps.Services.Cache;
 
 namespace AllyisApps.Services
 {
@@ -507,10 +508,10 @@ namespace AllyisApps.Services
 			 * - bill for the last partial month
 			 * - stop future billing
 			 */
-			int orgId = 0;
-			this.CheckSubscriptionAction(OrgAction.DeleteSubscritpion, subscriptionId, out orgId);
+			var sub = this.GetSubscription(subscriptionId);
+			this.CheckOrgAction(OrgAction.DeleteSubscritpion, sub.OrganizationId);
 			this.DBHelper.DeleteSubscription(subscriptionId);
-			return orgId;
+			return sub.OrganizationId;
 		}
 
 		/// <summary>
@@ -593,7 +594,7 @@ namespace AllyisApps.Services
 				SkuId = (SkuIdEnum)sku.SkuId,
 				ProductId = (ProductIdEnum)sku.ProductId,
 				SkuName = sku.SkuName,
-				Price = sku.Price,
+				Price = sku.CostPerBlock,
 				UserLimit = sku.UserLimit,
 				BillingFrequency = (BillingFrequencyEnum)sku.BillingFrequency,
 				Description = sku.Description,
@@ -667,8 +668,8 @@ namespace AllyisApps.Services
 			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException("subscriptionId");
 			if (string.IsNullOrWhiteSpace(subscriptionname)) throw new ArgumentNullException("subscriptionName");
 
-			int orgId = 0;
-			this.CheckSubscriptionAction(OrgAction.EditSubscription, subscriptionId, out orgId);
+			var sub = this.GetSubscription(subscriptionId);
+			this.CheckOrgAction(OrgAction.EditSubscription, sub.OrganizationId);
 			this.DBHelper.UpdateSubscriptionName(subscriptionId, subscriptionname);
 		}
 
@@ -843,7 +844,7 @@ namespace AllyisApps.Services
 			}
 			var spResults = DBHelper.GetProductSubscriptionInfo(orgId, (int)skuId);
 			var product = InitializeProduct(spResults.Item1);
-			product.ProductSkus = spResults.Item3.Select(sdb => InitializeSkuInfo(sdb)).ToList();
+			//product.Skus = spResults.Item3.Select(sdb => InitializeSkuInfo(sdb)).ToList();
 
 			var subscription = InitializeSubscription(spResults.Item2);
 			if (subscription != null)
@@ -864,26 +865,15 @@ namespace AllyisApps.Services
 		/// </summary>
 		public List<Product> GetAllActiveProductsAndSkus()
 		{
-			var spResults = DBHelper.GetAllActiveProductsAndSkus();
-			var products = spResults.Item1.Select(pdb => InitializeProduct(pdb)).ToList();
-
-			foreach (Product prod in products)
+			// get only active products
+			var result = CacheContainer.ProductsCache.Values.Where(x => x.IsActive).ToList();
+			foreach (var item in result)
 			{
-				prod.ProductSkus = new List<SkuInfo>();
+				// reduce the skus list to only active skus
+				item.Skus = item.Skus.Where(x => x.IsActive).ToList();
 			}
 
-			foreach (SkuInfo sku in spResults.Item2.Select(sk => InitializeSkuInfo(sk)))
-			{
-				foreach (Product prod in products)
-				{
-					if (sku.ProductId == prod.ProductId)
-					{
-						prod.ProductSkus.Add(sku);
-						break;
-					}
-				}
-			}
-			return products;
+			return result;
 		}
 
 		#region Info-DBEntity Conversions
@@ -955,10 +945,9 @@ namespace AllyisApps.Services
 			{
 				BillingFrequency = (BillingFrequencyEnum)sku.BillingFrequency,
 				SkuName = sku.SkuName,
-				Price = sku.Price,
+				Price = sku.CostPerBlock,
 				ProductId = (ProductIdEnum)sku.ProductId,
 				SkuId = (SkuIdEnum)sku.SkuId,
-				SubscriptionId = sku.SubscriptionId,
 				UserLimit = sku.UserLimit,
 				Description = sku.Description,
 				IconUrl = sku.IconUrl

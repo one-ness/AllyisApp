@@ -13,7 +13,7 @@
 		/// <summary>
 		/// country id
 		/// </summary>
-		public int CountryId { get; set; }
+		public string CountryCode { get; set; }
 
 		/// <summary>
 		/// state name

@@ -32,17 +32,17 @@ namespace AllyisApps.Services
 		/// Gets the list of valid countries.
 		/// </summary>
 		/// <returns>A collection of valid countries.</returns>
-		public Dictionary<string, string> GetCountries()
+		public Dictionary<string, Country> GetCountries()
 		{
-			return DBHelper.GetCountries();
+			return CacheContainer.CountriesCache;
 		}
 
 		/// <summary>
 		/// get the list of states for the given country
 		/// </summary>
-		public Dictionary<int, string> GetStates(string countryCode)
+		public List<State> GetStates(string countryCode)
 		{
-			return this.DBHelper.GetStates(countryCode);
+			return CacheContainer.StatesCache[countryCode];
 		}
 
 		public bool DeleteExpenseItem(int itemId)

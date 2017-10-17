@@ -1,12 +1,10 @@
-﻿@using AllyisApps.ViewModels.Auth;
-
-@model SkusListViewModel
+﻿@model SkusViewModel
 
 @{
 	ViewBag.Title = Strings.Products;
 }
 
-@foreach (var prod in Model.ProductsList.Where(i => i.ProductSkus.Any()))
+@foreach (var prod in Model.Products)
 {
 	<div class="row">
 		<div class="col-md-6 col-md-push-3">
@@ -18,7 +16,7 @@
 				</div>
 
 				<div class="panel-body">
-					@foreach (var sku in prod.ProductSkus)
+					@foreach (var sku in prod.Skus)
 					{
 						<div class="row">
 							<div class="panel-wrap panel-wrap-one col-md-10 col-md-push-1">
@@ -28,37 +26,10 @@
 											<div class="col-md-4">
 												<div class="row" style="text-align: center; vertical-align: middle; margin-top: 25px; margin-bottom: 10px;"><img src="~/@sku.IconUrl" alt="@sku.SkuName" /></div>
 												<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><strong>$@sku.Price.ToString("N2")</strong></div>
-												@if (Model.CurrentSubscriptions.Where(sub => sub.ProductId == sku.ProductId).FirstOrDefault() != null)   //subscribed to another sku under the same product
-												{
-													var currentSubId = Model.CurrentSubscriptions.Where(sub => sub.ProductId == sku.ProductId).FirstOrDefault().SubscriptionId;
-													if (Model.CurrentSubscriptions.Where(sub => sub.SkuId == sku.SkuId).FirstOrDefault() != null)   //already subscribed to this sku
-													{
-														<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;">
-															<a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = currentSubId })" class="btn btn-default">@Strings.Edit</a>
-														</div>
-													}
-													else
-													{
-														if (Model.CurrentSubscriptions.Where(sub => sub.ProductId == sku.ProductId).FirstOrDefault().SkuId > sku.SkuId) //pro version always has higher skuId than basic version
-														{
-															<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;">
-																<a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = currentSubId })" style="text-decoration: none" class="btn btn-default">@Strings.Downgrade</a>
-															</div>
-														}
-														else
-														{
-															<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;">
-																<a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = currentSubId })" style="text-decoration: none" class="btn btn-default">@Strings.Upgrade</a>
-															</div>
-														}
-													}
-												}
-												else
-												{
+
 													<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;">
 														<a href="@Url.Action(ActionConstants.Subscribe, ControllerConstants.Account, new { id = Model.OrganizationId, skuId = (int)sku.SkuId })" style="text-decoration: none" class="btn btn-default">@Strings.Subscribe</a>
 													</div>
-												}
 											</div>
 											<div class="col-md-8">
 												<h3>

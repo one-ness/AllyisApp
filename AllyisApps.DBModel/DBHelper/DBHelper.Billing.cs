@@ -292,6 +292,17 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// get all skus in the system
+		/// </summary>
+		public List<SkuDBEntity> GetAllSkus()
+		{
+			using (var con = new SqlConnection(this.SqlConnectionString))
+			{
+				return con.Query<SkuDBEntity>("Billing.GetAllSkus").ToList();
+			}
+		}
+
+		/// <summary>
 		/// Adds an entry to the customer subscription table, and adds a billing history item.
 		/// </summary>
 		/// <param name="stripeTokenCustId">The id of the stripe customer.</param>

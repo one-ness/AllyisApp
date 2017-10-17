@@ -69,7 +69,8 @@ namespace AllyisApps.Services
 		public int? CreateCustomer(Customer customer, int subscriptionId)
 		{
 			this.CheckStaffingManagerAction(StaffingManagerAction.EditCustomer, subscriptionId);
-			customer.Address?.EnsureDBRef(this);
+			// TODO: ensure valid countries and states during import
+			//customer.Address?.EnsureDBRef(this);
 			return DBHelper.CreateCustomerInfo(GetDBEntitiesFromCustomerInfo(customer));
 		}
 
@@ -82,7 +83,6 @@ namespace AllyisApps.Services
 		public int? UpdateCustomer(Customer customer, int subscriptionId)
 		{
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
-			customer.Address?.EnsureDBRef(this);
 			return DBHelper.UpdateCustomer(GetDBEntitiesFromCustomerInfo(customer));
 		}
 

@@ -36,7 +36,7 @@ namespace AllyisApps.Services.Billing
 		/// <summary>
 		/// Gets or sets the list of Skus under this product.
 		/// </summary>
-		public List<SkuInfo> ProductSkus { get; set; }
+		public List<Sku> Skus { get; set; }
 
 		/// <summary>
 		/// Gets or sets the area url.

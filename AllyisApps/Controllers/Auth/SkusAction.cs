@@ -9,6 +9,7 @@ using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
+using AllyisApps.ViewModels.Billing;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -24,46 +25,28 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>The skus view.</returns>
 		public ActionResult Skus(int id)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, id);    // only org owner has permission
-
-			SkusListViewModel model = ConstructSkusListViewModel(id);
-
-			return this.View("Skus", model);
-		}
-
-		/// <summary>
-		/// Uses services and utilities to initialize an <see cref="SkusListViewModel"/>.
-		/// </summary>
-		/// <param name="orgId">The current organization Id.</param>
-		/// <returns>Populated SkusListViewModel.</returns>
-		public SkusListViewModel ConstructSkusListViewModel(int orgId)
-		{
-			SkusListViewModel model = new SkusListViewModel { OrganizationId = orgId, ProductsList = new List<SkusListViewModel.ProductViewModel>() };
-
-			var result = AppService.GetAllActiveProductsAndSkus();
-			var activeSubscriptions = AppService.GetSubscriptionsByOrg(orgId);
-
-			model.CurrentSubscriptions = activeSubscriptions.Select(sub => new SubscriptionDisplayViewModel(sub));
-
-			model.ProductsList = result.Select(prod => new SkusListViewModel.ProductViewModel()
+			var model = new SkusViewModel();
+			model.CanSubscribe = this.AppService.CheckOrgAction(AppService.OrgAction.CreateSubscription, id);
+			var collection = this.AppService.GetAllActiveProductsAndSkus();
+			foreach (var item in collection)
 			{
-				AreaUrl = prod.AreaUrl,
-				ProductDescription = prod.ProductDescription,
-				ProductId = prod.ProductId,
-				ProductName = prod.ProductName,
-				ProductSkus = prod.ProductSkus.Select(psku => new SkusListViewModel.ProductViewModel.SkuInfoViewModel()
+				var pi = new SkusViewModel.ProductItem();
+				pi.ProductName = item.ProductName;
+				foreach (var sku in item.Skus)
 				{
-					Description = psku.Description,
-					IconUrl = psku.IconUrl,
-					Price = psku.Price,
-					ProductId = psku.ProductId,
-					SkuId = psku.SkuId,
-					SkuIdNext = psku.SkuIdNext,
-					SkuName = psku.SkuName
-				}).ToList()
-			});
+					var si = new SkusViewModel.ProductItem.SkuItem();
+					si.Price = sku.CostPerUnit;
+					si.SkuDescription = sku.SkuDescription;
+					si.SkuIconUrl = sku.IconUrl;
+					si.SkuId = (int)sku.SkuId;
+					si.SkuName = sku.SkuName;
+					pi.Skus.Add(si);
+				}
 
-			return model;
+				model.Products.Add(pi);
+			}
+
+			return View(model);
 		}
 	}
 }

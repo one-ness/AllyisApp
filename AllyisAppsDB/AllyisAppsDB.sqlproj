@@ -402,6 +402,8 @@
     <Build Include="Auth\Stored Procedures\GetOrganizationUsers.sql" />
     <Build Include="Auth\Stored Procedures\GetProductRoles.sql" />
     <Build Include="Billing\Stored Procedures\UpdateSubscriptionName.sql" />
+    <Build Include="Lookup\Stored Procedures\GetAllStates.sql" />
+    <Build Include="Billing\Stored Procedures\GetAllSkus.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
