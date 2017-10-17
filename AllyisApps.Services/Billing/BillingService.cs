@@ -394,8 +394,7 @@ namespace AllyisApps.Services
 			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException("subscriptionId");
 
 			// get from db
-			Task<dynamic> task = this.DBHelper.GetSubscriptionDetailsById(subscriptionId);
-			var sub = task.Result;
+			var sub = this.DBHelper.GetSubscriptionDetailsById(subscriptionId);
 			if (sub == null) throw new InvalidOperationException("subscriptionId");
 
 			// copy to subscription
@@ -406,11 +405,11 @@ namespace AllyisApps.Services
 			result.NumberOfUsers = sub.NumberOfUsers;
 			result.OrganizationId = sub.OrganizationId;
 			result.ProductDescription = sub.ProductDescription;
-			result.ProductId = sub.ProductId;
+			result.ProductId = (ProductIdEnum)sub.ProductId;
 			result.ProductName = sub.ProductName;
 			result.PromoExpirationDateUtc = sub.PromoExpirationDateUtc;
 			result.SkuDescription = sub.SkuDescription;
-			result.SkuId = sub.SkuId;
+			result.SkuId = (SkuIdEnum)sub.SkuId;
 			result.SkuName = sub.SkuName;
 			result.SubscriptionCreatedUtc = sub.SubscriptionCreatedUtc;
 			result.SubscriptionId = subscriptionId;

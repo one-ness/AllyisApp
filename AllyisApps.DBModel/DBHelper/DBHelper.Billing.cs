@@ -160,12 +160,12 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Get Subscription Details by Id.
 		/// </summary>
-		public async Task<dynamic> GetSubscriptionDetailsById(int subscriptionId)
+		public dynamic GetSubscriptionDetailsById(int subscriptionId)
 		{
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
 				// default blank object
-				return (await con.QueryAsync<dynamic>("[Billing].[GetSubscriptionDetailsById] @a", new { a = subscriptionId })).FirstOrDefault();
+				return con.Query<dynamic>("[Billing].[GetSubscriptionDetailsById] @a", new { a = subscriptionId }).FirstOrDefault();
 			}
 		}
 

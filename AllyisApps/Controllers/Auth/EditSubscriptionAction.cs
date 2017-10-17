@@ -18,7 +18,7 @@ namespace AllyisApps.Controllers.Auth
 		[HttpGet]
 		public ActionResult EditSubscription(int id)
 		{
-			var sub = AppService.GetSubscription(id);
+			var sub = this.AppService.GetSubscription(id);
 			var model = new EditSubscriptionViewModel();
 			model.OrganizationId = sub.OrganizationId;
 			model.ProductName = sub.ProductName;
