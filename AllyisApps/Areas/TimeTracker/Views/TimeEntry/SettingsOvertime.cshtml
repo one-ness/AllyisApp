@@ -1,0 +1,102 @@
+﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+@using AllyisApps.Core;
+@using AllyisApps.Services;
+@using AllyisApps.Services.TimeTracker;
+@model SettingsViewModel
+@{
+	ViewBag.Title = Strings.Overtime;
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
+	Layout = "~/Areas/TimeTracker/Views/Shared/_TimeTrackerSidebar.cshtml";
+	ViewData["UserId"] = Model.UserId;
+	ViewData["SubscriptionId"] = Model.SubscriptionId;
+	ViewData["SubscriptionName"] = Model.SubscriptionName;
+}
+
+@section css {
+	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+}
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm-2">
+			@Html.Partial("_ManageSettingSideBar")
+		</div>
+		<div class="col-sm-10">
+			<div class="panel panel-info" style="position: relative;">
+				<div class="panel-heading">
+					<h1 class="panel-title">@Strings.Overtime</h1>
+				</div>
+				<div id="Overtime" class="panel-body">
+					@using (Html.BeginForm(ActionConstants.UpdateOvertime, ControllerConstants.TimeEntry, FormMethod.Post, new { enctype = "multipart/form-data" }))
+		{
+						@Html.AntiForgeryToken();
+						@Html.HiddenFor(m => m.SubscriptionId)
+						<div id="OTCheck" style="margin:10px">
+							@{ bool overTimeUsed = Model.Settings.OvertimeHours > 0; }
+							<input type="radio" name="setting" id="setting" value="Yes" onclick="hideOT(false)" @(overTimeUsed ? " checked" : string.Empty) /><text> @Strings.Yes</text>
+							<input type="radio" name="setting" id="setting" value="No" onclick="hideOT(true)" @(!overTimeUsed ? " checked" : string.Empty) /><text> @Strings.No</text>
+						</div>
+						<div id="OTSettings" style="visibility: @(overTimeUsed ? "visible" : "hidden")">
+							<div style="margin:10px">
+								@Strings.After
+								<input type="text" id="hours" name="hours" value='@(Model.Settings.OvertimeHours < 0 ? 40 : Model.Settings.OvertimeHours)' class="form-control" style="width: 45px; text-align: center; display: inline-block;" /> @Strings.HoursPer
+								<select id="period" name="period" class="form-control" value='@Model.Settings.OvertimePeriod' style="display: inline-block; width: 100px;">
+									<option value="Day" @(Model.Settings.OvertimePeriod == "Day" ? " selected=true" : string.Empty)>@Strings.Day</option>
+									<option value="Week" @(Model.Settings.OvertimePeriod == "Week" ? " selected=true" : string.Empty)>@Strings.Week</option>
+									<option value="Month" @(Model.Settings.OvertimePeriod == "Month" ? " selected=true" : string.Empty)>@Strings.Month</option>
+								</select><br />
+							</div>
+							<div style="margin:10px">
+								@Strings.WithAMultiplierOf
+								<input type="text" id="mult" name="mult" value='@Model.Settings.OvertimeMultiplier.ToString("G10")' class="form-control" style="width: 50px; text-align: center; display: inline-block;" />
+							</div>
+						</div>
+						<div>
+							<input class="btn btn-primary tt-bottom-right" type="submit" value=@Strings.Save />
+						</div>
+		}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section scripts{
+	<script type="text/javascript">
+		var model_holiday = "";
+		deletePayClassWarning = "@Html.Raw(Strings.ConfirmDeletePayClass)";
+		deleteHolidayWarning = "@Html.Raw(Strings.ConfirmDeleteHoliday)";
+
+		mergePayClassUrl = "@Url.Action(ActionConstants.MergePayClass , ControllerConstants.TimeEntry, new { subscriptionId = ViewData["SubscriptionId"], userId = -1 })";
+		deletePayClassUrl = "@Url.Action(ActionConstants.DeletePayClass, ControllerConstants.TimeEntry, new { subscriptionId = ViewData["SubscriptionId"], userId = -1 })";
+		deleteHolidayUrl = "@Url.Action(ActionConstants.DeleteHoliday , ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId, id = Model.UserId, HolidayId = -1 })";
+
+		function populateHolidayForSelectedYear(year)
+		{
+			@foreach (var yearC in Model.Holidays.Select(m => m.Date.Year).Distinct())
+			{
+				<text>
+					if (@yearC != year) {
+						$('.' + @yearC).hide();
+						$('#' + @yearC).css("font-weight", "Normal");
+					}
+					else {
+						$('.' + @yearC).show();
+						$('#' + @yearC).css("font-weight", "Bold");
+					}
+				</text>
+			}
+		};
+
+		$('document').ready(function () {
+			populateHolidayForSelectedYear(@DateTime.Now.Year);
+			document.getElementById("datePickerHoliday").val = @Model.Settings.Today.ToString("MM/dd/yyyy").;
+		});
+	</script>
+	@Scripts.Render("~/bundles/jqueryui");
+	@Scripts.Render("~/bundles/moment")
+	<script src="~/Scripts/allyis-holidayDatepicker.js"></script>
+
+	@Scripts.Render("~/bundles/TTTimeEntrySettings")
+}

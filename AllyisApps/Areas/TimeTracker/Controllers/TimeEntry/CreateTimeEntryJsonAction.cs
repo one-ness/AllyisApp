@@ -47,13 +47,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					throw new ArgumentException(Resources.Strings.EnterATimeLongerThanZero);
 				}
 
-				IEnumerable<TimeEntry> otherEntriesToday = AppService.GetTimeEntriesByUserOverDateRange(
+				IEnumerable<Services.TimeTracker.TimeEntry > otherEntriesToday = AppService.GetTimeEntriesByUserOverDateRange(
 					new List<int> { model.UserId },
 					Utility.GetDateTimeFromDays(model.Date),
 					Utility.GetDateTimeFromDays(model.Date),
 					AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId);
 				float durationOther = 0.0f;
-				foreach (TimeEntry otherEntry in otherEntriesToday)
+				foreach (Services.TimeTracker.TimeEntry otherEntry in otherEntriesToday)
 				{
 					durationOther += otherEntry.Duration;
 				}
@@ -79,7 +79,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					throw new ArgumentException(Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
 				}
 
-				int id = AppService.CreateTimeEntry(new TimeEntry()
+				int id = AppService.CreateTimeEntry(new Services.TimeTracker.TimeEntry()
 				{
 					UserId = model.UserId,
 					ProjectId = model.ProjectId,
@@ -107,6 +107,34 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Console.WriteLine(e);
 				return null;
 			}
+		}
+
+		/// <summary>
+		/// Create Action for TimeEntry 
+		/// </summary>
+		/// <param name="model"></param>
+		/// <returns></returns>
+		protected ActionResult CreateTimeEntryJson(EditTimeEntryViewModel model)
+		{
+			if (model.IsCreated && (!model.TimeEntryId.HasValue || model.TimeEntryId.Value == 0))
+			{
+				return CreateTimeEntryJson(new CreateTimeEntryViewModel()
+				{
+					Date = model.Date,
+					Description = model.Description,
+					Duration = model.Duration,
+					PayClassId = model.PayClassId,
+					ProjectId = model.ProjectId,
+					SubscriptionId = model.SubscriptionId,
+					UserId = model.UserId
+				});
+
+			}
+			else
+			{
+				throw new Exception("Attempt to create entry that should have been edited");
+			}
+
 		}
 	}
 }

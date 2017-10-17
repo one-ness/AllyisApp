@@ -106,7 +106,7 @@ label.required:after {
 	}
 
 	&.create {
-		opacity: 0.5;
+		opacity: 1;
 		background-color: transparent;
 
 		.button-anim-wrap {
@@ -114,8 +114,9 @@ label.required:after {
 		}
 
 		.hidden-create {
-			display: none;
-			visibility: hidden;
+			//display: none;
+			//visibility: hidden;
+			.fa-mixin(@fa-var-remove);
 		}
 
 		.allyisicon-submit {
@@ -147,10 +148,11 @@ label.required:after {
 
 	&.changed {
 		opacity: 1;
-
-		.allyisicon-submit {
-			.fa-mixin(@fa-var-exclamation);
-		}
+		/*
+		//.allyisicon-submit {
+		//	.fa-mixin(@fa-var-exclamation);
+		//}
+		*/
 	}
 
 	&.error {

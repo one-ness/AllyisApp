@@ -26,7 +26,7 @@
     @Scripts.Render("~/bundles/underscore")
     @RenderSection("css", required: false)
     @*@Styles.Render(DisplayHints.LayoutThemeBundle)*@
-    <link href="@Url.Content(DisplayHints.LayoutThemeBundle + ".less")" rel="stylesheet/less" type="text/css" />
+    <link href="@Url.Content(DisplayHints.LayoutThemeBundle + ".min.css")" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="@Url.Content("~/Scripts/less.js")"></script>
     <meta name="description" content="@Strings.MetaDescription" />
 </head>

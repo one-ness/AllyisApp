@@ -100,28 +100,28 @@
 			else
 			{
 				@Html.DropDownListDisabled("PayClassNameDdl", from c in Model.PayClasses  //Ddl name must be different than model property name or the selected value cannot be adjusted
-																  select new SelectListItem
-																  {
-																	  Selected = (Model.PayClasses.Count() == 1) || (Model.PayClassId == c.PayClassId),
+															  select new SelectListItem
+															  {
+																  Selected = (Model.PayClasses.Count() == 1) || (Model.PayClassId == c.PayClassId),
 
-																	  Text = Strings.ResourceManager.GetString((c.PayClassName).Replace(" ", "")) ?? c.PayClassName,
+																  Text = Strings.ResourceManager.GetString((c.PayClassName).Replace(" ", "")) ?? c.PayClassName,
 
-																	  Value = c.PayClassId.ToString()
-																  }, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" }).RemoveIdAttribute()
+																  Value = c.PayClassId.ToString()
+															  }, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" }).RemoveIdAttribute()
 
 				<input type="hidden" name="PayClassId" value="" />   @*Needed for proper model binding, value changes on submit (see form above)*@
 			}
 		</div>
-			<div class="group left">
-				@if (locked && Model.Sample)
+		<div class="group left">
+			@if (locked && Model.Sample)
 				{
-					@Html.TextBox("BeforeLockDateDesc", "-", new { @disabled = "disabled", @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" })
+				@Html.TextBox("BeforeLockDateDesc", "-", new { @disabled = "disabled", @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" })
 				}
 				else
 				{
-					@Html.TextBoxDisabledFor(m => Model.Description, locked, new { @class = "form-control stretch", @onkeypress = "changeOccur(this)", @onchange = "changeOccur(this)", @placeholder = Strings.Description }).RemoveIdAttribute()
+				@Html.TextBoxDisabledFor(m => Model.Description, locked, new { @class = "form-control stretch", @onkeypress = "changeOccur(this)", @onchange = "changeOccur(this)", @placeholder = Strings.Description }).RemoveIdAttribute()
 				}
-			</div>
+		</div>
 		if (!locked)
 		{
 			<div class="button-anim-wrap btn-group group right">

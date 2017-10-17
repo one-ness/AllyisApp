@@ -1,0 +1,326 @@
+﻿@using AllyisApps.Areas.TimeTracker.Core;
+@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+@using AllyisApps.Services.Auth;
+@using AllyisApps.Utilities;
+@using System.Configuration;
+@model TimeEntryOverDateRangeViewModel
+@{
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
+	ViewBag.startOfWeek = Model.StartOfWeek;
+	ViewBag.TitleBar = Strings.TrackTime;
+	Layout = "~/Areas/TimeTracker/Views/Shared/_TimeTrackerSidebar.cshtml";
+	ViewData["IsManager"] = Model.CanManage;
+	ViewData["UserId"] = Model.EntryRange.UserId;
+	ViewData["SubscriptionId"] = Model.Subscriptionid;
+	ViewData["SubscriptionName"] = Model.SubscriptionName;
+}
+
+<div class="row">
+	@using (Html.BeginForm("TimeTrackerDatePickerRedirect", ControllerConstants.TimeEntry, FormMethod.Get, htmlAttributes: new { @class = "form-inline col-xs-12", @style = "margin-bottom: 20px;" }))
+	{
+		@*<input id="UserId" name="UserId" type="hidden" value="@Model.EntryRange.UserId" />*@
+		<input id="StartDate" name="startDate" type="hidden" value="@Model.EntryRange.StartDate" />
+		<input id="EndDate" name="endDate" type="hidden" value="@Model.EntryRange.EndDate" />
+		<div class="form-group pull-left">
+			<a href="@Url.Action(ActionConstants.Export, ControllerConstants.TimeEntry, routeValues: new
+				{
+					subscriptionId = Model.Subscriptionid,
+					userId = Model.EntryRange.UserId,
+					startingDate = Model.EntryRange.StartDate,
+					endingDate = Model.EntryRange.EndDate
+				})">
+				@*<input type="button" value="Export" class="btn btn-primary">*@
+				<span c>
+					@*<input type="button" value="Export" class="btn btn-primary">*@
+					<span class="btn btn-primary" style="margin-right: 15px;">@Strings.Export</span>
+			</a>
+			<span class="btn btn-primary" onclick="saveForm()" style="margin-right: 15px;">@Strings.Save</span>
+		</div>
+		<!-- Temp fix for Users button for smaller viewports -->
+		<div class="form-group pull-right">
+			<button type="button" class="btn btn-primary visible-xs" data-toggle="offcanvas" style="margin: 0 0 0 15px">@Strings.Users</button>
+		</div>
+		@*To be moved to a separate settings page*@
+
+		<div id="date-select" class="form-group pull-right">
+			<div class="input-group">
+
+				<div class="input-group-btn">
+					@if (ViewBag.SelectedUserId == ViewBag.SignedInUserID)
+					{
+						<a class="btn btn-primary" title="@Strings.Previous"
+						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.Subscriptionid, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
+							<i class="fa fa-chevron-left"></i>
+						</a>
+						<a class="btn btn-primary" title="@Strings.Current"
+						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.Subscriptionid, startDate = ViewBag.WeekStart, endDate = ViewBag.WeekEnd })">
+							<i class="glyphicon glyphicon-flash"></i>
+						</a>
+						<a class="btn btn-primary" title="@Strings.Next"
+						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.Subscriptionid, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
+							<i class="fa fa-chevron-right"></i>
+						</a>
+					}
+					else
+					{
+						<a class="btn btn-primary" title="@Strings.Previous"
+						   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.Subscriptionid, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
+							<i class="fa fa-chevron-left"></i>
+						</a>
+						<a class="btn btn-primary" title="@Strings.Current"
+						   href="@Url.Action(ActionConstants.Index, routeValues: new {  subscriptionId = Model.Subscriptionid, userId = ViewBag.SelectedUserId,  startDate = ViewBag.WeekStart, endDate = ViewBag.WeekEnd })">
+							<i class="glyphicon glyphicon-flash"></i>
+						</a>
+
+						<a class="btn btn-primary" title="@Strings.Next"
+						   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.Subscriptionid, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
+							<i class="fa fa-chevron-right"></i>
+						</a>
+					}
+				</div>
+				<input type="text" name="daterange" id="daterange" class="form-control" value="" />
+				@*<div class="input-group-btn">
+						<input type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.View class="btn btn-primary" style="width: 56px" />
+					</div>*@
+			</div>
+		</div>
+	}
+</div>
+
+@Html.Partial("_AjaxTimeEntries2", Model.EntryRange)
+
+@{ViewBag.SidebarToggleText = Strings.Details;
+	ViewBag.RenderSidebar = true;}
+@if (Model.CanManage)
+{
+	ViewBag.SidebarToggleText = Strings.Users;
+}
+
+@section sidebar {
+	<div class="panel panel-info" id="timesheet-summary">
+		<div class="panel-heading">
+			<h1 class="panel-title">@Model.CurrentUser.FirstName @Model.CurrentUser.LastName</h1>
+		</div>
+
+		<table class="table table-condensed">
+			@foreach (ProjectHours ph in Model.ProjectHours)
+			{
+				<tr>
+					<td>
+						@ph.Project.ProjectName
+					</td>
+					<td id="@ph.Project.ProjectId">
+						@ph.GetHoursInHoursMinutes()
+					</td>
+				</tr>
+			}
+			<tr>
+				<td>
+					<strong>@Strings.Total</strong>
+				</td>
+				<td>
+					<strong id="totalHours">@Model.GrandTotal.GetHoursInHoursMinutes()</strong>
+				</td>
+			</tr>
+		</table>
+	</div>
+	@*@if (Model.CanManage)
+		{
+			<div class="panel panel-info" id="TimeSheet-LockDate">
+				<div class="panel-heading">
+					<h1 class="panel-title">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.LockDate</h1>
+				</div>
+				@using (Html.BeginForm(ActionConstants.SetLockDate, ControllerConstants.TimeEntry, FormMethod.Post))
+				{
+					<input id="UserId" name="UserId" type="hidden" value="@Model.EntryRange.UserId" />
+					<input id="StartDate" name="StartDate" type="hidden" value="@Model.EntryRange.StartDate" />
+					<input id="EndDate" name="EndDate" type="hidden" value="@Model.EntryRange.EndDate" />
+					@Html.TextBoxFor(m => m.LockDate, new { name = "LockDate", id = "LockDate", @class = "form-control" })
+					//<input type="text" name="LockDate" id="LockDate" class="form-control" value="" onSubmit="alert(LockDate.value);" />
+				}
+			</div>
+		}*@
+
+	@if (Model.CanManage)
+	{
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<h1 class="panel-title">@Strings.MemberList</h1>
+				<input id="viewasuser-search" type="text" class="form-control" placeholder=@Strings.SearchPlaceholder />
+			</div>
+			<div id="viewasuser-list" class="list-group allyis-search" style="max-height: 50vh; overflow-y: auto;">
+				@{ var count = 0;
+					var pageCount = 1;
+					var hide = "";
+					foreach (var user in Model.Users)
+					{
+						pageCount = 1 + (count / Model.PageUserSize);
+						hide = "flex"; // All are originally shown so that the widths get calculated correctly (accounting for scroll bar). Pages after page 1 are then hidden when page loads.
+
+						string active = "";
+						var resetBackground = "this.style.backgroundColor=\"#FFFFFF\"";
+						if (user.UserId == Model.EntryRange.UserId)
+						{
+							active = "list-group-item-info";
+							resetBackground = "this.style.backgroundColor=\"#d9edf7\"";
+						}
+						<div data-page="@pageCount" class="@(active)"
+							 onmouseover='this.style.backgroundColor="#c4e3f3"' onmouseout="@resetBackground"
+							 style="width: 100%; display: @hide; justify-content: flex-end;">
+							@if (user.UserId == ViewBag.SignedInUserID)
+							{
+								<a class="col-xs-11 text-left" data-search="@user.Email"
+								   href="@Url.Action(ActionConstants.IndexNoUserId, routeValues: new
+								{
+									startDate = Model.EntryRange.StartDate,
+									endDate = Model.EntryRange.EndDate
+								})"
+								   style="text-decoration: none; color: #000000;">
+									@user.FirstName @user.LastName
+								</a>
+							}
+							else
+							{
+								<a class="col-xs-11 text-left" data-search="@user.Email"
+								   href="@Url.Action(ActionConstants.Index, routeValues: new
+								{
+									userId = user.UserId,
+									startDate = Model.EntryRange.StartDate,
+									endDate = Model.EntryRange.EndDate
+									})"
+								   style="text-decoration: none; color: #000000;">
+									@user.FirstName @user.LastName
+								</a>
+							}
+							<a href="@Url.Action(ActionConstants.UserEdit, routeValues: new {
+								subscriptionId = Model.Subscriptionid,
+								userId = user.UserId })"
+							   style="text-decoration: none; color: #0066AA; padding-right:5%" title="Assign Projects to User"><i class="fa fa-cog"></i></a>
+						</div>count++;
+					}
+				}
+			</div>
+			<div id="footPager" class="panel-footer" style="display: flex; justify-content: space-around; flex-wrap: wrap">
+				@if (Model.Users.Any())
+				{
+					var page = 1;
+					<input class="btn btn-primary btn-xs" id="page @page" name="pageButton" type="button" value="@page" onClick="showPage(@page)" disabled="" />page++;
+					while (page <= Model.UserPageCount)
+					{
+						<input class="btn btn-primary btn-xs" id="page @page" name="pageButton" type="button" value="@page" onClick="showPage(@page)" />page++;
+					}
+				}
+			</div>
+		</div>
+					}
+	@if (Model.CanManage)
+	{
+		<div class="panel panel-info" style="background-color: #f5f5f5;">
+			<div class="panel-heading"><span class="panel-title">@Strings.Upload</span></div>
+			@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.TimeEntry, new { subscriptionid = Model.Subscriptionid }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+			{
+				@Html.AntiForgeryToken();
+				<div>
+					<input type="file" id="upload-box" name="file" style="display:none;"
+						   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+					<input id="upload-file-name-display" name="file" class="form-control"
+						   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+				</div>
+				@*<div style="width:70%; margin:0 auto">*@
+				<div id="footUpload" style="background-color:#f5f5f5; display: flex; justify-content: space-around; flex-wrap: wrap; padding-bottom: 0px; float:right; margin-top: 10px;">
+					<a class="btn btn-primary" onclick="$('input[id=upload-box]').click();" title="Choose Excel file containing Time Tracker entries">@Strings.ChooseFile</a>
+					<input type="submit" style="margin-left: 3px; margin-right: 3px;" id="upload-button" value="@Strings.Upload" class="btn btn-primary" title="Upload Excel Time Tracker entries" />
+				</div>
+			}
+			@using (Html.BeginForm(ActionConstants.Template, ControllerConstants.TimeEntry, null, FormMethod.Get, new { style = "margin-bottom:10px;" }))
+			{
+				<div style="margin-top: 10px; margin-left: 3px; margin-bottom:10px;">
+					<input type="submit" id="template-button" value="@Strings.Template" class="btn btn-primary tt-template" title="Download Excel Time Tracker template" />
+				</div>
+			}
+		</div>
+	}
+}
+
+@section css
+{
+	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+	<link rel="stylesheet" type="text/css" href="~/Content/jquery.comiseo.daterangepicker.css" />
+}
+
+@section scripts
+{
+	@*Date range picker dependencies:*@
+	@Scripts.Render("~/bundles/jqueryui")
+	@Scripts.Render("~/bundles/moment")
+
+	<script type="text/javascript">
+		var model_startdate = @Model.EntryRange.StartDate;
+		var model_enddate = @Model.EntryRange.EndDate;
+		var model_lockdate = @Model.LockDate;
+		var pageSize = @Model.PageUserSize;
+		var page_container_id = "viewasuser-list";
+		var page_item_tag = "div";
+
+		$(document).ready(function () {
+			var disabledButtons = document.getElementsByName("disabledButton");
+			for (var i = 0; i < disabledButtons.length; i++) {
+				disabledButtons[i].disabled = true;
+			}
+		});
+	</script>
+	@Scripts.Render("~/bundles/daterangepicker")
+	@Scripts.Render("~/bundles/pageswithsearch")
+	@*Scripts.Render("~/bundles/TTTimeEntryIndex")Disable old javascript*@
+	@Scripts.Render("~/Areas/TimeTracker/Scripts/allyis-timeentry-index2.js");
+	<script>
+		function gatherData() {
+			var jsonEntires = [];
+			$(".TimeEntryForm").each(function (i, ele) {
+				var element = {};
+				element.CanManage = $(ele).find("[name='CanManage']").val();
+				element.IsCreated = $(ele).find("[name='IsCreated']").val();
+				element.Sample = $(ele).find("[name='Sample']").val();
+				element.IsEdited = $(ele).find("[name='IsEdited']").val();
+				element.IsDeleted = $(ele).find("[name='IsDeleted']").val();
+				element.TimeEntryId = $(ele).find("[name='TimeEntryId']").val();
+				element.UserId = $(ele).find("[name='UserId']").val();
+				element.Date = $(ele).find("[name='Date']").val();
+				element.StartingDate = $(ele).find("[name='StartingDate']").val();
+				element.EndingDate = $(ele).find("[name='EndingDate']").val();
+				element.Duration = $(ele).find("[name='Duration']").val();
+				element.ProjectId = $(ele).find("[name='ProjectId']").val();
+				element.PayClassId = $(ele).find("[name='PayClassId']").val();
+				element.Description = $(ele).find("[name='Description']").val();
+				element.SubscriptionId = $(ele).find("[name='SubscriptionId']").val();
+				jsonEntires.push(element);
+			});
+			return jsonEntires;
+		}
+		formSubmit = function () {
+			var form = $(document.createElement("form")).attr({ "method": "POST", "action": '@Url.Action("TimeEntryCURD")' });
+			var data = gatherData();
+			if (!data) { // gatherData() will return null if no one is checked or the user declines the confirmation prompt.
+				return;
+			}
+
+			var result = {};
+			result.StartingDate = @(Model.EntryRange.StartDate);
+			result.EndingDate = @(Model.EntryRange.EndDate);
+			result.Entries = data;
+			result.SubscriptionId = @(Model.Subscriptionid);
+			var datajson = JSON.stringify(result);
+
+			$(document.createElement("input")).attr({ "type": "hidden", "name": "data", "value": datajson }).appendTo(form);
+			form.appendTo(document.body).submit();
+		}
+
+		function saveForm() {
+			formSubmit();
+		}
+	</script>
+	<script type="text/javascript">
+		showPage(1); // This is important to call at the very end; otherwise all pages will be shown until the user clicks a page button.
+	</script>
+}
