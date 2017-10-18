@@ -195,7 +195,7 @@ ul ul {
 	margin-bottom: 0;
 }
 
-.container {
+.container .slim {
 	margin-right: auto;
 	margin-left: auto;
 	padding-left: 15px;
@@ -203,19 +203,19 @@ ul ul {
 }
 
 @media (min-width: 768px) {
-	.container {
+	.container .slim {
 		width: 750px;
 	}
 }
 
 @media (min-width: 992px) {
-	.container {
+	.container .slim {
 		width: 970px;
 	}
 }
 
 @media (min-width: 1200px) {
-	.container {
+	.container .slim {
 		width: 1170px;
 	}
 }
@@ -593,12 +593,12 @@ input[type="file"]:focus {
 	background-color: #eeeeee;
 }
 
-.container:before, .container:after, .row:before, .row:after, .nav:before, .nav:after, .navbar:before, .navbar:after, .navbar-header:before, .navbar-header:after, .navbar-collapse:before, .navbar-collapse:after {
+.container:before, .container:after, .slim:before, .slim:after, .row:before, .row:after, .nav:before, .nav:after, .navbar:before, .navbar:after, .navbar-header:before, .navbar-header:after, .navbar-collapse:before, .navbar-collapse:after {
 	content: " ";
 	display: table;
 }
 
-.container:after, .row:after, .nav:after, .navbar:after, .navbar-header:after, .navbar-collapse:after {
+.container:after, .slim:after, .row:after, .nav:after, .navbar:after, .navbar-header:after, .navbar-collapse:after {
 	clear: both;
 }
 
@@ -1242,12 +1242,12 @@ a.list-group-item:hover, a.list-group-item:focus {
 	border-color: #bce8f1;
 }
 
-.container:before, .container:after, .row:before, .row:after, .nav:before, .nav:after, .panel-body:before, .panel-body:after, .navbar:before, .navbar:after, .navbar-header:before, .navbar-header:after, .navbar-collapse:before, .navbar-collapse:after {
+.container:before, .container:after, .slim:before, .slim:after, .row:before, .row:after, .nav:before, .nav:after, .panel-body:before, .panel-body:after, .navbar:before, .navbar:after, .navbar-header:before, .navbar-header:after, .navbar-collapse:before, .navbar-collapse:after {
 	content: " ";
 	display: table;
 }
 
-.container:after, .row:after, .nav:after, .panel-body:after, .navbar:after, .navbar-header:after, .navbar-collapse:after {
+.container:after, .slim:after, .row:after, .nav:after, .panel-body:after, .navbar:after, .navbar-header:after, .navbar-collapse:after {
 	clear: both;
 }
 

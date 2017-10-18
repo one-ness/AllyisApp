@@ -26,7 +26,7 @@
                 <!--Get users By subscriptionUser-->
                 <!--Default selection: current user-->if (Model.CanManage)// was previously: (Permissions.Can(ProductAction.TimeTrackerCreateReportOthers, Model.OrganizationId, DB Helper.Instance.GetProductIDByName("TimeTracker")))
 				{
-					<div class="list-left container">
+					<div class="list-left slim">
 						<label for="UserSelect">@Strings.Employees</label>
 						@Html.DropDownList("UserSelect",
 											  Model.UserView,
@@ -35,14 +35,14 @@
 				}
 				else
 				{
-					<div class="list-left container" style="display: none;">
+					<div class="list-left slim" style="display: none;">
 						<label for="UserSelect">@Strings.Employees</label>
 						@Html.DropDownList("UserSelect",
 											  Model.UserView,
 											  htmlAttributes: new { @class = "form-control", /*disabled = "disabled",*/ multiple = "multiple", size = "9", style = "display: none;" })
 					</div>
 				}
-				<div class="options-right container">
+				<div class="options-right slim">
 					<div class="row">
 						<div class="form-group col-md-6 col-lg-6">
 							<!--Get Customers by OrganizationId-->
