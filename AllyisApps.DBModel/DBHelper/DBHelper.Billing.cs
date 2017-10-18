@@ -93,7 +93,7 @@ namespace AllyisApps.DBModel
 		/// <param name="productRoleId">Product role to assign (or -1 to remove from organization).</param>
 		/// <param name="productId">ID of Product in question.</param>
 		/// <returns>The number of updated and number of added users.</returns>
-		public Tuple<int, int> UpdateSubscriptionUserRoles(List<int> userIds, int organizationId, int productRoleId, int productId)
+		async public Task<Tuple<int, int>> UpdateSubscriptionUserRoles(List<int> userIds, int organizationId, int productRoleId, int productId)
 		{
 			DataTable userIdsTable = new DataTable();
 			userIdsTable.Columns.Add("userId", typeof(int));
@@ -110,7 +110,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// TODO: split updating user roles and creating new sub users
-				var results = connection.QueryMultiple("[Billing].[UpdateSubscriptionUserRoles]", parameters, commandType: CommandType.StoredProcedure);
+				var results = await connection.QueryMultipleAsync("[Billing].[UpdateSubscriptionUserRoles]", parameters, commandType: CommandType.StoredProcedure);
 				int usersUpdated = results.Read<int>().SingleOrDefault();
 				int usersAdded = results.Read<int>().SingleOrDefault();
 				return Tuple.Create(usersUpdated, usersAdded);

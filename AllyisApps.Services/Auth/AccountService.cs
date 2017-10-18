@@ -76,7 +76,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Accepts an invitation, adding the user to the invitation's organization, subscriptions, and projects, then deletes the invitations.
 		/// </summary>
-		public bool AcceptUserInvitation(int invitationId)
+		async public Task<bool> AcceptUserInvitation(int invitationId)
 		{
 			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId");
 
@@ -92,24 +92,22 @@ namespace AllyisApps.Services
 					var etRole = roleString[((int)SkuIdEnum.ExpenseTrackerBasic).ToString()].Value<int>();
 					var smRole = roleString[((int)SkuIdEnum.StaffingManagerBasic).ToString()].Value<int>();
 
-
 					if (ttRole > 0)
 					{
-						var result2 = (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, ttRole, (int)ProductIdEnum.TimeTracker));
+						var result2 = await (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, ttRole, (int)ProductIdEnum.TimeTracker));
 					}
 
 					if (etRole > 0)
 					{
 						var prodId = GetProductSubscriptionInfo(inviteInfo.OrganizationId, SkuIdEnum.ExpenseTrackerBasic).Product.ProductId;
-						var result3 = (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, etRole, (int)ProductIdEnum.ExpenseTracker));
+						var result3 = await (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, etRole, (int)ProductIdEnum.ExpenseTracker));
 					}
 
 					if (smRole > 0)
 					{
 						var prodId = GetProductSubscriptionInfo(inviteInfo.OrganizationId, SkuIdEnum.StaffingManagerBasic).Product.ProductId;
-						var result4 = (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, smRole, (int)ProductIdEnum.StaffingManager));
+						var result4 = await (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, smRole, (int)ProductIdEnum.StaffingManager));
 					}
-
 				}
 				NotifyInviteAcceptAsync(invitationId);
 			}
@@ -678,6 +676,5 @@ namespace AllyisApps.Services
 
 			return result;
 		}
-
 	}
 }
