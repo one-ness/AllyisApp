@@ -87,7 +87,6 @@ namespace AllyisApps.Services
 		public int? UpdateCustomer(Customer customer, int subscriptionId)
 		{
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
-			customer.Address?.EnsureDBRef(this);
 			return DBHelper.UpdateCustomer(GetDBEntitiesFromCustomerInfo(customer));
 		}
 
