@@ -1573,4 +1573,109 @@
   <data name="NoSubscriptionMessage" xml:space="preserve">
     <value>You are not part of a subscription yet. Please contact your employer to add you to a subscription.</value>
   </data>
+  <data name="AdditionalInformation" xml:space="preserve">
+    <value>Additional Information</value>
+  </data>
+  <data name="Applications" xml:space="preserve">
+    <value>Applications</value>
+  </data>
+  <data name="ApplicationStatuses" xml:space="preserve">
+    <value>Application Statuses</value>
+  </data>
+  <data name="BillingAmount" xml:space="preserve">
+    <value>Billing Amount</value>
+  </data>
+  <data name="BillingRate" xml:space="preserve">
+    <value>Billing Rate</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="EmploymentType" xml:space="preserve">
+    <value>Employment Type</value>
+  </data>
+  <data name="EmploymentTypes" xml:space="preserve">
+    <value>Employment Types</value>
+  </data>
+  <data name="ExpectedDuration" xml:space="preserve">
+    <value>Expected Duration</value>
+  </data>
+  <data name="FilterByEmploymentType" xml:space="preserve">
+    <value>Filter by Employment Type</value>
+  </data>
+  <data name="FilterByPositionStatus" xml:space="preserve">
+    <value>Filter by Position Status</value>
+  </data>
+  <data name="FilterByTags" xml:space="preserve">
+    <value>Filter by Tags</value>
+  </data>
+  <data name="LevelName" xml:space="preserve">
+    <value>Level Name</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="NEW" xml:space="preserve">
+    <value>NEW</value>
+  </data>
+  <data name="NoActiveApplications" xml:space="preserve">
+    <value>No Active Applications</value>
+  </data>
+  <data name="NoActivePositions" xml:space="preserve">
+    <value>No Active Positions</value>
+  </data>
+  <data name="PositionCount" xml:space="preserve">
+    <value>Position Count</value>
+  </data>
+  <data name="PositionDetails" xml:space="preserve">
+    <value>Position Details</value>
+  </data>
+  <data name="PositionLevel" xml:space="preserve">
+    <value>Position Level</value>
+  </data>
+  <data name="PositionLevels" xml:space="preserve">
+    <value>Position Levels</value>
+  </data>
+  <data name="Positions" xml:space="preserve">
+    <value>Positions</value>
+  </data>
+  <data name="PositionsAvailable" xml:space="preserve">
+    <value>Positions Available</value>
+  </data>
+  <data name="PositionStatus" xml:space="preserve">
+    <value>PositionStatus</value>
+  </data>
+  <data name="PositionStatuses" xml:space="preserve">
+    <value>Position Statuses</value>
+  </data>
+  <data name="RequiredSkills" xml:space="preserve">
+    <value>Required Skills</value>
+  </data>
+  <data name="StaffingManager" xml:space="preserve">
+    <value>Staffing Manager</value>
+  </data>
+  <data name="StaffingManagerRole" xml:space="preserve">
+    <value>Staffing Manager Role</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="StatusName" xml:space="preserve">
+    <value>StatusName</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="Team" xml:space="preserve">
+    <value>Team</value>
+  </data>
+  <data name="TypeName" xml:space="preserve">
+    <value>Type Name</value>
+  </data>
+  <data name="UserAddedToStaffingManager" xml:space="preserve">
+    <value>User Added To Staffing Manager</value>
+  </data>
+  <data name="UserChangedRolesInStaffingManager" xml:space="preserve">
+    <value>User Changed Roles In Staffing Manager</value>
+  </data>
 </root>

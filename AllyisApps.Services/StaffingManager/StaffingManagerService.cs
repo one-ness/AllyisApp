@@ -277,7 +277,11 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="position">The service layer Position object to be passed to the DB and updated. </param>
 		/// <returns>Returns the number of rows updated.</returns>
-		public int UpdatePosition(Position position) => DBHelper.UpdatePosition(ServiceObjectToDBEntity(position));
+		public int UpdatePosition(Position position)
+		{
+			UpdatePositionTages(position.PositionId, position.Tags);
+			return DBHelper.UpdatePosition(ServiceObjectToDBEntity(position));
+		}
 
 		/// <summary>
 		/// update default status
@@ -285,6 +289,54 @@ namespace AllyisApps.Services
 		/// <param name="organizationId"></param>
 		/// <param name="positionStatusId"></param>
 		public void UpdateDefaultPositionStatus(int organizationId, int positionStatusId) => DBHelper.UpdateStaffingSettings(organizationId, positionStatusId);
+
+		/// <summary>
+		/// updates tags when a position is updated. This deletes now unused tags, adds new join entry and tags if nessicary
+		/// </summary>
+		/// <param name="positionId"></param>
+		/// <param name="tags"></param>
+		public void UpdatePositionTages(int positionId, dynamic tags)
+		{
+			var currentTagsOnPosition = DBHelper.GetTagsByPositionId(positionId);
+			var AllTags = DBHelper.GetTags();
+			List<string> newTags = new List<string>();
+			foreach (var tag in tags) newTags.Add(tag.TagName);
+
+			foreach (string tag in newTags) //create new TAG entries
+			{
+				bool there = false;
+				foreach (TagDBEntity dbTag in AllTags) if (tag == dbTag.TagName) there = true;
+				if (!there)
+				{
+					DBHelper.CreateTag(tag, positionId);
+				}
+			}
+			
+			currentTagsOnPosition = DBHelper.GetTagsByPositionId(positionId);
+			AllTags = DBHelper.GetTags();
+
+			foreach (string tag in newTags) //create new join entries
+			{
+				bool there = false;
+				foreach (TagDBEntity dbTag in currentTagsOnPosition) if (tag == dbTag.TagName) there = true;
+				if (!there)
+				{
+					int theId = 0;
+					foreach (TagDBEntity allTag in AllTags) if (tag == allTag.TagName) theId = allTag.TagId;
+					DBHelper.AssignTag(theId, positionId);
+				}
+			}
+
+			foreach(TagDBEntity dbTag in currentTagsOnPosition)
+			{
+				bool there = false;
+				foreach (string tag in newTags) if (tag == dbTag.TagName) there = true;
+				if (!there)
+				{
+					DBHelper.DeletePositionTag(dbTag.TagId, positionId);
+				}
+			}
+		}
 
 		#endregion UpdateMethods
 

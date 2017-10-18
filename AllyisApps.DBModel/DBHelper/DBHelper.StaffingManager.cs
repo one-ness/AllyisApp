@@ -231,7 +231,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default -1
-				connection.Execute("[StaffingManager].[SetupTag]", parameters, commandType: CommandType.StoredProcedure);
+				connection.Execute("[Lookup].[SetupTag]", parameters, commandType: CommandType.StoredProcedure);
 			}
 
 			return parameters.Get<int>("@returnValue");
@@ -624,7 +624,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<TagDBEntity>("[StaffingManager].[GetTagsByPositionId]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.Query<TagDBEntity>("[StaffingManager].[GetPositionTagsByPosition]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -636,7 +636,7 @@ namespace AllyisApps.DBModel
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<TagDBEntity>("[StaffingManager].[GetTags]", commandType: CommandType.StoredProcedure);
+				return connection.Query<TagDBEntity>("[Lookup].[GetTags]", commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -883,7 +883,6 @@ namespace AllyisApps.DBModel
 				connection.Execute("[StaffingManager].[UpdateStaffingSettings]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
-
 		#endregion Update Methods
 
 		////////////////////////////

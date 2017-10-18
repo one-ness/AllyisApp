@@ -8,4 +8,6 @@ BEGIN
 		([TagName])
 	VALUES 	 
 		(@tagName)
+
+	SELECT IDENT_CURRENT('[Lookup].[TagId]');
 END

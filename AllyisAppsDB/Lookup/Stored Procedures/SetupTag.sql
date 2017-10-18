@@ -9,10 +9,11 @@ BEGIN
 	BEGIN TRANSACTION
 		EXEC [Lookup].[CreateTag] @tagName;
 
-		DECLARE @tagId INT = IDENT_CURRENT('[StaffingManager].[TagId]');
+		DECLARE @tagId INT 
+		SET @tagId = IDENT_CURRENT('[Lookup].[TagId]');
 
 		EXEC [StaffingManager].[CreatePositionTag] @tagId, @positionId;
 
-		SELECT IDENT_CURRENT('[StaffingManager].[TagId]');
+		SELECT IDENT_CURRENT('[Lookup].[TagId]');
 	COMMIT TRANSACTION
 END
