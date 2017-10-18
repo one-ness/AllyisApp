@@ -12,6 +12,8 @@ using AllyisApps.Services;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
 using AllyisApps.ViewModels.Auth;
+using System.Threading.Tasks;
+using AllyisApps.Services.Cache;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -27,9 +29,27 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="skuId">The id of the SKU being subscribed to.</param>
 		/// <returns>The result of this action.</returns>
 		[HttpGet]
-		public ActionResult Subscribe(int id, SkuIdEnum skuId)
+		public async Task<ActionResult> Subscribe(int id, SkuIdEnum skuId)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, id);
+			var collection = await this.AppService.GetSubscriptionsAsync(id);
+			foreach (var item in collection)
+			{
+				if (item.SkuId == skuId)
+				{
+					// already subscribed
+					this.Notifications.Add(new BootstrapAlert(string.Format("You are already subscribed to {0}", item.SkuName), Variety.Warning));
+					return this.RedirectToAction(ActionConstants.OrganizationSubscriptions, ControllerConstants.Account, new { id = id });
+				}
+				else
+				{
+					// get a list of all active skus
+					var activeSkus = CacheContainer.AllSkusCache.Where(x => x.IsActive).ToList();
+
+					
+				}
+			}
+
+
 			var infos = AppService.GetProductSubscriptionInfo(id, skuId);
 
 			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos, id);

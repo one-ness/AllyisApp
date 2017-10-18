@@ -26,6 +26,11 @@ namespace AllyisApps.Services.Cache
 		public static Dictionary<ProductIdEnum, List<Sku>> SkusCache { get; private set; }
 
 		/// <summary>
+		/// list of all skus in the system
+		/// </summary>
+		public static List<Sku> AllSkusCache { get; private set; }
+
+		/// <summary>
 		/// dictionary of all langugages, indexed by culture name
 		/// </summary>
 		public static Dictionary<string, Language> LanguagesCache { get; set; }
@@ -107,6 +112,7 @@ namespace AllyisApps.Services.Cache
 
 			// init skus
 			SkusCache = new Dictionary<ProductIdEnum, List<Sku>>();
+			AllSkusCache = new List<Sku>();
 			var skuEntities = DBHelper.GetAllSkus();
 			foreach (var item in skuEntities)
 			{
@@ -140,6 +146,8 @@ namespace AllyisApps.Services.Cache
 					list.Add(sku);
 					SkusCache.Add(sku.ProductId, list);
 				}
+
+				AllSkusCache.Add(sku);
 			}
 
 			// init products

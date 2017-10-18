@@ -26,10 +26,12 @@
 											<div class="col-md-4">
 												<div class="row" style="text-align: center; vertical-align: middle; margin-top: 25px; margin-bottom: 10px;"><img src="~/@sku.SkuIconUrl" alt="@sku.SkuName" /></div>
 												<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><strong>$@sku.Price.ToString("N2")</strong></div>
-
+												@if (Model.CanSubscribe)
+												{
 													<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;">
 														<a href="@Url.Action(ActionConstants.Subscribe, ControllerConstants.Account, new { id = Model.OrganizationId, skuId = (int)sku.SkuId })" style="text-decoration: none" class="btn btn-default">@Strings.Subscribe</a>
 													</div>
+												}
 											</div>
 											<div class="col-md-8">
 												<h3>
