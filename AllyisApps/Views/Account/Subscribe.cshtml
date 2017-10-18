@@ -10,7 +10,7 @@
 	Also remove the damn hardcoded "free users" numbers.*@
 <div class="shrink-wrap-center">
 	<div class="min300">
-		@using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, FormMethod.Post, new { @class = "form-inline" }))
+		@using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, FormMethod.Post, new { @class = "ovrd-form-inline form-inline" }))
 		{
 			@Html.AntiForgeryToken()
 			@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
@@ -26,26 +26,26 @@
 			@Html.Hidden("currentUserCount", (int)Model.CurrentUsers)
 
 			<p id="notice" style="color:red"></p>
-			<div class="row">
+			<div class="ovrd-row row">
 				<div class="ovrd-col-md-6 col-md-6 ovrd-col-md-push-3 col-md-push-3 col">
-					<div class="panel panel-default" style="min-width:350px;">
-						<div class="panel-heading">
+					<div class="ovrd-panel panel ovrd-panel-default panel-default" style="min-width:350px;">
+						<div class="ovrd-panel-heading panel-heading">
 							<h3 style="margin-top: 0; margin-bottom: 0; text-align: center;">
 								@Html.DisplayTextFor(m => m.SelectedSkuName)
 							</h3>
 						</div>
-						<div class="panel-body">
-							<div class="form-group">
+						<div class="ovrd-panel-body panel-body">
+							<div class="ovrd-form-group form-group">
 								<p>@Html.DisplayTextFor(m => m.SelectedSkuDescription)</p>
 								@Html.ReqLabelFor(m => m.SubscriptionName, "Subscription Name")
-								@Html.TextBoxFor(m => m.SubscriptionName, new { @class = "form-control", @placeholder = Model.SubscriptionNameToDisplayForSubscribing() })
+								@Html.TextBoxFor(m => m.SubscriptionName, new { @class = "ovrd-form-control form-control", @placeholder = Model.SubscriptionNameToDisplayForSubscribing() })
 								@Html.ValidationMessageFor(m => m.SubscriptionName)
 							</div>
 						</div>
-						<div class="panel-footer">
+						<div class="ovrd-panel-footer panel-footer">
 							<div class="pull-right">
-								<a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { organizationId = Model.OrganizationId })" class="btn btn-default"> @Strings.Cancel </a>
-								<input type="submit" class="btn btn-primary" value=@Strings.Save>
+								<a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { organizationId = Model.OrganizationId })" class="ovrd-btn btn ovrd-btn-default btn-default"> @Strings.Cancel </a>
+								<input type="submit" class="ovrd-btn btn ovrd-btn-primary btn-primary" value=@Strings.Save>
 							</div>
 							<div class="clearfix"></div>
 						</div>

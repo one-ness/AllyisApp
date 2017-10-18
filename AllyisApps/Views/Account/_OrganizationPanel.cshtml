@@ -7,10 +7,10 @@
 	string subtitle = Model.SiteUrl ?? "";
 	var OrgcityState = Model.City != null && Model.State != null ? Model.City + ", " + Model.State : Model.City + Model.State;
 }
-<div class="row">
+<div class="ovrd-row row">
 	<div class="ovrd-col-md-12 col-md-12 col">
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="ovrd-panel panel ovrd-panel-default panel-default">
+			<div class="ovrd-panel-heading panel-heading">
 				<h2 style="margin-top: 0px; margin-bottom: 0px;">
 					@title
 					@if (Model.IsManageAllowed)
@@ -21,7 +21,7 @@
 					}
 				</h2>
 			</div>
-			<div class="panel-body">
+			<div class="ovrd-panel-body panel-body">
 				<div class="ovrd-col-sm-8 col-sm-8 col index-details">
 					<p>
 						<label>@Strings.PhoneNumber:</label>
@@ -80,8 +80,8 @@
 							}
 
 							<a href="@(route)" style="text-decoration: none">
-								<div class="panel panel-default">
-									<div class="btn default" style="text-align:center; margin:10px;">
+								<div class="ovrd-panel panel ovrd-panel-default panel-default">
+									<div class="ovrd-btn btn default" style="text-align:center; margin:10px;">
 										<div class="center-block" text-align: center; vertical-align: middle;" style="margin-top:5px;">
 											<img src="~/@sub.IconUrl" alt="@sub.ProductName" />
 										</div>
@@ -103,5 +103,5 @@
 	</div>
 </div>
 
-<div class="row">
+<div class="ovrd-row row">
 </div>

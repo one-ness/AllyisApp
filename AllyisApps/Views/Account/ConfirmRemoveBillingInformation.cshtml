@@ -12,9 +12,9 @@
 		@using (Html.BeginForm(ActionConstants.RemoveBilling, ControllerConstants.Account, FormMethod.Post))
 		{
 
-			<div class="form-group allyis-action-buttons">
-				<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account)" class="btn btn-default"> @Strings.Cancel </a>
-				<input type="submit" class="btn btn-primary" value=@Strings.Continue>
+			<div class="ovrd-form-group form-group allyis-action-buttons">
+				<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account)" class="ovrd-btn btn ovrd-btn-default btn-default"> @Strings.Cancel </a>
+				<input type="submit" class="ovrd-btn btn ovrd-btn-primary btn-primary" value=@Strings.Continue>
 			</div>
 
 		}

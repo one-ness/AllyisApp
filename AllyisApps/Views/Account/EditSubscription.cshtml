@@ -4,7 +4,7 @@
 
 }
 
-<div class="row">
+<div class="ovrd-row row">
 	<div class="ovrd-col-md-6 col-md-6 ovrd-col-md-push-3 col-md-push-3 col">
 		<div class="ovrd-col-md-12 col-md-12 col text-center">
 			<img src="~/@Model.SkuIconUrl" alt="@Model.ProductName" style="margin-right:5px;" />
@@ -21,7 +21,7 @@
 				@using (Html.BeginForm(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = Model.SubscriptionId, idTwo = Model.SkuId }, FormMethod.Post, new { @class = "ovrd-col-md-12 col-md-12 col", @style = "margin-top:20px;display: inline-block" })) // , @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw(String.Format(Strings.WarningWhenUnsubscribing, Model.Name))) TODO: make this only fire on unsubscribe action.
 				{
 					@Html.ReqLabelFor(m => m.SubscriptionName, Strings.SubscriptionName)
-					@Html.TextBoxFor(m => m.SubscriptionName, new { @class = "form-control margined", @placeholder = Model.ProductName })
+					@Html.TextBoxFor(m => m.SubscriptionName, new { @class = "ovrd-form-control form-control margined", @placeholder = Model.ProductName })
 					@Html.AntiForgeryToken()
 					<input type="hidden" name="SubscriptionId" value="@Model.SubscriptionId" />
 					<input type="hidden" name="SkuId" value="@Model.SkuId" />
@@ -34,14 +34,14 @@
 						<div style="display:inline-block;">
 							<label for="subscriptionType">@Strings.ChangeSubscription: </label>
 						</div>
-						<div class="form-group">
-							@Html.DropDownListFor(m => m.SelectedNewSkuEnum, new SelectList(Model.OtherSkus), new { @class = "form-control" })
+						<div class="ovrd-form-group form-group">
+							@Html.DropDownListFor(m => m.SelectedNewSkuEnum, new SelectList(Model.OtherSkus), new { @class = "ovrd-form-control form-control" })
 						</div>
 					}
 					<div class="pull-right" , style="margin-top:50px;">
-						<a href="@Url.Action(ActionConstants.Unsubscribe, new { id = Model.SubscriptionId, idTwo = (int)Model.SkuId })" class="btn btn-danger">@Strings.Unsubscribe</a>
-						<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default"> @Strings.Cancel </a>
-						<input type="submit" value="@Strings.Save" class="btn btn-primary" id="save" />
+						<a href="@Url.Action(ActionConstants.Unsubscribe, new { id = Model.SubscriptionId, idTwo = (int)Model.SkuId })" class="ovrd-btn btn ovrd-btn-danger btn-danger">@Strings.Unsubscribe</a>
+						<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId })" class="ovrd-btn btn ovrd-btn-default btn-default"> @Strings.Cancel </a>
+						<input type="submit" value="@Strings.Save" class="ovrd-btn btn ovrd-btn-primary btn-primary" id="save" />
 					</div>
 
 				}

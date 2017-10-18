@@ -5,11 +5,11 @@
 
 <div class="shrink-wrap-center">
 	<div class="min300">
-		<div class="row">
+		<div class="ovrd-row row">
 			@if (Model.IsInvited)
 			{
 				<div class="ovrd-col-md-6 col-md-6 col min300">
-					<div class="form-group">
+					<div class="ovrd-form-group form-group">
 						<label>@Strings.Email</label>
 						<div class="text-box-padded">@Model.UserInfo.Email</div>
 					</div>
@@ -26,55 +26,55 @@
 			else
 			{
 				<div class="ovrd-col-md-6 col-md-6 col min300">
-					<div class="form-group">
+					<div class="ovrd-form-group form-group">
 						<label>@Strings.Email</label>
 						<div class="text-box-padded">@(Model.UserInfo.Email)</div>
 					</div>
-					<div class="form-group">
+					<div class="ovrd-form-group form-group">
 						<label>@Strings.FirstName</label>
 						<div class="text-box-padded">@(Model.FirstName)</div>
 					</div>
-					<div class="form-group">
+					<div class="ovrd-form-group form-group">
 						<label>@Strings.LastName</label>
 						<div class="text-box-padded">@(Model.LastName)</div>
 					</div>
-					<div class="form-group">
+					<div class="ovrd-form-group form-group">
 						<label>@Strings.DateOfBirth</label>
 						<div class="text-box-padded">
 							@if (Model.UserInfo.DateOfBirth.HasValue)
 							{ Model.UserInfo.DateOfBirth.Value.ToShortDateString(); }
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="ovrd-form-group form-group">
 						<label>@Strings.PhoneNumber</label>
 						<div class="text-box-padded">@(Model.UserInfo.PhoneNumber)</div>
 					</div>
 				</div>
 				<div class="ovrd-col-md-6 col-md-6 col min300">
-					<div class="form-group">
+					<div class="ovrd-form-group form-group">
 						<label>@Strings.Address</label>
 						<div class="text-box-padded">@(Model.UserInfo.Address == null ? null : Model.UserInfo.Address)</div>
 					</div>
-					<div class="form-group">
+					<div class="ovrd-form-group form-group">
 						<label>@Strings.Country</label>
 						<div class="text-box-padded">@(Model.UserInfo.Address == null ? null : Model.UserInfo.CountryName)</div>
 					</div>
-					<div class="form-group">
+					<div class="ovrd-form-group form-group">
 						<label>@Strings.State</label>
 						<div class="text-box-padded">@(Model.UserInfo.Address == null ? null : Model.UserInfo.StateName)</div>
 					</div>
-					<div class="form-group">
+					<div class="ovrd-form-group form-group">
 						<label>@Strings.City</label>
 						<div class="text-box-padded">@(Model.UserInfo.Address == null ? null : Model.UserInfo.City)</div>
 					</div>
-					<div class="form-group">
+					<div class="ovrd-form-group form-group">
 						<label>@Strings.PostalCode</label>
 						<div class="text-box-padded">@(Model.UserInfo.Address == null ? null : Model.UserInfo.PostalCode)</div>
 					</div>
 				</div>
 			}
 		</div>
-		@using (Html.BeginForm(ActionConstants.EditMember, ControllerConstants.Account, FormMethod.Post, new { @class = "form", role = "form" }))
+		@using (Html.BeginForm(ActionConstants.EditMember, ControllerConstants.Account, FormMethod.Post, new { @class = "ovrd-form form", role = "form" }))
 		{
 			@Html.AntiForgeryToken()
 			@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" });
@@ -82,56 +82,56 @@
 			@Html.HiddenFor(m => m.UserInfo.UserId);
 			@Html.HiddenFor(m => m.IsInvited);
 
-			<div class="row">
+			<div class="ovrd-row row">
 				<div class="ovrd-col-md-6 col-md-6 col min300">
 					@if (Model.IsInvited)
 					{
-						<div class="form-group">
+						<div class="ovrd-form-group form-group">
 							@Html.ReqLabelFor(m => m.FirstName, Strings.FirstName)
-							@Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+							@Html.TextBoxFor(m => m.FirstName, new { @class = "ovrd-form-control form-control" })
 							@Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
 						</div>
 					}
 					else
 					{ @Html.HiddenFor(m => m.FirstName);
 					}
-					<div class="form-group">
+					<div class="ovrd-form-group form-group">
 						@Html.ReqLabelFor(m => m.EmployeeId, Strings.EmployeeId)
-						@Html.TextBoxFor(m => m.EmployeeId, new { @class = "form-control" })
+						@Html.TextBoxFor(m => m.EmployeeId, new { @class = "ovrd-form-control form-control" })
 						@Html.ValidationMessageFor(m => m.EmployeeId, "", new { @class = "text-danger" })
 					</div>
 				</div>
 				<div class="ovrd-col-md-6 col-md-6 col min300">
 					@if (Model.IsInvited)
 					{
-						<div class="form-group">
+						<div class="ovrd-form-group form-group">
 							@Html.ReqLabelFor(m => m.LastName, Strings.LastName)
-							@Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+							@Html.TextBoxFor(m => m.LastName, new { @class = "ovrd-form-control form-control" })
 							@Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
 						</div>
 					} else { @Html.HiddenFor(m => m.LastName); }
 					@if (Model.ShowRoleDropDown)
 					{
-						<div class="form-group">
+						<div class="ovrd-form-group form-group">
 							@Html.LabelFor(m => m.EmployeeRoleId, Strings.Role)
-							@Html.DropDownListFor(m => m.EmployeeRoleId, Model.EmployeeRole, new { @id = "EmployeeRoleId", @class = "form-control" })
+							@Html.DropDownListFor(m => m.EmployeeRoleId, Model.EmployeeRole, new { @id = "EmployeeRoleId", @class = "ovrd-form-control form-control" })
 							@Html.ValidationMessageFor(m => m.EmployeeRoleId, "", new { @class = "text-danger" })
 						</div>
 					}
 					else
 					{
 						@Html.HiddenFor(m => m.EmployeeRoleId);
-						<div class="form-group">
+						<div class="ovrd-form-group form-group">
 							@Html.LabelFor(m => m.EmployeeRoleId, Strings.Role)
 							<div class="text-box-padded">@(Model.EmployeeRoleId == 1 ? Strings.Member : Strings.Owner)</div>
 						</div>
 					}
 				</div>
 			</div>
-			<div class="form-group allyis-action-buttons">
+			<div class="ovrd-form-group form-group allyis-action-buttons">
 				<div class="pull-right" style="display:inline-block; margin-top:15px;">
-					<a href="javascript:history.back()" class="btn btn-default">@Strings.Back</a>
-					<button class="btn btn-primary" type="submit" value=@Strings.Save>@Strings.Save</button>
+					<a href="javascript:history.back()" class="ovrd-btn btn ovrd-btn-default btn-default">@Strings.Back</a>
+					<button class="ovrd-btn btn ovrd-btn-primary btn-primary" type="submit" value=@Strings.Save>@Strings.Save</button>
 				</div>
 			</div>
 		}
@@ -143,7 +143,7 @@
 					using (Html.BeginForm(ActionConstants.RemoveMember, ControllerConstants.Account, new { organizationId = Model.OrganizationId, userId = Model.UserInfo.UserId }, FormMethod.Post, new { @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw("Delete User?")) }))
 					{
 						@Html.AntiForgeryToken()
-						<input type="submit" value="@Strings.Delete" class="btn btn-danger" style="margin-bottom: 15px;" id="submitDelete" />
+						<input type="submit" value="@Strings.Delete" class="ovrd-btn btn ovrd-btn-danger btn-danger" style="margin-bottom: 15px;" id="submitDelete" />
 					}
 				}
 				else
@@ -151,12 +151,12 @@
 					using (Html.BeginForm(ActionConstants.RemoveInvitation, ControllerConstants.Account, new { id = Model.UserInfo.UserId }, FormMethod.Post, new { @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw("Delete User?")) }))
 					{
 						@Html.AntiForgeryToken()
-						<input type="submit" value="@Strings.Delete" class="btn btn-danger" style="margin-bottom: 15px;" id="submitDelete" />
+						<input type="submit" value="@Strings.Delete" class="ovrd-btn btn ovrd-btn-danger btn-danger" style="margin-bottom: 15px;" id="submitDelete" />
 					}
 				}
 			</div>
 		}
-		<div class="form-group allyis-action-buttons">
+		<div class="ovrd-form-group form-group allyis-action-buttons">
 		</div>
 	</div>
 </div>
