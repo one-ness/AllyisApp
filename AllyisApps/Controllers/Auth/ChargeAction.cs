@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Services;
 using AllyisApps.Services.Common.Types;
@@ -24,10 +25,10 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="billingServicesEmail">The email associated with this customer.</param>
 		/// <returns>A page.</returns>
 		[CLSCompliant(false)]
-		public ActionResult Charge(int id, BillingServicesToken token, string billingServicesEmail)
+		async public Task<ActionResult> Charge(int id, BillingServicesToken token, string billingServicesEmail)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditBilling, id);
-			AppService.UpdateBillingInfo(billingServicesEmail, token, id);
+			await AppService.UpdateBillingInfo(billingServicesEmail, token, id);
 			Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Strings.Billing, Core.Alert.Variety.Success));
 			return this.RedirectToAction(ActionConstants.ManageOrg);
 		}

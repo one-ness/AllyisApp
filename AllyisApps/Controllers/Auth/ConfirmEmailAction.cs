@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 
@@ -21,7 +22,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="id">The guid to confirm the user email.</param>
 		/// <returns>The route for the user's home page.</returns>
 		[AllowAnonymous]
-		public ActionResult ConfirmEmail(Guid id)
+		async public Task<ActionResult> ConfirmEmail(Guid id)
 		{
 			if (this.AppService.ConfirmUserEmail(id))
 			{
@@ -31,7 +32,7 @@ namespace AllyisApps.Controllers.Auth
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.WarnYourEmailHasAlreadyBeenConfirmed, Variety.Warning));
 			}
-
+			await Task.Delay(1);
 			return this.RouteUserHome();
 		}
 	}

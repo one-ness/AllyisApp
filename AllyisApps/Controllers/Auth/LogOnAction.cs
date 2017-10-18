@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
@@ -27,7 +28,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="returnUrl">The URL the user wishes to visit.</param>
 		/// <returns>The log on view.</returns>
 		[AllowAnonymous]
-		public ActionResult LogOn(string returnUrl)
+		async public Task<ActionResult> LogOn(string returnUrl)
 		{
 			if (Request.IsAuthenticated)
 			{
@@ -35,6 +36,8 @@ namespace AllyisApps.Controllers.Auth
 			}
 
 			ViewBag.ReturnUrl = returnUrl;
+
+			await Task.Delay(1);
 			return this.View(new LogOnViewModel());
 		}
 
@@ -47,7 +50,7 @@ namespace AllyisApps.Controllers.Auth
 		[HttpPost]
 		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
-		public ActionResult LogOn(LogOnViewModel model, string returnUrl)
+		async public Task<ActionResult> LogOn(LogOnViewModel model, string returnUrl)
 		{
 			if (ModelState.IsValid)
 			{
@@ -75,6 +78,7 @@ namespace AllyisApps.Controllers.Auth
 
 			// login failed
 			ViewBag.ReturnUrl = returnUrl;
+			await Task.Delay(1);
 			return this.View(model);
 		}
 

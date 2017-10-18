@@ -579,7 +579,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Adds an Invitation to the invitations table and invitation sub roles table.
 		/// </summary>
-		public int CreateInvitation(string email, string firstName, string lastName, int organizationId, int organizationRoleId, string employeedId, string prodJson)
+		async public Task<int> CreateInvitation(string email, string firstName, string lastName, int organizationId, int organizationRoleId, string employeedId, string prodJson)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@email", email);
@@ -591,7 +591,8 @@ namespace AllyisApps.DBModel
 			parameters.Add("@prodJson", prodJson);
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				return con.Query<int>("[Auth].[CreateInvitation]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				var results = await con.QueryAsync<int>("[Auth].[CreateInvitation]", parameters, commandType: CommandType.StoredProcedure);
+				return results.FirstOrDefault();
 			}
 		}
 
@@ -894,6 +895,7 @@ namespace AllyisApps.DBModel
 				return (await con.QueryAsync<string>("Auth.GetMaxEmployeeId @a", new { a = organizationId })).FirstOrDefault();
 			}
 		}
+
 		/// <summary>
 		/// get the product roles for the given org and given product
 		/// </summary>

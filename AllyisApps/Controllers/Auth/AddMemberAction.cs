@@ -75,7 +75,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>The result of this action.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult AddMember(AddMemberViewModel model)
+		async public Task<ActionResult> AddMember(AddMemberViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
@@ -88,7 +88,7 @@ namespace AllyisApps.Controllers.Auth
 
 					string prodJson = string.Format("{{ \"" + (int)SkuIdEnum.TimeTrackerBasic + "\" : {0}, \"" + (int)SkuIdEnum.ExpenseTrackerBasic + "\" : {1}, \"" + (int)SkuIdEnum.StaffingManagerBasic + "\" : 0 }}", model.ttSelection, model.etSelection);
 
-					int invitationId = AppService.InviteUser(url, model.Email.Trim(), model.FirstName, model.LastName, model.OrganizationId, model.OrgRoleSelection == 2 ? OrganizationRole.Owner : OrganizationRole.Member, model.EmployeeId, prodJson);
+					int invitationId = await AppService.InviteUser(url, model.Email.Trim(), model.FirstName, model.LastName, model.OrganizationId, model.OrgRoleSelection == 2 ? OrganizationRole.Owner : OrganizationRole.Member, model.EmployeeId, prodJson);
 
 					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserEmailed, model.FirstName, model.LastName), Variety.Success));
 					return this.RedirectToAction(ActionConstants.OrganizationMembers, new { id = model.OrganizationId });

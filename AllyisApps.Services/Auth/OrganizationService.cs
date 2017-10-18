@@ -183,7 +183,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Creates an invitation for a new user in the database, and also sends an email to the new user with their access code.
 		/// </summary>
-		public int InviteUser(string url, string email, string firstName, string lastName, int organizationId, OrganizationRole organizationRoleId, string employeedId, string prodJson)
+		async public Task<int> InviteUser(string url, string email, string firstName, string lastName, int organizationId, OrganizationRole organizationRoleId, string employeedId, string prodJson)
 		{
 			if (organizationId <= 0) throw new ArgumentOutOfRangeException("organizationId");
 			this.CheckOrgAction(OrgAction.AddUserToOrganization, organizationId);
@@ -195,7 +195,7 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(prodJson)) throw new ArgumentNullException("employeedId");
 
 			// Creation of invitation
-			var result = DBHelper.CreateInvitation(email, firstName, lastName, organizationId, (int)organizationRoleId, employeedId, prodJson);
+			var result = await DBHelper.CreateInvitation(email, firstName, lastName, organizationId, (int)organizationRoleId, employeedId, prodJson);
 
 			if (result == -1)
 			{
@@ -458,7 +458,7 @@ namespace AllyisApps.Services
 			result.Email = entity.Email;
 			result.EmailConfirmationCode = entity.EmailConfirmationCode;
 			result.EmployeeId = entity.EmployeeId;
-			//result.Invitations = 
+			//result.Invitations =
 			result.FirstName = entity.FirstName;
 			result.IsEmailConfirmed = entity.IsEmailConfirmed;
 			result.IsLockoutEnabled = entity.IsLockoutEnabled;
@@ -470,14 +470,14 @@ namespace AllyisApps.Services
 			result.MaxApprovalAmount = entity.MaxAmount;
 			result.OrganizationId = entity.OrganizationId;
 			result.OrganizationRoleId = entity.OrganizationRoleId;
-			//result.Organizations = 
+			//result.Organizations =
 			result.OrganizationUserCreatedUtc = entity.OrganizationUserCreatedUtc;
 			result.PasswordHash = entity.PasswordHash;
 			result.PasswordResetCode = entity.PasswordResetCode;
 			result.PhoneExtension = entity.PhoneExtension;
 			result.PhoneNumber = entity.PhoneNumber;
-			//result.Subscriptions = 
-			result.UserCreatedUtc = entity.UserCreatedUtc;			
+			//result.Subscriptions =
+			result.UserCreatedUtc = entity.UserCreatedUtc;
 			result.UserId = entity.UserId;
 			return result;
 		}
