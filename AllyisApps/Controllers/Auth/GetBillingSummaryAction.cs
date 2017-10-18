@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
@@ -25,9 +26,9 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="organizationId">Organization id.</param>
 		/// <returns>The Billing summary page.</returns>
 		[HttpGet]
-		public ActionResult GetBillingSummary(int organizationId)
+		async public Task<ActionResult> GetBillingSummary(int organizationId)
 		{
-			IEnumerable<BillingHistoryItemViewModel> model = this.ConstructBillingHistoryViewModel(organizationId);
+			IEnumerable<BillingHistoryItemViewModel> model = await this.ConstructBillingHistoryViewModel(organizationId);
 
 			return this.View(model);
 		}
@@ -37,7 +38,7 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		/// <param name="organizationId">Organization id.</param>
 		/// <returns>Populated list of BillingHistoryItemViewModels.</returns>
-		public IEnumerable<BillingHistoryItemViewModel> ConstructBillingHistoryViewModel(int organizationId)
+		async public Task<IEnumerable<BillingHistoryItemViewModel>> ConstructBillingHistoryViewModel(int organizationId)
 		{
 			List<BillingHistoryItemViewModel> result = new List<BillingHistoryItemViewModel>();
 
@@ -49,7 +50,7 @@ namespace AllyisApps.Controllers.Auth
 				{
 					result.Add(new BillingHistoryItemViewModel
 					{
-						Date = ConvertUtcDateTimeToEpoch(invoice.Date.Value),
+						Date = await ConvertUtcDateTimeToEpoch(invoice.Date.Value),
 						Id = invoice.Id,
 						Description = string.Format("{0} invoice - Amount due: {1:C}", invoice.Service, invoice.AmountDue / 100.0), // Only works for USD right now // LANGUAGE Update to use resource file to change message language
 						ProductName = invoice.ProductName,
@@ -61,7 +62,7 @@ namespace AllyisApps.Controllers.Auth
 				{
 					result.Add(new BillingHistoryItemViewModel
 					{
-						Date = ConvertUtcDateTimeToEpoch(charge.Created),
+						Date = await ConvertUtcDateTimeToEpoch(charge.Created),
 						Id = charge.Id,
 						Description = string.Format("{0} charge - Amount paid: {1:C}", charge.Service, charge.Amount / 100.0), // Only works for USD right now // LANGUAGE Update to use resource file to change message language
 						ProductName = charge.StatementDescriptor,
@@ -75,7 +76,7 @@ namespace AllyisApps.Controllers.Auth
 			{
 				result.Add(new BillingHistoryItemViewModel
 				{
-					Date = ConvertUtcDateTimeToEpoch(item.Date),
+					Date = await ConvertUtcDateTimeToEpoch(item.Date),
 					Id = string.Empty,
 					Description = item.Description,
 					ProductName = item.SkuName,
@@ -91,8 +92,9 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		/// <param name="utcDate">Datetime, in Utc.</param>
 		/// <returns>Datetime in ms since the BEGINNING OF ALL TIME (Jan 1st, 1970).</returns>
-		public long ConvertUtcDateTimeToEpoch(DateTime utcDate)
+		async public Task<long> ConvertUtcDateTimeToEpoch(DateTime utcDate)
 		{
+			await Task.Delay(1);
 			return (long)utcDate.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
 		}
 	}

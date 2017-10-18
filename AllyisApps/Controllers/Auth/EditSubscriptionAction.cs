@@ -2,6 +2,7 @@
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
 using System.Web.Mvc;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -16,7 +17,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="id">Subscription id.</param>
 		/// <returns>The result of this action.</returns>
 		[HttpGet]
-		public ActionResult EditSubscription(int id)
+		async public Task<ActionResult> EditSubscription(int id)
 		{
 			var sub = this.AppService.GetSubscription(id);
 			var model = new EditSubscriptionViewModel();
@@ -27,6 +28,7 @@ namespace AllyisApps.Controllers.Auth
 			model.SkuName = sub.SkuName;
 			model.SubscriptionId = id;
 			model.SubscriptionName = sub.SubscriptionName;
+			await Task.Delay(1);
 			return this.View(model);
 		}
 
@@ -41,7 +43,7 @@ namespace AllyisApps.Controllers.Auth
 		/// .</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult EditSubscription(EditSubscriptionViewModel model)
+		async public Task<ActionResult> EditSubscription(EditSubscriptionViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
@@ -51,6 +53,7 @@ namespace AllyisApps.Controllers.Auth
 			}
 
 			// error
+			await Task.Delay(1);
 			return this.View(model);
 		}
 	}

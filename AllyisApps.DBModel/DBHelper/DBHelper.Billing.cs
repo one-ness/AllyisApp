@@ -345,7 +345,7 @@ namespace AllyisApps.DBModel
 		/// <param name="customerId">The id of the customer object.</param>
 		/// <param name="skuId">The id of the selected sku, for the billing history item.</param>
 		/// <param name="description">A description for the billing history item.</param>
-		public void CreateStripeOrganizationCustomer(int organizationId, int userId, string customerId, int? skuId, string description)
+		async public Task CreateStripeOrganizationCustomer(int organizationId, int userId, string customerId, int? skuId, string description)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
@@ -356,7 +356,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Query("[Billing].[CreateStripeOrganizationCustomer]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.QueryAsync("[Billing].[CreateStripeOrganizationCustomer]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -478,7 +478,7 @@ namespace AllyisApps.DBModel
 		/// <param name="orgid">The associated organization id.</param>
 		/// <param name="userid">The associated user id.</param>
 		/// <param name="skuid">Optional product id.</param>
-		public void AddBillingHistory(string description, int orgid, int userid, int? skuid)
+		async public Task AddBillingHistory(string description, int orgid, int userid, int? skuid)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@description", description);
@@ -488,7 +488,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[Billing].[CreateBillingHistory]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[Billing].[CreateBillingHistory]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 

@@ -24,8 +24,9 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		/// <returns>The ActionResult.</returns>
 		[AllowAnonymous]
-		public ActionResult ForgotPassword()
+		async public Task<ActionResult> ForgotPassword()
 		{
+			await Task.Delay(1);
 			return this.View(new ForgotPasswordViewModel());
 		}
 

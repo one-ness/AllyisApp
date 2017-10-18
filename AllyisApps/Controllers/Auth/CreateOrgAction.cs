@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
@@ -24,14 +25,14 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		/// <returns>Presents a page for the creation of a new organization.</returns>
 		[HttpGet]
-		public ActionResult CreateOrg()
+		async public Task<ActionResult> CreateOrg()
 		{
 			var model = new EditOrganizationViewModel();
 			model.IsCreating = true;
 
 			// create localized countries
 			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
-
+			await Task.Delay(1);
 			return this.View(model);
 		}
 
@@ -42,7 +43,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>The resulting page, Create if unsuccessful else Account Management.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult CreateOrg(EditOrganizationViewModel model)
+		async public Task<ActionResult> CreateOrg(EditOrganizationViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
@@ -51,15 +52,18 @@ namespace AllyisApps.Controllers.Auth
 				if (orgId < 0)
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.SubdomainTaken, Variety.Danger));
+					await Task.Delay(1);
 					return this.View(model);
 				}
 				else
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.OrganizationCreatedNotification, Variety.Success));
+					await Task.Delay(1);
 					return this.RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id = orgId });
 				}
 			}
 
+			await Task.Delay(1);
 			// Something happened, reload this view
 			return this.View(model);
 		}

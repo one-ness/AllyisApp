@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.TimeTracker;
 using AllyisApps.Lib;
@@ -29,7 +30,7 @@ namespace AllyisApps.Services
 		/// <param name="importData">Workbook with data to import.</param>
 		/// <param name="organizationId">The organization's Id.</param>
 		/// <param name="inviteUrl">Used for userImport when adding users via AddMemberPage</param>
-		public ImportActionResult Import(DataSet importData, int subscriptionId = 0, int organizationId = 0, string inviteUrl = null)
+		async public Task<ImportActionResult> Import(DataSet importData, int subscriptionId = 0, int organizationId = 0, string inviteUrl = null)
 		{
 			int orgId;
 			if (subscriptionId > 0 && UserContext.SubscriptionsAndRoles[subscriptionId] != null)
@@ -688,7 +689,7 @@ namespace AllyisApps.Services
 
 								try
 								{
-									InviteUser(inviteUrl, fields[0].Trim(), names[0], names[1], orgId, OrganizationRole.Member, fields[1], "{ \"Time\" : 0, \"Expense\" : 0, \"Staffing\" : 0 }"); //We need to update this with values from the excel sheet.
+									await InviteUser(inviteUrl, fields[0].Trim(), names[0], names[1], orgId, OrganizationRole.Member, fields[1], "{ \"Time\" : 0, \"Expense\" : 0, \"Staffing\" : 0 }"); //We need to update this with values from the excel sheet.
 									result.UsersImported += 1;
 								}
 								catch (DuplicateNameException)

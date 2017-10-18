@@ -6,6 +6,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Lib;
 using AllyisApps.Services;
@@ -24,7 +25,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <summary>
 		/// Get: Account/OrgDetails
 		/// </summary>
-		public ActionResult OrgDetails(int id)
+		async public Task<ActionResult> OrgDetails(int id)
 		{
 			var model = new OrganizationDetailsViewModel();
 			model.CanEditOrganization = this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id, false);
@@ -43,6 +44,8 @@ namespace AllyisApps.Controllers.Auth
 			model.OrganizationName = org.OrganizationName;
 			model.PhoneNumber = org.PhoneNumber;
 			model.SiteURL = org.SiteUrl;
+
+			await Task.Delay(1);
 			return View(model);
 		}
 	}

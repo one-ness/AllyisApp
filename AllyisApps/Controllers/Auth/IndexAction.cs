@@ -6,6 +6,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Lib;
 using AllyisApps.Services;
@@ -25,9 +26,9 @@ namespace AllyisApps.Controllers.Auth
 		/// Displays the account index page.
 		/// </summary>
 		/// <returns>The async task responsible for this action.</returns>
-		public ActionResult Index()
+		async public Task<ActionResult> Index()
 		{
-			AccountIndexViewModel viewModel = ConstuctIndexViewModel();
+			AccountIndexViewModel viewModel = await ConstuctIndexViewModel();
 
 			return this.View(viewModel);
 		}
@@ -36,7 +37,7 @@ namespace AllyisApps.Controllers.Auth
 		/// Constuct index view Model for Accounts.
 		/// </summary>
 		/// <returns>The Accound Index view model.</returns>
-		public AccountIndexViewModel ConstuctIndexViewModel()
+		async public Task<AccountIndexViewModel> ConstuctIndexViewModel()
 		{
 			User accountInfo = AppService.GetCurrentUser();
 
@@ -123,7 +124,6 @@ namespace AllyisApps.Controllers.Auth
 								});
 							break;
 
-
 						case ProductIdEnum.ExpenseTracker:
 							description = Resources.Strings.ExpenseTrackerDescription;
 							subViewModel.ProductGoToUrl = Url.RouteUrl(
@@ -161,6 +161,7 @@ namespace AllyisApps.Controllers.Auth
 				indexViewModel.Organizations.Add(orgViewModel);
 			}
 
+			await Task.Delay(1);
 			return indexViewModel;
 		}
 

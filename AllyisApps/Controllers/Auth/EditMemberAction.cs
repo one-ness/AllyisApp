@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Resources;
@@ -26,7 +27,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="orgId">Id of the org the member is in.</param>
 		/// <param name="invited">Is the user invited or a already a member?.</param>
 		/// <returns>Returns info for a view about the member to be edited.</returns>
-		public ActionResult EditMember(int userId, int orgId, int invited)
+		async public Task<ActionResult> EditMember(int userId, int orgId, int invited)
 		{
 			bool isInvited = invited == 0 ? false : true;
 			EditMemberViewModel model;
@@ -93,6 +94,7 @@ namespace AllyisApps.Controllers.Auth
 				};
 			}
 
+			await Task.Delay(1);
 			return View(model);
 		}
 
@@ -101,7 +103,7 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult EditMember(EditMemberViewModel model)
+		async public Task<ActionResult> EditMember(EditMemberViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
@@ -114,9 +116,11 @@ namespace AllyisApps.Controllers.Auth
 					Notifications.Add(new BootstrapAlert(Resources.Strings.CannotEditEmployeeId, Variety.Danger));
 				}
 
+				await Task.Delay(1);
 				return this.RedirectToAction(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { id = model.OrganizationId });
 			}
 
+			await Task.Delay(1);
 			return View(model);
 		}
 	}

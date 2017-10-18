@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Lib;
@@ -21,7 +22,7 @@ namespace AllyisApps.Controllers.Auth
 		/// GET: /Account/EditProfile.
 		/// </summary>
 		/// <returns>Edit profile view.</returns>
-		public ActionResult EditProfile()
+		async public Task<ActionResult> EditProfile()
 		{
 			var model = new EditProfileViewModel();
 			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
@@ -39,6 +40,7 @@ namespace AllyisApps.Controllers.Auth
 			model.SelectedStateId = user.Address?.StateId;
 			model.LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService, model.SelectedCountryCode);
 
+			await Task.Delay(1);
 			return this.View(model);
 		}
 
@@ -49,7 +51,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>Tje Edit profile view.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult EditProfile(EditProfileViewModel model)
+		async public Task<ActionResult> EditProfile(EditProfileViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
@@ -61,6 +63,7 @@ namespace AllyisApps.Controllers.Auth
 			// model error
 			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
 			model.LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService, model.SelectedCountryCode);
+			await Task.Delay(1);
 			return View(model);
 		}
 	}

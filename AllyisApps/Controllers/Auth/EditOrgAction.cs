@@ -6,6 +6,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
@@ -28,15 +29,17 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>Manage Page.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult EditOrg(EditOrganizationViewModel model)
+		async public Task<ActionResult> EditOrg(EditOrganizationViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
 				this.AppService.UpdateOrganization(model.OrganizationId, model.OrganizationName, model.SiteUrl, model.AddressId, model.Address, model.City, model.SelectedStateId, model.SelectedCountryCode, model.PostalCode, model.PhoneNumber, model.FaxNumber, null);
 				Notifications.Add(new BootstrapAlert(@Resources.Strings.OrganizationDetailsUpdated, Variety.Success));
+				await Task.Delay(1);
 				return this.RedirectToAction(ActionConstants.OrganizationDetails, ControllerConstants.Account, new { id = model.OrganizationId });
 			}
 
+			await Task.Delay(1);
 			// Model is invalid, try again
 			return this.View(model);
 		}
@@ -47,7 +50,7 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		/// <param name="id">The organization id.</param>
 		[HttpGet]
-		public ActionResult EditOrg(int id)
+		async public Task<ActionResult> EditOrg(int id)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
 			bool canDelete = this.AppService.CheckOrgAction(AppService.OrgAction.DeleteOrganization, id, false);
@@ -72,6 +75,7 @@ namespace AllyisApps.Controllers.Auth
 				LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService, organization.Address?.CountryCode ?? string.Empty)
 			};
 
+			await Task.Delay(1);
 			return this.View(model);
 		}
 	}
