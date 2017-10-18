@@ -62,9 +62,9 @@
 
 			<div class="panel-heading hidden visible-xs @(headerClass)">
 				<div class="panel-right table-col @offDayClass @holidayClass" style="display: block; background-color:transparent;">
-					
+
 					<label style="margin-right:2em;">@(dateStringNums) @(dateStringDayLong)</label>
-					<!-- Remove Copy Buttons 
+					<!-- Remove Copy Buttons
 					@*if (currentDate.DayOfWeek == startOfWeek)
 					{
 						<span style="padding-right:5px; padding-bottom:5px;">
@@ -178,7 +178,11 @@
 					</div>
 				</div>
 			</div>
-		}
+							}
 	</div>
-}
-
+							}
+<div class="pull-right">
+	<a href=@Context.Request.RawUrl
+	<span class="btn btn-danger" >@Strings.Cancel</span></a>
+	<span class="btn btn-primary" onclick="saveForm()" style="margin-right: 15px;">@Strings.Save</span>
+</div>

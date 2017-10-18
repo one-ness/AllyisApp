@@ -87,7 +87,7 @@ namespace AllyisApps.Services
 			foreach (var item in entities)
 			{
 				var data = new Subscription();
-				data.AreaUrl = item.ArealUrl;
+				data.ProductAreaUrl = item.ArealUrl;
 				data.IsActive = item.IsActive;
 				data.NumberOfUsers = item.NumberOfUsers ?? 0;
 				data.OrganizationId = item.OrganizationId;
@@ -535,35 +535,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Translates an Organization business object into an OrganizationDBEntity.
-		/// </summary>
-		/// <param name="organization">Organization instance.</param>
-		/// <returns>OrganizationDBEntity instance.</returns>
-		public OrganizationDBEntity GetDBEntityFromOrganization(Organization organization)
-		{
-			if (organization == null)
-			{
-				return null;
-			}
-
-			//Ensure that organizion buisneess object does not attempt to set CountryName or state name without ID
-			//Should not happen but can from import service.
-			organization.Address?.EnsureDBRef(this);
-
-			return new OrganizationDBEntity
-			{
-				AddressId = organization.Address?.AddressId,
-				CreatedUtc = organization.CreatedUtc,
-				FaxNumber = organization.FaxNumber,
-				OrganizationName = organization.OrganizationName,
-				OrganizationId = organization.OrganizationId,
-				PhoneNumber = organization.PhoneNumber,
-				SiteUrl = organization.SiteUrl,
-				Subdomain = organization.Subdomain,
-			};
-		}
-
-		/// <summary>
 		/// Translates an InvitationDBEntity into an Invitation business object.
 		/// </summary>
 		/// <param name="invitation">InvitationDBEntity instance.</param>
@@ -606,7 +577,7 @@ namespace AllyisApps.Services
 			{
 				ProductDescription = product.Description,
 				ProductId = (ProductIdEnum)product.ProductId,
-				ProductName = product.Name,
+				ProductName = product.ProductName,
 				AreaUrl = product.AreaUrl
 			};
 		}

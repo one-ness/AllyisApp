@@ -22,48 +22,12 @@ namespace AllyisApps.Controllers.Auth
 		/// <summary>
 		/// Removes the selected subscription from the database.
 		/// </summary>
-		/// <param name="id"> Subscription Id.</param>
-		/// <param name="idTwo">The id of the sku being unsubscribed from.</param>
-		/// <returns>Removes selected subscription.</returns>
 		[HttpGet]
-		public ActionResult Unsubscribe(int id, int idTwo)
+		public ActionResult Unsubscribe(int id)
 		{
-			var sub = AppService.GetSubscription(id);
-			int orgId = sub.OrganizationId;
-
-			int productId = (int)sub.ProductId;
-
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
-			var infos = AppService.GetProductSubscriptionInfo(orgId, (SkuIdEnum)idTwo);
-			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos, orgId);
-
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, model.OrganizationId);
-			string notificationString = AppService.UnsubscribeAndRemoveBillingSubscription(model.SelectedSku, model.CurrentSubscription.SubscriptionId);
-			if (notificationString != null)
-			{
-				Notifications.Add(new BootstrapAlert(notificationString, Variety.Success));
-			}
-
-			return this.RedirectToAction(ActionConstants.OrganizationSubscriptions, new { id = model.OrganizationId });
-		}
-
-		/// <summary>
-		/// Removes the selected subscription from the database.
-		/// </summary>
-		/// <param name="model">Model representing the current state of the change of subscription.</param>
-		/// <returns>Removes selected subscription.</returns>
-		[HttpPost]
-		[CLSCompliant(false)]
-		public ActionResult Unsubscribe(ProductSubscriptionViewModel model)
-		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, model.OrganizationId);
-			string notificationString = AppService.UnsubscribeAndRemoveBillingSubscription(model.SelectedSku, model.CurrentSubscription.SubscriptionId);
-			if (notificationString != null)
-			{
-				Notifications.Add(new BootstrapAlert(notificationString, Variety.Success));
-			}
-
-			return this.RedirectToAction(ActionConstants.OrganizationSubscriptions, new { id = model.OrganizationId });
+			int orgId = this.AppService.DeleteSubscription(id);
+			Notifications.Add(new BootstrapAlert("Your subscription was deleted successfully.", Variety.Success));
+			return this.RedirectToAction(ActionConstants.OrganizationSubscriptions, new { id = orgId });
 		}
 	}
 }

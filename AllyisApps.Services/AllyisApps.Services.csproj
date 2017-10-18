@@ -93,6 +93,7 @@
     <Compile Include="Billing\BlockBasedOnEnum.cs" />
     <Compile Include="Billing\Sku.cs" />
     <Compile Include="Billing\Subscription.cs" />
+    <Compile Include="Billing\UnitTypeEnum.cs" />
     <Compile Include="Billing\UpdateSubscriptionUserRolesResuts.cs" />
     <Compile Include="Cache\CacheContainer.cs" />
     <Compile Include="Expense\ExpenseHistory.cs" />

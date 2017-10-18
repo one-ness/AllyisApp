@@ -29,7 +29,7 @@ namespace AllyisApps.Controllers.Auth
 			foreach (var item in collection)
 			{
 				var data = new OrganizationSubscriptionsViewModel.ViewModelItem();
-				data.AreaUrl = item.AreaUrl;
+				data.AreaUrl = item.ProductAreaUrl;
 				data.NumberofUsers = item.NumberOfUsers;
 				data.ProductDescription = item.ProductDescription;
 				data.ProductName = item.ProductName;

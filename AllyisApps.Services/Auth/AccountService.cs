@@ -32,17 +32,17 @@ namespace AllyisApps.Services
 		/// Gets the list of valid countries.
 		/// </summary>
 		/// <returns>A collection of valid countries.</returns>
-		public Dictionary<string, string> GetCountries()
+		public Dictionary<string, Country> GetCountries()
 		{
-			return DBHelper.GetCountries();
+			return CacheContainer.CountriesCache;
 		}
 
 		/// <summary>
 		/// get the list of states for the given country
 		/// </summary>
-		public Dictionary<int, string> GetStates(string countryCode)
+		public List<State> GetStates(string countryCode)
 		{
-			return this.DBHelper.GetStates(countryCode);
+			return CacheContainer.StatesCache[countryCode];
 		}
 
 		public bool DeleteExpenseItem(int itemId)
@@ -295,7 +295,7 @@ namespace AllyisApps.Services
 			userInfo.Subscriptions = Subscriptions.Select(sub =>
 				new UserSubscription()
 				{
-					AreaUrl = sub.AreaUrl,
+					ProductAreaUrl = sub.AreaUrl,
 					OrganizationId = sub.OrganizationId,
 					ProductId = (ProductIdEnum)sub.ProductId,
 					ProductName = sub.ProductName,
@@ -308,7 +308,7 @@ namespace AllyisApps.Services
 						ProductId = (ProductIdEnum)sub.ProductId
 					},
 					UserId = userId,
-					IconUrl = sub.IconUrl
+					SkuIconUrl = sub.IconUrl
 				}
 			).ToList();
 

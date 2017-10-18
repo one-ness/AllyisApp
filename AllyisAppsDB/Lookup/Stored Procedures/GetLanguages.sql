@@ -2,8 +2,5 @@
 AS
 BEGIN
 	SET NOCOUNT ON;
-	SELECT
-		[CultureName],
-		[LanguageName]
-	FROM [Language] WITH (NOLOCK)
+	SELECT * FROM [Language] WITH (NOLOCK)
 END

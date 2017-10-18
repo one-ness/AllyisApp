@@ -904,6 +904,5 @@ namespace AllyisApps.DBModel
 				return (await con.QueryAsync<ProductRoleDBEntity>("Auth.GetProductRoles @a, @b", new { a = orgId, b = productId })).ToList();
 			}
 		}
-
 	}
 }
