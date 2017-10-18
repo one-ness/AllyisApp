@@ -263,7 +263,7 @@ namespace AllyisApps.DBModel
 		/// <param name="subscriptionName">The subscription name.</param>
 		/// <param name="userId">The user who is subscribing -- we need to make them manager.</param>
 		/// <returns>The new subscription id.</returns>
-		public int CreateSubscription(int organizationId, int skuId, string subscriptionName, int userId)
+		async public Task<int> CreateSubscription(int organizationId, int skuId, string subscriptionName, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
@@ -273,7 +273,8 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<int>("[Billing].[CreateSubscription]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				var results = await connection.QueryAsync<int>("[Billing].[CreateSubscription]", parameters, commandType: CommandType.StoredProcedure);
+				return results.SingleOrDefault();
 			}
 		}
 

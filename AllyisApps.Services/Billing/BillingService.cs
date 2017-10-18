@@ -651,7 +651,7 @@ namespace AllyisApps.Services
 		/// <param name="orgId">.</param>
 		/// <returns>.</returns>
 		[CLSCompliant(false)]
-		public void Subscribe(ProductIdEnum productId, string productName, SkuIdEnum selectedSku, string subscriptionName, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
+		async public void Subscribe(ProductIdEnum productId, string productName, SkuIdEnum selectedSku, string subscriptionName, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
 		{
 			// TODO: Split Subscribe into CreateSubscription and Update Subscription, called from SubscribeAction and EditSubscriptionAction
 
@@ -660,7 +660,7 @@ namespace AllyisApps.Services
 
 			InitializeSettingsForProduct(productId, orgId);
 
-			DBHelper.CreateSubscription(orgId, (int)selectedSku, subscriptionName, UserContext.UserId);
+			await DBHelper.CreateSubscription(orgId, (int)selectedSku, subscriptionName, UserContext.UserId);
 		}
 
 		/// <summary>

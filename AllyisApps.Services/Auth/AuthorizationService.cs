@@ -7,7 +7,6 @@
 using System;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Services
 {
