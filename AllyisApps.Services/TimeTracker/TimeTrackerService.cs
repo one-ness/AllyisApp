@@ -15,7 +15,7 @@ namespace AllyisApps.Services
 	/// </summary>
 	public partial class AppService : BaseService
 	{
-		public Setting GetSettings(int organizationId)
+		public Setting GetSettingsByOrganizationId(int organizationId)
 		{
 			if (organizationId < 0)
 			{
