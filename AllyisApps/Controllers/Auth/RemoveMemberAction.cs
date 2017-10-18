@@ -7,6 +7,7 @@
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -23,10 +24,10 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>Redirects to the manage org action.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult RemoveMember(int organizationId, int userId)
+		async public Task<ActionResult> RemoveMember(int organizationId, int userId)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, organizationId);
-			AppService.RemoveOrganizationUser(organizationId, userId);
+			await this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, organizationId);
+			await AppService.RemoveOrganizationUser(organizationId, userId);
 			Notifications.Add(new BootstrapAlert(Resources.Strings.UserDeletedSuccessfully, Variety.Success));
 			return this.RedirectToAction(ActionConstants.OrganizationMembers, new { id = organizationId });
 		}

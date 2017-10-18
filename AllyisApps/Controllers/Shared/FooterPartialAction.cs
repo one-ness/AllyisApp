@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.ViewModels.Shared;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Controllers
 {
@@ -21,9 +22,10 @@ namespace AllyisApps.Controllers
 		/// </summary>
 		/// <returns>The ActionResult.</returns>
 		[ChildActionOnly]
-		public ActionResult FooterPartial()
+		async public Task<ActionResult> FooterPartial()
 		{
-			List<LanguageViewModel> languages = AppService.ValidLanguages().Select(l => new LanguageViewModel
+			var results = await AppService.ValidLanguages();
+			List<LanguageViewModel> languages = results.Select(l => new LanguageViewModel
 			{
 				LanguageName = l.LanguageName,
 				CultureName = l.CultureName

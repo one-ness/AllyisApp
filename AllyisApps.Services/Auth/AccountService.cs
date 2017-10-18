@@ -54,9 +54,10 @@ namespace AllyisApps.Services
 		/// Gets the list of valid languages selections.
 		/// </summary>
 		/// <returns>A list of languages.</returns>
-		public IEnumerable<Language> ValidLanguages()
+		async public Task<IEnumerable<Language>> ValidLanguages()
 		{
-			return DBHelper.ValidLanguages().Select(s => new Language
+			var results = await DBHelper.ValidLanguages();
+			return results.Select(s => new Language
 			{
 				LanguageName = s.LanguageName,
 				CultureName = s.CultureName

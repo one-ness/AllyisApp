@@ -105,7 +105,7 @@ namespace AllyisApps.Services
 		/// <param name="description">Description for billing history item.</param>
 		/// <param name="orgId">.</param>
 		/// <returns>The subscription plan id of the deleted subscription plan, or null if none found.</returns>
-		public string DeleteSubscriptionPlanAndAddHistory(string stripeCustomerId, SkuIdEnum skuId, string description, int orgId)
+		async public Task<string> DeleteSubscriptionPlanAndAddHistory(string stripeCustomerId, SkuIdEnum skuId, string description, int orgId)
 		{
 			#region Validation
 
@@ -121,7 +121,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return DBHelper.DeleteSubscriptionPlanAndAddHistory(orgId, stripeCustomerId, UserContext.UserId, (int)skuId, description);
+			return await DBHelper.DeleteSubscriptionPlanAndAddHistory(orgId, stripeCustomerId, UserContext.UserId, (int)skuId, description);
 		}
 
 		/// <summary>
@@ -336,7 +336,7 @@ namespace AllyisApps.Services
 			#endregion Validation
 
 			// TODO: split updating user roles and creating new sub users
-			var UpdatedRows = await DBHelper.UpdateSubscriptionUserRoles(userIds, orgId, newProductRole, productId);
+			var UpdatedRows =  await DBHelper.UpdateSubscriptionUserRoles(userIds, orgId, newProductRole, productId);
 			return new UpdateSubscriptionUserRolesResuts()
 			{
 				UsersChanged = UpdatedRows.Item1,
@@ -390,7 +390,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="subscriptionId">Product Id.</param>
 		/// <returns>A SubscriptionDBEntity.</returns>
-		public Subscription GetSubscription(int subscriptionId)
+		async public Task<Subscription> GetSubscription(int subscriptionId)
 		{
 			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException("subscriptionId");
 
@@ -398,7 +398,7 @@ namespace AllyisApps.Services
 			this.CheckSubscriptionAction(OrgAction.ReadSubscription, subscriptionId, out orgId);
 
 			// get from db
-			var sub = this.DBHelper.GetSubscriptionDetailsById(subscriptionId);
+			var sub = await this.DBHelper.GetSubscriptionDetailsById(subscriptionId);
 			if (sub == null) throw new InvalidOperationException("subscriptionId");
 
 			// copy to subscription
@@ -473,7 +473,7 @@ namespace AllyisApps.Services
 		/// <param name="skuId">Selected sku id, for the billing history item.</param>
 		/// <param name="orgId">.</param>
 		[CLSCompliant(false)]
-		public void DeleteSubscriptionPlan(string subscriptionId, BillingServicesCustomerId customerId, int? skuId, int orgId)
+		async public void DeleteSubscriptionPlan(string subscriptionId, BillingServicesCustomerId customerId, int? skuId, int orgId)
 		{
 			#region Validation
 
@@ -493,13 +493,13 @@ namespace AllyisApps.Services
 			BillingServicesHandler handler = new BillingServicesHandler(service);
 			handler.DeleteSubscription(customerId, subscriptionId);
 			// DBHelper.DeleteSubscriptionPlan(subscriptionId);
-			DBHelper.DeleteSubscriptionPlanAndAddHistory(orgId, customerId.Id, UserContext.UserId, skuId, "Switching to free subscription, canceling stripe susbcription");
+			await DBHelper.DeleteSubscriptionPlanAndAddHistory(orgId, customerId.Id, UserContext.UserId, skuId, "Switching to free subscription, canceling stripe susbcription");
 		}
 
 		/// <summary>
 		/// delete the given subscription
 		/// </summary>
-		public int DeleteSubscription(int subscriptionId)
+		async public Task<int> DeleteSubscription(int subscriptionId)
 		{
 			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException("subscriptionId");
 
@@ -508,7 +508,7 @@ namespace AllyisApps.Services
 			 * - bill for the last partial month
 			 * - stop future billing
 			 */
-			var sub = this.GetSubscription(subscriptionId);
+			var sub = await this.GetSubscription(subscriptionId);
 			this.CheckOrgAction(OrgAction.DeleteSubscritpion, sub.OrganizationId);
 			this.DBHelper.DeleteSubscription(subscriptionId);
 			return sub.OrganizationId;
@@ -610,15 +610,15 @@ namespace AllyisApps.Services
 		/// <param name="SelectedSku">Sku id, for the billing history item.</param>
 		/// <param name="subscriptionId">Subscription id to unsubscribe from.</param>
 		/// <returns>A notification string, or null.</returns>
-		public string UnsubscribeAndRemoveBillingSubscription(SkuIdEnum SelectedSku, int? subscriptionId)
+		async public Task<string> UnsubscribeAndRemoveBillingSubscription(SkuIdEnum SelectedSku, int? subscriptionId)
 		{
-			var subscripiton = this.GetSubscription(subscriptionId.Value);
+			var subscripiton = await this.GetSubscription(subscriptionId.Value);
 			var orgId = subscripiton.OrganizationId;
 
 			BillingServicesCustomer custId = this.RetrieveCustomer(this.GetOrgBillingServicesCustomerId(orgId));
 			if (custId != null)
 			{
-				this.DeleteSubscriptionPlanAndAddHistory(custId.Id.Id, SelectedSku, "Unsubscribing from product.", orgId);
+				await this.DeleteSubscriptionPlanAndAddHistory(custId.Id.Id, SelectedSku, "Unsubscribing from product.", orgId);
 				// string subscriptionPlanId = this.DeleteSubscriptionPlanAndAddHistory(custId.Id.Id, SelectedSku, "Unsubscribing from product.");
 				// if (subscriptionPlanId != null)
 				//{
@@ -628,7 +628,7 @@ namespace AllyisApps.Services
 
 			if (subscriptionId != null)
 			{
-				string skuName = this.Unsubscribe(subscriptionId.Value);
+				string skuName = await this.Unsubscribe(subscriptionId.Value);
 				//return string.Format("{0} has been unsubscribed from {1}.", UserContext.UserSubscriptions[subscriptionId.Value].OrganizationName, skuName);
 			}
 
@@ -663,12 +663,17 @@ namespace AllyisApps.Services
 			DBHelper.CreateSubscription(orgId, (int)selectedSku, subscriptionName, UserContext.UserId);
 		}
 
-		public void UpdateSubscriptionName(int subscriptionId, string subscriptionname)
+		/// <summary>
+		/// change the subscription Name
+		/// </summary>
+		/// <param name="subscriptionId"></param>
+		/// <param name="subscriptionname"></param>
+		async public void UpdateSubscriptionName(int subscriptionId, string subscriptionname)
 		{
 			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException("subscriptionId");
 			if (string.IsNullOrWhiteSpace(subscriptionname)) throw new ArgumentNullException("subscriptionName");
 
-			var sub = this.GetSubscription(subscriptionId);
+			var sub = await this.GetSubscription(subscriptionId);
 			this.CheckOrgAction(OrgAction.EditSubscription, sub.OrganizationId);
 			this.DBHelper.UpdateSubscriptionName(subscriptionId, subscriptionname);
 		}
@@ -736,14 +741,14 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <return>The name of the sku for the removed subscription.</return>
-		public string Unsubscribe(int subscriptionId)
+		async public Task<string> Unsubscribe(int subscriptionId)
 		{
 			if (subscriptionId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("subscriptionId", "Subscription Id cannot be 0 or negative.");
 			}
 
-			return DBHelper.Unsubscribe(subscriptionId);
+			return await DBHelper.Unsubscribe(subscriptionId);
 		}
 
 		/// <summary>

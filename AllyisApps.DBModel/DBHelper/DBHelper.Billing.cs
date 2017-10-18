@@ -146,26 +146,28 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="subscriptionId">Subscription id.</param>
 		/// <returns>The name of the Sku for the deleted subscription, or null if none was found.</returns>
-		public string Unsubscribe(int subscriptionId)
+		async public Task<string> Unsubscribe(int subscriptionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 
 			parameters.Add("@subscriptionId", subscriptionId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<string>("[Billing].[DeleteSubscription]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				var results = await connection.QueryAsync<string>("[Billing].[DeleteSubscription]", parameters, commandType: CommandType.StoredProcedure);
+				return results.FirstOrDefault();
 			}
 		}
 
 		/// <summary>
 		/// Get Subscription Details by Id.
 		/// </summary>
-		public dynamic GetSubscriptionDetailsById(int subscriptionId)
+		async public Task<dynamic> GetSubscriptionDetailsById(int subscriptionId)
 		{
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
 				// default blank object
-				return con.Query<dynamic>("[Billing].[GetSubscriptionDetailsById] @a", new { a = subscriptionId }).FirstOrDefault();
+				var results = await con.QueryAsync<dynamic>("[Billing].[GetSubscriptionDetailsById] @a", new { a = subscriptionId });
+				return results.FirstOrDefault();
 			}
 		}
 
@@ -439,7 +441,7 @@ namespace AllyisApps.DBModel
 		/// <param name="skuId">Sku Id for the history item.</param>
 		/// <param name="description">Description for the history item.</param>
 		/// <returns>The subscription plan id of the delted subscription, or null if none found.</returns>
-		public string DeleteSubscriptionPlanAndAddHistory(int orgId, string customerId, int userId, int? skuId, string description)
+		async public Task<string> DeleteSubscriptionPlanAndAddHistory(int orgId, string customerId, int userId, int? skuId, string description)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
@@ -449,21 +451,22 @@ namespace AllyisApps.DBModel
 			parameters.Add("@description", description);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<string>(
+				var results = await connection.QueryAsync<string>(
 				   "[Billing].[DeleteSubPlanAndAddHistory]",
 				   parameters,
-				   commandType: CommandType.StoredProcedure).FirstOrDefault();
+				   commandType: CommandType.StoredProcedure);
+				return results.FirstOrDefault();
 			}
 		}
 
 		/// <summary>
 		/// Deletes a subscription.
 		/// </summary>
-		public void DeleteSubscription(int subscriptionid)
+		async public void DeleteSubscription(int subscriptionid)
 		{
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				con.Execute("Billing.DeleteSubscription @a", new { a = subscriptionid });
+				await con.ExecuteAsync("Billing.DeleteSubscription @a", new { a = subscriptionid });
 			}
 		}
 

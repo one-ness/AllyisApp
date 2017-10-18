@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
 using AllyisApps.ViewModels.Billing;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -23,12 +24,12 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		/// <param name="id">The organization id.</param>
 		/// <returns>The skus view.</returns>
-		public ActionResult Skus(int id)
+		async public Task<ActionResult> Skus(int id)
 		{
 			var model = new SkusViewModel();
-			model.CanSubscribe = this.AppService.CheckOrgAction(AppService.OrgAction.CreateSubscription, id);
+			model.CanSubscribe = await this.AppService.CheckOrgAction(AppService.OrgAction.CreateSubscription, id);
 			model.OrganizationId = id;
-			var collection = this.AppService.GetAllActiveProductsAndSkus();
+			var collection = await this.AppService.GetAllActiveProductsAndSkus();
 			foreach (var item in collection)
 			{
 				var pi = new SkusViewModel.ProductItem();
