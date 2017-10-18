@@ -26,6 +26,11 @@ namespace AllyisApps.Services.Cache
 		public static Dictionary<ProductIdEnum, List<Sku>> SkusCache { get; private set; }
 
 		/// <summary>
+		/// list of all skus in the system
+		/// </summary>
+		public static List<Sku> AllSkusCache { get; private set; }
+
+		/// <summary>
 		/// dictionary of all langugages, indexed by culture name
 		/// </summary>
 		public static Dictionary<string, Language> LanguagesCache { get; set; }
@@ -85,7 +90,12 @@ namespace AllyisApps.Services.Cache
 				country.CountryCode = item.Value.CountryCode;
 				country.CountryId = item.Value.CountryId;
 				country.CountryName = item.Value.CountryName;
-				country.States = StatesCache[country.CountryCode];
+				List<State> states = null;
+				if (StatesCache.TryGetValue(country.CountryCode, out states))
+				{
+					country.States = states;
+				}
+
 				CountriesCache.Add(country.CountryCode, country);
 			}
 
@@ -102,6 +112,7 @@ namespace AllyisApps.Services.Cache
 
 			// init skus
 			SkusCache = new Dictionary<ProductIdEnum, List<Sku>>();
+			AllSkusCache = new List<Sku>();
 			var skuEntities = DBHelper.GetAllSkus();
 			foreach (var item in skuEntities)
 			{
@@ -133,8 +144,11 @@ namespace AllyisApps.Services.Cache
 					// no
 					list = new List<Sku>();
 					list.Add(sku);
-					SkusCache.Add(sku.ProductId, new List<Sku>());
+					SkusCache.Add(sku.ProductId, list);
 				}
+
+				// add to all skus cache as well
+				AllSkusCache.Add(sku);
 			}
 
 			// init products
@@ -147,8 +161,13 @@ namespace AllyisApps.Services.Cache
 				prod.IsActive = item.IsActive;
 				prod.ProductDescription = item.Description;
 				prod.ProductId = (ProductIdEnum)item.ProductId;
-				prod.ProductName = item.Name;
-				prod.Skus = SkusCache[prod.ProductId];
+				prod.ProductName = item.ProductName;
+				List<Sku> skus = null;
+				if (SkusCache.TryGetValue(prod.ProductId, out skus))
+				{
+					prod.Skus = skus;
+				}
+
 				ProductsCache.Add(prod.ProductId, prod);
 			}
 		}

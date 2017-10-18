@@ -577,7 +577,7 @@ namespace AllyisApps.Services
 			{
 				ProductDescription = product.Description,
 				ProductId = (ProductIdEnum)product.ProductId,
-				ProductName = product.Name,
+				ProductName = product.ProductName,
 				AreaUrl = product.AreaUrl
 			};
 		}
