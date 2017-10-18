@@ -649,7 +649,6 @@
     <Content Include="Areas\TimeTracker\Views\TimeEntry\MergePayClass.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Shared\_TimeTrackerSidebar.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\Reactivate.cshtml" />
-    <Content Include="Areas\TimeTracker\Views\Customer\ReactivateBackUp.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\_ProjectsByCustomer.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\_IndexPartial_Active.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\_IndexPartial_Inactive.cshtml" />
