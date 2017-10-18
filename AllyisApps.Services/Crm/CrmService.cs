@@ -70,7 +70,8 @@ namespace AllyisApps.Services
 		{
 			if(this.CheckStaffingManagerAction(StaffingManagerAction.EditCustomer, subscriptionId, false) || this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId, false))
 			{
-				customer.Address?.EnsureDBRef(this);
+				// TODO: make sure valid countries and states are added during import
+				//customer.Address?.EnsureDBRef(this);
 				return DBHelper.CreateCustomerInfo(GetDBEntitiesFromCustomerInfo(customer));
 			}
 			string message = string.Format("action {0} denied for subscription {1}", TimeTrackerAction.EditCustomer.ToString(), subscriptionId);
