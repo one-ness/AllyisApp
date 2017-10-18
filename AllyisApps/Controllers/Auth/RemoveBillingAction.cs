@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -24,10 +25,10 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="id">Subscription plan id.</param>
 		/// <returns>Action result.</returns>
 		[HttpGet]
-		public ActionResult RemoveBilling(int id)
+		async public Task<ActionResult> RemoveBilling(int id)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
-			IEnumerable<int> subs = AppService.GetSubscriptionPlanPrices(id);
+			await this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
+			IEnumerable<int> subs = await AppService.GetSubscriptionPlanPrices(id);
 
 			if (subs != null && subs.Count() > 0)
 			{
@@ -46,11 +47,11 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="m">The model.</param>
 		/// <returns>Action Result.</returns>
 		[HttpPost]
-		public ActionResult RemoveBilling(BaseViewModel m)
+		async public Task<ActionResult> RemoveBilling(BaseViewModel m)
 		{
 			// TODO: org id is needed
 			int orgId = 0;
-			if (AppService.RemoveBilling(orgId))
+			if (await AppService.RemoveBilling(orgId))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.BillingRemoved, Variety.Success));
 				return this.Redirect(ActionConstants.ManageOrg);
