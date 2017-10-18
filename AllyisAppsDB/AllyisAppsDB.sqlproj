@@ -125,7 +125,7 @@
     <Build Include="TimeTracker\Stored Procedures\CreateBulkTimeEntry.sql" />
     <Build Include="TimeTracker\Stored Procedures\DeleteTimeEntry.sql" />
     <Build Include="TimeTracker\Stored Procedures\GetHolidays.sql" />
-    <Build Include="TimeTracker\Stored Procedures\GetLockDate.sql" />
+    <Build Include="TimeTracker\Stored Procedures\GetOldLockDate.sql" />
     <Build Include="TimeTracker\Stored Procedures\GetPayClasses.sql" />
     <Build Include="TimeTracker\Stored Procedures\GetSettings.sql" />
     <Build Include="TimeTracker\Stored Procedures\GetTimeEntriesByUserOverDateRange.sql" />

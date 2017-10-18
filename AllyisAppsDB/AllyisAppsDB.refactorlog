@@ -329,4 +329,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="IconUrl" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="90d6ec8a-d404-49d2-8c63-f620d5bd94c1" ChangeDateTime="10/18/2017 22:42:09">
+    <Property Name="ElementName" Value="[TimeTracker].[Setting].[PayrollProcessedDate]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[TimeTracker].[Setting]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PayrollProcessDate" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f04822d5-3808-4dc7-92dc-10743a712f58" ChangeDateTime="10/18/2017 22:42:14">
+    <Property Name="ElementName" Value="[TimeTracker].[Setting].[PayrollProcessDate]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[TimeTracker].[Setting]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PayrollProcessedDate" />
+  </Operation>
 </Operations>

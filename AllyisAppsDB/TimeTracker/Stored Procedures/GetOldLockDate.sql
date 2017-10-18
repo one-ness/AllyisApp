@@ -1,4 +1,4 @@
-CREATE PROCEDURE [TimeTracker].[GetLockDate]
+CREATE PROCEDURE [TimeTracker].[GetOldLockDate]
 	@organizationId INT
 AS
 	SET NOCOUNT ON;

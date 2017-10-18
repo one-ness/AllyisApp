@@ -61,7 +61,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			// Reference for checking status of entries
 			List<CompleteProject> allProjects = AppService.GetProjectsByUserAndOrganization(userId, organizationId, false).ToList();
-			DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
+			DateTime? lockDate = AppService.GetLockDateByOrganizationId(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
 
 			// Authorized to edit this entry
 			// Remove existing entries in target range

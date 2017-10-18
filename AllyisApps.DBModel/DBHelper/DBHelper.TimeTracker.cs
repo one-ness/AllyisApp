@@ -28,14 +28,14 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">The Organization Id.</param>
 		/// <returns>The lock date.</returns>
-		public LockDateDBEntity GetLockDate(int organizationId)
+		public LockDateDBEntity GetLockDateByOrganizationId(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<LockDateDBEntity>("[TimeTracker].[GetLockDate]", parameters, commandType: CommandType.StoredProcedure).Single();
+				return connection.Query<LockDateDBEntity>("[TimeTracker].[GetOldLockDate]", parameters, commandType: CommandType.StoredProcedure).Single();
 			}
 		}
 
@@ -357,12 +357,12 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Get settings for organization.
 		/// </summary>
-		/// <param name="orgId">The organization Id for which the settings are to be retrieved.</param>
+		/// <param name="organizationId">The organization Id for which the settings are to be retrieved.</param>
 		/// <returns>Settings for an organization.</returns>
-		public SettingDBEntity GetSettings(int orgId)
+		public SettingDBEntity GetSettingsByOrganizationId(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", orgId);
+			parameters.Add("@organizationId", organizationId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -381,7 +381,7 @@ namespace AllyisApps.DBModel
 		{
 			try
 			{
-				this.GetSettings(orgId);
+				this.GetSettingsByOrganizationId(orgId);
 			}
 			catch
 			{
