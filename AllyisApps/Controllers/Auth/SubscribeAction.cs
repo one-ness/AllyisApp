@@ -14,6 +14,7 @@ using AllyisApps.Services.Common.Types;
 using AllyisApps.ViewModels.Auth;
 using System.Threading.Tasks;
 using AllyisApps.Services.Cache;
+using System.Collections.Generic;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -23,7 +24,7 @@ namespace AllyisApps.Controllers.Auth
 	public partial class AccountController : BaseController
 	{
 		/// <summary>
-		/// GET: /Subscription/Subscribe/ProductId=#.
+		/// GET: /Subscription/Subscribe/skuid.
 		/// </summary>
 		/// <param name="id">Organization id.</param>
 		/// <param name="skuId">The id of the SKU being subscribed to.</param>
@@ -31,97 +32,89 @@ namespace AllyisApps.Controllers.Auth
 		[HttpGet]
 		public async Task<ActionResult> Subscribe(int id, SkuIdEnum skuId)
 		{
+			// get all subscriptions of the given organization
 			var collection = await this.AppService.GetSubscriptionsAsync(id);
+			var model = new SubscribeViewModel();
 			foreach (var item in collection)
 			{
+				// is it an existing sku?
 				if (item.SkuId == skuId)
 				{
-					// already subscribed
-					this.Notifications.Add(new BootstrapAlert(string.Format("You are already subscribed to {0}", item.SkuName), Variety.Warning));
-					return this.RedirectToAction(ActionConstants.OrganizationSubscriptions, ControllerConstants.Account, new { id = id });
+					// yes, already subscribed
+					this.Notifications.Add(new BootstrapAlert(string.Format("You are already subscribed to {0}.", item.SkuName), Variety.Warning));
+					return this.RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id = id });
 				}
 				else
 				{
-					// get a list of all active skus
-					var activeSkus = CacheContainer.AllSkusCache.Where(x => x.IsActive).ToList();
+					// no, get the product of this subscription
+					var pid = item.ProductId;
+					Product product = null;
+					if (!CacheContainer.ProductsCache.TryGetValue(pid, out product) || !product.IsActive)
+					{
+						// inactive or invalid product
+						this.Notifications.Add(new BootstrapAlert("You selected an invalid product to subscribe to.", Variety.Danger));
+						return this.RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id = id });
+					}
 
-					
+					// is it a sku of this product?
+					List<Sku> skus = null;
+					if (CacheContainer.SkusCache.TryGetValue(pid, out skus))
+					{
+						var sku = skus.Where(x => x.IsActive && x.SkuId == skuId).FirstOrDefault();
+						if (sku != null)
+						{
+							// yes, user is subscribing to another sku of an existing subscription (i.e., product)
+							model.IsChanging = true;
+							model.OrganizationId = id;
+							model.ProductName = item.ProductName;
+							model.SkuDescription = sku.SkuDescription;
+							model.SkuIconUrl = sku.IconUrl;
+							model.SkuName = sku.SkuName;
+							model.SubscriptionName = item.SubscriptionName;
+
+							// show the view
+							return View(model);
+						}
+					}
 				}
 			}
 
-
-			var infos = AppService.GetProductSubscriptionInfo(id, skuId);
-
-			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos, id);
-			model.SelectedSku = skuId;
-			model.SelectedSkuName = infos.SkuList.Where(s => s.SkuId == skuId).SingleOrDefault().SkuName;
-			model.SelectedSkuDescription = infos.SkuList.Where(s => s.SkuId == skuId).SingleOrDefault().Description;
-
-			if (!model.IsValid)
+			// reached here indicates user is subscribing to a new product with a new sku
+			var selectedSku = CacheContainer.AllSkusCache.Where(x => x.IsActive && x.SkuId == skuId).FirstOrDefault();
+			if (selectedSku == null)
 			{
-				return this.View(ViewConstants.Details, id);
+				// inactive or invalid sku
+				this.Notifications.Add(new BootstrapAlert("You selected an invalid sku to subscribe to.", Variety.Danger));
+				return this.RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id = id });
 			}
 
-			model.CurrentUsers = infos.UserCount;
-			return this.View(ViewConstants.Subscribe, model);
-		}
-
-		/// <summary>
-		/// Uses services to populate a <see cref="ProductSubscriptionViewModel"/> and returns it.
-		/// </summary>
-
-		/// <param name="productSubscription"></param>
-		/// <param name="organizationId">Organization id.</param>
-		/// <returns>The ProductSubscriptionViewModel.</returns>
-		[CLSCompliant(false)]
-		public ProductSubscriptionViewModel ConstructProductSubscriptionViewModel(ProductSubscription productSubscription, int organizationId)
-		{
-			if (productSubscription.Product != null)
+			// get product for the sku
+			Product selectedProduct = null;
+			if (!CacheContainer.ProductsCache.TryGetValue(selectedSku.ProductId, out selectedProduct) || !selectedProduct.IsActive)
 			{
-				SkuIdEnum selectedSku = productSubscription.SubscriptionInfo == null ? 0 : productSubscription.SubscriptionInfo.SkuId;
-
-				// TODO: orgName MUST be obtained in the service call AppService.GetProductSubscriptionInfo (it gets the orgId)
-				string SubscriptionName = "SubScription Name";
-				BillingServicesCustomerId customerId = new BillingServicesCustomerId(productSubscription.StripeTokenCustId);
-
-				return new ProductSubscriptionViewModel
-				{
-					IsValid = true,
-					OrganizationId = organizationId,
-					OrganizationName = SubscriptionName,
-					ProductId = productSubscription.Product.ProductId,
-					ProductName = productSubscription.Product.ProductName,
-					AreaUrl = productSubscription.Product.AreaUrl,
-					ProductDescription = productSubscription.Product.ProductDescription,
-					CurrentSubscription = productSubscription.SubscriptionInfo,
-					Skus = productSubscription.SkuList,
-					SelectedSku = selectedSku,
-					SelectedSkuName = selectedSku > 0 ? productSubscription.SkuList.Where(s => s.SkuId == selectedSku).SingleOrDefault().SkuName : string.Empty,
-					PreviousSku = selectedSku,
-					CustomerId = customerId.Id,
-					Token = new BillingServicesToken(customerId.ToString()) // TODO: Does this just convert back to the stripeToken string?? Investigate.
-				};
+				// inactive or invalid product
+				this.Notifications.Add(new BootstrapAlert("You selected an invalid product to subscribe to.", Variety.Danger));
+				return this.RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id = id });
 			}
 
-			return new ProductSubscriptionViewModel
-			{
-				IsValid = false
-			};
+			// fill model
+			model.OrganizationId = id;
+			model.ProductName = selectedProduct.ProductName;
+			model.SkuDescription = selectedSku.SkuDescription;
+			model.SkuIconUrl = selectedSku.IconUrl;
+			model.SkuName = selectedSku.SkuName;
+			return View(model);
 		}
 
 		/// <summary>
 		/// Subscribe to a product.
 		/// </summary>
-		/// <param name="model">The model.</param>
-		/// <returns>A page.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		[CLSCompliant(false)]
-		public ActionResult Subscribe(ProductSubscriptionViewModel model)
+		public async Task<ActionResult> Subscribe(SubscribeViewModel model)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, model.OrganizationId);
-			AppService.Subscribe(model.ProductId, model.ProductName, model.SelectedSku, model.SubscriptionName, 0, model.Token, false, null, null, model.OrganizationId);
-			Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.SubscribedSuccessfully, model.SelectedSkuName), Variety.Success));
+			await this.AppService.Subscribe(model.OrganizationId, (SkuIdEnum)model.SkuId, model.SubscriptionName);
+			Notifications.Add(new BootstrapAlert(string.Format("Your subscription: {0} was created successfully!", model.SubscriptionName), Variety.Success));
 			return this.RedirectToAction(ActionConstants.OrganizationSubscriptions, new { id = model.OrganizationId });
 		}
 	}

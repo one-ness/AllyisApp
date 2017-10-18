@@ -147,6 +147,7 @@ namespace AllyisApps.Services.Cache
 					SkusCache.Add(sku.ProductId, list);
 				}
 
+				// add to all skus cache as well
 				AllSkusCache.Add(sku);
 			}
 

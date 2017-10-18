@@ -5,7 +5,7 @@ namespace AllyisApps.ViewModels.Billing
 	/// <summary>
 	/// skus view model
 	/// </summary>
-	public class SkusViewModel
+	public class SkusViewModel : BaseViewModel
 	{
 		/// <summary>
 		/// organization id

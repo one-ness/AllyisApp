@@ -466,6 +466,7 @@
     <Compile Include="ViewModels\BillingProductSubscription\SubscriptionRoleSelectionModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\Billing\SkusViewModel.cs" />
+    <Compile Include="ViewModels\Billing\SubscribeViewModel.cs" />
     <Compile Include="ViewModels\ModelHelper.cs" />
     <Compile Include="ViewModels\Shared\LanguageViewModel.cs" />
     <Compile Include="ViewModels\Shared\LogOnPartialViewModel.cs" />
