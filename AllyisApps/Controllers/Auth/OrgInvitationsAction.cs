@@ -32,8 +32,8 @@ namespace AllyisApps.Controllers.Auth
 				data.EmployeeId = item.EmployeeId;
 				data.InvitationId = item.InvitationId;
 				data.InvitedOn = item.InvitationCreatedUtc;
-				//data.ProductAndRoleNames = ;
-				//data.Status = ;
+				//data.ProductAndRoleNames = item.ProductRolesJson; TODO: parse the json to get the product names and roles
+				data.Status = item.InvitationStatus.ToString();
 				StringBuilder sb = new StringBuilder();
 				sb.Append(item.FirstName);
 				sb.Append(" ");
@@ -45,8 +45,8 @@ namespace AllyisApps.Controllers.Auth
 			var org = this.AppService.GetOrganization(id);
 			model.OrganizationName = org.OrganizationName;
 			model.TabInfo.OrganizationId = id;
-			model.CanDeleteInvitation = this.AppService.CheckOrgAction(Services.AppService.OrgAction.DeleteInvitation, id, false);
-
+			model.CanDeleteInvitations = this.AppService.CheckOrgAction(Services.AppService.OrgAction.DeleteInvitation, id, false);
+			model.CanResendInvitations = this.AppService.CheckOrgAction(Services.AppService.OrgAction.AddUserToOrganization, id, false);
 			return View(model);
 		}
 	}
