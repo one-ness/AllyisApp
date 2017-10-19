@@ -36,22 +36,5 @@ namespace AllyisApps.Core
 		/// Gets the name of the Area to be routed to.
 		/// </summary>
 		public string Area { get; internal set; }
-
-		/// <summary>
-		/// Retrieves the relative path of the request based on the route.
-		/// </summary>
-		/// <param name="requestContext">The request context.</param>
-		/// <param name="values">The request values.</param>
-		/// <returns>The path as a string.</returns>
-		public override VirtualPathData GetVirtualPath(RequestContext requestContext, RouteValueDictionary values)
-		{
-			object subdomainParam = requestContext.HttpContext.Request.Params["subdomain"];
-			if (subdomainParam != null)
-			{
-				values["subdomain"] = subdomainParam;
-			}
-
-			return base.GetVirtualPath(requestContext, values);
-		}
 	}
 }

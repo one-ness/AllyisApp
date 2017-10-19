@@ -1,4 +1,4 @@
-﻿namespace AllyisApps.Services
+﻿namespace AllyisApps.Controllers
 {
 	/// <summary>
 	/// Represents the user information serialized to the forms authentication cookie.
