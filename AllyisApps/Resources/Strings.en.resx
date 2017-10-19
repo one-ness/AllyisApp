@@ -1474,4 +1474,22 @@
   <data name="UserChangedRolesInExpenseTracker" xml:space="preserve">
     <value>{0} users changed roles in Expense Tracker.</value>
   </data>
+  <data name="Review" xml:space="preserve">
+    <value>Review</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>Pendiente</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Aprobado</value>
+  </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>Rechazado</value>
+  </data>
+  <data name="PayrollProcessed" xml:space="preserve">
+    <value>Nómina procesada</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
 </root>

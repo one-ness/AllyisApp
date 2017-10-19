@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AllyisApps.Lib;
 using AllyisApps.Services;
-using AllyisApps.Services.Auth;
+using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.ViewModels
 {
@@ -57,6 +58,21 @@ namespace AllyisApps.ViewModels
 			}
 
 			return result;
+		}
+
+		/// <summary>
+		/// Gets a dictionary of all time entry statuses, localized.
+		/// </summary>
+		/// <param name="service">AppService object.</param>
+		/// <returns>A dictionary of all time entry statuses, localized.</returns>
+		public static Dictionary<int, string> GetLocalizedTimeEntryStatuses(AppService service)
+		{
+			var results = new Dictionary<int, string>();
+			foreach (TimeEntryStatus enumValue in Enum.GetValues(typeof(TimeEntryStatus)))
+			{
+				results.Add((int)enumValue, Resources.Strings.ResourceManager.GetString(enumValue.ToString()));
+			}
+			return results;
 		}
 	}
 }

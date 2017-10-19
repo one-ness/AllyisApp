@@ -293,11 +293,13 @@
     <Compile Include="Areas\TimeTracker\Controllers\Customer\TemplateAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Home\HomeController.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Project\ReactivateAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ReviewAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\MergePayClassAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ImportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\TemplateAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\TimeEntryCURDAction.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\Project\CompleteProjectViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\ReviewViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\MergePayClassViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsLockDateViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsPayClassesViewModel.cs" />
@@ -429,6 +431,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\Helpers.cs" />
     <Compile Include="Utilities\ImportMessageFormatter.cs" />
     <Compile Include="ViewModels\Auth\Organizations\OrganizationInvitationsViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\AddMemberViewModel.cs" />
@@ -646,7 +649,6 @@
     <Content Include="Areas\TimeTracker\Views\TimeEntry\MergePayClass.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Shared\_TimeTrackerSidebar.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\Reactivate.cshtml" />
-    <Content Include="Areas\TimeTracker\Views\Customer\ReactivateBackUp.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\_ProjectsByCustomer.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\_IndexPartial_Active.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\_IndexPartial_Inactive.cshtml" />
@@ -706,6 +708,7 @@
     <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsHoliday.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\_ManageSettingSideBar.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\_ManageSettingSideBar2.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\Review.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
@@ -722,6 +725,7 @@
     <Content Include="Scripts\allyis-account-permission.js" />
     <Content Include="Scripts\allyis-account-subscribe.js" />
     <Content Include="Scripts\allyis-list-group-search.js" />
+    <Content Include="Scripts\bootstrap-select.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <None Include="Resources\Files\CustomerProjectImportTemplate.xlsx" />
     <None Include="Resources\Files\TimeEntryImportTemplate.xlsx" />
@@ -1066,8 +1070,8 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Strings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

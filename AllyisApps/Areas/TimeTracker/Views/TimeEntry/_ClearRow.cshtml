@@ -4,8 +4,6 @@
 @using (Html.BeginForm(ActionConstants.DeleteTimeEntry, ControllerConstants.TimeEntry, FormMethod.Post))
 {
 	@Html.HiddenFor(m => m.TimeEntryId)
-	@Html.HiddenFor(m => m.StartingDate)
-	@Html.HiddenFor(m => m.EndingDate)
 
 	<td><input type="submit" value=@Strings.Delete /></td>
 }

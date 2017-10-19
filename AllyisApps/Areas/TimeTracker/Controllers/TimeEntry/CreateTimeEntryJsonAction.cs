@@ -61,7 +61,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				UserContext.SubscriptionAndRole subInfo = null;
 				this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(model.SubscriptionId, out subInfo);
 
-				DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId);
+				DateTime? lockDate = AppService.GetLockDateByOrganizationId(AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId);
 				if (durationResult + durationOther > 24.00)
 				{
 					throw new ArgumentException(Resources.Strings.CannotExceed24);
@@ -84,9 +84,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					UserId = model.UserId,
 					ProjectId = model.ProjectId,
 					PayClassId = model.PayClassId,
-					Date = Utility.GetDateTimeFromDays(model.Date) ?? DateTime.Now,
+					Date = Utility.GetNullableDateTimeFromDays(model.Date) ?? DateTime.Now,
 					Duration = durationResult.Value,
-					Description = model.Description
+					Description = model.Description,
+					TimeEntryStatusId = (int)TimeEntryStatus.Pending
 				});
 
 				return this.Json(new { status = "success", values = new { duration = this.GetDurationDisplay(model.Duration), description = model.Description, projectId = model.ProjectId, id = id, projectName = AppService.GetProject(model.ProjectId).ProjectName } });
