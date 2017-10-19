@@ -81,7 +81,7 @@ else
 			   class="btn btn-default pull-left" title="@Strings.Back"><i class="fa fa-caret-left"></i>&nbsp;@Strings.Back</a>
 			@if (Model.CanDeleteInvitation)
 			{
-				using (Html.BeginForm(ActionConstants.RemoveInvitation, ControllerConstants.Account, new { @id = Model.OrganizationId }, FormMethod.Post, new { onsubmit = "return getInvitationIdsAndSubmit();" }))
+				using (Html.BeginForm(ActionConstants.RemoveInvitation, ControllerConstants.Account, new { @id = Model.OrganizationId }, FormMethod.Post, new { @onsubmit = "return getInvitationIdsAndSubmit();" }))
 				{
 					@Html.AntiForgeryToken();
 					<input type="hidden" id="txtCsvUserIds" />

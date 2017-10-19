@@ -76,7 +76,7 @@
 		   class="btn btn-default pull-left" title="@Strings.Back"><i class="fa fa-caret-left"></i>&nbsp;@Strings.Back</a>
 		@if (Model.CanDeleteUser)
 		{
-			using (Html.BeginForm(ActionConstants.RemoveMember, ControllerConstants.Account, new { @id = Model.OrganizationId }, FormMethod.Post, new { onsubmit="return getUserIdsAndSubmit();" }))
+			using (Html.BeginForm(ActionConstants.RemoveMember, ControllerConstants.Account, new { @id = Model.OrganizationId }, FormMethod.Post, new { @onsubmit="return getUserIdsAndSubmit();" }))
 			{
 				@Html.AntiForgeryToken();
 				<input type="hidden" id="txtCsvUserIds" />

@@ -15,7 +15,7 @@
 			@if (Model.CanEditOrganization)
 			{
 				<a href="@Url.Action(ActionConstants.EditOrg, ControllerConstants.Account, new { id = Model.OrganizationId })"
-				   class="btn btn-default" title="@Strings.EditOrganization">@Strings.Edit <i class="fa fa-edit"></i></a>
+				   class="btn btn-default" title="@Strings.EditOrganization">@Strings.Edit&nbsp;<i class="fa fa-edit"></i></a>
 			}
 		</span>
 	</div>
@@ -65,6 +65,14 @@
 <div class="row">
 	<div class="col-xs-12">
 		<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)"
-		   class="btn btn-default pull-left" title="@Strings.Back"><i class="fa fa-caret-left"></i> @Strings.Back</a>
+		   class="btn btn-default pull-left" title="@Strings.Back"><i class="fa fa-caret-left"></i>&nbsp;@Strings.Back</a>
+		@if (Model.CanDeleteOrganization)
+		{
+			using (Html.BeginForm(ActionConstants.DeleteOrg, ControllerConstants.Account, new { id = Model.OrganizationId }, FormMethod.Post, new { @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw(Strings.ConfirmDeleteOrg)) }))
+			{
+				@Html.AntiForgeryToken()
+				<button type="submit" value="@Strings.DeleteOrganization" class="btn btn-danger pull-right" id="submitDelete">@Strings.DeleteOrganization</button>
+			}
+		}
 	</div>
 </div>
