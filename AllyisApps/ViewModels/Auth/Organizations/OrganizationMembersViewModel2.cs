@@ -46,6 +46,27 @@ namespace AllyisApps.ViewModels.Auth
 		public bool CanEditUser { get; set; }
 
 		/// <summary>
+		/// paging: number of entries to show in one page
+		/// </summary>
+		public int PageSize { get; set; }
+
+		/// <summary>
+		/// paging: current page number
+		/// </summary>
+		public int CurrentPageNumber { get; set; }
+
+		/// <summary>
+		/// paging: total pages
+		/// </summary>
+		public int TotalPages
+		{
+			get
+			{
+				return (this.Users.Count / this.PageSize) + 1;
+			}
+		}
+
+		/// <summary>
 		/// information for members and invitations tab
 		/// </summary>
 		public MembersAndInvitationsTabViewModel TabInfo { get; set; }
@@ -55,6 +76,8 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public OrganizationMembersViewModel2()
 		{
+			this.PageSize = 25; // default page number
+			this.CurrentPageNumber = 1; // default page
 			this.TabInfo = new MembersAndInvitationsTabViewModel();
 			this.TabInfo.MembersTabActive = "active";
 			this.Users = new List<ViewModelItem>();
