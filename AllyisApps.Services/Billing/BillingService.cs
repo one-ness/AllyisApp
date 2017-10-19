@@ -716,6 +716,8 @@ namespace AllyisApps.Services
 					throw new InvalidOperationException("You selected an invalid product to subscribe to.");
 			}
 
+			this.InitializeSettingsForProduct(selectedSku.ProductId, organizationId);
+
 			// create new subscription
 			this.DBHelper.CreateSubscription(organizationId, (int)skuId, subscriptionName, this.UserContext.UserId, productRoleId);
 		}

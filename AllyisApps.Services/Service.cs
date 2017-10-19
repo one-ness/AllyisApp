@@ -658,7 +658,7 @@ namespace AllyisApps.Services
 				StartOfWeek = settings.StartOfWeek,
 				LockDatePeriod = settings.LockDatePeriod,
 				LockDateQuantity = settings.LockDateQuantity,
-				IsLockDateUsed = settings.IsLockDateUsed
+				IsLockDateUsed = settings.IsLockDateUsed,
 			};
 		}
 
