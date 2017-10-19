@@ -64,5 +64,10 @@ namespace AllyisApps.ViewModels.Auth
 		/// is edit allowed?
 		/// </summary>
 		public bool CanEditOrganization { get; set; }
+
+		/// <summary>
+		/// is delete allowed?
+		/// </summary>
+		public bool CanDeleteOrganization { get; set; }
 	}
 }

@@ -44,6 +44,8 @@ namespace AllyisApps.Controllers.Auth
 
 			var org = this.AppService.GetOrganization(id);
 			model.OrganizationName = org.OrganizationName;
+			model.TabInfo.OrganizationId = id;
+			model.CanDeleteInvitation = this.AppService.CheckOrgAction(Services.AppService.OrgAction.DeleteInvitation, id, false);
 
 			return View(model);
 		}
