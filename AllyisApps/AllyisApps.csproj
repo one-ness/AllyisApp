@@ -783,7 +783,6 @@
     <Content Include="Views\Shared\EditorTemplates\Collection.cshtml" />
     <Content Include="Views\Account\_PremissionsLinkView.cshtml" />
     <Content Include="Views\Account\PermissionsOrg.cshtml" />
-    <Content Include="Views\Account\ManageOrg2.cshtml" />
     <Content Include="Views\Account\_ManageOrgMenuBar.cshtml" />
     <Content Include="Views\Account\OrgSubscriptions.cshtml" />
     <Content Include="Views\Account\OrgMembers.cshtml" />

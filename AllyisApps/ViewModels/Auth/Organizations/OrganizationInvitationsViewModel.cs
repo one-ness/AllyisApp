@@ -33,7 +33,12 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// is delete allowed?
 		/// </summary>
-		public bool CanDeleteInvitation { get; set; }
+		public bool CanDeleteInvitations { get; set; }
+
+		/// <summary>
+		/// is resend allowed?
+		/// </summary>
+		public bool CanResendInvitations { get; set; }
 
 		/// <summary>
 		/// constructor
@@ -100,6 +105,14 @@ namespace AllyisApps.ViewModels.Auth
 			/// date on which the status 
 			/// </summary>
 			public DateTime? DecisionDate { get; set; }
+
+			/// <summary>
+			/// constructor;
+			/// </summary>
+			public ViewModelItem()
+			{
+				this.ProductAndRoleNames = new List<Tuple<string, string>>();
+			}
 		}
 	}
 }
