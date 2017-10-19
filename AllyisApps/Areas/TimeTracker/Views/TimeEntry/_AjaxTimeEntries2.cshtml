@@ -18,7 +18,7 @@
 @foreach (var weekGroup in weekQuery)
 {
 	var dateQuery = from entry in weekGroup orderby entry.Date group entry by entry.Date;
-	<div class="panel panel-default timesheet-grouping">
+	<div class="ovrd-panel panel ovrd-panel-default panel-default timesheet-grouping">
 		@foreach (var dateGroup in dateQuery)
 		{
 			var theEntries = from entry in dateGroup where !entry.Sample select entry;
@@ -60,8 +60,8 @@
 				holidayClass = "holiday";
 			}
 
-			<div class="panel-heading hidden visible-xs @(headerClass)">
-				<div class="panel-right table-col @offDayClass @holidayClass" style="display: block; background-color:transparent;">
+			<div class="ovrd-panel-heading panel-heading hidden visible-xs @(headerClass)">
+				<div class="ovrd-panel-right panel-right ovrd-table-col table-col @offDayClass @holidayClass" style="display: block; background-color:transparent;">
 
 					<label style="margin-right:2em;">@(dateStringNums) @(dateStringDayLong)</label>
 					<!-- Remove Copy Buttons
@@ -105,12 +105,12 @@
 					*@-->
 				</div>
 			</div>
-			<div class="table-container @(containerClass)">
-				<div class="table-row">
-					<div class="panel-left hidden-xs table-col text-center @offDayClass @holidayClass">
+			<div class="ovrd-table-container table-container @(containerClass)">
+				<div class="ovrd-table-row table-row">
+					<div class="ovrd-panel-left panel-left hidden-xs ovrd-table-col table-col text-center @offDayClass @holidayClass">
 						<label style="margin: 0px 5px;">@dateStringNums</label>
 						<label style="margin: 0px 5px;">@dateStringDayShort</label>
-						<div class="panel-right table-col @offDayClass @holidayClass" style="display: block; background-color:transparent;">
+						<div class="ovrd-panel-right panel-right ovrd-table-col table-col @offDayClass @holidayClass" style="display: block; background-color:transparent;">
 							<table align="center">
 								<tr>
 									<!--
@@ -158,7 +158,7 @@
 							</table>
 						</div>
 					</div>
-					<div class="panel-right table-col @offDayClass @holidayClass">
+					<div class="ovrd-panel-right panel-right ovrd-table-col table-col @offDayClass @holidayClass">
 						@{
 							foreach (var entry in theEntries)
 							{
@@ -183,6 +183,6 @@
 							}
 <div class="pull-right">
 	<a href=@Context.Request.RawUrl
-	<span class="btn btn-danger" >@Strings.Cancel</span></a>
-	<span class="btn btn-primary" onclick="saveForm()" style="margin-right: 15px;">@Strings.Save</span>
+	<span class="ovrd-btn btn ovrd-btn-danger btn-danger" >@Strings.Cancel</span></a>
+	<span class="ovrd-btn btn ovrd-btn-primary btn-primary" onclick="saveForm()" style="margin-right: 15px;">@Strings.Save</span>
 </div>

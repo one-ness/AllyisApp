@@ -16,13 +16,13 @@
 	ViewData["SubscriptionName"] = Model.SubscriptionName;
 }
 
-<div class="row">
-	@using (Html.BeginForm("TimeTrackerDatePickerRedirect", ControllerConstants.TimeEntry, FormMethod.Get, htmlAttributes: new { @class = "form-inline col-xs-12", @style = "margin-bottom: 20px;" }))
+<div class="ovrd-row row">
+	@using (Html.BeginForm("TimeTrackerDatePickerRedirect", ControllerConstants.TimeEntry, FormMethod.Get, htmlAttributes: new { @class = "form-inline ovrd-col-xs-12 col-xs-12 col", @style = "margin-bottom: 20px;" }))
 	{
 		@*<input id="UserId" name="UserId" type="hidden" value="@Model.EntryRange.UserId" />*@
 		<input id="StartDate" name="startDate" type="hidden" value="@Model.EntryRange.StartDate" />
 		<input id="EndDate" name="endDate" type="hidden" value="@Model.EntryRange.EndDate" />
-		<div class="form-group pull-left">
+		<div class="ovrd-form-group form-group pull-left">
 			<a href="@Url.Action(ActionConstants.Export, ControllerConstants.TimeEntry, routeValues: new
 				{
 					subscriptionId = Model.Subscriptionid,
@@ -33,52 +33,52 @@
 				@*<input type="button" value="Export" class="btn btn-primary">*@
 				<span c>
 					@*<input type="button" value="Export" class="btn btn-primary">*@
-					<span class="btn btn-primary" style="margin-right: 15px;">@Strings.Export</span>
+					<span class="ovrd-btn btn ovrd-btn-primary btn-primary" style="margin-right: 15px;">@Strings.Export</span>
 			</a>
 		</div>
 		<!-- Temp fix for Users button for smaller viewports -->
-		<div class="form-group pull-right">
-			<button type="button" class="btn btn-primary visible-xs" data-toggle="offcanvas" style="margin: 0 0 0 15px">@Strings.Users</button>
+		<div class="ovrd-form-group form-group pull-right">
+			<button type="button" class="ovrd-btn btn ovrd-btn-primary btn-primary visible-xs" data-toggle="offcanvas" style="margin: 0 0 0 15px">@Strings.Users</button>
 		</div>
 		@*To be moved to a separate settings page*@
 
-		<div id="date-select" class="form-group pull-right">
+		<div id="date-select" class="ovrd-form-group form-group pull-right">
 			<div class="input-group">
 
 				<div class="input-group-btn">
 					@if (ViewBag.SelectedUserId == ViewBag.SignedInUserID)
 					{
-						<a class="btn btn-primary" title="@Strings.Previous"
+						<a class="ovrd-btn btn ovrd-btn-primary btn-primary" title="@Strings.Previous"
 						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.Subscriptionid, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
-							<i class="fa fa-chevron-left"></i>
+							<i class="ovrd-fa fa ovrd-fa-chevron-left fa-chevron-left"></i>
 						</a>
-						<a class="btn btn-primary" title="@Strings.Current"
+						<a class="ovrd-btn btn ovrd-btn-primary btn-primary" title="@Strings.Current"
 						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.Subscriptionid, startDate = ViewBag.WeekStart, endDate = ViewBag.WeekEnd })">
 							<i class="glyphicon glyphicon-flash"></i>
 						</a>
-						<a class="btn btn-primary" title="@Strings.Next"
+						<a class="ovrd-btn btn ovrd-btn-primary btn-primary" title="@Strings.Next"
 						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.Subscriptionid, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
-							<i class="fa fa-chevron-right"></i>
+							<i class="ovrd-fa fa ovrd-fa-chevron-right fa-chevron-right"></i>
 						</a>
 					}
 					else
 					{
-						<a class="btn btn-primary" title="@Strings.Previous"
+						<a class="ovrd-btn btn ovrd-btn-primary btn-primary" title="@Strings.Previous"
 						   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.Subscriptionid, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
-							<i class="fa fa-chevron-left"></i>
+							<i class="ovrd-fa fa ovrd-fa-chevron-left fa-chevron-left"></i>
 						</a>
-						<a class="btn btn-primary" title="@Strings.Current"
+						<a class="ovrd-btn btn ovrd-btn-primary btn-primary" title="@Strings.Current"
 						   href="@Url.Action(ActionConstants.Index, routeValues: new {  subscriptionId = Model.Subscriptionid, userId = ViewBag.SelectedUserId,  startDate = ViewBag.WeekStart, endDate = ViewBag.WeekEnd })">
 							<i class="glyphicon glyphicon-flash"></i>
 						</a>
 
-						<a class="btn btn-primary" title="@Strings.Next"
+						<a class="ovrd-btn btn ovrd-btn-primary btn-primary" title="@Strings.Next"
 						   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.Subscriptionid, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
-							<i class="fa fa-chevron-right"></i>
+							<i class="ovrd-fa fa ovrd-fa-chevron-right fa-chevron-right"></i>
 						</a>
 					}
 				</div>
-				<input type="text" name="daterange" id="daterange" class="form-control" value="" />
+				<input type="text" name="daterange" id="daterange" class="ovrd-form-control form-control" value="" />
 				@*<div class="input-group-btn">
 						<input type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.View class="btn btn-primary" style="width: 56px" />
 					</div>*@
@@ -97,12 +97,12 @@
 }
 
 @section sidebar {
-	<div class="panel panel-info" id="timesheet-summary">
-		<div class="panel-heading">
-			<h1 class="panel-title">@Model.CurrentUser.FirstName @Model.CurrentUser.LastName</h1>
+	<div class="ovrd-panel panel ovrd-panel-info panel-info" id="timesheet-summary">
+		<div class="ovrd-panel-heading panel-heading">
+			<h1 class="ovrd-panel-title panel-title">@Model.CurrentUser.FirstName @Model.CurrentUser.LastName</h1>
 		</div>
 
-		<table class="table table-condensed">
+		<table class="ovrd-table table ovrd-tabel-condensed table-condensed">
 			@foreach (ProjectHours ph in Model.ProjectHours)
 			{
 				<tr>
@@ -143,10 +143,10 @@
 
 	@if (Model.CanManage)
 	{
-		<div class="panel panel-info">
-			<div class="panel-heading">
-				<h1 class="panel-title">@Strings.MemberList</h1>
-				<input id="viewasuser-search" type="text" class="form-control" placeholder=@Strings.SearchPlaceholder />
+		<div class="ovrd-panel panel ovrd-panel-info panel-info">
+			<div class="ovrd-panel-heading panel-heading">
+				<h1 class="ovrd-panel-title panel-title">@Strings.MemberList</h1>
+				<input id="viewasuser-search" type="text" class="ovrd-form-control form-control" placeholder=@Strings.SearchPlaceholder />
 			</div>
 			<div id="viewasuser-list" class="list-group allyis-search" style="max-height: 50vh; overflow-y: auto;">
 				@{ var count = 0;
@@ -169,7 +169,7 @@
 							 style="width: 100%; display: @hide; justify-content: flex-end;">
 							@if (user.UserId == ViewBag.SignedInUserID)
 							{
-								<a class="col-xs-11 text-left" data-search="@user.Email"
+								<a class="ovrd-col-xs-11 col-xs-11 col text-left" data-search="@user.Email"
 								   href="@Url.Action(ActionConstants.IndexNoUserId, routeValues: new
 								{
 									startDate = Model.EntryRange.StartDate,
@@ -181,7 +181,7 @@
 							}
 							else
 							{
-								<a class="col-xs-11 text-left" data-search="@user.Email"
+								<a class="ovrd-col-xs-11 col-xs-11 col text-left" data-search="@user.Email"
 								   href="@Url.Action(ActionConstants.Index, routeValues: new
 								{
 									userId = user.UserId,
@@ -195,19 +195,19 @@
 							<a href="@Url.Action(ActionConstants.UserEdit, routeValues: new {
 								subscriptionId = Model.Subscriptionid,
 								userId = user.UserId })"
-							   style="text-decoration: none; color: #0066AA; padding-right:5%" title="Assign Projects to User"><i class="fa fa-cog"></i></a>
+							   style="text-decoration: none; color: #0066AA; padding-right:5%" title="Assign Projects to User"><i class="ovrd-fa fa ovrd-fa-cog fa-cog"></i></a>
 						</div>count++;
 					}
 				}
 			</div>
-			<div id="footPager" class="panel-footer" style="display: flex; justify-content: space-around; flex-wrap: wrap">
+			<div id="footPager" class="ovrd-panel-footer panel-footer" style="display: flex; justify-content: space-around; flex-wrap: wrap">
 				@if (Model.Users.Any())
 				{
 					var page = 1;
-					<input class="btn btn-primary btn-xs" id="page @page" name="pageButton" type="button" value="@page" onClick="showPage(@page)" disabled="" />page++;
+					<input class="ovrd-btn btn ovrd-btn-primary btn-primary btn-xs" id="page @page" name="pageButton" type="button" value="@page" onClick="showPage(@page)" disabled="" />page++;
 					while (page <= Model.UserPageCount)
 					{
-						<input class="btn btn-primary btn-xs" id="page @page" name="pageButton" type="button" value="@page" onClick="showPage(@page)" />page++;
+						<input class="ovrd-btn btn ovrd-btn-primary btn-primary ovrd-btn-xs btn-xs" id="page @page" name="pageButton" type="button" value="@page" onClick="showPage(@page)" />page++;
 					}
 				}
 			</div>
@@ -215,27 +215,27 @@
 					}
 	@if (Model.CanManage)
 	{
-		<div class="panel panel-info" style="background-color: #f5f5f5;">
-			<div class="panel-heading"><span class="panel-title">@Strings.Upload</span></div>
+		<div class="ovrd-panel panel ovrd-panel-info panel-info" style="background-color: #f5f5f5;">
+			<div class="ovrd-panel-heading panel-heading"><span class="ovrd-panel-title panel-title">@Strings.Upload</span></div>
 			@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.TimeEntry, new { subscriptionid = Model.Subscriptionid }, FormMethod.Post, new { enctype = "multipart/form-data" }))
 			{
 				@Html.AntiForgeryToken();
 				<div>
 					<input type="file" id="upload-box" name="file" style="display:none;"
 						   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-					<input id="upload-file-name-display" name="file" class="form-control"
+					<input id="upload-file-name-display" name="file" class="ovrd-form-control form-control"
 						   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
 				</div>
 				@*<div style="width:70%; margin:0 auto">*@
 				<div id="footUpload" style="background-color:#f5f5f5; display: flex; justify-content: space-around; flex-wrap: wrap; padding-bottom: 0px; float:right; margin-top: 10px;">
-					<a class="btn btn-primary" onclick="$('input[id=upload-box]').click();" title="Choose Excel file containing Time Tracker entries">@Strings.ChooseFile</a>
-					<input type="submit" style="margin-left: 3px; margin-right: 3px;" id="upload-button" value="@Strings.Upload" class="btn btn-primary" title="Upload Excel Time Tracker entries" />
+					<a class="ovrd-btn btn ovrd-btn-primary btn-primary" onclick="$('input[id=upload-box]').click();" title="Choose Excel file containing Time Tracker entries">@Strings.ChooseFile</a>
+					<input type="submit" style="margin-left: 3px; margin-right: 3px;" id="upload-button" value="@Strings.Upload" class="ovrd-btn btn ovrd-btn-primary btn-primary" title="Upload Excel Time Tracker entries" />
 				</div>
 			}
 			@using (Html.BeginForm(ActionConstants.Template, ControllerConstants.TimeEntry, null, FormMethod.Get, new { style = "margin-bottom:10px;" }))
 			{
 				<div style="margin-top: 10px; margin-left: 3px; margin-bottom:10px;">
-					<input type="submit" id="template-button" value="@Strings.Template" class="btn btn-primary tt-template" title="Download Excel Time Tracker template" />
+					<input type="submit" id="template-button" value="@Strings.Template" class="ovrd-btn btn ovrd-btn-primary btn-primary tt-template" title="Download Excel Time Tracker template" />
 				</div>
 			}
 		</div>
