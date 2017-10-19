@@ -49,7 +49,7 @@ else
 						<th>Name</th>
 						<th>Email</th>
 						<th>Employee ID</th>
-						<th>Invitation Date</th>
+						<th>Invite Date</th>
 						<th>Role(s)</th>
 						<th>Status</th>
 					</tr>
@@ -79,21 +79,46 @@ else
 		<div class="col-xs-12">
 			<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)"
 			   class="btn btn-default pull-left" title="@Strings.Back"><i class="fa fa-caret-left"></i>&nbsp;@Strings.Back</a>
-			@if (Model.CanDeleteInvitation)
+			@if (Model.CanResendInvitations)
+			{
+				using (Html.BeginForm(ActionConstants.ResendInvite, ControllerConstants.Account, new { @id = Model.OrganizationId }, FormMethod.Post, new { @onsubmit = "return getInvitationIdsAndResend();" }))
+				{
+					@Html.AntiForgeryToken();
+					<input type="hidden" id="csvResendInvitationIds" />
+					<button type="submit" class="btn btn-default pull-left" title="@Strings.ResendInvite" style="margin-left: 10px;">@Strings.ResendInvite</button>
+					<script type="text/javascript">
+						function getInvitationIdsAndResend() {
+							var csvIds = "";
+
+							// gather all the ids to resend as a csv
+
+							if (csvIds == "") {
+								alert("You have not chosen an invitation to resend");
+								return false;
+							}
+
+							// submit the form
+
+							return false; // for now, delete this line later
+						}
+					</script>
+				}
+			}
+			@if (Model.CanDeleteInvitations)
 			{
 				using (Html.BeginForm(ActionConstants.RemoveInvitation, ControllerConstants.Account, new { @id = Model.OrganizationId }, FormMethod.Post, new { @onsubmit = "return getInvitationIdsAndSubmit();" }))
 				{
 					@Html.AntiForgeryToken();
-					<input type="hidden" id="txtCsvUserIds" />
+					<input type="hidden" id="csvDeleteInvitationIds" />
 					<button type="submit" class="btn btn-danger pull-right" title="@Strings.Back">@Strings.Delete</button>
 					<script type="text/javascript">
-						function getUserIdsAndSubmit() {
+						function getInvitationIdsAndSubmit() {
 							var csvIds = "";
 
 							// gather all the ids to delete as a csv
 
 							if (csvIds == "") {
-								alert("You have not chosen a user to delete");
+								alert("You have not chosen an invitation to delete");
 								return false;
 							}
 

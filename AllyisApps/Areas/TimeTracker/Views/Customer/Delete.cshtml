@@ -15,8 +15,8 @@
 	{
 		@Html.AntiForgeryToken()
 
-		<div class="form-actions no-color">
-			<input type="submit" value=@Strings.Delete class="btn btn-default" /> |
+		<div class="ovrd-form-actions form-actions no-color">
+			<input type="submit" value=@Strings.Delete class="ovrd-btn btn ovrd-btn-default btn-default" /> |
 			@Html.ActionLink(Strings.BackToList, "Index")
 		</div>
 	}

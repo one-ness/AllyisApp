@@ -181,9 +181,9 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Creates an invitation for a new user in the database, and also sends an email to the new user with their access code.
+		/// Creates an invitation for a new user in the database, and also sends an email to the new user
 		/// </summary>
-		public int InviteUser(string url, string email, string firstName, string lastName, int organizationId, OrganizationRole organizationRoleId, string employeedId, string prodJson)
+		public int InviteUser(string url, string email, string firstName, string lastName, int organizationId, OrganizationRole organizationRoleId, string employeedId, string rolesJson)
 		{
 			if (organizationId <= 0) throw new ArgumentOutOfRangeException("organizationId");
 			this.CheckOrgAction(OrgAction.AddUserToOrganization, organizationId);
@@ -192,10 +192,10 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException("firstName");
 			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException("lastName");
 			if (string.IsNullOrWhiteSpace(employeedId)) throw new ArgumentNullException("employeedId");
-			if (string.IsNullOrWhiteSpace(prodJson)) throw new ArgumentNullException("employeedId");
+			if (string.IsNullOrWhiteSpace(rolesJson)) throw new ArgumentNullException("rolesJson");
 
 			// Creation of invitation
-			var result = DBHelper.CreateInvitation(email, firstName, lastName, organizationId, (int)organizationRoleId, employeedId, prodJson);
+			var result = DBHelper.CreateInvitation(email, firstName, lastName, organizationId, (int)organizationRoleId, employeedId, rolesJson);
 
 			if (result == -1)
 			{

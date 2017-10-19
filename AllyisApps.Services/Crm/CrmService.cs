@@ -68,17 +68,14 @@ namespace AllyisApps.Services
 		/// <returns>Customer id.</returns>
 		public int? CreateCustomer(Customer customer, int subscriptionId)
 		{
-			if (this.CheckStaffingManagerAction(StaffingManagerAction.EditCustomer, subscriptionId, false) || this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId, false))
+			if(this.CheckStaffingManagerAction(StaffingManagerAction.EditCustomer, subscriptionId, false) || this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId, false))
 			{
 				// TODO: make sure valid countries and states are added during import
 				//customer.Address?.EnsureDBRef(this);
 				return DBHelper.CreateCustomerInfo(GetDBEntitiesFromCustomerInfo(customer));
 			}
-			else
-			{
-				string message = string.Format("action {0} denied for subscription {1}", TimeTrackerAction.EditCustomer.ToString(), subscriptionId);
-				throw new AccessViolationException(message);
-			}
+			string message = string.Format("action {0} denied for subscription {1}", TimeTrackerAction.EditCustomer.ToString(), subscriptionId);
+			throw new AccessViolationException(message);
 		}
 
 		/// <summary>
@@ -638,14 +635,14 @@ namespace AllyisApps.Services
 			return new Address()
 			{
 				AddressId = address.AddressId,
-				Address1 = address.Address1,
+				Address1 = address.Address1 ?? address.Address,
 				Address2 = address.Address2,
 				City = address.City,
-				StateName = address.StateName,
+				StateName = address.State ?? address.StateName,
 				PostalCode = address.PostalCode,
 				CountryCode = address.CountryCode,
 				StateId = address.StateId,
-				CountryName = address.CountryName
+				CountryName = address.Country ?? address.CountryName
 			};
 		}
 
