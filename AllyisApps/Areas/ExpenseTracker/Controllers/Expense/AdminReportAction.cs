@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
@@ -18,7 +19,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <returns>A admin report view model.</returns>
-		public ActionResult AdminReport(int subscriptionId)
+		async public Task<ActionResult> AdminReport(int subscriptionId)
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.AdminReport, subscriptionId);
 
@@ -34,7 +35,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			}
 			else
 			{
-				adminReportVM = CreateAdminReportModel(subscriptionId);
+				adminReportVM = await CreateAdminReportModel(subscriptionId);
 			}
 
 			return View(adminReportVM);

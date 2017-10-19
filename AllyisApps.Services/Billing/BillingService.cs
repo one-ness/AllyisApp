@@ -617,7 +617,7 @@ namespace AllyisApps.Services
 			var subscripiton = await this.GetSubscription(subscriptionId.Value);
 			var orgId = subscripiton.OrganizationId;
 
-			BillingServicesCustomer custId = this.RetrieveCustomer(this.GetOrgBillingServicesCustomerId(orgId));
+			BillingServicesCustomer custId = this.RetrieveCustomer(await this.GetOrgBillingServicesCustomerId(orgId));
 			if (custId != null)
 			{
 				await this.DeleteSubscriptionPlanAndAddHistory(custId.Id.Id, SelectedSku, "Unsubscribing from product.", orgId);
@@ -694,13 +694,13 @@ namespace AllyisApps.Services
 			}
 			else
 			{
-				customer = this.RetrieveCustomer(this.GetOrgBillingServicesCustomerId(orgId));
+				customer = this.RetrieveCustomer(await this.GetOrgBillingServicesCustomerId(orgId));
 				token = existingToken;
 			}
 
 			if (billingAmount > 0)
 			{
-				BillingServicesCustomerId customerId = this.GetOrgBillingServicesCustomerId(orgId);
+				BillingServicesCustomerId customerId = await this.GetOrgBillingServicesCustomerId(orgId);
 				if (customerId == null)
 				{
 					customer = this.RetrieveCustomer(this.CreateBillingServicesCustomer(newBillingEmail, token));
@@ -724,7 +724,7 @@ namespace AllyisApps.Services
 			}
 			else
 			{
-				customer = this.RetrieveCustomer(this.GetOrgBillingServicesCustomerId(orgId));
+				customer = this.RetrieveCustomer(await this.GetOrgBillingServicesCustomerId(orgId));
 
 				if (customer != null)
 				{
@@ -798,7 +798,8 @@ namespace AllyisApps.Services
 		/// <returns>List of billing history items.</returns>
 		async public Task<IEnumerable<BillingHistoryItemInfo>> GetBillingHistory(int orgId)
 		{
-			return await DBHelper.GetBillingHistoryByOrg(orgId).Select(i =>
+			var billingHist = await DBHelper.GetBillingHistoryByOrg(orgId);
+			return billingHist.Select(i =>
 			{
 				return new BillingHistoryItemInfo
 				{

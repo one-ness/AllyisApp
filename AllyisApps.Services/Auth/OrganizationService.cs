@@ -322,7 +322,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="userId">User Id.</param>
-		public void RemoveOrganizationUser(int orgId, int userId)
+		async public Task RemoveOrganizationUser(int orgId, int userId)
 		{
 			if (orgId < 0)
 			{
@@ -334,7 +334,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
 			}
 
-			DBHelper.RemoveOrganizationUser(orgId, userId);
+			await DBHelper.RemoveOrganizationUser(orgId, userId);
 		}
 
 		/// <summary>
