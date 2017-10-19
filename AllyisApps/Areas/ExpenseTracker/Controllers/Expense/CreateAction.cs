@@ -42,13 +42,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			}
 
 			ExpenseReport report = reportId == -1 ? null : AppService.GetExpenseReport(reportId);
-			var userInfo = GetCookieData();
 			if (reportId != -1)
 			{
 				if (report != null
-					&& (report.SubmittedById != userInfo.UserId
+					&& (report.SubmittedById != this.AppService.UserContext.UserId)
 					|| ((ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Draft
-					&& (ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Rejected)))
+					&& (ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Rejected))
 				{
 					string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.EditReport.ToString());
 					throw new AccessViolationException(message);
@@ -73,7 +72,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			var model = new ExpenseCreateModel()
 			{
-				CurrentUser = GetCookieData().UserId,
+				CurrentUser = this.AppService.UserContext.UserId,
 				Items = itemViewModels,
 				StartDate = DateTime.UtcNow,
 				SubscriptionId = subscriptionId,

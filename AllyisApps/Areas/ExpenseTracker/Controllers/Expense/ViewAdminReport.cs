@@ -31,7 +31,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.AdminReport, subscriptionId);
 
-			var selectedUsers = model.Selection != null ? model.Selection.SelectedUsers : new List<int>() { GetCookieData().UserId };
+			var selectedUsers = model.Selection != null ? model.Selection.SelectedUsers : new List<int>() { this.AppService.UserContext.UserId };
 			var selectedStatus = model.Selection != null ? model.Selection.Status : new List<int> { 1, 2, 3, 4 };
 
 			if (viewDataButton.Equals(Strings.Preview))
