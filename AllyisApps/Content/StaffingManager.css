@@ -9089,7 +9089,7 @@ label.required:after {
   margin-left: .3em;
 }
 .very-inline-form.edit .allyisicon-submit:before {
-  content: "\f067";
+  content: "\f00c";
 }
 .very-inline-form.edit .allyisicon-delete {
   display: inline-block;
@@ -9115,34 +9115,15 @@ label.required:after {
   content: "\f00d";
 }
 .very-inline-form.create {
-  opacity: 1;
+  opacity: 0.5;
   background-color: transparent;
 }
 .very-inline-form.create .button-anim-wrap {
   width: 40px;
 }
 .very-inline-form.create .hidden-create {
-  display: inline-block;
-  font: normal normal normal 14px/1 FontAwesome;
-  font-size: inherit;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-.very-inline-form.create .hidden-create.fa-pull-left {
-  margin-right: .3em;
-}
-.very-inline-form.create .hidden-create.fa-pull-right {
-  margin-left: .3em;
-}
-.very-inline-form.create .hidden-create.pull-left {
-  margin-right: .3em;
-}
-.very-inline-form.create .hidden-create.pull-right {
-  margin-left: .3em;
-}
-.very-inline-form.create .hidden-create:before {
-  content: "\f00d";
+  display: none;
+  visibility: hidden;
 }
 .very-inline-form.create .allyisicon-submit {
   display: inline-block;
@@ -9246,11 +9227,29 @@ label.required:after {
 }
 .very-inline-form.changed {
   opacity: 1;
-  /*
-		//.allyisicon-submit {
-		//	.fa-mixin(@fa-var-exclamation);
-		//}
-		*/
+}
+.very-inline-form.changed .allyisicon-submit {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.very-inline-form.changed .allyisicon-submit.fa-pull-left {
+  margin-right: .3em;
+}
+.very-inline-form.changed .allyisicon-submit.fa-pull-right {
+  margin-left: .3em;
+}
+.very-inline-form.changed .allyisicon-submit.pull-left {
+  margin-right: .3em;
+}
+.very-inline-form.changed .allyisicon-submit.pull-right {
+  margin-left: .3em;
+}
+.very-inline-form.changed .allyisicon-submit:before {
+  content: "\f12a";
 }
 .very-inline-form.error.error-delete .allyisicon-delete {
   display: inline-block;

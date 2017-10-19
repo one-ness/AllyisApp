@@ -17,6 +17,7 @@ SELECT DISTINCT [TimeEntryId]
 	,[Date]
 	,[Duration]
 	,[Description]
+	,[TimeEntryStatusId]
 FROM [TimeTracker].[TimeEntry] WITH (NOLOCK) 
 JOIN [Auth].[User] WITH (NOLOCK) ON [User].[UserId] = [TimeEntry].[UserId]
 JOIN [Hrm].[PayClass] WITH (NOLOCK) ON [PayClass].[PayClassId] = [TimeEntry].[PayClassId]
