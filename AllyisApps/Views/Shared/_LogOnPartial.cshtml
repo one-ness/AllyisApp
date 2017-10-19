@@ -6,7 +6,7 @@
 		<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)">@Model.UserName</a>
 	</li>
 	<li>
-		<a href="@Url.Action(ActionConstants.LogOff, ControllerConstants.Account)" title="@Strings.SignOut" onclick="@ViewExtensions.ConfirmDialog(Strings.LogOffPrompt)">
+		<a href="@Url.Action(ActionConstants.LogOff, ControllerConstants.Account)" title="@Strings.SignOut" onclick="javascript: return confirm('@Strings.LogOffPrompt');">
 			@Strings.SignOut &nbsp;<i class="fa fa-sign-out"></i>
 		</a>
 	</li>

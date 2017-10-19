@@ -252,22 +252,28 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// updates the sku and name for the given subscription
+		/// </summary>
+		public void UpdateSubscriptionSkuAndName(int subscriptionId, string subscriptionName, int skuId)
+		{
+			using (var con = new SqlConnection(this.SqlConnectionString))
+			{
+				con.Execute("Billing.UpdateSubscriptionSkuAndName @a, @b, @c", new { a = subscriptionId, b = subscriptionName, c = skuId });
+			}
+		}
+		/// <summary>
 		/// Creates subscription
 		/// Adds all the organization users as users to the subscription
 		/// Adds the user who subscribed to the subscription as a manager.
 		/// </summary>
-		/// <param name="organizationId">Sets OrganizationId.</param>
-		/// <param name="skuId">Sku -- the subscription item you're subscribing to.</param>
-		/// <param name="subscriptionName">The subscription name.</param>
-		/// <param name="userId">The user who is subscribing -- we need to make them manager.</param>
-		/// <returns>The new subscription id.</returns>
-		public int CreateSubscription(int organizationId, int skuId, string subscriptionName, int userId)
+		public int CreateSubscription(int organizationId, int skuId, string subscriptionName, int userId, int productRoleId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@skuId", skuId);
 			parameters.Add("@subscriptionName", subscriptionName);
 			parameters.Add("@userId", userId);
+			parameters.Add("@productRoleId", productRoleId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
