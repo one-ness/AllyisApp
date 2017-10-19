@@ -79,7 +79,7 @@
 			using (Html.BeginForm(ActionConstants.RemoveMember, ControllerConstants.Account, new { @id = Model.OrganizationId }, FormMethod.Post, new { @onsubmit="return getUserIdsAndSubmit();" }))
 			{
 				@Html.AntiForgeryToken();
-				<input type="hidden" id="txtCsvUserIds" />
+				<input type="hidden" id="csvUserIds" />
 				<button type="submit" class="btn btn-danger pull-right" title="@Strings.Back">@Strings.Delete</button>
 				<script type="text/javascript">
 					function getUserIdsAndSubmit() {
