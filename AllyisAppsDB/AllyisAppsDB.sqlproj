@@ -136,7 +136,7 @@
     <Build Include="TimeTracker\Stored Procedures\UpdateSettings.sql" />
     <Build Include="TimeTracker\Stored Procedures\UpdateStartOfWeek.sql" />
     <Build Include="TimeTracker\Stored Procedures\UpdateTimeEntry.sql" />
-    <Build Include="TimeTracker\Stored Procedures\UpdateLockDate.sql" />
+    <Build Include="TimeTracker\Stored Procedures\UpdateOldLockDate.sql" />
     <Build Include="TimeTracker\Stored Procedures\UpdateOvertime.sql" />
     <Build Include="TimeTracker\Stored Procedures\CreatePayClass.sql" />
     <Build Include="TimeTracker\Stored Procedures\CreateTimeEntry.sql" />
@@ -408,6 +408,8 @@
     <Build Include="Lookup\Stored Procedures\GetAllStates.sql" />
     <Build Include="Billing\Stored Procedures\GetAllSkus.sql" />
     <Build Include="Billing\Stored Procedures\UpdateSubscriptionSkuAndName.sql" />
+    <Build Include="TimeTracker\Stored Procedures\UpdateLockDate.sql" />
+    <Build Include="TimeTracker\Stored Procedures\UpdatePayrollProcessedDate.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

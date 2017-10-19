@@ -397,47 +397,6 @@ namespace AllyisApps.DBModel
 				{
 					connection.Execute("[TimeTracker].[UpdateSettings]", parameters, commandType: CommandType.StoredProcedure);
 				}
-
-				//            // Init new set of default holidays for time tracker
-				//            IEnumerable<HolidayDBEntity> holidays;
-
-				// using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-				//{
-				//	parameters = new DynamicParameters();
-				//	parameters.Add("@organizationId", 0);
-				//	holidays = connection.Query<HolidayDBEntity>("[Hrm].[GetHolidays]", parameters, commandType: CommandType.StoredProcedure);
-				//	if (holidays != null && holidays.Count() > 0)
-				//	{
-				//		foreach (HolidayDBEntity currentHoliday in holidays)
-				//		{
-				//			parameters = new DynamicParameters();
-				//			parameters.Add("@organizationId", orgId);
-				//			parameters.Add("@holidayName", currentHoliday.HolidayName);
-				//			parameters.Add("@date", currentHoliday.Date);
-				//			connection.Execute("[Hrm].[CreateHoliday]", parameters, commandType: CommandType.StoredProcedure);
-				//		}
-				//	}
-				//}
-
-				//// init new set of pay classes
-				// IEnumerable<PayClassDBEntity> payClasses;
-
-				// using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-				//{
-				//	parameters = new DynamicParameters();
-				//	parameters.Add("@organizationId", 0);
-				//	payClasses = connection.Query<PayClassDBEntity>("[Hrm].[GetPayClasses]", parameters, commandType: CommandType.StoredProcedure);
-				//	if (payClasses != null && payClasses.Count() > 0)
-				//	{
-				//		foreach (PayClassDBEntity currentPayClass in payClasses)
-				//		{
-				//			parameters = new DynamicParameters();
-				//			parameters.Add("@organizationId", orgId);
-				//			parameters.Add("@payClassName", currentPayClass.PayClassName);
-				//			connection.Execute("[Hrm].[CreatePayClass]", parameters, commandType: CommandType.StoredProcedure);
-				//		}
-				//	}
-				//}
 			}
 		}
 
@@ -449,7 +408,7 @@ namespace AllyisApps.DBModel
 		/// <param name="lockDatePeriod">.</param>
 		/// <param name="lockDateQuantity">.</param>
 		/// <returns>.</returns>
-		public bool UpdateLockDate(int organizationId, bool lockDateUsed, int lockDatePeriod, int lockDateQuantity)
+		public bool UpdateOldLockDate(int organizationId, bool lockDateUsed, int lockDatePeriod, int lockDateQuantity)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
@@ -459,10 +418,46 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[TimeTracker].[UpdateLockDate]", parameters, commandType: CommandType.StoredProcedure);
+				connection.Execute("[TimeTracker].[UpdateOldLockDate]", parameters, commandType: CommandType.StoredProcedure);
 			}
 
 			return true;
+		}
+
+		/// <summary>
+		/// Updates lock date in time tracker settings.
+		/// </summary>
+		/// <param name="organizationId">The organization that the settings belong to.</param>
+		/// <param name="lockDate">The new lock date.</param>
+		/// <returns>.</returns>
+		public int UpdateLockDate(int organizationId, DateTime lockDate)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationId", organizationId);
+			parameters.Add("@lockDate", lockDate);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Execute("[TimeTracker].[UpdateLockDate]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Updates payroll processed date in time tracker settings.
+		/// </summary>
+		/// <param name="organizationId">The organization that the settings belong to.</param>
+		/// <param name="payrollProcessedDate">The new lock date.</param>
+		/// <returns>.</returns>
+		public int UpdatePayrollProcessedDate(int organizationId, DateTime payrollProcessedDate)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationId", organizationId);
+			parameters.Add("@payrollProcessedDate", payrollProcessedDate);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Execute("[TimeTracker].[UpdatePayrollProcessedDate]", parameters, commandType: CommandType.StoredProcedure);
+			}
 		}
 
 		/// <summary>

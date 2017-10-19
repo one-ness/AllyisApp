@@ -551,7 +551,7 @@ namespace AllyisApps.Services
 		/// <param name="lockDateQuantity">The quantity of the selected period.</param>
 		/// <param name="orgId">.</param>
 		/// <returns>.</returns>
-		public bool UpdateLockDate(bool lockDateUsed, int lockDatePeriod, int lockDateQuantity, int orgId)
+		public bool UpdateOldLockDate(bool lockDateUsed, int lockDatePeriod, int lockDateQuantity, int orgId)
 		{
 			if (!new int[] { 1, 2, 3 }.Contains(lockDatePeriod))
 			{
@@ -563,7 +563,17 @@ namespace AllyisApps.Services
 				throw new ArgumentException("Lock date quantity cannot be less than zero.");
 			}
 
-			return DBHelper.UpdateLockDate(orgId, lockDateUsed, lockDatePeriod, lockDateQuantity);
+			return DBHelper.UpdateOldLockDate(orgId, lockDateUsed, lockDatePeriod, lockDateQuantity);
+		}
+
+		public int UpdateLockDate(int organizationId, DateTime lockDate)
+		{
+			if (organizationId < 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(organizationId), $"{nameof(organizationId)} must be greater than 0.");
+			}
+
+			return DBHelper.UpdateLockDate(organizationId, lockDate);
 		}
 
 		/// <summary>
