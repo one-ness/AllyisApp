@@ -375,7 +375,7 @@ namespace AllyisApps.DBModel
 				var queryResults = await connection.QueryAsync<string>(
 				   "[Billing].[GetStripeOrgCustomer]",
 				   parameters,
-				   commandType: CommandType.StoredProcedure)
+				   commandType: CommandType.StoredProcedure);
 				return queryResults.SingleOrDefault();
 			}
 		}

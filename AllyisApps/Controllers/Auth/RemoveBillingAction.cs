@@ -27,7 +27,7 @@ namespace AllyisApps.Controllers.Auth
 		[HttpGet]
 		async public Task<ActionResult> RemoveBilling(int id)
 		{
-			await this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
 			IEnumerable<int> subs = await AppService.GetSubscriptionPlanPrices(id);
 
 			if (subs != null && subs.Count() > 0)

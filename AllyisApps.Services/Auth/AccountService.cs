@@ -458,7 +458,7 @@ namespace AllyisApps.Services
 		/// <param name="oldPassword">Old password, for verification.</param>
 		/// <param name="newPassword">New password to change it to.</param>
 		/// <returns>True for a successful change, false if anything fails.</returns>
-		public bool ChangePassword(string oldPassword, string newPassword)
+		async public Task<bool> ChangePassword(string oldPassword, string newPassword)
 		{
 			if (string.IsNullOrWhiteSpace(oldPassword)) throw new ArgumentNullException("oldPassword");
 			if (string.IsNullOrWhiteSpace(newPassword)) throw new ArgumentNullException("newPassword");
@@ -472,7 +472,7 @@ namespace AllyisApps.Services
 				{
 					// old password is correct.
 					result = true;
-					this.DBHelper.UpdateUserPassword(UserContext.UserId, Crypto.GetPasswordHash(newPassword));
+					await this.DBHelper.UpdateUserPassword(UserContext.UserId, Crypto.GetPasswordHash(newPassword));
 				}
 			}
 
