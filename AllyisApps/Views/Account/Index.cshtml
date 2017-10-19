@@ -6,17 +6,17 @@
 	var cityState = Model.UserInfo.City != null && Model.UserInfo.State != null ? Model.UserInfo.City + ", " + Model.UserInfo.State : string.Empty;
 }
 
-<div class="row">
+<div class="ovrd-row row">
 	<div class="ovrd-col-md-8 col-md-8 ovrd-col-md-push-2 col-md-push-2 col">
 
-		<div class="row">
+		<div class="ovrd-row row">
 			<div class="ovrd-col-xs-12 col-xs-12 col">
-				<h1 style="float: left">@Strings.MyAccount</h1>
+				<h1 class="pull-left" style="margin-bottom:5px; margin-top:0px;">@Strings.MyAccount</h1>
 			</div>
 		</div>
 
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="ovrd-panel panel ovrd-panel-default panel-default">
+			<div class="ovrd-panel-heading panel-heading">
 				<h2 style="margin-top: 0px; margin-bottom: 0px;">
 					@Model.UserInfo.FirstName @Model.UserInfo.LastName
 					<span class="small text-muted" style="margin-left: 10px;">
@@ -24,7 +24,7 @@
 					</span>
 				</h2>
 			</div>
-			<div class="panel-body">
+			<div class="ovrd-panel-body panel-body">
 				<div class="ovrd-col-sm-9 col-sm-9 col index-details">
 					<p>
 						<label>@Strings.PhoneNumber:</label>
@@ -37,14 +37,14 @@
 					</p>
 				</div>
 				<div class="ovrd-col-sm-3 col-sm-3 col vertically-stacked-buttons text-right" style="padding-right:5px">
-					<a href="@Url.Action(ActionConstants.ChangePassword, ControllerConstants.Account)" class="btn btn-default"> @Strings.ChangePassword </a>
-					<a href="@Url.Action(ActionConstants.EditProfile, ControllerConstants.Account)" class="btn btn-default"> @Strings.EditProfile </a>
+					<a href="@Url.Action(ActionConstants.ChangePassword, ControllerConstants.Account)" class="ovrd-btn btn ovrd-btn-default btn-default">@Strings.ChangePassword <i class="ovrd-fa fa ovrd-fa-user-secret fa-user-secret"></i></a>
+					<a href="@Url.Action(ActionConstants.EditProfile, ControllerConstants.Account)" class="ovrd-btn btn ovrd-btn-default btn-default">@Strings.EditProfile <i class="ovrd-fa fa ovrd-fa-info-circle fa-info-circle"></i></a>
 				</div>
 			</div>
 
 			@if (Model.Invitations.Count > 0)
 			{
-				<div class="panel-body">
+				<div class="ovrd-panel-body panel-body">
 					<div class="index-details" style="padding-left: 15px">
 						<p>
 							<label>@Strings.Invitations</label>
@@ -65,13 +65,13 @@
 								{
 
 									<span class="ovrd-col-xs-4 col-xs-4 ovrd-col-xs-3 col-xs-3 col pull-right" style="margin-top:15px;">
-										<input type="submit" value="@Strings.Accept" class="btn btn-primary ovrd-col-xs-12 col-xs-12 col" />
+										<input type="submit" value="@Strings.Accept" class="ovrd-btn btn ovrd-btn-primary btn-primary col-xs-12" />
 									</span>
 								}
 								@using (Html.BeginForm(ActionConstants.RejectInvitation, ControllerConstants.Account, new { id = @invite.InvitationId }, FormMethod.Post))
 								{
 									<span class="ovrd-col-xs-4 col-xs-4 ovrd-col-xs-3 col-xs-3 col pull-right" style="margin-top:15px;">
-										<input type="submit" value="@Strings.Reject" class="btn btn-primary ovrd-col-xs-12 col-xs-12 col" />
+										<input type="submit" value="@Strings.Reject" class="ovrd-btn btn ovrd-btn-primary btn-primary ovrd-col-xs-12 col-xs-12 col" />
 									</span>
 								}
 							</div>
@@ -83,17 +83,19 @@
 	</div>
 </div>
 
-<div class="row">
+<div class="ovrd-row row">
 	<div class="ovrd-col-md-push-2 col-md-push-2 ovrd-col-md-8 col-md-8 col">
-		<div class="row">
-			<div class="ovrd-col-xs-12 col-xs-12 col">
-				<h1 style="float: left">@Strings.YourOrganizations</h1>
-				<a href="@Url.Action(ActionConstants.CreateOrg, ControllerConstants.Account)" class="btn btn-default" style="float: right; margin-top: 20px; margin-bottom: 15px;">@Strings.CreateOrganization</a>
+		<div class="ovrd-row row" style="margin-bottom:5px;">
+			<div class="ovrd-col-xs-6 col-xs-6 col">
+				<h1 class="pull-left" style="margin-bottom:0px; margin-top:0px;">@Strings.YourOrganizations</h1>
+			</div>
+			<div class="ovrd-col-xs-6 col-xs-6 col">
+				<a href="@Url.Action(ActionConstants.CreateOrg, ControllerConstants.Account)" class="ovrd-btn btn ovrd-btn-default btn-default pull-right">@Strings.CreateOrganization <i class="ovrd-fa fa ovrd-fa-building fa-building"></i></a>
 			</div>
 		</div>
 		@if (Model.Organizations.Count <= 0)
 		{
-			<div class="row">
+			<div class="ovrd-row row">
 				<div class="ovrd-col-xs-12 col-xs-12 col">
 					<p><i>@Strings.NoOrganizationMessage</i></p>
 					<p><i>@Strings.NoOrganizationMessage2</i></p>
@@ -104,29 +106,49 @@
 		{
 			foreach (var org in Model.Organizations)
 			{
-
 				string title = org.OrganizationName;
 				string subtitle = org.SiteUrl ?? "";
 				var OrgcityState = org.City != null && org.State != null ? org.City + ", " + org.State : org.City + org.State;
 
-				<div class="row">
+				<div class="ovrd-row row">
 					<div class="ovrd-col-md-12 col-md-12 col">
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h2 style="margin-top: 0px; margin-bottom: 0px;">
-									@title
-									@if (org.IsManageAllowed)
-									{
-										@*<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = org.OrganizationId })" title="@Strings.EditOrganization" class="pull-right text-muted">
-											<i class="fa fa-cog  fa-lg"></i>
-										</a>*@
-										<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = org.OrganizationId })" title="@Strings.EditOrganization" class="btn btn-default pull-right">
-											Manage <i class="ovrd-fa fa ovrd-fa-cog fa-cog"></i>
-										</a>
-									}
-								</h2>
+						<div class="ovrd-panel panel ovrd-panel-default panel-default">
+							<div class="ovrd-panel-heading panel-heading">
+								<div class="ovrd-row row">
+									<div class="ovrd-col-xs-9 col-xs-9 col">
+										<h2 style="margin-top:0px; margin-bottom:0px;">@title</h2>
+									</div>
+									<div class="ovrd-col-xs-3 col-xs-3 col">
+										<div class="dropdown pull-right">
+											<a class="ovrd-btn btn ovrd-btn-default btn-default dropdown-toggle" data-toggle="dropdown"><i class="ovrd-fa fa ovrd-fa-cog fa-cog"></i> @Strings.Manage <i class="ovrd-fa fa ovrd-fa-caret-down fa-caret-down"></i></a>
+											<ul class="dropdown-menu">
+												@if (org.IsReadOrgDetailsAllowed)
+												{
+													<li><a href="@Url.Action(ActionConstants.OrganizationDetails, ControllerConstants.Account, new { @id = org.OrganizationId })" title="@Strings.OrganizationDetails">@Strings.Details <i class="ovrd-fa fa ovrd-fa-info-circle fa-info-circle"></i></a></li>
+												}
+												@if (org.IsReadMembersListAllowed)
+												{
+													<li><a href="@Url.Action(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { @id = org.OrganizationId })" title="@Strings.MemberList">@Strings.Members <i class="ovrd-fa fa ovrd-fa-users fa-users"></i></a></li>
+												}
+												@if (org.IsReadPermissionsListAllowed)
+												{
+													<li><a href="@Url.Action(ActionConstants.ManageOrgPermissions, ControllerConstants.Account, new { @id = org.OrganizationId })" title="@Strings.ManagePermissions">@Strings.Permissions <i class="ovrd-fa fa ovrd-fa-lock fa-lock"></i></a></li>
+												}
+												@if (org.IsReadSubscriptionsListAllowed)
+												{
+													<li><a href="@Url.Action(ActionConstants.OrganizationSubscriptions, ControllerConstants.Account, new { @id = org.OrganizationId })" title="@Strings.Subscriptions">@Strings.Subscriptions <i class="ovrd-fa fa ovrd-fa-list fa-list"></i></a></li>
+												}
+												@if (org.IsReadBillingDetailsAllowed)
+												{
+													<li><a href="javascript:void(0);">@Strings.Billing <i class="ovrd-fa fa ovrd-fa-dollar fa-dollar"></i></a></li>
+												}
+											</ul>
+										</div>
+										@*}*@
+									</div>
+								</div>
 							</div>
-							<div class="panel-body">
+							<div class="ovrd-panel-body panel-body">
 								<div class="ovrd-col-sm-8 col-sm-8 col index-details">
 									<p>
 										<label>@Strings.PhoneNumber:</label>
@@ -159,26 +181,36 @@
 									</p>
 								</div>
 								<div class="ovrd-col-md-12 col-md-12 col" style="height: 100%; margin-top:15px; display: flex; flex-wrap: wrap; justify-content: space-around; clear: both;">
-									@foreach (var sub in org.Subscriptions)
+									@if (org.Subscriptions.Count <= 0)
 									{
-										<div class="square-box">
-											<a href="@sub.ProductGoToUrl" style="text-decoration: none">
-												<div class="panel panel-default">
-													<div class="btn default" style="text-align:center; margin:10px;">
-														<div class="center-block" text-align: center; vertical-align: middle;" style="margin-top:5px;">
-															<img src="@(Url.Content(sub.IconUrl))" alt="@sub.ProductName" />
+										<p>@Strings.NoSubscriptionMessage</p>
+										if (org.IsCreateSubscriptionAllowed)
+										{
+											<p><i>Please visit the <a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { @id = org.OrganizationId })" style="color:cornflowerblue">subscriptions page</a> to subscribe to our products.</i></p>
+										}
+									}
+									else
+									{
+										foreach (var sub in org.Subscriptions)
+										{
+											<div class="square-box">
+												<a href="@sub.ProductGoToUrl" style="text-decoration: none">
+													<div class="ovrd-panel panel ovrd-panel-default panel-default">
+														<div class="ovrd-btn btn default" style="text-align:center; margin:5px;">
+															<div class="center-block" style="text-align:center; vertical-align:middle;">
+																<img src="@(Url.Content(sub.IconUrl))" alt="@sub.ProductName" />
+															</div>
+															<h4>
+																@sub.ProductName
+															</h4>
+															<p>
+																@sub.SubscriptionName
+															</p>
 														</div>
-
-														<h3>
-															@sub.ProductName
-														</h3>
-														<p>
-															@sub.SubscriptionName
-														</p>
 													</div>
-												</div>
-											</a>
-										</div>
+												</a>
+											</div>
+										}
 									}
 								</div>
 							</div>
@@ -186,7 +218,7 @@
 					</div>
 				</div>
 
-				<div class="row">
+				<div class="ovrd-row row">
 				</div>
 												}
 											}

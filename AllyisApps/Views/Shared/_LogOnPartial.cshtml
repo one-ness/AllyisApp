@@ -9,7 +9,7 @@
 		<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)">@Model.UserName</a>
 	</li>
 	<li>
-		<a href="@Url.Action(ActionConstants.LogOff, ControllerConstants.Account)" title="@Strings.SignOut" class="navbar-btn ovrd-col-xs-push-2 col-xs-push-2 ovrd-col-xs-8 col-xs-8 ovrd-col-sm-12 col-sm-12 col" onclick="@ViewExtensions.ConfirmDialog(Strings.LogOffPrompt)" style ="padding: 5px 5px;">
+		<a href="@Url.Action(ActionConstants.LogOff, ControllerConstants.Account)" title="@Strings.SignOut" class="ovrd-navbar-btn navbar-btn ovrd-col-xs-push-2 col-xs-push-2 ovrd-col-xs-8 col-xs-8 ovrd-col-sm-12 col-sm-12 col" onclick="@ViewExtensions.ConfirmDialog(Strings.LogOffPrompt)" style ="padding: 5px 5px;">
 			@Strings.SignOut &nbsp;<i class="ovrd-fa fa ovrd-fa-sign-out fa-sign-out"></i>
 		</a>
 	</li>
