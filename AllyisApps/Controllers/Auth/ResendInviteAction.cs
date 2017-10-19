@@ -21,13 +21,13 @@ namespace AllyisApps.Controllers.Auth
 		async public Task<ActionResult> ResendInvite(int id)
 		{
 			var invite = await AppService.GetInvitationByID(id);
-			await AppService.CheckOrgAction(Services.AppService.OrgAction.AddUserToOrganization, invite.OrganizationId);
+			AppService.CheckOrgAction(Services.AppService.OrgAction.AddUserToOrganization, invite.OrganizationId);
 			User usr = await AppService.GetUserByEmail(invite.Email);
 			string url = usr != null ?
 						Url.Action(ActionConstants.Index, ControllerConstants.Account, null, protocol: Request.Url.Scheme) :
 						Url.Action(ActionConstants.Register, ControllerConstants.Account, null, protocol: Request.Url.Scheme);
 			Notifications.Add(new BootstrapAlert(String.Format(Strings.InviteResentTo, invite.Email), Variety.Success));
-			await AppService.SendInviteEmail(url, invite.Email.Trim());
+			AppService.SendInviteEmail(url, invite.Email.Trim());
 			return RedirectToAction(ActionConstants.OrganizationInvitations, ControllerConstants.Account, new { id = invite.OrganizationId });
 		}
 	}

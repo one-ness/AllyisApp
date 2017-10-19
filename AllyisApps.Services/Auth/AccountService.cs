@@ -69,9 +69,10 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="invitationId">Id of invite.</param>
 		/// <returns>Inviation info </returns>
-		public Invitation GetInvitationByID(int invitationId)
+		async public Task<Invitation> GetInvitationByID(int invitationId)
 		{
-			return InitializeInvitationInfo(DBHelper.GetInvitation(invitationId));
+			var results = InitializeInvitationInfo(await DBHelper.GetInvitation(invitationId));
+			return results;
 		}
 
 		/// <summary>
@@ -81,7 +82,7 @@ namespace AllyisApps.Services
 		{
 			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId");
 
-			Invitation inviteInfo = InitializeInvitationInfo(this.DBHelper.GetInvitation(invitationId));
+			Invitation inviteInfo = InitializeInvitationInfo(await this.DBHelper.GetInvitation(invitationId));
 			var result = (this.DBHelper.AcceptInvitation(invitationId, this.UserContext.UserId) == 1);
 			if (result)
 			{
@@ -120,9 +121,9 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="invitationId">The id of the invitation to reject.</param>
 		/// <returns>The resulting message.</returns>
-		public bool RejectInvitation(int invitationId)
+		async public Task<bool> RejectInvitation(int invitationId)
 		{
-			bool rejected = (DBHelper.RejectInvitation(invitationId) == 1);
+			bool rejected = (await DBHelper.RejectInvitation(invitationId) == 1);
 			if (rejected)
 			{
 				NotifyInviteRejectAsync(invitationId);
@@ -186,13 +187,13 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="email">The login email.</param>
 		/// <param name="password">The login password.</param>
-		public User ValidateLogin(string email, string password)
+		async public Task<User> ValidateLogin(string email, string password)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
 
 			User result = null;
-			result = InitializeUser(this.DBHelper.GetUserByEmail(email), false);
+			result = InitializeUser(await this.DBHelper.GetUserByEmail(email), false);
 
 			if (result != null)
 			{
@@ -358,11 +359,11 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="email">Email address.</param>
 		/// <returns>A UserInfo instance with the user's info.</returns>
-		public User GetUserByEmail(string email)
+		async public Task<User> GetUserByEmail(string email)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
 
-			return InitializeUser(DBHelper.GetUserByEmail(email));
+			return InitializeUser(await DBHelper.GetUserByEmail(email));
 		}
 
 		/// <summary>

@@ -24,8 +24,9 @@ namespace AllyisApps.Controllers.Auth
 		[HttpPost]
 		async public Task<ActionResult> RemoveInvitation(int id)
 		{
-			var orgId = await AppService.GetInvitationByID(id).OrganizationId;
-			await this.AppService.CheckOrgAction(AppService.OrgAction.DeleteInvitation, orgId);
+			var orgGet = await AppService.GetInvitationByID(id);
+			var orgId = orgGet.OrganizationId;
+			this.AppService.CheckOrgAction(AppService.OrgAction.DeleteInvitation, orgId);
 			var results = await AppService.RemoveInvitation(id);
 
 			if (results)

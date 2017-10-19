@@ -496,7 +496,7 @@ namespace AllyisApps.DBModel
 		/// Removes billing information for an organization.
 		/// </summary>
 		/// <param name="orgid">The id of the organization to remove the billing information for.</param>
-		public void RemoveBilling(int orgid)
+		async public void RemoveBilling(int orgid)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@orgId", orgid);
@@ -504,10 +504,11 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default -1
-				connection.Query<int>(
+				var results = await connection.QueryAsync<int>(
 				  "[Billing].[DeleteBillingInformation]",
 				  parameters,
-				  commandType: CommandType.StoredProcedure).SingleOrDefault();
+				  commandType: CommandType.StoredProcedure);
+				results.SingleOrDefault();
 			}
 		}
 
@@ -516,17 +517,18 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgid">Sets productId.</param>
 		/// <returns>List of prices.</returns>
-		public IEnumerable<int> GetSubscriptionPlanPrices(int orgid)
+		async public Task<IEnumerable<int>> GetSubscriptionPlanPrices(int orgid)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@orgId", orgid);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default empty list
-				return connection.Query<int>(
+				var results = await connection.QueryAsync<int>(
 				  "[Billing].[GetSubscriptionPlanPricesByOrg]",
 				  parameters,
 				  commandType: CommandType.StoredProcedure);
+				return results;
 			}
 		}
 

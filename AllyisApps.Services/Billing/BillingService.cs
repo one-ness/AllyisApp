@@ -176,10 +176,11 @@ namespace AllyisApps.Services
 		/// Removes billing from the current organization.
 		/// </summary>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool RemoveBilling(int orgId)
+		async public Task<bool> RemoveBilling(int orgId)
 		{
 			this.CheckOrgAction(OrgAction.EditBilling, orgId);
 			DBHelper.RemoveBilling(orgId);
+			await Task.Delay(0);
 			return true;
 		}
 
@@ -460,9 +461,9 @@ namespace AllyisApps.Services
 		/// Gets a list of non-zero subscription plan prices used by the current organization.
 		/// </summary>
 		/// <returns>List of prices, as ints.</returns>
-		public IEnumerable<int> GetSubscriptionPlanPrices(int orgId)
+		async public Task<IEnumerable<int>> GetSubscriptionPlanPrices(int orgId)
 		{
-			return DBHelper.GetSubscriptionPlanPrices(orgId);
+			return await DBHelper.GetSubscriptionPlanPrices(orgId);
 		}
 
 		/// <summary>
@@ -520,7 +521,7 @@ namespace AllyisApps.Services
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="productId">Product Id.</param>
 		/// <returns>A list of User's for users in the organization with subscriptions to the given product.</returns>
-		public IEnumerable<User> GetUsersWithSubscriptionToProductInOrganization(int orgId, int productId)
+		async public Task<IEnumerable<User>> GetUsersWithSubscriptionToProductInOrganization(int orgId, int productId)
 		{
 			if (orgId <= 0)
 			{
@@ -532,7 +533,8 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
 			}
 
-			return DBHelper.GetUsersWithSubscriptionToProductInOrganization(orgId, productId).Select(u => InitializeUser(u, false));
+			var results = await DBHelper.GetUsersWithSubscriptionToProductInOrganization(orgId, productId);
+			return results.Select(u => InitializeUser(u, false));
 		}
 
 		/// <summary>
