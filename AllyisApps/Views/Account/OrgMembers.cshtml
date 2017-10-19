@@ -3,12 +3,6 @@
 	var sb = new System.Text.StringBuilder();
 	sb.AppendFormat("{0}: {1}", Strings.Members, Model.OrganizationName);
 	ViewBag.TitleBar = sb.ToString();
-
-	sb.Clear();
-	sb.Append("Member count");
-	sb.Append(": ");
-	sb.Append(Model.Users.Count);
-	string title = sb.ToString();
 }
 
 @Html.Partial("_MembersAndInvitationsTab", Model.TabInfo)
@@ -82,8 +76,28 @@
 		   class="btn btn-default pull-left" title="@Strings.Back"><i class="fa fa-caret-left"></i>&nbsp;@Strings.Back</a>
 		@if (Model.CanDeleteUser)
 		{
-			<a href="@Url.Action(ActionConstants.RemoveMember, ControllerConstants.Account)"
-			   class="btn btn-danger pull-right" title="@Strings.Back">@Strings.RemoveMember</a>
+			using (Html.BeginForm(ActionConstants.RemoveMember, ControllerConstants.Account, new { @id = Model.OrganizationId }, FormMethod.Post, new { onsubmit="return getUserIdsAndSubmit();" }))
+			{
+				@Html.AntiForgeryToken();
+				<input type="hidden" id="txtCsvUserIds" />
+				<button type="submit" class="btn btn-danger pull-right" title="@Strings.Back">@Strings.Delete</button>
+				<script type="text/javascript">
+					function getUserIdsAndSubmit() {
+						var csvIds = "";
+
+						// gather all the ids to delete as a csv
+
+						if (csvIds == "") {
+							alert("You have not chosen a user to delete");
+							return false;
+						}
+
+						// submit the form
+
+						return false; // for now, delete this line later
+					}
+				</script>
+			}
 		}
 	</div>
 </div>
