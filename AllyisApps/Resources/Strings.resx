@@ -120,7 +120,7 @@
   <data name="ActionUnauthorizedMessage" xml:space="preserve">
     <value>You are not authorized to perform this action.</value>
   </data>
-  <data name="Billing" xml:space="preserve">
+  <data name="BillingAccepted" xml:space="preserve">
     <value>Billing information accepted.</value>
   </data>
   <data name="BillingRemoved" xml:space="preserve">
@@ -184,7 +184,7 @@
     <value>No users were selected.</value>
   </data>
   <data name="OrganizationCreatedNotification" xml:space="preserve">
-    <value>You have successfully created the organization</value>
+    <value>Your organization has been created successfully! Please choose a subscription.</value>
   </data>
   <data name="OrganizationDeleteNotification" xml:space="preserve">
     <value>has been deleted successfully.</value>
@@ -996,7 +996,7 @@
   <data name="PClasses" xml:space="preserve">
     <value>Pay Classes</value>
   </data>
-  <data name="Permissions" xml:space="preserve">
+  <data name="EditPermissions" xml:space="preserve">
     <value>Edit Permissions</value>
   </data>
   <data name="PhoneFormatValidation" xml:space="preserve">
@@ -1526,7 +1526,7 @@
     <value>Title</value>
   </data>
   <data name="RegistationSucessful" xml:space="preserve">
-    <value>Registation is successful Please verify email address.</value>
+    <value>You have registered successfully! Please verify your email address by clicking on the link sent to you.</value>
   </data>
   <data name="YouMustRegisterYourEmailAddress" xml:space="preserve">
     <value>You must verify your email address. Please click on the verification link sent to you in the email.</value>
@@ -1560,5 +1560,17 @@
   </data>
   <data name="SuperUser" xml:space="preserve">
     <value>Super User</value>
+  </data>
+  <data name="Manage" xml:space="preserve">
+    <value>Manage</value>
+  </data>
+  <data name="Billing" xml:space="preserve">
+    <value>Billing</value>
+  </data>
+  <data name="Permissions" xml:space="preserve">
+    <value>Permissions</value>
+  </data>
+  <data name="NoSubscriptionMessage" xml:space="preserve">
+    <value>You are not part of a subscription yet. Please contact your employer to add you to a subscription.</value>
   </data>
 </root>

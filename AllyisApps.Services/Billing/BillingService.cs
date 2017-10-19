@@ -14,6 +14,8 @@ using AllyisApps.Lib;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
+using System.Threading.Tasks;
+using AllyisApps.Services.Cache;
 
 namespace AllyisApps.Services
 {
@@ -93,20 +95,6 @@ namespace AllyisApps.Services
 				this.AddBillingHistory(string.Format("Updating {0} customer data", serviceType), null, orgId);
 			}
 		}
-
-		///// <summary>
-		///// Deletes a billing services subscription.
-		///// </summary>
-		///// <param name="id">The customer id associated with the subscription to be deleted.</param>
-		///// <param name="subscriptionId">The id of the subscription to delete.</param>
-		//[CLSCompliant(false)]
-		// public void DeleteSubscription(BillingServicesCustomerId id, string subscriptionId)
-		//{
-		//	string serviceType = "Stripe";
-		//	BillingServicesHandler handler = new BillingServicesHandler(serviceType);
-
-		//	// TODO complete this
-		//}
 
 		/// <summary>
 		/// Deletes a subscription plan for the current organization with the given stripe customer id, if one exists.
@@ -391,7 +379,7 @@ namespace AllyisApps.Services
 			return new Product
 			{
 				ProductId = (ProductIdEnum)product.ProductId,
-				ProductName = product.Name,
+				ProductName = product.ProductName,
 				ProductDescription = product.Description,
 				AreaUrl = product.AreaUrl
 			};
@@ -404,29 +392,35 @@ namespace AllyisApps.Services
 		/// <returns>A SubscriptionDBEntity.</returns>
 		public Subscription GetSubscription(int subscriptionId)
 		{
-			if (subscriptionId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("subscriptionId", "Subscription Id cannot be 0 or negative.");
-			}
+			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException("subscriptionId");
 
-			SubscriptionDBEntity si = DBHelper.GetSubscriptionDetailsById(subscriptionId);
-			if (si == null)
-			{
-				return null;
-			}
+			int orgId = 0;
+			this.CheckSubscriptionAction(OrgAction.ReadSubscription, subscriptionId, out orgId);
 
-			return new Subscription
-			{
-				OrganizationId = si.OrganizationId,
-				SubscriptionId = si.SubscriptionId,
-				SkuId = (SkuIdEnum)si.SkuId,
-				NumberOfUsers = si.NumberOfUsers,
-				Licenses = si.Licenses,
-				CreatedUtc = si.CreatedUtc,
-				IsActive = si.IsActive,
-				SubscriptionName = si.Name,
-				ProductId = (ProductIdEnum)si.ProductId
-			};
+			// get from db
+			var sub = this.DBHelper.GetSubscriptionDetailsById(subscriptionId);
+			if (sub == null) throw new InvalidOperationException("subscriptionId");
+
+			// copy to subscription
+			var result = new Subscription();
+			result.ProductAreaUrl = sub.ArealUrl;
+			result.SkuIconUrl = sub.IconUrl;
+			result.IsActive = sub.IsActive;
+			result.NumberOfUsers = sub.NumberOfUsers;
+			result.OrganizationId = sub.OrganizationId;
+			result.ProductDescription = sub.ProductDescription;
+			result.ProductId = (ProductIdEnum)sub.ProductId;
+			result.ProductName = sub.ProductName;
+			result.PromoExpirationDateUtc = sub.PromoExpirationDateUtc;
+			result.SkuDescription = sub.SkuDescription;
+			result.SkuId = (SkuIdEnum)sub.SkuId;
+			result.SkuName = sub.SkuName;
+			result.SubscriptionCreatedUtc = sub.SubscriptionCreatedUtc;
+			result.SubscriptionId = subscriptionId;
+			result.SubscriptionName = sub.SubscriptionName;
+
+			// return sub
+			return result;
 		}
 
 		public List<SubscriptionUser> GetSubscriptionUsers(int subscriptionId)
@@ -440,7 +434,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="subscriptionId"></param>
 		/// <returns></returns>
-		public string getSubscriptionName(int subscriptionId)
+		public string GetSubscriptionName(int subscriptionId)
 		{
 			return DBHelper.GetSubscriptionName(subscriptionId);
 		}
@@ -500,6 +494,24 @@ namespace AllyisApps.Services
 			handler.DeleteSubscription(customerId, subscriptionId);
 			// DBHelper.DeleteSubscriptionPlan(subscriptionId);
 			DBHelper.DeleteSubscriptionPlanAndAddHistory(orgId, customerId.Id, UserContext.UserId, skuId, "Switching to free subscription, canceling stripe susbcription");
+		}
+
+		/// <summary>
+		/// delete the given subscription
+		/// </summary>
+		public int DeleteSubscription(int subscriptionId)
+		{
+			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException("subscriptionId");
+
+			// TODO: after deleting (setting isactive = 0) subscription:
+			/*
+			 * - bill for the last partial month
+			 * - stop future billing
+			 */
+			var sub = this.GetSubscription(subscriptionId);
+			this.CheckOrgAction(OrgAction.DeleteSubscritpion, sub.OrganizationId);
+			this.DBHelper.DeleteSubscription(subscriptionId);
+			return sub.OrganizationId;
 		}
 
 		/// <summary>
@@ -582,7 +594,7 @@ namespace AllyisApps.Services
 				SkuId = (SkuIdEnum)sku.SkuId,
 				ProductId = (ProductIdEnum)sku.ProductId,
 				SkuName = sku.SkuName,
-				Price = sku.Price,
+				Price = sku.CostPerBlock,
 				UserLimit = sku.UserLimit,
 				BillingFrequency = (BillingFrequencyEnum)sku.BillingFrequency,
 				Description = sku.Description,
@@ -624,36 +636,106 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Subscribes the current organization to a product or updates the organization's subscription to the product,
-		/// and creates/updates/removes the billing subscription plan accordingly.
+		/// Subscribes the current organization to a product or updates the organization's subscription to the product.
 		/// </summary>
-		/// <param name="productId">Product id.</param>
-		/// <param name="productName">Product name.</param>
-		/// <param name="selectedSku">Selected sku id.</param>
-		/// <param name="subscriptionName">Subscription Name.</param>
-		/// <param name="billingAmount">Billing amount, as an int in cents.</param>
-		/// <param name="existingToken">The existing BillingServicesToken, if any.</param>
-		/// <param name="addingBillingCustomer">A value indicating whether a new billing customer is being added.</param>
-		/// <param name="newBillingEmail">The email for the new billing customer, if being added.</param>
-		/// <param name="newBillingToken">The new BillingServicesToken, if being added.</param>
-		/// <param name="orgId">.</param>
-		/// <returns>.</returns>
-		[CLSCompliant(false)]
-		public void Subscribe(ProductIdEnum productId, string productName, SkuIdEnum selectedSku, string subscriptionName, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
+		public async Task Subscribe(int organizationId, SkuIdEnum skuId, string subscriptionName)
 		{
-			// TODO: Split Subscribe into CreateSubscription and Update Subscription, called from SubscribeAction and EditSubscriptionAction
+			if (organizationId <= 0) throw new ArgumentOutOfRangeException();
+			if (string.IsNullOrWhiteSpace(subscriptionName)) throw new ArgumentNullException();
 
-			// This method is related to billing, which is not supported
-			// CreateAndUpdateAndDeleteSubscriptionPlan(productId, productName, selectedSku, previousSku, billingAmount, existingToken, addingBillingCustomer, newBillingEmail, newBillingToken, orgId);
+			// get all subscriptions of the given organization
+			var collection = await this.GetSubscriptionsAsync(organizationId);
+			foreach (var item in collection)
+			{
+				// is it an existing sku?
+				if (item.SkuId == skuId)
+				{
+					// yes, already subscribed
+					return;
+				}
+				else
+				{
+					// no, get the product of this subscription
+					var pid = item.ProductId;
+					Product product = null;
+					if (!CacheContainer.ProductsCache.TryGetValue(pid, out product) || !product.IsActive)
+					{
+						// inactive or invalid product
+						throw new InvalidOperationException("You selected an invalid product to subscribe to.");
+					}
 
-			InitializeSettingsForProduct(productId, orgId);
+					// is it a sku of this product?
+					List<Sku> skus = null;
+					if (CacheContainer.SkusCache.TryGetValue(pid, out skus))
+					{
+						var sku = skus.Where(x => x.IsActive && x.SkuId == skuId).FirstOrDefault();
+						if (sku != null)
+						{
+							// yes, user is subscribing to another sku of an existing subscription (i.e., product)
+							this.UpdateSubscriptionSkuAndName(organizationId, item.SubscriptionId, subscriptionName, skuId);
+							return;
+						}
+					}
+				}
+			}
 
-			DBHelper.CreateSubscription(orgId, (int)selectedSku, subscriptionName, UserContext.UserId);
+			// reached here indicates user is subscribing to a new product with a new sku
+			var selectedSku = CacheContainer.AllSkusCache.Where(x => x.IsActive && x.SkuId == skuId).FirstOrDefault();
+			if (selectedSku == null)
+			{
+				// inactive or invalid sku id
+				throw new InvalidOperationException("You selected an invalid sku to subscribe to.");
+			}
+
+			// get product for the sku
+			Product selectedProduct = null;
+			if (!CacheContainer.ProductsCache.TryGetValue(selectedSku.ProductId, out selectedProduct) || !selectedProduct.IsActive)
+			{
+				// inactive or invalid product
+				throw new InvalidOperationException("You selected an invalid product to subscribe to.");
+			}
+
+			// set the creating user as highest level
+			int productRoleId = 0;
+			switch(selectedSku.ProductId)
+			{
+				case ProductIdEnum.ExpenseTracker:
+					productRoleId = (int)ExpenseTrackerRole.SuperUser;
+					break;
+
+				case ProductIdEnum.StaffingManager:
+					productRoleId = (int)StaffingManagerRole.Manager;
+					break;
+
+				case ProductIdEnum.TimeTracker:
+					productRoleId = (int)TimeTrackerRole.Manager;
+					break;
+
+				default:
+					// inactive or invalid product
+					throw new InvalidOperationException("You selected an invalid product to subscribe to.");
+			}
+
+			this.InitializeSettingsForProduct(selectedSku.ProductId, organizationId);
+
+			// create new subscription
+			this.DBHelper.CreateSubscription(organizationId, (int)skuId, subscriptionName, this.UserContext.UserId, productRoleId);
 		}
 
-		public void UpdateSubscription(int orgId, int skuId, int subscriptionId, string subscriptionname)
+		public void UpdateSubscriptionName(int subscriptionId, string subscriptionName)
 		{
-			DBHelper.UpdateSubscription(orgId, skuId, subscriptionId, subscriptionname);
+			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException("subscriptionId");
+			if (string.IsNullOrWhiteSpace(subscriptionName)) throw new ArgumentNullException("subscriptionName");
+
+			var sub = this.GetSubscription(subscriptionId);
+			this.CheckOrgAction(OrgAction.EditSubscription, sub.OrganizationId);
+			this.DBHelper.UpdateSubscriptionName(subscriptionId, subscriptionName);
+		}
+
+		private void UpdateSubscriptionSkuAndName(int organizationId, int subscriptionId, string subscriptionName, SkuIdEnum skuId)
+		{
+			this.CheckOrgAction(OrgAction.EditSubscription, organizationId);
+			this.DBHelper.UpdateSubscriptionSkuAndName(subscriptionId, subscriptionName, (int)skuId);
 		}
 
 		public void CreateAndUpdateAndDeleteSubscriptionPlan(int productId, string productName, int selectedSku, int previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
@@ -827,7 +909,7 @@ namespace AllyisApps.Services
 			}
 			var spResults = DBHelper.GetProductSubscriptionInfo(orgId, (int)skuId);
 			var product = InitializeProduct(spResults.Item1);
-			product.ProductSkus = spResults.Item3.Select(sdb => InitializeSkuInfo(sdb)).ToList();
+			//product.Skus = spResults.Item3.Select(sdb => InitializeSkuInfo(sdb)).ToList();
 
 			var subscription = InitializeSubscription(spResults.Item2);
 			if (subscription != null)
@@ -848,26 +930,17 @@ namespace AllyisApps.Services
 		/// </summary>
 		public List<Product> GetAllActiveProductsAndSkus()
 		{
-			var spResults = DBHelper.GetAllActiveProductsAndSkus();
-			var products = spResults.Item1.Select(pdb => InitializeProduct(pdb)).ToList();
+			// get only active products and with sku products
+			var result = CacheContainer.ProductsCache.Values.Where(x => x.IsActive && x.Skus.Count > 0).ToList();
 
-			foreach (Product prod in products)
+			// reduce to show products
+			foreach (var item in result)
 			{
-				prod.ProductSkus = new List<SkuInfo>();
+				// reduce the skus list to only active skus
+				item.Skus = item.Skus.Where(x => x.IsActive).ToList();
 			}
 
-			foreach (SkuInfo sku in spResults.Item2.Select(sk => InitializeSkuInfo(sk)))
-			{
-				foreach (Product prod in products)
-				{
-					if (sku.ProductId == prod.ProductId)
-					{
-						prod.ProductSkus.Add(sku);
-						break;
-					}
-				}
-			}
-			return products;
+			return result;
 		}
 
 		#region Info-DBEntity Conversions
@@ -886,19 +959,16 @@ namespace AllyisApps.Services
 
 			return new Subscription
 			{
-				AreaUrl = subscriptionDisplay.AreaUrl,
-				CreatedUtc = subscriptionDisplay.CreatedUtc,
+				ProductAreaUrl = subscriptionDisplay.AreaUrl,
+				SubscriptionCreatedUtc = subscriptionDisplay.CreatedUtc,
 				NumberOfUsers = subscriptionDisplay.NumberOfUsers,
 				OrganizationId = subscriptionDisplay.OrganizationId,
-				OrganizationName = subscriptionDisplay.OrganizationName,
-				Description = subscriptionDisplay.Description,
 				ProductId = (ProductIdEnum)subscriptionDisplay.ProductId,
 				ProductName = subscriptionDisplay.ProductName,
 				SkuId = (SkuIdEnum)subscriptionDisplay.SkuId,
 				SkuName = subscriptionDisplay.SkuName,
 				SubscriptionId = subscriptionDisplay.SubscriptionId,
 				SubscriptionName = subscriptionDisplay.SubscriptionName,
-				Tier = subscriptionDisplay.Tier
 			};
 		}
 
@@ -916,10 +986,9 @@ namespace AllyisApps.Services
 
 			return new Subscription
 			{
-				CreatedUtc = subscription.CreatedUtc,
+				SubscriptionCreatedUtc = subscription.SubscriptionCreatedUtc,
 				IsActive = subscription.IsActive,
-				Licenses = subscription.Licenses,
-				SubscriptionName = subscription.Name,
+				SubscriptionName = subscription.SubscriptionName,
 				NumberOfUsers = subscription.NumberOfUsers,
 				OrganizationId = subscription.OrganizationId,
 				SkuId = (SkuIdEnum)subscription.SkuId,
@@ -943,10 +1012,9 @@ namespace AllyisApps.Services
 			{
 				BillingFrequency = (BillingFrequencyEnum)sku.BillingFrequency,
 				SkuName = sku.SkuName,
-				Price = sku.Price,
+				Price = sku.CostPerBlock,
 				ProductId = (ProductIdEnum)sku.ProductId,
 				SkuId = (SkuIdEnum)sku.SkuId,
-				SubscriptionId = sku.SubscriptionId,
 				UserLimit = sku.UserLimit,
 				Description = sku.Description,
 				IconUrl = sku.IconUrl

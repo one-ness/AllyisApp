@@ -27,15 +27,15 @@
 </head>
 <body id="@DisplayHints.PageBodyId" class="@DisplayHints.PageBodyClasses">
     <div class="container slim" id="body-container">
-        <div class="row" id="header-row">
+        <div class="ovrd-row row" id="header-row">
             <div class="col" id="header-col">
                 @Html.Partial("_Header")
             </div>
         </div>
-        <div class="row xs-row-padding" id="main-row">
+        <div class="ovrd-row row xs-row-padding" id="main-row">
             <div class="col" id="main-col">
                 @Html.Partial("_NotificationPartial")
-                        <div class="row" id="title-row">
+                        <div class="ovrd-row row" id="title-row">
                             @if (!string.IsNullOrWhiteSpace(ViewBag.Title))
                                 {<h1 class="text-center">@ViewBag.Title</h1>}
                             @if (!string.IsNullOrWhiteSpace(ViewBag.Subtitle))
@@ -46,7 +46,7 @@
                         @RenderBody()
             </div>
         </div>
-        <div class="row" id="footer-row">
+        <div class="ovrd-row row" id="footer-row">
             <div class="col" id="footer-col">
                 @Html.Action(ActionConstants.FooterPartial, ControllerConstants.Shared, new { area = "" })
             </div>

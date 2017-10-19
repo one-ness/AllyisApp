@@ -19,6 +19,7 @@ using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Lookup;
 using Newtonsoft.Json.Linq;
+using AllyisApps.Services.Cache;
 
 namespace AllyisApps.Services
 {
@@ -31,17 +32,17 @@ namespace AllyisApps.Services
 		/// Gets the list of valid countries.
 		/// </summary>
 		/// <returns>A collection of valid countries.</returns>
-		public Dictionary<string, string> GetCountries()
+		public Dictionary<string, Country> GetCountries()
 		{
-			return DBHelper.GetCountries();
+			return CacheContainer.CountriesCache;
 		}
 
 		/// <summary>
 		/// get the list of states for the given country
 		/// </summary>
-		public Dictionary<int, string> GetStates(string countryCode)
+		public List<State> GetStates(string countryCode)
 		{
-			return this.DBHelper.GetStates(countryCode);
+			return CacheContainer.StatesCache[countryCode];
 		}
 
 		public bool DeleteExpenseItem(int itemId)
@@ -53,13 +54,9 @@ namespace AllyisApps.Services
 		/// Gets the list of valid languages selections.
 		/// </summary>
 		/// <returns>A list of languages.</returns>
-		public IEnumerable<Language> ValidLanguages()
+		public List<Language> ValidLanguages()
 		{
-			return DBHelper.ValidLanguages().Select(s => new Language
-			{
-				LanguageName = s.LanguageName,
-				CultureName = s.CultureName
-			});
+			return CacheContainer.LanguagesCache.Values.ToList();
 		}
 
 		/// <summary>
@@ -80,36 +77,38 @@ namespace AllyisApps.Services
 			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId");
 
 			Invitation inviteInfo = InitializeInvitationInfo(this.DBHelper.GetInvitation(invitationId));
-
-			JObject roleString = JObject.Parse(inviteInfo.RoleJson);
-
-			var ttRole = roleString[((int)SkuIdEnum.TimeTrackerBasic).ToString()].Value<int>();
-			var etRole = roleString[((int)SkuIdEnum.ExpenseTrackerBasic).ToString()].Value<int>();
-			var smRole = roleString[((int)SkuIdEnum.StaffingManagerBasic).ToString()].Value<int>();
-
 			var result = (this.DBHelper.AcceptInvitation(invitationId, this.UserContext.UserId) == 1);
-			if (ttRole > 0)
-			{
-				var result2 = (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, ttRole, (int)ProductIdEnum.TimeTracker));
-			}
-
-			if (etRole > 0)
-			{
-				var prodId = GetProductSubscriptionInfo(inviteInfo.OrganizationId, SkuIdEnum.ExpenseTrackerBasic).Product.ProductId;
-				var result3 = (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, etRole, (int)ProductIdEnum.ExpenseTracker));
-			}
-
-			if (smRole > 0)
-			{
-				var prodId = GetProductSubscriptionInfo(inviteInfo.OrganizationId, SkuIdEnum.StaffingManagerBasic).Product.ProductId;
-				var result4 = (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, smRole, (int)ProductIdEnum.StaffingManager));
-			}
-
 			if (result)
 			{
+				if (inviteInfo.ProductRolesJson != null)
+				{
+					JObject roleString = JObject.Parse(inviteInfo.ProductRolesJson);
+
+					var ttRole = roleString[((int)SkuIdEnum.TimeTrackerBasic).ToString()].Value<int>();
+					var etRole = roleString[((int)SkuIdEnum.ExpenseTrackerBasic).ToString()].Value<int>();
+					var smRole = roleString[((int)SkuIdEnum.StaffingManagerBasic).ToString()].Value<int>();
+
+
+					if (ttRole > 0)
+					{
+						var result2 = (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, ttRole, (int)ProductIdEnum.TimeTracker));
+					}
+
+					if (etRole > 0)
+					{
+						var prodId = GetProductSubscriptionInfo(inviteInfo.OrganizationId, SkuIdEnum.ExpenseTrackerBasic).Product.ProductId;
+						var result3 = (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, etRole, (int)ProductIdEnum.ExpenseTracker));
+					}
+
+					if (smRole > 0)
+					{
+						var prodId = GetProductSubscriptionInfo(inviteInfo.OrganizationId, SkuIdEnum.StaffingManagerBasic).Product.ProductId;
+						var result4 = (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, smRole, (int)ProductIdEnum.StaffingManager));
+					}
+
+				}
 				NotifyInviteAcceptAsync(invitationId);
 			}
-
 			return result;
 		}
 
@@ -292,7 +291,7 @@ namespace AllyisApps.Services
 			userInfo.Subscriptions = Subscriptions.Select(sub =>
 				new UserSubscription()
 				{
-					AreaUrl = sub.AreaUrl,
+					ProductAreaUrl = sub.AreaUrl,
 					OrganizationId = sub.OrganizationId,
 					ProductId = (ProductIdEnum)sub.ProductId,
 					ProductName = sub.ProductName,
@@ -305,7 +304,7 @@ namespace AllyisApps.Services
 						ProductId = (ProductIdEnum)sub.ProductId
 					},
 					UserId = userId,
-					IconUrl = sub.IconUrl
+					SkuIconUrl = sub.IconUrl
 				}
 			).ToList();
 
@@ -330,8 +329,6 @@ namespace AllyisApps.Services
 						LastName = inv.LastName,
 						InvitationId = inv.InvitationId,
 						OrganizationId = inv.OrganizationId,
-						OrganizationRole = (OrganizationRole)inv.OrganizationRoleId,
-						OrganizationName = inv.OrganizationName
 					}
 				).ToList();
 			return userInfo;
@@ -552,8 +549,7 @@ namespace AllyisApps.Services
 				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
 				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
 				UserId = user.UserId,
-				Address = address,
-				MaxAmount = user.MaxAmount
+				Address = address
 			};
 		}
 
@@ -611,7 +607,6 @@ namespace AllyisApps.Services
 			OrganizationUserDBEntity entity = new OrganizationUserDBEntity()
 			{
 				UserId = userInfo.UserId,
-				MaxAmount = userInfo.MaxAmount,
 				OrganizationId = userInfo.OrganizationId
 			};
 			DBHelper.UpdateUserMaxAmount(entity);
@@ -656,5 +651,29 @@ namespace AllyisApps.Services
 
 			return new string(idchars);
 		}
+
+		/// <summary>
+		/// get the list of roles for the given product, for the given organization
+		/// </summary>
+		public async Task<List<ProductRole>> GetProductRolesAsync(int orgId, ProductIdEnum pid)
+		{
+			// NOTE: orgid is ignored for now
+			if ((int)pid < 0) throw new ArgumentOutOfRangeException("pid");
+
+			var collection = await this.DBHelper.GetProductRolesAsync(orgId, (int)pid);
+			var result = new List<ProductRole>();
+			foreach (var item in collection)
+			{
+				var role = new ProductRole();
+				role.OrganizationId = orgId;
+				role.ProductId = (ProductIdEnum)item.ProductId;
+				role.ProductRoleId = item.ProductRoleId;
+				role.ProductRoleName = item.ProductRoleName;
+				result.Add(role);
+			}
+
+			return result;
+		}
+
 	}
 }

@@ -1,65 +1,42 @@
-﻿@model AllyisApps.ViewModels.Auth.ProductSubscriptionViewModel
+﻿@model SubscribeViewModel
 
 @{
-	Layout = "~/Views/Shared/_Layout.cshtml";
 	ViewBag.Title = Strings.Subscribe;
-	ViewBag.Description = Model.ProductDescription;
+	string saveTitle = Strings.Save;
+	if (Model.IsChanging)
+	{
+		saveTitle = Strings.ChangeSubscription;
+	}
 }
 
-@*TODO: Currently mentions of pricing are commented out. When pricing is properly implemented, restore these mentions.
-	Also remove the damn hardcoded "free users" numbers.*@
-<div class="shrink-wrap-center">
-	<div class="min300">
-		@using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, FormMethod.Post, new { @class = "ovrd-form-inline form-inline" }))
-		{
-			@Html.AntiForgeryToken()
-			@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
-
-			@Html.HiddenFor(m => m.OrganizationId)
-			@Html.HiddenFor(m => m.ProductId)
-			@Html.HiddenFor(m => m.ProductName)
-			@Html.HiddenFor(m => m.SelectedSku)
-			@Html.HiddenFor(m => m.SelectedSkuName)
-			@Html.HiddenFor(m => m.PreviousSku)
-			@Html.HiddenFor(m => m.Token)
-			@Html.HiddenFor(m => m.Billing)
-			@Html.Hidden("currentUserCount", (int)Model.CurrentUsers)
-
-			<p id="notice" style="color:red"></p>
-			<div class="ovrd-row row">
-				<div class="ovrd-col-md-6 col-md-6 ovrd-col-md-push-3 col-md-push-3 col">
-					<div class="ovrd-panel panel ovrd-panel-default panel-default" style="min-width:350px;">
-						<div class="ovrd-panel-heading panel-heading">
-							<h3 style="margin-top: 0; margin-bottom: 0; text-align: center;">
-								@Html.DisplayTextFor(m => m.SelectedSkuName)
-							</h3>
-						</div>
-						<div class="ovrd-panel-body panel-body">
-							<div class="ovrd-form-group form-group">
-								<p>@Html.DisplayTextFor(m => m.SelectedSkuDescription)</p>
-								@Html.ReqLabelFor(m => m.SubscriptionName, "Subscription Name")
-								@Html.TextBoxFor(m => m.SubscriptionName, new { @class = "ovrd-form-control form-control", @placeholder = Model.SubscriptionNameToDisplayForSubscribing() })
-								@Html.ValidationMessageFor(m => m.SubscriptionName)
-							</div>
-						</div>
-						<div class="ovrd-panel-footer panel-footer">
-							<div class="pull-right">
-								<a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { organizationId = Model.OrganizationId })" class="ovrd-btn btn ovrd-btn-default btn-default"> @Strings.Cancel </a>
-								<input type="submit" class="ovrd-btn btn ovrd-btn-primary btn-primary" value=@Strings.Save>
-							</div>
-							<div class="clearfix"></div>
-						</div>
-					</div>
-				</div>
+<div class="ovrd-row row">
+	<div class="ovrd-col-md-6 col-md-6 ovrd-col-md-push-3 col-md-push-3 col">
+		<div class="ovrd-col-md-12 col-md-12 col text-center">
+			<img src="~/@Model.SkuIconUrl" alt="@Model.ProductName" style="margin-right:5px;" />
+			<h2 style="display:inline-block;">
+				@Model.ProductName
+			</h2>
+		</div>
+		<div class="ovrd-col-md-10 col-md-10 ovrd-col-md-push-1 col-md-push-1 col" style="margin-top:20px;">
+			<div class="ovrd-col-md-12 col-md-12 col">
+				@Model.SkuDescription
 			</div>
-		}
+
+			<div>
+				@using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, null, FormMethod.Post, new { @class = "ovrd-col-md-12 col-md-12 col", @style = "margin-top:20px;display: inline-block" })) // , @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw(String.Format(Strings.WarningWhenUnsubscribing, Model.Name))) TODO: make this only fire on unsubscribe action.
+				{
+					@Html.HiddenFor(m => m.OrganizationId)
+					@Html.HiddenFor(m => m.SkuId)
+					@Html.ReqLabelFor(m => m.SubscriptionName, Strings.SubscriptionName)
+					@Html.TextBoxFor(m => m.SubscriptionName, new { @class = "ovrd-form-control form-control margined" })
+					@Html.AntiForgeryToken()
+					<div class="pull-right" , style="margin-top:50px;">
+						<a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { id = Model.OrganizationId })" class="ovrd-btn btn ovrd-btn-default btn-default"> @Strings.Cancel </a>
+						<input type="submit" value="@saveTitle" class="ovrd-btn btn ovrd-btn-primary btn-primary" id="save" />
+					</div>
+
+				}
+			</div>
+		</div>
 	</div>
 </div>
-@section Scripts {
-	<script type="text/javascript">
-		var model_previousSku = @Model.PreviousSku;
-		var warningWhenSwitchingToFreeSubscription = "@Html.Raw(Strings.WarningWhenSwitchingToFreeSubscription)";
-		var cannotReduceUserCount = "@Html.Raw(Strings.CannotReduceUserCount)";
-	</script>
-	@Scripts.Render("~/bundles/AccountSubscribe");
-}

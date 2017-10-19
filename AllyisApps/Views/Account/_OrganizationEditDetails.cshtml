@@ -84,13 +84,13 @@
 			<div class="ovrd-form-group form-group allyis-action-buttons">
 				@if (Model.IsCreating)
 				{
-					<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account, null)" new { class="ovrd-btn btn ovrd-btn-default btn-default" }>
+					<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)" new { class="ovrd-btn btn ovrd-btn-default btn-default" }>
 						@Strings.Cancel
 					</a>
 				}
 				else
 				{
-					<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId })" new { class="ovrd-btn btn ovrd-btn-default btn-default" }>
+					<a href="@Url.Action(ActionConstants.OrganizationDetails, ControllerConstants.Account, new { id = Model.OrganizationId })" new { class="ovrd-btn btn ovrd-btn-default btn-default" }>
 						@Strings.Cancel
 					</a>
 				}
@@ -98,12 +98,4 @@
 			</div>
 		}
 	</div>
-	@if (Model != null && Model.CanDelete)
-	{
-		using (Html.BeginForm(ActionConstants.DeleteOrg, ControllerConstants.Account, new { id = Model.OrganizationId }, FormMethod.Post, new { @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw(Strings.ConfirmDeleteOrg)) }))
-		{
-			@Html.AntiForgeryToken()
-			<input type="submit" value="@Strings.DeleteOrganization" class="ovrd-btn ovrd-btn-danger btn-danger" style="margin-bottom: 15px;" id="submitDelete" />
-		}
-	}
 </div>

@@ -61,17 +61,13 @@ namespace AllyisApps.ViewModels.Auth
 		public string FaxNumber { get; set; }
 
 		/// <summary>
-		/// side bar view model
+		/// is edit allowed?
 		/// </summary>
-		public ManageOrgSideBarViewModel SideBarViewModel { get; set; }
+		public bool CanEditOrganization { get; set; }
 
 		/// <summary>
-		/// constructor
+		/// is delete allowed?
 		/// </summary>
-		public OrganizationDetailsViewModel()
-		{
-			this.SideBarViewModel = new ManageOrgSideBarViewModel();
-			this.SideBarViewModel.DetailsActive = "active";
-		}
+		public bool CanDeleteOrganization { get; set; }
 	}
 }

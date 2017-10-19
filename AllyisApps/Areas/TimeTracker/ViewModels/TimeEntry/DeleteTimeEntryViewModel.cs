@@ -32,16 +32,6 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		}
 
 		/// <summary>
-		/// Gets or sets the starting date of the date range.
-		/// </summary>
-		public DateTime StartingDate { get; set; }
-
-		/// <summary>
-		/// Gets or sets the ending date of the date range.
-		/// </summary>
-		public DateTime EndingDate { get; set; }
-
-		/// <summary>
 		/// Gets or sets the id of the time entry.
 		/// </summary>
 		public int TimeEntryId { get; set; }

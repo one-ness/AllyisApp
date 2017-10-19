@@ -25,6 +25,7 @@
     <DocumentationFile>bin\Debug\AllyisApps.Services.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
     <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>AllyisApps.Services1.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -37,6 +38,7 @@
     <DocumentationFile>bin\Release\AllyisApps.Services.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
     <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>AllyisApps.Services1.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Dapper, Version=1.50.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -91,8 +93,11 @@
     <Compile Include="Billing\BillingHistoryItemInfo.cs" />
     <Compile Include="Billing\BillingService.cs" />
     <Compile Include="Billing\BlockBasedOnEnum.cs" />
+    <Compile Include="Billing\Sku.cs" />
     <Compile Include="Billing\Subscription.cs" />
+    <Compile Include="Billing\UnitTypeEnum.cs" />
     <Compile Include="Billing\UpdateSubscriptionUserRolesResuts.cs" />
+    <Compile Include="Cache\CacheContainer.cs" />
     <Compile Include="Expense\ExpenseHistory.cs" />
     <Compile Include="Expense\ExpenseFile.cs" />
     <Compile Include="Expense\ExpenseItem.cs" />
@@ -102,6 +107,8 @@
     <Compile Include="Finance\FinanceService.cs" />
     <Compile Include="Lookup\Address.cs" />
     <Compile Include="Lookup\AddressService.cs" />
+    <Compile Include="Lookup\Country.cs" />
+    <Compile Include="Lookup\State.cs" />
     <Compile Include="Project\PjmService.cs" />
     <Compile Include="Project\Project.cs" />
     <Compile Include="ServiceConstants.cs" />
@@ -124,7 +131,7 @@
     <Compile Include="Lookup\Tag.cs" />
     <Compile Include="TimeTracker\Holiday.cs" />
     <Compile Include="Auth\Invitation.cs" />
-    <Compile Include="Auth\Language.cs" />
+    <Compile Include="Lookup\Language.cs" />
     <Compile Include="TimeTracker\LockDatePeriodEnum.cs" />
     <Compile Include="TimeTracker\PayClass.cs" />
     <Compile Include="Crm\CompleteProject.cs" />
@@ -166,12 +173,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="AllyisApps.Services.ruleset" />
+    <None Include="AllyisApps.Services1.ruleset" />
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AllyisApps\Services\Billing\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

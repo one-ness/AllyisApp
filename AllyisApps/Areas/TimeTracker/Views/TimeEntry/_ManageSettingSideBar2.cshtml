@@ -1,0 +1,16 @@
+﻿<ul class="ovrd-nav nav ovrd-nav-tabs nav-tabs" style="background-color: #eaeff7;">
+	@if (ViewBag.Title == Strings.OrgSOW) { <li style="background-color: #d1d1d1">@Html.ActionLink("Week Start", "Settingsstartofweek")</li> }
+	else { <li>@Html.ActionLink("Week Start", "Settingsstartofweek")</li> }
+
+	@if (ViewBag.Title == Strings.PClasses) { <li style="background-color: #d1d1d1">@Html.ActionLink("Pay Class", "Settingspayclass")</li> }
+	else { <li>@Html.ActionLink("Pay Class", "Settingspayclass")</li> }
+
+	@if (ViewBag.Title == Strings.LockDate) { <li style="background-color: #d1d1d1">@Html.ActionLink("Lock date", "Settingslockdate")</li> }
+	else { <li>@Html.ActionLink("Lock date", "Settingslockdate")</li> }
+
+	@if (ViewBag.Title == Strings.Overtime) { <li style="background-color: #d1d1d1">@Html.ActionLink("Overtime", "SettingsOvertime")</li> }
+	else { <li>@Html.ActionLink("Overtime", "SettingsOvertime")</li> }
+
+	@if (ViewBag.Title == Strings.Holidays) { <li style="background-color: #d1d1d1">@Html.ActionLink("Holidays", "SettingsHoliday")</li> }
+	else { <li>@Html.ActionLink("Holidays", "SettingsHoliday")</li>	 }
+</ul><br />

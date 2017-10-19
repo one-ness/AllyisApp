@@ -6,18 +6,23 @@
 	public enum InvitationStatusEnum : int
 	{
 		/// <summary>
-		/// Pening invite accepted
+		/// any
 		/// </summary>
-		Pending = 0,
+		Any = 65535,
 
 		/// <summary>
-		/// Invite is accepted
+		/// Pending
 		/// </summary>
-		Accepted = 1,
+		Pending = 1,
 
 		/// <summary>
-		/// Invite is rejected
+		/// Accepted
 		/// </summary>
-		Rejected = -1,
+		Accepted = 2,
+
+		/// <summary>
+		/// Rejected
+		/// </summary>
+		Rejected = 4,
 	}
 }

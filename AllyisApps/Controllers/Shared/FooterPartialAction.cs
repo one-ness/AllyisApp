@@ -23,12 +23,11 @@ namespace AllyisApps.Controllers
 		[ChildActionOnly]
 		public ActionResult FooterPartial()
 		{
-			List<LanguageViewModel> languages = AppService.ValidLanguages().Select(l => new LanguageViewModel
+			var model = this.AppService.ValidLanguages().Select(l => new LanguageViewModel
 			{
 				LanguageName = l.LanguageName,
 				CultureName = l.CultureName
 			}).ToList();
-			var model = languages;
 			ViewData["CultureName"] = AppService.UserContext != null ? AppService.UserContext.PreferedLanguageId : TempData["language"];
 			return this.View(ViewConstants.Footer, model);
 		}

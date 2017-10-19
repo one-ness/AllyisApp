@@ -6,6 +6,7 @@
 
 using System.Web.Security;
 using AllyisApps.Core;
+using AllyisApps.Services.Cache;
 
 namespace AllyisApps
 {
@@ -24,6 +25,9 @@ namespace AllyisApps
 
 			// init auth
 			FormsAuthentication.Initialize();
+
+			// init services cache
+			CacheContainer.Init(GlobalSettings.SqlConnectionString);
 		}
 	}
 }

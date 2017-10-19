@@ -14,11 +14,6 @@ namespace AllyisApps.DBModel.Billing
 	public class SkuDBEntity : BaseDBEntity
 	{
 		/// <summary>
-		/// Gets or sets SubscriptionId.
-		/// </summary>
-		public int SubscriptionId { get; set; }
-
-		/// <summary>
 		/// Gets or sets SkuId.
 		/// </summary>
 		public int SkuId { get; set; }
@@ -34,15 +29,14 @@ namespace AllyisApps.DBModel.Billing
 		public string SkuName { get; set; }
 
 		/// <summary>
-		/// Gets or sets Price.
-		/// TODO: price must be calculated from block size and cost per block.
-		/// </summary>
-		public decimal Price { get; set; }
-
-		/// <summary>
 		/// cost per block.
 		/// </summary>
 		public decimal CostPerBlock { get; set; }
+
+		/// <summary>
+		/// block based on
+		/// </summary>
+		public byte BlockBasedOn { get; set; }
 
 		/// <summary>
 		/// Gets or sets UserLimit.
@@ -67,12 +61,12 @@ namespace AllyisApps.DBModel.Billing
 		/// <summary>
 		/// Gets or sets promotional cost per block.
 		/// </summary>
-		public decimal PromoCostPerBlock { get; set; }
+		public decimal? PromoCostPerBlock { get; set; }
 
 		/// <summary>
 		/// Gets or sets the date on which the promotional cost ends.
 		/// </summary>
-		public DateTime? PromotDeadline { get; set; }
+		public DateTime? PromoDeadline { get; set; }
 
 		/// <summary>
 		/// Gets or sets the description.

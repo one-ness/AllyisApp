@@ -10,8 +10,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using AllyisApps.DBModel.Billing;
-
-// using AllyisApps.DBModel.Cache;
+using System.Threading.Tasks;
 using Dapper;
 
 namespace AllyisApps.DBModel
@@ -161,16 +160,23 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Get Subscription Details by Id.
 		/// </summary>
-		/// <param name="subscriptionId"> Subscription Id.</param>
-		/// <returns>SubscriptionDBEntity obj.</returns>
-		public SubscriptionDBEntity GetSubscriptionDetailsById(int subscriptionId)
+		public dynamic GetSubscriptionDetailsById(int subscriptionId)
 		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@subscriptionId", subscriptionId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
 				// default blank object
-				return connection.Query<SubscriptionDBEntity>("[Billing].[GetSubscriptionDetailsById]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				return con.Query<dynamic>("[Billing].[GetSubscriptionDetailsById] @a", new { a = subscriptionId }).FirstOrDefault();
+			}
+		}
+
+		/// <summary>
+		/// get the list of subscriptions for the given organization
+		/// </summary>
+		public async Task<dynamic> GetSubscriptionsAsync(int orgId)
+		{
+			using (var con = new SqlConnection(this.SqlConnectionString))
+			{
+				return (await con.QueryAsync<dynamic>("Billing.GetSubscriptions @a", new { a = orgId })).ToList();
 			}
 		}
 
@@ -235,46 +241,39 @@ namespace AllyisApps.DBModel
 
 		/// <summary>
 		/// Updates subscription:
-		///  - upgrades or downgrades the subscription (sku id)
 		///  - changes the subscription name.
 		/// </summary>
-		/// <param name="organizationId">Sets OrganizationId.</param>
-		/// <param name="skuId">Sku to change to.</param>
-		/// <param name="subscriptionId">Subscripiton Id</param>
-		/// <param name="subscriptionName">The subscription name.</param>
-		/// <returns>Number of rows changed.</returns>
-		public int UpdateSubscription(int organizationId, int skuId, int subscriptionId, string subscriptionName)
+		public void UpdateSubscriptionName(int subscriptionId, string subscriptionName)
 		{
-			// TODO: pass in subscriptionId as a parameter to simplify logic
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", organizationId);
-			parameters.Add("@skuId", skuId);
-			parameters.Add("@subscriptionId", subscriptionId);
-			parameters.Add("@subscriptionName", subscriptionName);
-
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Execute("[Billing].[UpdateSubscription]", parameters, commandType: CommandType.StoredProcedure);
+				con.Execute("Billing.UpdateSubscriptionName @a, @b", new { a = subscriptionId, b = subscriptionName });
 			}
 		}
 
+		/// <summary>
+		/// updates the sku and name for the given subscription
+		/// </summary>
+		public void UpdateSubscriptionSkuAndName(int subscriptionId, string subscriptionName, int skuId)
+		{
+			using (var con = new SqlConnection(this.SqlConnectionString))
+			{
+				con.Execute("Billing.UpdateSubscriptionSkuAndName @a, @b, @c", new { a = subscriptionId, b = subscriptionName, c = skuId });
+			}
+		}
 		/// <summary>
 		/// Creates subscription
 		/// Adds all the organization users as users to the subscription
 		/// Adds the user who subscribed to the subscription as a manager.
 		/// </summary>
-		/// <param name="organizationId">Sets OrganizationId.</param>
-		/// <param name="skuId">Sku -- the subscription item you're subscribing to.</param>
-		/// <param name="subscriptionName">The subscription name.</param>
-		/// <param name="userId">The user who is subscribing -- we need to make them manager.</param>
-		/// <returns>The new subscription id.</returns>
-		public int CreateSubscription(int organizationId, int skuId, string subscriptionName, int userId)
+		public int CreateSubscription(int organizationId, int skuId, string subscriptionName, int userId, int productRoleId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@skuId", skuId);
 			parameters.Add("@subscriptionName", subscriptionName);
 			parameters.Add("@userId", userId);
+			parameters.Add("@productRoleId", productRoleId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -295,6 +294,17 @@ namespace AllyisApps.DBModel
 			{
 				// default empty object
 				return connection.Query<SkuDBEntity>("[Billing].[GetSkuById]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
+			}
+		}
+
+		/// <summary>
+		/// get all skus in the system
+		/// </summary>
+		public List<SkuDBEntity> GetAllSkus()
+		{
+			using (var con = new SqlConnection(this.SqlConnectionString))
+			{
+				return con.Query<SkuDBEntity>("Billing.GetAllSkus").ToList();
 			}
 		}
 
@@ -453,21 +463,13 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Deletes a customer subscription.
+		/// Deletes a subscription.
 		/// </summary>
-		/// <param name="subscriptionid">The id of the subscription plan to be deleted.</param>
-		/// <returns>The deleted subscription plan Id, or -1 on failure.</returns>
-		public string DeleteSubscriptionPlan(string subscriptionid)
+		public void DeleteSubscription(int subscriptionid)
 		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@stripeTokenSubId", subscriptionid);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				// default -1
-				return connection.Query<string>(
-				   "[Billing].[DeleteCustomerSubscription]",
-				   parameters,
-				   commandType: CommandType.StoredProcedure).SingleOrDefault();
+				con.Execute("Billing.DeleteSubscription @a", new { a = subscriptionid });
 			}
 		}
 

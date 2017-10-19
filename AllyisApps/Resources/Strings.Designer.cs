@@ -295,11 +295,20 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Billing information accepted..
+        ///   Looks up a localized string similar to Billing.
         /// </summary>
         public static string Billing {
             get {
                 return ResourceManager.GetString("Billing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Billing information accepted..
+        /// </summary>
+        public static string BillingAccepted {
+            get {
+                return ResourceManager.GetString("BillingAccepted", resourceCulture);
             }
         }
         
@@ -1231,6 +1240,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit Permissions.
+        /// </summary>
+        public static string EditPermissions {
+            get {
+                return ResourceManager.GetString("EditPermissions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit Profile.
         /// </summary>
         public static string EditProfile {
@@ -2050,6 +2068,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manage.
+        /// </summary>
+        public static string Manage {
+            get {
+                return ResourceManager.GetString("Manage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manage Organization.
         /// </summary>
         public static string ManageOrganization {
@@ -2446,6 +2473,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You are not part of a subscription yet. Please contact your employer to add you to a subscription..
+        /// </summary>
+        public static string NoSubscriptionMessage {
+            get {
+                return ResourceManager.GetString("NoSubscriptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You are not authorized to approve time entries..
         /// </summary>
         public static string NotAuthZApproveTimeEntries {
@@ -2644,7 +2680,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have successfully created the organization.
+        ///   Looks up a localized string similar to Your organization has been created successfully! Please choose a subscription..
         /// </summary>
         public static string OrganizationCreatedNotification {
             get {
@@ -2851,7 +2887,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit Permissions.
+        ///   Looks up a localized string similar to Permissions.
         /// </summary>
         public static string Permissions {
             get {
@@ -3103,7 +3139,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Registation is successful Please verify email address..
+        ///   Looks up a localized string similar to You have registered successfully! Please verify your email address by clicking on the link sent to you..
         /// </summary>
         public static string RegistationSucessful {
             get {

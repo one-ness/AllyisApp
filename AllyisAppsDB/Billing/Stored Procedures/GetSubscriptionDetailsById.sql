@@ -1,15 +1,10 @@
-CREATE PROCEDURE [Billing].[GetSubscriptionDetailsById]
+﻿CREATE PROCEDURE [Billing].[GetSubscriptionDetailsById]
 	@subscriptionId INT
 AS
+begin
 	SET NOCOUNT ON;
-SELECT [OrganizationId]
-      ,[Subscription].[SkuId]
-	  ,[Subscription].[SubscriptionId]
-	  ,[NumberOfUsers]
-      ,[SubscriptionCreatedUtc]
-      ,[Subscription].[IsActive]
-	  ,[SubscriptionName] As 'Name'
-	  ,[Sku].[ProductId]
-FROM [Billing].[Subscription] WITH (NOLOCK) 
-JOIN [Billing].[Sku] ON [Sku].SkuId = [Subscription].[SkuId]
-WHERE [SubscriptionId] = @subscriptionId AND [Subscription].[IsActive] = 1
+	select s.*, sku.SkuName, sku.[Description] as 'SkuDescription', sku.ProductId, sku.IconUrl, p.AreaUrl, p.[Description] as 'ProductDescription', p.ProductName from Subscription s with (nolock)
+	inner join Sku sku with (nolock) on sku.SkuId = s.SkuId
+	inner join Product p with (nolock) on p.ProductId = sku.ProductId
+	where s.SubscriptionId = @subscriptionId and s.IsActive = 1 and sku.IsActive = 1 and p.IsActive = 1
+end

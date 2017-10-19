@@ -9,9 +9,8 @@ SELECT
 	[FirstName], 
 	[LastName], 
 	[OrganizationId],  
-	[OrganizationRoleId],
 	[EmployeeId],
-	[RoleJson]
+	[ProductRolesJson]
 FROM [Auth].[Invitation]
 WITH (NOLOCK)
-WHERE [Email] = @email AND [IsActive] = 1
+WHERE [Email] = @email

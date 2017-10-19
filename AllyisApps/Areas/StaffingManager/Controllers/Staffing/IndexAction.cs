@@ -37,7 +37,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			UserContext.SubscriptionAndRole subInfo = null;
 			int userId = this.AppService.UserContext.UserId;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			string subName = AppService.getSubscriptionName(subscriptionId);
+			string subName = AppService.GetSubscriptionName(subscriptionId);
 
 			System.Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<ApplicationStatus>, List<Customer>> infos;
 

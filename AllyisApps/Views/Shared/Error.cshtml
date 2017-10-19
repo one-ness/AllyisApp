@@ -14,13 +14,13 @@
 
     <div class="redirect button" align="center">
 
-        <a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account,new { area = "" })" class="btn btn-default">@Strings.GoHome <i class="ovrd-fa ovrd-fa-home fa-home"></i></a>
+        <a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account,new { area = "" })" class="ovrd-btn btn ovrd-btn-default btn-default">@Strings.GoHome <i class="ovrd-fa ovrd-fa-home fa-home"></i></a>
     </div>
 
     @if (Model != null && HttpContext.Current.IsDebuggingEnabled)
     {
         <p>
-            <a href="#errorMessageCollapse" class="btn btn-default" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="errorMessageCollapse">
+            <a href="#errorMessageCollapse" class="ovrd-btn btn ovrd-btn-default btn-default" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="errorMessageCollapse">
                 @Strings.ViewErrorMessage
             </a>
         </p>

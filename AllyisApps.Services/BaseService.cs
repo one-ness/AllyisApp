@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using AllyisApps.DBModel;
 using AllyisApps.Services.Auth;
+using AllyisApps.Services.Cache;
 
 namespace AllyisApps.Services
 {

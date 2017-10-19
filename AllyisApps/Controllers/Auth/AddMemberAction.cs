@@ -33,8 +33,8 @@ namespace AllyisApps.Controllers.Auth
 			model.OrganizationId = id;
 			model.EmployeeId = await this.AppService.GetNextEmployeeId(id);
 
-			var etSubInfo = AppService.GetProductSubscriptionInfo(id, SkuIdEnum.ExpenseTrackerBasic);
-			var ttSubInfo = AppService.GetProductSubscriptionInfo(id, SkuIdEnum.TimeTrackerBasic);
+			var etSubInfo = AppService.GetProductSubscriptionInfo(id, SkuIdEnum.ExpenseTrackerBasic).SubscriptionInfo;
+			var ttSubInfo = AppService.GetProductSubscriptionInfo(id, SkuIdEnum.TimeTrackerBasic).SubscriptionInfo;
 
 			model.hasET = etSubInfo != null ? true : false;
 			model.hasTT = ttSubInfo != null ? true : false;
@@ -88,10 +88,10 @@ namespace AllyisApps.Controllers.Auth
 
 					string prodJson = string.Format("{{ \"" + (int)SkuIdEnum.TimeTrackerBasic + "\" : {0}, \"" + (int)SkuIdEnum.ExpenseTrackerBasic + "\" : {1}, \"" + (int)SkuIdEnum.StaffingManagerBasic + "\" : 0 }}", model.ttSelection, model.etSelection);
 
-					int invitationId = AppService.InviteUser(url, model.Email.Trim(), model.FirstName, model.LastName, model.OrganizationId, model.OrgRoleSelection == "2" ? OrganizationRole.Owner : OrganizationRole.Member, model.EmployeeId, prodJson);
+					int invitationId = AppService.InviteUser(url, model.Email.Trim(), model.FirstName, model.LastName, model.OrganizationId, model.OrgRoleSelection == 2 ? OrganizationRole.Owner : OrganizationRole.Member, model.EmployeeId, prodJson);
 
 					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserEmailed, model.FirstName, model.LastName), Variety.Success));
-					return this.RedirectToAction(ActionConstants.ManageOrg, new { id = model.OrganizationId });
+					return this.RedirectToAction(ActionConstants.OrganizationMembers, new { id = model.OrganizationId });
 				}
 				catch (InvalidOperationException)
 				{

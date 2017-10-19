@@ -57,6 +57,11 @@ namespace AllyisApps
 		public const string ManageSubPermissions = "managesubpermissions";
 		public const string ManagePermissions2 = "managepermissions2";
 		public const string OrgIndex = "orgindex";
+		public const string OrganizationDetails = "orgdetails";
+		public const string OrganizationInvitations = "orginvitations";
+		public const string OrganizationMembers = "orgmembers";
+		public const string OrganizationSubscriptions = "orgsubscriptions";
+		public const string OrganizationBilling = "orgbilling";
 		public const string Pending = "pending";
 		public const string PrivacyPolicy = "privacypolicy";
 		public const string Reactivate = "reactivate";
@@ -91,6 +96,8 @@ namespace AllyisApps
 		public const string Report = "report";
 		public const string SetLockDate = "setlockdate";
 		public const string Settings = "settings";
+		public const string SettingsHoliday = "settingsholiday";
+		public const string SettingsOvertime = "settingsovertime";
 		public const string MergePayClass = "mergepayclass";
 		public const string ViewReport = "viewreport";
 		public const string ViewAdminReport = "viewadminreport";
@@ -111,7 +118,9 @@ namespace AllyisApps
 		public const string SubmitUpdatePosition = "submitupdateposition";
 		public const string ViewPosition = "viewposition";
 		public const string CreateApplicationStatus = "createapplicationstatus";
-
+		public const string SettingsStartOfWeek = "settingsstartofweek";
+		public const string SettingsPayClass = "settingspayclass";
+		public const string SettingsLockDate = "settingslockdate";
 	}
 
 	/// <summary>

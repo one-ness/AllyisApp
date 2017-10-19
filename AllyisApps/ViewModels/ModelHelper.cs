@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AllyisApps.Lib;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
 
 namespace AllyisApps.ViewModels
 {
@@ -23,10 +24,10 @@ namespace AllyisApps.ViewModels
 			foreach (var item in countries)
 			{
 				// get the country name
-				string countryName = Utility.AggregateSpaces(item.Value);
+				string countryName = Utility.AggregateSpaces(item.Value.CountryName);
 
 				// use the country name in the resource file to get it's localized name
-				string localized = Resources.Countries.ResourceManager.GetString(countryName) ?? item.Value;
+				string localized = Resources.Countries.ResourceManager.GetString(countryName) ?? item.Value.CountryName;
 
 				result.Add(item.Key, localized);
 			}
@@ -49,9 +50,9 @@ namespace AllyisApps.ViewModels
 				var states = service.GetStates(countryCode);
 				foreach (var item in states)
 				{
-					var stateName = Utility.AggregateSpaces(item.Value);
-					var localized = Resources.States.ResourceManager.GetString(stateName) ?? item.Value;
-					result.Add(item.Key.ToString(), localized);
+					var stateName = Utility.AggregateSpaces(item.StateName);
+					var localized = Resources.States.ResourceManager.GetString(stateName) ?? item.StateName;
+					result.Add(item.StateId.ToString(), localized);
 				}
 			}
 

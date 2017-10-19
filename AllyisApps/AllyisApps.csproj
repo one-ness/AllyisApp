@@ -296,8 +296,12 @@
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\MergePayClassAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ImportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\TemplateAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\TimeEntryCURDAction.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\Project\CompleteProjectViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\MergePayClassViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsLockDateViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsPayClassesViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsWeekStartViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\TimeEntryRangeForUserViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\TimeEntryViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\PayClassInfoViewModel.cs" />
@@ -354,19 +358,23 @@
     <Compile Include="Controllers\Auth\ConfirmEmailAction.cs" />
     <Compile Include="Controllers\Auth\CreateOrgAction.cs" />
     <Compile Include="Controllers\Auth\EditMemberAction.cs" />
+    <Compile Include="Controllers\Auth\EditMemberAction2.cs" />
     <Compile Include="Controllers\Auth\EditProfileAction.cs" />
-    <Compile Include="Controllers\Auth\EditSubscriptionAction.cs" />
+    <Compile Include="Controllers\Billing\EditSubscriptionAction.cs" />
     <Compile Include="Controllers\Auth\ForgotPasswordAction.cs" />
     <Compile Include="Controllers\Auth\ImportAction.cs" />
     <Compile Include="Controllers\Auth\IndexAction.cs" />
     <Compile Include="Controllers\Auth\LogOffAction.cs" />
     <Compile Include="Controllers\Auth\LogOnAction.cs" />
-    <Compile Include="Controllers\Auth\ManageOrgAction2.cs" />
+    <Compile Include="Controllers\Auth\OrgDetailsAction.cs" />
+    <Compile Include="Controllers\Auth\OrgInvitationsAction.cs" />
+    <Compile Include="Controllers\Auth\OrgMembersAction.cs" />
+    <Compile Include="Controllers\Auth\OrgSubscriptionsAction.cs" />
     <Compile Include="Controllers\Auth\RegisterAction.cs" />
     <Compile Include="Controllers\Auth\RejectInvitationAction.cs" />
     <Compile Include="Controllers\Auth\ResendInviteAction.cs" />
     <Compile Include="Controllers\Auth\ResetPasswordAction.cs" />
-    <Compile Include="Controllers\Auth\SkusAction.cs" />
+    <Compile Include="Controllers\Billing\SkusAction.cs" />
     <Compile Include="Controllers\Auth\TemplateAction.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ErrorPageController.cs" />
@@ -380,14 +388,12 @@
     <Compile Include="Controllers\Auth\DeleteOrgAction.cs" />
     <Compile Include="Controllers\Auth\DownloadImportUsersTemplateAction.cs" />
     <Compile Include="Controllers\Auth\EditOrgAction.cs" />
-    <Compile Include="Controllers\Auth\GetBillingSummaryAction.cs" />
     <Compile Include="Controllers\Auth\RemoveInvitationAction.cs" />
     <Compile Include="Controllers\Auth\ManageOrgAction.cs" />
     <Compile Include="Controllers\Auth\ManagePermissionsAction.cs" />
-    <Compile Include="Controllers\Auth\RemoveBillingAction.cs" />
     <Compile Include="Controllers\Auth\RemoveMemberAction.cs" />
-    <Compile Include="Controllers\Auth\SubscribeAction.cs" />
-    <Compile Include="Controllers\Auth\UnsubscribeAction.cs" />
+    <Compile Include="Controllers\Billing\SubscribeAction.cs" />
+    <Compile Include="Controllers\Billing\UnsubscribeAction.cs" />
     <Compile Include="Controllers\Shared\FooterPartialAction.cs" />
     <Compile Include="Controllers\Shared\LogOnPartialAction.cs" />
     <Compile Include="Controllers\Shared\SharedController.cs" />
@@ -396,8 +402,8 @@
     <Compile Include="Core\CookieData.cs" />
     <Compile Include="Core\CustomRoutes.cs" />
     <Compile Include="Core\GlobalSettings.cs" />
-    <Compile Include="Extensions\IEnumerableExtensions.cs" />
-    <Compile Include="Extensions\RouteExtensions.cs" />
+    <Compile Include="Core\RouteExtensions.cs" />
+    <Compile Include="Core\ViewExtensions.cs" />
     <Compile Include="Resources\Countries.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -423,14 +429,18 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\ApplicationExceptions.cs" />
     <Compile Include="Utilities\ImportMessageFormatter.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\OrganizationInvitationsViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\AddMemberViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\ManageOrgSideBarViewModel.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\EditMemberViewModel2.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\ManageOrgMenuBarViewModel.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\MembersAndInvitationsTabViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\OrganizationDetailsViewModel.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\OrganizationMembersViewModel2.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\OrganizationSubscriptionsViewModel.cs" />
     <Compile Include="ViewModels\Auth\User\ChangePasswordViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\EditMemberViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\EditSubscriptionViewModel.cs" />
+    <Compile Include="ViewModels\Billing\EditSubscriptionViewModel.cs" />
     <Compile Include="ViewModels\Auth\User\AccountIndexViewModel.cs" />
     <Compile Include="ViewModels\Auth\Invitation\InvitationInfoViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\ManageOrgViewModel.cs" />
@@ -439,26 +449,26 @@
     <Compile Include="ViewModels\Auth\User\EditProfileViewModel.cs" />
     <Compile Include="ViewModels\Auth\User\ForgotPasswordViewModel.cs" />
     <Compile Include="ViewModels\Auth\User\LogOnViewModel.cs" />
-    <Compile Include="ViewModels\BillingProductSubscription\ProductRoleViewModel.cs" />
-    <Compile Include="ViewModels\BillingProductSubscription\SkusListViewModel.cs" />
-    <Compile Include="ViewModels\BillingProductSubscription\BillingHistoryItemViewModel.cs" />
+    <Compile Include="ViewModels\Billing\ProductRoleViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\PermissionsManagementViewModel.cs" />
     <Compile Include="ViewModels\Auth\User\ResetPasswordViewModel.cs" />
     <Compile Include="ViewModels\Auth\User\UserInfoViewModel.cs" />
-    <Compile Include="ViewModels\BillingProductSubscription\BillingViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\EditOrganizationViewModel.cs" />
     <Compile Include="ViewModels\Auth\User\EditUserPermissionViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\OrganizationAddMembersViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\OrganizationMembersViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\OrganizationUserViewModel.cs" />
-    <Compile Include="ViewModels\BillingProductSubscription\SubscriptionDisplayViewModel.cs" />
-    <Compile Include="ViewModels\BillingProductSubscription\SubscriptionRoleSelectionModel.cs" />
+    <Compile Include="ViewModels\Billing\SubscriptionDisplayViewModel.cs" />
+    <Compile Include="ViewModels\Billing\SubscriptionRoleSelectionModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\Billing\SkusViewModel.cs" />
+    <Compile Include="ViewModels\Billing\SubscribeViewModel.cs" />
     <Compile Include="ViewModels\ModelHelper.cs" />
     <Compile Include="ViewModels\Shared\LanguageViewModel.cs" />
     <Compile Include="ViewModels\Shared\LogOnPartialViewModel.cs" />
     <Compile Include="ViewModels\Shared\SubscriptionsViewModel.cs" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-drp-init.js" />
+    <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-index2.js" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-settings.js" />
     <Content Include="Content\bootstrap\less\variables.css">
       <DependentUpon>variables.less</DependentUpon>
@@ -618,12 +628,9 @@
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Utilities\InviteMap.cs" />
-    <Compile Include="ViewModels\BillingProductSubscription\ProductSubscriptionViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Filters\NotificationFilter.cs" />
     <Compile Include="Utilities\ErrorHandler.cs" />
-    <Compile Include="Utilities\Helpers.cs" />
-    <Compile Include="Extensions\ViewExtensions.cs" />
     <Content Include="Content\icons\fav16.png" />
     <Content Include="Content\icons\fav32.png" />
     <Content Include="Content\icons\fav64.png" />
@@ -685,6 +692,20 @@
     <Content Include="Areas\StaffingManager\Views\Staffing\_ApplicationInfoPartial.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\Application.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\ApplicationDocument.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\Index2.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\_AjaxTimeEntries2.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\_AjaxTimeEntryBody2.cshtml" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsStartOfWeek.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsPayClass.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsLockDate.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsOvertime.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsHoliday.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\_ManageSettingSideBar.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\_ManageSettingSideBar2.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
@@ -740,7 +761,7 @@
     <Content Include="Views\Shared\Oops.cshtml" />
     <Content Include="Views\Account\GetBillingSummary.cshtml" />
     <Content Include="Views\Account\ManageOrg.cshtml" />
-    <Content Include="Views\Account\_ManageOrgDetails.cshtml" />
+    <Content Include="Views\Account\OrgDetails.cshtml" />
     <Content Include="Views\Account\_ManageOrgSubscriptions.cshtml" />
     <Content Include="Views\Account\_OrganizationEditDetails.cshtml" />
     <Content Include="Views\Account\Subscribe.cshtml" />
@@ -763,7 +784,11 @@
     <Content Include="Views\Account\_PremissionsLinkView.cshtml" />
     <Content Include="Views\Account\PermissionsOrg.cshtml" />
     <Content Include="Views\Account\ManageOrg2.cshtml" />
-    <Content Include="Views\Account\_ManageOrgSideBar.cshtml" />
+    <Content Include="Views\Account\_ManageOrgMenuBar.cshtml" />
+    <Content Include="Views\Account\OrgSubscriptions.cshtml" />
+    <Content Include="Views\Account\OrgMembers.cshtml" />
+    <Content Include="Views\Account\OrgInvitations.cshtml" />
+    <Content Include="Views\Account\_MembersAndInvitationsTab.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\Dependencies\CodeAnalysis\CustomDictionary.xml">
@@ -986,6 +1011,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\TimeTracker\ViewModels\Manage\" />
+    <Folder Include="Areas\TimeTracker\Views\Setting2Action\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

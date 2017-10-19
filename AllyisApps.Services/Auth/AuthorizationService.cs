@@ -20,24 +20,34 @@ namespace AllyisApps.Services
 		/// </summary>
 		public enum OrgAction : int
 		{
-			EditUser = 1, // edit other users (edit self must always be allowed)
+			CreateSubscription = 100000,
+			CreateBilling,
+
+			ReadBilling = 200000,
+			ReadInvitationsList,
+			ReadOrganization,
+			ReadSubscription,
+			ReadPermissionsList, // view list of users and their permissions
+			ReadSubscriptionsList, // view list of subscriptions
+			ReadUser, // view other users (view self must always be allowed)
+			ReadUsersList, // view list of users
+
+			EditUser = 300000, // edit other users (edit self must always be allowed)
 			EditUserPermission,
-			EditInvitation,
 			EditOrganization,
 			EditSubscription,
 			EditBilling,
-			ReadOrganization,
-			ReadUser, // view other users (view self must always be allowed)
-			DeleteUserFromOrganization,
+			AddUserToOrganization, // same as create invitation
+			AddUserToSubscription,
+			ChangePassword, // change password for others (change for self must always be allowed)
+			ResendInvitation,
+
+			DeleteUserFromOrganization = 400000,
 			DeleteUserFromSubscription,
+			DeleteInvitation,
 			DeleteOrganization,
 			DeleteSubscritpion,
 			DeleteBilling,
-			AddUserToOrganization, // same as create invitation
-			AddUserToSubscription,
-			CreateSubscription,
-			CreateBilling,
-			ChangePassword, // change password for others (change for self must always be allowed)
 		}
 
 		public enum StaffingManagerAction : int
@@ -112,7 +122,12 @@ namespace AllyisApps.Services
 						switch (action)
 						{
 							case OrgAction.ReadOrganization:
-								// all members have permission to read organization details
+								// all members can read organization details
+								result = true;
+								break;
+
+							case OrgAction.ReadUsersList:
+								// all members can read other user list
 								result = true;
 								break;
 
@@ -127,6 +142,27 @@ namespace AllyisApps.Services
 			if (!result && throwException)
 			{
 				string message = string.Format("action {0} denied for org {1}", action.ToString(), orgId);
+				throw new AccessViolationException(message);
+			}
+
+			return result;
+		}
+
+		public bool CheckSubscriptionAction(OrgAction action, int subscriptionId, out int organizationId, bool throwException = true)
+		{
+			bool result = false;
+			organizationId = 0;
+
+			UserContext.SubscriptionAndRole sar = null;
+			if (this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out sar))
+			{
+				organizationId = sar.OrganizationId;
+				result = this.CheckOrgAction(action, organizationId, throwException);
+			}
+
+			if (!result && throwException)
+			{
+				string message = string.Format("action {0} denied for subscription {1}", action.ToString(), subscriptionId);
 				throw new AccessViolationException(message);
 			}
 

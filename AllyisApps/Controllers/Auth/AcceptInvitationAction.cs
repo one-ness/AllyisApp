@@ -24,7 +24,7 @@ namespace AllyisApps.Controllers.Auth
 			{
 				var invitation = AppService.GetInvitationByID(id);
 
-				string res = string.Format("You have successfully joined {0} in the role of {1}.", invitation.OrganizationName, invitation.OrganizationRole);
+				string res = string.Format("You have successfully joined {0} in the role of {1}.");
 				Notifications.Add(new Core.Alert.BootstrapAlert(res, Core.Alert.Variety.Success));
 			}
 
