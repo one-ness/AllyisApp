@@ -24,12 +24,12 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		/// <param name="id">The organization id.</param>
 		/// <returns>The skus view.</returns>
-		async public Task<ActionResult> Skus(int id)
+		public ActionResult Skus(int id)
 		{
 			var model = new SkusViewModel();
-			model.CanSubscribe = await this.AppService.CheckOrgAction(AppService.OrgAction.CreateSubscription, id);
+			model.CanSubscribe = this.AppService.CheckOrgAction(AppService.OrgAction.CreateSubscription, id);
 			model.OrganizationId = id;
-			var collection = await this.AppService.GetAllActiveProductsAndSkus();
+			var collection = this.AppService.GetAllActiveProductsAndSkus();
 			foreach (var item in collection)
 			{
 				var pi = new SkusViewModel.ProductItem();

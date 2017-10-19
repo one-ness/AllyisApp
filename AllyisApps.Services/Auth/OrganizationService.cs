@@ -241,7 +241,7 @@ namespace AllyisApps.Services
 
 		public async void NotifyInviteAcceptAsync(int inviteId)
 		{
-			InvitationDBEntity invitation = DBHelper.GetInvitation(inviteId);
+			InvitationDBEntity invitation = await DBHelper.GetInvitation(inviteId);
 			string msgbody = new System.Web.HtmlString($"{invitation.FirstName} {invitation.LastName} has joined the organization <organization name> on Allyis Apps.").ToString();
 
 			foreach (string email in DBHelper.GetOrganizationOwnerEmails(invitation.OrganizationId))
@@ -256,7 +256,7 @@ namespace AllyisApps.Services
 
 		public async void NotifyInviteRejectAsync(int inviteId)
 		{
-			InvitationDBEntity invitation = DBHelper.GetInvitation(inviteId);
+			InvitationDBEntity invitation = await DBHelper.GetInvitation(inviteId);
 			string msgbody = new System.Web.HtmlString($"{invitation.FirstName} {invitation.LastName} has rejected joining the organization <organization name> on Allyis Apps.").ToString();
 
 			foreach (string email in DBHelper.GetOrganizationOwnerEmails(invitation.OrganizationId))
@@ -274,11 +274,11 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="invitationId">Invitation Id.</param>
 		/// <returns>Returns false if permissions fail.</returns>
-		public bool RemoveInvitation(int invitationId)
+		async public Task<bool> RemoveInvitation(int invitationId)
 		{
 			if (invitationId <= 0) throw new ArgumentException("invitationId");
 
-			var invite = GetInvitationByID(invitationId);
+			var invite = await GetInvitationByID(invitationId);
 			this.CheckOrgAction(OrgAction.DeleteInvitation, invite.OrganizationId);
 			return DBHelper.DeleteInvitation(invitationId);
 		}

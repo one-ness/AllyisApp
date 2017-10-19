@@ -24,7 +24,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>Redirects to the manage org action.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> RemoveMember(int organizationId, int userId)
+		public ActionResult RemoveMember(int organizationId, int userId)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, organizationId);
 			await AppService.RemoveOrganizationUser(organizationId, userId);

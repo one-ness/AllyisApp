@@ -69,9 +69,10 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="invitationId">Id of invite.</param>
 		/// <returns>Inviation info </returns>
-		public Invitation GetInvitationByID(int invitationId)
+		async public Task<Invitation> GetInvitationByID(int invitationId)
 		{
-			return InitializeInvitationInfo(DBHelper.GetInvitation(invitationId));
+			var results = InitializeInvitationInfo(await DBHelper.GetInvitation(invitationId));
+			return results;
 		}
 
 		/// <summary>
@@ -81,7 +82,7 @@ namespace AllyisApps.Services
 		{
 			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId");
 
-			Invitation inviteInfo = InitializeInvitationInfo(this.DBHelper.GetInvitation(invitationId));
+			Invitation inviteInfo = InitializeInvitationInfo(await this.DBHelper.GetInvitation(invitationId));
 			var result = (this.DBHelper.AcceptInvitation(invitationId, this.UserContext.UserId) == 1);
 			if (result)
 			{
@@ -120,9 +121,9 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="invitationId">The id of the invitation to reject.</param>
 		/// <returns>The resulting message.</returns>
-		public bool RejectInvitation(int invitationId)
+		async public Task<bool> RejectInvitation(int invitationId)
 		{
-			bool rejected = (DBHelper.RejectInvitation(invitationId) == 1);
+			bool rejected = (await DBHelper.RejectInvitation(invitationId) == 1);
 			if (rejected)
 			{
 				NotifyInviteRejectAsync(invitationId);
