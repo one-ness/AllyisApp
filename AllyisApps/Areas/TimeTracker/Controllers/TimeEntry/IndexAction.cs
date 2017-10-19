@@ -45,7 +45,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			var infos = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null, userId);
 
-			ViewBag.SignedInUserID = GetCookieData().UserId;
+			ViewBag.SignedInUserID = this.AppService.UserContext.UserId;
 			ViewBag.SelectedUserId = userId;
 			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infos.Item1.StartOfWeek));
 			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infos.Item1.StartOfWeek));
@@ -72,7 +72,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>Provides the view for the defined user over the date range defined.</returns>
 		public ActionResult IndexNoUserId(int subscriptionId, int? startDate = null, int? endDate = null)
 		{
-			int userId = GetCookieData().UserId;
+			int userId = this.AppService.UserContext.UserId;
 
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
 

@@ -400,8 +400,7 @@
     <Compile Include="Core\CookieData.cs" />
     <Compile Include="Core\CustomRoutes.cs" />
     <Compile Include="Core\GlobalSettings.cs" />
-    <Compile Include="Extensions\IEnumerableExtensions.cs" />
-    <Compile Include="Extensions\RouteExtensions.cs" />
+    <Compile Include="Core\RouteExtensions.cs" />
     <Compile Include="Resources\Countries.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -427,7 +426,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\ApplicationExceptions.cs" />
     <Compile Include="Utilities\ImportMessageFormatter.cs" />
     <Compile Include="ViewModels\Auth\Organizations\OrganizationInvitationsViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\AddMemberViewModel.cs" />
@@ -557,8 +555,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Filters\NotificationFilter.cs" />
     <Compile Include="Utilities\ErrorHandler.cs" />
-    <Compile Include="Utilities\Helpers.cs" />
-    <Compile Include="Extensions\ViewExtensions.cs" />
     <Content Include="Content\icons\fav16.png" />
     <Content Include="Content\icons\fav32.png" />
     <Content Include="Content\icons\fav64.png" />

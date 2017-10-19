@@ -119,7 +119,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				Statuses = enumList,
 				SubscriptionId = subInfo.SubscriptionId,
 				SubscriptionName = subInfo.SubscriptionName,
-				UserId = GetCookieData().UserId,
+				UserId = this.AppService.UserContext.UserId,
 				Users = userList,
 				Selection = new AdminReportSelectionModel
 				{

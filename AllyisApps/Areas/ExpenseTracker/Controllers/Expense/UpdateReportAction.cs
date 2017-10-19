@@ -27,10 +27,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			}
 
 			var oldReport = AppService.GetExpenseReport(model.Report.ExpenseReportId);
-			var userInfo = GetCookieData();
 			if (model.Report.ExpenseReportId != -1)
 			{
-				if (oldReport.SubmittedById != userInfo.UserId
+				if (oldReport.SubmittedById != this.AppService.UserContext.UserId
 					|| ((ExpenseStatusEnum)oldReport.ReportStatus != ExpenseStatusEnum.Draft
 					&& (ExpenseStatusEnum)oldReport.ReportStatus != ExpenseStatusEnum.Rejected))
 				{
