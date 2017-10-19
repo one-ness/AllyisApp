@@ -29,7 +29,7 @@ namespace AllyisApps.Controllers.Auth
 			Notifications.Add(new BootstrapAlert(Resources.Strings.LogOffSuccess, Variety.Success));
 
 			// redirect to home
-			return Redirect(this.ApplicationRootUrl);
+			return RedirectToAction(ActionConstants.Index, ControllerConstants.Home);
 		}
 	}
 }

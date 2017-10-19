@@ -25,7 +25,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Pending, subscriptionId);
 
 			var orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
-			int userId = GetCookieData().UserId;
+			int userId = this.AppService.UserContext.UserId;
 			IEnumerable<ExpenseReport> reports = AppService.GetExpenseReportByOrgId(orgId);
 			IEnumerable<ExpenseReport> pending = reports.ToList().Where(r => r.ReportStatus == (int)ExpenseStatusEnum.Pending);
 			ExpensePendingModel model = InitializeViewModel(subscriptionId, userId, pending);

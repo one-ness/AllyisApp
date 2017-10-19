@@ -29,8 +29,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				return RedirectToAction("Create", new { subscriptionId = model.SubscriptionId, reportId = model.Report.ExpenseReportId });
 			}
 
-			var userInfo = GetCookieData();
-			if (userInfo.UserId != model.CurrentUser)
+			if (this.AppService.UserContext.UserId != model.CurrentUser)
 			{
 				string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.CreateReport.ToString());
 				throw new AccessViolationException(message);

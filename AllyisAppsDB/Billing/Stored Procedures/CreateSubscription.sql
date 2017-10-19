@@ -1,11 +1,13 @@
-CREATE PROCEDURE [Billing].[CreateSubscription]
+﻿CREATE PROCEDURE [Billing].[CreateSubscription]
 	@organizationId INT,
 	@skuId INT,
 	@subscriptionName NVARCHAR(50),
-	@userId INT
+	@userId INT,
+	@productRoleId int
 AS
 BEGIN
 	SET NOCOUNT ON;
+	DECLARE @subscriptionId INT
 
 	--Create the new subscription
 	INSERT INTO [Billing].[Subscription]
@@ -17,18 +19,12 @@ BEGIN
 		@skuId,
 		@subscriptionName);
 
-	DECLARE @subscriptionId INT = IDENT_CURRENT('[Billing].[Subscription]');
-
-	-- Insert all members of given org to SubscriptionUser table with User role
-	-- ASSUMPTION: 1 is the productRoleId of "User" for all subscriptions
+	select @subscriptionId = SCOPE_IDENTITY()
+	
+	-- create a new subscription user
 	INSERT INTO [Billing].[SubscriptionUser] ([UserId], [SubscriptionId], [ProductRoleId])
-		SELECT [UserId], @subscriptionId, 1
-		FROM [Auth].[OrganizationUser]
-		WHERE [OrganizationId] = @organizationId;
+		values(@userId, @subscriptionId, @productRoleId)
 
-	-- Update the current user's role to manager
-	-- ASSUMPTION: 2 is the productRoleId of "Manager" for all subscriptions
-	EXEC [Billing].[UpdateSubscriptionUserProductRole] 2, @subscriptionId, @userId
+	select @subscriptionId
 
-	SELECT @subscriptionId;
 END

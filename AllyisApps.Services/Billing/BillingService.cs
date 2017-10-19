@@ -798,8 +798,8 @@ namespace AllyisApps.Services
 		/// <returns>List of billing history items.</returns>
 		async public Task<IEnumerable<BillingHistoryItemInfo>> GetBillingHistory(int orgId)
 		{
-			var billingHist = await DBHelper.GetBillingHistoryByOrg(orgId);
-			return billingHist.Select(i =>
+			var results = await DBHelper.GetBillingHistoryByOrg(orgId);
+			return results.Select(i =>
 			{
 				return new BillingHistoryItemInfo
 				{

@@ -27,8 +27,9 @@ namespace AllyisApps.Controllers.Auth
 		async public Task<ActionResult> RemoveMember(int organizationId, int userId)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, organizationId);
-			await AppService.RemoveOrganizationUser(organizationId, userId);
+			AppService.RemoveOrganizationUser(organizationId, userId);
 			Notifications.Add(new BootstrapAlert(Resources.Strings.UserDeletedSuccessfully, Variety.Success));
+			await Task.Delay(0);
 			return this.RedirectToAction(ActionConstants.OrganizationMembers, new { id = organizationId });
 		}
 	}

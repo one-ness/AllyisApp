@@ -1,65 +1,42 @@
-﻿@model AllyisApps.ViewModels.Auth.ProductSubscriptionViewModel
+﻿@model SubscribeViewModel
 
 @{
-	Layout = "~/Views/Shared/_Layout.cshtml";
 	ViewBag.Title = Strings.Subscribe;
-	ViewBag.Description = Model.ProductDescription;
+	string saveTitle = Strings.Save;
+	if (Model.IsChanging)
+	{
+		saveTitle = Strings.ChangeSubscription;
+	}
 }
 
-@*TODO: Currently mentions of pricing are commented out. When pricing is properly implemented, restore these mentions.
-	Also remove the damn hardcoded "free users" numbers.*@
-<div class="shrink-wrap-center">
-	<div class="min300">
-		@using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, FormMethod.Post, new { @class = "form-inline" }))
-		{
-			@Html.AntiForgeryToken()
-			@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
-
-			@Html.HiddenFor(m => m.OrganizationId)
-			@Html.HiddenFor(m => m.ProductId)
-			@Html.HiddenFor(m => m.ProductName)
-			@Html.HiddenFor(m => m.SelectedSku)
-			@Html.HiddenFor(m => m.SelectedSkuName)
-			@Html.HiddenFor(m => m.PreviousSku)
-			@Html.HiddenFor(m => m.Token)
-			@Html.HiddenFor(m => m.Billing)
-			@Html.Hidden("currentUserCount", (int)Model.CurrentUsers)
-
-			<p id="notice" style="color:red"></p>
-			<div class="row">
-				<div class="col-md-6 col-md-push-3">
-					<div class="panel panel-default" style="min-width:350px;">
-						<div class="panel-heading">
-							<h3 style="margin-top: 0; margin-bottom: 0; text-align: center;">
-								@Html.DisplayTextFor(m => m.SelectedSkuName)
-							</h3>
-						</div>
-						<div class="panel-body">
-							<div class="form-group">
-								<p>@Html.DisplayTextFor(m => m.SelectedSkuDescription)</p>
-								@Html.ReqLabelFor(m => m.SubscriptionName, "Subscription Name")
-								@Html.TextBoxFor(m => m.SubscriptionName, new { @class = "form-control", @placeholder = "Subscription name" })
-								@Html.ValidationMessageFor(m => m.SubscriptionName)
-							</div>
-						</div>
-						<div class="panel-footer">
-							<div class="pull-right">
-								<a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { organizationId = Model.OrganizationId })" class="btn btn-default"> @Strings.Cancel </a>
-								<input type="submit" class="btn btn-primary" value=@Strings.Save>
-							</div>
-							<div class="clearfix"></div>
-						</div>
-					</div>
-				</div>
+<div class="row">
+	<div class="col-md-6 col-md-push-3">
+		<div class="col-md-12 text-center">
+			<img src="~/@Model.SkuIconUrl" alt="@Model.ProductName" style="margin-right:5px;" />
+			<h2 style="display:inline-block;">
+				@Model.ProductName
+			</h2>
+		</div>
+		<div class="col-md-10 col-md-push-1" style="margin-top:20px;">
+			<div class="col-md-12">
+				@Model.SkuDescription
 			</div>
-		}
+
+			<div>
+				@using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, null, FormMethod.Post, new { @class = "col-md-12", @style = "margin-top:20px;display: inline-block" })) // , @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw(String.Format(Strings.WarningWhenUnsubscribing, Model.Name))) TODO: make this only fire on unsubscribe action.
+				{
+					@Html.HiddenFor(m => m.OrganizationId)
+					@Html.HiddenFor(m => m.SkuId)
+					@Html.ReqLabelFor(m => m.SubscriptionName, Strings.SubscriptionName)
+					@Html.TextBoxFor(m => m.SubscriptionName, new { @class = "form-control margined" })
+					@Html.AntiForgeryToken()
+					<div class="pull-right" , style="margin-top:50px;">
+						<a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default"> @Strings.Cancel </a>
+						<input type="submit" value="@saveTitle" class="btn btn-primary" id="save" />
+					</div>
+
+				}
+			</div>
+		</div>
 	</div>
 </div>
-@section Scripts {
-	<script type="text/javascript">
-		var model_previousSku = @Model.PreviousSku;
-		var warningWhenSwitchingToFreeSubscription = "@Html.Raw(Strings.WarningWhenSwitchingToFreeSubscription)";
-		var cannotReduceUserCount = "@Html.Raw(Strings.CannotReduceUserCount)";
-	</script>
-	@Scripts.Render("~/bundles/AccountSubscribe");
-}
