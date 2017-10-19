@@ -28,12 +28,12 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Creates an organization.
 		/// </summary>
-		public int SetupOrganization(string employeeId, string organizationName, string phoneNumber, string faxNumber, string siteUrl, string subDomainName, string address1, string city, int? stateId, string postalCode, string countryCode)
+		async public Task<int> SetupOrganization(string employeeId, string organizationName, string phoneNumber, string faxNumber, string siteUrl, string subDomainName, string address1, string city, int? stateId, string postalCode, string countryCode)
 		{
 			if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException("employeeId");
 			if (string.IsNullOrWhiteSpace(organizationName)) throw new ArgumentNullException("organizationName");
 
-			return this.DBHelper.SetupOrganization(this.UserContext.UserId, (int)OrganizationRole.Owner, employeeId, organizationName, phoneNumber, faxNumber, siteUrl, subDomainName, address1, city, stateId, postalCode, countryCode);
+			return await this.DBHelper.SetupOrganization(this.UserContext.UserId, (int)OrganizationRole.Owner, employeeId, organizationName, phoneNumber, faxNumber, siteUrl, subDomainName, address1, city, stateId, postalCode, countryCode);
 		}
 
 		/// <summary>
@@ -41,12 +41,12 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>The Organization.</returns>
-		public Organization GetOrganization(int orgId)
+		async public Task<Organization> GetOrganization(int orgId)
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
 
 			this.CheckOrgAction(OrgAction.ReadOrganization, orgId);
-			return InitializeOrganization(this.DBHelper.GetOrganization(orgId));
+			return InitializeOrganization(await this.DBHelper.GetOrganization(orgId));
 		}
 
 		public async Task<List<Invitation>> GetInvitationsAsync(int orgId)
@@ -112,9 +112,9 @@ namespace AllyisApps.Services
 		/// pending in the organization, the organization's billing stripe handle, and a list of all products.
 		/// </summary>
 		/// <returns>.</returns>
-		public Organization GetOrganizationManagementInfo(int orgId)
+		async public Task<Organization> GetOrganizationManagementInfo(int orgId)
 		{
-			var spResults = DBHelper.GetOrganizationManagementInfo(orgId);
+			var spResults = await DBHelper.GetOrganizationManagementInfo(orgId);
 			Organization org = InitializeOrganization(spResults.Item1);
 			org.Users = spResults.Item2.Select(oudb => InitializeOrganizationUser(oudb)).ToList();
 			org.Subscriptions = spResults.Item3.Select(sddb => InitializeSubscription(sddb)).ToList();
@@ -159,25 +159,25 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Updates an organization chosen by the current user.
 		/// </summary>
-		public bool UpdateOrganization(int organizationId, string organizationName, string siteUrl, int? addressId, string address1, string city, int? stateId, string countryCode, string postalCode, string phoneNumber, string faxNumber, string subDomain)
+		async public Task<bool> UpdateOrganization(int organizationId, string organizationName, string siteUrl, int? addressId, string address1, string city, int? stateId, string countryCode, string postalCode, string phoneNumber, string faxNumber, string subDomain)
 		{
 			if (organizationId <= 0) throw new ArgumentOutOfRangeException("organizationId");
 			if (string.IsNullOrWhiteSpace(organizationName)) throw new ArgumentNullException("organizationName");
 
 			this.CheckOrgAction(OrgAction.EditOrganization, organizationId);
 
-			return this.DBHelper.UpdateOrganization(organizationId, organizationName, siteUrl, addressId, address1, city, stateId, countryCode, postalCode, phoneNumber, faxNumber, subDomain) > 0;
+			return await this.DBHelper.UpdateOrganization(organizationId, organizationName, siteUrl, addressId, address1, city, stateId, countryCode, postalCode, phoneNumber, faxNumber, subDomain) > 0;
 		}
 
 		/// <summary>
 		/// Deletes the user's current chosen organization.
 		/// </summary>
 		/// <returns>Returns false if permissions fail.</returns>
-		public void DeleteOrganization(int orgId)
+		async public Task DeleteOrganization(int orgId)
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
 			this.CheckOrgAction(OrgAction.DeleteOrganization, orgId);
-			this.DBHelper.DeleteOrganization(orgId);
+			await this.DBHelper.DeleteOrganization(orgId);
 		}
 
 		/// <summary>

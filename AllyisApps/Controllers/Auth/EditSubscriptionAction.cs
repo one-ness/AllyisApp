@@ -19,7 +19,7 @@ namespace AllyisApps.Controllers.Auth
 		[HttpGet]
 		async public Task<ActionResult> EditSubscription(int id)
 		{
-			var sub = this.AppService.GetSubscription(id);
+			var sub = await this.AppService.GetSubscription(id);
 			var model = new EditSubscriptionViewModel();
 			model.OrganizationId = sub.OrganizationId;
 			model.ProductName = sub.ProductName;
@@ -28,7 +28,7 @@ namespace AllyisApps.Controllers.Auth
 			model.SkuName = sub.SkuName;
 			model.SubscriptionId = id;
 			model.SubscriptionName = sub.SubscriptionName;
-			await Task.Delay(1);
+
 			return this.View(model);
 		}
 
@@ -47,13 +47,12 @@ namespace AllyisApps.Controllers.Auth
 		{
 			if (ModelState.IsValid)
 			{
-				this.AppService.UpdateSubscriptionName(model.SubscriptionId, model.SubscriptionName);
+				await this.AppService.UpdateSubscriptionName(model.SubscriptionId, model.SubscriptionName);
 				Notifications.Add(new BootstrapAlert(string.Format("{0} updated successfully!", model.SubscriptionName), Variety.Success));
 				return this.RedirectToAction(ActionConstants.OrganizationSubscriptions, new { id = model.OrganizationId });
 			}
 
 			// error
-			await Task.Delay(1);
 			return this.View(model);
 		}
 	}

@@ -29,7 +29,7 @@ namespace AllyisApps.Controllers.Auth
 		{
 			var model = new OrganizationDetailsViewModel();
 			model.CanEditOrganization = this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id, false);
-			var org = this.AppService.GetOrganization(id);
+			var org = await this.AppService.GetOrganization(id);
 			if (org.Address != null)
 			{
 				model.Address = org.Address.Address1;
@@ -45,7 +45,6 @@ namespace AllyisApps.Controllers.Auth
 			model.PhoneNumber = org.PhoneNumber;
 			model.SiteURL = org.SiteUrl;
 
-			await Task.Delay(1);
 			return View(model);
 		}
 	}

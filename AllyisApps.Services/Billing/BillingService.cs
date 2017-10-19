@@ -78,7 +78,7 @@ namespace AllyisApps.Services
 			#endregion Validation
 
 			//// Either get the existing billing service information for the org or create some if the org has none
-			BillingServicesCustomerId customerId = this.GetOrgBillingServicesCustomerId(orgId);
+			BillingServicesCustomerId customerId = await this.GetOrgBillingServicesCustomerId(orgId);
 			if (customerId == null)
 			{
 				string serviceType = "Stripe";
@@ -188,9 +188,9 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <returns>The customer Id.</returns>
 		[CLSCompliant(false)]
-		public BillingServicesCustomerId GetOrgBillingServicesCustomerId(int orgId)
+		async public Task<BillingServicesCustomerId> GetOrgBillingServicesCustomerId(int orgId)
 		{
-			string id = DBHelper.GetOrgCustomer(orgId);
+			string id = await DBHelper.GetOrgCustomer(orgId);
 			return new BillingServicesCustomerId(id);
 		}
 
@@ -336,7 +336,7 @@ namespace AllyisApps.Services
 			#endregion Validation
 
 			// TODO: split updating user roles and creating new sub users
-			var UpdatedRows =  await DBHelper.UpdateSubscriptionUserRoles(userIds, orgId, newProductRole, productId);
+			var UpdatedRows = await DBHelper.UpdateSubscriptionUserRoles(userIds, orgId, newProductRole, productId);
 			return new UpdateSubscriptionUserRolesResuts()
 			{
 				UsersChanged = UpdatedRows.Item1,
@@ -668,7 +668,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="subscriptionId"></param>
 		/// <param name="subscriptionname"></param>
-		async public void UpdateSubscriptionName(int subscriptionId, string subscriptionname)
+		async public Task UpdateSubscriptionName(int subscriptionId, string subscriptionname)
 		{
 			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException("subscriptionId");
 			if (string.IsNullOrWhiteSpace(subscriptionname)) throw new ArgumentNullException("subscriptionName");
@@ -794,9 +794,9 @@ namespace AllyisApps.Services
 		/// Gets a list of <see cref="BillingHistoryItemInfo"/>s for the billing history of the current organization.
 		/// </summary>
 		/// <returns>List of billing history items.</returns>
-		public IEnumerable<BillingHistoryItemInfo> GetBillingHistory(int orgId)
+		async public Task<IEnumerable<BillingHistoryItemInfo>> GetBillingHistory(int orgId)
 		{
-			return DBHelper.GetBillingHistoryByOrg(orgId).Select(i =>
+			return await DBHelper.GetBillingHistoryByOrg(orgId).Select(i =>
 			{
 				return new BillingHistoryItemInfo
 				{

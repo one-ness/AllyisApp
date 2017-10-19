@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Finance;
 using AllyisApps.Services.Expense;
@@ -70,7 +71,7 @@ namespace AllyisApps.Services
 		/// <returns></returns>
 		public bool CanDelete(int subId, int accId, out List<Account> associatedAccounts)
 		{
-			var subInfo = GetSubscription(subId);
+			var subInfo = GetSubscription(subId).Result;
 			List<Account> accounts = GetAccounts(subInfo.OrganizationId).ToList();
 
 			List<ExpenseReport> reports = GetExpenseReportByOrgId(subInfo.OrganizationId).ToList();

@@ -35,8 +35,9 @@ namespace AllyisApps.Controllers.Auth
 
 			if (!isInvited)
 			{
-				OrganizationUser userOrgInfo = AppService.GetOrganizationManagementInfo(orgId).Users.Find(m => m.UserId == userId);
-				User userBasicInfo = AppService.GetUser(userId);
+				var orgResult = await AppService.GetOrganizationManagementInfo(orgId);
+				OrganizationUser userOrgInfo = orgResult.Users.Find(m => m.UserId == userId);
+				User userBasicInfo = await AppService.GetUser(userId);
 
 				model = new EditMemberViewModel
 				{
@@ -72,7 +73,8 @@ namespace AllyisApps.Controllers.Auth
 			}
 			else
 			{
-				Invitation userOrgInfo = AppService.GetOrganizationManagementInfo(orgId).Invitations.Find(m => m.InvitationId == userId);
+				var orgResult = await AppService.GetOrganizationManagementInfo(orgId);
+				Invitation userOrgInfo = orgResult.Invitations.Find(m => m.InvitationId == userId);
 
 				model = new EditMemberViewModel
 				{
@@ -94,7 +96,6 @@ namespace AllyisApps.Controllers.Auth
 				};
 			}
 
-			await Task.Delay(1);
 			return View(model);
 		}
 
@@ -107,7 +108,7 @@ namespace AllyisApps.Controllers.Auth
 		{
 			if (ModelState.IsValid)
 			{
-				if (this.AppService.UpdateMember(model.UserInfo.UserId, model.OrganizationId, model.EmployeeId, model.EmployeeRoleId, model.FirstName, model.LastName, model.IsInvited))
+				if (await this.AppService.UpdateMember(model.UserInfo.UserId, model.OrganizationId, model.EmployeeId, model.EmployeeRoleId, model.FirstName, model.LastName, model.IsInvited))
 				{
 					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UpdateMemberSuccessMessage, model.UserInfo.FirstName, model.UserInfo.LastName), Variety.Success));
 				}
@@ -120,7 +121,6 @@ namespace AllyisApps.Controllers.Auth
 				return this.RedirectToAction(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { id = model.OrganizationId });
 			}
 
-			await Task.Delay(1);
 			return View(model);
 		}
 	}

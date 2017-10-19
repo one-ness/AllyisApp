@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -22,12 +23,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="accountId">The Account Id.</param>
 		/// <returns>A Model to the Create Account Page.</returns>
-		public ActionResult CreateAccount(int subscriptionId, int? accountId = null)
+		async public Task<ActionResult> CreateAccount(int subscriptionId, int? accountId = null)
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Accounts, subscriptionId);
 
 			SetNavData(subscriptionId);
-			var subInfo = AppService.GetSubscription(subscriptionId);
+			var subInfo = await AppService.GetSubscription(subscriptionId);
 			var accounts = AppService.GetAccounts(subInfo.OrganizationId);
 			var account = (accounts != null) && (accountId != null) ? accounts.Where(x => x.AccountId == accountId.Value).FirstOrDefault() : null;
 			List<SelectListItem> parentList = new List<SelectListItem>() { new SelectListItem() { Text = "None", Value = "0" } };

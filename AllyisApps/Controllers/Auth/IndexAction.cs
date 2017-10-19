@@ -39,7 +39,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>The Accound Index view model.</returns>
 		async public Task<AccountIndexViewModel> ConstuctIndexViewModel()
 		{
-			User accountInfo = AppService.GetCurrentUser();
+			User accountInfo = await AppService.GetCurrentUser();
 
 			AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel()
 			{
@@ -161,7 +161,6 @@ namespace AllyisApps.Controllers.Auth
 				indexViewModel.Organizations.Add(orgViewModel);
 			}
 
-			await Task.Delay(1);
 			return indexViewModel;
 		}
 

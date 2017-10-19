@@ -28,7 +28,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="returnUrl">The URL the user wishes to visit.</param>
 		/// <returns>The log on view.</returns>
 		[AllowAnonymous]
-		async public Task<ActionResult> LogOn(string returnUrl)
+		public ActionResult LogOn(string returnUrl)
 		{
 			if (Request.IsAuthenticated)
 			{
@@ -37,7 +37,6 @@ namespace AllyisApps.Controllers.Auth
 
 			ViewBag.ReturnUrl = returnUrl;
 
-			await Task.Delay(1);
 			return this.View(new LogOnViewModel());
 		}
 
@@ -55,7 +54,7 @@ namespace AllyisApps.Controllers.Auth
 			if (ModelState.IsValid)
 			{
 				User result = null;
-				if ((result = AppService.ValidateLogin(model.Email, model.Password)) != null)
+				if ((result = await AppService.ValidateLogin(model.Email, model.Password)) != null)
 				{
 					// sign in
 					if (result.IsEmailConfirmed || (WebConfigurationManager.AppSettings["RequireEmailConfirmation"] ?? "true").ToLower().Equals("false"))

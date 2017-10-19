@@ -26,7 +26,7 @@ namespace AllyisApps.Controllers.Auth
 		{
 			var model = new EditProfileViewModel();
 			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
-			var user = this.AppService.GetCurrentUser();
+			var user = await this.AppService.GetCurrentUser();
 			model.Address = user.Address?.Address1;
 			model.AddressId = user.Address?.AddressId;
 			model.City = user.Address?.City;
@@ -40,7 +40,6 @@ namespace AllyisApps.Controllers.Auth
 			model.SelectedStateId = user.Address?.StateId;
 			model.LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService, model.SelectedCountryCode);
 
-			await Task.Delay(1);
 			return this.View(model);
 		}
 
@@ -55,7 +54,7 @@ namespace AllyisApps.Controllers.Auth
 		{
 			if (ModelState.IsValid)
 			{
-				this.AppService.UpdateCurrentUserProfile(model.DateOfBirth, model.FirstName, model.LastName, model.PhoneNumber, model.AddressId, model.Address, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode);
+				await this.AppService.UpdateCurrentUserProfile(model.DateOfBirth, model.FirstName, model.LastName, model.PhoneNumber, model.AddressId, model.Address, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode);
 				Notifications.Add(new BootstrapAlert(Resources.Strings.UpdateProfileSuccessMessage, Variety.Success));
 				return this.RouteUserHome();
 			}
@@ -63,7 +62,7 @@ namespace AllyisApps.Controllers.Auth
 			// model error
 			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
 			model.LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService, model.SelectedCountryCode);
-			await Task.Delay(1);
+
 			return View(model);
 		}
 	}

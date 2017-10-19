@@ -199,7 +199,7 @@ namespace AllyisApps.Controllers.Auth
 		[HttpGet]
 		async public Task<ActionResult> ManageSubPermissions(int id)
 		{
-			var sub = AppService.GetSubscription(id);
+			var sub = await AppService.GetSubscription(id);
 			var orgSubs = AppService.GetSubscriptionsByOrg(sub.OrganizationId);
 
 			var subUsers = AppService.GetSubscriptionUsers(id);

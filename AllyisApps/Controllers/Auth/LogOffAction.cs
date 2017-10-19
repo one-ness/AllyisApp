@@ -21,14 +21,13 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		/// <returns>The ActionResult.</returns>
 		[HttpGet]
-		async public Task<ActionResult> LogOff()
+		public ActionResult LogOff()
 		{
 			this.SignOut();
 
 			// display success message to user
 			Notifications.Add(new BootstrapAlert(Resources.Strings.LogOffSuccess, Variety.Success));
 
-			await Task.Delay(1);
 			// redirect to home
 			return Redirect(this.ApplicationRootUrl);
 		}

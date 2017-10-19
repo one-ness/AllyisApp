@@ -45,9 +45,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="subId">The subscription id.</param>
 		/// <returns>An admin report model.</returns>
-		public AdminReportModel CreateAdminReportModel(int subId)
+		async public Task<AdminReportModel> CreateAdminReportModel(int subId)
 		{
-			var subInfo = AppService.GetSubscription(subId);
+			var subInfo = await AppService.GetSubscription(subId);
 			var reportInfo = AppService.GetReportInfo(subId);
 			var reports = AppService.GetExpenseReportByOrgId(subInfo.OrganizationId);
 			List<ExpenseReportViewModel> reportViewModels = new List<ExpenseReportViewModel>();

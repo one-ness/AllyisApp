@@ -25,7 +25,7 @@ namespace AllyisApps.Controllers.Auth
 		async public Task<ActionResult> DeleteOrg(int id)
 		{
 			// Method includes permissions check
-			AppService.DeleteOrganization(id);
+			await AppService.DeleteOrganization(id);
 			string notification = string.Format("{0} {1}", Resources.Strings.YourOrg, Resources.Strings.OrganizationDeleteNotification);
 			Notifications.Add(new BootstrapAlert(notification, Variety.Success));
 			await Task.Delay(1);

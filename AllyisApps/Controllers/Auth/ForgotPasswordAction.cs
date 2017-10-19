@@ -24,9 +24,8 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		/// <returns>The ActionResult.</returns>
 		[AllowAnonymous]
-		async public Task<ActionResult> ForgotPassword()
+		public ActionResult ForgotPassword()
 		{
-			await Task.Delay(1);
 			return this.View(new ForgotPasswordViewModel());
 		}
 
@@ -46,7 +45,7 @@ namespace AllyisApps.Controllers.Auth
 				// NOTE: do not check for failure, always display success message and redirect to login page
 				string code = Guid.NewGuid().ToString();
 				string callbackUrl = Url.Action(ActionConstants.ResetPassword, ControllerConstants.Account, null, protocol: Request.Url.Scheme);
-				User user = this.AppService.GetUserByEmail(model.Email);
+				User user = await this.AppService.GetUserByEmail(model.Email);
 				if (user != null)
 				{
 					StringBuilder sb = new StringBuilder();

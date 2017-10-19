@@ -186,13 +186,13 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="email">The login email.</param>
 		/// <param name="password">The login password.</param>
-		public User ValidateLogin(string email, string password)
+		async public Task<User> ValidateLogin(string email, string password)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
 
 			User result = null;
-			result = InitializeUser(this.DBHelper.GetUserByEmail(email), false);
+			result = InitializeUser(await this.DBHelper.GetUserByEmail(email), false);
 
 			if (result != null)
 			{
@@ -203,7 +203,7 @@ namespace AllyisApps.Services
 					// Store updated password hash if needed
 					if (passwordValidation.updatedHash != null)
 					{
-						DBHelper.UpdateUserPassword(result.UserId, passwordValidation.updatedHash);
+						await DBHelper.UpdateUserPassword(result.UserId, passwordValidation.updatedHash);
 					}
 				}
 				else
@@ -274,19 +274,19 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// get the current logged in user
 		/// </summary>
-		public User GetCurrentUser()
+		async public Task<User> GetCurrentUser()
 		{
-			return this.GetUser(this.UserContext.UserId);
+			return await this.GetUser(this.UserContext.UserId);
 		}
 
 		/// <summary>
 		/// Get User Address, Organizaiontins, and Inviations for account page
 		/// </summary>
-		public User GetUser(int userId)
+		async public Task<User> GetUser(int userId)
 		{
 			if (userId <= 0) throw new ArgumentOutOfRangeException("userId");
 
-			dynamic infos = this.DBHelper.GetUser(userId);
+			dynamic infos = await this.DBHelper.GetUser(userId);
 			User userInfo = this.InitializeUser(infos.User);
 			IEnumerable<dynamic> Organizations = infos.Organizations;
 			IEnumerable<dynamic> Subscriptions = infos.Subscriptions;
@@ -340,17 +340,17 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// update the current user profile
 		/// </summary>
-		public void UpdateCurrentUserProfile(int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
+		async public Task UpdateCurrentUserProfile(int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
 		{
-			this.DBHelper.UpdateUserProfile(this.UserContext.UserId, firstName, lastName, Utility.GetDateTimeFromDays(dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
+			await this.DBHelper.UpdateUserProfile(this.UserContext.UserId, firstName, lastName, Utility.GetDateTimeFromDays(dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
 		}
 
 		/// <summary>
 		/// update the current user profile
 		/// </summary>
-		public void UpdateUserProfile(int userId, int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
+		async public Task UpdateUserProfile(int userId, int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
 		{
-			this.DBHelper.UpdateUserProfile(userId, firstName, lastName, Utility.GetDateTimeFromDays(dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
+			await this.DBHelper.UpdateUserProfile(userId, firstName, lastName, Utility.GetDateTimeFromDays(dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
 		}
 
 		/// <summary>
@@ -358,24 +358,24 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="email">Email address.</param>
 		/// <returns>A UserInfo instance with the user's info.</returns>
-		public User GetUserByEmail(string email)
+		async public Task<User> GetUserByEmail(string email)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
 
-			return InitializeUser(DBHelper.GetUserByEmail(email));
+			return InitializeUser(await DBHelper.GetUserByEmail(email));
 		}
 
 		/// <summary>
 		/// Updates an organization member's info.
 		/// </summary>
-		public bool UpdateMember(int userId, int orgId, string employeeId, int roleId, string firstName, string lastName, bool isInvited)
+		async public Task<bool> UpdateMember(int userId, int orgId, string employeeId, int roleId, string firstName, string lastName, bool isInvited)
 		{
 			if (userId <= 0) throw new ArgumentOutOfRangeException("userId");
 			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
 			if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException("employeeId");
 			if (roleId <= 0) throw new ArgumentOutOfRangeException("roleId");
 
-			return DBHelper.UpdateMember(userId, orgId, employeeId, roleId, firstName, lastName, isInvited) == 1 ? true : false;
+			return await DBHelper.UpdateMember(userId, orgId, employeeId, roleId, firstName, lastName, isInvited) == 1 ? true : false;
 		}
 
 		/// <summary>

@@ -364,17 +364,18 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">The id of the organization.</param>
 		/// <returns>The Organization custormer.</returns>
-		public string GetOrgCustomer(int orgId)
+		async public Task<string> GetOrgCustomer(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@orgId", orgId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default -1
-				return connection.Query<string>(
+				var queryResults = await connection.QueryAsync<string>(
 				   "[Billing].[GetStripeOrgCustomer]",
 				   parameters,
-				   commandType: CommandType.StoredProcedure).SingleOrDefault();
+				   commandType: CommandType.StoredProcedure)
+				return queryResults.SingleOrDefault();
 			}
 		}
 
@@ -580,13 +581,13 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>List of BillingHistoryItem.</returns>
-		public IEnumerable<BillingHistoryItemDBEntity> GetBillingHistoryByOrg(int orgId)
+		async public Task<IEnumerable<BillingHistoryItemDBEntity>> GetBillingHistoryByOrg(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<BillingHistoryItemDBEntity>("[Billing].[GetBillingHistoryByOrg]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.QueryAsync<BillingHistoryItemDBEntity>("[Billing].[GetBillingHistoryByOrg]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 

@@ -43,14 +43,15 @@ namespace AllyisApps.Controllers.Auth
 			List<BillingHistoryItemViewModel> result = new List<BillingHistoryItemViewModel>();
 
 			// Creation of items from Stripe data
-			BillingServicesCustomerId customerId = AppService.GetOrgBillingServicesCustomerId(organizationId);
+			BillingServicesCustomerId customerId = await AppService.GetOrgBillingServicesCustomerId(organizationId);
 			if (customerId != null)
 			{
-				foreach (BillingServicesInvoice invoice in AppService.ListInvoices(customerId))
+				var invoices = AppService.ListInvoices(customerId);
+				foreach (BillingServicesInvoice invoice in invoices)
 				{
 					result.Add(new BillingHistoryItemViewModel
 					{
-						Date = await ConvertUtcDateTimeToEpoch(invoice.Date.Value),
+						Date = ConvertUtcDateTimeToEpoch(invoice.Date.Value),
 						Id = invoice.Id,
 						Description = string.Format("{0} invoice - Amount due: {1:C}", invoice.Service, invoice.AmountDue / 100.0), // Only works for USD right now // LANGUAGE Update to use resource file to change message language
 						ProductName = invoice.ProductName,
@@ -62,7 +63,7 @@ namespace AllyisApps.Controllers.Auth
 				{
 					result.Add(new BillingHistoryItemViewModel
 					{
-						Date = await ConvertUtcDateTimeToEpoch(charge.Created),
+						Date = ConvertUtcDateTimeToEpoch(charge.Created),
 						Id = charge.Id,
 						Description = string.Format("{0} charge - Amount paid: {1:C}", charge.Service, charge.Amount / 100.0), // Only works for USD right now // LANGUAGE Update to use resource file to change message language
 						ProductName = charge.StatementDescriptor,
@@ -72,11 +73,12 @@ namespace AllyisApps.Controllers.Auth
 			}
 
 			// Creation of items from our database
-			foreach (BillingHistoryItemInfo item in AppService.GetBillingHistory(organizationId))
+			var billingHistory = await AppService.GetBillingHistory(organizationId);
+			foreach (BillingHistoryItemInfo item in billingHistory)
 			{
 				result.Add(new BillingHistoryItemViewModel
 				{
-					Date = await ConvertUtcDateTimeToEpoch(item.Date),
+					Date = ConvertUtcDateTimeToEpoch(item.Date),
 					Id = string.Empty,
 					Description = item.Description,
 					ProductName = item.SkuName,
@@ -92,9 +94,8 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		/// <param name="utcDate">Datetime, in Utc.</param>
 		/// <returns>Datetime in ms since the BEGINNING OF ALL TIME (Jan 1st, 1970).</returns>
-		async public Task<long> ConvertUtcDateTimeToEpoch(DateTime utcDate)
+		public long ConvertUtcDateTimeToEpoch(DateTime utcDate)
 		{
-			await Task.Delay(1);
 			return (long)utcDate.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
 		}
 	}

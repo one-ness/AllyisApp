@@ -89,7 +89,6 @@ namespace AllyisApps.Controllers.Auth
 				}
 			}
 
-			await Task.Delay(1);
 			return RedirectToAction(ActionConstants.AddMember, ControllerConstants.Account, new { organizationId = id });
 		}
 	}

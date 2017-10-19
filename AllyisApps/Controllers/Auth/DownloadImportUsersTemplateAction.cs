@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace AllyisApps.Controllers.Auth
@@ -18,7 +17,7 @@ namespace AllyisApps.Controllers.Auth
 		/// Downloads the ImportUsersTemplate.csv file.
 		/// </summary>
 		/// <returns>A file object of ImportUsersTemplate.csv.</returns>
-		async public Task<ActionResult> DownloadImportUsersTemplate()
+		public ActionResult DownloadImportUsersTemplate()
 		{
 			string dir = (string)Resources.Files.Files.ResourceManager.GetObject("ImportUserTemplate");
 			var cd = new System.Net.Mime.ContentDisposition()
@@ -28,7 +27,7 @@ namespace AllyisApps.Controllers.Auth
 			};
 
 			Response.AppendHeader("Content-Disposition", cd.ToString());
-			await Task.Delay(1);
+
 			return this.File(new System.Text.UTF8Encoding().GetBytes(dir), "text/csv");
 		}
 	}

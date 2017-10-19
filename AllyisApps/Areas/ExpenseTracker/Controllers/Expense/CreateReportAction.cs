@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
@@ -19,7 +20,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="model">The model object.</param>
 		/// <returns>An action result.</returns>
 		[HttpPost]
-		public ActionResult CreateReport(ExpenseCreateModel model)
+		async public Task<ActionResult> CreateReport(ExpenseCreateModel model)
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, model.SubscriptionId);
 
@@ -40,7 +41,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				model.Items = new List<ExpenseItemCreateViewModel>();
 			}
 
-			var subscription = AppService.GetSubscription(model.SubscriptionId);
+			var subscription = await AppService.GetSubscription(model.SubscriptionId);
 			var organizationId = subscription.OrganizationId;
 			ExpenseStatusEnum reportStatus;
 			DateTime? submittedUtc = null;

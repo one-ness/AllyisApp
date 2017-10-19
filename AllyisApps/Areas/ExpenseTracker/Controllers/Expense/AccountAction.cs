@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
@@ -16,14 +17,14 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The Subscription Id.</param>
 		/// <returns>The account view page.</returns>
-		public ActionResult Accounts(int subscriptionId)
+		async public Task<ActionResult> Accounts(int subscriptionId)
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Accounts, subscriptionId);
 
 			SetNavData(subscriptionId);
 
 			AccountPageViewModel model = new AccountPageViewModel();
-			var subInfo = AppService.GetSubscription(subscriptionId);
+			var subInfo = await AppService.GetSubscription(subscriptionId);
 			var accounts = AppService.GetAccounts(subInfo.OrganizationId);
 			var results = accounts.Select(x =>
 				new AccountManagementViewModel()
