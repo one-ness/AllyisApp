@@ -401,6 +401,7 @@
     <Compile Include="Core\CustomRoutes.cs" />
     <Compile Include="Core\GlobalSettings.cs" />
     <Compile Include="Core\RouteExtensions.cs" />
+    <Compile Include="Core\ViewExtensions.cs" />
     <Compile Include="Resources\Countries.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
