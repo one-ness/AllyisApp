@@ -19,6 +19,7 @@ using AllyisApps.Services.Expense;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.Services.TimeTracker;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Services
 {
@@ -58,7 +59,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="entry">Time entry info.</param>
 		/// <returns>Time entry id.</returns>
-		public int CreateTimeEntry(TimeEntry entry)
+		async public Task<int> CreateTimeEntry(TimeEntry entry)
 		{
 			#region Validation
 
@@ -69,7 +70,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return DBHelper.CreateTimeEntry(GetDBEntityFromTimeEntryInfo(entry));
+			return await DBHelper.CreateTimeEntry(GetDBEntityFromTimeEntryInfo(entry));
 		}
 
 		/// <summary>
@@ -94,7 +95,7 @@ namespace AllyisApps.Services
 		/// Deletes a time entry.
 		/// </summary>
 		/// <param name="timeEntryId">Time entry Id.</param>
-		public void DeleteTimeEntry(int timeEntryId)
+		async public void DeleteTimeEntry(int timeEntryId)
 		{
 			#region Validation
 
@@ -106,6 +107,7 @@ namespace AllyisApps.Services
 			#endregion Validation
 
 			DBHelper.DeleteTimeEntry(timeEntryId);
+			await Task.Delay(0);
 		}
 
 		/// <summary>
@@ -145,7 +147,7 @@ namespace AllyisApps.Services
 		/// <param name="start">Starting. <see cref="DateTime"/>.</param>
 		/// <param name="end">Ending. <see cref="DateTime"/>.</param>
 		/// <returns><see cref="IEnumerable{TimeEntryInfo}"/>.</returns>
-		public IEnumerable<TimeEntry> GetTimeEntriesByUserOverDateRange(List<int> userIds, DateTime? start, DateTime? end, int organizationId = -1)
+		async public Task<IEnumerable<TimeEntry>> GetTimeEntriesByUserOverDateRange(List<int> userIds, DateTime? start, DateTime? end, int organizationId = -1)
 		{
 			#region Validation
 
@@ -172,7 +174,8 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return DBHelper.GetTimeEntriesByUserOverDateRange(userIds, organizationId, start ?? DateTime.Now, end ?? DateTime.Now).Select(te => InitializeTimeEntryInfo(te));
+			var results = await DBHelper.GetTimeEntriesByUserOverDateRange(userIds, organizationId, start ?? DateTime.Now, end ?? DateTime.Now);
+			return results.Select(te => InitializeTimeEntryInfo(te));
 		}
 
 		/// <summary>
@@ -194,9 +197,9 @@ namespace AllyisApps.Services
 		/// Gets the lock date for the current organization.
 		/// </summary>
 		/// <returns>Lock date.</returns>
-		public DateTime? GetLockDate(int organizationId)
+		async public Task<DateTime?> GetLockDate(int organizationId)
 		{
-			LockDateDBEntity lockDate = DBHelper.GetLockDate(organizationId);
+			LockDateDBEntity lockDate = await DBHelper.GetLockDate(organizationId);
 			return GetLockDateFromParameters(lockDate.IsLockDateUsed, lockDate.LockDatePeriod, lockDate.LockDateQuantity);
 		}
 
@@ -225,11 +228,12 @@ namespace AllyisApps.Services
 		/// <param name="holiday">Holiday.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool CreateHoliday(Holiday holiday, int subscriptionId)
+		async public Task<bool> CreateHoliday(Holiday holiday, int subscriptionId)
 		{
 			if (holiday == null) throw new ArgumentException("holiday");
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 			DBHelper.CreateHoliday(GetDBEntityFromHoliday(holiday));
+			await Task.Delay(0);
 			return true;
 		}
 
@@ -263,10 +267,11 @@ namespace AllyisApps.Services
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool CreatePayClass(string payClassName, int orgId, int subscriptionId)
+		async public Task<bool> CreatePayClass(string payClassName, int orgId, int subscriptionId)
 		{
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 			DBHelper.CreatePayClass(payClassName, orgId);
+			await Task.Delay(0);
 			return true;
 		}
 
@@ -382,7 +387,7 @@ namespace AllyisApps.Services
 		/// <param name="projectId">Project id to filter by.</param>
 		/// <param name="customerId">Customer id to filter by.</param>
 		/// <returns>The stream writer.</returns>
-		public StreamWriter PrepareCSVExport(int orgId, List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
+		async public Task<StreamWriter> PrepareCSVExport(int orgId, List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
 		{
 			// Preparing data
 			IEnumerable<TimeEntry> data = new List<TimeEntry>();
@@ -394,7 +399,7 @@ namespace AllyisApps.Services
 			}
 			else
 			{
-				data = this.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1), orgId);
+				data = await this.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1), orgId);
 			}
 
 			if (projectId > 0)
@@ -405,14 +410,15 @@ namespace AllyisApps.Services
 			{
 				if (customerId > 0)
 				{
-					IEnumerable<int> customerProjects = GetProjectsByCustomer(customerId).Select(p => p.ProjectId);
+					var proj = await GetProjectsByCustomer(customerId);
+					IEnumerable<int> customerProjects = proj.Select(p => p.ProjectId);
 					data = data.Where(t => customerProjects.Contains(t.ProjectId));
 				}
 			}
 
 			if (userIds != null && userIds.Count == 1 && userIds[0] > 0)
 			{
-				projects = GetProjectsByUserAndOrganization(userIds[0], orgId, onlyActive: false);
+				projects = await GetProjectsByUserAndOrganization(userIds[0], orgId, onlyActive: false);
 			}
 			else
 			{
@@ -568,7 +574,7 @@ namespace AllyisApps.Services
 		/// <param name="startingDate">Start of date range.</param>
 		/// <param name="endingDate">End of date range.</param>
 		/// <returns>.</returns>
-		public Tuple<Setting, List<PayClass>, List<Holiday>, List<CompleteProject>, List<User>, List<TimeEntry>>
+		async public Task<Tuple<Setting, List<PayClass>, List<Holiday>, List<CompleteProject>, List<User>, List<TimeEntry>>>
 			GetTimeEntryIndexInfo(int orgId, DateTime? startingDate, DateTime? endingDate, int? userId = null)
 		{
 			#region Validation
@@ -592,7 +598,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			var spResults = DBHelper.GetTimeEntryIndexPageInfo(orgId, (int)ProductIdEnum.TimeTracker, userId.Value, startingDate, endingDate);
+			var spResults = await DBHelper.GetTimeEntryIndexPageInfo(orgId, (int)ProductIdEnum.TimeTracker, userId.Value, startingDate, endingDate);
 
 			return Tuple.Create(InitializeSettingsInfo(spResults.Item1),
 				spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),

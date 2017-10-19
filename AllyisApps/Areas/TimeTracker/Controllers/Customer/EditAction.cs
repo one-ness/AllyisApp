@@ -14,6 +14,7 @@ using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.TimeTracker.Customer;
 using static AllyisApps.Services.AppService;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -29,15 +30,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="userId">The Customer id.</param>
 		/// <returns>Presents a page to edit Customer data.</returns>
 		[HttpGet]
-		public ActionResult Edit(int subscriptionId, int userId)
+		async public Task<ActionResult> Edit(int subscriptionId, int userId)
 		{
 			if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
 			{
 				AppService.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
 			}
 
-			var customer = AppService.GetCustomerInfo(userId);
-			string subscriptionNameToDisplay = AppService.GetSubscriptionName(subscriptionId);
+			var customer = await AppService.GetCustomerInfo(userId);
+			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
 			return this.View(new EditCustomerInfoViewModel
 			{
 				ContactEmail = customer.ContactEmail,
@@ -75,11 +76,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The ActionResult.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Edit(EditCustomerInfoViewModel model)
+		async public Task<ActionResult> Edit(EditCustomerInfoViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
-				var result = AppService.UpdateCustomer(
+				var result = await AppService.UpdateCustomer(
 					new Customer()
 					{
 						CustomerId = model.CustomerId,

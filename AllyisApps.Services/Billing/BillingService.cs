@@ -435,9 +435,9 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="subscriptionId"></param>
 		/// <returns></returns>
-		public string GetSubscriptionName(int subscriptionId)
+		async public Task<string> GetSubscriptionName(int subscriptionId)
 		{
-			return DBHelper.GetSubscriptionName(subscriptionId);
+			return await DBHelper.GetSubscriptionName(subscriptionId);
 		}
 
 		/// <summary>

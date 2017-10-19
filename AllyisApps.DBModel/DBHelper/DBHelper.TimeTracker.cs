@@ -15,6 +15,7 @@ using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.Hrm;
 using AllyisApps.DBModel.TimeTracker;
 using Dapper;
+using System.Threading.Tasks;
 
 namespace AllyisApps.DBModel
 {
@@ -28,14 +29,15 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">The Organization Id.</param>
 		/// <returns>The lock date.</returns>
-		public LockDateDBEntity GetLockDate(int organizationId)
+		async public Task<LockDateDBEntity> GetLockDate(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<LockDateDBEntity>("[TimeTracker].[GetLockDate]", parameters, commandType: CommandType.StoredProcedure).Single();
+				var results = await connection.QueryAsync<LockDateDBEntity>("[TimeTracker].[GetLockDate]", parameters, commandType: CommandType.StoredProcedure);
+				return results.Single();
 			}
 		}
 
@@ -43,7 +45,7 @@ namespace AllyisApps.DBModel
 		/// Creates a holiday and related TimeEntries for an organization.
 		/// </summary>
 		/// <param name="newHoliday">The HolidayDBEntity to create.</param>
-		public void CreateHoliday(HolidayDBEntity newHoliday)
+		async public void CreateHoliday(HolidayDBEntity newHoliday)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@holidayName", newHoliday.HolidayName);
@@ -51,7 +53,8 @@ namespace AllyisApps.DBModel
 			parameters.Add("@organizationId", newHoliday.OrganizationId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				newHoliday.HolidayId = connection.Query<int>("[Hrm].[CreateHoliday]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				var proj = await connection.QueryAsync<int>("[Hrm].[CreateHoliday]", parameters, commandType: CommandType.StoredProcedure);
+				newHoliday.HolidayId = proj.FirstOrDefault();
 			}
 		}
 
@@ -93,14 +96,14 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="payClassName">The name of the pay class to add.</param>
 		/// <param name="organizationId">The organization to add the pay class to.</param>
-		public void CreatePayClass(string payClassName, int organizationId)
+		async public void CreatePayClass(string payClassName, int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@payClassName", payClassName);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[Hrm].[CreatePayClass]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[Hrm].[CreatePayClass]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -172,7 +175,7 @@ namespace AllyisApps.DBModel
 		/// <param name="startingDate">The beginning date of the date range.</param>
 		/// <param name="endingDate">The ending date of the date range.</param>
 		/// <returns>A collection of time entries.</returns>
-		public IEnumerable<TimeEntryDBEntity> GetTimeEntriesByUserOverDateRange(
+		async public Task<IEnumerable<TimeEntryDBEntity>> GetTimeEntriesByUserOverDateRange(
 			List<int> userId,
 			int orgId,
 			DateTime startingDate,
@@ -193,7 +196,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				IEnumerable<TimeEntryDBEntity> result = connection.Query<TimeEntryDBEntity>(
+				IEnumerable<TimeEntryDBEntity> result = await connection.QueryAsync<TimeEntryDBEntity>(
 					"[TimeTracker].[GetTimeEntriesByUserOverDateRange]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
@@ -251,7 +254,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="entry">Object to be saved to the database.</param>
 		/// <returns>The id of the created timeEntry. If unsuccessful, returns -1.</returns>
-		public int CreateTimeEntry(TimeEntryDBEntity entry)
+		async public Task<int> CreateTimeEntry(TimeEntryDBEntity entry)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", entry.UserId);
@@ -263,7 +266,8 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				entry.TimeEntryId = connection.Query<int>("[TimeTracker].[CreateTimeEntry]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				var result = await connection.QueryAsync<int>("[TimeTracker].[CreateTimeEntry]", parameters, commandType: CommandType.StoredProcedure);
+				entry.TimeEntryId = result.FirstOrDefault();
 			}
 
 			return entry.TimeEntryId;
@@ -534,7 +538,7 @@ namespace AllyisApps.DBModel
 		/// <param name="startingDate">Start of date range.</param>
 		/// <param name="endingDate">End of date range.</param>
 		/// <returns>.</returns>
-		public Tuple<SettingDBEntity, List<PayClassDBEntity>, List<HolidayDBEntity>, List<ProjectDBEntity>, List<UserDBEntity>, List<TimeEntryDBEntity>>
+		async public Task<Tuple<SettingDBEntity, List<PayClassDBEntity>, List<HolidayDBEntity>, List<ProjectDBEntity>, List<UserDBEntity>, List<TimeEntryDBEntity>>>
 			GetTimeEntryIndexPageInfo(int orgId, int timeTrackerProductId, int userId, DateTime? startingDate, DateTime? endingDate)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -546,7 +550,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				var results = connection.QueryMultiple(
+				var results = await connection.QueryMultipleAsync(
 					"[TimeTracker].[GetTimeEntryIndexInfo]",
 					parameters,
 					commandType: CommandType.StoredProcedure);

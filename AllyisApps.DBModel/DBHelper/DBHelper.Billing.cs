@@ -203,13 +203,14 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="subscriptionId"></param>
 		/// <returns></returns>
-		public string GetSubscriptionName(int subscriptionId)
+		async public Task<string> GetSubscriptionName(int subscriptionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@subscriptionId", subscriptionId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<string>("[Billing].[GetSubscriptionName]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				var results = await connection.QueryAsync<string>("[Billing].[GetSubscriptionName]", parameters, commandType: CommandType.StoredProcedure);
+				return results.SingleOrDefault();
 			}
 		}
 
