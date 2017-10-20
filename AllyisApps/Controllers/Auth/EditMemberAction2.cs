@@ -26,6 +26,7 @@ namespace AllyisApps.Controllers.Auth
 		public async Task<ActionResult> EditMember2(int id)
 		{
 			var model = await Task.Run(() => new EditMemberViewModel2());
+			User user = this.AppService.GetUser(id);
 			return View(model);
 		}
 	}
