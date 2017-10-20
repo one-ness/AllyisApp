@@ -196,7 +196,7 @@ namespace AllyisApps.Services
 
 			return result;
 		}
-
+		
 		/// <summary>
 		/// check permissions for the given action in the given subscription for the logged in user.
 		/// </summary>

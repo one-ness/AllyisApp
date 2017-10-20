@@ -16,15 +16,15 @@
 	ViewData["SubscriptionName"] = Model.SubscriptionName;
 }
 
-<div class="row">
-	<div class="col-xs-12 col-md-8 col-md-push-2">
-		<ul class="nav nav-tabs">
+<div class="ovrd-row row">
+	<div class="ovrd-col-xs-12 col-xs-12 ovrd-col-md-8 col-md-8 ovrd-col-md-push-2 col-md-push-2 col">
+		<ul class="ovrd-nav nav ovrd-nav-tabs nav-tabs">
 			<li id="activeTab" class="active"><a onclick="populateActiveForm()">Active</a></li>
 			<li id="inactiveTab"><a onclick="populateInactiveForm()">Inactive</a></li>
 		</ul>
 		<br />
 		<form>
-			<div id="resultPartialForm" class="row">
+			<div id="resultPartialForm" class="ovrd-row row">
 				<!--Partial view will be updated here every time a tab is chosen-->
 				<div id="activePartial">
 					@Html.Partial("_IndexPartial_Active")
