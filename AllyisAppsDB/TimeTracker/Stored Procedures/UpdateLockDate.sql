@@ -1,6 +1,6 @@
 CREATE PROCEDURE [TimeTracker].[UpdateLockDate]
 	@organizationId INT,
-	@lockDate DATETIME2
+	@lockDate DATE
 AS
 	UPDATE [TimeTracker].[Setting]
 	SET [LockDate] = @lockDate

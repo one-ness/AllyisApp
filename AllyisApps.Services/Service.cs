@@ -724,7 +724,8 @@ namespace AllyisApps.Services
 				UserId = entity.UserId,
 				EmployeeId = entity.EmployeeId,
 				Email = entity.Email,
-				TimeEntryStatusId = entity.TimeEntryStatusId
+				TimeEntryStatusId = entity.TimeEntryStatusId,
+				IsLocked = entity.IsLocked
 			};
 		}
 
