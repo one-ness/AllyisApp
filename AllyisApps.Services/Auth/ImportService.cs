@@ -64,17 +64,18 @@ namespace AllyisApps.Services
 			{
 				customersProjects.Add(new Tuple<Customer, List<Project.Project>>(
 					customer,
-					this.GetProjectsByCustomer(customer.CustomerId).ToList()
+					(await this.GetProjectsByCustomer(customer.CustomerId)).ToList()
 				));
 			}
 
 			// Retrieval of existing user data
-			List<Tuple<string, User>> users = this.GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, this.GetUser(o.UserId))).ToList();
+			var userGet = await this.GetUser(UserContext.UserId);
+			List<Tuple<string, User>> users = this.GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, userGet )).ToList();
 
 			// Retrieval of existing user product subscription data
 			int ttProductId = (int)ProductIdEnum.TimeTracker;
 			SubscriptionDisplayDBEntity ttSub = DBHelper.GetSubscriptionsDisplayByOrg(orgId).Where(s => s.ProductId == ttProductId).SingleOrDefault();
-			List<User> userSubs = this.GetUsersWithSubscriptionToProductInOrganization(orgId, ttProductId).ToList();
+			List<User> userSubs = (await this.GetUsersWithSubscriptionToProductInOrganization(orgId, ttProductId)).ToList();
 
 			// Retrieval of existing pay class data
 			List<PayClass> payClasses = DBHelper.GetPayClasses(orgId).Select(pc => InitializePayClassInfo(pc)).ToList();
@@ -266,7 +267,7 @@ namespace AllyisApps.Services
 
 								if (newCustomer != null)
 								{
-									int? newCustomerId = this.CreateCustomer(newCustomer, subscriptionId);
+									int? newCustomerId = await this.CreateCustomer(newCustomer, subscriptionId);
 									if (newCustomerId == null)
 									{
 										result.CustomerFailures.Add(string.Format("Could not create customer {0}: permission failure.", newCustomer.CustomerName));
@@ -312,7 +313,7 @@ namespace AllyisApps.Services
 
 							if (updated)
 							{
-								this.UpdateCustomer(customer, subscriptionId);
+								await this.UpdateCustomer(customer, subscriptionId);
 							}
 						}
 					}
@@ -414,7 +415,7 @@ namespace AllyisApps.Services
 									StartingDate = defaultProjectStartDate,
 									EndingDate = defaultProjectEndDate
 								};
-								project.ProjectId = this.CreateProject(project);
+								project.ProjectId = await this.CreateProject(project);
 								if (project.ProjectId == -1)
 								{
 									result.ProjectFailures.Add(string.Format("Database error while creating project {0}", project.ProjectName));
@@ -522,7 +523,7 @@ namespace AllyisApps.Services
 										StartingDate = defaultProjectStartDate,
 										EndingDate = defaultProjectEndDate
 									};
-									project.ProjectId = this.CreateProject(project);
+									project.ProjectId = await this.CreateProject(project);
 									if (project.ProjectId == -1)
 									{
 										result.ProjectFailures.Add(string.Format("Database error while creating project {0}", project.ProjectName));
@@ -739,7 +740,7 @@ namespace AllyisApps.Services
 
 							if (updated)
 							{
-								this.UpdateUserProfile(userInOrg.UserId, Utility.GetDaysFromDateTime(userInOrg.DateOfBirth), userInOrg.FirstName, userInOrg.LastName, userInOrg.PhoneNumber, userInOrg.Address?.AddressId, userInOrg.Address?.Address1, userInOrg.Address?.City, userInOrg.Address?.StateId, userInOrg.Address?.PostalCode, userInOrg.Address?.CountryCode);
+								await this.UpdateUserProfile(userInOrg.UserId, Utility.GetDaysFromDateTime(userInOrg.DateOfBirth), userInOrg.FirstName, userInOrg.LastName, userInOrg.PhoneNumber, userInOrg.Address?.AddressId, userInOrg.Address?.Address1, userInOrg.Address?.City, userInOrg.Address?.StateId, userInOrg.Address?.PostalCode, userInOrg.Address?.CountryCode);
 							}
 						}
 					}
@@ -754,7 +755,8 @@ namespace AllyisApps.Services
 						if (project != null && userInOrg != null)
 						{
 							// Find existing project user
-							if (!this.GetProjectsByUserAndOrganization(userInOrg.UserId).Where(p => p.ProjectId == project.ProjectId).Any())
+							var proj = await this.GetProjectsByUserAndOrganization(userInOrg.UserId);
+							if (!proj.Where(p => p.ProjectId == project.ProjectId).Any())
 							{
 								// If no project user entry exists for this user and project, we create one.
 								this.CreateProjectUser(project.ProjectId, userInOrg.UserId);
@@ -833,7 +835,8 @@ namespace AllyisApps.Services
 									}
 
 									// Find existing entry. If none, create new one     TODO: See if there's a good way to populate this by sheet rather than by row, or once at the top
-									List<TimeEntryDBEntity> entries = DBHelper.GetTimeEntriesByUserOverDateRange(new List<int> { userInOrg.UserId }, orgId, theDate, theDate).ToList();
+									var entryGet = await DBHelper.GetTimeEntriesByUserOverDateRange(new List<int> { userInOrg.UserId }, orgId, theDate, theDate);
+									List<TimeEntryDBEntity> entries = entryGet.ToList();
 									if (!entries.Where(e => ((e.Description == null && description.Equals("")) || description.Equals(e.Description)) && e.Duration == theDuration && e.PayClassId == payClass.PayClassId && e.ProjectId == project.ProjectId).Any())
 									{
 										if (entries.Select(e => e.Duration).Sum() + theDuration > 24)
@@ -843,7 +846,7 @@ namespace AllyisApps.Services
 										}
 
 										// All required information is present and valid
-										if (DBHelper.CreateTimeEntry(new TimeEntryDBEntity
+										if (await DBHelper.CreateTimeEntry(new TimeEntryDBEntity
 										{
 											Date = theDate,
 											Description = description,

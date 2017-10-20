@@ -219,7 +219,7 @@ namespace AllyisApps.Services
 		/// <returns>Lock date.</returns>
 		async public Task<DateTime?> GetLockDate(int organizationId)
 		{
-			LockDateDBEntity lockDate = await DBHelper.GetLockDate(organizationId);
+			LockDateDBEntity lockDate = await DBHelper.GetLockDateByOrganizationId(organizationId);
 			return GetLockDateFromParameters(lockDate.IsLockDateUsed, lockDate.LockDatePeriod, lockDate.LockDateQuantity);
 		}
 
