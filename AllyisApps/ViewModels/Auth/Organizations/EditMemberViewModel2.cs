@@ -101,7 +101,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public EditMemberViewModel2()
 		{
-			this.Roles = new List<RoleItem>():
+            this.Roles = new List<RoleItem>();
 		}
 	}
 }
