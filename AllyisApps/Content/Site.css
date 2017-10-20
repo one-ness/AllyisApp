@@ -788,10 +788,6 @@ div.shrink-wrap-center > div {
 	}
 }
 
-body {
-	margin-bottom: calc(85px);
-}
-
 .footer {
 	background-color: #f8f8f8;
 	border-top: 1px #e7e7e7 solid;
