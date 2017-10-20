@@ -331,6 +331,7 @@ namespace AllyisApps.Services
 						OrganizationId = inv.OrganizationId,
 					}
 				).ToList();
+
 			return userInfo;
 		}
 
