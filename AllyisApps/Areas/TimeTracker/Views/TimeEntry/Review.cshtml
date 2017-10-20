@@ -36,7 +36,7 @@
 			<div class="clearfix"></div>
 		</div>
 	</div>
-	<table class="table table-hover table-xtra-condensed table-responsive">
+	<table class="table table-xtra-condensed table-responsive">
 		<thead>
 			<tr class="double-bottom-border">
 				<th><input type="checkbox" class="check-all" check-all-id="0"></th>
@@ -66,7 +66,7 @@
 							<div class="status-dots">
 								<i class="fa fa-circle status-dot color-code-Pending  @(group.All(entry => entry.TimeEntryStatusId != 0) ? "greyed-out" : "")" aria-hidden="true"></i>
 								<i class="fa fa-circle status-dot color-code-Rejected @(group.All(entry => entry.TimeEntryStatusId != 1) ? "greyed-out" : "")" aria-hidden="true"></i>
-								<i class="fa fa-circle status-dot color-code-Accepted @(group.All(entry => entry.TimeEntryStatusId != 2) ? "greyed-out" : "")" aria-hidden="true"></i>
+								<i class="fa fa-circle status-dot color-code-Approved @(group.All(entry => entry.TimeEntryStatusId != 2) ? "greyed-out" : "")" aria-hidden="true"></i>
 								<i class="fa fa-circle status-dot color-code-PayrollProcessed @(group.All(entry => entry.TimeEntryStatusId != 3) ? "greyed-out" : "")" aria-hidden="true"></i>
 							</div>
 						</div>
@@ -195,28 +195,41 @@
 			padding: 3px !important;
 		}
 
-		.color-code-Pending {
+		i.color-code-Pending {
 			color: grey;
-			background: grey;
 		}
 
-		.color-code-Accepted {
+		tr.color-code-Pending {
+			background-color: grey;
+		}
+
+		i.color-code-Approved {
 			color: dodgerblue;
-			background: dodgerblue;
 		}
 
-		.color-code-Rejected {
-			color: orangered;
-			background: orangered;
+		tr.color-code-Approved {
+			background-color: dodgerblue;
 		}
 
-		.color-code-PayrollProcessed {
-			color: forestgreen;
-			background: forestgreen;
+		i.color-code-Rejected {
+			color: tomato;
+		}
+
+		tr.color-code-Rejected {
+			background-color: tomato;
+		}
+
+		i.color-code-PayrollProcessed {
+			color: mediumseagreen;
+		}
+
+		tr.color-code-PayrollProcessed {
+			background-color: mediumseagreen;
 		}
 
 		.greyed-color {
-			color: lightgrey !important;
+			color: lightgrey;
+			background-color: lightgrey;
 		}
 
 		.status-dots {
