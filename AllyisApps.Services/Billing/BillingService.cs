@@ -435,9 +435,9 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="subscriptionId"></param>
 		/// <returns></returns>
-		public string GetSubscriptionName(int subscriptionId)
+		async public Task<string> GetSubscriptionName(int subscriptionId)
 		{
-			return DBHelper.GetSubscriptionName(subscriptionId);
+			return await DBHelper.GetSubscriptionName(subscriptionId);
 		}
 
 		/// <summary>
@@ -782,14 +782,14 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="subscriptionId">The subscription id for which you wish to know the product name.</param>
 		/// <returns>The product name.</returns>
-		public string GetProductNameBySubscriptionId(int subscriptionId)
+		async public Task<string> GetProductNameBySubscriptionId(int subscriptionId)
 		{
 			if (subscriptionId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("subscriptionId", "Subscription Id cannot be 0 or negative.");
 			}
 
-			return DBHelper.GetProductAreaBySubscription(subscriptionId);
+			return await DBHelper.GetProductAreaBySubscription(subscriptionId);
 		}
 
 		/// <summary>

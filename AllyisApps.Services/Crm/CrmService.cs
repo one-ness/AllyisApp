@@ -44,7 +44,6 @@ namespace AllyisApps.Services
 			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			var spResults = DBHelper.GetNextCustId(subInfo.OrganizationId);
 			return spResults.Item1 == null ? "0000000000000000" : new string(IncrementAlphanumericCharArray(spResults.Item1.ToCharArray()));
-				
 		}
 
 		/// <summary>
@@ -877,7 +876,6 @@ namespace AllyisApps.Services
 					CustomerId = completeProject.CustomerId,
 					CustomerName = completeProject.CustomerName,
 					CustomerOrgId = completeProject.CustomerOrgId,
-
 				},
 				EndDate = completeProject.EndDate,
 				IsActive = completeProject.IsActive,

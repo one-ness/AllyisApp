@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
@@ -17,7 +18,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="model">User settings information.</param>
 		/// <returns>The action result.</returns>
 		[HttpPost]
-		public ActionResult UpdateUserSettings(UserSettingsViewModel model)
+		async public Task<ActionResult> UpdateUserSettings(UserSettingsViewModel model)
 		{
 			UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId];
 			if (!ModelState.IsValid)
@@ -28,7 +29,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			foreach (UserMaxAmountViewModel userMaxAmountViewModel in model.Users)
 			{
 				OrganizationUser userInfo = InitializeOrganizaionUser(userMaxAmountViewModel, subInfo.OrganizationId);
-				AppService.UpdateUserOrgMaxAmount(userInfo);
+				await AppService.UpdateUserOrgMaxAmount(userInfo);
 			}
 
 			return RedirectToAction("index");

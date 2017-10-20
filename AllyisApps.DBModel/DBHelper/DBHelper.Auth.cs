@@ -195,7 +195,7 @@ namespace AllyisApps.DBModel
 		/// Updates the max amount a user can approve of in a report.
 		/// </summary>
 		/// <param name="orgUser"></param>
-		public void UpdateUserMaxAmount(OrganizationUserDBEntity orgUser)
+		async public Task UpdateUserMaxAmount(OrganizationUserDBEntity orgUser)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", orgUser.UserId);
@@ -204,7 +204,7 @@ namespace AllyisApps.DBModel
 
 			using (var connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[Auth].[UpdateUserMaxAmount]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[Auth].[UpdateUserMaxAmount]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 

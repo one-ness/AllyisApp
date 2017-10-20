@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
 using AllyisApps.Services;
@@ -23,9 +24,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			ViewData["MaxAmount"] = AppService.GetOrganizationUserMaxAmount(AppService.UserContext.UserId, subInfo.OrganizationId);
 		}
 
-		private void UploadItems(ExpenseCreateModel model, ExpenseReport report)
+		async private Task UploadItems(ExpenseCreateModel model, ExpenseReport report)
 		{
-			IList<ExpenseItem> oldItems = AppService.GetExpenseItemsByReportId(report.ExpenseReportId);
+			IList<ExpenseItem> oldItems = await AppService.GetExpenseItemsByReportId(report.ExpenseReportId);
 			List<int> itemIds = new List<int>();
 			foreach (ExpenseItem oldItem in oldItems)
 			{

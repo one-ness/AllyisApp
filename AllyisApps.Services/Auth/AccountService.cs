@@ -606,14 +606,14 @@ namespace AllyisApps.Services
 			};
 		}
 
-		public void UpdateUserOrgMaxAmount(OrganizationUser userInfo)
+		async public Task UpdateUserOrgMaxAmount(OrganizationUser userInfo)
 		{
 			OrganizationUserDBEntity entity = new OrganizationUserDBEntity()
 			{
 				UserId = userInfo.UserId,
 				OrganizationId = userInfo.OrganizationId
 			};
-			DBHelper.UpdateUserMaxAmount(entity);
+			await DBHelper.UpdateUserMaxAmount(entity);
 		}
 
 		public decimal GetOrganizationUserMaxAmount(int userId, int orgId)

@@ -29,7 +29,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			SetNavData(subscriptionId);
 			var subInfo = await AppService.GetSubscription(subscriptionId);
-			var accounts = AppService.GetAccounts(subInfo.OrganizationId);
+			var accounts = await AppService.GetAccounts(subInfo.OrganizationId);
 			var account = (accounts != null) && (accountId != null) ? accounts.Where(x => x.AccountId == accountId.Value).FirstOrDefault() : null;
 			List<SelectListItem> parentList = new List<SelectListItem>() { new SelectListItem() { Text = "None", Value = "0" } };
 

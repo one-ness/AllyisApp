@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
@@ -17,9 +18,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="index">The item index.</param>
 		/// <returns>A partial view.</returns>
-		public ActionResult AddItem(int subscriptionId, int index)
+		async public Task<ActionResult> AddItem(int subscriptionId, int index)
 		{
-			IEnumerable<Account> accountEntities = AppService.GetAccounts(subscriptionId);
+			IEnumerable<Account> accountEntities = await AppService.GetAccounts(subscriptionId);
 			List<AccountViewModel> accountViewModels = new List<AccountViewModel>();
 			foreach (Account account in accountEntities)
 			{

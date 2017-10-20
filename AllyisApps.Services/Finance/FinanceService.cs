@@ -12,9 +12,10 @@ namespace AllyisApps.Services
 	/// </summary>
 	public partial class AppService : BaseService
 	{
-		public IList<Account> GetAccounts(int orgId)
+		async public Task<IList<Account>> GetAccounts(int orgId)
 		{
-			return DBHelper.GetAccounts(orgId).Select(x => InitializeAccountModel(x)).ToList();
+			var results = await DBHelper.GetAccounts(orgId);
+			return results.Select(x => InitializeAccountModel(x)).ToList();
 		}
 
 		public bool UpdateAccount(Account item)
@@ -31,9 +32,9 @@ namespace AllyisApps.Services
 			return result != -1 ? true : false;
 		}
 
-		public void DeleteAccount(int id)
+		async public Task DeleteAccount(int id)
 		{
-			DBHelper.DeleteAccount(id);
+			await DBHelper.DeleteAccount(id);
 			return;
 		}
 
@@ -72,9 +73,9 @@ namespace AllyisApps.Services
 		public bool CanDelete(int subId, int accId, out List<Account> associatedAccounts)
 		{
 			var subInfo = GetSubscription(subId).Result;
-			List<Account> accounts = GetAccounts(subInfo.OrganizationId).ToList();
+			List<Account> accounts = GetAccounts(subInfo.OrganizationId).Result.ToList();
 
-			List<ExpenseReport> reports = GetExpenseReportByOrgId(subInfo.OrganizationId).ToList();
+			List<ExpenseReport> reports = GetExpenseReportByOrgId(subInfo.OrganizationId).Result.ToList();
 			List<ExpenseItem> items = new List<ExpenseItem>();
 
 			associatedAccounts = new List<Account>();
@@ -82,7 +83,7 @@ namespace AllyisApps.Services
 			//Get all report items to check their associated account.
 			foreach (var report in reports)
 			{
-				items.AddRange(GetExpenseItemsByReportId(report.ExpenseReportId));
+				items.AddRange(GetExpenseItemsByReportId(report.ExpenseReportId).Result);
 			}
 			List<Account> parentAccounts = accounts.Where(x => x.AccountId == accId).ToList();
 
