@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using AllyisApps.DBModel.TimeTracker;
 using AllyisApps.Services.TimeTracker;
 
@@ -23,6 +24,23 @@ namespace AllyisApps.Services
 			}
 
 			return DBEntityToServiceObject(DBHelper.GetSettingsByOrganizationId(organizationId));
+		}
+
+		public bool LockTimeEntries(int subscriptionId, DateTime lockDate)
+		{
+			var organizationId = UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			var timeTrackerSettings = GetSettingsByOrganizationId(organizationId);
+			var startDate = timeTrackerSettings.LockDate == null ? DateTime.MinValue : timeTrackerSettings.LockDate;
+			var timeEntries = GetTimeEntriesOverDateRange(organizationId, startDate, lockDate);
+
+			if (timeEntries.Any(entry =>
+				(TimeEntryStatus)entry.TimeEntryStatusId != TimeEntryStatus.Approved ||
+				(TimeEntryStatus)entry.TimeEntryStatusId != TimeEntryStatus.Rejected))
+			{
+				return false;
+			}
+
+			return UpdateLockDate(organizationId, lockDate) == 1;
 		}
 
 		#region public static

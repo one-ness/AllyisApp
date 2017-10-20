@@ -101,8 +101,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpPost]
 		public ActionResult LockTimeEntries(int subscriptionId, DateTime startDate, DateTime lockDate)
 		{
-			//bool successful = AppService.LockTimeEntries(subscriptionId, lockDate);
-			Notifications.Add(new BootstrapAlert($"Successfully locked all time entries at or before {lockDate.ToShortDateString()}", Variety.Success));
+			bool successful = AppService.LockTimeEntries(subscriptionId, lockDate);
+			if (successful)
+			{
+				Notifications.Add(new BootstrapAlert($"Successfully locked all time entries at or before {lockDate.ToShortDateString()}", Variety.Success));
+			}
+			else
+			{
+				Notifications.Add(new BootstrapAlert($"Cannot lock time entries at or before {lockDate.ToShortDateString()}.  Are all of them Approved or Rejected?", Variety.Danger));
+			}
+
 			return RedirectToAction(ActionConstants.Review, new { subscriptionId = subscriptionId, startDate = startDate, endDate = lockDate });
 		}
 	}
