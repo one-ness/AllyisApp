@@ -5,6 +5,8 @@
 //------------------------------------------------------------------------------
 
 using System;
+using AllyisApps.DBModel.TimeTracker;
+using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Services
 {
@@ -13,6 +15,16 @@ namespace AllyisApps.Services
 	/// </summary>
 	public partial class AppService : BaseService
 	{
+		public Setting GetSettingsByOrganizationId(int organizationId)
+		{
+			if (organizationId < 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(organizationId), $"{nameof(organizationId)} must be greater than 0.");
+			}
+
+			return DBEntityToServiceObject(DBHelper.GetSettingsByOrganizationId(organizationId));
+		}
+
 		#region public static
 
 		public static DateTime SetStartingDate(DateTime? date, int startOfWeek)
@@ -28,6 +40,24 @@ namespace AllyisApps.Services
 			}
 
 			return date.Value.Date;
+		}
+
+		public static Setting DBEntityToServiceObject(SettingDBEntity settings)
+		{
+			return new Setting
+			{
+				OrganizationId = settings.OrganizationId,
+				StartOfWeek = settings.StartOfWeek,
+				OvertimeHours = settings.OvertimeHours,
+				OvertimePeriod = settings.OvertimePeriod,
+				OvertimeMultiplier = settings.OvertimeMultiplier,
+				IsLockDateUsed = settings.IsLockDateUsed,
+				LockDatePeriod = settings.LockDatePeriod,
+				LockDateQuantity = settings.LockDateQuantity,
+				PayrollProcessedDate = settings.PayrollProcessedDate,
+				LockDate = settings.LockDate,
+				PayPeriod = settings.PayPeriod
+			};
 		}
 
 		#endregion public static

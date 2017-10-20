@@ -7,6 +7,9 @@
     [IsLockDateUsed]     BIT            CONSTRAINT [DF_Setting_LockDateUsed] DEFAULT ((0)) NOT NULL,
     [LockDatePeriod]     INT			CONSTRAINT [DF_Setting_LockDatePeriod] DEFAULT (1) NOT NULL,
     [LockDateQuantity]   INT            CONSTRAINT [DF_Setting_LockDateQuantity] DEFAULT ((14)) NOT NULL,
+    [PayrollProcessedDate] DATETIME2 NULL,
+    [LockDate] DATETIME2 NULL,
+    [PayPeriod] VARCHAR(MAX) NOT NULL DEFAULT '{"type":"duration","duration":"14","startDate":"2017-10-16"}',
     CONSTRAINT [PK_Setting] PRIMARY KEY CLUSTERED ([OrganizationId] ASC),
     CONSTRAINT [FK_Settings_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId])
 );

@@ -79,6 +79,9 @@ namespace AllyisApps
 			bundles.Add(new ScriptBundle("~/bundles/UpdateStateDDL").Include(
 				"~/Scripts/allyis-updateStateDDL.js"));
 
+			bundles.Add(new ScriptBundle("~/bundles/BootstrapSelect").Include(
+				"~/Scripts/bootstrap-select.min.js"));
+
 			// CDN links with fallbacks
 			Bundle jQueryBundle = new ScriptBundle("~/bundles/jquery"/*, "//ajax.aspnetcdn.com/ajax/jquery/jquery-3.1.1.min.js"*/).Include(
 						"~/Scripts/jquery-{version}.js");
@@ -130,6 +133,9 @@ namespace AllyisApps
 
 			bundles.Add(new StyleBundle("~/Content/Timetracker").Include(
 					  "~/Content/timetracker.css"));
+
+			bundles.Add(new StyleBundle("~/Content/BootstrapSelect").Include(
+					  "~/Content/bootstrap-select.min.css"));
 
 			// CDN links - fallbacks are much trickier with CSS as we cannot simply use a javascript variable as above. For now, no fallback provided.
 			bundles.Add(new StyleBundle("~/Content/Bootstrap", "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"));

@@ -53,7 +53,6 @@
 /// <reference path="jquery-3.1.1.min.js" />
 /// <reference path="jquery-3.1.1.slim.min.js" />
 /// <reference path="jquery-ui.min.js" />
-/// <reference path="less.js" />
 /// <reference path="moment-2.14.1.js" />
 /// <reference path="respond.js" />
 /// <reference path="respond.matchmedia.addlistener.js" />

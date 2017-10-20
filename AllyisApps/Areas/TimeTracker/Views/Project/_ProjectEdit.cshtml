@@ -50,11 +50,11 @@
 						@Html.ListBoxFor(m => m.SubscriptionUsers, new MultiSelectList(Model.SubscriptionUsers, "UserId", "Name"), new { @name = "Excluded", @id = "excluded-users", @class = "filter-list", @Multiple = "multiple" })
 					</div>
 					<div class="actions">
-						<a href="javascript: moveSelectedProjectEditModal('in')" class="btn btn-default move-in">
-							<i class="fa fa-lg fa-arrow-right"></i>
+						<a href="javascript: moveSelectedProjectEditModal('in')" class="ovrd-btn btn ovrd-btn-default btn-default move-in">
+							<i class="ovrd-fa fa ovrd-fa-lg fa-lg ovrd-fa-arrow-right fa-arrow-right"></i>
 						</a>
-						<a href="javascript: moveSelectedProjectEditModal('out')" class="btn btn-default move-out">
-							<i class="fa fa-lg fa-arrow-left"></i>
+						<a href="javascript: moveSelectedProjectEditModal('out')" class="ovrd-btn btn ovrd-btn-default btn-default move-out">
+							<i class="ovrd-fa fa ovrd-fa-lg fa-lg ovrd-fa-arrow-left fa-arrow-left"></i>
 						</a>
 					</div>
 					<div class="right">
@@ -68,18 +68,18 @@
 						@Html.ListBoxFor(m => m.SelectedProjectUserIds, new MultiSelectList(Model.ProjectUsers, "UserId", "Name"), new { @name = "Included", @id = "included-users", @class = "filter-list", @Multiple = "multiple" })
 					</div>
 				</div>
-				<div class="form-group row" style="margin-bottom: 0px; margin-top: 15px;">
+				<div class="form-group ovrd-row row" style="margin-bottom: 0px; margin-top: 15px;">
 					<div class="form-group projectDate">
 						<label>@Strings.StartDate</label>
 						@Html.HiddenFor(m => m.StartDate)
 						<input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerStart" />
-						<span class="fa fa-fw fa-calendar" id="datePickerStartButton"></span>
+						<span class="ovrd-fa fa ovrd-fa-fw fa-fw ovrd-fa-calendar fa-calendar" id="datePickerStartButton"></span>
 					</div>
 					<div class="form-group projectDate" style="float: right">
 						<label>@Strings.EndDate</label>
 						@Html.HiddenFor(m => m.EndDate)
 						<input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerEnd" />
-						<span class="fa fa-fw fa-calendar" id="datePickerEndButton"></span>
+						<span class="ovrd-fa fa ovrd-fa-fw fa-fw ovrd-fa-calendar fa-calendar" id="datePickerEndButton"></span>
 					</div>
 				</div>
 				@Html.HiddenFor(m => m.ParentCustomerId)
@@ -90,16 +90,16 @@
 			</div>
 
 			<div class="text-right" style="padding-top: 15px; padding-bottom: 15px;">
-				<input type="button" class="btn btn-default" value=@Strings.Cancel onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId })'" />
-				<input type="submit" value=@Strings.Save class="btn btn-primary" id="submitProject" />
+				<input type="button" class="ovrd-btn btn ovrd-btn-default btn-default" value=@Strings.Cancel onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId })'" />
+				<input type="submit" value=@Strings.Save class="ovrd-btn btn ovrd-btn-primary btn-primary" id="submitProject" />
 			</div>
 		}
 
 		<br />
 		@if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)
 		{
-			<div class="row">
-				<div class="col-md-6 sm-control-width">
+			<div class="ovrd-row row">
+				<div class="ovrd-col-md-6 col-md-6 col sm-control-width">
 					<label>@Strings.Upload</label>
 					@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
 					{
@@ -113,13 +113,13 @@
 
 						<div style="margin-top: 10px; margin-bottom: 15px; float:right;">
 							<a class="btn btn-primary" onclick="$('input[id=upload-box]').click();" title="Choose project entries Excel file to upload">@Strings.ChooseFile</a>
-							<input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" title="Upload project entries from Excel" />
+							<input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="ovrd-btn btn ovrd-btn-primary btn-primary" title="Upload project entries from Excel" />
 						</div>
 					}
 					@using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Customer, null, FormMethod.Get, new { style = "display: flex; justify-content: space-between;", id = "template-form" }))
 					{
 						<div style="margin-top: 10px; margin-bottom: 15px; float:left">
-							<input type="submit" form="template-form" id="template-button" value="@Strings.Template" class="btn btn-primary" title="Download Excel template for project entries" />
+							<input type="submit" form="template-form" id="template-button" value="@Strings.Template" class="ovrd-btn btn ovrd-btn-primary btn-primary" title="Download Excel template for project entries" />
 						</div>
 					}
 				</div>

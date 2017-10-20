@@ -45,5 +45,10 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Gets or sets the description defined in this entry.
 		/// </summary>
 		public string Description { get; set; }
+
+		/// <summary>
+		/// Gets or sets the status of the time entry, e.g. "Pending", "Approved", "Rejected", "Payroll Processed".
+		/// </summary>
+		public int TimeEntryStatusId { get; set; }
 	}
 }

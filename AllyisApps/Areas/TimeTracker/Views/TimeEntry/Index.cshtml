@@ -50,7 +50,7 @@
 					{
 						<a class="btn btn-primary" title="@Strings.Previous"
 						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.Subscriptionid, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
-							<i class="fa fa-chevron-left"></i>
+							<i class="ovrd-fa fa ovrd-fa-chevron-left fa-chevron-left"></i>
 						</a>
 						<a class="btn btn-primary" title="@Strings.Current"
 						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.Subscriptionid, startDate = ViewBag.WeekStart, endDate = ViewBag.WeekEnd })">
@@ -58,14 +58,14 @@
 						</a>
 						<a class="btn btn-primary" title="@Strings.Next"
 						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.Subscriptionid, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
-							<i class="fa fa-chevron-right"></i>
+							<i class="ovrd-fa fa ovrd-fa-chevron-right fa-chevron-right"></i>
 						</a>
 					}
 					else
 					{
 						<a class="btn btn-primary" title="@Strings.Previous"
 						   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.Subscriptionid, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
-							<i class="fa fa-chevron-left"></i>
+							<i class="ovrd-fa fa ovrd-fa-chevron-left fa-chevron-left"></i>
 						</a>
 						<a class="btn btn-primary" title="@Strings.Current"
 						   href="@Url.Action(ActionConstants.Index, routeValues: new {  subscriptionId = Model.Subscriptionid, userId = ViewBag.SelectedUserId,  startDate = ViewBag.WeekStart, endDate = ViewBag.WeekEnd })">
@@ -74,7 +74,7 @@
 
 						<a class="btn btn-primary" title="@Strings.Next"
 						   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.Subscriptionid, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
-							<i class="fa fa-chevron-right"></i>
+							<i class="ovrd-fa fa ovrd-fa-chevron-right fa-chevron-right"></i>
 						</a>
 					}
 				</div>
@@ -195,7 +195,7 @@
 							<a href="@Url.Action(ActionConstants.UserEdit, routeValues: new {
 								subscriptionId = Model.Subscriptionid,
 								userId = user.UserId })"
-							   style="text-decoration: none; color: #0066AA; padding-right:5%" title="Assign Projects to User"><i class="fa fa-cog"></i></a>
+							   style="text-decoration: none; color: #0066AA; padding-right:5%" title="Assign Projects to User"><i class="ovrd-fa fa ovrd-fa-cog fa-cog"></i></a>
 						</div>count++;
 					}
 				}
