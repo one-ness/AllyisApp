@@ -794,6 +794,7 @@ div.shrink-wrap-center > div {
 	position: static;
 	bottom: 0px;
 	height: 70px !important;
+	margin-top: calc(85px);
 }
 
 .footer .footer-links {
