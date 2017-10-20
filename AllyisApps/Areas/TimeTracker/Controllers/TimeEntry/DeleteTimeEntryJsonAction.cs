@@ -11,6 +11,7 @@ using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -26,7 +27,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="model">The model representing the time entry to be deleted.</param>
 		/// <returns>JSON Status. {status: 'success|error', message: 'a string'}.</returns>
 		[HttpPost]
-		public ActionResult DeleteTimeEntryJson(DeleteTimeEntryViewModel model)
+		async public Task<ActionResult> DeleteTimeEntryJson(DeleteTimeEntryViewModel model)
 		{
 			// Check for permissions
 			Services.TimeTracker.TimeEntry entry = AppService.GetTimeEntry(model.TimeEntryId);
@@ -56,7 +57,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			// Time entry is locked
-			DateTime? lockDate = AppService.GetLockDateByOrganizationId(AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId);
+			DateTime? lockDate = await AppService.GetLockDate(AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId);
 			if ((!this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, model.SubscriptionId)) && entry.Date <= (lockDate == null ? DateTime.MinValue : lockDate.Value))
 			{
 				string errorMessage = Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture);
@@ -78,14 +79,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="model"></param>
 		/// <returns></returns>
-		protected ActionResult DeleteTimeEntryJson(EditTimeEntryViewModel model)
+		async protected Task<ActionResult> DeleteTimeEntryJson(EditTimeEntryViewModel model)
 		{
 			if (!model.IsDeleted)
 			{
 				throw new Exception("Attempt to delete edited view that was not marked for deletion");
 			}
 
-			return DeleteTimeEntryJson(new DeleteTimeEntryViewModel()
+			return await DeleteTimeEntryJson(new DeleteTimeEntryViewModel()
 			{
 				ApprovalState = model.ApprovalState,
 				Duration = model.Duration,

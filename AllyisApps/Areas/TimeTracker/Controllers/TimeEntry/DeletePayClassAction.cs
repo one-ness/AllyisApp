@@ -8,6 +8,7 @@ using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -22,7 +23,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="userId">The id of the class to delete.</param> // TODO: update this after changing the route
 		/// <param name="subscriptionId">The subscription's id.</param>
 		/// <returns>Redirects to the settings view.</returns>
-		public ActionResult DeletePayClass(int userId, int subscriptionId)
+		async public Task<ActionResult> DeletePayClass(int userId, int subscriptionId)
 		{
 			int orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 
@@ -36,7 +37,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else
 			{
-				if (AppService.DeletePayClass(userId, orgId, subscriptionId, null))
+				if (await AppService.DeletePayClass(userId, orgId, subscriptionId, null))
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulDeletePayClass.Replace("{0}", sourcePayClassName), Variety.Success));
 				}

@@ -12,6 +12,7 @@ using System.Linq;
 using AllyisApps.Lib;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -25,15 +26,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <returns>The settings page.</returns>
-		public ActionResult SettingsStartOfWeek(int subscriptionId)
+		async public Task<ActionResult> SettingsStartOfWeek(int subscriptionId)
 		{
 			this.AppService.CheckTimeTrackerAction((AppService.TimeTrackerAction.EditOthers), subscriptionId);
 			int organizaionID = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			var infos = AppService.GetAllSettings(organizaionID);
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			string subName = AppService.GetSubscriptionName(subscriptionId);
-			var infoOrg = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
+			string subName = await AppService.GetSubscriptionName(subscriptionId);
+			var infoOrg = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infoOrg.Item1.StartOfWeek));
 			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
 			Services.TimeTracker.Setting settings = infos.Item1;
@@ -74,14 +75,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subscriptionId">The subscription's id.</param>
 		/// <param name="startOfWeek">Start of week selected by Organization admin.</param>
 		/// <returns>Action result.</returns>
-		public ActionResult UpdateStartOfWeek(int subscriptionId, int startOfWeek)
+		async public Task<ActionResult> UpdateStartOfWeek(int subscriptionId, int startOfWeek)
 		{
 			System.Diagnostics.Debug.WriteLine("New Start Date: " + startOfWeek);
+			var upWeek = await AppService.UpdateStartOfWeek(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId, subscriptionId, startOfWeek);
 			if (startOfWeek < 0 || startOfWeek > 6)
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.InvalidSOW, Variety.Warning));
 			}
-			else if (!AppService.UpdateStartOfWeek(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId, subscriptionId, startOfWeek))
+			else if (!upWeek)
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}

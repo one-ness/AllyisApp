@@ -287,7 +287,7 @@ namespace AllyisApps.DBModel
 		/// <param name="userId">The User Id.</param>
 		/// <param name="isActive">Is active.</param>
 		/// <returns>The number of rows successfully updated.</returns>C:\Users\v-trsan\Desktop\AllyisApps\aa\src\main\aadb\StoredProcedures\TimeTracker
-		public int UpdateProjectUser(int projectId, int userId, int isActive)
+		async public Task<int> UpdateProjectUser(int projectId, int userId, int isActive)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@projectId", projectId);
@@ -298,10 +298,11 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				int rows = 1;
-				rows = connection.Query<int>(
+				var result = await connection.QueryAsync<int>(
 					"[Pjm].[UpdateProjectUser]",
 					parameters,
-					commandType: CommandType.StoredProcedure).SingleOrDefault();
+					commandType: CommandType.StoredProcedure);
+				rows = result.SingleOrDefault();
 
 				return rows;
 			}

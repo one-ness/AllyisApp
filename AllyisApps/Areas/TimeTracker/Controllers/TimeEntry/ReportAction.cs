@@ -16,6 +16,7 @@ using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
 using AllyisApps.ViewModels.TimeTracker.Project;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -29,7 +30,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The Subscription Id.</param>
 		/// <returns>The reports page.</returns>
-		public ActionResult Report(int subscriptionId)
+		async public Task<ActionResult> Report(int subscriptionId)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 
@@ -40,7 +41,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			const string TempDataKey = "RVM";
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			string subName = AppService.GetSubscription(subscriptionId).SubscriptionName;
+			var getSub = await AppService.GetSubscription(subscriptionId);
+			string subName = getSub.SubscriptionName; 
 			if (this.TempData[TempDataKey] != null)
 			{
 				reportVM = (ReportViewModel)TempData[TempDataKey];
@@ -56,7 +58,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			reportVM.ProjectView = this.GetProjectSelectList(infos.CompleteProject, reportVM.Selection.CustomerId, reportVM.Selection.ProjectId);
 			reportVM.SubscriptionId = subscriptionId;
 
-			var infoOrg = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
+			var infoOrg = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infoOrg.Item1.StartOfWeek));
 			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
 
