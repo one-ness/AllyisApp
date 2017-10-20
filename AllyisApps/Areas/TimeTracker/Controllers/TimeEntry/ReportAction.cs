@@ -36,7 +36,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			ReportViewModel reportVM = null;
 
-			var infos = AppService.GetReportInfo(subscriptionId);
+			var infos = await AppService.GetReportInfo(subscriptionId);
 
 			const string TempDataKey = "RVM";
 			UserContext.SubscriptionAndRole subInfo = null;

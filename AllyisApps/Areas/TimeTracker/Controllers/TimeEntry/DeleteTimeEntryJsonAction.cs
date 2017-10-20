@@ -30,7 +30,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		async public Task<ActionResult> DeleteTimeEntryJson(DeleteTimeEntryViewModel model)
 		{
 			// Check for permissions
-			Services.TimeTracker.TimeEntry entry = AppService.GetTimeEntry(model.TimeEntryId);
+			Services.TimeTracker.TimeEntry entry = await AppService.GetTimeEntry(model.TimeEntryId);
 			if (entry.UserId != this.AppService.UserContext.UserId)
 			{
 				if (!this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId))

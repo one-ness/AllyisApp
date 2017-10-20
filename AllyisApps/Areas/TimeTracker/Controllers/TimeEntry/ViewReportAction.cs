@@ -62,7 +62,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					reportVMselect.Users = userSelect;
 				}
 
-				var infos = AppService.GetReportInfo(subscriptionId);
+				var infos = await AppService.GetReportInfo(subscriptionId);
 				UserContext.SubscriptionAndRole subInfo = null;
 				this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 				string subName = await AppService.GetSubscriptionName(subscriptionId);

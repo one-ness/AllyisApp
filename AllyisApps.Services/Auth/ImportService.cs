@@ -78,7 +78,8 @@ namespace AllyisApps.Services
 			List<User> userSubs = (await this.GetUsersWithSubscriptionToProductInOrganization(orgId, ttProductId)).ToList();
 
 			// Retrieval of existing pay class data
-			List<PayClass> payClasses = DBHelper.GetPayClasses(orgId).Select(pc => InitializePayClassInfo(pc)).ToList();
+			var classGet = await DBHelper.GetPayClasses(orgId);
+			List<PayClass> payClasses = classGet.Select(pc => InitializePayClassInfo(pc)).ToList();
 
 			// Result object
 			ImportActionResult result = new ImportActionResult();

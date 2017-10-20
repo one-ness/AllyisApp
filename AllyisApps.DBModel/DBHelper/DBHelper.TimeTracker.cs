@@ -16,7 +16,6 @@ using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.Hrm;
 using AllyisApps.DBModel.TimeTracker;
 using Dapper;
-using System.Threading.Tasks;
 
 namespace AllyisApps.DBModel
 {
