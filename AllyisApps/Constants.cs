@@ -121,6 +121,8 @@ namespace AllyisApps
 		public const string SettingsStartOfWeek = "settingsstartofweek";
 		public const string SettingsPayClass = "settingspayclass";
 		public const string SettingsLockDate = "settingslockdate";
+		public const string Review = "review";
+		public const string UpdateTimeEntryStatus = "updatetimeentrystatus";
 	}
 
 	/// <summary>

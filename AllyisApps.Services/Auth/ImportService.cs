@@ -786,11 +786,13 @@ namespace AllyisApps.Services
 									string duration = null;
 									string description = "";
 									string payclass = "Regular";
+									string timeEntryStatusString = null;
 
 									this.readColumn(row, ColumnHeaders.Date, val => date = val);
 									this.readColumn(row, ColumnHeaders.Duration, val => duration = val);
 									if (hasTTDescription) this.readColumn(row, ColumnHeaders.Description, val => description = val);
 									this.readColumn(row, ColumnHeaders.PayClass, val => payclass = val);
+									readColumn(row, ColumnHeaders.Status, val => timeEntryStatusString = val);
 
 									PayClass payClass = payClasses.Where(p => p.PayClassName.ToUpper().Equals(payclass.ToUpper())).SingleOrDefault();
 									DateTime theDate;
@@ -799,6 +801,12 @@ namespace AllyisApps.Services
 									if (payClass == null)
 									{
 										result.TimeEntryFailures.Add(string.Format("Error importing time entry on sheet {0}, row {1}: unknown {2} ({3}).", table.TableName, table.Rows.IndexOf(row) + 2, ColumnHeaders.PayClass, payclass));
+										continue;
+									}
+
+									if (!Enum.TryParse(timeEntryStatusString, out TimeEntryStatus timeEntryStatus))
+									{
+										result.TimeEntryFailures.Add(string.Format("Error importing time entry on sheet {0}, row {1}: unknown {2} ({3}).", table.TableName, table.Rows.IndexOf(row) + 2, ColumnHeaders.Status, timeEntryStatusString));
 										continue;
 									}
 
@@ -835,7 +843,7 @@ namespace AllyisApps.Services
 										}
 
 										// All required information is present and valid
-										if (DBHelper.CreateTimeEntry(new DBModel.TimeTracker.TimeEntryDBEntity
+										if (DBHelper.CreateTimeEntry(new TimeEntryDBEntity
 										{
 											Date = theDate,
 											Description = description,
@@ -844,7 +852,8 @@ namespace AllyisApps.Services
 											LastName = userInOrg.LastName,
 											PayClassId = payClass.PayClassId,
 											ProjectId = project.ProjectId,
-											UserId = userInOrg.UserId
+											UserId = userInOrg.UserId,
+											TimeEntryStatusId = (int)timeEntryStatus
 										}) == -1)
 										{
 											result.TimeEntryFailures.Add(string.Format("Database error importing time entry on sheet {0}, row {1}.", table.TableName, table.Rows.IndexOf(row) + 2));

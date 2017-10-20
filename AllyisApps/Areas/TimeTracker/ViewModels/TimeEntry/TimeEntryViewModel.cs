@@ -8,6 +8,36 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 	public class TimeEntryViewModel
 	{
 		/// <summary>
+		/// Default constructor.
+		/// </summary>
+		public TimeEntryViewModel() { }
+
+		/// <summary>
+		/// Initializes the view model with the timeentry service object.
+		/// </summary>
+		/// <param name="timeEntry">The time entry service object to convert</param>
+		public TimeEntryViewModel(Services.TimeTracker.TimeEntry timeEntry)
+		{
+			ApprovalState = timeEntry.ApprovalState;
+			Date = timeEntry.Date;
+			Description = timeEntry.Description;
+			Duration = timeEntry.Duration;
+			Email = timeEntry.Email;
+			EmployeeId = timeEntry.EmployeeId;
+			FirstName = timeEntry.FirstName;
+			IsLockSaved = timeEntry.IsLockSaved;
+			LastName = timeEntry.LastName;
+			ModSinceApproval = timeEntry.ModSinceApproval;
+			PayClassId = timeEntry.PayClassId;
+			PayClassName = timeEntry.PayClassName;
+			ProjectId = timeEntry.ProjectId;
+			TimeEntryId = timeEntry.TimeEntryId;
+			UserId = timeEntry.UserId;
+			TimeEntryStatusId = timeEntry.TimeEntryStatusId;
+			TimeEntryStatusName = timeEntry.getTimeEntryStatusName();
+		}
+
+		/// <summary>
 		/// Gets or sets the TimeEntryId.
 		/// </summary>
 		public int TimeEntryId { get; set; }
@@ -81,5 +111,25 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Gets or sets a value indicating whether the data has changed since being approved or dissaproved.
 		/// </summary>
 		public bool ModSinceApproval { get; set; }
+
+		/// <summary>
+		/// Gets or sets the customer name for the time entry
+		/// </summary>
+		public string CustomerName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the project name for the time entry
+		/// </summary>
+		public string ProjectName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the status of the time entry, e.g. "Pending", "Approved", "Rejected", "Payroll Processed".
+		/// </summary>
+		public int TimeEntryStatusId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the status of the time entry, e.g. "Pending", "Approved", "Rejected", "Payroll Processed".
+		/// </summary>
+		public string TimeEntryStatusName { get; set; }
 	}
 }

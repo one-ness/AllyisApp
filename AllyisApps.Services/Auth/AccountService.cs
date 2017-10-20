@@ -335,6 +335,13 @@ namespace AllyisApps.Services
 						OrganizationId = inv.OrganizationId,
 					}
 				).ToList();
+
+			if (this.UserContext.UserId != userInfo.UserId)
+			{
+				// logged in user is trying to read a different user's information
+
+			}
+
 			return userInfo;
 		}
 

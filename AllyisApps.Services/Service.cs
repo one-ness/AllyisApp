@@ -92,6 +92,26 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// Sets the approval state of a time entry in the database.
+		/// </summary>
+		/// <param name="timeEntryId">The Id of the time entry to be updated.</param>
+		/// <param name="timeEntryStatusId">The new status.</param>
+		public int UpdateTimeEntryStatusById(int timeEntryId, int timeEntryStatusId)
+		{
+			if (timeEntryId <= 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(timeEntryId), $"{nameof(timeEntryId)} must be greater than 0.");
+			}
+
+			if (timeEntryStatusId < 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(timeEntryStatusId), $"{nameof(timeEntryStatusId)} must not be negative.");
+			}
+
+			return DBHelper.UpdateTimeEntryStatusById(timeEntryId, timeEntryStatusId);
+		}
+
+		/// <summary>
 		/// Deletes a time entry.
 		/// </summary>
 		/// <param name="timeEntryId">Time entry Id.</param>
@@ -200,6 +220,9 @@ namespace AllyisApps.Services
 		async public Task<DateTime?> GetLockDate(int organizationId)
 		{
 			LockDateDBEntity lockDate = await DBHelper.GetLockDate(organizationId);
+		public DateTime? GetLockDateByOrganizationId(int organizationId)
+		{
+			LockDateDBEntity lockDate = DBHelper.GetLockDateByOrganizationId(organizationId);
 			return GetLockDateFromParameters(lockDate.IsLockDateUsed, lockDate.LockDatePeriod, lockDate.LockDateQuantity);
 		}
 
@@ -312,11 +335,17 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets a list of <see cref="PayClass"/>'s for an organization.
 		/// </summary>
-		public IEnumerable<PayClass> GetPayClasses(int subscriptionId)
+		public IEnumerable<PayClass> GetPayClassesBySubscriptionId(int subscriptionId)
 		{
-			UserContext.SubscriptionAndRole subInfo = null;
-			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			return DBHelper.GetPayClasses(subInfo.OrganizationId).Select(pc => InitializePayClassInfo(pc));
+			return DBHelper.GetPayClasses(UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId).Select(pc => InitializePayClassInfo(pc));
+		}
+
+		/// <summary>
+		/// Gets a list of <see cref="PayClass"/>'s for an organization.
+		/// </summary>
+		public IEnumerable<PayClass> GetPayClassesByOrganizationId(int organizationId)
+		{
+			return DBHelper.GetPayClasses(organizationId).Select(pc => InitializePayClassInfo(pc));
 		}
 
 		/// <summary>
@@ -445,7 +474,8 @@ namespace AllyisApps.Services
 					ColumnHeaders.ProjectId,
 					ColumnHeaders.CustomerName,
 					ColumnHeaders.CustomerId,
-					ColumnHeaders.Description
+					ColumnHeaders.Description,
+					ColumnHeaders.Status
 				));
 
 			foreach (TimeEntry entry in data)
@@ -468,7 +498,8 @@ namespace AllyisApps.Services
 							project != null ? (project.ProjectOrgId ?? string.Empty) : string.Empty,
 							project != null ? (project.owningCustomer.CustomerName ?? string.Empty) : string.Empty,
 							project != null ? (project.owningCustomer.CustomerOrgId ?? string.Empty) : string.Empty,
-							entry.Description));
+							entry.Description,
+							((TimeEntryStatus)entry.TimeEntryStatusId).ToString()));
 				}
 				catch (Exception ex)
 				{
@@ -529,7 +560,7 @@ namespace AllyisApps.Services
 		/// <param name="lockDateQuantity">The quantity of the selected period.</param>
 		/// <param name="orgId">.</param>
 		/// <returns>.</returns>
-		public bool UpdateLockDate(bool lockDateUsed, int lockDatePeriod, int lockDateQuantity, int orgId)
+		public bool UpdateOldLockDate(bool lockDateUsed, int lockDatePeriod, int lockDateQuantity, int orgId)
 		{
 			if (!new int[] { 1, 2, 3 }.Contains(lockDatePeriod))
 			{
@@ -541,7 +572,17 @@ namespace AllyisApps.Services
 				throw new ArgumentException("Lock date quantity cannot be less than zero.");
 			}
 
-			return DBHelper.UpdateLockDate(orgId, lockDateUsed, lockDatePeriod, lockDateQuantity);
+			return DBHelper.UpdateOldLockDate(orgId, lockDateUsed, lockDatePeriod, lockDateQuantity);
+		}
+
+		public int UpdateLockDate(int organizationId, DateTime lockDate)
+		{
+			if (organizationId < 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(organizationId), $"{nameof(organizationId)} must be greater than 0.");
+			}
+
+			return DBHelper.UpdateLockDate(organizationId, lockDate);
 		}
 
 		/// <summary>
@@ -664,7 +705,7 @@ namespace AllyisApps.Services
 				StartOfWeek = settings.StartOfWeek,
 				LockDatePeriod = settings.LockDatePeriod,
 				LockDateQuantity = settings.LockDateQuantity,
-				IsLockDateUsed = settings.IsLockDateUsed
+				IsLockDateUsed = settings.IsLockDateUsed,
 			};
 		}
 
@@ -691,7 +732,8 @@ namespace AllyisApps.Services
 				TimeEntryId = entity.TimeEntryId,
 				UserId = entity.UserId,
 				EmployeeId = entity.EmployeeId,
-				Email = entity.Email
+				Email = entity.Email,
+				TimeEntryStatusId = entity.TimeEntryStatusId
 			};
 		}
 

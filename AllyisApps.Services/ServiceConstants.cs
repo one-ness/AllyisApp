@@ -184,6 +184,11 @@
 		/// </summary>
 		public const string PayClass = "Pay Class";
 
+		/// <summary>
+		/// Time Entry-Property: Pay Class.
+		/// </summary>
+		public const string Status = "Status";
+
 		#endregion Time Entry
 	}
 }
