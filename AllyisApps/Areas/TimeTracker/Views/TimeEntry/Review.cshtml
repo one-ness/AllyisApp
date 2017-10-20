@@ -36,7 +36,7 @@
 			<div class="clearfix"></div>
 		</div>
 	</div>
-	<table class="table table-hover table-condensed table-responsive">
+	<table class="table table-xtra-condensed table-responsive">
 		<thead>
 			<tr class="double-bottom-border">
 				<th><input type="checkbox" class="check-all" check-all-id="0"></th>
@@ -60,11 +60,21 @@
 					{
 						<td>@Model.TimeEntryTotalsByUserByPayClass[group.Key][payClassId]</td>
 					}
-					<td>@group.Sum(entry => entry.Duration)</td>
+					<td>
+						<div class="pull-left">@group.Sum(entry => entry.Duration)</div>
+						<div class="pull-right">
+							<div class="status-dots">
+								<i class="fa fa-circle status-dot color-code-Pending  @(group.All(entry => entry.TimeEntryStatusId != 0) ? "greyed-out" : "")" aria-hidden="true"></i>
+								<i class="fa fa-circle status-dot color-code-Rejected @(group.All(entry => entry.TimeEntryStatusId != 1) ? "greyed-out" : "")" aria-hidden="true"></i>
+								<i class="fa fa-circle status-dot color-code-Approved @(group.All(entry => entry.TimeEntryStatusId != 2) ? "greyed-out" : "")" aria-hidden="true"></i>
+								<i class="fa fa-circle status-dot color-code-PayrollProcessed @(group.All(entry => entry.TimeEntryStatusId != 3) ? "greyed-out" : "")" aria-hidden="true"></i>
+							</div>
+						</div>
+					</td>
 				</tr>
 				foreach (var timeEntry in group)
 				{
-					<tr class="child-row hidden" rowId=@group.Key data-time-entry-status-id="@timeEntry.TimeEntryStatusId">
+					<tr class="child-row hidden color-code-@(timeEntry.TimeEntryStatusName)" rowId=@group.Key data-time-entry-status-id="@timeEntry.TimeEntryStatusId">
 						<td></td>
 						<td><input type="checkbox" class="check time-entry-check" check-id="@group.Key" data-time-entry-id="@timeEntry.TimeEntryId"></td>
 						<td>
@@ -174,6 +184,74 @@
 	<style>
 		.filtered {
 			display: none;
+		}
+
+		.table-xtra-condensed > thead > tr > th,
+		.table-xtra-condensed > tbody > tr > th,
+		.table-xtra-condensed > tfoot > tr > th,
+		.table-xtra-condensed > thead > tr > td,
+		.table-xtra-condensed > tbody > tr > td,
+		.table-xtra-condensed > tfoot > tr > td {
+			padding: 3px !important;
+		}
+
+		i.color-code-Pending {
+			color: grey;
+		}
+
+		tr.color-code-Pending {
+			background-color: grey;
+		}
+
+		i.color-code-Approved {
+			color: dodgerblue;
+		}
+
+		tr.color-code-Approved {
+			background-color: dodgerblue;
+		}
+
+		i.color-code-Rejected {
+			color: tomato;
+		}
+
+		tr.color-code-Rejected {
+			background-color: tomato;
+		}
+
+		i.color-code-PayrollProcessed {
+			color: mediumseagreen;
+		}
+
+		tr.color-code-PayrollProcessed {
+			background-color: mediumseagreen;
+		}
+
+		.greyed-color {
+			color: lightgrey;
+			background-color: lightgrey;
+		}
+
+		.status-dots {
+			height: 20px;
+			width: 20px;
+			-webkit-transform-origin: 50% 50%;
+			-moz-transform-origin: 50% 50%;
+			-ms-transform-origin: 50% 50%;
+			-o-transform-origin: 50% 50%;
+			transform-origin: 50% 50%;
+			-webkit-transform: rotate(45deg);
+			-moz-transform: rotate(45deg);
+			-ms-transform: rotate(20deg);
+			-o-transform: rotate(20deg);
+			transform: rotate(45deg);
+		}
+
+		.status-dot {
+			font-size: 10px !important;
+			height: 10px;
+			width: 10px;
+			float: left;
 		}
 	</style>
 }
