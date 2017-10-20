@@ -11,6 +11,11 @@ namespace AllyisApps.ViewModels.Auth
 	public class OrganizationInvitationsViewModel : BaseViewModel
 	{
 		/// <summary>
+		/// organization id
+		/// </summary>
+		public int OrganizationId { get; set; }
+
+		/// <summary>
 		/// name of the organization
 		/// </summary>
 		public string OrganizationName { get; set; }
@@ -24,6 +29,16 @@ namespace AllyisApps.ViewModels.Auth
 		/// information for members and invitations tab
 		/// </summary>
 		public MembersAndInvitationsTabViewModel TabInfo { get; set; }
+
+		/// <summary>
+		/// is delete allowed?
+		/// </summary>
+		public bool CanDeleteInvitations { get; set; }
+
+		/// <summary>
+		/// is resend allowed?
+		/// </summary>
+		public bool CanResendInvitations { get; set; }
 
 		/// <summary>
 		/// constructor
@@ -76,9 +91,28 @@ namespace AllyisApps.ViewModels.Auth
 			public DateTime InvitedOn { get; set; }
 
 			/// <summary>
+			/// formatted invitation date
+			/// </summary>
+			public string FormattedInvitedOnDate
+			{
+				get
+				{
+					return this.InvitedOn.ToString("d");
+				}
+			}
+
+			/// <summary>
 			/// date on which the status 
 			/// </summary>
 			public DateTime? DecisionDate { get; set; }
+
+			/// <summary>
+			/// constructor;
+			/// </summary>
+			public ViewModelItem()
+			{
+				this.ProductAndRoleNames = new List<Tuple<string, string>>();
+			}
 		}
 	}
 }

@@ -7,6 +7,7 @@ namespace AllyisApps.ViewModels.Auth
 	/// </summary>
 	public class MembersAndInvitationsTabViewModel
 	{
+		public int OrganizationId { get; set; }
 		public string MembersTabActive { get; set; }
 		public string InvitationsTabActive { get; set; }
 	}

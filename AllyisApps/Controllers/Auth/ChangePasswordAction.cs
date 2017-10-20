@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.ViewModels.Auth;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Controllers.Auth
 {

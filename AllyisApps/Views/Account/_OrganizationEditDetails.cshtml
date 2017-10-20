@@ -13,33 +13,33 @@
 		{
 			@Html.AntiForgeryToken()
 			@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
-			<div class="row">
-				<div class="col-md-6 sm-control-width">
-					<div class="form-group">
+			<div class="ovrd-row row">
+				<div class="ovrd-col-md-6 col-md-6 col sm-control-width">
+					<div class="ovrd-form-group form-group">
 						@Html.ReqLabelFor(m => m.OrganizationName, Strings.Name)
-						@Html.TextBoxFor(m => m.OrganizationName, new { @class = "form-control" })
+						@Html.TextBoxFor(m => m.OrganizationName, new { @class = "ovrd-form-control form-control" })
 						@Html.ValidationMessageFor(m => m.OrganizationName, "", new { @class = "text-danger" })
 					</div>
-					<div class="form-group">
+					<div class="ovrd-form-group form-group">
 						@Html.ReqLabelFor(m => m.SiteUrl, Strings.SiteURL)
-						@Html.TextBoxFor(m => m.SiteUrl, new { @class = "form-control" })
+						@Html.TextBoxFor(m => m.SiteUrl, new { @class = "ovrd-form-control form-control" })
 						@Html.ValidationMessageFor(m => m.SiteUrl, "", new { @class = "text-danger" })
 					</div>
-					<div class="form-group">
+					<div class="ovrd-form-group form-group">
 						@Html.ReqLabelFor(m => m.PhoneNumber, Strings.PhoneNumber)
-						@Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+						@Html.TextBoxFor(m => m.PhoneNumber, new { @class = "ovrd-form-control form-control" })
 						@Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
 					</div>
-					<div class="form-group">
+					<div class="ovrd-form-group form-group">
 						@Html.ReqLabelFor(m => m.FaxNumber, Strings.FaxNumber)
-						@Html.TextBoxFor(m => m.FaxNumber, new { @class = "form-control" })
+						@Html.TextBoxFor(m => m.FaxNumber, new { @class = "ovrd-form-control form-control" })
 						@Html.ValidationMessageFor(m => m.FaxNumber, "", new { @class = "text-danger" })
 					</div>
 					@if (Model.IsCreating)
 					{
-						<div class="form-group">
+						<div class="ovrd-form-group form-group">
 							@Html.ReqLabelFor(m => m.EmployeeId, Strings.EmployeeId)
-							@Html.TextBoxFor(m => m.EmployeeId, new { @class = "form-control", @maxlength = "16" })
+							@Html.TextBoxFor(m => m.EmployeeId, new { @class = "ovrd-form-control form-control", @maxlength = "16" })
 							@Html.ValidationMessageFor(m => m.EmployeeId, "", new { @class = "text-danger" })
 						</div>
 					}
@@ -48,30 +48,30 @@
 						@Html.HiddenFor(m => m.EmployeeId);
 					}
 				</div>
-				<div class="col-md-6 sm-control-width">
-					<div class="form-group">
+				<div class="ovrd-col-md-6 col-md-6 col sm-control-width">
+					<div class="ovrd-form-group form-group">
 						@Html.ReqLabelFor(m => m.Address, Strings.Address)
-						@Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+						@Html.TextBoxFor(m => m.Address, new { @class = "ovrd-form-control form-control" })
 						@Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
 					</div>
-					<div class="form-group">
+					<div class="ovrd-form-group form-group">
 						@Html.ReqLabelFor(m => m.Country, Strings.Country)
-						@Html.DropDownListFor(m => m.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new { @id = ViewConstants.DdlCountriesId, @class = "form-control" })
+						@Html.DropDownListFor(m => m.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new { @id = ViewConstants.DdlCountriesId, @class = "ovrd-form-control form-control" })
 						@Html.ValidationMessageFor(m => m.Country, "", new { @class = "text-danger" })
 					</div>
-					<div class="form-group">
+					<div class="ovrd-form-group form-group">
 						@Html.ReqLabelFor(m => m.State, Strings.State)
-						@Html.DropDownListFor(m => m.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @id = ViewConstants.DdlStatesId, @class = "form-control" })
+						@Html.DropDownListFor(m => m.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @id = ViewConstants.DdlStatesId, @class = "ovrd-form-control form-control" })
 						@Html.ValidationMessageFor(m => m.State, "", new { @class = "text-danger" })
 					</div>
-					<div class="form-group">
+					<div class="ovrd-form-group form-group">
 						@Html.ReqLabelFor(m => m.City, Strings.City)
-						@Html.TextBoxFor(m => m.City, new { @class = "form-control" })
+						@Html.TextBoxFor(m => m.City, new { @class = "ovrd-form-control form-control" })
 						@Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
 					</div>
-					<div class="form-group">
+					<div class="ovrd-form-group form-group">
 						@Html.ReqLabelFor(m => m.PostalCode, Strings.PostalCode)
-						@Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control" })
+						@Html.TextBoxFor(m => m.PostalCode, new { @class = "ovrd-form-control form-control" })
 						@Html.ValidationMessageFor(m => m.PostalCode, "", new { @class = "text-danger" })
 					</div>
 
@@ -81,29 +81,21 @@
 				</div>
 			</div>
 
-			<div class="form-group allyis-action-buttons">
+			<div class="ovrd-form-group form-group allyis-action-buttons">
 				@if (Model.IsCreating)
 				{
-					<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)" new { class="btn btn-default" }>
+					<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)" new { class="ovrd-btn btn ovrd-btn-default btn-default" }>
 						@Strings.Cancel
 					</a>
 				}
 				else
 				{
-					<a href="@Url.Action(ActionConstants.OrganizationDetails, ControllerConstants.Account, new { id = Model.OrganizationId })" new { class="btn btn-default" }>
+					<a href="@Url.Action(ActionConstants.OrganizationDetails, ControllerConstants.Account, new { id = Model.OrganizationId })" new { class="ovrd-btn btn ovrd-btn-default btn-default" }>
 						@Strings.Cancel
 					</a>
 				}
-				<input type="submit" value="@Strings.Save" class="btn btn-primary" id="submit" />
+				<input type="submit" value="@Strings.Save" class="ovrd-btn btn ovrd-btn-primary btn-primary" id="submit" />
 			</div>
 		}
 	</div>
-	@if (Model != null && Model.CanDelete)
-	{
-		using (Html.BeginForm(ActionConstants.DeleteOrg, ControllerConstants.Account, new { id = Model.OrganizationId }, FormMethod.Post, new { @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw(Strings.ConfirmDeleteOrg)) }))
-		{
-			@Html.AntiForgeryToken()
-			<input type="submit" value="@Strings.DeleteOrganization" class="btn btn-danger" style="margin-bottom: 15px;" id="submitDelete" />
-		}
-	}
 </div>

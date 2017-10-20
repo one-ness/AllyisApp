@@ -31,7 +31,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult MergePayClass(int subscriptionId, int userId)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
-			var allPayClasses = AppService.GetPayClasses(subscriptionId);
+			var allPayClasses = AppService.GetPayClassesBySubscriptionId(subscriptionId);
 			var destPayClasses = allPayClasses.Where(pc => pc.PayClassId != userId);
 			string sourcePayClassName = allPayClasses.Where(pc => pc.PayClassId == userId).ElementAt(0).PayClassName;
 
@@ -62,13 +62,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				SourcePayClassId = sourcePayClassId,
 				SourcePayClassName = sourcePayClassName,
 				SubscriptionId = subscriptionId,
-				DestinationPayClasses = destPayClasses.Select(payclass => new PayClassInfoViewModel()
-				{
-					CreatedUtc = payclass.CreatedUtc,
-					OrganizationId = payclass.OrganizationId,
-					PayClassId = payclass.PayClassId,
-					PayClassName = payclass.PayClassName
-				})
+				DestinationPayClasses = destPayClasses.Select(payclass => new PayClassInfoViewModel(payclass))
 			};
 		}
 

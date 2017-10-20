@@ -15,6 +15,7 @@ using AllyisApps.Services.Lookup;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Crm;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Services
 {
@@ -38,11 +39,11 @@ namespace AllyisApps.Services
 		/// valid country names.
 		/// </summary>
 		/// <returns>.</returns>
-		public string GetNextCustId(int subscriptionId)
+		async public Task<string> GetNextCustId(int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			var spResults = DBHelper.GetNextCustId(subInfo.OrganizationId);
+			var spResults = await DBHelper.GetNextCustId(subInfo.OrganizationId);
 			return spResults.Item1 == null ? "0000000000000000" : new string(IncrementAlphanumericCharArray(spResults.Item1.ToCharArray()));
 		}
 
@@ -51,9 +52,9 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="customerId">Customer Id.</param>
 		/// <returns>.</returns>
-		public Customer GetCustomerInfo(int customerId)
+		async public Task<Customer> GetCustomerInfo(int customerId)
 		{
-			var spResults = DBHelper.GetCustomerProfile(customerId);
+			var spResults = await DBHelper.GetCustomerProfile(customerId);
 			Customer customer = InitializeCustomer(spResults.Item1);
 			customer.Address = InitializeAddress(spResults.Item2);
 			return customer;
@@ -65,19 +66,16 @@ namespace AllyisApps.Services
 		/// <param name="customer">Customer.</param>
 		/// <param name="subscriptionId">.</param>
 		/// <returns>Customer id.</returns>
-		public int? CreateCustomer(Customer customer, int subscriptionId)
+		async public Task<int?> CreateCustomer(Customer customer, int subscriptionId)
 		{
-			if (this.CheckStaffingManagerAction(StaffingManagerAction.EditCustomer, subscriptionId, false) || this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId, false))
+			if(this.CheckStaffingManagerAction(StaffingManagerAction.EditCustomer, subscriptionId, false) || this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId, false))
 			{
 				// TODO: make sure valid countries and states are added during import
 				//customer.Address?.EnsureDBRef(this);
-				return DBHelper.CreateCustomerInfo(GetDBEntitiesFromCustomerInfo(customer));
+				return await DBHelper.CreateCustomerInfo(GetDBEntitiesFromCustomerInfo(customer));
 			}
-			else
-			{
-				string message = string.Format("action {0} denied for subscription {1}", TimeTrackerAction.EditCustomer.ToString(), subscriptionId);
-				throw new AccessViolationException(message);
-			}
+			string message = string.Format("action {0} denied for subscription {1}", TimeTrackerAction.EditCustomer.ToString(), subscriptionId);
+			throw new AccessViolationException(message);
 		}
 
 		/// <summary>
@@ -86,10 +84,10 @@ namespace AllyisApps.Services
 		/// <param name="customer">Updated customer info.</param>
 		/// <param name="subscriptionId">The customer's subscription Id.</param>
 		/// <returns>Returns 1 if succeed, -1 if fail, and null if authorization fails.</returns>
-		public int? UpdateCustomer(Customer customer, int subscriptionId)
+		async public Task<int?> UpdateCustomer(Customer customer, int subscriptionId)
 		{
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
-			return DBHelper.UpdateCustomer(GetDBEntitiesFromCustomerInfo(customer));
+			return await DBHelper.UpdateCustomer(GetDBEntitiesFromCustomerInfo(customer));
 		}
 
 		/// <summary>
@@ -98,10 +96,10 @@ namespace AllyisApps.Services
 		/// <param name="customerId">Customer id.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public string DeleteCustomer(int subscriptionId, int customerId)
+		async public Task<string> DeleteCustomer(int subscriptionId, int customerId)
 		{
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
-			return DBHelper.DeleteCustomer(customerId);
+			return await DBHelper.DeleteCustomer(customerId);
 		}
 
 		/// <summary>
@@ -111,10 +109,10 @@ namespace AllyisApps.Services
 		/// <param name="orgId">The Organization Id.</param>
 		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public string ReactivateCustomer(int customerId, int subscriptionId, int orgId)
+		async public Task<string> ReactivateCustomer(int customerId, int subscriptionId, int orgId)
 		{
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
-			return DBHelper.ReactivateCustomer(customerId);
+			return await DBHelper.ReactivateCustomer(customerId);
 		}
 
 		/// <summary>
@@ -143,9 +141,9 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">The organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<CompleteProject>, List<Customer>> GetProjectsAndCustomersForOrgAndUser(int orgId)
+		async public Task<Tuple<List<CompleteProject>, List<Customer>>> GetProjectsAndCustomersForOrgAndUser(int orgId)
 		{
-			var spResults = DBHelper.GetProjectsAndCustomersForOrgAndUser(orgId, UserContext.UserId);
+			var spResults = await DBHelper.GetProjectsAndCustomersForOrgAndUser(orgId, UserContext.UserId);
 			return Tuple.Create(
 				spResults.Item1.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
 				spResults.Item2.Select(cdb => (Customer)InitializeCustomer(cdb)).ToList());
@@ -199,14 +197,14 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="customerId">Customer Id.</param>
 		/// <returns>List of ProjectInfo's.</returns>
-		public IEnumerable<Project.Project> GetProjectsByCustomer(int customerId)
+		async public Task<IEnumerable<Project.Project>> GetProjectsByCustomer(int customerId)
 		{
 			if (customerId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be 0 or negative.");
 			}
 
-			IEnumerable<ProjectDBEntity> dbeList = DBHelper.GetProjectsByCustomer(customerId);
+			IEnumerable<ProjectDBEntity> dbeList = await DBHelper.GetProjectsByCustomer(customerId);
 			List<Project.Project> list = new List<Project.Project>();
 			foreach (ProjectDBEntity dbe in dbeList)
 			{
@@ -224,14 +222,14 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="customerId">Customer Id.</param>
 		/// <returns>List of ProjectInfo's.</returns>
-		public IEnumerable<Project.Project> GetInactiveProjectsByCustomer(int customerId)
+		async public Task<IEnumerable<Project.Project>> GetInactiveProjectsByCustomer(int customerId)
 		{
 			if (customerId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be 0 or negative.");
 			}
 
-			IEnumerable<ProjectDBEntity> dbeList = DBHelper.GetInactiveProjectsByCustomer(customerId);
+			IEnumerable<ProjectDBEntity> dbeList = await DBHelper.GetInactiveProjectsByCustomer(customerId);
 			List<Project.Project> list = new List<Project.Project>();
 			foreach (ProjectDBEntity dbe in dbeList)
 			{
@@ -250,7 +248,7 @@ namespace AllyisApps.Services
 		/// <param name="newProject">Project with project information.</param>
 		/// <param name="userIds">List of users being assigned to the project.</param>
 		/// <returns>Project Id if succeed, -1 if ProjectOrgId is taken.</returns>
-		public int CreateProjectAndUpdateItsUserList(Project.Project newProject, IEnumerable<int> userIds)
+		async public Task<int> CreateProjectAndUpdateItsUserList(Project.Project newProject, IEnumerable<int> userIds)
 		{
 			#region Validation
 
@@ -276,7 +274,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return DBHelper.CreateProjectAndUpdateItsUserList(GetDBEntityFromProject(newProject), userIds);
+			return await DBHelper.CreateProjectAndUpdateItsUserList(GetDBEntityFromProject(newProject), userIds);
 		}
 
 		/// <summary>
@@ -284,7 +282,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="newProject">Project with project information.</param>
 		/// <returns>Project Id.</returns>
-		public int CreateProject(Project.Project newProject)
+		async public Task<int> CreateProject(Project.Project newProject)
 		{
 			#region Validation
 
@@ -310,7 +308,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return DBHelper.CreateProject(GetDBEntityFromProject(newProject));
+			return await DBHelper.CreateProject(GetDBEntityFromProject(newProject));
 		}
 
 		/// <summary>
@@ -318,7 +316,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="subId">SubscriptionId.</param>
 		/// <param name="project">Project with updated properties.</param>
-		public void UpdateProject(int subId, Project.Project project)
+		async public void UpdateProject(int subId, Project.Project project)
 		{
 			#region Validation
 
@@ -341,6 +339,7 @@ namespace AllyisApps.Services
 
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditProject, subId);
 			DBHelper.UpdateProject(GetDBEntityFromProject(project));
+			await Task.Delay(0);
 		}
 
 		/// <summary>
@@ -355,7 +354,7 @@ namespace AllyisApps.Services
 		/// <param name="userIds">Updated on-project user list.</param>
 		/// <param name="subscriptionId">.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool UpdateProjectAndUsers(int projectId, string name, string orgId, DateTime? start, DateTime? end, IEnumerable<int> userIds, int subscriptionId, bool isHourly = true)
+		async public Task<bool> UpdateProjectAndUsers(int projectId, string name, string orgId, DateTime? start, DateTime? end, IEnumerable<int> userIds, int subscriptionId, bool isHourly = true)
 		{
 			#region Validation
 
@@ -388,6 +387,7 @@ namespace AllyisApps.Services
 
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
 			DBHelper.UpdateProjectAndUsers(projectId, name, orgId, isHourly, start, end, userIds);
+			await Task.Delay(0);
 			return true;
 		}
 
@@ -416,7 +416,7 @@ namespace AllyisApps.Services
 		/// <param name="projectId">Project Id.</param>
 		/// <param name="subscriptionId">.</param>
 		/// <returns>Returns null if authorization fails, project name is succeed, empty string if not found.</returns>
-		public string DeleteProject(int projectId, int subscriptionId)
+		async public Task<string> DeleteProject(int projectId, int subscriptionId)
 		{
 			if (projectId <= 0)
 			{
@@ -424,7 +424,7 @@ namespace AllyisApps.Services
 			}
 
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
-			return DBHelper.DeleteProject(projectId);
+			return await DBHelper.DeleteProject(projectId);
 		}
 
 		/// <summary>
@@ -497,14 +497,15 @@ namespace AllyisApps.Services
 		/// <param name="orgId">The organization's Id.</param>
 		/// <param name="onlyActive">True (default) to only return active projects, false to include all projects, active or not.</param>
 		/// <returns>A list of all the projects a user can access in an organization.</returns>
-		public IEnumerable<CompleteProject> GetProjectsByUserAndOrganization(int userId, int orgId = -1, bool onlyActive = true)
+		async public Task<IEnumerable<CompleteProject>> GetProjectsByUserAndOrganization(int userId, int orgId = -1, bool onlyActive = true)
 		{
 			if (userId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
 			}
 
-			return DBHelper.GetProjectsByUserAndOrganization(userId, orgId, onlyActive ? 1 : 0).Select(c => InitializeCompleteProjectInfo(c));
+			var results = await DBHelper.GetProjectsByUserAndOrganization(userId, orgId, onlyActive ? 1 : 0);
+			return results.Select(c => InitializeCompleteProjectInfo(c));
 		}
 
 		/// <summary>
@@ -528,14 +529,14 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="projectId">Project Id.</param>
 		/// <returns>CompleteProject instance.</returns>
-		public CompleteProject GetProjectAsUser(int projectId)
+		async public Task<CompleteProject> GetProjectAsUser(int projectId)
 		{
 			if (projectId < 0)
 			{
 				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be negative.");
 			}
 
-			return InitializeCompleteProjectInfo(DBHelper.GetProjectByIdAndUser(projectId, UserContext.UserId));
+			return InitializeCompleteProjectInfo(await DBHelper.GetProjectByIdAndUser(projectId, UserContext.UserId));
 		}
 
 		/// <summary>
@@ -566,14 +567,14 @@ namespace AllyisApps.Services
 		/// <param name="customerId">Customer Id.</param>
 		/// <param name="subscriptionId">.</param>
 		/// <returns>.</returns>
-		public Tuple<string, List<SubscriptionUser>> GetNextProjectIdAndSubUsers(int customerId, int subscriptionId)
+		async public Task<Tuple<string, List<SubscriptionUser>>> GetNextProjectIdAndSubUsers(int customerId, int subscriptionId)
 		{
 			if (customerId < 0)
 			{
 				throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be negative.");
 			}
 
-			var spResults = DBHelper.GetNextProjectIdAndSubUsers(customerId, subscriptionId);
+			var spResults = await DBHelper.GetNextProjectIdAndSubUsers(customerId, subscriptionId);
 			return Tuple.Create(
 				spResults.Item1 == null ? "0000000000000000" : new string(IncrementAlphanumericCharArray(spResults.Item1.ToCharArray())),
 				spResults.Item2.Select(sudb => InitializeSubscriptionUser(sudb)).ToList());
@@ -584,12 +585,12 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>All the projects in the organization.</returns>
-		public IEnumerable<Project.Project> GetAllProjectsForOrganization(int orgId)
+		async public Task<IEnumerable<Project.Project>> GetAllProjectsForOrganization(int orgId)
 		{
 			var result = new List<Project.Project>();
 			foreach (var customer in this.GetCustomerList(orgId))
 			{
-				result.AddRange(this.GetProjectsByCustomer(customer.CustomerId));
+				result.AddRange(await this.GetProjectsByCustomer(customer.CustomerId));
 			}
 			return result;
 		}
@@ -637,14 +638,14 @@ namespace AllyisApps.Services
 			return new Address()
 			{
 				AddressId = address.AddressId,
-				Address1 = address.Address1,
+				Address1 = address.Address1 ?? address.Address,
 				Address2 = address.Address2,
 				City = address.City,
-				StateName = address.StateName,
+				StateName = address.State ?? address.StateName,
 				PostalCode = address.PostalCode,
 				CountryCode = address.CountryCode,
 				StateId = address.StateId,
-				CountryName = address.CountryName
+				CountryName = address.Country ?? address.CountryName
 			};
 		}
 

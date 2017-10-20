@@ -61,7 +61,7 @@ namespace AllyisApps.Controllers.Auth
 				string confirmEmailBody = string.Format(Strings.ConfirmEmailMessage, Strings.ApplicationTitle, confirmUrl);
 
 				// compute birthdate
-				var birthdate = Utility.GetDateTimeFromDays(model.DateOfBirth);
+				var birthdate = Utility.GetNullableDateTimeFromDays(model.DateOfBirth);
 
 				// create new user in the db and get back the userId and count of invitations
 				int userId = await AppService.SetupNewUser(model.Email, model.Password, model.FirstName, model.LastName, code, birthdate, model.PhoneNumber, model.Address, null, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode, confirmEmailSubject, confirmEmailBody);

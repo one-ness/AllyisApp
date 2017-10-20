@@ -14,6 +14,7 @@ using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
 using Microsoft.CSharp.RuntimeBinder;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Services
 {
@@ -120,9 +121,9 @@ namespace AllyisApps.Services
 		/// <param name="customer">Customer.</param>
 		/// <param name="subscriptionId">.</param>
 		/// <returns>Customer id.</returns>
-		public int? CreateStaffingCustomer(Customer customer, int subscriptionId)
+		async public Task<int?> CreateStaffingCustomer(Customer customer, int subscriptionId)
 		{
-			return DBHelper.CreateCustomerInfo(GetDBEntitiesFromCustomerInfo(customer));
+			return await DBHelper.CreateCustomerInfo(GetDBEntitiesFromCustomerInfo(customer));
 		}
 
 		#endregion CreateMethods

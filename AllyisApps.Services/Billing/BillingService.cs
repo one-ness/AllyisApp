@@ -57,7 +57,7 @@ namespace AllyisApps.Services
 		/// <param name="token">The BillingServicesToken being used for this charge.</param>
 		/// <param name="orgId">.</param>
 		[CLSCompliant(false)]
-		async public Task UpdateBillingInfo(string billingServicesEmail, BillingServicesToken token, int orgId)
+		async public void UpdateBillingInfo(string billingServicesEmail, BillingServicesToken token, int orgId)
 		{
 			#region Validation
 
@@ -84,7 +84,7 @@ namespace AllyisApps.Services
 				string serviceType = "Stripe";
 				BillingServicesHandler handler = new BillingServicesHandler(serviceType);
 				customerId = handler.CreateCustomer(billingServicesEmail, token);
-				await this.CreateStripeOrganizationCustomer(customerId, null, orgId);
+				this.CreateStripeOrganizationCustomer(customerId, null, orgId);
 				// this.AddBillingHistory(string.Format("Adding {0} customer data", serviceType), null);
 			}
 			else
@@ -92,7 +92,7 @@ namespace AllyisApps.Services
 				string serviceType = "Stripe";
 				BillingServicesHandler handler = new BillingServicesHandler(serviceType);
 				handler.UpdateCustomer(customerId, token);
-				await this.AddBillingHistory(string.Format("Updating {0} customer data", serviceType), null, orgId);
+				this.AddBillingHistory(string.Format("Updating {0} customer data", serviceType), null, orgId);
 			}
 		}
 
@@ -162,7 +162,7 @@ namespace AllyisApps.Services
 		/// <param name="description">A description for the item.</param>
 		/// <param name="skuId">Sku Id.</param>
 		/// <param name="orgId">.</param>
-		async public Task AddBillingHistory(string description, int? skuId, int orgId)
+		async public void AddBillingHistory(string description, int? skuId, int orgId)
 		{
 			if (skuId.HasValue && skuId.Value <= 0)
 			{
@@ -176,11 +176,10 @@ namespace AllyisApps.Services
 		/// Removes billing from the current organization.
 		/// </summary>
 		/// <returns>Returns false if authorization fails.</returns>
-		async public Task<bool> RemoveBilling(int orgId)
+		public bool RemoveBilling(int orgId)
 		{
 			this.CheckOrgAction(OrgAction.EditBilling, orgId);
 			DBHelper.RemoveBilling(orgId);
-			await Task.Delay(0);
 			return true;
 		}
 
@@ -202,7 +201,7 @@ namespace AllyisApps.Services
 		/// <param name="selectedSku">Selected sku id, for the billing history item.</param>
 		/// <param name="orgId">.</param>
 		[CLSCompliant(false)]
-		async public Task CreateStripeOrganizationCustomer(BillingServicesCustomerId customerId, int? selectedSku, int orgId)
+		async public void CreateStripeOrganizationCustomer(BillingServicesCustomerId customerId, int? selectedSku, int orgId)
 		{
 			if (customerId == null)
 			{
@@ -638,49 +637,110 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Subscribes the current organization to a product or updates the organization's subscription to the product,
-		/// and creates/updates/removes the billing subscription plan accordingly.
+		/// Subscribes the current organization to a product or updates the organization's subscription to the product.
 		/// </summary>
-		/// <param name="productId">Product id.</param>
-		/// <param name="productName">Product name.</param>
-		/// <param name="selectedSku">Selected sku id.</param>
-		/// <param name="subscriptionName">Subscription Name.</param>
-		/// <param name="billingAmount">Billing amount, as an int in cents.</param>
-		/// <param name="existingToken">The existing BillingServicesToken, if any.</param>
-		/// <param name="addingBillingCustomer">A value indicating whether a new billing customer is being added.</param>
-		/// <param name="newBillingEmail">The email for the new billing customer, if being added.</param>
-		/// <param name="newBillingToken">The new BillingServicesToken, if being added.</param>
-		/// <param name="orgId">.</param>
-		/// <returns>.</returns>
-		[CLSCompliant(false)]
-		async public void Subscribe(ProductIdEnum productId, string productName, SkuIdEnum selectedSku, string subscriptionName, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
+		public async Task Subscribe(int organizationId, SkuIdEnum skuId, string subscriptionName)
 		{
-			// TODO: Split Subscribe into CreateSubscription and Update Subscription, called from SubscribeAction and EditSubscriptionAction
+			if (organizationId <= 0) throw new ArgumentOutOfRangeException();
+			if (string.IsNullOrWhiteSpace(subscriptionName)) throw new ArgumentNullException();
 
-			// This method is related to billing, which is not supported
-			// CreateAndUpdateAndDeleteSubscriptionPlan(productId, productName, selectedSku, previousSku, billingAmount, existingToken, addingBillingCustomer, newBillingEmail, newBillingToken, orgId);
+			// get all subscriptions of the given organization
+			var collection = await this.GetSubscriptionsAsync(organizationId);
+			foreach (var item in collection)
+			{
+				// is it an existing sku?
+				if (item.SkuId == skuId)
+				{
+					// yes, already subscribed
+					return;
+				}
+				else
+				{
+					// no, get the product of this subscription
+					var pid = item.ProductId;
+					Product product = null;
+					if (!CacheContainer.ProductsCache.TryGetValue(pid, out product) || !product.IsActive)
+					{
+						// inactive or invalid product
+						throw new InvalidOperationException("You selected an invalid product to subscribe to.");
+					}
 
-			InitializeSettingsForProduct(productId, orgId);
+					// is it a sku of this product?
+					List<Sku> skus = null;
+					if (CacheContainer.SkusCache.TryGetValue(pid, out skus))
+					{
+						var sku = skus.Where(x => x.IsActive && x.SkuId == skuId).FirstOrDefault();
+						if (sku != null)
+						{
+							// yes, user is subscribing to another sku of an existing subscription (i.e., product)
+							this.UpdateSubscriptionSkuAndName(organizationId, item.SubscriptionId, subscriptionName, skuId);
+							return;
+						}
+					}
+				}
+			}
 
-			await DBHelper.CreateSubscription(orgId, (int)selectedSku, subscriptionName, UserContext.UserId);
+			// reached here indicates user is subscribing to a new product with a new sku
+			var selectedSku = CacheContainer.AllSkusCache.Where(x => x.IsActive && x.SkuId == skuId).FirstOrDefault();
+			if (selectedSku == null)
+			{
+				// inactive or invalid sku id
+				throw new InvalidOperationException("You selected an invalid sku to subscribe to.");
+			}
+
+			// get product for the sku
+			Product selectedProduct = null;
+			if (!CacheContainer.ProductsCache.TryGetValue(selectedSku.ProductId, out selectedProduct) || !selectedProduct.IsActive)
+			{
+				// inactive or invalid product
+				throw new InvalidOperationException("You selected an invalid product to subscribe to.");
+			}
+
+			// set the creating user as highest level
+			int productRoleId = 0;
+			switch(selectedSku.ProductId)
+			{
+				case ProductIdEnum.ExpenseTracker:
+					productRoleId = (int)ExpenseTrackerRole.SuperUser;
+					break;
+
+				case ProductIdEnum.StaffingManager:
+					productRoleId = (int)StaffingManagerRole.Manager;
+					break;
+
+				case ProductIdEnum.TimeTracker:
+					productRoleId = (int)TimeTrackerRole.Manager;
+					break;
+
+				default:
+					// inactive or invalid product
+					throw new InvalidOperationException("You selected an invalid product to subscribe to.");
+			}
+
+			this.InitializeSettingsForProduct(selectedSku.ProductId, organizationId);
+
+			// create new subscription
+			await this.DBHelper.CreateSubscription(organizationId, (int)skuId, subscriptionName, productRoleId);
 		}
 
-		/// <summary>
-		/// change the subscription Name
-		/// </summary>
-		/// <param name="subscriptionId"></param>
-		/// <param name="subscriptionname"></param>
-		async public Task UpdateSubscriptionName(int subscriptionId, string subscriptionname)
+		async public void UpdateSubscriptionName(int subscriptionId, string subscriptionName)
 		{
 			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException("subscriptionId");
-			if (string.IsNullOrWhiteSpace(subscriptionname)) throw new ArgumentNullException("subscriptionName");
+			if (string.IsNullOrWhiteSpace(subscriptionName)) throw new ArgumentNullException("subscriptionName");
 
 			var sub = await this.GetSubscription(subscriptionId);
 			this.CheckOrgAction(OrgAction.EditSubscription, sub.OrganizationId);
-			this.DBHelper.UpdateSubscriptionName(subscriptionId, subscriptionname);
+			this.DBHelper.UpdateSubscriptionName(subscriptionId, subscriptionName);
 		}
 
-		async public Task CreateAndUpdateAndDeleteSubscriptionPlan(int productId, string productName, int selectedSku, int previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
+		async private void UpdateSubscriptionSkuAndName(int organizationId, int subscriptionId, string subscriptionName, SkuIdEnum skuId)
+		{
+			this.CheckOrgAction(OrgAction.EditSubscription, organizationId);
+			this.DBHelper.UpdateSubscriptionSkuAndName(subscriptionId, subscriptionName, (int)skuId);
+			await Task.Delay(0);
+		}
+
+		async public void CreateAndUpdateAndDeleteSubscriptionPlan(int productId, string productName, int selectedSku, int previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
 		{
 			BillingServicesCustomer customer;
 			BillingServicesToken token;
@@ -688,7 +748,7 @@ namespace AllyisApps.Services
 			{
 				BillingServicesCustomerId customerId = this.CreateBillingServicesCustomer(newBillingEmail, newBillingToken);
 
-				await this.CreateStripeOrganizationCustomer(customerId, null, orgId);
+				this.CreateStripeOrganizationCustomer(customerId, null, orgId);
 				customer = this.RetrieveCustomer(customerId);
 				token = newBillingToken;
 			}
@@ -704,7 +764,7 @@ namespace AllyisApps.Services
 				if (customerId == null)
 				{
 					customer = this.RetrieveCustomer(this.CreateBillingServicesCustomer(newBillingEmail, token));
-					await this.CreateStripeOrganizationCustomer(customer.Id, null, orgId);
+					this.CreateStripeOrganizationCustomer(customer.Id, null, orgId);
 				}
 				else
 				{

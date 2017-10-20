@@ -436,6 +436,17 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// updates the sku and name for the given subscription
+		/// </summary>
+		async public void UpdateSubscriptionSkuAndName(int subscriptionId, string subscriptionName, int skuId)
+		{
+			using (var con = new SqlConnection(this.SqlConnectionString))
+			{
+				await con.ExecuteAsync("Billing.UpdateSubscriptionSkuAndName @a, @b, @c", new { a = subscriptionId, b = subscriptionName, c = skuId });
+			}
+		}
+
+		/// <summary>
 		/// Looks for a subscription plan with the given organization Id and stripe customer Id. If found,
 		/// deletes it and adds a history item using the given user Id, skuId, and description.
 		/// </summary>
