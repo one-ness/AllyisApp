@@ -68,7 +68,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			};
 
 			report.ExpenseReportId = AppService.CreateExpenseReport(report);
-			UploadItems(model, report);
+			await UploadItems(model, report);
 			UploadAttachments(model, report);
 
 			return RedirectToAction("Index");

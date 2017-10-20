@@ -195,7 +195,7 @@ namespace AllyisApps.DBModel
 		/// Updates the max amount a user can approve of in a report.
 		/// </summary>
 		/// <param name="orgUser"></param>
-		public void UpdateUserMaxAmount(OrganizationUserDBEntity orgUser)
+		async public Task UpdateUserMaxAmount(OrganizationUserDBEntity orgUser)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", orgUser.UserId);
@@ -204,7 +204,7 @@ namespace AllyisApps.DBModel
 
 			using (var connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[Auth].[UpdateUserMaxAmount]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[Auth].[UpdateUserMaxAmount]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -411,7 +411,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">The organization's Id.</param>
 		/// <param name="userId">The user's Id.</param>
-		public void RemoveOrganizationUser(int organizationId, int userId)
+		async public Task RemoveOrganizationUser(int organizationId, int userId)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -419,7 +419,7 @@ namespace AllyisApps.DBModel
 				parameters.Add("@organizationId", organizationId);
 				parameters.Add("@userId", userId);
 
-				connection.Execute("[Auth].[DeleteOrgUser]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[Auth].[DeleteOrgUser]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 

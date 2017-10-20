@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Finance;
 using Dapper;
@@ -112,14 +113,15 @@ namespace AllyisApps.DBModel
 		/// Retrieves all of the accounts in the database.
 		/// </summary>
 		/// <returns></returns>
-		public IEnumerable<AccountDBEntity> GetAccounts(int orgId)
+		async public Task<IEnumerable<AccountDBEntity>> GetAccounts(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<AccountDBEntity>("[Finance].[GetAccounts]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable();
+				var results = await connection.QueryAsync<AccountDBEntity>("[Finance].[GetAccounts]", parameters, commandType: CommandType.StoredProcedure);
+				return results.AsEnumerable();
 			}
 		}
 
@@ -164,14 +166,14 @@ namespace AllyisApps.DBModel
 		/// Deletes and account from the database.
 		/// </summary>
 		/// <param name="accountId">The.</param>
-		public void DeleteAccount(int accountId)
+		async public Task DeleteAccount(int accountId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@accountId", accountId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[Finance].[DeleteAccount]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[Finance].[DeleteAccount]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 

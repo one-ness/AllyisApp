@@ -54,7 +54,7 @@ namespace AllyisApps.Controllers.Auth
 		[CLSCompliant(false)]
 		async public Task<ManageOrgViewModel> ConstructOrganizationManageViewModel(int organizationId)
 		{
-			var orgInfo = AppService.GetOrganizationManagementInfo(organizationId);
+			var orgInfo = await AppService.GetOrganizationManagementInfo(organizationId);
 
 			BillingServicesCustomer customer = (orgInfo.StripeToken == null) ? null : AppService.RetrieveCustomer(new BillingServicesCustomerId(orgInfo.StripeToken));
 			await Task.Delay(1);
