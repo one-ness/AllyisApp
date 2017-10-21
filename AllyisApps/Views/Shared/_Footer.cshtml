@@ -1,47 +1,25 @@
-﻿@using AllyisApps.ViewModels.Shared;
+﻿<style>
+	.footer-bar {
+		background-color: #efefef;
+		bottom: 0;
+		font-size: smaller;
+		height: 40px;
+		padding-bottom: 5px;
+		padding-top: 5px;
+		position: absolute;
+		width: inherit;
+	}
 
-@model List<LanguageViewModel>
-
-@{
-    Layout = string.Empty;
-    var CultureName = (string)ViewData["CultureName"];
-}
-
-@*<footer class="footer">
-    <div class="container-fluid text-center text-muted">*@
-<div class="footer slim" style="max-height:55px">
-    <div class="ovrd-row row">
-        <p class="footer-links ovrd-col-xs-8 col-xs-8 ovrd-col-sm-6 col-sm-6 col">
-            @*<select class="col-xs-12 col-sm-6 col form-control" id="languageSelect" onchange="OnLanguageSelect()" value=@ViewBag.language style="width: inherit;">
-                @foreach (LanguageViewModel language in Model.Item1)
-                {
-                    string languageKey = LanguageViewModel.Clean(language.LanguageName);
-                    if (CultureName == language.CultureName)
-                    {
-                        <option value=@language.CultureName selected>@(Strings.ResourceManager.GetString(languageKey) ?? language.LanguageName)</option>
-                    }
-                    else
-                    {
-                        <option value=@language.CultureName>@(Strings.ResourceManager.GetString(languageKey) ?? language.LanguageName)</option>
-                    }
-                }
-            </select >*@
-            <span class="ovrd-col-xs-12 col-xs-12 ovrd-col-sm-6 col-sm-6 col footer-text">
-                <a href="@Url.Action(ActionConstants.PrivacyPolicy, ControllerConstants.Home)">@Strings.PrivacyPolicy</a>
-                <a href="@Url.Action(ActionConstants.Help, ControllerConstants.Home)">@Strings.Help</a>
-            </span>
-        </p>
-        <p class="ovrd-col-xs-4 col-xs-4 ovrd-col-sm-6 col-sm-6 col footer-text" style="text-align: right">
-            &copy; @DateTime.Now.Year - Allyis, Inc.
-        </p>
-    </div>
+		.footer-bar a {
+			margin-right: 10px;
+		}
+</style>
+<div class="container">
+	<div class="row footer-bar">
+		<div class="col-xs-12">
+			<a class="pull-left" href="@Url.Action(ActionConstants.PrivacyPolicy, ControllerConstants.Home)">@Strings.PrivacyPolicy</a>
+			<a class="pull-left" href="@Url.Action(ActionConstants.Help, ControllerConstants.Home)">@Strings.Help</a>
+			<span class="pull-right">&copy; @DateTime.Now.Year - Allyis, Inc.</span>
+		</div>
+	</div>
 </div>
-
-    @*</div>
-</footer>*@
-
-@*<script type="text/javascript">
-    OnLanguageSelect = function () {
-        window.location.href = "@Url.Action(ActionConstants.UpdateLanguage, ControllerConstants.Shared, new { CultureName = -1 } )".replace('-1', $("#languageSelect").val());
-    }
-</script>*@
