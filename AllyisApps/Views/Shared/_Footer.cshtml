@@ -4,23 +4,24 @@
 		bottom: 0;
 		font-size: smaller;
 		height: 40px;
-		padding-bottom: 5px;
-		padding-top: 5px;
-		margin-top: 85px;
-		position: static;
-		width: inherit;
+		padding-bottom: 2px;
+		padding-top: 2px;
+		position: absolute;
+		width: 100%;
 	}
 
-	.footer-bar a {
-		margin-right: 10px;
-	}
+		.footer-bar a {
+			margin-right: 10px;
+		}
 </style>
-<div class="container">
-	<div class="row footer-bar">
-		<div class="col-xs-12">
-			<a class="pull-left" href="@Url.Action(ActionConstants.PrivacyPolicy, ControllerConstants.Home)">@Strings.PrivacyPolicy</a>
-			<a class="pull-left" href="@Url.Action(ActionConstants.Help, ControllerConstants.Home)">@Strings.Help</a>
-			<span class="pull-right">&copy; @DateTime.Now.Year - Allyis, Inc.</span>
+<div class="footer-bar">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<a class="pull-left" href="@Url.Action(ActionConstants.PrivacyPolicy, ControllerConstants.Home)">@Strings.PrivacyPolicy</a>
+				<a class="pull-left" href="@Url.Action(ActionConstants.Help, ControllerConstants.Home)">@Strings.Help</a>
+				<span class="pull-right">&copy; @DateTime.Now.Year - Allyis, Inc.</span>
+			</div>
 		</div>
 	</div>
 </div>

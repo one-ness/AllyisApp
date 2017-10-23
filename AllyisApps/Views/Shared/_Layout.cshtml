@@ -46,7 +46,9 @@
 			</div>
 		</div>
 	</div>
+	
 	@Html.Action(ActionConstants.FooterPartial, ControllerConstants.Shared, new { area = "" })
+
 	@RenderSection("modals", required: false)
 	@Scripts.Render("~/bundles/jquery")
 	@Scripts.Render("~/bundles/jqueryval")
