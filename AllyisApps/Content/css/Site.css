@@ -1,3 +1,120 @@
+.shrink-wrap-center {
+	text-align: center;
+}
+
+.shrink-wrap-center > div {
+	text-align: left;
+	display: inline-block;
+}
+
+.min300 {
+	min-width: 300px;
+}
+
+.btn-gray {
+	background-color: #595959;
+	border-color: #4d4d4d;
+}
+
+.btn-gray:hover {
+	background-color: #404040;
+	border-color: #2e2e2e;
+}
+
+.btn-gray:disabled {
+	background-color: #595959;
+	border-color: #4d4d4d;
+}
+
+.allyis-action-buttons {
+	text-align: right;
+}
+
+label.required:after {
+	color: #d9534f;
+	content: " *";
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight: bolder;
+}
+
+p {
+	margin: 0 0 10px;
+}
+
+a {
+	color: #595959;
+}
+
+a:hover {
+	color: #333333;
+}
+
+.slim {
+	margin-right: auto;
+	margin-left: auto;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+.sm-control-width {
+	width: 320px;
+}
+
+@media (min-width: 992px) {
+	.sm-control-width {
+		width: 420px;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*Compiled css with overrides*/
+
 html {
 	height: 100%;
 }
