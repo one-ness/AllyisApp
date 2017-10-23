@@ -68,7 +68,7 @@ namespace AllyisApps.Services
 		/// <returns>Customer id.</returns>
 		async public Task<int?> CreateCustomer(Customer customer, int subscriptionId)
 		{
-			if(this.CheckStaffingManagerAction(StaffingManagerAction.EditCustomer, subscriptionId, false) || this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId, false))
+			if (this.CheckStaffingManagerAction(StaffingManagerAction.EditCustomer, subscriptionId, false) || this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId, false))
 			{
 				// TODO: make sure valid countries and states are added during import
 				//customer.Address?.EnsureDBRef(this);
@@ -155,9 +155,9 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">The Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<CompleteProject>, List<Customer>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId)
+		async public Task<Tuple<List<CompleteProject>, List<Customer>>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId)
 		{
-			var spResults = DBHelper.GetInactiveProjectsAndCustomersForOrgAndUser(orgId, UserContext.UserId);
+			var spResults = await DBHelper.GetInactiveProjectsAndCustomersForOrgAndUser(orgId, UserContext.UserId);
 			return Tuple.Create(
 				spResults.Item1.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
 				spResults.Item2.Select(cdb => (Customer)InitializeCustomer(cdb)).ToList());
@@ -168,7 +168,7 @@ namespace AllyisApps.Services
 		/// (current organization by default), another list of Projects for all projects in the organization,
 		/// the name of the user (as "Firstname Lastname"), and the user's email.
 		/// </summary>
-		public Tuple<List<Project.Project>, List<Project.Project>, string, string> GetProjectsForOrgAndUser(int userId, int subscriptionId)
+		async public Task<Tuple<List<Project.Project>, List<Project.Project>, string, string>> GetProjectsForOrgAndUser(int userId, int subscriptionId)
 		{
 			if (userId <= 0) throw new ArgumentException("userId");
 			if (subscriptionId <= 0) throw new ArgumentException("subscriptionId");
@@ -177,7 +177,7 @@ namespace AllyisApps.Services
 			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			if (subInfo != null)
 			{
-				var spResults = DBHelper.GetProjectsForOrgAndUser(userId, subInfo.OrganizationId);
+				var spResults = await DBHelper.GetProjectsForOrgAndUser(userId, subInfo.OrganizationId);
 				var userDBEntity = spResults.Item3;
 				string name = string.Format("{0} {1}", userDBEntity.FirstName, userDBEntity.LastName);
 				return Tuple.Create(

@@ -20,7 +20,6 @@ using AllyisApps.Services.Expense;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.Services.TimeTracker;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Services
 {
@@ -784,7 +783,7 @@ namespace AllyisApps.Services
 		/// <param name="userId">User Id.</param>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<ApplicationStatus>, List<Customer>>
+		async public Task<Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<ApplicationStatus>, List<Customer>>>
 			GetStaffingIndexInfo(int orgId, int? userId = null)
 		{
 			#region Validation
@@ -804,7 +803,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			var results = DBHelper.GetStaffingIndexPageInfo(orgId);
+			var results = await DBHelper.GetStaffingIndexPageInfo(orgId);
 
 			return Tuple.Create(
 				results.Item1.Select(posdb => InitializePositionThumbnailInfo(posdb, results.Item2, results.Item5)).ToList(),

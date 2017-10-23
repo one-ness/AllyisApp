@@ -1,45 +1,45 @@
 ﻿@model AllyisApps.ViewModels.Auth.LogOnViewModel
 @{
-    ViewBag.Title = Strings.SignIn;
+	ViewBag.Title = Strings.SignIn;
 }
 
 <div class="shrink-wrap-center">
-    <div class="min300">
-        @using (Html.BeginForm(ActionConstants.LogOn, ControllerConstants.Account, new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "ovrd-form-horizontal form-horizontal", role = "form" }))
-        {
-            @Html.AntiForgeryToken()
+	<div class="min300">
+		@using (Html.BeginForm(ActionConstants.LogOn, ControllerConstants.Account, new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "ovrd-form-horizontal form-horizontal", role = "form" }))
+		{
+			@Html.AntiForgeryToken()
 
-            @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
-            <div class="ovrd-form-group form-group">
-                @Html.ReqLabelFor(m => m.Email, Strings.Email)
-                @Html.TextBoxFor(m => m.Email, new { @class = "ovrd-form-control form-control" })
-                @Html.ValidationMessageFor(m => m.Email, string.Empty, new { @class = "text-danger" })
-            </div>
-            <div class="ovrd-form-group form-group">
-                @Html.ReqLabelFor(m =>m.Password, Strings.Password)
-                @Html.PasswordFor(m => m.Password, new { @class = "ovrd-form-control form-control" })
-                @Html.ValidationMessageFor(m => m.Password, string.Empty, new { @class = "text-danger" })
-                <div class="field-validation-error" id="capsWarningDiv" style="visibility:hidden; height:0px"><span>@Strings.CapsLock</span></div>
-            </div>
-            <div class="checkbox ovrd-form-group form-group pull-left">
-                @Html.CheckBoxFor(m => m.RememberMe, new { id = Html.NameFor(m => m.RememberMe), style = "margin-left: 0px" })
-                <label for="@Html.NameFor(m=>m.RememberMe)"> @Strings.RememberMe </label>
-            </div>
-            <div class="ovrd-form-group form-group allyis-action-buttons">
-                <p>
-                    <input type="submit" value="@Strings.SignIn" class="ovrd-btn btn ovrd-btn-primary btn-primary" />
-                </p>
-                <p>
-                    <a href="@Url.Action(ActionConstants.Register, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl })"> @Strings.RegisterLinkText </a>
-                </p>
-                <p>
-                    <a href="@Url.Action(ActionConstants.ForgotPassword, ControllerConstants.Account)"> @Strings.ForgotPasswordViewTitle </a>
-                </p>
-            </div>
-        }
-    </div>
+			@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
+			<div class="ovrd-form-group form-group">
+				@Html.ReqLabelFor(m => m.Email, Strings.Email)
+				@Html.TextBoxFor(m => m.Email, new { @class = "ovrd-form-control form-control" })
+				@Html.ValidationMessageFor(m => m.Email, string.Empty, new { @class = "text-danger" })
+			</div>
+			<div class="ovrd-form-group form-group">
+				@Html.ReqLabelFor(m => m.Password, Strings.Password)
+				@Html.PasswordFor(m => m.Password, new { @class = "ovrd-form-control form-control" })
+				@Html.ValidationMessageFor(m => m.Password, string.Empty, new { @class = "text-danger" })
+				<div class="field-validation-error" id="capsWarningDiv" style="visibility:hidden; height:0px"><span>@Strings.CapsLock</span></div>
+			</div>
+			<div class="checkbox ovrd-form-group form-group pull-left">
+				@Html.CheckBoxFor(m => m.RememberMe, new { id = Html.NameFor(m => m.RememberMe), style = "margin-left: 0px" })
+				<label for="@Html.NameFor(m=>m.RememberMe)"> @Strings.RememberMe </label>
+			</div>
+			<div class="ovrd-form-group form-group allyis-action-buttons">
+				<p>
+					<input type="submit" value="@Strings.SignIn" class="ovrd-btn btn ovrd-btn-primary btn-primary" />
+				</p>
+				<p>
+					<a href="@Url.Action(ActionConstants.Register, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl })"> @Strings.RegisterLinkText </a>
+				</p>
+				<p>
+					<a href="@Url.Action(ActionConstants.ForgotPassword, ControllerConstants.Account)"> @Strings.ForgotPasswordViewTitle </a>
+				</p>
+			</div>
+		}
+	</div>
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/CapsCheck")
+	@Scripts.Render("~/bundles/CapsCheck")
 }

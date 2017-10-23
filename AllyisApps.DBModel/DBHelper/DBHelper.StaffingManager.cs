@@ -10,6 +10,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Dynamic;
 using System.Linq;
+using System.Threading.Tasks;
 using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.Lookup;
 using AllyisApps.DBModel.StaffingManager;
@@ -56,7 +57,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-			return connection.Query<int>("[StaffingManager].[CreateApplicant]", parameters, commandType: CommandType.StoredProcedure).Single();
+				return connection.Query<int>("[StaffingManager].[CreateApplicant]", parameters, commandType: CommandType.StoredProcedure).Single();
 			}
 		}
 
@@ -458,7 +459,7 @@ namespace AllyisApps.DBModel
 				return connection.Query<ApplicantDBEntity>("[StaffingManager].[GetApplicantByApplicationId]", parameters, commandType: CommandType.StoredProcedure).Single();
 			}
 		}
-		
+
 		/// <summary>
 		/// Retrieves the all applications, the applicants and documents associated with those applications, for a position.
 		/// </summary>
@@ -645,7 +646,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>, List<ApplicationStatusDBEntity>, List<CustomerDBEntity>>
+		async public Task<Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>, List<ApplicationStatusDBEntity>, List<CustomerDBEntity>>>
 			GetStaffingIndexPageInfo(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -653,7 +654,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				var results = connection.QueryMultiple(
+				var results = await connection.QueryMultipleAsync(
 					"[StaffingManager].[GetStaffingIndexInfo]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
@@ -698,7 +699,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@status", StatusesTable.AsTableValuedParameter("[StaffingManager].[StatusesTable]"));
 			parameters.Add("@type", TypesTable.AsTableValuedParameter("[StaffingManager].[TypesTable]"));
 			parameters.Add("@tags", TagTable.AsTableValuedParameter("[Lookup].[TagTable]"));
-			
+
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
@@ -716,20 +717,20 @@ namespace AllyisApps.DBModel
 					results.Read<CustomerDBEntity>().ToList());
 			}
 		}
-		
+
 		/// <summary>
 		/// Updates an organizations staffing settings.
 		/// </summary>
 		/// <param name="orgId">org ID thats getting a new setting </param>
 		/// <returns>Creates an orgs staffing object</returns>
-		public List<int> GetStaffingDefaultStatus(int orgId)
+		async public Task<List<int>> GetStaffingDefaultStatus(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var result = connection.QueryMultiple("[StaffingManager].[GetStaffingDefaultStatus]", parameters, commandType: CommandType.StoredProcedure);
+				var result = await connection.QueryMultipleAsync("[StaffingManager].[GetStaffingDefaultStatus]", parameters, commandType: CommandType.StoredProcedure);
 
 				return result.Read<int>().ToList();
 			}

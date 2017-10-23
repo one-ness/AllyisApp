@@ -702,14 +702,14 @@ namespace AllyisApps.DBModel
 		/// <param name="userId">User Id.</param>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<ProjectDBEntity>, List<ProjectDBEntity>, UserDBEntity> GetProjectsForOrgAndUser(int userId, int orgId)
+		async public Task<Tuple<List<ProjectDBEntity>, List<ProjectDBEntity>, UserDBEntity>> GetProjectsForOrgAndUser(int userId, int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
 			parameters.Add("@orgId", orgId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				var results = connection.QueryMultiple(
+				var results = await connection.QueryMultipleAsync(
 					"[Pjm].[GetProjectsForOrgAndUser]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
@@ -751,14 +751,14 @@ namespace AllyisApps.DBModel
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="userId">User Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<ProjectDBEntity>, List<dynamic>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId, int userId)
+		async public Task<Tuple<List<ProjectDBEntity>, List<dynamic>>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
 			parameters.Add("@orgId", orgId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				var results = connection.QueryMultiple(
+				var results = await connection.QueryMultipleAsync(
 					"[Crm].[GetInactiveProjectsAndCustomersForOrgAndUser]",
 					parameters,
 					commandType: CommandType.StoredProcedure);

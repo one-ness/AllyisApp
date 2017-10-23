@@ -48,7 +48,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					throw new ArgumentException(Resources.Strings.EnterATimeLongerThanZero);
 				}
 
-				IEnumerable<Services.TimeTracker.TimeEntry > otherEntriesToday = await AppService.GetTimeEntriesByUserOverDateRange(
+				IEnumerable<Services.TimeTracker.TimeEntry> otherEntriesToday = await AppService.GetTimeEntriesByUserOverDateRange(
 					new List<int> { model.UserId },
 					Utility.GetDateTimeFromDays(model.Date),
 					Utility.GetDateTimeFromDays(model.Date),
@@ -85,7 +85,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					UserId = model.UserId,
 					ProjectId = model.ProjectId,
 					PayClassId = model.PayClassId,
-					Date = Utility.GetDateTimeFromDays(model.Date) ?? DateTime.Now,
+					Date = model.Date > 0 ? Utility.GetDateTimeFromDays(model.Date) : DateTime.Now,
 					Duration = durationResult.Value,
 					Description = model.Description
 				});
@@ -110,7 +110,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		}
 
 		/// <summary>
-		/// Create Action for TimeEntry 
+		/// Create Action for TimeEntry
 		/// </summary>
 		/// <param name="model"></param>
 		/// <returns></returns>
@@ -128,13 +128,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					SubscriptionId = model.SubscriptionId,
 					UserId = model.UserId
 				});
-
 			}
 			else
 			{
 				throw new Exception("Attempt to create entry that should have been edited");
 			}
-
 		}
 	}
 }

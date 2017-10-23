@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
@@ -24,11 +25,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subscriptionId">The subscription's id.</param>
 		/// <param name="userId">The Id of the user to edit.</param>
 		/// <returns>The user edit page.</returns>
-		public ActionResult UserEdit(int subscriptionId, int userId)
+		async public Task<ActionResult> UserEdit(int subscriptionId, int userId)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
-			var infos = AppService.GetProjectsForOrgAndUser(userId, subscriptionId);
-			string subscriptionNameToDisplay = AppService.GetSubscriptionName(subscriptionId);
+			var infosTask = AppService.GetProjectsForOrgAndUser(userId, subscriptionId);
+			var subscriptionNameToDisplayTask = AppService.GetSubscriptionName(subscriptionId);
+
+			await Task.WhenAll(new Task[] { infosTask, subscriptionNameToDisplayTask });
+
+			var infos = infosTask.Result;
+			string subscriptionNameToDisplay = subscriptionNameToDisplayTask.Result;
+
 			return this.View(new UserEditViewModel
 			{
 				UserId = this.AppService.UserContext.UserId,

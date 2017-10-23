@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
@@ -42,15 +43,15 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// setup position setup viewmodel
 		/// </summary>
 		/// <returns></returns>
-		public EditPositionViewModel setupPositionEditViewModel(int subscriptionId)
+		async public Task<EditPositionViewModel> setupPositionEditViewModel(int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 
-			string subscriptionNameToDisplay = AppService.GetSubscriptionName(subscriptionId);
+			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
 
 			//TODO: this is piggy-backing off the get index action, create a new action that just gets items 3-5.
-			var infos = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
+			var infos = await AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
 			var temp = new string[infos.Item2.Count];
 			var count = 0;
 			for (int i = 0; i < infos.Item2.Count; i++)
