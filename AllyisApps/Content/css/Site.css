@@ -1,5 +1,11 @@
+html {
+	height: 100%;
+}
+
 body {
+	position: relative;
 	margin: 0;
+	min-height: 100%;
 }
 
 nav {
@@ -791,7 +797,7 @@ div.shrink-wrap-center > div {
 .footer {
 	background-color: #f8f8f8;
 	border-top: 1px #e7e7e7 solid;
-	position: static;
+	position: absolute;
 	bottom: 0px;
 	height: 70px !important;
 	margin-top: calc(85px);

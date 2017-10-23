@@ -3,21 +3,76 @@
     ViewBag.Title = Strings.SignIn;
 }
 
+<style>
+	.shrink-wrap-center {
+		text-align: center;
+	}
+	
+	.shrink-wrap-center > div {
+		text-align: left;
+		display: inline-block;
+	}
+
+	.min300 {
+		min-width: 300px;
+	}
+
+	.btn-gray {
+		background-color: #595959;
+		border-color: #4d4d4d;
+	}
+
+	.btn-gray:hover {
+		background-color: #404040;
+		border-color: #2e2e2e;
+	}
+
+	.allyis-action-buttons {
+		text-align: right;
+	}
+
+	p {
+		margin: 0 0 10px;
+	}
+
+	a {
+		color: #595959;
+	}
+
+	a:hover {
+		color: #333333;
+	}
+
+	label.required:after {
+		color: #d9534f;
+		content: " *";
+		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+		font-weight: bolder;
+	}
+
+	.slim {
+		margin-right: auto;
+		margin-left: auto;
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+</style>
+
 <div class="shrink-wrap-center">
     <div class="min300">
-        @using (Html.BeginForm(ActionConstants.LogOn, ControllerConstants.Account, new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "ovrd-form-horizontal form-horizontal", role = "form" }))
+        @using (Html.BeginForm(ActionConstants.LogOn, ControllerConstants.Account, new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
             @Html.AntiForgeryToken()
 
             @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
             <div class="ovrd-form-group form-group">
                 @Html.ReqLabelFor(m => m.Email, Strings.Email)
-                @Html.TextBoxFor(m => m.Email, new { @class = "ovrd-form-control form-control" })
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.Email, string.Empty, new { @class = "text-danger" })
             </div>
             <div class="ovrd-form-group form-group">
                 @Html.ReqLabelFor(m =>m.Password, Strings.Password)
-                @Html.PasswordFor(m => m.Password, new { @class = "ovrd-form-control form-control" })
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.Password, string.Empty, new { @class = "text-danger" })
                 <div class="field-validation-error" id="capsWarningDiv" style="visibility:hidden; height:0px"><span>@Strings.CapsLock</span></div>
             </div>
@@ -25,9 +80,9 @@
                 @Html.CheckBoxFor(m => m.RememberMe, new { id = Html.NameFor(m => m.RememberMe), style = "margin-left: 0px" })
                 <label for="@Html.NameFor(m=>m.RememberMe)"> @Strings.RememberMe </label>
             </div>
-            <div class="ovrd-form-group form-group allyis-action-buttons">
+            <div class="form-group allyis-action-buttons">
                 <p>
-                    <input type="submit" value="@Strings.SignIn" class="ovrd-btn btn ovrd-btn-primary btn-primary" />
+                    <input type="submit" value="@Strings.SignIn" class="btn btn-primary btn-gray" />
                 </p>
                 <p>
                     <a href="@Url.Action(ActionConstants.Register, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl })"> @Strings.RegisterLinkText </a>

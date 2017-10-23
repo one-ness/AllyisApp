@@ -21,8 +21,7 @@
 	@Styles.Render("~/Content/FontAwesome")
 	@Scripts.Render("~/bundles/underscore")
 	@RenderSection("css", required: false)
-	@*@Styles.Render(DisplayHints.LayoutThemeBundle)*@
-	<link href="@Url.Content(DisplayHints.LayoutThemeBundle.Replace("Content/", "Content/css/") + ".css")" rel="stylesheet" type="text/css" />
+	@*<link href="@Url.Content(DisplayHints.LayoutThemeBundle.Replace("Content/", "Content/css/") + ".css")" rel="stylesheet" type="text/css" />*@
 	<meta name="description" content="@Strings.MetaDescription" />
 </head>
 <body id="@DisplayHints.PageBodyId" class="@DisplayHints.PageBodyClasses">
