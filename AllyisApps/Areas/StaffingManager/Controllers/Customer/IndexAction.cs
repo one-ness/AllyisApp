@@ -14,6 +14,7 @@ using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
 using AllyisApps.ViewModels.TimeTracker.Customer;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -41,7 +42,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">Subscription id.</param>
 		/// <returns>The index page.</returns>
-		public ActionResult IndexNoUserId(int subscriptionId)
+		async public Task<ActionResult> IndexNoUserId(int subscriptionId)
 		{
 			if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
 			{
@@ -51,7 +52,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 
-			var infos = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
+			var infos = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 
 			return this.View("Index", this.ConstructManageCustomerViewModel(subscriptionId));
 		}

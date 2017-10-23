@@ -28,8 +28,9 @@ namespace AllyisApps.Controllers.Auth
 		async public Task<ActionResult> Charge(int id, BillingServicesToken token, string billingServicesEmail)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditBilling, id);
-			await AppService.UpdateBillingInfo(billingServicesEmail, token, id);
+			AppService.UpdateBillingInfo(billingServicesEmail, token, id);
 			Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Strings.Billing, Core.Alert.Variety.Success));
+			await Task.Yield();
 			return this.RedirectToAction(ActionConstants.ManageOrg);
 		}
 	}

@@ -17,6 +17,7 @@ using AllyisApps.Services.Auth;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.ViewModels;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -131,10 +132,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					}
 					if (model.PositionStatusId == 0)
 					{
-						model.PositionStatusId = (await AppService.GetStaffingDefaultStatus(subInfo.OrganizationId))[0];
+						var defaultGet = await AppService.GetStaffingDefaultStatus(subInfo.OrganizationId);
+						model.PositionStatusId = defaultGet[0];
 					}
 				}
-				int? positionId = AppService.CreatePosition(
+				int? positionId = await AppService.CreatePosition(
 					new Position()
 					{
 						OrganizationId = model.OrganizationId,

@@ -48,8 +48,9 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			Position pos = AppService.GetPosition(positionId);
+			Position pos = await AppService.GetPosition(positionId);
 
+			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
 			var subscriptionNameToDisplayTask = AppService.GetSubscriptionName(subscriptionId);
 			//TODO: this is piggy-backing off the get index action, create a new action that just gets items 3-5.
 			var infosTask = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
@@ -165,10 +166,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					}
 					if (model.PositionStatusId == 0)
 					{
-						model.PositionStatusId = (await AppService.GetStaffingDefaultStatus(subInfo.OrganizationId))[0];
+						var defaultGet = await AppService.GetStaffingDefaultStatus(subInfo.OrganizationId);
+						model.PositionStatusId = defaultGet[0];
 					}
 				}
-				int? positionId = AppService.UpdatePosition(
+				int? positionId = await AppService.UpdatePosition(
 					new Position()
 					{
 						OrganizationId = model.OrganizationId,

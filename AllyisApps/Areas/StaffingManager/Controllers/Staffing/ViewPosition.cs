@@ -50,8 +50,8 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			Position pos = AppService.GetPosition(positionId);
-			List<Application> applicationsSerive = AppService.GetFullApplicationInfoByPositionId(positionId);
+			Position pos = await AppService.GetPosition(positionId);
+			List<Application> applicationsSerive = await AppService.GetFullApplicationInfoByPositionId(positionId);
 			List<ApplicationInfoViewModel> applications = new List<ApplicationInfoViewModel>();
 
 			var subscriptionNameToDisplayTask = AppService.GetSubscriptionName(subscriptionId);
