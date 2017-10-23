@@ -479,8 +479,8 @@
     <Content Include="Content\bootstrap\css\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap\css\bootstrap.css" />
     <Content Include="Content\bootstrap\css\bootstrap.min.css" />
-    <Content Include="Content\bootstrap\js\bootstrap.js" />
-    <Content Include="Content\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Scripts\bootstrap\bootstrap.js" />
+    <Content Include="Scripts\bootstrap\bootstrap.min.js" />
     <Content Include="Content\css\ExpenseTracker.css" />
     <Content Include="Content\css\ExpenseTracker.min.css">
       <DependentUpon>ExpenseTracker.css</DependentUpon>
@@ -496,97 +496,9 @@
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\font-awesome\HELP-US-OUT.txt" />
     <Content Include="Content\icons\ExpenseTracker.png" />
-    <Content Include="Content\unused_css\allyis-list-group-search.css" />
-    <Content Include="Content\unused_css\allyis-list-group-search.min.css">
-      <DependentUpon>allyis-list-group-search.css</DependentUpon>
-    </Content>
-    <Content Include="Content\unused_css\allyis-pages-with-filter.css" />
-    <Content Include="Content\unused_css\allyis-pages-with-filter.min.css">
-      <DependentUpon>allyis-pages-with-filter.css</DependentUpon>
-    </Content>
-    <Content Include="Content\unused_css\allyis-tabs.css" />
-    <Content Include="Content\unused_css\allyis-tabs.min.css">
-      <DependentUpon>allyis-tabs.css</DependentUpon>
-    </Content>
-    <Content Include="Content\unused_css\breadcrumbs.css" />
-    <Content Include="Content\unused_css\breadcrumbs.min.css">
-      <DependentUpon>breadcrumbs.css</DependentUpon>
-    </Content>
-    <Content Include="Content\unused_css\error.css" />
-    <Content Include="Content\unused_css\error.min.css">
-      <DependentUpon>error.css</DependentUpon>
-    </Content>
-    <Content Include="Content\unused_css\form.css" />
     <Content Include="Content\icons\StaffingManager.png" />
     <Content Include="Content\icons\TimeTrackerPro.png" />
     <Content Include="Content\icons\TimeTracker.png" />
-    <Content Include="Content\unused_css\form.min.css">
-      <DependentUpon>form.css</DependentUpon>
-    </Content>
-    <Content Include="Content\unused_css\general.css" />
-    <Content Include="Content\unused_css\general.min.css">
-      <DependentUpon>general.css</DependentUpon>
-    </Content>
-    <Content Include="Content\unused_css\index.css" />
-    <Content Include="Content\unused_css\index.min.css">
-      <DependentUpon>index.css</DependentUpon>
-    </Content>
-    <Content Include="Content\unused_css\modal.css" />
-    <Content Include="Content\unused_css\modal.min.css">
-      <DependentUpon>modal.css</DependentUpon>
-    </Content>
-    <Content Include="Content\unused_css\navigation.css" />
-    <Content Include="Content\unused_css\navigation.min.css">
-      <DependentUpon>navigation.css</DependentUpon>
-    </Content>
-    <Content Include="Content\unused_css\offcanvas.css" />
-    <Content Include="Content\unused_css\offcanvas.min.css">
-      <DependentUpon>offcanvas.css</DependentUpon>
-    </Content>
-    <Content Include="Content\unused_css\paneled_index.css" />
-    <Content Include="Content\unused_css\paneled_index.min.css">
-      <DependentUpon>paneled_index.css</DependentUpon>
-    </Content>
-    <Content Include="Content\unused_css\permissions.css" />
-    <Content Include="Content\unused_css\permissions.min.css">
-      <DependentUpon>permissions.css</DependentUpon>
-    </Content>
-    <Content Include="Content\unused_css\report.css" />
-    <Content Include="Content\unused_css\report.min.css">
-      <DependentUpon>report.css</DependentUpon>
-    </Content>
-    <Content Include="Content\unused_css\sale.css" />
-    <Content Include="Content\unused_css\sale.min.css">
-      <DependentUpon>sale.css</DependentUpon>
-    </Content>
-    <Content Include="Content\unused_css\sticky_footer.css" />
-    <Content Include="Content\unused_css\sticky_footer.min.css">
-      <DependentUpon>sticky_footer.css</DependentUpon>
-    </Content>
-    <Content Include="Content\unused_css\swapper-ui.css" />
-    <Content Include="Content\unused_css\swapper-ui.min.css">
-      <DependentUpon>swapper-ui.css</DependentUpon>
-    </Content>
-    <Content Include="Content\unused_css\tt_customer.css" />
-    <Content Include="Content\unused_css\tt_customer.min.css">
-      <DependentUpon>tt_customer.css</DependentUpon>
-    </Content>
-    <Content Include="Content\unused_css\utilities.min.css">
-      <DependentUpon>utilities.css</DependentUpon>
-    </Content>
-    <Content Include="Content\unused_css\_mixins.css" />
-    <Content Include="Content\unused_css\_mixins.min.css">
-      <DependentUpon>_mixins.css</DependentUpon>
-    </Content>
-    <Content Include="Content\unused_css\_root.css" />
-    <Content Include="Content\unused_css\_root.min.css">
-      <DependentUpon>_root.css</DependentUpon>
-    </Content>
-    <Content Include="Content\unused_css\_variables.css" />
-    <Content Include="Content\unused_css\_variables.min.css">
-      <DependentUpon>_variables.css</DependentUpon>
-    </Content>
-    <Content Include="Content\unused_css\utilities.css" />
     <Content Include="Scripts\allyis-account-permission2.js" />
     <Content Include="Scripts\allyis-holidayDatepicker.js" />
     <Content Include="Scripts\allyis-birthDatepicker.js" />
@@ -796,46 +708,6 @@
     <Content Include="Content\icons\ExpenseTrackerPro.png" />
     <Content Include="Content\icons\invoice.png" />
     <Content Include="Content\icons\tasks-list.png" />
-    <Content Include="Scripts\bootstrap\affix.js" />
-    <Content Include="Scripts\bootstrap\alert.js" />
-    <Content Include="Scripts\bootstrap\button.js" />
-    <Content Include="Scripts\bootstrap\carousel.js" />
-    <Content Include="Scripts\bootstrap\collapse.js" />
-    <Content Include="Scripts\bootstrap\dropdown.js" />
-    <Content Include="Scripts\bootstrap\modal.js" />
-    <Content Include="Scripts\bootstrap\popover.js" />
-    <Content Include="Scripts\bootstrap\scrollspy.js" />
-    <Content Include="Scripts\bootstrap\tab.js" />
-    <Content Include="Scripts\bootstrap\tests\index.html" />
-    <Content Include="Scripts\bootstrap\tests\unit\affix.js" />
-    <Content Include="Scripts\bootstrap\tests\unit\alert.js" />
-    <Content Include="Scripts\bootstrap\tests\unit\button.js" />
-    <Content Include="Scripts\bootstrap\tests\unit\carousel.js" />
-    <Content Include="Scripts\bootstrap\tests\unit\collapse.js" />
-    <Content Include="Scripts\bootstrap\tests\unit\dropdown.js" />
-    <Content Include="Scripts\bootstrap\tests\unit\modal.js" />
-    <Content Include="Scripts\bootstrap\tests\unit\phantom.js" />
-    <Content Include="Scripts\bootstrap\tests\unit\popover.js" />
-    <Content Include="Scripts\bootstrap\tests\unit\scrollspy.js" />
-    <Content Include="Scripts\bootstrap\tests\unit\tab.js" />
-    <Content Include="Scripts\bootstrap\tests\unit\tooltip.js" />
-    <Content Include="Scripts\bootstrap\tests\vendor\jquery.min.js" />
-    <Content Include="Scripts\bootstrap\tests\vendor\qunit.css" />
-    <Content Include="Scripts\bootstrap\tests\vendor\qunit.js" />
-    <Content Include="Scripts\bootstrap\tests\visual\affix-with-sticky-footer.html" />
-    <Content Include="Scripts\bootstrap\tests\visual\affix.html" />
-    <Content Include="Scripts\bootstrap\tests\visual\alert.html" />
-    <Content Include="Scripts\bootstrap\tests\visual\button.html" />
-    <Content Include="Scripts\bootstrap\tests\visual\carousel.html" />
-    <Content Include="Scripts\bootstrap\tests\visual\collapse.html" />
-    <Content Include="Scripts\bootstrap\tests\visual\dropdown.html" />
-    <Content Include="Scripts\bootstrap\tests\visual\modal.html" />
-    <Content Include="Scripts\bootstrap\tests\visual\popover.html" />
-    <Content Include="Scripts\bootstrap\tests\visual\scrollspy.html" />
-    <Content Include="Scripts\bootstrap\tests\visual\tab.html" />
-    <Content Include="Scripts\bootstrap\tests\visual\tooltip.html" />
-    <Content Include="Scripts\bootstrap\tooltip.js" />
-    <Content Include="Scripts\bootstrap\transition.js" />
     <Content Include="Global.asax" />
     <Content Include="Areas\TimeTracker\Views\web.config">
       <SubType>Designer</SubType>
@@ -845,10 +717,6 @@
     <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="Scripts\bootstrap\.jscsrc" />
-    <Content Include="Scripts\bootstrap\.jshintrc" />
-    <Content Include="Scripts\bootstrap\tests\README.md" />
-    <Content Include="Scripts\bootstrap\tests\unit\.jshintrc" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\_ClearRow.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\Report.cshtml" />
