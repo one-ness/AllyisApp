@@ -678,7 +678,7 @@ namespace AllyisApps.DBModel
 		/// <param name="types">Organization Id.</param>
 		/// <param name="tags">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>, List<ApplicationStatusDBEntity>, List<CustomerDBEntity>>
+		async public Task<Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>, List<ApplicationStatusDBEntity>, List<CustomerDBEntity>>>
 			GetStaffingIndexPageInfoFiltered(int orgId, List<string> statuses, List<string> types, List<string> tags = null)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -702,7 +702,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				var results = connection.QueryMultiple(
+				var results = await connection.QueryMultipleAsync(
 					"[StaffingManager].[GetStaffingIndexInfoFiltered]",
 					parameters,
 					commandType: CommandType.StoredProcedure);

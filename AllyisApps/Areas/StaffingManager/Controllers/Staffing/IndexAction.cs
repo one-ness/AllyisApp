@@ -51,11 +51,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				List<string> tags = new List<string>();
 				if (Tags != null) tags = new List<string>(Tags.Split(",".ToCharArray()));
 
-				infos = AppService.GetStaffingIndexInfoFiltered(subInfo.OrganizationId, statuses, types, tags, userId);
+				infos = await AppService.GetStaffingIndexInfoFiltered(subInfo.OrganizationId, statuses, types, tags, userId);
 			}
 			else
 			{
-				infos = AppService.GetStaffingIndexInfo(subInfo.OrganizationId, userId);
+				infos = await AppService.GetStaffingIndexInfo(subInfo.OrganizationId, userId);
 			}
 
 			// ViewBag.SignedInUserID = GetCookieData().UserId;

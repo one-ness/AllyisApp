@@ -23,7 +23,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.AdminReport, subscriptionId);
 
-			SetNavData(subscriptionId);
+			await SetNavData(subscriptionId);
 
 			AdminReportModel adminReportVM = null;
 

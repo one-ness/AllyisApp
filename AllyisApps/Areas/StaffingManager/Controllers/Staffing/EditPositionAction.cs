@@ -142,7 +142,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="model">The Customer ViewModel.</param>
 		/// <param name="subscriptionId">The sub id from the ViewModel.</param>
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
-		public ActionResult SubmitUpdatePosition(EditPositionViewModel model, int subscriptionId)
+		async public Task<ActionResult> SubmitUpdatePosition(EditPositionViewModel model, int subscriptionId)
 		{
 			if (ModelState.IsValid)
 			{
@@ -165,7 +165,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					}
 					if (model.PositionStatusId == 0)
 					{
-						model.PositionStatusId = AppService.GetStaffingDefaultStatus(subInfo.OrganizationId)[0];
+						model.PositionStatusId = (await AppService.GetStaffingDefaultStatus(subInfo.OrganizationId))[0];
 					}
 				}
 				int? positionId = AppService.UpdatePosition(

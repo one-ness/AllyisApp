@@ -21,7 +21,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>The action result.</returns>
 		async public Task<ActionResult> UserSettings(int subscriptionId)
 		{
-			SetNavData(subscriptionId);
+			await SetNavData(subscriptionId);
 
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.UserSettings, subscriptionId);
 

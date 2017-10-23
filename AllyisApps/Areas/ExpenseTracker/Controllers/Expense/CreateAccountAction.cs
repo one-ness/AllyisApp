@@ -27,7 +27,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Accounts, subscriptionId);
 
-			SetNavData(subscriptionId);
+			await SetNavData(subscriptionId);
 			var subInfo = await AppService.GetSubscription(subscriptionId);
 			var accounts = await AppService.GetAccounts(subInfo.OrganizationId);
 			var account = (accounts != null) && (accountId != null) ? accounts.Where(x => x.AccountId == accountId.Value).FirstOrDefault() : null;

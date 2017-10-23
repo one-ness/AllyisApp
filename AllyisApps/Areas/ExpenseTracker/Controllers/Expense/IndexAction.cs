@@ -23,7 +23,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>The action result.</returns>
 		async public Task<ActionResult> Index(int subscriptionId)
 		{
-			SetNavData(subscriptionId);
+			await SetNavData(subscriptionId);
 
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, subscriptionId);
 
@@ -33,7 +33,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			var results = await AppService.GetExpenseReportBySubmittedId(userId);
 			var items = results.Select(x => x).Where(y => y.OrganizationId == subInfo.OrganizationId);
 
-			return View(InitializeViewModel(subscriptionId, userId, DateTime.UtcNow, DateTime.UtcNow.AddDays(7), items));
+			return View(await InitializeViewModel(subscriptionId, userId, DateTime.UtcNow, DateTime.UtcNow.AddDays(7), items));
 		}
 
 		/// <summary>

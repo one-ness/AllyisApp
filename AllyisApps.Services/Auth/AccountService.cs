@@ -339,7 +339,6 @@ namespace AllyisApps.Services
 			if (this.UserContext.UserId != userInfo.UserId)
 			{
 				// logged in user is trying to read a different user's information
-
 			}
 
 			return userInfo;
@@ -623,9 +622,9 @@ namespace AllyisApps.Services
 			await DBHelper.UpdateUserMaxAmount(entity);
 		}
 
-		public decimal GetOrganizationUserMaxAmount(int userId, int orgId)
+		async public Task<decimal> GetOrganizationUserMaxAmount(int userId, int orgId)
 		{
-			return DBHelper.GetUserOrgMaxAmount(userId, orgId);
+			return await DBHelper.GetUserOrgMaxAmount(userId, orgId);
 		}
 
 		/// <summary>

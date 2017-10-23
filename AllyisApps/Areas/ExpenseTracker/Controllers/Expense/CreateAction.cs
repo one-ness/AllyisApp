@@ -24,8 +24,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>Returns an action result.</returns>
 		async public Task<ActionResult> Create(int subscriptionId, int reportId = -1)
 		{
-			SetNavData(subscriptionId);
-			var results = await AppService.GetAccounts(subscriptionId);
+			await SetNavData(subscriptionId);
+			var organizationId = (await AppService.GetSubscription(subscriptionId)).OrganizationId;
+			var results = await AppService.GetAccounts(organizationId);
 			IList<Account> accounts = results.ToList();
 			List<AccountViewModel> accountViewModels = new List<AccountViewModel>();
 			foreach (Account account in accounts)

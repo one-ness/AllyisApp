@@ -337,7 +337,7 @@ namespace AllyisApps.Services
 		async public Task<IEnumerable<PayClass>> GetPayClassesBySubscriptionId(int subscriptionId)
 		{
 			var getClass = await DBHelper.GetPayClasses(UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
-			return  getClass.Select(pc => InitializePayClassInfo(pc));
+			return getClass.Select(pc => InitializePayClassInfo(pc));
 		}
 
 		/// <summary>
@@ -831,7 +831,7 @@ namespace AllyisApps.Services
 		/// <param name="tags">tags.</param>
 		/// <param name="userId">User Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<ApplicationStatus>, List<Customer>>
+		async public Task<Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<ApplicationStatus>, List<Customer>>>
 			GetStaffingIndexInfoFiltered(int orgId, List<string> statusName, List<string> typeName, List<string> tags = null, int? userId = 0)
 		{
 			#region Validation
@@ -851,7 +851,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			var results = DBHelper.GetStaffingIndexPageInfoFiltered(orgId, statusName, typeName, tags);
+			var results = await DBHelper.GetStaffingIndexPageInfoFiltered(orgId, statusName, typeName, tags);
 
 			return Tuple.Create(
 				results.Item1.Select(posdb => InitializePositionThumbnailInfo(posdb, results.Item2, results.Item5)).ToList(),
