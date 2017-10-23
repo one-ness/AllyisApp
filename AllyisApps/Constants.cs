@@ -123,6 +123,7 @@ namespace AllyisApps
 		public const string SettingsLockDate = "settingslockdate";
 		public const string Review = "review";
 		public const string UpdateTimeEntryStatus = "updatetimeentrystatus";
+		public const string LockTimeEntries = "locktimeentries";
 	}
 
 	/// <summary>

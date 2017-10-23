@@ -147,7 +147,7 @@ namespace AllyisApps.DBModel
 					parameters,
 					commandType: CommandType.StoredProcedure);
 
-				return result == null ? new List<TimeEntryDBEntity>() : result;
+				return result ?? new List<TimeEntryDBEntity>();
 			}
 		}
 
@@ -196,7 +196,7 @@ namespace AllyisApps.DBModel
 					parameters,
 					commandType: CommandType.StoredProcedure);
 
-				return result == null ? new List<TimeEntryDBEntity>() : result;
+				return result ?? new List<TimeEntryDBEntity>();
 			}
 		}
 
@@ -221,7 +221,7 @@ namespace AllyisApps.DBModel
 																	parameters,
 																	commandType: CommandType.StoredProcedure);
 
-				return result == null ? new List<TimeEntryDBEntity>() : result;
+				return result ?? new List<TimeEntryDBEntity>();
 			}
 		}
 
