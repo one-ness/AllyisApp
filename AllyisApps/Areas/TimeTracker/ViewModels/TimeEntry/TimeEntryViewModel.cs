@@ -35,6 +35,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 			UserId = timeEntry.UserId;
 			TimeEntryStatusId = timeEntry.TimeEntryStatusId;
 			TimeEntryStatusName = timeEntry.getTimeEntryStatusName();
+			IsLocked = timeEntry.IsLocked;
 		}
 
 		/// <summary>
@@ -131,5 +132,10 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Gets or sets the status of the time entry, e.g. "Pending", "Approved", "Rejected", "Payroll Processed".
 		/// </summary>
 		public string TimeEntryStatusName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the bool for whether or not the time entry is locked
+		/// </summary>
+		public bool IsLocked { get; set; }
 	}
 }

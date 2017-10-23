@@ -100,5 +100,10 @@ namespace AllyisApps.Services.TimeTracker
 		{
 			return ((TimeEntryStatus)TimeEntryStatusId).ToString();
 		}
+
+		/// <summary>
+		/// Gets or sets the bool for whether or not the time entry is locked
+		/// </summary>
+		public bool IsLocked { get; set; }
 	}
 }

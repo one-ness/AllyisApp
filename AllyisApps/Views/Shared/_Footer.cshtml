@@ -1,22 +1,25 @@
-﻿@using AllyisApps.ViewModels.Shared;
+﻿<style>
+	.footer-bar {
+		background-color: #efefef;
+		bottom: 0;
+		font-size: smaller;
+		height: 40px;
+		padding-bottom: 5px;
+		padding-top: 5px;
+		position: absolute;
+		width: inherit;
+	}
 
-@model List<LanguageViewModel>
-
-@{
-    Layout = string.Empty;
-    var CultureName = (string)ViewData["CultureName"];
-}
-
-<div class="footer slim" style="max-height:55px">
-    <div class="ovrd-row row">
-        <p class="footer-links ovrd-col-xs-8 col-xs-8 ovrd-col-sm-6 col-sm-6 col">
-            <span class="ovrd-col-xs-12 col-xs-12 ovrd-col-sm-6 col-sm-6 col footer-text">
-                <a href="@Url.Action(ActionConstants.PrivacyPolicy, ControllerConstants.Home)">@Strings.PrivacyPolicy</a>
-                <a href="@Url.Action(ActionConstants.Help, ControllerConstants.Home)">@Strings.Help</a>
-            </span>
-        </p>
-        <p class="ovrd-col-xs-4 col-xs-4 ovrd-col-sm-6 col-sm-6 col footer-text" style="text-align: right">
-            &copy; @DateTime.Now.Year - Allyis, Inc.
-        </p>
-    </div>
+		.footer-bar a {
+			margin-right: 10px;
+		}
+</style>
+<div class="container">
+	<div class="row footer-bar">
+		<div class="col-xs-12">
+			<a class="pull-left" href="@Url.Action(ActionConstants.PrivacyPolicy, ControllerConstants.Home)">@Strings.PrivacyPolicy</a>
+			<a class="pull-left" href="@Url.Action(ActionConstants.Help, ControllerConstants.Home)">@Strings.Help</a>
+			<span class="pull-right">&copy; @DateTime.Now.Year - Allyis, Inc.</span>
+		</div>
+	</div>
 </div>

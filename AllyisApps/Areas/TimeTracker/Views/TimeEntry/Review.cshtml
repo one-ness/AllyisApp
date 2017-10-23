@@ -11,6 +11,29 @@
 }
 
 
+<div class="row" style="padding-bottom: 20px">
+	<div class="col-sm-6 col-sm-offset-6">
+		@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "form-inline pull-right", role = "form" }))
+		{
+			<label>Set status for selected entries as: </label>
+			<div class="input-group">
+				@Html.DropDownList("timeEntryStatusId",
+				new SelectList(Model.TimeEntryStatusOptions, "Key", "Value"),
+				new
+				{
+					@class = "form-control selectpicker set-status-select",
+					@data_width = "fit"
+				})
+				<span class="input-group-btn">
+					<button id="submit-status" class="btn btn-primary" type="submit" tabindex="-1">Save</button>
+				</span>
+			</div>
+			<input type="hidden" name="timeEntryIdsJSON" class="time-entries-input" value="[]" />
+			@Html.HiddenFor(m => m.StartDate)
+			@Html.HiddenFor(m => m.EndDate)
+		}
+	</div>
+</div>
 
 <div class="panel panel-default">
 	<div class="panel-heading row" style="margin: 0; padding-left: 0; padding-right: 0;">
@@ -29,10 +52,18 @@
 					@class = "selectpicker pull-right filter-status-select",
 					@title = "Filter by status",
 					@multiple = "multiple",
-					@data_selected_text_format = "count > 2"
+					@data_selected_text_format = "count > 2",
+					@data_width = "fit"
 				})
-
-			<button type="button" class="btn btn-primary pull-right" style="margin-right:15px">Lock Entries</button>
+			<div class="btn-group pull-right" style="padding-right:15px;">
+				<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Actions
+				</button>
+				<div class="dropdown-menu">
+					<a class="dropdown-item" id="lock-entries-link">Lock Entries</a>
+					<a class="dropdown-item" id="payroll-process-link">Payroll Process</a>
+				</div>
+			</div>
 			<div class="clearfix"></div>
 		</div>
 	</div>
@@ -74,9 +105,9 @@
 				</tr>
 				foreach (var timeEntry in group)
 				{
-					<tr class="child-row hidden color-code-@(timeEntry.TimeEntryStatusName)" rowId=@group.Key data-time-entry-status-id="@timeEntry.TimeEntryStatusId">
+					<tr class="child-row hidden color-code-@(timeEntry.TimeEntryStatusName) @(timeEntry.IsLocked ? "greyed-out" : "")" rowId=@group.Key data-time-entry-status-id="@timeEntry.TimeEntryStatusId">
 						<td></td>
-						<td><input type="checkbox" class="check time-entry-check" check-id="@group.Key" data-time-entry-id="@timeEntry.TimeEntryId"></td>
+						<td><input type="checkbox" class="check time-entry-check" check-id="@group.Key" data-time-entry-id="@timeEntry.TimeEntryId" @(timeEntry.IsLocked ? "disabled" : "")></td>
 						<td>
 							<a class="details-modal-input" data-time-entry-object='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(timeEntry))' style="cursor:pointer">
 								@timeEntry.Date.ToShortDateString()
@@ -107,25 +138,49 @@
 </div>
 
 <div class="row">
-	<div class="col-sm-6 col-sm-offset-6">
-		@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "form-inline pull-right", role = "form" }))
-		{
-			<label>Set status for selected entries as: </label>
-			<div class="input-group">
-				@Html.DropDownList("timeEntryStatusId",
+	<div class="col-xs-12">
+		<div class="panel panel-default pull-left">
+			<div class="panel-heading" style="background-color:transparent">Legend</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="color-box color-code-Pending"></div>
+					- Pending
+				</div>
+				<div class="row">
+					<div class="color-box color-code-Rejected"></div>
+					- Rejected
+				</div>
+				<div class="row">
+					<div class="color-box color-code-Approved"></div>
+					<div class="text-box-padded">- Approved</div>
+				</div>
+				<div class="row">
+					<div class="color-box color-code-PayrollProcessed"></div>
+					- PayrollProcessed
+				</div>
+			</div>
+		</div>
+		<div class="pull-right">
+			@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "form-inline pull-right", role = "form" }))
+			{
+				<label>Set status for selected entries as: </label>
+				<div class="input-group">
+					@Html.DropDownList("timeEntryStatusId",
 				new SelectList(Model.TimeEntryStatusOptions, "Key", "Value"),
-				new {
+				new
+				{
 					@class = "form-control selectpicker set-status-select",
 					@data_width = "fit"
 				})
-				<span class="input-group-btn">
-					<button id="submit-status" class="btn btn-primary" type="submit" tabindex="-1">Save</button>
-				</span>
-			</div>
-			<input type="hidden" name="timeEntryIdsJSON" class="time-entries-input" value="[]"/>
-			@Html.HiddenFor(m => m.StartDate)
-			@Html.HiddenFor(m => m.EndDate)
-		}
+					<span class="input-group-btn">
+						<button id="submit-status" class="btn btn-primary" type="submit" tabindex="-1">Save</button>
+					</span>
+				</div>
+				<input type="hidden" name="timeEntryIdsJSON" class="time-entries-input" value="[]" />
+				@Html.HiddenFor(m => m.StartDate)
+				@Html.HiddenFor(m => m.EndDate)
+			}
+		</div>
 	</div>
 </div>
 
@@ -196,40 +251,55 @@
 		}
 
 		i.color-code-Pending {
-			color: grey;
+			color: rgb(128, 128, 128);
 		}
 
 		tr.color-code-Pending {
-			background-color: grey;
+			background-color: rgba(128, 128, 128, .4);
+		}
+
+		.color-box.color-code-Pending {
+			background-color: rgb(128, 128, 128);
 		}
 
 		i.color-code-Approved {
-			color: dodgerblue;
+			color: rgb(30, 144, 255);
 		}
 
 		tr.color-code-Approved {
-			background-color: dodgerblue;
+			background-color: rgba(30, 144, 255, .4);
+		}
+
+		.color-box.color-code-Approved {
+			background-color: rgb(30, 144, 255);
 		}
 
 		i.color-code-Rejected {
-			color: tomato;
+			color: rgb(255, 99, 71);
 		}
 
 		tr.color-code-Rejected {
-			background-color: tomato;
+			background: rgba(255, 99, 71, .4);
+		}
+
+		.color-box.color-code-Rejected {
+			background-color: rgb(255, 99, 71);
 		}
 
 		i.color-code-PayrollProcessed {
-			color: mediumseagreen;
+			color: rgb(60, 179, 113);
 		}
 
 		tr.color-code-PayrollProcessed {
-			background-color: mediumseagreen;
+			background-color: rgba(60, 179, 113, .4);
 		}
 
-		.greyed-color {
+		.color-box.color-code-PayrollProcessed {
+			background-color: rgb(60, 179, 113);
+		}
+
+		i.greyed-out {
 			color: lightgrey;
-			background-color: lightgrey;
 		}
 
 		.status-dots {
@@ -252,6 +322,14 @@
 			height: 10px;
 			width: 10px;
 			float: left;
+		}
+
+		.color-box {
+			float: left;
+			width: 20px;
+			height: 20px;
+			margin: 5px;
+			border: 1px solid rgba(0, 0, 0, .2);
 		}
 	</style>
 }
@@ -337,7 +415,7 @@
 				'method': 'get'
 			}).append(jQuery('<input>', {
 				'name': 'startDate',
-				'value': picker.startDate.toISOString().slice(0,10),
+				'value': picker.startDate.toISOString().slice(0, 10),
 				'type': 'hidden'
 			})).append(jQuery('<input>', {
 				'name': 'endDate',
@@ -383,6 +461,23 @@
 			$(".parent-row").filter(function () {
 				return !$(this).nextAll(":not(.filtered)").hasClass("child-row");
 			}).addClass("filtered");
+		});
+
+		$("#lock-entries-link").click(function () {
+			var newForm = jQuery('<form>', {
+				'action': '/@ProductNameConstants.TimeTracker/@Model.SubscriptionId/@ControllerConstants.TimeEntry/@ActionConstants.LockTimeEntries',
+				'target': '_top',
+				'method': 'post'
+			}).append(jQuery('<input>', {
+				'name': 'lockDate',
+				'value': "@Model.EndDate",
+				'type': 'hidden'
+			})).append(jQuery('<input>', {
+				'name': 'startDate',
+				'value': "@Model.StartDate",
+				'type': 'hidden'
+			}));
+			newForm.appendTo(document.body).submit();
 		});
 	});
 </script>
