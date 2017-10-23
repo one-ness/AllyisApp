@@ -7,25 +7,9 @@
     var CultureName = (string)ViewData["CultureName"];
 }
 
-@*<footer class="footer">
-    <div class="container-fluid text-center text-muted">*@
 <div class="footer slim" style="max-height:55px">
     <div class="ovrd-row row">
         <p class="footer-links ovrd-col-xs-8 col-xs-8 ovrd-col-sm-6 col-sm-6 col">
-            @*<select class="col-xs-12 col-sm-6 col form-control" id="languageSelect" onchange="OnLanguageSelect()" value=@ViewBag.language style="width: inherit;">
-                @foreach (LanguageViewModel language in Model.Item1)
-                {
-                    string languageKey = LanguageViewModel.Clean(language.LanguageName);
-                    if (CultureName == language.CultureName)
-                    {
-                        <option value=@language.CultureName selected>@(Strings.ResourceManager.GetString(languageKey) ?? language.LanguageName)</option>
-                    }
-                    else
-                    {
-                        <option value=@language.CultureName>@(Strings.ResourceManager.GetString(languageKey) ?? language.LanguageName)</option>
-                    }
-                }
-            </select >*@
             <span class="ovrd-col-xs-12 col-xs-12 ovrd-col-sm-6 col-sm-6 col footer-text">
                 <a href="@Url.Action(ActionConstants.PrivacyPolicy, ControllerConstants.Home)">@Strings.PrivacyPolicy</a>
                 <a href="@Url.Action(ActionConstants.Help, ControllerConstants.Home)">@Strings.Help</a>
@@ -36,12 +20,3 @@
         </p>
     </div>
 </div>
-
-    @*</div>
-</footer>*@
-
-@*<script type="text/javascript">
-    OnLanguageSelect = function () {
-        window.location.href = "@Url.Action(ActionConstants.UpdateLanguage, ControllerConstants.Shared, new { CultureName = -1 } )".replace('-1', $("#languageSelect").val());
-    }
-</script>*@
