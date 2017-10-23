@@ -63,7 +63,7 @@ namespace AllyisApps.DBModel
 		/// <param name="holidayName">The HolidayDBEntity to delete.</param>
 		/// <param name="date">The HolidayDBEntity to delete.</param>
 		/// <param name="organizationId">The HolidayDBEntity to delete.</param>
-		public void DeleteHoliday(string holidayName, DateTime date, int organizationId)
+		async public void DeleteHoliday(string holidayName, DateTime date, int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@holidayName", holidayName);
@@ -71,7 +71,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@organizationId", organizationId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[Hrm].[DeleteHoliday]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[Hrm].[DeleteHoliday]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -111,7 +111,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="payClassId">The id of the pay class to remove.</param>
 		/// <param name="destPayClass">The id of the payclass to move all old entries to (nullable).</param>
-		public void DeletePayClass(int payClassId, int? destPayClass)
+		async public void DeletePayClass(int payClassId, int? destPayClass)
 		{
 			// TODO: move this part in the DeletePayClass stored procedure
 			if (destPayClass != null)
@@ -128,7 +128,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@id", payClassId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[Hrm].[DeletePayClass]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[Hrm].[DeletePayClass]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -156,13 +156,13 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">The organizationid to look for or null for defaults.</param>
 		/// <returns>The PayClassDBEntity.</returns>
-		public IEnumerable<PayClassDBEntity> GetPayClasses(int organizationId)
+		async public Task<IEnumerable<PayClassDBEntity>> GetPayClasses(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<PayClassDBEntity>("[Hrm].[GetPayClasses]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.QueryAsync<PayClassDBEntity>("[Hrm].[GetPayClasses]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -230,17 +230,18 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="timeEntryId">The id of the time entry.</param>
 		/// <returns>The time entry.</returns>
-		public TimeEntryDBEntity GetTimeEntryById(int timeEntryId)
+		async public Task<TimeEntryDBEntity> GetTimeEntryById(int timeEntryId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@timeEntryId", timeEntryId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<TimeEntryDBEntity>(
+				var result = await connection.QueryAsync<TimeEntryDBEntity>(
 					"[TimeTracker].[GetTimeEntryById]",
 					parameters,
-					commandType: CommandType.StoredProcedure).Single();
+					commandType: CommandType.StoredProcedure);
+				return result.Single();
 			}
 		}
 
@@ -308,7 +309,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="timeEntryId">The Id of the time entry to be updated.</param>
 		/// <param name="timeEntryStatusId">The new status.</param>
-		public int UpdateTimeEntryStatusById(int timeEntryId, int timeEntryStatusId)
+		async public Task<int> UpdateTimeEntryStatusById(int timeEntryId, int timeEntryStatusId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@timeEntryId", timeEntryId);
@@ -316,7 +317,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Execute("[TimeTracker].[UpdateTimeEntryStatusById]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.ExecuteAsync("[TimeTracker].[UpdateTimeEntryStatusById]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -325,14 +326,14 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">The organization Id.</param>
 		/// <param name="startOfWeek">The value for which day should be the start of the week. 1-6 M-Sat, 0 Sun.</param>
-		public void UpdateTimeTrackerStartOfWeek(int orgId, int startOfWeek)
+		async public void UpdateTimeTrackerStartOfWeek(int orgId, int startOfWeek)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
 			parameters.Add("@startOfWeek", startOfWeek);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[TimeTracker].[UpdateStartOfWeek]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[TimeTracker].[UpdateStartOfWeek]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -343,7 +344,7 @@ namespace AllyisApps.DBModel
 		/// <param name="overtimeHours">Hours until overtime.</param>
 		/// <param name="overtimePeriod">Time period for hours until overtime.</param>
 		/// <param name="overtimeMultiplier">Overtime pay multiplier.</param>
-		public void UpdateOvertime(int orgId, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
+		async public void UpdateOvertime(int orgId, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
@@ -353,7 +354,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[TimeTracker].[UpdateOvertime]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[TimeTracker].[UpdateOvertime]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -411,7 +412,7 @@ namespace AllyisApps.DBModel
 		/// <param name="lockDatePeriod">.</param>
 		/// <param name="lockDateQuantity">.</param>
 		/// <returns>.</returns>
-		public bool UpdateOldLockDate(int organizationId, bool lockDateUsed, int lockDatePeriod, int lockDateQuantity)
+		async public Task<bool> UpdateOldLockDate(int organizationId, bool lockDateUsed, int lockDatePeriod, int lockDateQuantity)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
@@ -421,7 +422,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[TimeTracker].[UpdateOldLockDate]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[TimeTracker].[UpdateOldLockDate]", parameters, commandType: CommandType.StoredProcedure);
 			}
 
 			return true;

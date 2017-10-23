@@ -16,6 +16,7 @@ using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Crm;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -80,7 +81,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				DataExportViewModel dataVM = null;
 				try
 				{
-					dataVM = this.ConstructDataExportViewModel(subscriptionId, organizationId, reportVMselect.Users, Utility.GetDateTimeFromDays(dateRangeStart.Value), Utility.GetDateTimeFromDays(dateRangeEnd.Value), projectSelect, customerSelect);
+					dataVM = await this.ConstructDataExportViewModel(subscriptionId, organizationId, reportVMselect.Users, Utility.GetDateTimeFromDays(dateRangeStart.Value), Utility.GetDateTimeFromDays(dateRangeEnd.Value), projectSelect, customerSelect);
 				}
 				catch (Exception ex)
 				{
@@ -140,7 +141,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else if (viewDataButton.Equals(Resources.Strings.Export))
 			{
-				return this.ExportReport(subscriptionId, organizationId, userSelect, Utility.GetDateTimeFromDays(dateRangeStart.Value), Utility.GetDateTimeFromDays(dateRangeEnd.Value), customerSelect, projectSelect);
+				return await this.ExportReport(subscriptionId, organizationId, userSelect, Utility.GetDateTimeFromDays(dateRangeStart.Value), Utility.GetDateTimeFromDays(dateRangeEnd.Value), customerSelect, projectSelect);
 			}
 
 			return this.RedirectToAction(ActionConstants.Report);

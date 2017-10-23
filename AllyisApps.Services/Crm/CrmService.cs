@@ -454,7 +454,7 @@ namespace AllyisApps.Services
 		/// <param name="userId">User Id.</param>
 		/// <param name="isActive">Active status to update to.</param>
 		/// <returns>Number of rows updated.</returns>
-		public int UpdateProjectUser(int projectId, int userId, bool isActive)
+		async public Task<int> UpdateProjectUser(int projectId, int userId, bool isActive)
 		{
 			if (projectId <= 0)
 			{
@@ -466,7 +466,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
 			}
 
-			return DBHelper.UpdateProjectUser(projectId, userId, isActive ? 1 : 0);
+			return await DBHelper.UpdateProjectUser(projectId, userId, isActive ? 1 : 0);
 		}
 
 		/// <summary>

@@ -40,7 +40,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="timeEntryId">Time entry Id.</param>
 		/// <returns>A TimeEntryDBEntity.</returns>
-		public TimeEntry GetTimeEntry(int timeEntryId)
+		async public Task<TimeEntry> GetTimeEntry(int timeEntryId)
 		{
 			#region Validation
 
@@ -51,7 +51,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return InitializeTimeEntryInfo(DBHelper.GetTimeEntryById(timeEntryId));
+			return InitializeTimeEntryInfo(await DBHelper.GetTimeEntryById(timeEntryId));
 		}
 
 		/// <summary>
@@ -96,7 +96,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="timeEntryId">The Id of the time entry to be updated.</param>
 		/// <param name="timeEntryStatusId">The new status.</param>
-		public int UpdateTimeEntryStatusById(int timeEntryId, int timeEntryStatusId)
+		async public Task<int> UpdateTimeEntryStatusById(int timeEntryId, int timeEntryStatusId)
 		{
 			if (timeEntryId <= 0)
 			{
@@ -108,7 +108,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException(nameof(timeEntryStatusId), $"{nameof(timeEntryStatusId)} must not be negative.");
 			}
 
-			return DBHelper.UpdateTimeEntryStatusById(timeEntryId, timeEntryStatusId);
+			return await DBHelper.UpdateTimeEntryStatusById(timeEntryId, timeEntryStatusId);
 		}
 
 		/// <summary>
@@ -264,7 +264,7 @@ namespace AllyisApps.Services
 		/// <param name="orgId">The organization's Id.</param>
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool DeleteHoliday(int holidayId, int orgId, int subscriptionId)
+		async public Task<bool> DeleteHoliday(int holidayId, int orgId, int subscriptionId)
 		{
 			if (holidayId <= 0) throw new ArgumentException("holidayId");
 			if (orgId <= 0) throw new ArgumentException("orgId");
@@ -275,6 +275,7 @@ namespace AllyisApps.Services
 			if (deletedHoliday != null)
 			{
 				DBHelper.DeleteHoliday(deletedHoliday.HolidayName, deletedHoliday.Date, orgId);
+				await Task.Delay(0);
 			}
 
 			return true;
@@ -303,10 +304,11 @@ namespace AllyisApps.Services
 		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <param name="destPayClass">The id of the destination payclass.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool DeletePayClass(int payClassId, int orgId, int subscriptionId, int? destPayClass)
+		async public Task<bool> DeletePayClass(int payClassId, int orgId, int subscriptionId, int? destPayClass)
 		{
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 			DBHelper.DeletePayClass(payClassId, destPayClass);
+			await Task.Delay(0);
 			return true;
 		}
 
@@ -332,17 +334,19 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets a list of <see cref="PayClass"/>'s for an organization.
 		/// </summary>
-		public IEnumerable<PayClass> GetPayClassesBySubscriptionId(int subscriptionId)
+		async public Task<IEnumerable<PayClass>> GetPayClassesBySubscriptionId(int subscriptionId)
 		{
-			return DBHelper.GetPayClasses(UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId).Select(pc => InitializePayClassInfo(pc));
+			var getClass = await DBHelper.GetPayClasses(UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
+			return  getClass.Select(pc => InitializePayClassInfo(pc));
 		}
 
 		/// <summary>
 		/// Gets a list of <see cref="PayClass"/>'s for an organization.
 		/// </summary>
-		public IEnumerable<PayClass> GetPayClassesByOrganizationId(int organizationId)
+		async public Task<IEnumerable<PayClass>> GetPayClassesByOrganizationId(int organizationId)
 		{
-			return DBHelper.GetPayClasses(organizationId).Select(pc => InitializePayClassInfo(pc));
+			var getClass = await DBHelper.GetPayClasses(organizationId);
+			return getClass.Select(pc => InitializePayClassInfo(pc));
 		}
 
 		/// <summary>
@@ -352,7 +356,7 @@ namespace AllyisApps.Services
 		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <param name="startOfWeek">Start of Week.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool UpdateStartOfWeek(int organizationId, int subscriptionId, int startOfWeek)
+		async public Task<bool> UpdateStartOfWeek(int organizationId, int subscriptionId, int startOfWeek)
 		{
 			#region Validation
 
@@ -365,6 +369,7 @@ namespace AllyisApps.Services
 
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 			DBHelper.UpdateTimeTrackerStartOfWeek(organizationId, startOfWeek);
+			await Task.Delay(0);
 			return true;
 		}
 
@@ -377,7 +382,7 @@ namespace AllyisApps.Services
 		/// <param name="overtimePeriod">Time period for hours until overtime.</param>
 		/// <param name="overtimeMultiplier">Overtime pay multiplier.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool UpdateOvertime(int subscriptionId, int organizationId, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
+		async public Task<bool> UpdateOvertime(int subscriptionId, int organizationId, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
 		{
 			#region Validation
 
@@ -400,6 +405,7 @@ namespace AllyisApps.Services
 
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 			DBHelper.UpdateOvertime(organizationId, overtimeHours, overtimePeriod, overtimeMultiplier);
+			await Task.Delay(0);
 			return true;
 		}
 
@@ -557,7 +563,7 @@ namespace AllyisApps.Services
 		/// <param name="lockDateQuantity">The quantity of the selected period.</param>
 		/// <param name="orgId">.</param>
 		/// <returns>.</returns>
-		public bool UpdateOldLockDate(bool lockDateUsed, int lockDatePeriod, int lockDateQuantity, int orgId)
+		async public Task<bool> UpdateOldLockDate(bool lockDateUsed, int lockDatePeriod, int lockDateQuantity, int orgId)
 		{
 			if (!new int[] { 1, 2, 3 }.Contains(lockDatePeriod))
 			{
@@ -569,7 +575,7 @@ namespace AllyisApps.Services
 				throw new ArgumentException("Lock date quantity cannot be less than zero.");
 			}
 
-			return DBHelper.UpdateOldLockDate(orgId, lockDateUsed, lockDatePeriod, lockDateQuantity);
+			return await DBHelper.UpdateOldLockDate(orgId, lockDateUsed, lockDatePeriod, lockDateQuantity);
 		}
 
 		public int UpdateLockDate(int organizationId, DateTime lockDate)

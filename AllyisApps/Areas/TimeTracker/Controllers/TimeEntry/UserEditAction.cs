@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -67,7 +68,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>Json object representing the results of the action.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public JsonResult UserEditAJAX(int userId, int subscriptionId, List<int> offUser, List<int> onUser)
+		async public Task<JsonResult> UserEditAJAX(int userId, int subscriptionId, List<int> offUser, List<int> onUser)
 		{
 			int organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			if (this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId, false))
@@ -76,7 +77,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					foreach (int proj_id in offUser)
 					{
-						if (AppService.UpdateProjectUser(proj_id, userId, false).Equals(0))
+						var update = await AppService.UpdateProjectUser(proj_id, userId, false);
+						if (update.Equals(0))
 						{
 							AppService.DeleteProjectUser(proj_id, userId);
 						}
@@ -87,7 +89,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					foreach (int proj_id in onUser)
 					{
-						if (AppService.UpdateProjectUser(proj_id, userId, true).Equals(0))
+						var update = await AppService.UpdateProjectUser(proj_id, userId, false);
+						if (update.Equals(0))
 						{
 							AppService.CreateProjectUser(proj_id, userId);
 						}
