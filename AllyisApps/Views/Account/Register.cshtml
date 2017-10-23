@@ -4,53 +4,6 @@
 	ViewBag.Subtitle = Strings.RegisterNewAccountDialogue;
 }
 
-<style>
-	.shrink-wrap-center {
-		text-align: center;
-	}
-
-	.shrink-wrap-center > div {
-		text-align: left;
-		display: inline-block;
-	}
-
-	.btn-gray {
-		background-color: #595959;
-		border-color: #4d4d4d;
-	}
-
-	.btn-gray:hover {
-		background-color: #404040;
-		border-color: #2e2e2e;
-	}
-
-	.btn-gray:disabled {
-		background-color: #595959;
-		border-color: #4d4d4d;
-	}
-
-	.allyis-action-buttons {
-		text-align: right;
-	}
-
-	label.required:after {
-		color: #d9534f;
-		content: " *";
-		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-		font-weight: bolder;
-	}
-
-	.sm-control-width {
-		width: 320px;
-	}
-
-	/*(at)media (min-width: 992px) {
-		.sm-control-width {
-			width: 420px;
-		}
-	}*/
-</style>
-
 <div class="shrink-wrap-center">
 	<div class="min300">
 		@using (Html.BeginForm(ActionConstants.Register, ControllerConstants.Account, new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "form" }))
