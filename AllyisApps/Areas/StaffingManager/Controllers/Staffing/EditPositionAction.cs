@@ -16,6 +16,7 @@ using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.ViewModels;
 using System.Web.Script.Serialization;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -43,13 +44,13 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// setup position setup viewmodel
 		/// </summary>
 		/// <returns></returns>
-		public EditPositionViewModel setupEditPositionViewModel(int positionId, int subscriptionId)
+		async public Task<EditPositionViewModel> setupEditPositionViewModel(int positionId, int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			Position pos = AppService.GetPosition(positionId);
+			Position pos = await AppService.GetPosition(positionId);
 
-			string subscriptionNameToDisplay = AppService.GetSubscriptionName(subscriptionId);
+			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
 			//TODO: this is piggy-backing off the get index action, create a new action that just gets items 3-5.
 			var infos = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
 			var temp = new string[infos.Item2.Count];
@@ -136,7 +137,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="model">The Customer ViewModel.</param>
 		/// <param name="subscriptionId">The sub id from the ViewModel.</param>
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
-		public ActionResult SubmitUpdatePosition(EditPositionViewModel model, int subscriptionId)
+		async public Task<ActionResult> SubmitUpdatePosition(EditPositionViewModel model, int subscriptionId)
 		{
 			if (ModelState.IsValid)
 			{
@@ -159,10 +160,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					}
 					if(model.PositionStatusId == 0)
 					{
-						model.PositionStatusId = AppService.GetStaffingDefaultStatus(subInfo.OrganizationId)[0];
+						var defaultGet = await AppService.GetStaffingDefaultStatus(subInfo.OrganizationId);
+						model.PositionStatusId = defaultGet[0];
 					}
 				}
-				int? positionId = AppService.UpdatePosition(
+				int? positionId = await AppService.UpdatePosition(
 					new Position()
 					{
 						OrganizationId = model.OrganizationId,

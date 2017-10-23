@@ -6,7 +6,6 @@ using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.Services.Expense;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {

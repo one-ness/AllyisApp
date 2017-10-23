@@ -16,6 +16,7 @@ using AllyisApps.Services.StaffingManager;
 using AllyisApps.Services.Lookup;
 using System;
 using AllyisApps.Lib;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -29,10 +30,10 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// </summary>
 		/// <returns>A create application page.</returns>
 		[HttpGet]
-		public ActionResult Application(int subscriptionId, int applicantId)
+		async public Task<ActionResult> Application(int subscriptionId, int applicantId)
 		{
 			var subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
-			List<Position> positions = this.AppService.GetPositionsByOrganizationId(subInfo.OrganizationId);
+			List<Position> positions = await this.AppService.GetPositionsByOrganizationId(subInfo.OrganizationId);
 			List<SelectListItem> positionList = new List<SelectListItem>();
 			foreach (Position pos in positions)
 			{
@@ -59,10 +60,10 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns>A redirect to staffing index page.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Application(StaffingApplicationViewModel model)
+		async public Task<ActionResult> Application(StaffingApplicationViewModel model)
 		{
 			Application application = InitializeApplication(model);
-			application.ApplicationId = this.AppService.CreateApplication(application);
+			application.ApplicationId = await this.AppService.CreateApplication(application);
 			UploadAttachments(model, application);
 			return this.RedirectToAction("Applicant", new { applicantId = model.ApplicantId });
 		}

@@ -339,7 +339,7 @@ namespace AllyisApps.Services
 
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditProject, subId);
 			DBHelper.UpdateProject(GetDBEntityFromProject(project));
-			await Task.Delay(0);
+			await Task.Yield();
 		}
 
 		/// <summary>
@@ -387,7 +387,7 @@ namespace AllyisApps.Services
 
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
 			DBHelper.UpdateProjectAndUsers(projectId, name, orgId, isHourly, start, end, userIds);
-			await Task.Delay(0);
+			await Task.Yield();
 			return true;
 		}
 

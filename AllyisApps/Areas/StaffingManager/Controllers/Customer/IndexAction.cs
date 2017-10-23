@@ -13,6 +13,7 @@ using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
 using AllyisApps.ViewModels.TimeTracker.Customer;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -40,7 +41,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">Subscription id.</param>
 		/// <returns>The index page.</returns>
-		public ActionResult IndexNoUserId(int subscriptionId)
+		async public Task<ActionResult> IndexNoUserId(int subscriptionId)
 		{
 			if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
 			{
@@ -50,7 +51,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 
-			var infos = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
+			var infos = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 
 			return this.View("Index", this.ConstructManageCustomerViewModel(subscriptionId));
 		}
@@ -60,14 +61,14 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The id of the current subscription.</param>
 		/// <returns>The ManageCustomerViewModel.</returns>
-		public AllyisApps.ViewModels.Staffing.Customer.ManageCustomerViewModel ConstructManageCustomerViewModel(int subscriptionId)
+		async public Task<AllyisApps.ViewModels.Staffing.Customer.ManageCustomerViewModel> ConstructManageCustomerViewModel(int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			var infos = AppService.GetProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
+			var infos = await AppService.GetProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
 			var inactiveInfo = AppService.GetInactiveProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
 			bool canEditProjects = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
-			string subName = AppService.GetSubscriptionName(subscriptionId);
+			string subName = await AppService.GetSubscriptionName(subscriptionId);
 			List<CompleteProject> projects = canEditProjects ? infos.Item1 : infos.Item1.Where(p => p.IsProjectUser == true).ToList();
 			List<Customer> customers = infos.Item2;
 			IList<CustomerProjectViewModel> customersList = new List<CustomerProjectViewModel>();

@@ -737,7 +737,7 @@ namespace AllyisApps.Services
 		{
 			this.CheckOrgAction(OrgAction.EditSubscription, organizationId);
 			this.DBHelper.UpdateSubscriptionSkuAndName(subscriptionId, subscriptionName, (int)skuId);
-			await Task.Delay(0);
+			await Task.Yield();
 		}
 
 		async public void CreateAndUpdateAndDeleteSubscriptionPlan(int productId, string productName, int selectedSku, int previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)

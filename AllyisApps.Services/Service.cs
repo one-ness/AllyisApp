@@ -20,7 +20,6 @@ using AllyisApps.Services.Expense;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.Services.TimeTracker;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Services
 {
@@ -128,7 +127,7 @@ namespace AllyisApps.Services
 			#endregion Validation
 
 			DBHelper.DeleteTimeEntry(timeEntryId);
-			await Task.Delay(0);
+			await Task.Yield();
 		}
 
 		/// <summary>
@@ -254,7 +253,7 @@ namespace AllyisApps.Services
 			if (holiday == null) throw new ArgumentException("holiday");
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 			DBHelper.CreateHoliday(GetDBEntityFromHoliday(holiday));
-			await Task.Delay(0);
+			await Task.Yield();
 			return true;
 		}
 
@@ -276,7 +275,7 @@ namespace AllyisApps.Services
 			if (deletedHoliday != null)
 			{
 				DBHelper.DeleteHoliday(deletedHoliday.HolidayName, deletedHoliday.Date, orgId);
-				await Task.Delay(0);
+				await Task.Yield();
 			}
 
 			return true;
@@ -293,7 +292,7 @@ namespace AllyisApps.Services
 		{
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 			DBHelper.CreatePayClass(payClassName, orgId);
-			await Task.Delay(0);
+			await Task.Yield();
 			return true;
 		}
 
@@ -309,7 +308,7 @@ namespace AllyisApps.Services
 		{
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 			DBHelper.DeletePayClass(payClassId, destPayClass);
-			await Task.Delay(0);
+			await Task.Yield();
 			return true;
 		}
 
@@ -370,7 +369,7 @@ namespace AllyisApps.Services
 
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 			DBHelper.UpdateTimeTrackerStartOfWeek(organizationId, startOfWeek);
-			await Task.Delay(0);
+			await Task.Yield();
 			return true;
 		}
 
@@ -406,7 +405,7 @@ namespace AllyisApps.Services
 
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 			DBHelper.UpdateOvertime(organizationId, overtimeHours, overtimePeriod, overtimeMultiplier);
-			await Task.Delay(0);
+			await Task.Yield();
 			return true;
 		}
 

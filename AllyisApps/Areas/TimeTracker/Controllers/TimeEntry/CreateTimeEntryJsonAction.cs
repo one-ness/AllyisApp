@@ -80,12 +80,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					throw new ArgumentException(Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
 				}
 
+				var dateGet = new DateTime();
+				if (model.Date != 0) dateGet = Utility.GetDateTimeFromDays(model.Date);
+				else dateGet = DateTime.Now;
+
 				int id = await AppService.CreateTimeEntry(new Services.TimeTracker.TimeEntry()
 				{
 					UserId = model.UserId,
 					ProjectId = model.ProjectId,
 					PayClassId = model.PayClassId,
-					Date = Utility.GetDateTimeFromDays(model.Date) ?? DateTime.Now,
+					Date = dateGet,
 					Duration = durationResult.Value,
 					Description = model.Description
 				});

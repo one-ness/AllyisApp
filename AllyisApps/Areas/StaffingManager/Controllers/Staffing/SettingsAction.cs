@@ -16,6 +16,7 @@ using AllyisApps.Services.Auth;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.ViewModels;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -29,14 +30,14 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// </summary>
 		/// <param name="subscriptionId"></param>
 		/// <returns></returns>
-		public ActionResult Settings(int subscriptionId)
+		async public Task<ActionResult> Settings(int subscriptionId)
 		{
 			SetNavData(subscriptionId);
 
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			string subscriptionNameToDisplay = AppService.GetSubscriptionName(subscriptionId);
-			var defaultStatus = AppService.GetStaffingDefaultStatus(subInfo.OrganizationId); //[0] is default position status, [1] is default application status
+			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
+			var defaultStatus = await AppService.GetStaffingDefaultStatus(subInfo.OrganizationId); //[0] is default position status, [1] is default application status
 
 			int? defaultPosStat = null;
 			if (defaultStatus.Count >= 1) defaultPosStat = defaultStatus[0];

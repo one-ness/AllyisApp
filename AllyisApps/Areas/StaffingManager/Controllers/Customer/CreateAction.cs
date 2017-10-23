@@ -12,6 +12,7 @@ using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Staffing.Customer;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -26,10 +27,10 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="subscriptionId">The subscription.</param>
 		/// <returns>Presents a page for the creation of a new Customer.</returns>
 		[HttpGet]
-		public ActionResult Create(int subscriptionId)
+		async public Task<ActionResult> Create(int subscriptionId)
 		{
-			var nextCustomerId = AppService.GetNextCustId(subscriptionId);
-			string subscriptionNameToDisplay = AppService.GetSubscriptionName(subscriptionId);
+			var nextCustomerId = await AppService.GetNextCustId(subscriptionId);
+			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
 			int orgID = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			return this.View(new EditCustomerInfoViewModel
 			{
@@ -50,11 +51,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Create(EditCustomerInfoViewModel model)
+		async public Task<ActionResult> Create(EditCustomerInfoViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
-				int? customerId = AppService.CreateCustomer(
+				int? customerId = await AppService.CreateCustomer(
 					new Customer()
 					{
 						ContactEmail = model.ContactEmail,

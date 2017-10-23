@@ -18,6 +18,7 @@ using AllyisApps.Services.StaffingManager;
 using AllyisApps.ViewModels;
 using System.Web.Script.Serialization;
 using System;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -45,15 +46,15 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// setup position setup viewmodel
 		/// </summary>
 		/// <returns></returns>
-		public ViewPositionViewModel setupViewPositionViewModel(int positionId, int subscriptionId)
+		async public Task<ViewPositionViewModel> setupViewPositionViewModel(int positionId, int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			Position pos = AppService.GetPosition(positionId);
-			List<Application> applicationsSerive = AppService.GetFullApplicationInfoByPositionId(positionId);
+			Position pos = await AppService.GetPosition(positionId);
+			List<Application> applicationsSerive = await AppService.GetFullApplicationInfoByPositionId(positionId);
 			List<ApplicationInfoViewModel> applications = new List<ApplicationInfoViewModel>();
 
-			string subscriptionNameToDisplay = AppService.GetSubscriptionName(subscriptionId);
+			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
 			//TODO: this is piggy-backing off the get index action, create a new action that just gets items 3-5.
 			var infos = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
 			foreach (Application app in applicationsSerive)

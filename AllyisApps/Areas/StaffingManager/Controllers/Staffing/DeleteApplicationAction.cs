@@ -16,6 +16,7 @@ using AllyisApps.Services.StaffingManager;
 using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels.Staffing;
 using System;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -28,10 +29,12 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// Applicant page.
 		/// </summary>
 		/// <returns></returns>
-		public ActionResult DeleteApplication(int applicationId)
+		async public Task<ActionResult> DeleteApplication(int applicationId)
 		{
-			int applicantId = this.AppService.GetApplicantAddressByApplicationId(applicationId).ApplicantId;
+			var applicantGet = await this.AppService.GetApplicantAddressByApplicationId(applicationId);
+			int applicantId = applicantGet.ApplicantId;
 			this.AppService.DeleteApplication(applicationId);
+			await Task.Yield();
 			return this.RedirectToAction("Applicant", new { applicantId = applicantId });
 		}
 	}
