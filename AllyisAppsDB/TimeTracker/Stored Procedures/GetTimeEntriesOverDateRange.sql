@@ -4,24 +4,33 @@ CREATE PROCEDURE [TimeTracker].[GetTimeEntriesOverDateRange]
 	@endingDate DATE
 AS
 	SET NOCOUNT ON;
-SELECT DISTINCT [TimeEntryId] 
-	,[User].[UserId] AS [UserId]
-	,[User].[FirstName] AS [FirstName]
-	,[User].[LastName] AS [LastName]
-	,[User].[Email]
-	,[OrganizationUser].[EmployeeId]
-	,[TimeEntry].[ProjectId]
-	,[TimeEntry].[PayClassId]
-	,[PayClass].[PayClassName] AS [PayClassName]
-	,[Date]
-	,[Duration]
-	,[Description]
-	,[TimeEntryStatusId]
-FROM [TimeTracker].[TimeEntry] WITH (NOLOCK)
-JOIN [Hrm].[PayClass] WITH (NOLOCK) ON [PayClass].[PayClassId] = [TimeEntry].[PayClassId]
-JOIN [Auth].[User] WITH (NOLOCK) ON [User].[UserId] = [TimeEntry].[UserId]
-JOIN [Auth].[OrganizationUser] WITH (NOLOCK) ON [User].[UserId] = [OrganizationUser].[UserId] AND [OrganizationUser].[OrganizationId] = @organizationId
-WHERE [Date] >= @startingDate
-	AND [Date] <= @endingDate
-	AND [PayClass].[OrganizationId] = @organizationId
+SELECT DISTINCT 
+	[te].[TimeEntryId]
+	,[te].[ProjectId]
+	,[te].[PayClassId]
+	,[te].[Date]
+	,[te].[Duration]
+	,[te].[Description]
+	,[te].[TimeEntryStatusId]
+	,[u].[UserId] AS [UserId]
+	,[u].[FirstName] AS [FirstName]
+	,[u].[LastName] AS [LastName]
+	,[u].[Email]
+	,[ou].[EmployeeId]
+	,[pc].[PayClassName] AS [PayClassName]
+	,[IsLocked] = CAST(
+		CASE
+			WHEN CAST([te].[Date] AS DATE) <= CAST([s].[LockDate] AS DATE)  -- TODO: turn [TimeEntry].[Date] to DATE type
+				THEN 1
+			ELSE 0
+			END
+		AS BIT)
+FROM [TimeTracker].[TimeEntry] [te] WITH (NOLOCK)
+JOIN [Hrm].[PayClass] [pc] WITH (NOLOCK) ON [pc].[PayClassId] = [te].[PayClassId]
+JOIN [Auth].[User] [u] WITH (NOLOCK) ON [u].[UserId] = [te].[UserId]
+JOIN [Auth].[OrganizationUser] [ou] WITH (NOLOCK) ON [u].[UserId] = [ou].[UserId] AND [ou].[OrganizationId] = @organizationId
+JOIN [TimeTracker].[Setting] [s] WITH (NOLOCK) ON [s].[OrganizationId] = [ou].[OrganizationId]
+WHERE [te].[Date] >= @startingDate
+	AND [te].[Date] <= @endingDate
+	AND [pc].[OrganizationId] = @organizationId
 ORDER BY [Date] ASC

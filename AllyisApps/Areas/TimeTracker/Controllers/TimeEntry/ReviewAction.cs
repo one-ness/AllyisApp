@@ -84,7 +84,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="timeEntryStatusId">Status to change to.</param>
 		/// <param name="endDate">Date range for reloading the page.</param>
 		/// <param name="startDate">Date range for reloading the page.</param>
-		/// <returns>Redirect to same page</returns>
+		/// <returns>Redirect to same page.</returns>
 		[HttpPost]
 		async public Task<ActionResult> UpdateTimeEntryStatus(int subscriptionId, string timeEntryIdsJSON, int timeEntryStatusId, DateTime startDate, DateTime endDate)
 		{
@@ -94,6 +94,21 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			Notifications.Add(new BootstrapAlert("Successfully updated selected time entry statuses", Variety.Success));
 			return RedirectToAction(ActionConstants.Review, new { subscriptionId = subscriptionId, startDate = startDate, endDate = endDate });
+		}
+
+		/// <summary>
+		/// Locks all time entries with date that is less than or equal to lockDate
+		/// </summary>
+		/// <param name="subscriptionId">Subscription that the lock operation will be performed on.</param>
+		/// <param name="startDate">Used for the redirect back to the review page -- need to preserve the date range they came in with.</param>
+		/// <param name="lockDate">The date from which to all all time entries before.  Also the end date of the review page's date range.</param>
+		/// <returns>Redirect to same page.</returns>
+		[HttpPost]
+		public ActionResult LockTimeEntries(int subscriptionId, DateTime startDate, DateTime lockDate)
+		{
+			//bool successful = AppService.LockTimeEntries(subscriptionId, lockDate);
+			Notifications.Add(new BootstrapAlert($"Successfully locked all time entries at or before {lockDate.ToShortDateString()}", Variety.Success));
+			return RedirectToAction(ActionConstants.Review, new { subscriptionId = subscriptionId, startDate = startDate, endDate = lockDate });
 		}
 	}
 }

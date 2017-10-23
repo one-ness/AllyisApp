@@ -11,6 +11,11 @@ namespace AllyisApps.ViewModels.Auth
 	public class EditMemberViewModel2 : BaseViewModel
 	{
 		/// <summary>
+		/// org id
+		/// </summary>
+		public int OrganizationId { get; set; }
+
+		/// <summary>
 		/// Gets or sets the account e-mail.
 		/// </summary>
 		public string Email { get; set; }
@@ -66,6 +71,16 @@ namespace AllyisApps.ViewModels.Auth
 		public string EmployeeId { get; set; }
 
 		/// <summary>
+		/// organization role id
+		/// </summary>
+		public int SelectedOrganizationRoleId { get; set; }
+
+		/// <summary>
+		/// list of org roles
+		/// </summary>
+		public Dictionary<int, string> OrgRolesList { get; set; }
+
+		/// <summary>
 		/// roles of this user
 		/// </summary>
 		public List<RoleItem> Roles { get; set; }
@@ -88,12 +103,20 @@ namespace AllyisApps.ViewModels.Auth
 			/// <summary>
 			/// role id
 			/// </summary>
-			public int RoleId { get; set; }
+			public int SelectedRoleId { get; set; }
 
 			/// <summary>
-			/// role name
+			/// list of role ids and names for the dropdown
 			/// </summary>
-			public string RoleName { get; set; }
+			public Dictionary<int, string> RoleList { get; set; }
+
+			/// <summary>
+			/// constructor
+			/// </summary>
+			public RoleItem()
+			{
+				this.RoleList = new Dictionary<int, string>();
+			}
 		}
 
 		/// <summary>
@@ -101,7 +124,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public EditMemberViewModel2()
 		{
-            this.Roles = new List<RoleItem>();
+			this.Roles = new List<RoleItem>();
 		}
 	}
 }

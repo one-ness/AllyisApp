@@ -1,6 +1,6 @@
 CREATE PROCEDURE [TimeTracker].[UpdatePayrollProcessedDate]
 	@organizationId INT,
-	@payrollProcessedDate DATETIME2
+	@payrollProcessedDate DATE
 AS
 	UPDATE [TimeTracker].[Setting]
 	SET [PayrollProcessedDate] = @payrollProcessedDate
