@@ -1,15 +1,15 @@
 ﻿<div class="container">
 	<div class="row">
 		<div class="col-xs-12">
-			<nav class="ovrd-navbar navbar ovrd-navbar-default navbar-default">
-				<div class="ovrd-navbar-header navbar-header">
-					<button type="button" class="ovrd-navbar-toggle navbar-toggle collapsed" data-toggle="collapse" data-target="#header-navbar-collapse" aria-expanded="false">
+			<nav class="header-bar navbar navbar-default">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header-navbar-collapse" aria-expanded="false">
 						<span class="sr-only">@Strings.ToggleNavigation</span>
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<span class="ovrd-navbar-brand navbar-brand">
+					<span class="navbar-brand">
 						<a href='@Url.Action(ActionConstants.Index, ControllerConstants.Account, new { area = "" })'>
 							<img src="~/Content/icons/allyislogo.png" style="height: 32px; float: left; margin-top: -8px; margin-right: 8px;" title="" alt="apps">
 							@Strings.Apps
@@ -18,9 +18,9 @@
 				</div>
 
 				<!-- Collect the nav links, forms, and other content for toggling -->
-				<div class="collapse ovrd-navbar-collapse navbar-collapse" id="header-navbar-collapse">
-					<div class="ovrd-navbar-right navbar-right">
-						<ul class="ovrd-nav nav ovrd-navbar-nav navbar-nav">
+				<div class="collapse navbar-collapse" id="header-navbar-collapse">
+					<div class="navbar-right">
+						<ul class="nav header-nav navbar-nav">
 							@if (DisplayHints.BreadcrumbNavPartialLocation != null)
 							{
 								Html.RenderPartial(DisplayHints.BreadcrumbNavPartialLocation);

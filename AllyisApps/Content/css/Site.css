@@ -66,9 +66,34 @@ a:hover {
 	}
 }
 
+.footer-bar {
+	background-color: #efefef;
+	bottom: 0;
+	font-size: smaller;
+	height: 40px;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	margin-top: 85px;
+	position: static;
+	width: inherit;
+}
 
+.footer-bar a {
+	margin-right: 10px;
+}
 
+.header-bar {
+	position: relative;
+	min-height: 50px;
+	margin-bottom: 20px;
+	margin-top: 15px;
+	border: 1px solid rgb(160, 160, 160);
+	border-width: 1px 5px;
+}
 
+.header-nav {
+	margin: 0 15px 0 0;
+}
 
 
 
@@ -115,7 +140,7 @@ a:hover {
 
 /*Compiled css with overrides*/
 
-html {
+/*html {
 	height: 100%;
 }
 
@@ -1291,7 +1316,6 @@ td.checked {
 	border-top-left-radius: 3px;
 	border-top-right-radius: 3px;
 	border-color: #ddd;
-	/*margin: 0 0 0 5px;*/
 	padding: 8px 12px 2px 12px;
 	background-color: #e5e5e5;
 }
@@ -1675,4 +1699,4 @@ button {
 	src: url(//netdna.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.eot?#iefix&v=4.4.0) format('embedded-opentype'), url(//netdna.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.svg?v=4.4.0#fontawesomeregular) format('svg'), url(//netdna.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.woff2?v=4.4.0) format('woff2'), url(//netdna.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.woff?v=4.4.0) format('woff'), url(//netdna.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.ttf?v=4.4.0) format('truetype');
 	font-weight: normal;
 	font-style: normal;
-}
+}*/
