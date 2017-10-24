@@ -51,7 +51,6 @@ namespace AllyisApps.Controllers.Auth
 				Notifications.Add(new BootstrapAlert(string.Format("{0} updated successfully!", model.SubscriptionName), Variety.Success));
 				return this.RedirectToAction(ActionConstants.OrganizationSubscriptions, new { id = model.OrganizationId });
 			}
-			await Task.Yield(); 
 			// error
 			return this.View(model);
 		}
