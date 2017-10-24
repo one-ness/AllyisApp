@@ -1816,6 +1816,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Value of var \&quot;{0}\&quot; is not a valid enum in {1}..
+        /// </summary>
+        public static string InvalidEnum {
+            get {
+                return ResourceManager.GetString("InvalidEnum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid start of week input..
         /// </summary>
         public static string InvalidSOW {
@@ -2037,6 +2046,42 @@ namespace AllyisApps.Resources {
         public static string LockedOutExplanation {
             get {
                 return ResourceManager.GetString("LockedOutExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value of var \&quot;{0}\&quot; is not a valid option for LockEntriesResult.
+        /// </summary>
+        public static string LockEntriesResultOutOfRange {
+            get {
+                return ResourceManager.GetString("LockEntriesResultOutOfRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot lock time entries &lt;= {0} because of a db error..
+        /// </summary>
+        public static string LockTimeEntriesDBError {
+            get {
+                return ResourceManager.GetString("LockTimeEntriesDBError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot lock time entries &lt;= {0} because not all of them are status Approved or Rejected..
+        /// </summary>
+        public static string LockTimeEntriesInvalidStatuses {
+            get {
+                return ResourceManager.GetString("LockTimeEntriesInvalidStatuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully locked all time entries &lt;= {0}..
+        /// </summary>
+        public static string LockTimeEntriesSuccess {
+            get {
+                return ResourceManager.GetString("LockTimeEntriesSuccess", resourceCulture);
             }
         }
         
@@ -4066,6 +4111,33 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot unlock time entries because of a db error.
+        /// </summary>
+        public static string UnlockTimeEntriesDbError {
+            get {
+                return ResourceManager.GetString("UnlockTimeEntriesDbError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot unlock time entries because no time entries are locked.
+        /// </summary>
+        public static string UnlockTimeEntriesNoLockDate {
+            get {
+                return ResourceManager.GetString("UnlockTimeEntriesNoLockDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully unlocked all locked time entries.
+        /// </summary>
+        public static string UnlockTimeEntriesSuccess {
+            get {
+                return ResourceManager.GetString("UnlockTimeEntriesSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unpaid Time Off.
         /// </summary>
         public static string UnpaidTimeOff {
@@ -4098,6 +4170,15 @@ namespace AllyisApps.Resources {
         public static string UpdateProfileSuccessMessage {
             get {
                 return ResourceManager.GetString("UpdateProfileSuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully updated selected time entry statuses..
+        /// </summary>
+        public static string UpdateTimeEntryStatusSuccess {
+            get {
+                return ResourceManager.GetString("UpdateTimeEntryStatusSuccess", resourceCulture);
             }
         }
         

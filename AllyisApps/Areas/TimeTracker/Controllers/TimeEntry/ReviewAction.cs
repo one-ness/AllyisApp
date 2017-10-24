@@ -10,6 +10,8 @@ using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
+using AllyisApps.Resources;
+using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using Newtonsoft.Json;
@@ -32,8 +34,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			DateTime calculatedStartDate = startDate ?? DateTime.Now.AddMonths(-1);
 			DateTime calculatedEndDate = endDate ?? DateTime.Now;
-			var organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-			var payClasses = AppService.GetPayClassesByOrganizationId(organizationId).Select(x => new PayClassInfoViewModel(x));
+			int organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			var payClasses = AppService.GetPayClassesByOrganizationId(organizationId).Select(x => new PayClassInfoViewModel(x)).ToList();
 			var allTimeEntries = AppService.GetTimeEntriesOverDateRange(organizationId, calculatedStartDate, calculatedEndDate)
 				.Select(entry =>
 				{
@@ -41,16 +43,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					return new TimeEntryViewModel(entry)
 					{
 						ProjectName = project.ProjectName,
-						CustomerName = project.owningCustomer.CustomerName,
+						CustomerName = project.owningCustomer.CustomerName
 					};
-				});
+				})
+				.ToList();
 			var timeEntriesByUser = allTimeEntries.ToLookup(entry => entry.UserId);
 
 			var timeEntryTotalsByUserByPayClass = new Dictionary<int, Dictionary<int, float>>();
 			foreach (var group in timeEntriesByUser)
 			{
 				timeEntryTotalsByUserByPayClass.Add(group.Key, new Dictionary<int, float>());
-				foreach (var payClassId in payClasses.Select(p => p.PayClassId))
+				foreach (int payClassId in payClasses.Select(p => p.PayClassId))
 				{
 					timeEntryTotalsByUserByPayClass[group.Key].Add(payClassId, group.Where(e => e.PayClassId == payClassId).Sum(e => e.Duration));
 				}
@@ -87,8 +90,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			var timeEntryIds = JsonConvert.DeserializeObject<List<int>>(timeEntryIdsJSON);
 			timeEntryIds.ForEach(entryId => AppService.UpdateTimeEntryStatusById(entryId, timeEntryStatusId));
-			Notifications.Add(new BootstrapAlert("Successfully updated selected time entry statuses", Variety.Success));
-			return RedirectToAction(ActionConstants.Review, new { subscriptionId = subscriptionId, startDate = startDate, endDate = endDate });
+			Notifications.Add(new BootstrapAlert(Strings.UpdateTimeEntryStatusSuccess, Variety.Success));
+			return RedirectToAction(ActionConstants.Review, new { subscriptionId, startDate, endDate });
 		}
 
 		/// <summary>
@@ -97,21 +100,58 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subscriptionId">Subscription that the lock operation will be performed on.</param>
 		/// <param name="startDate">Used for the redirect back to the review page -- need to preserve the date range they came in with.</param>
 		/// <param name="lockDate">The date from which to all all time entries before.  Also the end date of the review page's date range.</param>
+		/// <exception cref="ArgumentOutOfRangeException">Expection for if an invalid enum is returned from the service layer.</exception>
 		/// <returns>Redirect to same page.</returns>
 		[HttpPost]
 		public ActionResult LockTimeEntries(int subscriptionId, DateTime startDate, DateTime lockDate)
 		{
-			bool successful = AppService.LockTimeEntries(subscriptionId, lockDate);
-			if (successful)
+			LockEntriesResult result = AppService.LockTimeEntries(subscriptionId, lockDate);
+			switch (result)
 			{
-				Notifications.Add(new BootstrapAlert($"Successfully locked all time entries at or before {lockDate.ToShortDateString()}", Variety.Success));
-			}
-			else
-			{
-				Notifications.Add(new BootstrapAlert($"Cannot lock time entries at or before {lockDate.ToShortDateString()}.  Are all of them Approved or Rejected?", Variety.Danger));
+				case LockEntriesResult.InvalidStatuses:
+					Notifications.Add(new BootstrapAlert(string.Format(Strings.LockTimeEntriesInvalidStatuses, lockDate.ToShortDateString()), Variety.Danger));
+					break;
+				case LockEntriesResult.DBError:
+					Notifications.Add(new BootstrapAlert(string.Format(Strings.LockTimeEntriesDBError, lockDate.ToShortDateString()), Variety.Danger));
+					break;
+				case LockEntriesResult.Success:
+					Notifications.Add(new BootstrapAlert(string.Format(Strings.LockTimeEntriesSuccess, lockDate.ToShortDateString()), Variety.Success));
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(string.Format(Strings.InvalidEnum, nameof(result), nameof(LockTimeEntries)));
 			}
 
-			return RedirectToAction(ActionConstants.Review, new { subscriptionId = subscriptionId, startDate = startDate, endDate = lockDate });
+			return RedirectToAction(ActionConstants.Review, new { subscriptionId, startDate, lockDate });
+		}
+
+		/// <summary>
+		/// Locks all time entries with date that is less than or equal to lockDate
+		/// </summary>
+		/// <param name="subscriptionId">Subscription that the lock operation will be performed on.</param>
+		/// <param name="startDate">Used for the redirect back to the review page -- need to preserve the date range they came in with.</param>
+		/// <param name="endDate">The date from which to all all time entries before.  Also the end date of the review page's date range.</param>
+		/// <exception cref="ArgumentOutOfRangeException">Expection for if an invalid enum is returned from the service layer.</exception>
+		/// <returns>Redirect to same page.</returns>
+		[HttpPost]
+		public ActionResult UnlockTimeEntries(int subscriptionId, DateTime startDate, DateTime endDate)
+		{
+			UnlockEntriesResult result = AppService.UnlockTimeEntries(subscriptionId);
+			switch (result)
+			{
+				case UnlockEntriesResult.NoLockDate:
+					Notifications.Add(new BootstrapAlert(Strings.UnlockTimeEntriesNoLockDate, Variety.Danger));
+					break;
+				case UnlockEntriesResult.DBError:
+					Notifications.Add(new BootstrapAlert(Strings.UnlockTimeEntriesDbError, Variety.Danger));
+					break;
+				case UnlockEntriesResult.Success:
+					Notifications.Add(new BootstrapAlert(Strings.UnlockTimeEntriesSuccess, Variety.Success));
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(string.Format(Strings.InvalidEnum, nameof(result), nameof(UnlockTimeEntries)));
+			}
+
+			return RedirectToAction(ActionConstants.Review, new { subscriptionId, startDate, endDate });
 		}
 	}
 }

@@ -124,6 +124,7 @@ namespace AllyisApps
 		public const string Review = "review";
 		public const string UpdateTimeEntryStatus = "updatetimeentrystatus";
 		public const string LockTimeEntries = "locktimeentries";
+		public const string UnlockTimeEntries = "unlocktimeentries";
 	}
 
 	/// <summary>
