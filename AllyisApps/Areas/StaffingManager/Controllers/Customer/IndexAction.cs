@@ -29,11 +29,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="subscriptionId">The Subscription Id.</param>
 		/// <returns>Customer Index.</returns>
 		[HttpGet]
-		public ActionResult Index(int subscriptionId)
+		async public Task<ActionResult> Index(int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			return this.View(this.ConstructManageCustomerViewModel(subscriptionId));
+			return this.View(await this.ConstructManageCustomerViewModel(subscriptionId));
 		}
 
 		/// <summary>

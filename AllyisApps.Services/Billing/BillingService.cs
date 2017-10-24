@@ -720,7 +720,7 @@ namespace AllyisApps.Services
 			this.InitializeSettingsForProduct(selectedSku.ProductId, organizationId);
 
 			// create new subscription
-			await this.DBHelper.CreateSubscription(organizationId, (int)skuId, subscriptionName, productRoleId);
+			await this.DBHelper.CreateSubscription(organizationId, (int)skuId, subscriptionName, UserContext.UserId, productRoleId);
 		}
 
 		async public void UpdateSubscriptionName(int subscriptionId, string subscriptionName)

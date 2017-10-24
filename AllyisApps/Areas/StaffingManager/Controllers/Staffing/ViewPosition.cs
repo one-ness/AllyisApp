@@ -56,7 +56,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 
 			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
 			//TODO: this is piggy-backing off the get index action, create a new action that just gets items 3-5.
-			var infos = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
+			var infos = await AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
 			foreach (Application app in applicationsSerive)
 			{
 				var viewApp = BuildApplications(app);

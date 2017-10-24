@@ -30,11 +30,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription.</param>
 		/// <returns>Presents a page for the creation of a new position.</returns>
-		public ActionResult CreatePosition(int subscriptionId)
+		async public Task<ActionResult> CreatePosition(int subscriptionId)
 		{
 			SetNavData(subscriptionId);
 
-			var newmodel = setupPositionEditViewModel(subscriptionId);
+			var newmodel = await setupPositionEditViewModel(subscriptionId);
 
 			return this.View(newmodel);
 		}
@@ -51,7 +51,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
 
 			//TODO: this is piggy-backing off the get index action, create a new action that just gets items 3-5.
-			var infos = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
+			var infos = await AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
 			var temp = new string[infos.Item2.Count];
 			var count = 0;
 			for (int i = 0; i < infos.Item2.Count; i++)

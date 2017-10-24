@@ -264,14 +264,16 @@ namespace AllyisApps.DBModel
 		/// <param name="skuId">Sku -- the subscription item you're subscribing to.</param>
 		/// <param name="subscriptionName">The subscription name.</param>
 		/// <param name="userId">The user who is subscribing -- we need to make them manager.</param>
+		/// <param name="productRoleId">product role</param>
 		/// <returns>The new subscription id.</returns>
-		async public Task<int> CreateSubscription(int organizationId, int skuId, string subscriptionName, int userId)
+		async public Task<int> CreateSubscription(int organizationId, int skuId, string subscriptionName, int userId, int productRoleId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@skuId", skuId);
 			parameters.Add("@subscriptionName", subscriptionName);
 			parameters.Add("@userId", userId);
+			parameters.Add("@productRoleId", productRoleId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{

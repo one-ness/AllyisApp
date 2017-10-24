@@ -44,7 +44,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			int? defaultAppStat = null;
 			if (defaultStatus.Count >= 2) defaultAppStat = defaultStatus[1];
 
-			var infos = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
+			var infos = await AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
 
 			//ViewBag.SignedInUserID = GetCookieData().UserId;
 			//ViewBag.SelectedUserId = userId;
