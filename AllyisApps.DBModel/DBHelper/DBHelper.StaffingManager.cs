@@ -15,7 +15,6 @@ using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.Lookup;
 using AllyisApps.DBModel.StaffingManager;
 using Dapper;
-using System.Threading.Tasks;
 
 namespace AllyisApps.DBModel
 {

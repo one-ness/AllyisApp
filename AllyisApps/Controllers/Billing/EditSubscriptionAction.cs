@@ -47,11 +47,10 @@ namespace AllyisApps.Controllers.Auth
 		{
 			if (ModelState.IsValid)
 			{
-				this.AppService.UpdateSubscriptionName(model.SubscriptionId, model.SubscriptionName);
+				await this.AppService.UpdateSubscriptionName(model.SubscriptionId, model.SubscriptionName);
 				Notifications.Add(new BootstrapAlert(string.Format("{0} updated successfully!", model.SubscriptionName), Variety.Success));
 				return this.RedirectToAction(ActionConstants.OrganizationSubscriptions, new { id = model.OrganizationId });
 			}
-			await Task.Yield(); 
 			// error
 			return this.View(model);
 		}

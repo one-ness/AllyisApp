@@ -50,7 +50,6 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			Position pos = await AppService.GetPosition(positionId);
 
-			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
 			var subscriptionNameToDisplayTask = AppService.GetSubscriptionName(subscriptionId);
 			//TODO: this is piggy-backing off the get index action, create a new action that just gets items 3-5.
 			var infosTask = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
