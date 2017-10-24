@@ -103,7 +103,14 @@ a:hover {
 	margin-top: 6px;
 }
 
+.detail-label {
+	text-align: right;
+	width: 20%;
+}
 
+.detail-content {
+	width: 50%;
+}
 
 
 
