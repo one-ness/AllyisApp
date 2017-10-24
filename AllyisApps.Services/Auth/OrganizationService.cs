@@ -28,12 +28,12 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Creates an organization.
 		/// </summary>
-		public int SetupOrganization(string employeeId, string organizationName, string phoneNumber, string faxNumber, string siteUrl, string subDomainName, string address1, string city, int? stateId, string postalCode, string countryCode)
+		async public Task<int> SetupOrganization(string employeeId, string organizationName, string phoneNumber, string faxNumber, string siteUrl, string subDomainName, string address1, string city, int? stateId, string postalCode, string countryCode)
 		{
 			if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException("employeeId");
 			if (string.IsNullOrWhiteSpace(organizationName)) throw new ArgumentNullException("organizationName");
 
-			return this.DBHelper.SetupOrganization(this.UserContext.UserId, (int)OrganizationRoleEnum.Owner, employeeId, organizationName, phoneNumber, faxNumber, siteUrl, subDomainName, address1, city, stateId, postalCode, countryCode);
+			return await this.DBHelper.SetupOrganization(this.UserContext.UserId, (int)OrganizationRole.Owner, employeeId, organizationName, phoneNumber, faxNumber, siteUrl, subDomainName, address1, city, stateId, postalCode, countryCode);
 		}
 
 		/// <summary>
@@ -41,12 +41,12 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>The Organization.</returns>
-		public Organization GetOrganization(int orgId)
+		async public Task<Organization> GetOrganization(int orgId)
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
 
 			this.CheckOrgAction(OrgAction.ReadOrganization, orgId);
-			return InitializeOrganization(this.DBHelper.GetOrganization(orgId));
+			return InitializeOrganization(await this.DBHelper.GetOrganization(orgId));
 		}
 
 		public async Task<List<Invitation>> GetInvitationsAsync(int orgId)
@@ -97,7 +97,7 @@ namespace AllyisApps.Services
 				data.PromoExpirationDateUtc = item.PromoExpirationDateUtc;
 				data.SkuId = (SkuIdEnum)item.SkuId;
 				data.SkuName = item.SkuName;
-				data.CreatedUtc = item.SubscriptionCreatedUtc;
+				data.SubscriptionCreatedUtc = item.SubscriptionCreatedUtc;
 				data.SubscriptionId = item.SubscriptionId;
 				data.SubscriptionName = item.SubscriptionName;
 				result.Add(data);
@@ -112,14 +112,28 @@ namespace AllyisApps.Services
 		/// pending in the organization, the organization's billing stripe handle, and a list of all products.
 		/// </summary>
 		/// <returns>.</returns>
-		public Organization GetOrganizationManagementInfo(int orgId)
+		async public Task<Organization> GetOrganizationManagementInfo(int orgId)
 		{
-			var spResults = DBHelper.GetOrganizationManagementInfo(orgId);
+			var spResults = await DBHelper.GetOrganizationManagementInfo(orgId);
 			Organization org = InitializeOrganization(spResults.Item1);
 			org.Users = spResults.Item2.Select(oudb => InitializeOrganizationUser(oudb)).ToList();
 			org.Subscriptions = spResults.Item3.Select(sddb => InitializeSubscription(sddb)).ToList();
 			org.Invitations = spResults.Item4.Select(idb => InitializeInvitationInfo(idb)).ToList();
 			org.StripeToken = spResults.Item5;
+			return org;
+		}
+
+		/// <summary>
+		/// Gets the Organization for the current chosen organization, along with the list of valid countries and the
+		/// employee id for the current user in the current chosen organization.
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <returns>.</returns>
+		public Organization GetOrgWithNextEmployeeId(int orgId)
+		{
+			var spResults = DBHelper.GetOrgWithNextEmployeeId(orgId, UserContext.UserId);
+			Organization org = InitializeOrganization(spResults.Item1);
+			org.NextEmpolyeeID = spResults.Item2;
 			return org;
 		}
 
@@ -145,31 +159,31 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Updates an organization chosen by the current user.
 		/// </summary>
-		public bool UpdateOrganization(int organizationId, string organizationName, string siteUrl, int? addressId, string address1, string city, int? stateId, string countryCode, string postalCode, string phoneNumber, string faxNumber, string subDomain)
+		async public Task<bool> UpdateOrganization(int organizationId, string organizationName, string siteUrl, int? addressId, string address1, string city, int? stateId, string countryCode, string postalCode, string phoneNumber, string faxNumber, string subDomain)
 		{
 			if (organizationId <= 0) throw new ArgumentOutOfRangeException("organizationId");
 			if (string.IsNullOrWhiteSpace(organizationName)) throw new ArgumentNullException("organizationName");
 
 			this.CheckOrgAction(OrgAction.EditOrganization, organizationId);
 
-			return this.DBHelper.UpdateOrganization(organizationId, organizationName, siteUrl, addressId, address1, city, stateId, countryCode, postalCode, phoneNumber, faxNumber, subDomain) > 0;
+			return await this.DBHelper.UpdateOrganization(organizationId, organizationName, siteUrl, addressId, address1, city, stateId, countryCode, postalCode, phoneNumber, faxNumber, subDomain) > 0;
 		}
 
 		/// <summary>
 		/// Deletes the user's current chosen organization.
 		/// </summary>
 		/// <returns>Returns false if permissions fail.</returns>
-		public void DeleteOrganization(int orgId)
+		async public Task DeleteOrganization(int orgId)
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
 			this.CheckOrgAction(OrgAction.DeleteOrganization, orgId);
-			this.DBHelper.DeleteOrganization(orgId);
+			await this.DBHelper.DeleteOrganization(orgId);
 		}
 
 		/// <summary>
-		/// Creates an invitation for a new user in the database, and also sends an email to the new user
+		/// Creates an invitation for a new user in the database, and also sends an email to the new user with their access code.
 		/// </summary>
-		public int InviteUser(string url, string email, string firstName, string lastName, int organizationId, OrganizationRoleEnum organizationRoleId, string employeedId, string rolesJson)
+		async public Task<int> InviteUser(string url, string email, string firstName, string lastName, int organizationId, OrganizationRole organizationRoleId, string employeedId, string prodJson)
 		{
 			if (organizationId <= 0) throw new ArgumentOutOfRangeException("organizationId");
 			this.CheckOrgAction(OrgAction.AddUserToOrganization, organizationId);
@@ -178,10 +192,10 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException("firstName");
 			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException("lastName");
 			if (string.IsNullOrWhiteSpace(employeedId)) throw new ArgumentNullException("employeedId");
-			if (string.IsNullOrWhiteSpace(rolesJson)) throw new ArgumentNullException("rolesJson");
+			if (string.IsNullOrWhiteSpace(prodJson)) throw new ArgumentNullException("employeedId");
 
 			// Creation of invitation
-			var result = DBHelper.CreateInvitation(email, firstName, lastName, organizationId, (int)organizationRoleId, employeedId, rolesJson);
+			var result = await DBHelper.CreateInvitation(email, firstName, lastName, organizationId, (int)organizationRoleId, employeedId, prodJson);
 
 			if (result == -1)
 			{
@@ -227,7 +241,7 @@ namespace AllyisApps.Services
 
 		public async void NotifyInviteAcceptAsync(int inviteId)
 		{
-			InvitationDBEntity invitation = DBHelper.GetInvitation(inviteId);
+			InvitationDBEntity invitation = await DBHelper.GetInvitation(inviteId);
 			string msgbody = new System.Web.HtmlString($"{invitation.FirstName} {invitation.LastName} has joined the organization <organization name> on Allyis Apps.").ToString();
 
 			foreach (string email in DBHelper.GetOrganizationOwnerEmails(invitation.OrganizationId))
@@ -242,7 +256,7 @@ namespace AllyisApps.Services
 
 		public async void NotifyInviteRejectAsync(int inviteId)
 		{
-			InvitationDBEntity invitation = DBHelper.GetInvitation(inviteId);
+			InvitationDBEntity invitation = await DBHelper.GetInvitation(inviteId);
 			string msgbody = new System.Web.HtmlString($"{invitation.FirstName} {invitation.LastName} has rejected joining the organization <organization name> on Allyis Apps.").ToString();
 
 			foreach (string email in DBHelper.GetOrganizationOwnerEmails(invitation.OrganizationId))
@@ -260,11 +274,11 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="invitationId">Invitation Id.</param>
 		/// <returns>Returns false if permissions fail.</returns>
-		public bool RemoveInvitation(int invitationId)
+		async public Task<bool> RemoveInvitation(int invitationId)
 		{
 			if (invitationId <= 0) throw new ArgumentException("invitationId");
 
-			var invite = GetInvitationByID(invitationId);
+			var invite = await GetInvitationByID(invitationId);
 			this.CheckOrgAction(OrgAction.DeleteInvitation, invite.OrganizationId);
 			return DBHelper.DeleteInvitation(invitationId);
 		}
@@ -308,7 +322,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="userId">User Id.</param>
-		public void RemoveOrganizationUser(int orgId, int userId)
+		async public Task RemoveOrganizationUser(int orgId, int userId)
 		{
 			if (orgId < 0)
 			{
@@ -320,7 +334,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
 			}
 
-			DBHelper.RemoveOrganizationUser(orgId, userId);
+			await DBHelper.RemoveOrganizationUser(orgId, userId);
 		}
 
 		/// <summary>
@@ -350,7 +364,7 @@ namespace AllyisApps.Services
 		{
 			#region Validation
 
-			if (!Enum.IsDefined(typeof(OrganizationRoleEnum), newOrganizationRole))
+			if (!Enum.IsDefined(typeof(OrganizationRole), newOrganizationRole))
 			{
 				throw new ArgumentOutOfRangeException("newOrganizationRole", "Organization role must match a value of the OrganizationRole enum.");
 			}
@@ -444,7 +458,7 @@ namespace AllyisApps.Services
 			result.Email = entity.Email;
 			result.EmailConfirmationCode = entity.EmailConfirmationCode;
 			result.EmployeeId = entity.EmployeeId;
-			//result.Invitations = 
+			//result.Invitations =
 			result.FirstName = entity.FirstName;
 			result.IsEmailConfirmed = entity.IsEmailConfirmed;
 			result.IsLockoutEnabled = entity.IsLockoutEnabled;
@@ -456,14 +470,14 @@ namespace AllyisApps.Services
 			result.MaxApprovalAmount = entity.MaxAmount;
 			result.OrganizationId = entity.OrganizationId;
 			result.OrganizationRoleId = entity.OrganizationRoleId;
-			//result.Organizations = 
+			//result.Organizations =
 			result.OrganizationUserCreatedUtc = entity.OrganizationUserCreatedUtc;
 			result.PasswordHash = entity.PasswordHash;
 			result.PasswordResetCode = entity.PasswordResetCode;
 			result.PhoneExtension = entity.PhoneExtension;
 			result.PhoneNumber = entity.PhoneNumber;
-			//result.Subscriptions = 
-			result.UserCreatedUtc = entity.UserCreatedUtc;			
+			//result.Subscriptions =
+			result.UserCreatedUtc = entity.UserCreatedUtc;
 			result.UserId = entity.UserId;
 			return result;
 		}

@@ -4,6 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -14,7 +16,6 @@ using AllyisApps.Services.Auth;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.Services.Lookup;
-using System;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -28,10 +29,10 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// </summary>
 		/// <returns>A create application page.</returns>
 		[HttpGet]
-		public ActionResult ApplicationsPartial(int subscriptionId, List<StaffingApplicationViewModel> model)
+		async public Task<ActionResult> ApplicationsPartial(int subscriptionId, List<StaffingApplicationViewModel> model)
 		{
 			var subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
-			List<Position> positions = this.AppService.GetPositionsByOrganizationId(subInfo.OrganizationId);
+			List<Position> positions = await this.AppService.GetPositionsByOrganizationId(subInfo.OrganizationId);
 			List<SelectListItem> positionList = new List<SelectListItem>();
 			foreach (Position pos in positions)
 			{

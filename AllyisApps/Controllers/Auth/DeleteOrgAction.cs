@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 
@@ -21,12 +22,13 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>Redirection to account index, or an error page.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult DeleteOrg(int id)
+		async public Task<ActionResult> DeleteOrg(int id)
 		{
 			// Method includes permissions check
-			AppService.DeleteOrganization(id);
+			await AppService.DeleteOrganization(id);
 			string notification = string.Format("{0} {1}", Resources.Strings.YourOrg, Resources.Strings.OrganizationDeleteNotification);
 			Notifications.Add(new BootstrapAlert(notification, Variety.Success));
+			await Task.Delay(1);
 			return this.RouteUserHome();
 		}
 	}

@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
@@ -29,21 +30,26 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// </summary>
 		/// <param name="subscriptionId"></param>
 		/// <returns></returns>
-		public ActionResult Settings(int subscriptionId)
+		async public Task<ActionResult> Settings(int subscriptionId)
 		{
 			SetNavData(subscriptionId);
 
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			string subscriptionNameToDisplay = AppService.GetSubscriptionName(subscriptionId);
-			var defaultStatus = AppService.GetStaffingDefaultStatus(subInfo.OrganizationId); //[0] is default position status, [1] is default application status
+			var subscriptionNameToDisplayTask = AppService.GetSubscriptionName(subscriptionId);
+			var defaultStatusTask = AppService.GetStaffingDefaultStatus(subInfo.OrganizationId); //[0] is default position status, [1] is default application status
+
+			await Task.WhenAll(new Task[] { subscriptionNameToDisplayTask, defaultStatusTask });
+
+			string subscriptionNameToDisplay = subscriptionNameToDisplayTask.Result;
+			var defaultStatus = defaultStatusTask.Result;
 
 			int? defaultPosStat = null;
 			if (defaultStatus.Count >= 1) defaultPosStat = defaultStatus[0];
 			int? defaultAppStat = null;
 			if (defaultStatus.Count >= 2) defaultAppStat = defaultStatus[1];
 
-			var infos = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
+			var infos = await AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
 
 			//ViewBag.SignedInUserID = GetCookieData().UserId;
 			//ViewBag.SelectedUserId = userId;

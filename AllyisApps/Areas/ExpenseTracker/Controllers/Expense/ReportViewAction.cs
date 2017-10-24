@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
@@ -19,11 +20,11 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="reportId">The report id.</param>
 		/// <returns>The view with selected report details.</returns>
-		public ActionResult ReportView(int subscriptionId, int reportId)
+		async public Task<ActionResult> ReportView(int subscriptionId, int reportId)
 		{
-			SetNavData(subscriptionId);
+			await SetNavData(subscriptionId);
 
-			var model = InitializeReportViewModel(subscriptionId, reportId);
+			var model = await InitializeReportViewModel(subscriptionId, reportId);
 
 			return View(model);
 		}
@@ -34,27 +35,35 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="id">The report id.</param>
 		/// <returns>The view model.</returns>
-		public ReportViewModel InitializeReportViewModel(int subscriptionId, int id)
+		async public Task<ReportViewModel> InitializeReportViewModel(int subscriptionId, int id)
 		{
-			SetNavData(subscriptionId);
+			await SetNavData(subscriptionId);
 
-			var report = AppService.GetExpenseReport(id);
-			var reportItems = AppService.GetExpenseItemsByReportId(id);
+			var reportTask = AppService.GetExpenseReport(id);
+			var reportItemsTask = AppService.GetExpenseItemsByReportId(id);
+			var historyTask = AppService.GetExpenseHistoryByReportId(id);
+
+			await Task.WhenAll(new Task[] { reportTask, reportItemsTask, historyTask });
+
+			var report = reportTask.Result;
+			var reportItems = reportItemsTask.Result;
+			var history = historyTask.Result;
+
 			List<ExpenseItemCreateViewModel> itemViewModels = new List<ExpenseItemCreateViewModel>();
 			foreach (ExpenseItem item in reportItems)
 			{
 				itemViewModels.Add(InitializeExpenseItemViewModel(item));
 			}
 
-			var user = AppService.GetUser(report.SubmittedById);
-			var history = AppService.GetExpenseHistoryByReportId(id);
+			var user = await AppService.GetUser(report.SubmittedById);
+
 			List<ExpenseHistoryViewModel> reportHistory = new List<ExpenseHistoryViewModel>();
 
 			List<string> fileNames = AzureFiles.GetReportAttachments(id);
 
 			foreach (var item in history)
 			{
-				var reviewer = AppService.GetUser(item.UserId);
+				var reviewer = await AppService.GetUser(item.UserId);
 				reportHistory.Add(new ExpenseHistoryViewModel()
 				{
 					Reviewer = string.Format("{0} {1}", reviewer.FirstName, reviewer.LastName),

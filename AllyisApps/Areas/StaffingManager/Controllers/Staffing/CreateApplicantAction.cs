@@ -14,6 +14,7 @@ using AllyisApps.Services.Auth;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.Services.Lookup;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -43,11 +44,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns></returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult CreateApplicant(int subscriptionId, StaffingApplicantViewModel model)
+		async public Task<ActionResult> CreateApplicant(int subscriptionId, StaffingApplicantViewModel model)
 		{
 			var subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			Applicant applicant = InitializeApplicant(subInfo.OrganizationId, model);
-			this.AppService.CreateApplicant(applicant);
+			await this.AppService.CreateApplicant(applicant);
 			return this.RedirectToAction("ApplicantList");
 		}
 

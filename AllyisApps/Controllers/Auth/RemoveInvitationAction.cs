@@ -7,6 +7,7 @@
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -21,11 +22,12 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="id">Organization's id.</param>
 		/// <returns>Redirects to the manage org action.</returns>
 		[HttpPost]
-		public ActionResult RemoveInvitation(int id)
+		async public Task<ActionResult> RemoveInvitation(int id)
 		{
-			var orgId = AppService.GetInvitationByID(id).OrganizationId;
+			var orgGet = await AppService.GetInvitationByID(id);
+			var orgId = orgGet.OrganizationId;
 			this.AppService.CheckOrgAction(AppService.OrgAction.DeleteInvitation, orgId);
-			var results = AppService.RemoveInvitation(id);
+			var results = await AppService.RemoveInvitation(id);
 
 			if (results)
 			{

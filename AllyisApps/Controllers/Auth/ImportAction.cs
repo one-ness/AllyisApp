@@ -6,6 +6,7 @@
 
 using System.Data;
 using System.IO;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
@@ -30,7 +31,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Import(int id, HttpPostedFileBase upload)
+		async public Task<ActionResult> Import(int id, HttpPostedFileBase upload)
 		{
 			// TODO: Replace ModelState errors with exception catches and notifications
 			// TODO: Buff up the error handling (catch errors from import functions, etc.)
@@ -65,7 +66,7 @@ namespace AllyisApps.Controllers.Auth
 					DataSet result = reader.AsDataSet();
 					reader.Close();
 
-					string[] formattedResult = ImportMessageFormatter.FormatImportResult(AppService.Import(result, organizationId: id,
+					string[] formattedResult = ImportMessageFormatter.FormatImportResult(await AppService.Import(result, organizationId: id,
 						inviteUrl: Url.Action(ActionConstants.Index, ControllerConstants.Account, null, protocol: Request.Url.Scheme)));
 					if (!string.IsNullOrEmpty(formattedResult[0]))
 					{
@@ -79,6 +80,7 @@ namespace AllyisApps.Controllers.Auth
 						Notifications.Add(alert);
 					}
 
+					await Task.Delay(1);
 					return RedirectToAction(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { id = id });
 				}
 				else

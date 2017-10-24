@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense;
 using AllyisApps.Controllers;
@@ -27,7 +28,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="startDate">The start date range.</param>
 		/// <param name="endDate">The end date range.</param>
 		/// <returns>Returns File or a Redirect to the admin report page.</returns>
-		public ActionResult ViewAdminReport(string viewDataButton, AdminReportModel model, int subscriptionId, int organizationId, DateTime? startDate, DateTime? endDate)
+		async public Task<ActionResult> ViewAdminReport(string viewDataButton, AdminReportModel model, int subscriptionId, int organizationId, DateTime? startDate, DateTime? endDate)
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.AdminReport, subscriptionId);
 
@@ -44,14 +45,19 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					Status = selectedStatus
 				};
 
-				AdminReportModel adminReportVM = CreateAdminReportModel(subscriptionId);
-				adminReportVM.SubscriptionName = AppService.GetSubscriptionName(subscriptionId);
+				var adminReportTask = CreateAdminReportModel(subscriptionId);
+				var subNameTask = AppService.GetSubscriptionName(subscriptionId);
+
+				await Task.WhenAll(new Task[] { adminReportTask, subNameTask });
+
+				AdminReportModel adminReportVM = adminReportTask.Result;
+				adminReportVM.SubscriptionName = subNameTask.Result;
 				adminReportVM.Selection = adminRVMSelect;
 
 				ExpenseDataExportViewModel dataVM = null;
 				try
 				{
-					dataVM = ConstructAdminDataExportViewModel(subscriptionId, organizationId, selectedUsers.ToList(), selectedStatus, startDate, endDate);
+					dataVM = await ConstructAdminDataExportViewModel(subscriptionId, organizationId, selectedUsers.ToList(), selectedStatus, startDate, endDate);
 				}
 				catch (Exception e)
 				{
@@ -71,7 +77,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			}
 			else if (viewDataButton.Equals(Strings.Export))
 			{
-				return this.ExportExpenseReport(subscriptionId, organizationId, model, startDate, endDate);
+				return await this.ExportExpenseReport(subscriptionId, organizationId, model, startDate, endDate);
 			}
 
 			return RedirectToAction(ActionConstants.AdminReport);
@@ -87,7 +93,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="startDate">The start date range.</param>
 		/// <param name="endDate">The end date range.</param>
 		/// <returns>An ExpenseDataExportViewModel.</returns>
-		public ExpenseDataExportViewModel ConstructAdminDataExportViewModel(int subscriptionId, int organizationId, List<int> userId, List<int> selectedStatus, DateTime? startDate = null, DateTime? endDate = null)
+		async public Task<ExpenseDataExportViewModel> ConstructAdminDataExportViewModel(int subscriptionId, int organizationId, List<int> userId, List<int> selectedStatus, DateTime? startDate = null, DateTime? endDate = null)
 		{
 			List<ExpenseReportViewModel> expenses = new List<ExpenseReportViewModel>();
 
@@ -96,7 +102,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			foreach (var user in userId)
 			{
-				var reports = AppService.GetExpenseReportBySubmittedId(user).Select(x => x).Where(x => DateTime.Compare(x.CreatedUtc, start) >= 0 && DateTime.Compare(x.CreatedUtc, end) <= 0);
+				var results = await AppService.GetExpenseReportBySubmittedId(user);
+				var reports = results.Select(x => x).Where(x => DateTime.Compare(x.CreatedUtc, start) >= 0 && DateTime.Compare(x.CreatedUtc, end) <= 0);
 				reports = reports.Select(x => x).Where(y => selectedStatus.IndexOf(y.ReportStatus) != -1);
 				List<ExpenseReportViewModel> reportViewModels = new List<ExpenseReportViewModel>();
 				foreach (ExpenseReport report in reports)

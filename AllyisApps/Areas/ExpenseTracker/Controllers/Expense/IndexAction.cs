@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
@@ -20,19 +21,19 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <returns>The action result.</returns>
-		public ActionResult Index(int subscriptionId)
+		async public Task<ActionResult> Index(int subscriptionId)
 		{
-			SetNavData(subscriptionId);
+			await SetNavData(subscriptionId);
 
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, subscriptionId);
 
 			int userId = this.AppService.UserContext.UserId;
 
 			UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+			var results = await AppService.GetExpenseReportBySubmittedId(userId);
+			var items = results.Select(x => x).Where(y => y.OrganizationId == subInfo.OrganizationId);
 
-			var items = AppService.GetExpenseReportBySubmittedId(userId).Select(x => x).Where(y => y.OrganizationId == subInfo.OrganizationId);
-
-			return View(InitializeViewModel(subscriptionId, userId, DateTime.UtcNow, DateTime.UtcNow.AddDays(7), items));
+			return View(await InitializeViewModel(subscriptionId, userId, DateTime.UtcNow, DateTime.UtcNow.AddDays(7), items));
 		}
 
 		/// <summary>
@@ -44,15 +45,19 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="endDate">The end date.</param>
 		/// <param name="expenses">The expenses.</param>
 		/// <returns>Returns the view model.</returns>
-		public ExpenseIndexViewModel InitializeViewModel(int subId, int userId, DateTime startDate, DateTime endDate, IEnumerable<ExpenseReport> expenses)
+		async public Task<ExpenseIndexViewModel> InitializeViewModel(int subId, int userId, DateTime startDate, DateTime endDate, IEnumerable<ExpenseReport> expenses)
 		{
 			List<ExpenseItemViewModel> items = new List<ExpenseItemViewModel>();
 
 			foreach (var item in expenses)
 			{
-				var expItems = AppService.GetExpenseItemsByReportId(item.ExpenseReportId);
+				var expItemsTask = AppService.GetExpenseItemsByReportId(item.ExpenseReportId);
+				var userTask = AppService.GetUser(item.SubmittedById);
 
-				var user = AppService.GetUser(item.SubmittedById);
+				await Task.WhenAll(new Task[] { expItemsTask, userTask });
+
+				var expItems = expItemsTask.Result;
+				var user = userTask.Result;
 
 				decimal totalAmount = expItems.Sum(x => x.Amount);
 

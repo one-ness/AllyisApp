@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -23,7 +24,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="userId">The Customer id.</param>
 		/// <returns>The Customer index.</returns>
 		[HttpGet]
-		public ActionResult Delete(int subscriptionId, string userId)
+		async public Task<ActionResult> Delete(int subscriptionId, string userId)
 		{
 			int numValue;
 			bool parsed = int.TryParse(userId, out numValue);
@@ -34,7 +35,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else
 			{
-				var result = AppService.DeleteCustomer(subscriptionId, numValue);
+				var result = await AppService.DeleteCustomer(subscriptionId, numValue);
 
 				if (!string.IsNullOrEmpty(result))
 				{

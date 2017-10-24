@@ -13,6 +13,7 @@ using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -28,10 +29,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="userId"> The payclass Id.</param>
 		/// <returns>The merge pay class view.</returns>
 		[HttpGet]
-		public ActionResult MergePayClass(int subscriptionId, int userId)
+		async public Task<ActionResult> MergePayClass(int subscriptionId, int userId)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
-			var allPayClasses = AppService.GetPayClassesBySubscriptionId(subscriptionId);
+			var allPayClasses = await AppService.GetPayClassesBySubscriptionId(subscriptionId);
 			var destPayClasses = allPayClasses.Where(pc => pc.PayClassId != userId);
 			string sourcePayClassName = allPayClasses.Where(pc => pc.PayClassId == userId).ElementAt(0).PayClassName;
 
@@ -75,10 +76,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[CLSCompliant(false)]
-		public ActionResult MergePayClass(MergePayClassViewModel model, int destPayClass)
+		async public Task<ActionResult> MergePayClass(MergePayClassViewModel model, int destPayClass)
 		{
 			// change all of the entries with old payclass to destPayClass and delete the old payclass
-			if (AppService.DeletePayClass(model.SourcePayClassId, AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId, model.SubscriptionId, destPayClass))
+			if (await AppService.DeletePayClass(model.SourcePayClassId, AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId, model.SubscriptionId, destPayClass))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulMergePayClass, Variety.Success));
 			}

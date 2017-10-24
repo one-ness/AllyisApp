@@ -7,6 +7,7 @@ using AllyisApps.Controllers;
 using AllyisApps.Lib;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -21,7 +22,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <returns></returns>
 		[HttpPost]
-		public ActionResult TimeEntryCURD(string data)
+		async public Task<ActionResult> TimeEntryCURD(string data)
 		{
 
 			var items = JsonConvert.DeserializeObject<TimeEntryCRUDModel>(data);
@@ -37,13 +38,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					if (entry.IsDeleted)
 					{
-						 res = (JsonResult) DeleteTimeEntryJson(entry);
+						 res = (JsonResult)await DeleteTimeEntryJson(entry);
 					}
 					else
 					{
 						if (entry.IsEdited)
 						{
-							res = (JsonResult)EditTimeEntryJson(entry);
+							res = (JsonResult)await EditTimeEntryJson(entry);
 						}
 					}
 				}
@@ -51,7 +52,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					if (entry.IsCreated && !entry.IsDeleted)
 					{
-						res = (JsonResult)CreateTimeEntryJson(entry);
+						res = (JsonResult)await CreateTimeEntryJson(entry);
 					}
 				}
 				

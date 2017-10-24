@@ -6,6 +6,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Lib;
 using AllyisApps.Services;
@@ -24,12 +25,12 @@ namespace AllyisApps.Controllers.Auth
 		/// <summary>
 		/// Get: Account/OrgDetails
 		/// </summary>
-		public ActionResult OrgDetails(int id)
+		async public Task<ActionResult> OrgDetails(int id)
 		{
 			var model = new OrganizationDetailsViewModel();
 			model.CanEditOrganization = this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id, false);
+			var org = await this.AppService.GetOrganization(id);
 			model.CanDeleteOrganization = this.AppService.CheckOrgAction(AppService.OrgAction.DeleteOrganization, id, false);
-			var org = this.AppService.GetOrganization(id);
 			if (org.Address != null)
 			{
 				model.Address = org.Address.Address1;
@@ -44,6 +45,7 @@ namespace AllyisApps.Controllers.Auth
 			model.OrganizationName = org.OrganizationName;
 			model.PhoneNumber = org.PhoneNumber;
 			model.SiteURL = org.SiteUrl;
+
 			return View(model);
 		}
 	}

@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Resources;
@@ -75,7 +76,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="id">The Organization Id.</param>
 		/// <returns>Action result.</returns>
 		[HttpGet]
-		public ActionResult ManagePermissions(int id)
+		async public Task<ActionResult> ManagePermissions(int id)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id);
 			var infos = AppService.GetOrgAndSubRoles(id);
@@ -140,6 +141,7 @@ namespace AllyisApps.Controllers.Auth
 				}
 			}
 
+			await Task.Delay(1);
 			return this.View("Permission2", model);
 		}
 
@@ -149,7 +151,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="id">Organizaion Id.</param>
 		/// <returns></returns>
 		[HttpGet]
-		public ActionResult ManageOrgPermissions(int id)
+		async public Task<ActionResult> ManageOrgPermissions(int id)
 		{
 			//Get OrganizaionUser Rows
 			AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id);
@@ -185,7 +187,7 @@ namespace AllyisApps.Controllers.Auth
 				}).OrderBy(orgU => orgU.FullName).ToList()
 			};
 
-			//
+			await Task.Delay(1);
 			return this.View("PermissionsOrg", perModel);
 		}
 
@@ -195,9 +197,9 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="id">Subscription ID</param>
 		/// <returns></returns>
 		[HttpGet]
-		public ActionResult ManageSubPermissions(int id)
+		async public Task<ActionResult> ManageSubPermissions(int id)
 		{
-			var sub = AppService.GetSubscription(id);
+			var sub = await AppService.GetSubscription(id);
 			var orgSubs = AppService.GetSubscriptionsByOrg(sub.OrganizationId);
 
 			var subUsers = AppService.GetSubscriptionUsers(id);
@@ -265,6 +267,7 @@ namespace AllyisApps.Controllers.Auth
 				Users = OrgUsers
 			};
 
+			await Task.Delay(1);
 			return this.View("PermissionsOrg", model);
 		}
 
@@ -275,7 +278,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="data">The JSON string of the model of actions and users.</param>
 		/// <returns>A Json object representing the results of the actions.</returns>
 		[HttpPost]
-		public ActionResult ManagePermissions(string data)
+		async public Task<ActionResult> ManagePermissions(string data)
 		{
 			UserPermissionsAction model = JsonConvert.DeserializeObject<UserPermissionsAction>(data);
 
@@ -384,7 +387,7 @@ namespace AllyisApps.Controllers.Auth
 				{
 					// TODO: instead of providing product id, provide subscription id of the subscription to be modified
 					// TODO: split updating user roles and creating new sub users
-					var updatedAndAdded = AppService.UpdateSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedAction.Value, model.OrganizationId, model.ProductId.Value);
+					var updatedAndAdded = await AppService.UpdateSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedAction.Value, model.OrganizationId, model.ProductId.Value);
 					if (updatedAndAdded.UsersChanged > 0)
 					{
 						Notifications.Add(new BootstrapAlert(string.Format(UsersModifiedMessage, updatedAndAdded.UsersChanged), Variety.Success));
@@ -402,6 +405,8 @@ namespace AllyisApps.Controllers.Auth
 					Notifications.Add(new BootstrapAlert(Resources.Strings.UserDeletedSuccessfully, Variety.Success));
 				}
 			}
+
+			await Task.Delay(1);
 			return Redirect(model.FromUrl);
 		}
 	}

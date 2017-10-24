@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
@@ -18,11 +19,11 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <returns>A admin report view model.</returns>
-		public ActionResult AdminReport(int subscriptionId)
+		async public Task<ActionResult> AdminReport(int subscriptionId)
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.AdminReport, subscriptionId);
 
-			SetNavData(subscriptionId);
+			await SetNavData(subscriptionId);
 
 			AdminReportModel adminReportVM = null;
 
@@ -34,7 +35,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			}
 			else
 			{
-				adminReportVM = CreateAdminReportModel(subscriptionId);
+				adminReportVM = await CreateAdminReportModel(subscriptionId);
 			}
 
 			return View(adminReportVM);
@@ -45,11 +46,17 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="subId">The subscription id.</param>
 		/// <returns>An admin report model.</returns>
-		public AdminReportModel CreateAdminReportModel(int subId)
+		async public Task<AdminReportModel> CreateAdminReportModel(int subId)
 		{
-			var subInfo = AppService.GetSubscription(subId);
-			var reportInfo = AppService.GetReportInfo(subId);
-			var reports = AppService.GetExpenseReportByOrgId(subInfo.OrganizationId);
+			var subInfoTask = AppService.GetSubscription(subId);
+			var reportInfoTask = AppService.GetReportInfo(subId);
+
+			await Task.WhenAll(new Task[] { subInfoTask, reportInfoTask });
+
+			var subInfo = subInfoTask.Result;
+			var reportInfo = reportInfoTask.Result;
+
+			var reports = await AppService.GetExpenseReportByOrgId(subInfo.OrganizationId);
 			List<ExpenseReportViewModel> reportViewModels = new List<ExpenseReportViewModel>();
 			foreach (ExpenseReport report in reports)
 			{

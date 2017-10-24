@@ -14,6 +14,7 @@ using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.Lookup;
 using Dapper;
+using System.Threading.Tasks;
 
 namespace AllyisApps.DBModel
 {
@@ -28,7 +29,7 @@ namespace AllyisApps.DBModel
 		/// <param name="project">ProjectDBEntity with new project info.</param>
 		/// <param name="userIds">List of users to be assigned to this project.</param>
 		/// <returns>Returns the id of the created project, else returns -1.</returns>
-		public int CreateProjectAndUpdateItsUserList(ProjectDBEntity project, IEnumerable<int> userIds)
+		async public Task<int> CreateProjectAndUpdateItsUserList(ProjectDBEntity project, IEnumerable<int> userIds)
 		{
 			if (string.IsNullOrWhiteSpace(project.ProjectName))
 			{
@@ -54,7 +55,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute(
+				await connection.ExecuteAsync(
 					"[Pjm].[CreateProjectAndUpdateItsUserList]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
@@ -68,7 +69,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="project">ProjectDBEntity with new project info.</param>
 		/// <returns>Returns the id of the created project, else returns -1.</returns>
-		public int CreateProject(ProjectDBEntity project)
+		async public Task<int> CreateProject(ProjectDBEntity project)
 		{
 			if (string.IsNullOrWhiteSpace(project.ProjectName))
 			{
@@ -86,7 +87,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute(
+				await connection.ExecuteAsync(
 					"[Pjm].[CreateProject]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
@@ -100,11 +101,12 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="projectId">The id of the project to be deleted.</param>
 		/// <returns>Returns project name if successful, return empty string if not found.</returns>
-		public string DeleteProject(int projectId)
+		async public Task<string> DeleteProject(int projectId)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				var result = connection.Query<string>("[Pjm].[DeleteProject]", new { ProjectId = projectId, DeactivateDate = DateTime.Now }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				var resultGet = await connection.QueryAsync<string>("[Pjm].[DeleteProject]", new { ProjectId = projectId, DeactivateDate = DateTime.Now }, commandType: CommandType.StoredProcedure);
+				var result = resultGet.SingleOrDefault();
 				if (result == null) { return ""; }
 				return result;
 			}
@@ -151,7 +153,7 @@ namespace AllyisApps.DBModel
 		/// Updates project properties.
 		/// </summary>
 		/// <param name="project">The ProjectDBEntity with the updated properties.</param>
-		public void UpdateProject(ProjectDBEntity project)
+		async public void UpdateProject(ProjectDBEntity project)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@projectId", project.ProjectId);
@@ -163,7 +165,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute(
+				await connection.ExecuteAsync(
 					"[Pjm].[UpdateProject]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
@@ -175,14 +177,14 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="customerId">The id of the customer.</param>
 		/// <returns>A collection of projects with the definied customer.</returns>
-		public IEnumerable<ProjectDBEntity> GetProjectsByCustomer(int customerId)
+		async public Task<IEnumerable<ProjectDBEntity>> GetProjectsByCustomer(int customerId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@customerId", customerId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<ProjectDBEntity>(
+				return await connection.QueryAsync<ProjectDBEntity>(
 					"[Pjm].[GetProjectsByCustomer]",
 					parameters,
 				   commandType: CommandType.StoredProcedure);
@@ -194,14 +196,14 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="customerId">The id of the customer.</param>
 		/// <returns>A collection of projects with the definied customer.</returns>
-		public IEnumerable<ProjectDBEntity> GetInactiveProjectsByCustomer(int customerId)
+		async public Task<IEnumerable<ProjectDBEntity>> GetInactiveProjectsByCustomer(int customerId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@customerId", customerId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<ProjectDBEntity>(
+				return await connection.QueryAsync<ProjectDBEntity>(
 					"[Pjm].[GetInactiveProjectsByCustomer]",
 					parameters,
 				   commandType: CommandType.StoredProcedure);
@@ -241,7 +243,7 @@ namespace AllyisApps.DBModel
 		/// <param name="customerId">Customer Id.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>.</returns>
-		public Tuple<string, List<SubscriptionUserDBEntity>> GetNextProjectIdAndSubUsers(int customerId, int subscriptionId)
+		async public Task<Tuple<string, List<SubscriptionUserDBEntity>>> GetNextProjectIdAndSubUsers(int customerId, int subscriptionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@customerId", customerId);
@@ -249,7 +251,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				var results = connection.QueryMultiple(
+				var results = await connection.QueryMultipleAsync(
 					"[Pjm].[GetNextProjectIdAndSubUsers]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
@@ -285,7 +287,7 @@ namespace AllyisApps.DBModel
 		/// <param name="userId">The User Id.</param>
 		/// <param name="isActive">Is active.</param>
 		/// <returns>The number of rows successfully updated.</returns>C:\Users\v-trsan\Desktop\AllyisApps\aa\src\main\aadb\StoredProcedures\TimeTracker
-		public int UpdateProjectUser(int projectId, int userId, int isActive)
+		async public Task<int> UpdateProjectUser(int projectId, int userId, int isActive)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@projectId", projectId);
@@ -296,10 +298,11 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				int rows = 1;
-				rows = connection.Query<int>(
+				var result = await connection.QueryAsync<int>(
 					"[Pjm].[UpdateProjectUser]",
 					parameters,
-					commandType: CommandType.StoredProcedure).SingleOrDefault();
+					commandType: CommandType.StoredProcedure);
+				rows = result.SingleOrDefault();
 
 				return rows;
 			}
@@ -331,7 +334,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="customerInfo">The table with the customer to create.</param>
 		/// <returns>The Id of the customer if one was created -1 if not.</returns>
-		public int CreateCustomerInfo(Tuple<CustomerDBEntity, AddressDBEntity> customerInfo)
+		async public Task<int> CreateCustomerInfo(Tuple<CustomerDBEntity, AddressDBEntity> customerInfo)
 		{
 			if (customerInfo == null)
 			{
@@ -359,7 +362,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default null
-				connection.Execute("[Crm].[CreateCustomerInfo]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[Crm].[CreateCustomerInfo]", parameters, commandType: CommandType.StoredProcedure);
 			}
 
 			return parameters.Get<int>("@retId");
@@ -370,7 +373,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="customerInfo">The table with the customer to create.</param>
 		/// <return>1 if succeed, -1 if fail because CustOrgId is not unique.</return>
-		public int UpdateCustomer(Tuple<CustomerDBEntity, AddressDBEntity> customerInfo)
+		async public Task<int> UpdateCustomer(Tuple<CustomerDBEntity, AddressDBEntity> customerInfo)
 		{
 			if (customerInfo == null)
 			{
@@ -398,7 +401,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[Crm].[UpdateCustomerInfo]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[Crm].[UpdateCustomerInfo]", parameters, commandType: CommandType.StoredProcedure);
 			}
 			return parameters.Get<int>("@retId");
 		}
@@ -473,13 +476,13 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<string> GetNextCustId(int orgId)
+		async public Task<Tuple<string>> GetNextCustId(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@orgId", orgId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				var results = connection.QueryMultiple(
+				var results = await connection.QueryMultipleAsync(
 					"[Crm].[GetNextCustId]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
@@ -495,13 +498,13 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="customerId">Customer Id.</param>
 		/// <returns>.</returns>
-		public Tuple<dynamic, AddressDBEntity> GetCustomerProfile(int customerId)
+		async public Task<Tuple<dynamic, AddressDBEntity>> GetCustomerProfile(int customerId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@customerId", customerId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				var results = connection.QueryMultiple(
+				var results = await connection.QueryMultipleAsync(
 					"[Crm].[GetCustomerProfile]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
@@ -516,11 +519,12 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="customerId">The customer's Id.</param>
 		/// <returns>Customer's name if successful, empty string if not found.</returns>
-		public string DeleteCustomer(int customerId)
+		async public Task<string> DeleteCustomer(int customerId)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				var result = connection.Query<string>("[Crm].[DeleteCustomer]", new { CustomerId = customerId }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				var resultGet = await connection.QueryAsync<string>("[Crm].[DeleteCustomer]", new { CustomerId = customerId }, commandType: CommandType.StoredProcedure);
+				var result = resultGet.SingleOrDefault();
 				if (result == null) { return ""; }
 				return result;
 			}
@@ -549,11 +553,12 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="customerId">The customer's Id.</param>
 		/// <returns>True if successful.</returns>
-		public string ReactivateCustomer(int customerId)
+		async public Task<string> ReactivateCustomer(int customerId)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				var result = connection.Query<string>("[Crm].[ReactivateCustomer]", new { CustomerId = customerId }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				var resultGet = await connection.QueryAsync<string>("[Crm].[ReactivateCustomer]", new { CustomerId = customerId }, commandType: CommandType.StoredProcedure);
+				var result = resultGet.SingleOrDefault();
 				if (result == null) { return ""; }
 				return result;
 			}
@@ -566,7 +571,7 @@ namespace AllyisApps.DBModel
 		/// <param name="orgId">The organization's Id.</param>
 		/// <param name="activity">The level of activity you wish to allow. Specifying 0 includes inactive projects.</param>
 		/// <returns>A collection of CompleteProjectDBEntity objects for each project the user has access to within the organization.</returns>
-		public IEnumerable<ProjectDBEntity> GetProjectsByUserAndOrganization(int userId, int orgId, int activity)
+		async public Task<IEnumerable<ProjectDBEntity>> GetProjectsByUserAndOrganization(int userId, int orgId, int activity)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
@@ -574,7 +579,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@activity", activity);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<ProjectDBEntity>(
+				return await connection.QueryAsync<ProjectDBEntity>(
 					"[Pjm].[GetProjectsByUserAndOrganization]",
 					parameters,
 					 commandType: CommandType.StoredProcedure);
@@ -627,7 +632,7 @@ namespace AllyisApps.DBModel
 		/// <param name="projectId">The project's Id.</param>
 		/// <param name="userId">The user Id.</param>
 		/// <returns>Info about the requested project.</returns>
-		public ProjectDBEntity GetProjectByIdAndUser(int projectId, int userId)
+		async public Task<ProjectDBEntity> GetProjectByIdAndUser(int projectId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@projectId", projectId);
@@ -635,10 +640,11 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<ProjectDBEntity>(
+				var results = await connection.QueryAsync<ProjectDBEntity>(
 					"[Pjm].[GetProjectByIdAndUser]",
 					parameters,
-					commandType: CommandType.StoredProcedure).SingleOrDefault();
+					commandType: CommandType.StoredProcedure);
+				return results.SingleOrDefault();
 			}
 		}
 
@@ -652,7 +658,7 @@ namespace AllyisApps.DBModel
 		/// <param name="start">The start date assigned to the project.</param>
 		/// <param name="end">The end date assigned to the project.</param>
 		/// <param name="userIds">The updated list of project users, by their Ids.</param>
-		public void UpdateProjectAndUsers(int projectId, string projectName, string orgId, bool isHourly, DateTime? start, DateTime? end, IEnumerable<int> userIds)
+		async public void UpdateProjectAndUsers(int projectId, string projectName, string orgId, bool isHourly, DateTime? start, DateTime? end, IEnumerable<int> userIds)
 		{
 			if (string.IsNullOrWhiteSpace(projectName))
 			{
@@ -682,7 +688,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Query(
+				await connection.QueryAsync(
 					"[Pjm].[UpdateProjectAndUsers]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
@@ -697,14 +703,14 @@ namespace AllyisApps.DBModel
 		/// <param name="userId">User Id.</param>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<ProjectDBEntity>, List<ProjectDBEntity>, UserDBEntity> GetProjectsForOrgAndUser(int userId, int orgId)
+		async public Task<Tuple<List<ProjectDBEntity>, List<ProjectDBEntity>, UserDBEntity>> GetProjectsForOrgAndUser(int userId, int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
 			parameters.Add("@orgId", orgId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				var results = connection.QueryMultiple(
+				var results = await connection.QueryMultipleAsync(
 					"[Pjm].[GetProjectsForOrgAndUser]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
@@ -722,14 +728,14 @@ namespace AllyisApps.DBModel
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="userId">User Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<ProjectDBEntity>, List<dynamic>> GetProjectsAndCustomersForOrgAndUser(int orgId, int userId)
+		async public Task<Tuple<List<ProjectDBEntity>, List<dynamic>>> GetProjectsAndCustomersForOrgAndUser(int orgId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
 			parameters.Add("@orgId", orgId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				var results = connection.QueryMultiple(
+				var results = await connection.QueryMultipleAsync(
 					"[Pjm].[GetProjectsAndCustomersForOrgAndUser]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
@@ -746,14 +752,14 @@ namespace AllyisApps.DBModel
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="userId">User Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<ProjectDBEntity>, List<dynamic>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId, int userId)
+		async public Task<Tuple<List<ProjectDBEntity>, List<dynamic>>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
 			parameters.Add("@orgId", orgId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				var results = connection.QueryMultiple(
+				var results = await connection.QueryMultipleAsync(
 					"[Crm].[GetInactiveProjectsAndCustomersForOrgAndUser]",
 					parameters,
 					commandType: CommandType.StoredProcedure);

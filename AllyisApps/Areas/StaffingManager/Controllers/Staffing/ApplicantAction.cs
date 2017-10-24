@@ -16,6 +16,7 @@ using AllyisApps.Services.StaffingManager;
 using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels.Staffing;
 using System;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -28,13 +29,14 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// Applicant page.
 		/// </summary>
 		/// <returns></returns>
-		public ActionResult Applicant(int subscriptionId, int applicantId)
+		async public Task<ActionResult> Applicant(int subscriptionId, int applicantId)
 		{
 			SetNavData(subscriptionId);
 
-			Applicant applicant = this.AppService.GetApplicantAddressById(applicantId);
+			Applicant applicant =  await this.AppService.GetApplicantAddressById(applicantId);
 			StaffingApplicantViewModel model = InitializeStaffingApplicantViewModel(applicant);
-			model.Applications = this.AppService.GetApplicationsByApplicantId(applicantId).Select(a => InitializeStaffingApplicationViewModel(a)).ToList();
+			var applicationsGet = await this.AppService.GetApplicationsByApplicantId(applicantId);
+			model.Applications = applicationsGet.Select(a => InitializeStaffingApplicationViewModel(a)).ToList();
 
 			foreach (var application in model.Applications)
 			{

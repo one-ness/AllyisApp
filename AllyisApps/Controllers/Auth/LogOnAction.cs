@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
@@ -35,6 +36,7 @@ namespace AllyisApps.Controllers.Auth
 			}
 
 			ViewBag.ReturnUrl = returnUrl;
+
 			return this.View(new LogOnViewModel());
 		}
 
@@ -47,12 +49,12 @@ namespace AllyisApps.Controllers.Auth
 		[HttpPost]
 		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
-		public ActionResult LogOn(LogOnViewModel model, string returnUrl)
+		async public Task<ActionResult> LogOn(LogOnViewModel model, string returnUrl)
 		{
 			if (ModelState.IsValid)
 			{
 				User result = null;
-				if ((result = AppService.ValidateLogin(model.Email, model.Password)) != null)
+				if ((result = await AppService.ValidateLogin(model.Email, model.Password)) != null)
 				{
 					// sign in
 					if (result.IsEmailConfirmed || (WebConfigurationManager.AppSettings["RequireEmailConfirmation"] ?? "true").ToLower().Equals("false"))
@@ -75,6 +77,7 @@ namespace AllyisApps.Controllers.Auth
 
 			// login failed
 			ViewBag.ReturnUrl = returnUrl;
+			await Task.Delay(1);
 			return this.View(model);
 		}
 

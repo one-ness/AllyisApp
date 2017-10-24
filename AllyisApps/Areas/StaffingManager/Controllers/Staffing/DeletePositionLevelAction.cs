@@ -7,6 +7,7 @@
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -22,7 +23,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="userId">The id of the level to delete.</param> // TODO: update this after changing the route
 		/// <param name="subscriptionId">The subscription's id.</param>
 		/// <returns>Redirects to the settings view.</returns>
-		public ActionResult DeletePositionLevel(int positionLevelId, int userId, int subscriptionId)
+		async public Task<ActionResult> DeletePositionLevel(int positionLevelId, int userId, int subscriptionId)
 		{
 			try
 			{
@@ -34,7 +35,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				// Should only be here because of permission failures
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
-
+			await Task.Yield();
 			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId });
 		}
 	}

@@ -6,6 +6,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
@@ -28,11 +29,11 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>Manage Page.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult EditOrg(EditOrganizationViewModel model)
+		async public Task<ActionResult> EditOrg(EditOrganizationViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
-				this.AppService.UpdateOrganization(model.OrganizationId, model.OrganizationName, model.SiteUrl, model.AddressId, model.Address, model.City, model.SelectedStateId, model.SelectedCountryCode, model.PostalCode, model.PhoneNumber, model.FaxNumber, null);
+				await this.AppService.UpdateOrganization(model.OrganizationId, model.OrganizationName, model.SiteUrl, model.AddressId, model.Address, model.City, model.SelectedStateId, model.SelectedCountryCode, model.PostalCode, model.PhoneNumber, model.FaxNumber, null);
 				Notifications.Add(new BootstrapAlert(@Resources.Strings.OrganizationDetailsUpdated, Variety.Success));
 				return this.RedirectToAction(ActionConstants.OrganizationDetails, ControllerConstants.Account, new { id = model.OrganizationId });
 			}
@@ -47,11 +48,11 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		/// <param name="id">The organization id.</param>
 		[HttpGet]
-		public ActionResult EditOrg(int id)
+		async public Task<ActionResult> EditOrg(int id)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
 			bool canDelete = this.AppService.CheckOrgAction(AppService.OrgAction.DeleteOrganization, id, false);
-			var organization = this.AppService.GetOrganization(id);
+			var organization = await this.AppService.GetOrganization(id);
 			var model = new EditOrganizationViewModel()
 			{
 				OrganizationId = organization.OrganizationId,

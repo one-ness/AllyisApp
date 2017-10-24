@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Resources;
 using AllyisApps.Services.Auth;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -17,11 +18,11 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="id">Invitation ID</param>
 		/// <returns></returns>
 		[HttpGet]
-		public ActionResult ResendInvite(int id)
+		async public Task<ActionResult> ResendInvite(int id)
 		{
-			var invite = AppService.GetInvitationByID(id);
+			var invite = await AppService.GetInvitationByID(id);
 			AppService.CheckOrgAction(Services.AppService.OrgAction.AddUserToOrganization, invite.OrganizationId);
-			User usr = AppService.GetUserByEmail(invite.Email);
+			User usr = await AppService.GetUserByEmail(invite.Email);
 			string url = usr != null ?
 						Url.Action(ActionConstants.Index, ControllerConstants.Account, null, protocol: Request.Url.Scheme) :
 						Url.Action(ActionConstants.Register, ControllerConstants.Account, null, protocol: Request.Url.Scheme);

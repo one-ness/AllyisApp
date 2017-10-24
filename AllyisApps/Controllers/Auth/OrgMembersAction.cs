@@ -19,7 +19,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <summary>
 		/// Get: Account/OrgMembers
 		/// </summary>
-		public async Task<ActionResult> OrgMembers(int id)
+		async public Task<ActionResult> OrgMembers(int id)
 		{
 			var model = new OrganizationMembersViewModel2();
 			model.CanAddUser = this.AppService.CheckOrgAction(AppService.OrgAction.AddUserToOrganization, id, false);
@@ -46,7 +46,8 @@ namespace AllyisApps.Controllers.Auth
 				model.Users.Add(data);
 			}
 
-			model.OrganizationName = AppService.GetOrganization(id).OrganizationName;
+			var org = await this.AppService.GetOrganization(id);
+			model.OrganizationName = org.OrganizationName;
 
 			return View(model);
 		}

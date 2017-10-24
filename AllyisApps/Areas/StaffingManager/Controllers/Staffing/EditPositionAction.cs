@@ -16,6 +16,7 @@ using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.ViewModels;
 using System.Web.Script.Serialization;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -30,11 +31,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="positionId">The position id.</param>
 		/// <param name="subscriptionId">the subscription</param>
 		/// <returns>Presents a page for the creation of a new position.</returns>
-		public ActionResult EditPosition(int positionId, int subscriptionId)
+		async public Task<ActionResult> EditPosition(int positionId, int subscriptionId)
 		{
 			SetNavData(subscriptionId);
 
-			var editModel = setupEditPositionViewModel(positionId, subscriptionId);
+			var editModel = await setupEditPositionViewModel(positionId, subscriptionId);
 
 			return this.View(editModel);
 		}
@@ -43,15 +44,21 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// setup position setup viewmodel
 		/// </summary>
 		/// <returns></returns>
-		public EditPositionViewModel setupEditPositionViewModel(int positionId, int subscriptionId)
+		async public Task<EditPositionViewModel> setupEditPositionViewModel(int positionId, int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			Position pos = AppService.GetPosition(positionId);
+			Position pos = await AppService.GetPosition(positionId);
 
-			string subscriptionNameToDisplay = AppService.GetSubscriptionName(subscriptionId);
+			var subscriptionNameToDisplayTask = AppService.GetSubscriptionName(subscriptionId);
 			//TODO: this is piggy-backing off the get index action, create a new action that just gets items 3-5.
-			var infos = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
+			var infosTask = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
+
+			await Task.WhenAll(new Task[] { infosTask, subscriptionNameToDisplayTask });
+
+			string subscriptionNameToDisplay = subscriptionNameToDisplayTask.Result;
+			var infos = infosTask.Result;
+
 			var temp = new string[infos.Item2.Count];
 			var count = 0;
 			var assignedTags = "";
@@ -70,7 +77,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			}
 			var tags = new string[count];
 			for (int k = 0; k < count; k++) tags[k] = temp[k];
-			foreach(var tag in pos.Tags) assignedTags += "," + tag.TagName;
+			foreach (var tag in pos.Tags) assignedTags += "," + tag.TagName;
 			return new EditPositionViewModel
 			{
 				PositionId = pos.PositionId,
@@ -126,7 +133,6 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				},
 				SelectedCountryCode = pos.Address?.CountryCode,
 				SelectedStateId = pos.Address?.StateId
-
 			};
 		}
 
@@ -136,7 +142,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="model">The Customer ViewModel.</param>
 		/// <param name="subscriptionId">The sub id from the ViewModel.</param>
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
-		public ActionResult SubmitUpdatePosition(EditPositionViewModel model, int subscriptionId)
+		async public Task<ActionResult> SubmitUpdatePosition(EditPositionViewModel model, int subscriptionId)
 		{
 			if (ModelState.IsValid)
 			{
@@ -157,12 +163,13 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 							else tags.Add(new Tag { TagName = tag, TagId = -1, PositionId = -1 });
 						}
 					}
-					if(model.PositionStatusId == 0)
+					if (model.PositionStatusId == 0)
 					{
-						model.PositionStatusId = AppService.GetStaffingDefaultStatus(subInfo.OrganizationId)[0];
+						var defaultGet = await AppService.GetStaffingDefaultStatus(subInfo.OrganizationId);
+						model.PositionStatusId = defaultGet[0];
 					}
 				}
-				int? positionId = AppService.UpdatePosition(
+				int? positionId = await AppService.UpdatePosition(
 					new Position()
 					{
 						OrganizationId = model.OrganizationId,

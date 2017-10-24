@@ -6,6 +6,7 @@
 
 using System.Data;
 using System.IO;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
@@ -30,7 +31,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Import(int subscriptionId, HttpPostedFileBase file)
+		async public Task<ActionResult> Import(int subscriptionId, HttpPostedFileBase file)
 		{
 			int organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 
@@ -68,7 +69,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					DataSet result = reader.AsDataSet();
 					reader.Close();
 
-					string[] formattedResult = ImportMessageFormatter.FormatImportResult(AppService.Import(result, subscriptionId: subscriptionId));
+					string[] formattedResult = ImportMessageFormatter.FormatImportResult(await AppService.Import(result, subscriptionId: subscriptionId));
 					if (!string.IsNullOrEmpty(formattedResult[0]))
 					{
 						Notifications.Add(new AllyisApps.Core.Alert.BootstrapAlert(formattedResult[0], AllyisApps.Core.Alert.Variety.Success));

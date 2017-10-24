@@ -6,6 +6,7 @@
 
 using System.Data;
 using System.IO;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -31,7 +32,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult CustomerImport(int subscriptionId, ExpenseFile file)
+		async public Task<ActionResult> CustomerImport(int subscriptionId, ExpenseFile file)
 		{
 			// TODO: Replace ModelState errors with exception catches and notifications
 			// TODO: Buff up the error handling (catch errors from import functions, etc.)
@@ -70,7 +71,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					DataSet result = reader.AsDataSet();
 					reader.Close();
 
-					string[] formattedResult = ImportMessageFormatter.FormatImportResult(AppService.Import(result, subscriptionId: subscriptionId));
+					string[] formattedResult = ImportMessageFormatter.FormatImportResult(await AppService.Import(result, subscriptionId: subscriptionId));
 					if (!string.IsNullOrEmpty(formattedResult[0]))
 					{
 						Notifications.Add(new BootstrapAlert(formattedResult[0], Variety.Success));

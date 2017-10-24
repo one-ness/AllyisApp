@@ -27,6 +27,7 @@ namespace AllyisApps.Controllers.Auth
 			};
 
 			Response.AppendHeader("Content-Disposition", cd.ToString());
+
 			return this.File(new System.Text.UTF8Encoding().GetBytes(dir), "text/csv");
 		}
 	}
