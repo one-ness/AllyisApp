@@ -55,7 +55,7 @@
 					@data_selected_text_format = "count > 2",
 					@data_width = "fit"
 				})
-			<div class="btn-group pull-right" style="padding-right:15px;">
+			<div class="pull-right dropdown" style="padding-right:15px;">
 				<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					Actions
 				</button>
@@ -177,7 +177,7 @@
 	<div class="pageContainer"></div>
 </div>
 
-<div class="row">
+<div class="row" style="padding-right: 15px; padding-left: 15px;">
 	<div class="panel panel-default pull-left">
 		<div class="panel-heading" style="background-color:transparent !important; padding:5px 10px;">Legend</div>
 		<div class="panel-body" style="padding:5px;">
@@ -230,35 +230,37 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<div class="slim">
-					<div class="row">
-						<div class="col-xs-6">User Name:</div>
-						<div class="col-xs-6" id="modal-details-name"></div>
-					</div>
-					<div class="row">
-						<div class="col-xs-6">Customer:</div>
-						<div class="col-xs-6" id="modal-details-customer"></div>
-					</div>
-					<div class="row">
-						<div class="col-xs-6">Project:</div>
-						<div class="col-xs-6" id="modal-details-project"></div>
-					</div>
-					<div class="row">
-						<div class="col-xs-6">Pay Type:</div>
-						<div class="col-xs-6" id="modal-details-pay-type"></div>
-					</div>
-					<div class="row">
-						<div class="col-xs-6">Duration:</div>
-						<div class="col-xs-6" id="modal-details-duration"></div>
-					</div>
-					<div class="row">
-						<div class="col-xs-6">Description:</div>
-						<div class="col-xs-6" id="modal-details-description"></div>
-					</div>
-					<div class="row">
-						<div class="col-xs-6">Status:</div>
-						<div class="col-xs-6" id="modal-details-status"></div>
-					</div>
+				<div class="row">
+					<div class="col-xs-6">User Name:</div>
+					<div class="col-xs-6" id="modal-details-name"></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">Customer:</div>
+					<div class="col-xs-6" id="modal-details-customer"></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">Project:</div>
+					<div class="col-xs-6" id="modal-details-project"></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">Pay Type:</div>
+					<div class="col-xs-6" id="modal-details-pay-type"></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">Duration:</div>
+					<div class="col-xs-6" id="modal-details-duration"></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">Description:</div>
+					<div class="col-xs-6" id="modal-details-description"></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">Status:</div>
+					<div class="col-xs-6" id="modal-details-status"></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">Locked:</div>
+					<div class="col-xs-6" id="modal-details-locked"></div>
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -464,6 +466,7 @@
 			$("#modal-details-duration").text(timeEntry.Duration);
 			$("#modal-details-description").text(timeEntry.Description || "None");
 			$("#modal-details-status").text(timeEntry.TimeEntryStatusName);
+			$("#modal-details-locked").text(timeEntry.IsLocked ? "Yes" : "No");
 			$('#time-entry-details-modal').modal();
 		});
 

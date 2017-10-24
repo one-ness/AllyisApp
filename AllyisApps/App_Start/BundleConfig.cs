@@ -62,7 +62,7 @@ namespace AllyisApps
 
 			bundles.Add(new ScriptBundle("~/bundles/AccountManage").Include(
 				"~/Scripts/allyis-account-manage.js"/*,
-                "~/Scripts/allyis-pages-with-filter.js"*/));
+				"~/Scripts/allyis-pages-with-filter.js"*/));
 
 			bundles.Add(new ScriptBundle("~/bundles/AccountPermission").Include(
 				"~/Scripts/allyis-account-permission.js"));
@@ -118,6 +118,11 @@ namespace AllyisApps
 			underscore.CdnFallbackExpression = "window._";
 			bundles.Add(underscore);
 
+			Bundle tetherBundle = new ScriptBundle("~/bundles/tether", "https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js").Include(
+				"~/Scripts/tether.min.js");
+			tetherBundle.CdnFallbackExpression = "$.Tether";
+			bundles.Add(tetherBundle);
+
 			Bundle bootstrapJSBundle = new ScriptBundle("~/bundles/bootstrap", "//ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js").Include(
 						"~/Scripts/bootstrap/*.js");
 			bootstrapJSBundle.CdnFallbackExpression = "$.fn.modal";
@@ -127,18 +132,18 @@ namespace AllyisApps
 
 			// General Allyis styles
 			bundles.Add(new StyleBundle("~/Content/Site").Include(
-					  ////"~/Content/flex_box.css",
-					  ////"~/Content/bootstrap.css",
-					  "~/Content/Site.css"));
+					////"~/Content/flex_box.css",
+					////"~/Content/bootstrap.css",
+					"~/Content/Site.css"));
 
 			bundles.Add(new StyleBundle("~/Content/Timetracker").Include(
-					  "~/Content/timetracker.css"));
+					"~/Content/timetracker.css"));
 
 			bundles.Add(new StyleBundle("~/Content/BootstrapSelect").Include(
-					  "~/Content/bootstrap-select.min.css"));
+					"~/Content/css/bootstrap-select.min.css"));
 
 			// CDN links - fallbacks are much trickier with CSS as we cannot simply use a javascript variable as above. For now, no fallback provided.
-			bundles.Add(new StyleBundle("~/Content/Bootstrap", "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"));
+			bundles.Add(new StyleBundle("~/Content/bootstrap", "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"));
 
 			bundles.Add(new StyleBundle("~/Content/FontAwesome", "//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"));
 

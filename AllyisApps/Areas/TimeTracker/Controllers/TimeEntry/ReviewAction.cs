@@ -85,7 +85,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="endDate">Date range for reloading the page.</param>
 		/// <param name="startDate">Date range for reloading the page.</param>
 		/// <returns>Redirect to same page.</returns>
-		[HttpPost]
 		public ActionResult UpdateTimeEntryStatus(int subscriptionId, string timeEntryIdsJSON, int timeEntryStatusId, DateTime startDate, DateTime endDate)
 		{
 			var timeEntryIds = JsonConvert.DeserializeObject<List<int>>(timeEntryIdsJSON);
@@ -102,7 +101,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="lockDate">The date from which to all all time entries before.  Also the end date of the review page's date range.</param>
 		/// <exception cref="ArgumentOutOfRangeException">Expection for if an invalid enum is returned from the service layer.</exception>
 		/// <returns>Redirect to same page.</returns>
-		[HttpPost]
 		public ActionResult LockTimeEntries(int subscriptionId, DateTime startDate, DateTime lockDate)
 		{
 			LockEntriesResult result = AppService.LockTimeEntries(subscriptionId, lockDate);
@@ -132,7 +130,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="endDate">Used for the redirect back to the review page -- need to preserve the date range they came in with.</param>
 		/// <exception cref="ArgumentOutOfRangeException">Expection for if an invalid enum is returned from the service layer.</exception>
 		/// <returns>Redirect to same page.</returns>
-		[HttpPost]
 		public ActionResult UnlockTimeEntries(int subscriptionId, DateTime startDate, DateTime endDate)
 		{
 			UnlockEntriesResult result = AppService.UnlockTimeEntries(subscriptionId);
@@ -162,7 +159,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="endDate">Used for the redirect back to the review page -- need to preserve the date range they came in with.</param>
 		/// <exception cref="ArgumentOutOfRangeException">Expection for if an invalid enum is returned from the service layer.</exception>
 		/// <returns>Redirect to same page.</returns>
-		[HttpPost]
 		public ActionResult PayrollProcessTimeEntries(int subscriptionId, DateTime startDate, DateTime endDate)
 		{
 			PayrollProcessEntriesResult result = AppService.PayrollProcessTimeEntries(subscriptionId);
