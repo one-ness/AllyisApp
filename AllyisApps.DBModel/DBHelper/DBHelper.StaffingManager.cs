@@ -15,7 +15,6 @@ using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.Lookup;
 using AllyisApps.DBModel.StaffingManager;
 using Dapper;
-using System.Threading.Tasks;
 
 namespace AllyisApps.DBModel
 {
@@ -475,7 +474,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="PositionId">The id of the position.</param>
 		/// <returns>The applicant that submitted the given application.</returns>
-		public dynamic GetFullApplicationInfoByPositionId(int PositionId)
+		async public Task<dynamic> GetFullApplicationInfoByPositionId(int PositionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@positionId", PositionId);
@@ -483,7 +482,7 @@ namespace AllyisApps.DBModel
 			dynamic applicationsAndApplicantInfo = new ExpandoObject();
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var results = connection.QueryMultiple("[StaffingManager].[GetFullApplicationInfosByPositionId]", parameters, commandType: CommandType.StoredProcedure);
+				var results = await connection.QueryMultipleAsync("[StaffingManager].[GetFullApplicationInfosByPositionId]", parameters, commandType: CommandType.StoredProcedure);
 
 				applicationsAndApplicantInfo.applications = results.Read<dynamic>().ToList();
 				applicationsAndApplicantInfo.applicants = results.Read<dynamic>().ToList();
@@ -837,7 +836,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="position">The account object to be updated.</param>
 		/// <returns>Returns the number of rows updated.</returns>
-		public int UpdatePosition(dynamic position)
+		async public Task<int> UpdatePosition(dynamic position)
 		{
 			if (position == null)
 			{
@@ -872,7 +871,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Execute("[StaffingManager].[UpdatePosition]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.ExecuteAsync("[StaffingManager].[UpdatePosition]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 

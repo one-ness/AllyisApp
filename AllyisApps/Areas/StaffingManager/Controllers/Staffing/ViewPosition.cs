@@ -33,11 +33,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="positionId">The position id.</param>
 		/// <param name="subscriptionId">the subscription</param>
 		/// <returns>Presents a page for the creation of a new position.</returns>
-		public ActionResult ViewPosition(int positionId, int subscriptionId)
+		async public Task<ActionResult> ViewPosition(int positionId, int subscriptionId)
 		{
 			SetNavData(subscriptionId);
 
-			var viewModel = setupViewPositionViewModel(positionId, subscriptionId);
+			var viewModel = await setupViewPositionViewModel(positionId, subscriptionId);
 
 			return this.View(viewModel);
 		}

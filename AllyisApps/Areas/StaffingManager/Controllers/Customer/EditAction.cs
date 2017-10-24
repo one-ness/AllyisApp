@@ -13,7 +13,6 @@ using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Staffing.Customer;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {

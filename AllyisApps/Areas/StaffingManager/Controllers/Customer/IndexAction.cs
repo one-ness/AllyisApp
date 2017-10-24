@@ -14,7 +14,6 @@ using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
 using AllyisApps.ViewModels.TimeTracker.Customer;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {

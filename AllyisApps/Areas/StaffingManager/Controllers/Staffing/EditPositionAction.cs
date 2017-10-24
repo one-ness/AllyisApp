@@ -31,11 +31,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="positionId">The position id.</param>
 		/// <param name="subscriptionId">the subscription</param>
 		/// <returns>Presents a page for the creation of a new position.</returns>
-		public ActionResult EditPosition(int positionId, int subscriptionId)
+		async public Task<ActionResult> EditPosition(int positionId, int subscriptionId)
 		{
 			SetNavData(subscriptionId);
 
-			var editModel = setupEditPositionViewModel(positionId, subscriptionId);
+			var editModel = await setupEditPositionViewModel(positionId, subscriptionId);
 
 			return this.View(editModel);
 		}
@@ -57,7 +57,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 
 			await Task.WhenAll(new Task[] { infosTask, subscriptionNameToDisplayTask });
 
-			string subscriptionNameToDisplay = subscriptionNameToDisplayTask.Result;
+			subscriptionNameToDisplay = subscriptionNameToDisplayTask.Result;
 			var infos = infosTask.Result;
 
 			var temp = new string[infos.Item2.Count];
