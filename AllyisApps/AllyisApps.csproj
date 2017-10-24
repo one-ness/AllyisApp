@@ -473,13 +473,7 @@
     <Content Include="Areas\TimeTracker\Scripts\allyis-drp-init.js" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-index2.js" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-settings.js" />
-    <Content Include="Content\bootstrap\css\bootstrap-grid.css" />
-    <Content Include="Content\bootstrap\css\bootstrap-grid.min.css" />
-    <Content Include="Content\bootstrap\css\bootstrap-reboot.css" />
-    <Content Include="Content\bootstrap\css\bootstrap-reboot.min.css" />
-    <Content Include="Content\bootstrap\css\bootstrap.css" />
     <Content Include="Content\bootstrap\css\bootstrap.min.css" />
-    <Content Include="Scripts\bootstrap\bootstrap.js" />
     <Content Include="Scripts\bootstrap\bootstrap.min.js" />
     <Content Include="Content\css\ExpenseTracker.css" />
     <Content Include="Content\css\ExpenseTracker.min.css">
@@ -604,11 +598,6 @@
     <Content Include="Areas\TimeTracker\Views\TimeEntry\_ManageSettingSideBar.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\_ManageSettingSideBar2.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\Review.cshtml" />
-    <Content Include="Content\bootstrap\css\bootstrap-grid.css.map" />
-    <Content Include="Content\bootstrap\css\bootstrap-grid.min.css.map" />
-    <Content Include="Content\bootstrap\css\bootstrap-reboot.css.map" />
-    <Content Include="Content\bootstrap\css\bootstrap-reboot.min.css.map" />
-    <Content Include="Content\bootstrap\css\bootstrap.css.map" />
     <Content Include="Content\bootstrap\css\bootstrap.min.css.map" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.ttf" />
