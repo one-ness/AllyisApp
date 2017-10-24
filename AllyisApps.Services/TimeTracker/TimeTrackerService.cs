@@ -74,6 +74,52 @@ namespace AllyisApps.Services
 			return UpdateLockDate(organizationId, lockDate) == 1 ? UnlockEntriesResult.Success : UnlockEntriesResult.DBError;
 		}
 
+		public PayrollProcessEntriesResult PayrollProcessTimeEntries(int subscriptionId)
+		{
+			// Validate params
+			if (subscriptionId < 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(subscriptionId), $"{nameof(subscriptionId)} must not be negative.");
+			}
+
+			int organizationId = UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			if (organizationId < 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(organizationId), $"{nameof(organizationId)} must not be negative.");
+			}
+
+			// Validate that there are locked entries to process
+			Setting timeTrackerSettings = GetSettingsByOrganizationId(organizationId);
+			if (timeTrackerSettings.LockDate == null)
+			{
+				return PayrollProcessEntriesResult.NoLockDate;
+			}
+
+			// Validate that all statuses in the affected date range are correct (!Pending)
+			DateTime startDate = timeTrackerSettings.PayrollProcessedDate ?? System.Data.SqlTypes.SqlDateTime.MinValue.Value;
+			var timeEntries = DBHelper.GetTimeEntriesOverDateRange(organizationId, startDate, timeTrackerSettings.LockDate.Value).ToList();
+			if (timeEntries.Any(entry => entry.TimeEntryStatusId == (int)TimeEntryStatus.Pending))
+			{
+				return PayrollProcessEntriesResult.InvalidStatuses;
+			}
+
+			// Perform payroll process and lock date update,
+			// Validate no unexpected db behavior (should be only one row updated)
+			if (DBHelper.UpdatePayrollProcessedDate(organizationId, timeTrackerSettings.LockDate.Value) != 1
+				|| DBHelper.UpdateLockDate(organizationId, null) != 1)
+			{
+				return PayrollProcessEntriesResult.DBError;
+			}
+
+			//Update approved entries to payroll processed
+			timeEntries
+				.Where(entry => entry.TimeEntryStatusId == (int)TimeEntryStatus.Approved)
+				.ToList()
+				.ForEach(entry => DBHelper.UpdateTimeEntryStatusById(entry.TimeEntryId, (int)TimeEntryStatus.PayrollProcessed));
+
+			return PayrollProcessEntriesResult.Success;
+		}
+
 		#region public static
 
 		public static DateTime SetStartingDate(DateTime? date, int startOfWeek)

@@ -2050,6 +2050,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lock Entries.
+        /// </summary>
+        public static string LockEntries {
+            get {
+                return ResourceManager.GetString("LockEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Value of var \&quot;{0}\&quot; is not a valid option for LockEntriesResult.
         /// </summary>
         public static string LockEntriesResultOutOfRange {
@@ -2923,11 +2932,56 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Payroll Process.
+        /// </summary>
+        public static string PayrollProcess {
+            get {
+                return ResourceManager.GetString("PayrollProcess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot payroll process time entries because of a DB error..
+        /// </summary>
+        public static string PayrollProcessDBError {
+            get {
+                return ResourceManager.GetString("PayrollProcessDBError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Payroll Processed.
         /// </summary>
         public static string PayrollProcessed {
             get {
                 return ResourceManager.GetString("PayrollProcessed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot payroll process time entries because some of them are still pending..
+        /// </summary>
+        public static string PayrollProcessInvalidStatuses {
+            get {
+                return ResourceManager.GetString("PayrollProcessInvalidStatuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must lock time entries before changing them to payroll processed..
+        /// </summary>
+        public static string PayrollProcessNoLockDate {
+            get {
+                return ResourceManager.GetString("PayrollProcessNoLockDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully marked all locked and approved time entries as payroll processed..
+        /// </summary>
+        public static string PayrollProcessSuccess {
+            get {
+                return ResourceManager.GetString("PayrollProcessSuccess", resourceCulture);
             }
         }
         
@@ -4107,6 +4161,15 @@ namespace AllyisApps.Resources {
         public static string UnauthorizedReportsOtherUser {
             get {
                 return ResourceManager.GetString("UnauthorizedReportsOtherUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unlock Entries.
+        /// </summary>
+        public static string UnlockEntries {
+            get {
+                return ResourceManager.GetString("UnlockEntries", resourceCulture);
             }
         }
         

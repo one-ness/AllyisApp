@@ -118,18 +118,18 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Notifications.Add(new BootstrapAlert(string.Format(Strings.LockTimeEntriesSuccess, lockDate.ToShortDateString()), Variety.Success));
 					break;
 				default:
-					throw new ArgumentOutOfRangeException(string.Format(Strings.InvalidEnum, nameof(result), nameof(LockTimeEntries)));
+					throw new ArgumentOutOfRangeException(string.Format(Strings.InvalidEnum, nameof(result), nameof(LockEntriesResult)));
 			}
 
 			return RedirectToAction(ActionConstants.Review, new { subscriptionId, startDate, lockDate });
 		}
 
 		/// <summary>
-		/// Locks all time entries with date that is less than or equal to lockDate
+		/// Unlocks all time entries with date that is less than or equal to lockDate
 		/// </summary>
-		/// <param name="subscriptionId">Subscription that the lock operation will be performed on.</param>
+		/// <param name="subscriptionId">Subscription that the unlock operation will be performed on.</param>
 		/// <param name="startDate">Used for the redirect back to the review page -- need to preserve the date range they came in with.</param>
-		/// <param name="endDate">The date from which to all all time entries before.  Also the end date of the review page's date range.</param>
+		/// <param name="endDate">Used for the redirect back to the review page -- need to preserve the date range they came in with.</param>
 		/// <exception cref="ArgumentOutOfRangeException">Expection for if an invalid enum is returned from the service layer.</exception>
 		/// <returns>Redirect to same page.</returns>
 		[HttpPost]
@@ -148,7 +148,40 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Notifications.Add(new BootstrapAlert(Strings.UnlockTimeEntriesSuccess, Variety.Success));
 					break;
 				default:
-					throw new ArgumentOutOfRangeException(string.Format(Strings.InvalidEnum, nameof(result), nameof(UnlockTimeEntries)));
+					throw new ArgumentOutOfRangeException(string.Format(Strings.InvalidEnum, nameof(result), nameof(UnlockEntriesResult)));
+			}
+
+			return RedirectToAction(ActionConstants.Review, new { subscriptionId, startDate, endDate });
+		}
+
+		/// <summary>
+		/// Attempts to change the status of all entries between the lock date and the previous payroll process date to PayrollProcessed
+		/// </summary>
+		/// <param name="subscriptionId">Subscription that the unlock operation will be performed on.</param>
+		/// <param name="startDate">Used for the redirect back to the review page -- need to preserve the date range they came in with.</param>
+		/// <param name="endDate">Used for the redirect back to the review page -- need to preserve the date range they came in with.</param>
+		/// <exception cref="ArgumentOutOfRangeException">Expection for if an invalid enum is returned from the service layer.</exception>
+		/// <returns>Redirect to same page.</returns>
+		[HttpPost]
+		public ActionResult PayrollProcessTimeEntries(int subscriptionId, DateTime startDate, DateTime endDate)
+		{
+			PayrollProcessEntriesResult result = AppService.PayrollProcessTimeEntries(subscriptionId);
+			switch (result)
+			{
+				case PayrollProcessEntriesResult.NoLockDate:
+					Notifications.Add(new BootstrapAlert(Strings.PayrollProcessNoLockDate, Variety.Danger));
+					break;
+				case PayrollProcessEntriesResult.DBError:
+					Notifications.Add(new BootstrapAlert(Strings.PayrollProcessDBError, Variety.Danger));
+					break;
+				case PayrollProcessEntriesResult.InvalidStatuses:
+					Notifications.Add(new BootstrapAlert(Strings.PayrollProcessInvalidStatuses, Variety.Danger));
+					break;
+				case PayrollProcessEntriesResult.Success:
+					Notifications.Add(new BootstrapAlert(Strings.PayrollProcessSuccess, Variety.Success));
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(string.Format(Strings.InvalidEnum, nameof(result), nameof(PayrollProcessEntriesResult)));
 			}
 
 			return RedirectToAction(ActionConstants.Review, new { subscriptionId, startDate, endDate });

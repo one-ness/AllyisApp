@@ -1618,4 +1618,25 @@
 	<data name="InvalidEnum" xml:space="preserve">
     <value>Value of var \"{0}\" is not a valid enum in {1}.</value>
   </data>
+	<data name="LockEntries" xml:space="preserve">
+    <value>Lock Entries</value>
+  </data>
+	<data name="UnlockEntries" xml:space="preserve">
+    <value>Unlock Entries</value>
+  </data>
+	<data name="PayrollProcess" xml:space="preserve">
+    <value>Payroll Process</value>
+  </data>
+	<data name="PayrollProcessNoLockDate" xml:space="preserve">
+    <value>You must lock time entries before changing them to payroll processed.</value>
+  </data>
+	<data name="PayrollProcessDBError" xml:space="preserve">
+    <value>Cannot payroll process time entries because of a DB error.</value>
+  </data>
+	<data name="PayrollProcessInvalidStatuses" xml:space="preserve">
+    <value>Cannot payroll process time entries because some of them are still pending.</value>
+  </data>
+	<data name="PayrollProcessSuccess" xml:space="preserve">
+    <value>Successfully marked all locked and approved time entries as payroll processed.</value>
+  </data>
 </root>

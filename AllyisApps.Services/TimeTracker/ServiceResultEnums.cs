@@ -13,4 +13,12 @@
 		DBError,
 		Success
 	}
+
+	public enum PayrollProcessEntriesResult
+	{
+		NoLockDate,
+		DBError,
+		Success,
+		InvalidStatuses
+	}
 }
