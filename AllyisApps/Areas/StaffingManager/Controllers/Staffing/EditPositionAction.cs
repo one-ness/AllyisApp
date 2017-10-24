@@ -56,7 +56,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 
 			await Task.WhenAll(new Task[] { infosTask, subscriptionNameToDisplayTask });
 
-			subscriptionNameToDisplay = subscriptionNameToDisplayTask.Result;
+			string subscriptionNameToDisplay = subscriptionNameToDisplayTask.Result;
 			var infos = infosTask.Result;
 
 			var temp = new string[infos.Item2.Count];
