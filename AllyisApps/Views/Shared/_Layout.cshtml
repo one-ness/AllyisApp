@@ -21,26 +21,33 @@
 	@Styles.Render("~/Content/FontAwesome")
 	@Scripts.Render("~/bundles/underscore")
 	@RenderSection("css", required: false)
-	@*@Styles.Render(DisplayHints.LayoutThemeBundle)*@
 	<link href="@Url.Content(DisplayHints.LayoutThemeBundle.Replace("Content/", "Content/css/") + ".css")" rel="stylesheet" type="text/css" />
 	<meta name="description" content="@Strings.MetaDescription" />
 </head>
 <body id="@DisplayHints.PageBodyId" class="@DisplayHints.PageBodyClasses">
 	@Html.Partial("_Header")
+	<!-- breadcrumbs partial should be rendered here -->
+	@Html.Partial("_NotificationPartial")
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-12">
-				@Html.Partial("_NotificationPartial")
 				@if (!string.IsNullOrWhiteSpace(ViewBag.Title))
 			{<h1 class="text-center">@ViewBag.Title</h1>}
 				@if (!string.IsNullOrWhiteSpace(ViewBag.Subtitle))
 			{<h4 class="text-center">@ViewBag.Subtitle</h4>}
 				@if (!string.IsNullOrWhiteSpace(ViewBag.Description))
 			{<p class="text-center">@ViewBag.Description</p>}
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
 				@RenderBody()
 			</div>
 		</div>
 	</div>
+	
 	@Html.Action(ActionConstants.FooterPartial, ControllerConstants.Shared, new { area = "" })
 
 	@RenderSection("modals", required: false)
