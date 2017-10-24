@@ -25,7 +25,7 @@
 				</h2>
 			</div>
 			<div class="panel-body">
-				<div class="col-sm-9 col index-details">
+				<div class="col-sm-9 index-details">
 					<p>
 						<label>@Strings.PhoneNumber:</label>
 						@Model.UserInfo.PhoneNumber @Model.UserInfo.PhoneExtension
@@ -36,7 +36,7 @@
 						<span class="address-row">@cityState @Model.UserInfo.PostalCode</span>
 					</p>
 				</div>
-				<div class="col-sm-3 col vertically-stacked-buttons text-right" style="padding-right:5px">
+				<div class="col-sm-3 vertically-stacked-buttons text-right" style="padding-right:5px">
 					<a href="@Url.Action(ActionConstants.ChangePassword, ControllerConstants.Account)" class="btn btn-default ovrd-btn">@Strings.ChangePassword <i class="fa fa-user-secret"></i></a>
 					<a href="@Url.Action(ActionConstants.EditProfile, ControllerConstants.Account)" class="btn btn-default ovrd-btn spaced-btn">@Strings.EditProfile <i class="fa fa-info-circle"></i></a>
 				</div>
@@ -60,18 +60,18 @@
 						@foreach (var invite in Model.Invitations)
 						{
 							<div class="invites">
-								<span class="col-xs-4 col-xs-6 col" style="margin-top:25px;">@invite.OrganizationName</span>
+								<span class="col-xs-4 col-xs-6" style="margin-top:25px;">@invite.OrganizationName</span>
 								@using (Html.BeginForm(ActionConstants.AcceptInvitation, ControllerConstants.Account, new { id = @invite.InvitationId }, FormMethod.Post))
 								{
 
-									<span class="col-xs-4 col-xs-3 col pull-right" style="margin-top:15px;">
-										<input type="submit" value="@Strings.Accept" class="btn btn-primary col-xs-12 col" />
+									<span class="col-xs-4 col-xs-3 pull-right" style="margin-top:15px;">
+										<input type="submit" value="@Strings.Accept" class="btn btn-primary col-xs-12" />
 									</span>
 								}
 								@using (Html.BeginForm(ActionConstants.RejectInvitation, ControllerConstants.Account, new { id = @invite.InvitationId }, FormMethod.Post))
 								{
-									<span class="col-xs-4 col-xs-3 col pull-right" style="margin-top:15px;">
-										<input type="submit" value="@Strings.Reject" class="btn btn-primary col-xs-12 col" />
+									<span class="col-xs-4 col-xs-3 pull-right" style="margin-top:15px;">
+										<input type="submit" value="@Strings.Reject" class="btn btn-primary col-xs-12" />
 									</span>
 								}
 							</div>
@@ -84,19 +84,19 @@
 </div>
 
 <div class="row">
-	<div class="col-md-push-2 col-md-8 col">
+	<div class="col-md-push-2 col-md-8">
 		<div class="row" style="margin-bottom:5px;">
-			<div class="col-xs-6 col">
+			<div class="col-xs-6">
 				<h1 class="pull-left" style="margin-bottom:0px; margin-top:0px;">@Strings.YourOrganizations</h1>
 			</div>
-			<div class="col-xs-6 col">
+			<div class="col-xs-6">
 				<a href="@Url.Action(ActionConstants.CreateOrg, ControllerConstants.Account)" class="btn btn-default pull-right">@Strings.CreateOrganization <i class="fa fa-building"></i></a>
 			</div>
 		</div>
 		@if (Model.Organizations.Count <= 0)
 		{
 			<div class="row">
-				<div class="col-xs-12 col">
+				<div class="col-xs-12">
 					<p><i>@Strings.NoOrganizationMessage</i></p>
 					<p><i>@Strings.NoOrganizationMessage2</i></p>
 				</div>
@@ -111,14 +111,14 @@
 				var OrgcityState = org.City != null && org.State != null ? org.City + ", " + org.State : org.City + org.State;
 
 				<div class="row">
-					<div class="col-md-12 col">
+					<div class="col-md-12">
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<div class="row">
-									<div class="col-xs-9 col">
+									<div class="col-xs-9">
 										<h2 style="margin-top:0px; margin-bottom:0px;">@title</h2>
 									</div>
-									<div class="col-xs-3 col">
+									<div class="col-xs-3l">
 										<div class="dropdown pull-right">
 											<a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> @Strings.Manage <i class="fa fa-caret-down"></i></a>
 											<ul class="dropdown-menu">
@@ -149,7 +149,7 @@
 								</div>
 							</div>
 							<div class="panel-body">
-								<div class="col-sm-8 col index-details">
+								<div class="col-sm-8 index-details">
 									<p>
 										<label>@Strings.PhoneNumber:</label>
 										@org.PhoneNumber
@@ -160,7 +160,7 @@
 										<span class="address-row">@OrgcityState @org.PostalCode</span>
 									</p>
 								</div>
-								<div class="col-sm-4 col index-details">
+								<div class="col-sm-4 index-details">
 									<p>
 										<label>@Strings.Website:</label>
 										@{
@@ -180,7 +180,7 @@
 										@org.FaxNumber
 									</p>
 								</div>
-								<div class="col-md-12 col" style="height: 100%; margin-top:15px; display: flex; flex-wrap: wrap; justify-content: space-around; clear: both;">
+								<div class="col-md-12" style="height: 100%; margin-top:15px; display: flex; flex-wrap: wrap; justify-content: space-around; clear: both;">
 									@if (org.Subscriptions.Count <= 0)
 									{
 										<p>@Strings.NoSubscriptionMessage</p>
