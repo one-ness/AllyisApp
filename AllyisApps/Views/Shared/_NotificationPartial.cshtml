@@ -1,25 +1,24 @@
-﻿@*@{
-        ViewBag.Alerts.Add(new BootstrapAlert("test", BootstrapAlert.Variety.Success));
-        ViewBag.Alerts.Add(new BootstrapAlert("test2"));
-    }*@
+﻿<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			@if (ViewBag.Alerts != null)
+			{
 
-<div class="container text-center" style="width:80%;">
-    @if(ViewBag.Alerts != null)
-    {
-
-        foreach (AllyisApps.Core.Alert.BootstrapAlert a in ViewBag.Alerts)
-        {
-                <div class="alert alert-dismissable fade in @a.Type.Classes">
-					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    @if(a.IsHtmlString)
-                    {
-                        @(new HtmlString(a.Text))
-                    }
-                    else
-                    {
-                        @a.Text
-                    }
-                </div>
-        }
-   }
+				foreach (AllyisApps.Core.Alert.BootstrapAlert a in ViewBag.Alerts)
+				{
+					<div class="alert alert-dismissable fade in @a.Type.Classes text-center ovrd-alert">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						@if (a.IsHtmlString)
+						{
+							@(new HtmlString(a.Text))
+						}
+						else
+						{
+							@a.Text
+						}
+					</div>
+				}
+			}
+		</div>
+	</div>
 </div>

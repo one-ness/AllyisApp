@@ -6,17 +6,17 @@
 	var cityState = Model.UserInfo.City != null && Model.UserInfo.State != null ? Model.UserInfo.City + ", " + Model.UserInfo.State : string.Empty;
 }
 
-<div class="ovrd-row row">
-	<div class="ovrd-col-md-8 col-md-8 ovrd-col-md-push-2 col-md-push-2 col">
+<div class="row">
+	<div class="col-md-8 col-md-push-2">
 
-		<div class="ovrd-row row">
-			<div class="ovrd-col-xs-12 col-xs-12 col">
+		<div class="row">
+			<div class="col-xs-12">
 				<h1 class="pull-left" style="margin-bottom:5px; margin-top:0px;">@Strings.MyAccount</h1>
 			</div>
 		</div>
 
-		<div class="ovrd-panel panel ovrd-panel-default panel-default">
-			<div class="ovrd-panel-heading panel-heading">
+		<div class="panel panel-default">
+			<div class="panel-heading">
 				<h2 style="margin-top: 0px; margin-bottom: 0px;">
 					@Model.UserInfo.FirstName @Model.UserInfo.LastName
 					<span class="small text-muted" style="margin-left: 10px;">
@@ -24,8 +24,8 @@
 					</span>
 				</h2>
 			</div>
-			<div class="ovrd-panel-body panel-body">
-				<div class="ovrd-col-sm-9 col-sm-9 col index-details">
+			<div class="panel-body">
+				<div class="col-sm-9 col index-details">
 					<p>
 						<label>@Strings.PhoneNumber:</label>
 						@Model.UserInfo.PhoneNumber @Model.UserInfo.PhoneExtension
@@ -36,9 +36,9 @@
 						<span class="address-row">@cityState @Model.UserInfo.PostalCode</span>
 					</p>
 				</div>
-				<div class="ovrd-col-sm-3 col-sm-3 col vertically-stacked-buttons text-right" style="padding-right:5px">
-					<a href="@Url.Action(ActionConstants.ChangePassword, ControllerConstants.Account)" class="ovrd-btn btn ovrd-btn-default btn-default">@Strings.ChangePassword <i class="ovrd-fa fa ovrd-fa-user-secret fa-user-secret"></i></a>
-					<a href="@Url.Action(ActionConstants.EditProfile, ControllerConstants.Account)" class="ovrd-btn btn ovrd-btn-default btn-default">@Strings.EditProfile <i class="ovrd-fa fa ovrd-fa-info-circle fa-info-circle"></i></a>
+				<div class="col-sm-3 col vertically-stacked-buttons text-right" style="padding-right:5px">
+					<a href="@Url.Action(ActionConstants.ChangePassword, ControllerConstants.Account)" class=btn btn-default">@Strings.ChangePassword <i class="ovrd-fa fa ovrd-fa-user-secret fa-user-secret"></i></a>
+					<a href="@Url.Action(ActionConstants.EditProfile, ControllerConstants.Account)" class="btn btn-default">@Strings.EditProfile <i class="ovrd-fa fa ovrd-fa-info-circle fa-info-circle"></i></a>
 				</div>
 			</div>
 

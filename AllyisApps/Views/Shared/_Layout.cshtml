@@ -9,58 +9,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="/Content/icons/fav128.png?v=2" sizes="128x128" type="image/png" />
-    <link rel="icon" href="/Content/icons/fav64.png?v=2" sizes="64x64" type="image/png" />
-    <link rel="icon" href="/Content/icons/fav32.png?v=2" sizes="32x32" type="image/png" />
-    <link rel="icon" href="/Content/icons/fav16.png?v=2" sizes="16x16" type="image/png" />
-    <link rel="shortcut icon" href="favicon.ico?v=2" />
-    <title>@title</title>
-    @Styles.Render("~/Content/Bootstrap")
-    @Styles.Render("~/Content/FontAwesome")
-    @Scripts.Render("~/bundles/underscore")
-    @RenderSection("css", required: false)
-    @*@Styles.Render(DisplayHints.LayoutThemeBundle)*@
-    <link href="@Url.Content(DisplayHints.LayoutThemeBundle + ".css")" rel="stylesheet" type="text/css" />
-    <meta name="description" content="@Strings.MetaDescription" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="shortcut icon" href="/Content/icons/fav128.png?v=2" sizes="128x128" type="image/png" />
+	<link rel="icon" href="/Content/icons/fav64.png?v=2" sizes="64x64" type="image/png" />
+	<link rel="icon" href="/Content/icons/fav32.png?v=2" sizes="32x32" type="image/png" />
+	<link rel="icon" href="/Content/icons/fav16.png?v=2" sizes="16x16" type="image/png" />
+	<link rel="shortcut icon" href="favicon.ico?v=2" />
+	<title>@title</title>
+	@Styles.Render("~/Content/Bootstrap")
+	@Styles.Render("~/Content/FontAwesome")
+	@Scripts.Render("~/bundles/underscore")
+	@RenderSection("css", required: false)
+	<link href="@Url.Content(DisplayHints.LayoutThemeBundle.Replace("Content/", "Content/css/") + ".css")" rel="stylesheet" type="text/css" />
+	<meta name="description" content="@Strings.MetaDescription" />
 </head>
 <body id="@DisplayHints.PageBodyId" class="@DisplayHints.PageBodyClasses">
-    <div class="container slim" id="body-container">
-        <div class="ovrd-row row" id="header-row">
-            <div class="col" id="header-col">
-                @Html.Partial("_Header")
-            </div>
-        </div>
-        <div class="ovrd-row row xs-row-padding" id="main-row">
-            <div class="col" id="main-col">
-                @Html.Partial("_NotificationPartial")
-                        <div class="ovrd-row row" id="title-row">
-                            @if (!string.IsNullOrWhiteSpace(ViewBag.Title))
-                                {<h1 class="text-center">@ViewBag.Title</h1>}
-                            @if (!string.IsNullOrWhiteSpace(ViewBag.Subtitle))
-                                {<h4 class="text-center">@ViewBag.Subtitle</h4>}
-                            @if (!string.IsNullOrWhiteSpace(ViewBag.Description))
-                                {<p class="text-center">@ViewBag.Description</p>}
-                        </div>
-                        @RenderBody()
-            </div>
-        </div>
-        <div class="ovrd-row row" id="footer-row">
-            <div class="col" id="footer-col">
-                @Html.Action(ActionConstants.FooterPartial, ControllerConstants.Shared, new { area = "" })
-            </div>
-        </div>
-    </div>
+	@Html.Partial("_Header")
+	<!-- breadcrumbs partial should be rendered here -->
+	@Html.Partial("_NotificationPartial")
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				@if (!string.IsNullOrWhiteSpace(ViewBag.Title))
+			{<h1 class="text-center">@ViewBag.Title</h1>}
+				@if (!string.IsNullOrWhiteSpace(ViewBag.Subtitle))
+			{<h4 class="text-center">@ViewBag.Subtitle</h4>}
+				@if (!string.IsNullOrWhiteSpace(ViewBag.Description))
+			{<p class="text-center">@ViewBag.Description</p>}
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				@RenderBody()
+			</div>
+		</div>
+	</div>
+	
+	@Html.Action(ActionConstants.FooterPartial, ControllerConstants.Shared, new { area = "" })
 
-    @RenderSection("modals", required: false)
-
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/jqueryuoval")
-    @Scripts.Render("~/bundles/jquerytransit")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+	@RenderSection("modals", required: false)
+	@Scripts.Render("~/bundles/jquery")
+	@Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/jqueryuoval")
+	@Scripts.Render("~/bundles/jquerytransit")
+	@Scripts.Render("~/bundles/bootstrap")
+	@RenderSection("scripts", required: false)
 </body>
 </html>
 
