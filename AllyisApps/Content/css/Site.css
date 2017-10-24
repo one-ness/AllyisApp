@@ -166,6 +166,9 @@ input.members-checkbox {
 	border-color: #ddd;
 }
 
+.field-validation-error > span {
+	color: #a94442;
+}
 
 
 
