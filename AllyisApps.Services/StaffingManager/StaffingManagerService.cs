@@ -537,12 +537,12 @@ namespace AllyisApps.Services
 		{
 			var applications = applicationAndApplicantInfo.applications;
 			var results = new List<Application>();
-			foreach(var application in applications)
+			foreach (var application in applications)
 			{
 				var Applicant = new Applicant();
 				foreach (var applicant in applicationAndApplicantInfo.applicants)
 				{
-					if(applicant.ApplicantId == application.ApplicantId)
+					if (applicant.ApplicantId == application.ApplicantId)
 					{
 						Applicant.ApplicantId = applicant.ApplicantId;
 						Applicant.FirstName = applicant.FirstName;
@@ -560,7 +560,8 @@ namespace AllyisApps.Services
 				{
 					if (document.ApplicationId == application.ApplicationId)
 					{
-						ApplicationDocuments.Add( new ApplicationDocument() {
+						ApplicationDocuments.Add(new ApplicationDocument()
+						{
 							ApplicationId = document.ApplicationId,
 							ApplicationDocumentId = document.ApplicationDocumentId,
 							DocumentLink = document.DocumentLink,
@@ -568,8 +569,8 @@ namespace AllyisApps.Services
 						});
 					}
 				}
-				results.Add( new Application() {
-
+				results.Add(new Application()
+				{
 					ApplicantId = application.ApplicantId,
 					ApplicationId = application.ApplicationId,
 					ApplicationStatus = application.ApplicationStatusId,
@@ -578,7 +579,6 @@ namespace AllyisApps.Services
 					Applicant = Applicant,
 					ApplicationDocuments = ApplicationDocuments
 				});
-
 			}
 			return results;
 		}
@@ -694,7 +694,6 @@ namespace AllyisApps.Services
 				}
 				catch (RuntimeBinderException)
 				{
-
 				}
 
 				positions.Add(newPosition);
@@ -726,6 +725,7 @@ namespace AllyisApps.Services
 				.ConvertAll(x => new Tag { TagId = x.TagId, TagName = x.TagName });
 			return taglist;
 		}
+
 		/// <summary>
 		/// Converts a TagDBEntity DB layer object to a Tag service layer object.
 		/// </summary>

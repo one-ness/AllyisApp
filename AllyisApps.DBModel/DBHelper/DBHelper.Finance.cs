@@ -199,7 +199,7 @@ namespace AllyisApps.DBModel
 		/// <param name="userId"></param>
 		/// <param name="orgId"></param>
 		/// <returns>The ORganizationUserDBEntity object.</returns>
-		public decimal GetUserOrgMaxAmount(int userId, int orgId)
+		async public Task<decimal> GetUserOrgMaxAmount(int userId, int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
@@ -207,7 +207,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				var orgUsers = connection.Query<decimal>("[Auth].[GetOrgUserMaxAmount]", parameters, commandType: CommandType.StoredProcedure);
+				var orgUsers = await connection.QueryAsync<decimal>("[Auth].[GetOrgUserMaxAmount]", parameters, commandType: CommandType.StoredProcedure);
 				return orgUsers.FirstOrDefault();
 			}
 		}

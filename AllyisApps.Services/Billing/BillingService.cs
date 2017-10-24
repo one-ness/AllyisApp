@@ -57,7 +57,7 @@ namespace AllyisApps.Services
 		/// <param name="token">The BillingServicesToken being used for this charge.</param>
 		/// <param name="orgId">.</param>
 		[CLSCompliant(false)]
-		async public void UpdateBillingInfo(string billingServicesEmail, BillingServicesToken token, int orgId)
+		async public Task UpdateBillingInfo(string billingServicesEmail, BillingServicesToken token, int orgId)
 		{
 			#region Validation
 
@@ -698,7 +698,7 @@ namespace AllyisApps.Services
 
 			// set the creating user as highest level
 			int productRoleId = 0;
-			switch(selectedSku.ProductId)
+			switch (selectedSku.ProductId)
 			{
 				case ProductIdEnum.ExpenseTracker:
 					productRoleId = (int)ExpenseTrackerRole.SuperUser;
@@ -723,7 +723,7 @@ namespace AllyisApps.Services
 			await this.DBHelper.CreateSubscription(organizationId, (int)skuId, subscriptionName, UserContext.UserId, productRoleId);
 		}
 
-		async public void UpdateSubscriptionName(int subscriptionId, string subscriptionName)
+		async public Task UpdateSubscriptionName(int subscriptionId, string subscriptionName)
 		{
 			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException("subscriptionId");
 			if (string.IsNullOrWhiteSpace(subscriptionName)) throw new ArgumentNullException("subscriptionName");

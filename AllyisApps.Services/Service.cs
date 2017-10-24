@@ -337,7 +337,7 @@ namespace AllyisApps.Services
 		async public Task<IEnumerable<PayClass>> GetPayClassesBySubscriptionId(int subscriptionId)
 		{
 			var getClass = await DBHelper.GetPayClasses(UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
-			return  getClass.Select(pc => InitializePayClassInfo(pc));
+			return getClass.Select(pc => InitializePayClassInfo(pc));
 		}
 
 		/// <summary>

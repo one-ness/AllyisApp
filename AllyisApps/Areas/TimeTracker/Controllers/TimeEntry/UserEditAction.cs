@@ -6,11 +6,11 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -28,8 +28,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		async public Task<ActionResult> UserEdit(int subscriptionId, int userId)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
-			var infos = AppService.GetProjectsForOrgAndUser(userId, subscriptionId);
-			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
+			var infosTask = AppService.GetProjectsForOrgAndUser(userId, subscriptionId);
+			var subscriptionNameToDisplayTask = AppService.GetSubscriptionName(subscriptionId);
+
+			await Task.WhenAll(new Task[] { infosTask, subscriptionNameToDisplayTask });
+
+			var infos = infosTask.Result;
+			string subscriptionNameToDisplay = subscriptionNameToDisplayTask.Result;
+
 			return this.View(new UserEditViewModel
 			{
 				UserId = this.AppService.UserContext.UserId,

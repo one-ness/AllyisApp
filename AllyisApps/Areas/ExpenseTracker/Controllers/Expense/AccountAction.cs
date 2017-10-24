@@ -21,7 +21,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Accounts, subscriptionId);
 
-			SetNavData(subscriptionId);
+			await SetNavData(subscriptionId);
 
 			AccountPageViewModel model = new AccountPageViewModel();
 			var subInfo = await AppService.GetSubscription(subscriptionId);

@@ -51,8 +51,15 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			Position pos = await AppService.GetPosition(positionId);
 
 			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
+			var subscriptionNameToDisplayTask = AppService.GetSubscriptionName(subscriptionId);
 			//TODO: this is piggy-backing off the get index action, create a new action that just gets items 3-5.
-			var infos = await AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
+			var infosTask = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
+
+			await Task.WhenAll(new Task[] { infosTask, subscriptionNameToDisplayTask });
+
+			string subscriptionNameToDisplay = subscriptionNameToDisplayTask.Result;
+			var infos = infosTask.Result;
+
 			var temp = new string[infos.Item2.Count];
 			var count = 0;
 			var assignedTags = "";
@@ -71,7 +78,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			}
 			var tags = new string[count];
 			for (int k = 0; k < count; k++) tags[k] = temp[k];
-			foreach(var tag in pos.Tags) assignedTags += "," + tag.TagName;
+			foreach (var tag in pos.Tags) assignedTags += "," + tag.TagName;
 			return new EditPositionViewModel
 			{
 				PositionId = pos.PositionId,
@@ -127,7 +134,6 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				},
 				SelectedCountryCode = pos.Address?.CountryCode,
 				SelectedStateId = pos.Address?.StateId
-
 			};
 		}
 
@@ -158,7 +164,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 							else tags.Add(new Tag { TagName = tag, TagId = -1, PositionId = -1 });
 						}
 					}
-					if(model.PositionStatusId == 0)
+					if (model.PositionStatusId == 0)
 					{
 						var defaultGet = await AppService.GetStaffingDefaultStatus(subInfo.OrganizationId);
 						model.PositionStatusId = defaultGet[0];

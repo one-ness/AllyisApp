@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
@@ -65,8 +66,14 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			var infos = await AppService.GetProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
-			var inactiveInfo = AppService.GetInactiveProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
+			var infosTask = AppService.GetProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
+			var inactiveInfoTask = AppService.GetInactiveProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
+
+			await Task.WhenAll(new Task[] { infosTask, inactiveInfoTask });
+
+			var infos = infosTask.Result;
+			var inactiveInfo = inactiveInfoTask.Result;
+
 			bool canEditProjects = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
 			string subName = await AppService.GetSubscriptionName(subscriptionId);
 			List<CompleteProject> projects = canEditProjects ? infos.Item1 : infos.Item1.Where(p => p.IsProjectUser == true).ToList();

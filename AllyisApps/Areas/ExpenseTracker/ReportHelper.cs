@@ -15,13 +15,18 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 	/// </summary>
 	public partial class ExpenseController : BaseController
 	{
-		private void SetNavData(int subscriptionId)
+		async private Task SetNavData(int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
-			ViewData["SubscriptionName"] = AppService.GetSubscriptionName(subscriptionId);
+			var subNameTask = AppService.GetSubscriptionName(subscriptionId);
+			var orgMaxUserTask = AppService.GetOrganizationUserMaxAmount(AppService.UserContext.UserId, subInfo.OrganizationId);
+
+			await Task.WhenAll(new Task[] { subNameTask, orgMaxUserTask });
+
+			ViewData["SubscriptionName"] = subNameTask.Result;
 			ViewData["SubscriptionId"] = subscriptionId;
 			ViewData["ProductRole"] = subInfo.ProductRoleId;
-			ViewData["MaxAmount"] = AppService.GetOrganizationUserMaxAmount(AppService.UserContext.UserId, subInfo.OrganizationId);
+			ViewData["MaxAmount"] = orgMaxUserTask.Result;
 		}
 
 		async private Task UploadItems(ExpenseCreateModel model, ExpenseReport report)

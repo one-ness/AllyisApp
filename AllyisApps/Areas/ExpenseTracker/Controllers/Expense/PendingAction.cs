@@ -21,7 +21,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>Returns an action result.</returns>
 		async public Task<ActionResult> Pending(int subscriptionId)
 		{
-			SetNavData(subscriptionId);
+			await SetNavData(subscriptionId);
 
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Pending, subscriptionId);
 			var results = await AppService.GetSubscription(subscriptionId);

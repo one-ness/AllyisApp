@@ -28,7 +28,7 @@
 				}
 				foreach (string name in fileNames)
 				{
-					Tuple<Stream, string, string> tup = AzureFiles.GetFile(Model.Report.ExpenseReportId, name);
+					Tuple<Stream, string, string> tup = AzureFiles.GetFileRazor(Model.Report.ExpenseReportId, name);
 					HttpPostedFileBase file = new ExpenseFile(tup.Item1, tup.Item2, tup.Item3);
 					Model.Files.Add(file);
 				}

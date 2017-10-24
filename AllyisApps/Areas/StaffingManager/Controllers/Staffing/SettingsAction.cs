@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
@@ -36,8 +37,13 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
-			var defaultStatus = await AppService.GetStaffingDefaultStatus(subInfo.OrganizationId); //[0] is default position status, [1] is default application status
+			var subscriptionNameToDisplayTask = AppService.GetSubscriptionName(subscriptionId);
+			var defaultStatusTask = AppService.GetStaffingDefaultStatus(subInfo.OrganizationId); //[0] is default position status, [1] is default application status
+
+			await Task.WhenAll(new Task[] { subscriptionNameToDisplayTask, defaultStatusTask });
+
+			string subscriptionNameToDisplay = subscriptionNameToDisplayTask.Result;
+			var defaultStatus = defaultStatusTask.Result;
 
 			int? defaultPosStat = null;
 			if (defaultStatus.Count >= 1) defaultPosStat = defaultStatus[0];

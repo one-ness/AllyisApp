@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -15,7 +16,6 @@ using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Crm;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -62,10 +62,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					reportVMselect.Users = userSelect;
 				}
 
-				var infos = await AppService.GetReportInfo(subscriptionId);
 				UserContext.SubscriptionAndRole subInfo = null;
 				this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-				string subName = await AppService.GetSubscriptionName(subscriptionId);
+
+				var infosTask = AppService.GetReportInfo(subscriptionId);
+				var subNameTask = AppService.GetSubscriptionName(subscriptionId);
+
+				await Task.WhenAll(new Task[] { infosTask, subNameTask });
+
+				var infos = infosTask.Result;
+				string subName = subNameTask.Result;
 
 				bool canEditOthers = this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId, false);
 				ReportViewModel reportVM = this.ConstructReportViewModel(this.AppService.UserContext.UserId, organizationId, canEditOthers, infos.Customers, infos.CompleteProject, showExport, reportVMselect);

@@ -22,7 +22,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>The view with selected report details.</returns>
 		async public Task<ActionResult> ReportView(int subscriptionId, int reportId)
 		{
-			SetNavData(subscriptionId);
+			await SetNavData(subscriptionId);
 
 			var model = await InitializeReportViewModel(subscriptionId, reportId);
 
@@ -37,7 +37,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>The view model.</returns>
 		async public Task<ReportViewModel> InitializeReportViewModel(int subscriptionId, int id)
 		{
-			SetNavData(subscriptionId);
+			await SetNavData(subscriptionId);
 
 			var reportTask = AppService.GetExpenseReport(id);
 			var reportItemsTask = AppService.GetExpenseItemsByReportId(id);

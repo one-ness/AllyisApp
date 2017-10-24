@@ -121,6 +121,11 @@ namespace AllyisApps.Lib
 			return new Tuple<Stream, string, string>(stream, contentType, attName);
 		}
 
+		public static Tuple<Stream, string, string> GetFileRazor(int reportId, string attName)
+		{
+			return GetFile(reportId, attName).Result;
+		}
+
 		public static bool SaveApplicationDocument(int applicationId, Stream stream, string documentName)
 		{
 			try

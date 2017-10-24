@@ -10,6 +10,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Dynamic;
 using System.Linq;
+using System.Threading.Tasks;
 using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.Lookup;
 using AllyisApps.DBModel.StaffingManager;
@@ -468,7 +469,7 @@ namespace AllyisApps.DBModel
 				return result.Single();
 			}
 		}
-		
+
 		/// <summary>
 		/// Retrieves the all applications, the applicants and documents associated with those applications, for a position.
 		/// </summary>
@@ -708,7 +709,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@status", StatusesTable.AsTableValuedParameter("[StaffingManager].[StatusesTable]"));
 			parameters.Add("@type", TypesTable.AsTableValuedParameter("[StaffingManager].[TypesTable]"));
 			parameters.Add("@tags", TagTable.AsTableValuedParameter("[Lookup].[TagTable]"));
-			
+
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = await connection.QueryMultipleAsync(
@@ -726,7 +727,7 @@ namespace AllyisApps.DBModel
 					results.Read<CustomerDBEntity>().ToList());
 			}
 		}
-		
+
 		/// <summary>
 		/// Updates an organizations staffing settings.
 		/// </summary>

@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -30,8 +31,13 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		[HttpGet]
 		async public Task<ActionResult> Edit(int subscriptionId, int userId)
 		{
-			var customer = await AppService.GetCustomerInfo(userId);
-			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
+			var customerTask = AppService.GetCustomerInfo(userId);
+			var subscriptionNameToDisplayTask = AppService.GetSubscriptionName(subscriptionId);
+
+			await Task.WhenAll(new Task[] { customerTask, subscriptionNameToDisplayTask });
+
+			var customer = customerTask.Result;
+			var subscriptionNameToDisplay = subscriptionNameToDisplayTask.Result;
 
 			return this.View(new EditCustomerInfoViewModel
 			{
