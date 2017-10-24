@@ -415,7 +415,7 @@ namespace AllyisApps.Services
 			result.SkuDescription = sub.SkuDescription;
 			result.SkuId = (SkuIdEnum)sub.SkuId;
 			result.SkuName = sub.SkuName;
-			result.SubscriptionCreatedUtc = sub.SubscriptionCreatedUtc;
+			result.CreatedUtc = sub.SubscriptionCreatedUtc;
 			result.SubscriptionId = subscriptionId;
 			result.SubscriptionName = sub.SubscriptionName;
 
@@ -963,7 +963,7 @@ namespace AllyisApps.Services
 			return new Subscription
 			{
 				ProductAreaUrl = subscriptionDisplay.AreaUrl,
-				SubscriptionCreatedUtc = subscriptionDisplay.CreatedUtc,
+				CreatedUtc = subscriptionDisplay.CreatedUtc,
 				NumberOfUsers = subscriptionDisplay.NumberOfUsers,
 				OrganizationId = subscriptionDisplay.OrganizationId,
 				ProductId = (ProductIdEnum)subscriptionDisplay.ProductId,
@@ -989,7 +989,7 @@ namespace AllyisApps.Services
 
 			return new Subscription
 			{
-				SubscriptionCreatedUtc = subscription.SubscriptionCreatedUtc,
+				CreatedUtc = subscription.SubscriptionCreatedUtc,
 				IsActive = subscription.IsActive,
 				SubscriptionName = subscription.SubscriptionName,
 				NumberOfUsers = subscription.NumberOfUsers,

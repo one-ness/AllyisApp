@@ -114,7 +114,7 @@ namespace AllyisApps.Services
 			{
 				switch (orgInfo.OrganizationRole)
 				{
-					case OrganizationRole.Owner:
+					case OrganizationRoleEnum.Owner:
 						result = true;
 						break;
 

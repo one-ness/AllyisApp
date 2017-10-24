@@ -17,8 +17,6 @@ namespace AllyisApps.Services.Auth
 	/// </summary>
 	public class Organization
 	{
-		private string nextEmpolyeeID;
-
 		/// <summary>
 		/// Gets or sets the Organization Id.
 		/// </summary>
@@ -85,22 +83,6 @@ namespace AllyisApps.Services.Auth
 		public String StripeToken { get; set; }
 
 		/// <summary>
-		/// Gets next Unique Employee Id. This should only be loaded when populated.
-		/// </summary>
-		public String NextEmpolyeeID
-		{
-			get
-			{
-				if (nextEmpolyeeID == null) throw new Exception("Attempt to get NextEmpolyeeID when not poptualted.");
-				return nextEmpolyeeID;
-			}
-			set
-			{
-				nextEmpolyeeID = value;
-			}
-		}
-
-		/// <summary>
 		/// indicates if the users list has been loaded
 		/// </summary>
 		public bool IsUsersLoaded { get; set; }
@@ -109,6 +91,11 @@ namespace AllyisApps.Services.Auth
 		/// indicates if subscriptions list has been loaded
 		/// </summary>
 		public bool IsSubscriptionsLoaded { get; set; }
+
+		/// <summary>
+		/// indicates if inviations list has been loaded
+		/// </summary>
+		public bool IsInvitationsLoaded { get; set; }
 
 		public Organization()
 		{
