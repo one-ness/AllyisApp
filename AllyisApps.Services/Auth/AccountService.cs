@@ -245,8 +245,7 @@ namespace AllyisApps.Services
 					result.OrganizationsAndRoles.Add(item.OrganizationId, new UserContext.OrganizationAndRole()
 					{
 						OrganizationId = item.OrganizationId,
-						OrganizationRole = (OrganizationRole)item.OrganizationRoleId,
-						MaxAmount = item.MaxAmount ?? 0
+						OrganizationRole = (OrganizationRoleEnum)item.OrganizationRoleId,
 					});
 				}
 
@@ -283,65 +282,90 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Get User Address, Organizaiontins, and Inviations for account page
 		/// </summary>
-		async public Task<User> GetUser(int userId)
+		public async Task<User> GetUser(int userId)
 		{
 			if (userId <= 0) throw new ArgumentOutOfRangeException("userId");
 
-			dynamic infos = await this.DBHelper.GetUser(userId);
-			User userInfo = this.InitializeUser(infos.User);
-			IEnumerable<dynamic> Organizations = infos.Organizations;
-			IEnumerable<dynamic> Subscriptions = infos.Subscriptions;
-
-			userInfo.Subscriptions = Subscriptions.Select(sub =>
-				new UserSubscription()
-				{
-					ProductAreaUrl = sub.AreaUrl,
-					OrganizationId = sub.OrganizationId,
-					ProductId = (ProductIdEnum)sub.ProductId,
-					ProductName = sub.ProductName,
-					SkuId = (SkuIdEnum)sub.SkuId,
-					SubscriptionId = sub.SubscriptionId,
-					SubscriptionName = sub.SubscriptionName,
-					ProductRole = new ProductRole()
-					{
-						ProductRoleId = sub.ProductRoleId,
-						ProductId = (ProductIdEnum)sub.ProductId
-					},
-					UserId = userId,
-					SkuIconUrl = sub.IconUrl
-				}
-			).ToList();
-
-			userInfo.Organizations = Organizations.Select(
-				org =>
-					new UserOrganization()
-					{
-						Organization = InitializeOrganization(org),
-						OrganizationRole = (OrganizationRole)org.OrganizationRoleId,
-						UserId = userId,
-					}
-			).ToList();
-
-			IEnumerable<dynamic> Invitations = infos.Invitations;
-			userInfo.Invitations = Invitations.Select(
-				inv =>
-					new Invitation()
-					{
-						Email = inv.Email,
-						EmployeeId = inv.EmployeeId,
-						FirstName = inv.FirstName,
-						LastName = inv.LastName,
-						InvitationId = inv.InvitationId,
-						OrganizationId = inv.OrganizationId,
-					}
-				).ToList();
-
-			if (this.UserContext.UserId != userInfo.UserId)
+			dynamic sets = await this.DBHelper.GetUser(userId);
+			User user = this.InitializeUser(sets.User);
+			dynamic subs = sets.Subscriptions;
+			foreach (var item in subs)
 			{
-				// logged in user is trying to read a different user's information
+				UserSubscription sub = new UserSubscription();
+				sub.IsActive = item.IsActive;
+				sub.NumberOfUsers = item.NumberOfUsers;
+				sub.OrganizationId = item.OrganizationId;
+				sub.ProductAreaUrl = item.ProductAreaUrl;
+				sub.ProductDescription = item.ProductDescription;
+				sub.ProductId = (ProductIdEnum)item.ProductId;
+				sub.ProductName = item.ProductName;
+				sub.ProductRoleId = item.ProductRole;
+				sub.PromoExpirationDateUtc = item.PromotionExpirationDateUtc;
+				sub.SkuDescription = item.SkuDescription;
+				sub.SkuIconUrl = item.SkuIconUrl;
+				sub.SkuId = (SkuIdEnum)item.SkuId;
+				sub.SkuName = item.SkuName;
+				sub.CreatedUtc = item.SubscriptionCreatedUtc;
+				sub.SubscriptionId = item.SubscriptionId;
+				sub.SubscriptionName = item.SubscriptionName;
+				sub.JoinedDateUtc = item.SubscriptionUserCreatedUtc;
+				sub.UserId = item.UserId;
+				user.Subscriptions.Add(sub);
 			}
 
-			return userInfo;
+			dynamic orgs = sets.Organizations;
+			foreach (var item in orgs)
+			{
+				UserOrganization org = new UserOrganization();
+				org.Address = new Address();
+				org.Address.Address1 = item.Address1;
+				org.Address.AddressId = item.AddressId;
+				org.Address.City = item.City;
+				org.Address.CountryCode = item.CountryCode;
+				org.Address.CountryName = item.CountryName;
+				org.Address.PostalCode = item.PostalCode;
+				org.Address.StateId = item.StateId;
+				org.Address.StateName = item.StateName;
+				org.CreatedUtc = item.OrganizationCreatedUtc;
+				org.EmployeeId = item.EmployeeId;
+				org.FaxNumber = item.FaxNumber;
+				org.IsActive = item.IsActive;
+				org.JoinedDateUtc = item.OrganizationUserCreatedUtc;
+				org.MaxApprovalAmount = item.ApprovalAmount;
+				org.OrganizationId = item.OrganizationId;
+				org.OrganizationName = item.OrganizationName;
+				org.OrganizationRole = (OrganizationRoleEnum)item.OrganizationRoleId;
+				org.PhoneNumber = item.PhoneNumber;
+				org.SiteUrl = item.SiteUrl;
+				org.UserId = item.UserId;
+				user.Organizations.Add(org);
+			}
+
+			dynamic invites = sets.Invitations;
+			foreach (var item in invites)
+			{
+				Invitation invite = new Invitation();
+				invite.CompressedEmail = item.Email;
+				invite.Email = item.Email;
+				invite.EmployeeId = item.EmployeeId;
+				invite.FirstName = item.FirstName;
+				invite.InvitationCreatedUtc = item.InvitationCreatedUtc;
+				invite.InvitationId = item.InvitationId;
+				invite.InvitationStatus = (InvitationStatusEnum)item.InvitationStatus;
+				invite.LastName = item.LastName;
+				invite.OrganizationId = item.OrganizationId;
+				invite.OrganizationName = item.OrganizationName;
+				invite.ProductRolesJson = item.ProductRolesJson;
+				user.Invitations.Add(invite);
+			}
+
+			if (this.UserContext.UserId != user.UserId)
+			{
+				// logged in user is trying to read a different user's information
+
+			}
+
+			return user;
 		}
 
 		/// <summary>

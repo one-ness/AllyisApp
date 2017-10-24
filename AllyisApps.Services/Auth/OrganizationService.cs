@@ -33,7 +33,7 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException("employeeId");
 			if (string.IsNullOrWhiteSpace(organizationName)) throw new ArgumentNullException("organizationName");
 
-			return await this.DBHelper.SetupOrganization(this.UserContext.UserId, (int)OrganizationRole.Owner, employeeId, organizationName, phoneNumber, faxNumber, siteUrl, subDomainName, address1, city, stateId, postalCode, countryCode);
+			return await this.DBHelper.SetupOrganization(this.UserContext.UserId, (int)OrganizationRoleEnum.Owner, employeeId, organizationName, phoneNumber, faxNumber, siteUrl, subDomainName, address1, city, stateId, postalCode, countryCode);
 		}
 
 		/// <summary>
@@ -124,20 +124,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets the Organization for the current chosen organization, along with the list of valid countries and the
-		/// employee id for the current user in the current chosen organization.
-		/// </summary>
-		/// <param name="orgId">Organization Id.</param>
-		/// <returns>.</returns>
-		public Organization GetOrgWithNextEmployeeId(int orgId)
-		{
-			var spResults = DBHelper.GetOrgWithNextEmployeeId(orgId, UserContext.UserId);
-			Organization org = InitializeOrganization(spResults.Item1);
-			org.NextEmpolyeeID = spResults.Item2;
-			return org;
-		}
-
-		/// <summary>
 		/// Gets a list of UserRolesInfos for users in the current organization and their roles/subscription roles,
 		/// and a list of Subscriptions (with only SubscriptionId, ProductId, and ProductName populated) for
 		/// all subscriptions in the current organization.
@@ -183,7 +169,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Creates an invitation for a new user in the database, and also sends an email to the new user with their access code.
 		/// </summary>
-		async public Task<int> InviteUser(string url, string email, string firstName, string lastName, int organizationId, OrganizationRole organizationRoleId, string employeedId, string prodJson)
+		async public Task<int> InviteUser(string url, string email, string firstName, string lastName, int organizationId, OrganizationRoleEnum organizationRoleId, string employeedId, string prodJson)
 		{
 			if (organizationId <= 0) throw new ArgumentOutOfRangeException("organizationId");
 			this.CheckOrgAction(OrgAction.AddUserToOrganization, organizationId);
@@ -364,7 +350,7 @@ namespace AllyisApps.Services
 		{
 			#region Validation
 
-			if (!Enum.IsDefined(typeof(OrganizationRole), newOrganizationRole))
+			if (!Enum.IsDefined(typeof(OrganizationRoleEnum), newOrganizationRole))
 			{
 				throw new ArgumentOutOfRangeException("newOrganizationRole", "Organization role must match a value of the OrganizationRole enum.");
 			}
