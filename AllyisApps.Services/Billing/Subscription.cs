@@ -37,7 +37,7 @@ namespace AllyisApps.Services.Billing
 		/// <summary>
 		/// Gets or sets CreatedDate.
 		/// </summary>
-		public DateTime SubscriptionCreatedUtc { get; set; }
+		public DateTime CreatedUtc { get; set; }
 
 		/// <summary>
 		/// gets or set promotion expiration date.

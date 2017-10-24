@@ -33,7 +33,7 @@ namespace AllyisApps.Controllers.Auth
 				data.NumberofUsers = item.NumberOfUsers;
 				data.ProductDescription = item.ProductDescription;
 				data.ProductName = item.ProductName;
-				data.SubscriptionCreatedUtc = item.SubscriptionCreatedUtc;
+				data.SubscriptionCreatedUtc = item.CreatedUtc;
 				data.SubscriptionId = item.SubscriptionId;
 				data.SubscriptionName = item.SubscriptionName;
 				model.Subscriptions.Add(data);

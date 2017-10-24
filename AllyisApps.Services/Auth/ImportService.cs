@@ -688,7 +688,7 @@ namespace AllyisApps.Services
 
 								try
 								{
-									InviteUser(inviteUrl, fields[0].Trim(), names[0], names[1], orgId, OrganizationRole.Member, fields[1], "{ \"Time\" : 0, \"Expense\" : 0, \"Staffing\" : 0 }"); //We need to update this with values from the excel sheet.
+									InviteUser(inviteUrl, fields[0].Trim(), names[0], names[1], orgId, OrganizationRoleEnum.Member, fields[1], "{ \"Time\" : 0, \"Expense\" : 0, \"Staffing\" : 0 }"); //We need to update this with values from the excel sheet.
 									result.UsersImported += 1;
 								}
 								catch (DuplicateNameException)

@@ -1419,6 +1419,10 @@ h3 {
 	margin-top: 6px;
 }
 
+.vertically-stacked-buttons a {
+	margin-bottom: 10px;
+}
+
 .index-details > p > label {
 	display: block;
 }

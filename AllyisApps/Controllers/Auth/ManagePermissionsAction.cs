@@ -28,8 +28,8 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		private Dictionary<int, string> organizationRoles = new Dictionary<int, string>
 		{
-		{ (int)OrganizationRole.Member, Strings.Member },
-		{ (int)OrganizationRole.Owner, Strings.Owner }
+		{ (int)OrganizationRoleEnum.Member, Strings.Member },
+		{ (int)OrganizationRoleEnum.Owner, Strings.Owner }
 		};
 
 		private Dictionary<int, string> ttRoles = new Dictionary<int, string>
@@ -50,8 +50,8 @@ namespace AllyisApps.Controllers.Auth
 		private Dictionary<string, int> setOrganizationRoles = new Dictionary<string, int>
 	{
 		{ Strings.RemoveOrg, -1 },
-		{ Strings.SetMember, (int)OrganizationRole.Member },
-		{ Strings.SetOwner, (int)OrganizationRole.Owner }
+		{ Strings.SetMember, (int)OrganizationRoleEnum.Member },
+		{ Strings.SetOwner, (int)OrganizationRoleEnum.Owner }
 	};
 
 		private Dictionary<string, int> setTTRoles = new Dictionary<string, int>
@@ -297,7 +297,7 @@ namespace AllyisApps.Controllers.Auth
 			if (model.SubscriptionId == null && model.OrganizationId != 0)
 			{
 				// Changing organization roles
-				if (!Enum.IsDefined(typeof(OrganizationRole), model.SelectedAction) && model.SelectedAction != -1)
+				if (!Enum.IsDefined(typeof(OrganizationRoleEnum), model.SelectedAction) && model.SelectedAction != -1)
 				{
 					Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDidNotDefineATargetRole, Variety.Danger));
 					return Redirect(model.FromUrl);

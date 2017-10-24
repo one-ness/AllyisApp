@@ -77,27 +77,27 @@ namespace AllyisApps.Controllers.Auth
 				AccountIndexViewModel.OrganizationViewModel orgViewModel =
 				new AccountIndexViewModel.OrganizationViewModel()
 				{
-					OrganizationId = item.Organization.OrganizationId,
-					OrganizationName = item.Organization.OrganizationName,
-					PhoneNumber = item.Organization.PhoneNumber,
-					Address1 = item.Organization.Address?.Address1,
-					City = item.Organization.Address?.City,
-					State = item.Organization.Address?.StateName,
-					PostalCode = item.Organization.Address?.PostalCode,
-					Country = item.Organization.Address?.CountryName,
-					SiteUrl = item.Organization.SiteUrl,
-					FaxNumber = item.Organization.FaxNumber,
-					IsCreateSubscriptionAllowed = this.AppService.CheckOrgAction(AppService.OrgAction.CreateSubscription, item.Organization.OrganizationId, false),
-					IsReadBillingDetailsAllowed = this.AppService.CheckOrgAction(AppService.OrgAction.ReadBilling, item.Organization.OrganizationId, false),
-					IsReadMembersListAllowed = this.AppService.CheckOrgAction(AppService.OrgAction.ReadUsersList, item.Organization.OrganizationId, false),
-					IsReadOrgDetailsAllowed = this.AppService.CheckOrgAction(AppService.OrgAction.ReadOrganization, item.Organization.OrganizationId, false),
-					IsReadPermissionsListAllowed = this.AppService.CheckOrgAction(AppService.OrgAction.ReadPermissionsList, item.Organization.OrganizationId, false),
-					IsReadSubscriptionsListAllowed = this.AppService.CheckOrgAction(AppService.OrgAction.ReadSubscriptionsList, item.Organization.OrganizationId, false)
+					OrganizationId = item.OrganizationId,
+					OrganizationName = item.OrganizationName,
+					PhoneNumber = item.PhoneNumber,
+					Address1 = item.Address?.Address1,
+					City = item.Address?.City,
+					State = item.Address?.StateName,
+					PostalCode = item.Address?.PostalCode,
+					Country = item.Address?.CountryName,
+					SiteUrl = item.SiteUrl,
+					FaxNumber = item.FaxNumber,
+					IsCreateSubscriptionAllowed = this.AppService.CheckOrgAction(AppService.OrgAction.CreateSubscription, item.OrganizationId, false),
+					IsReadBillingDetailsAllowed = this.AppService.CheckOrgAction(AppService.OrgAction.ReadBilling, item.OrganizationId, false),
+					IsReadMembersListAllowed = this.AppService.CheckOrgAction(AppService.OrgAction.ReadUsersList, item.OrganizationId, false),
+					IsReadOrgDetailsAllowed = this.AppService.CheckOrgAction(AppService.OrgAction.ReadOrganization, item.OrganizationId, false),
+					IsReadPermissionsListAllowed = this.AppService.CheckOrgAction(AppService.OrgAction.ReadPermissionsList, item.OrganizationId, false),
+					IsReadSubscriptionsListAllowed = this.AppService.CheckOrgAction(AppService.OrgAction.ReadSubscriptionsList, item.OrganizationId, false)
 				};
 
 				// Add subscription info
 				foreach (var subItem in accountInfo.Subscriptions
-					.Where(sub => sub.OrganizationId == item.Organization.OrganizationId)
+					.Where(sub => sub.OrganizationId == item.OrganizationId)
 					.OrderBy(sub => sub.ProductId))
 				{
 					string description = string.Empty;
