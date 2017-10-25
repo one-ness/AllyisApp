@@ -27,7 +27,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The user edit page.</returns>
 		public async Task<ActionResult> UserEdit(int subscriptionId, int userId)
 		{
-			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
+			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
 			var infosTask = AppService.GetProjectsForOrgAndUser(userId, subscriptionId);
 			var subscriptionNameToDisplayTask = AppService.GetSubscriptionName(subscriptionId);
 
@@ -36,9 +36,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var infos = infosTask.Result;
 			string subscriptionNameToDisplay = subscriptionNameToDisplayTask.Result;
 
-			return this.View(new UserEditViewModel
+			return View(new UserEditViewModel
 			{
-				UserId = this.AppService.UserContext.UserId,
+				UserId = AppService.UserContext.UserId,
 				SubscriptionId = subscriptionId,
 				UserProjects = infos.Item1.AsParallel().Select(proj => new UserEditViewModel.ProjectInfoViewModel()
 				{
@@ -70,7 +70,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public async Task<JsonResult> UserEditAJAX(int userId, int subscriptionId, List<int> offUser, List<int> onUser)
 		{
 			int organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-			if (this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId, false))
+			if (AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId, false))
 			{
 				if (offUser != null)
 				{
@@ -96,11 +96,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					}
 				}
 
-				return this.Json(new { status = "success" });
+				return Json(new { status = "success" });
 			}
 			else
 			{
-				return this.Json(new { status = "failure" });
+				return Json(new { status = "failure" });
 			}
 		}
 	}

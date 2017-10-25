@@ -40,7 +40,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			{
 				if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
 				{
-					this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
+					AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
 				}
 
 				if (file != null && file.ContentLength > 0)

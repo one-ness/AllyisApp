@@ -33,16 +33,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public async Task<FileStreamResult> Export(int userId, int subscriptionId, int? startingDate = null, int? endingDate = null)
 		{
 			int orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-			if (userId != this.AppService.UserContext.UserId)
+			if (userId != AppService.UserContext.UserId)
 			{
-				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
+				AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			}
 
 			DateTime? start = startingDate.HasValue ? (DateTime?)Utility.GetDateTimeFromDays(startingDate.Value) : null;
 			DateTime? end = endingDate.HasValue ? (DateTime?)Utility.GetDateTimeFromDays(endingDate.Value) : null;
 
 			var file = await AppService.PrepareCSVExport(orgId, new List<int> { userId }, start, end);
-			return this.File(file.BaseStream, "text/csv", "export.csv");
+			return File(file.BaseStream, "text/csv", "export.csv");
 		}
 
 		/// <summary>

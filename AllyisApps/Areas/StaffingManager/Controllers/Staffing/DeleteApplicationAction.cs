@@ -21,11 +21,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns></returns>
 		public async Task<ActionResult> DeleteApplication(int applicationId)
 		{
-			var applicantGet = await this.AppService.GetApplicantAddressByApplicationId(applicationId);
+			var applicantGet = await AppService.GetApplicantAddressByApplicationId(applicationId);
 			int applicantId = applicantGet.ApplicantId;
-			this.AppService.DeleteApplication(applicationId);
+			AppService.DeleteApplication(applicationId);
 			await Task.Yield();
-			return this.RedirectToAction("Applicant", new { applicantId = applicantId });
+			return RedirectToAction("Applicant", new { applicantId = applicantId });
 		}
 	}
 }

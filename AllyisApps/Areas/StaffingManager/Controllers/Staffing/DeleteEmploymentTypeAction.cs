@@ -37,7 +37,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
 			await Task.Yield();
-			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId });
+			return RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId });
 		}
 	}
 }

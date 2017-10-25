@@ -6,10 +6,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using AllyisApps.DBModel;
 using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.Lookup;
 using AllyisApps.Services.Auth;
@@ -42,7 +40,7 @@ namespace AllyisApps.Services
 		public async Task<string> GetNextCustId(int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			var spResults = await DBHelper.GetNextCustId(subInfo.OrganizationId);
 			return spResults.Item1 == null ? "0000000000000000" : new string(IncrementAlphanumericCharArray(spResults.Item1.ToCharArray()));
 		}
@@ -68,13 +66,13 @@ namespace AllyisApps.Services
 		/// <returns>Customer id.</returns>
 		public async Task<int?> CreateCustomer(Customer customer, int subscriptionId)
 		{
-			if (this.CheckStaffingManagerAction(StaffingManagerAction.EditCustomer, subscriptionId, false) || this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId, false))
+			if (CheckStaffingManagerAction(StaffingManagerAction.EditCustomer, subscriptionId, false) || CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId, false))
 			{
 				// TODO: make sure valid countries and states are added during import
 				//customer.Address?.EnsureDBRef(this);
 				return await DBHelper.CreateCustomerInfo(GetDBEntitiesFromCustomerInfo(customer));
 			}
-			string message = string.Format("action {0} denied for subscription {1}", TimeTrackerAction.EditCustomer.ToString(), subscriptionId);
+			string message = string.Format("action {0} denied for subscription {1}", TimeTrackerAction.EditCustomer, subscriptionId);
 			throw new AccessViolationException(message);
 		}
 
@@ -86,7 +84,7 @@ namespace AllyisApps.Services
 		/// <returns>Returns 1 if succeed, -1 if fail, and null if authorization fails.</returns>
 		public async Task<int?> UpdateCustomer(Customer customer, int subscriptionId)
 		{
-			this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
+			CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
 			return await DBHelper.UpdateCustomer(GetDBEntitiesFromCustomerInfo(customer));
 		}
 
@@ -98,7 +96,7 @@ namespace AllyisApps.Services
 		/// <returns>Returns false if authorization fails.</returns>
 		public async Task<string> DeleteCustomer(int subscriptionId, int customerId)
 		{
-			this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
+			CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
 			return await DBHelper.DeleteCustomer(customerId);
 		}
 
@@ -111,7 +109,7 @@ namespace AllyisApps.Services
 		/// <returns>Returns false if authorization fails.</returns>
 		public async Task<string> ReactivateCustomer(int customerId, int subscriptionId, int orgId)
 		{
-			this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
+			CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
 			return await DBHelper.ReactivateCustomer(customerId);
 		}
 
@@ -174,7 +172,7 @@ namespace AllyisApps.Services
 			if (subscriptionId <= 0) throw new ArgumentException("subscriptionId");
 
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			if (subInfo != null)
 			{
 				var spResults = await DBHelper.GetProjectsForOrgAndUser(userId, subInfo.OrganizationId);
@@ -337,7 +335,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			this.CheckTimeTrackerAction(TimeTrackerAction.EditProject, subId);
+			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subId);
 			DBHelper.UpdateProject(GetDBEntityFromProject(project));
 			await Task.Yield();
 		}
@@ -385,7 +383,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			this.CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
+			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
 			DBHelper.UpdateProjectAndUsers(projectId, name, orgId, isHourly, start, end, userIds);
 			await Task.Yield();
 			return true;
@@ -405,7 +403,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
 			}
 
-			this.CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
+			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
 			DBHelper.ReactivateProject(projectId);
 			return true;
 		}
@@ -423,7 +421,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
 			}
 
-			this.CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
+			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
 			return await DBHelper.DeleteProject(projectId);
 		}
 
@@ -588,9 +586,9 @@ namespace AllyisApps.Services
 		public async Task<IEnumerable<Project.Project>> GetAllProjectsForOrganization(int orgId)
 		{
 			var result = new List<Project.Project>();
-			foreach (var customer in this.GetCustomerList(orgId))
+			foreach (var customer in GetCustomerList(orgId))
 			{
-				result.AddRange(await this.GetProjectsByCustomer(customer.CustomerId));
+				result.AddRange(await GetProjectsByCustomer(customer.CustomerId));
 			}
 			return result;
 		}
@@ -815,7 +813,7 @@ namespace AllyisApps.Services
 				return null;
 			}
 
-			return new AllyisApps.Services.Project.Project
+			return new Project.Project
 			{
 				owningCustomer = new Customer()
 				{

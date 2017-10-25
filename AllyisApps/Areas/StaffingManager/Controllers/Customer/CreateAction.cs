@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels;
@@ -38,9 +37,9 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			string subscriptionNameToDisplay = subscriptionNameToDisplayTask.Result;
 
 			int orgID = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-			return this.View(new EditCustomerInfoViewModel
+			return View(new EditCustomerInfoViewModel
 			{
-				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
 				IsCreating = true,
 				CustomerOrgId = nextCustomerId,
 				SubscriptionId = subscriptionId,
@@ -91,23 +90,23 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					if (customerId == -1)
 					{
 						Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerOrgIdNotUnique, Variety.Danger));
-						return this.View(model);
+						return View(model);
 					}
 
 					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerCreatedNotification, Variety.Success));
 
 					// Redirect to the user details page
-					return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = model.SubscriptionId });
+					return RedirectToAction(ActionConstants.Index, new { subscriptionId = model.SubscriptionId });
 				}
 
 				// No customer value, should only happen because of a permission failure
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 
-				return this.RedirectToAction(ActionConstants.Index);
+				return RedirectToAction(ActionConstants.Index);
 			}
 
 			// Invalid model
-			return this.View(model);
+			return View(model);
 		}
 	}
 }

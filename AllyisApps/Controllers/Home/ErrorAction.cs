@@ -19,7 +19,7 @@ namespace AllyisApps.Controllers
 		/// <returns>The action.</returns>
 		public ActionResult Error()
 		{
-			return this.View("~/Views/Shared/ErrorQuiet.cshtml");
+			return View("~/Views/Shared/ErrorQuiet.cshtml");
 		}
 	}
 }

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -50,9 +48,9 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public OrganizationInvitationsViewModel()
 		{
-			this.Invitations = new List<ViewModelItem>();
-			this.TabInfo = new MembersAndInvitationsTabViewModel();
-			this.TabInfo.InvitationsTabActive = "active";
+			Invitations = new List<ViewModelItem>();
+			TabInfo = new MembersAndInvitationsTabViewModel();
+			TabInfo.InvitationsTabActive = "active";
 		}
 
 		/// <summary>
@@ -102,7 +100,7 @@ namespace AllyisApps.ViewModels.Auth
 			{
 				get
 				{
-					return this.InvitedOn.ToString("d");
+					return InvitedOn.ToString("d");
 				}
 			}
 
@@ -116,7 +114,7 @@ namespace AllyisApps.ViewModels.Auth
 			/// </summary>
 			public ViewModelItem()
 			{
-				this.ProductAndRoleNames = new List<Tuple<string, string>>();
+				ProductAndRoleNames = new List<Tuple<string, string>>();
 			}
 		}
 	}

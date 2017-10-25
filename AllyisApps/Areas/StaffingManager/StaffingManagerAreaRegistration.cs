@@ -35,7 +35,7 @@ namespace AllyisApps.Areas.StaffingManager
 			context.Routes.MapSubdomainRoute(
 				name: "StaffingManager_default",
 				url: "staffingmanager/{subscriptionId}/{controller}/{action}",
-				area: this.AreaName,
+				area: AreaName,
 				defaults: new { controller = "Home", action = "Index" },
 				constraints: new { subscriptionId = @"\d+" },
 				namespaces: new string[] { "AllyisApps.Areas.StaffingManager.Controllers" });
@@ -43,7 +43,7 @@ namespace AllyisApps.Areas.StaffingManager
 			context.Routes.MapSubdomainRoute(
 				name: "StaffingManager_filtered",
 				url: "staffingmanager/{subscriptionId}/{controller}/{action}/{filters}",
-				area: this.AreaName,
+				area: AreaName,
 				defaults: new { controller = "Staffing", action = "Index" },
 				constraints: new { subscriptionId = @"\d+" },
 				namespaces: new string[] { "AllyisApps.Areas.StaffingManager.Controllers" });
@@ -51,7 +51,7 @@ namespace AllyisApps.Areas.StaffingManager
 			context.Routes.MapSubdomainRoute(
 				name: "StaffingIndex",
 				url: "staffingmanager/{subscriptionId}/{controller}",
-				area: this.AreaName,
+				area: AreaName,
 				defaults: new { controller = "Staffing", action = "Index" },
 				constraints: new { subscriptionId = @"\d+" },
 				namespaces: new string[] { "AllyisApps.Areas.StaffingManager.Controllers" });

@@ -57,7 +57,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				HistoryId = GetHashCode(),
 				ReportId = reportId,
 				Text = text,
-				UserId = this.AppService.UserContext.UserId
+				UserId = AppService.UserContext.UserId
 			};
 
 			if (string.Equals(status, "Approve"))

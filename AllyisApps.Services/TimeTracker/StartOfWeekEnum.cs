@@ -9,7 +9,7 @@ namespace AllyisApps.Services.TimeTracker
 	/// <summary>
 	/// An enum to keep track of the starting day selection.
 	/// </summary>
-	public enum StartOfWeekEnum : int
+	public enum StartOfWeekEnum
 	{
 		/// <summary>
 		/// Start: Sunday.

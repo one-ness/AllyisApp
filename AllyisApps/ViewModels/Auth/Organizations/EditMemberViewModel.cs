@@ -72,7 +72,7 @@ namespace AllyisApps.ViewModels.Auth
 		{
 			get
 			{
-				return (this.CurrentUserId != this.UserInfo.UserId);
+				return (CurrentUserId != UserInfo.UserId);
 			}
 		}
 	}

@@ -28,14 +28,14 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		{
 			SetNavData(subscriptionId);
 
-			var subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
-			List<Applicant> applicants = await this.AppService.GetApplicantAddressesByOrgId(subInfo.OrganizationId);
+			var subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+			List<Applicant> applicants = await AppService.GetApplicantAddressesByOrgId(subInfo.OrganizationId);
 			ApplicantListViewModel model = new ApplicantListViewModel()
 			{
 				Applicants = applicants.Select(a => InitializeStaffingApplicantViewModel(a)).ToList()
 			};
 
-			return this.View(model);
+			return View(model);
 		}
 	}
 }

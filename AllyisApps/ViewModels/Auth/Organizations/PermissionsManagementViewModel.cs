@@ -4,14 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Web;
-
-using AllyisApps.Services.Auth;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -285,9 +278,9 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public PermissionsAction()
 		{
-			this.OrganizationRoleTarget = 0;
-			this.TimeTrackerRoleTarget = 0;
-			this.ExpenseTrackerRoleTarget = 0;
+			OrganizationRoleTarget = 0;
+			TimeTrackerRoleTarget = 0;
+			ExpenseTrackerRoleTarget = 0;
 		}
 
 		/// <summary>
@@ -331,7 +324,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public TargetUser()
 		{
-			this.Message = string.Empty;
+			Message = string.Empty;
 		}
 
 		/// <summary>

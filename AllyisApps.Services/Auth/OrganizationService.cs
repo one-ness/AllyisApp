@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using AllyisApps.DBModel;
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.Lib;
@@ -33,7 +32,7 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException("employeeId");
 			if (string.IsNullOrWhiteSpace(organizationName)) throw new ArgumentNullException("organizationName");
 
-			return await this.DBHelper.SetupOrganization(this.UserContext.UserId, (int)OrganizationRoleEnum.Owner, employeeId, organizationName, phoneNumber, faxNumber, siteUrl, subDomainName, address1, city, stateId, postalCode, countryCode);
+			return await DBHelper.SetupOrganization(UserContext.UserId, (int)OrganizationRoleEnum.Owner, employeeId, organizationName, phoneNumber, faxNumber, siteUrl, subDomainName, address1, city, stateId, postalCode, countryCode);
 		}
 
 		/// <summary>
@@ -45,16 +44,16 @@ namespace AllyisApps.Services
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
 
-			this.CheckOrgAction(OrgAction.ReadOrganization, orgId);
-			return InitializeOrganization(await this.DBHelper.GetOrganization(orgId));
+			CheckOrgAction(OrgAction.ReadOrganization, orgId);
+			return InitializeOrganization(await DBHelper.GetOrganization(orgId));
 		}
 
 		public async Task<List<Invitation>> GetInvitationsAsync(int orgId)
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
 
-			this.CheckOrgAction(OrgAction.ReadInvitationsList, orgId);
-			var collection = await this.DBHelper.GetInvitationsAsync(orgId, (int)InvitationStatusEnum.Any);
+			CheckOrgAction(OrgAction.ReadInvitationsList, orgId);
+			var collection = await DBHelper.GetInvitationsAsync(orgId, (int)InvitationStatusEnum.Any);
 			var result = new List<Invitation>();
 			foreach (var item in collection)
 			{
@@ -81,9 +80,9 @@ namespace AllyisApps.Services
 		public async Task<List<Subscription>> GetSubscriptionsAsync(int orgId)
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
-			this.CheckOrgAction(OrgAction.ReadSubscriptionsList, orgId);
+			CheckOrgAction(OrgAction.ReadSubscriptionsList, orgId);
 			var result = new List<Subscription>();
-			dynamic entities = await this.DBHelper.GetSubscriptionsAsync(orgId);
+			dynamic entities = await DBHelper.GetSubscriptionsAsync(orgId);
 			foreach (var item in entities)
 			{
 				var data = new Subscription();
@@ -150,9 +149,9 @@ namespace AllyisApps.Services
 			if (organizationId <= 0) throw new ArgumentOutOfRangeException("organizationId");
 			if (string.IsNullOrWhiteSpace(organizationName)) throw new ArgumentNullException("organizationName");
 
-			this.CheckOrgAction(OrgAction.EditOrganization, organizationId);
+			CheckOrgAction(OrgAction.EditOrganization, organizationId);
 
-			return await this.DBHelper.UpdateOrganization(organizationId, organizationName, siteUrl, addressId, address1, city, stateId, countryCode, postalCode, phoneNumber, faxNumber, subDomain) > 0;
+			return await DBHelper.UpdateOrganization(organizationId, organizationName, siteUrl, addressId, address1, city, stateId, countryCode, postalCode, phoneNumber, faxNumber, subDomain) > 0;
 		}
 
 		/// <summary>
@@ -162,8 +161,8 @@ namespace AllyisApps.Services
 		public async Task DeleteOrganization(int orgId)
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
-			this.CheckOrgAction(OrgAction.DeleteOrganization, orgId);
-			await this.DBHelper.DeleteOrganization(orgId);
+			CheckOrgAction(OrgAction.DeleteOrganization, orgId);
+			await DBHelper.DeleteOrganization(orgId);
 		}
 
 		/// <summary>
@@ -172,7 +171,7 @@ namespace AllyisApps.Services
 		public async Task<int> InviteUser(string url, string email, string firstName, string lastName, int organizationId, OrganizationRoleEnum organizationRoleId, string employeedId, string prodJson)
 		{
 			if (organizationId <= 0) throw new ArgumentOutOfRangeException("organizationId");
-			this.CheckOrgAction(OrgAction.AddUserToOrganization, organizationId);
+			CheckOrgAction(OrgAction.AddUserToOrganization, organizationId);
 			if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException("url");
 			if (string.IsNullOrWhiteSpace(email)) throw new ArgumentNullException("email");
 			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException("firstName");
@@ -210,14 +209,14 @@ namespace AllyisApps.Services
 			string orgName = string.Empty;
 			string htmlbody = string.Format(
 				"{0} {1} has requested you join their organization on Allyis Apps{2}!<br /> Click <a href={3}>Here</a> to create an account and join!",
-				this.UserContext.FirstName,
-				this.UserContext.LastName,
+				UserContext.FirstName,
+				UserContext.LastName,
 				orgName,
 				url);
 
 			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
 			var task = Mailer.SendEmailAsync(
-				this.ServiceSettings.SupportEmail,
+				ServiceSettings.SupportEmail,
 				email,
 				"Join Allyis Apps!",
 				msgbody);
@@ -264,8 +263,8 @@ namespace AllyisApps.Services
 		{
 			if (invitationId <= 0) throw new ArgumentException("invitationId");
 
-			var invite = await GetInvitationByID(invitationId);
-			this.CheckOrgAction(OrgAction.DeleteInvitation, invite.OrganizationId);
+			var invite = await this.GetInvitationById(invitationId);
+			CheckOrgAction(OrgAction.DeleteInvitation, invite.OrganizationId);
 			return DBHelper.DeleteInvitation(invitationId);
 		}
 
@@ -313,9 +312,9 @@ namespace AllyisApps.Services
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
 
-			this.CheckOrgAction(OrgAction.ReadUsersList, orgId);
+			CheckOrgAction(OrgAction.ReadUsersList, orgId);
 			var result = new List<OrganizationUser>();
-			var collection = await this.DBHelper.GetOrganizationUsersAsync(orgId);
+			var collection = await DBHelper.GetOrganizationUsersAsync(orgId);
 			foreach (var item in collection)
 			{
 				var data = this.InitializeOrganizationUser(item);

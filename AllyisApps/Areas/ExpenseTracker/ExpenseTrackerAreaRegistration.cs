@@ -35,7 +35,7 @@ namespace AllyisApps.Areas.ExpenseTracker
 			context.Routes.MapSubdomainRoute(
 				name: "ExpenseTracker_Detail",
 				url: "expensetracker/{subscriptionId}/{controller}/{action}/{reportId}",
-				area: this.AreaName,
+				area: AreaName,
 				defaults: new { controller = "expense", action = "index" },
 				constraints: new { subscriptionId = @"\d+", reportId = @"\d+" },
 				namespaces: new string[] { "AllyisApps.Areas.ExpenseTracker.Controllers", "AllyisApps.Areas.ExpenseTracker.Controllers.Expense" });
@@ -43,7 +43,7 @@ namespace AllyisApps.Areas.ExpenseTracker
 			context.Routes.MapSubdomainRoute(
 				name: "ExpenseTracker_Action",
 				url: "expensetracker/{subscriptionId}/{controller}/{action}",
-				area: this.AreaName,
+				area: AreaName,
 				defaults: new { controller = "expense", action = "index" },
 				constraints: new { subscriptionId = @"\d+" },
 				namespaces: new string[] { "AllyisApps.Areas.ExpenseTracker.Controllers", "AllyisApps.Areas.ExpenseTracker.Controllers.Expense" });
@@ -51,7 +51,7 @@ namespace AllyisApps.Areas.ExpenseTracker
 			context.Routes.MapSubdomainRoute(
 				name: "ExpenseTracker_Default",
 				url: "expensetracker/{subscriptionId}/{controller}",
-				area: this.AreaName,
+				area: AreaName,
 				defaults: new { controller = "expense", action = "index" },
 				constraints: new { subscriptionId = @"\d+" },
 				namespaces: new string[] { "AllyisApps.Areas.ExpenseTracker.Controllers", "AllyisApps.Areas.ExpenseTracker.Controllers.Expense" });

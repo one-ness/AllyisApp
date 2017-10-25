@@ -47,7 +47,7 @@ namespace AllyisApps.Services.Common.Types
 			#endregion last4 validation
 
 			this.last4 = last4;
-			this.billingServicesCustomerId = customerId;
+			billingServicesCustomerId = customerId;
 			this.email = email;
 		}
 
@@ -62,7 +62,7 @@ namespace AllyisApps.Services.Common.Types
 		{
 			get
 			{
-				return this.billingServicesCustomerId;
+				return billingServicesCustomerId;
 			}
 		}
 
@@ -73,7 +73,7 @@ namespace AllyisApps.Services.Common.Types
 		{
 			get
 			{
-				return this.last4;
+				return last4;
 			}
 		}
 
@@ -84,7 +84,7 @@ namespace AllyisApps.Services.Common.Types
 		{
 			get
 			{
-				return this.email;
+				return email;
 			}
 		}
 

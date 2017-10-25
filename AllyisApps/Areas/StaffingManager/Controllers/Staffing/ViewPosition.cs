@@ -35,7 +35,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 
 			var viewModel = await setupViewPositionViewModel(positionId, subscriptionId);
 
-			return this.View(viewModel);
+			return View(viewModel);
 		}
 
 		/// <summary>
@@ -45,7 +45,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		public async Task<ViewPositionViewModel> setupViewPositionViewModel(int positionId, int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			Position pos = await AppService.GetPosition(positionId);
 			List<Application> applicationsSerive = await AppService.GetFullApplicationInfoByPositionId(positionId);
 			List<ApplicationInfoViewModel> applications = new List<ApplicationInfoViewModel>();
@@ -94,7 +94,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			return new ViewPositionViewModel
 			{
 				PositionId = pos.PositionId,
-				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
 				LocalizedStates = new Dictionary<string, string>(),
 				IsCreating = false,
 				OrganizationId = subInfo.OrganizationId,

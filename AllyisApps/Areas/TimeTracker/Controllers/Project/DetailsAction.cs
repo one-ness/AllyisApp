@@ -25,10 +25,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The details view of the project.</returns>
 		public async Task<ActionResult> Details(int subscriptionId, int projectId)
 		{
-			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
+			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
 			var model = await AppService.GetProjectAsUser(projectId);
 			model.CanEditProject = true;
-			return this.View(model);
+			return View(model);
 		}
 	}
 }

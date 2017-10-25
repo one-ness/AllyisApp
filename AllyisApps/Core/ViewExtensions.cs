@@ -64,7 +64,7 @@ namespace AllyisApps.Extensions.ViewExtensions
 		/// <returns>A javascript function.</returns>
 		public static string ConfirmDialog(this HtmlHelper htmlHelper, string resourceString, Dictionary<string, string> variables)
 		{
-			return ViewExtensions.ConfirmDialog(htmlHelper, Helpers.ResourceReplace(resourceString, variables));
+			return ConfirmDialog(htmlHelper, Helpers.ResourceReplace(resourceString, variables));
 		}
 
 		/// <summary>
@@ -80,7 +80,7 @@ namespace AllyisApps.Extensions.ViewExtensions
 		/// <returns>Javascript describing the confirmation message with a string replacement.</returns>
 		public static string ConfirmDialog(this HtmlHelper htmlHelper, string resourceString, string variable, string value)
 		{
-			return ViewExtensions.ConfirmDialog(htmlHelper, Helpers.ResourceReplace(resourceString, variable, value));
+			return ConfirmDialog(htmlHelper, Helpers.ResourceReplace(resourceString, variable, value));
 		}
 
 		/// <summary>

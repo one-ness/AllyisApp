@@ -78,7 +78,7 @@ namespace AllyisApps.Controllers.Auth
 		[HttpGet]
 		public async Task<ActionResult> ManagePermissions(int id)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id);
+			AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id);
 			var infos = AppService.GetOrgAndSubRoles(id);
 			ManagePermissionsViewModel model = new ManagePermissionsViewModel
 			{
@@ -142,7 +142,7 @@ namespace AllyisApps.Controllers.Auth
 			}
 
 			await Task.Delay(1);
-			return this.View("Permission2", model);
+			return View("Permission2", model);
 		}
 
 		/// <summary>
@@ -188,7 +188,7 @@ namespace AllyisApps.Controllers.Auth
 			};
 
 			await Task.Delay(1);
-			return this.View("PermissionsOrg", perModel);
+			return View("PermissionsOrg", perModel);
 		}
 
 		/// <summary>
@@ -268,7 +268,7 @@ namespace AllyisApps.Controllers.Auth
 			};
 
 			await Task.Delay(1);
-			return this.View("PermissionsOrg", model);
+			return View("PermissionsOrg", model);
 		}
 
 		/// <summary>
@@ -282,17 +282,17 @@ namespace AllyisApps.Controllers.Auth
 		{
 			UserPermissionsAction model = JsonConvert.DeserializeObject<UserPermissionsAction>(data);
 
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, model.OrganizationId);
+			AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, model.OrganizationId);
 
 			if (model.SelectedUsers == null || model.SelectedUsers.Count() == 0)
 			{
-				Notifications.Add(new BootstrapAlert(Resources.Strings.NoUsersSelected, Variety.Danger));
+				Notifications.Add(new BootstrapAlert(Strings.NoUsersSelected, Variety.Danger));
 				return Redirect(model.FromUrl);
 			}
 
 			if (model.SelectedAction == null)
 			{
-				Notifications.Add(new BootstrapAlert(Resources.Strings.NoActionsSelected, Variety.Danger));
+				Notifications.Add(new BootstrapAlert(Strings.NoActionsSelected, Variety.Danger));
 				return Redirect(model.FromUrl);
 			}
 
@@ -302,22 +302,22 @@ namespace AllyisApps.Controllers.Auth
 				// Changing organization roles
 				if (!Enum.IsDefined(typeof(OrganizationRoleEnum), model.SelectedAction) && model.SelectedAction != -1)
 				{
-					Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDidNotDefineATargetRole, Variety.Danger));
+					Notifications.Add(new BootstrapAlert(Strings.YouDidNotDefineATargetRole, Variety.Danger));
 					return Redirect(model.FromUrl);
 				}
 
-				if (model.SelectedUsers.Where(tu => tu.UserId == this.AppService.UserContext.UserId).Any())
+				if (model.SelectedUsers.Where(tu => tu.UserId == AppService.UserContext.UserId).Any())
 				{
 					if (model.SelectedAction == -1)
 					{
-						Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouAreUnableToRemoveYourself, Variety.Danger));
+						Notifications.Add(new BootstrapAlert(Strings.YouAreUnableToRemoveYourself, Variety.Danger));
 					}
 					else
 					{
-						Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouAreUnableToChangeYourOwnRole, Variety.Danger));
+						Notifications.Add(new BootstrapAlert(Strings.YouAreUnableToChangeYourOwnRole, Variety.Danger));
 					}
 
-					model.SelectedUsers = model.SelectedUsers.Where(tu => tu.UserId != this.AppService.UserContext.UserId);
+					model.SelectedUsers = model.SelectedUsers.Where(tu => tu.UserId != AppService.UserContext.UserId);
 					if (model.SelectedUsers.Count() == 0)
 					{
 						return Redirect(model.FromUrl);
@@ -327,12 +327,12 @@ namespace AllyisApps.Controllers.Auth
 				if (model.SelectedAction == -1 && model.SubscriptionId == null)
 				{
 					int numberChanged = AppService.DeleteOrganizationUsers(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.OrganizationId);
-					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersRemovedFromOrg, numberChanged), Variety.Success));
+					Notifications.Add(new BootstrapAlert(string.Format(Strings.UsersRemovedFromOrg, numberChanged), Variety.Success));
 				}
 				else
 				{
 					int numberChanged = AppService.UpdateOrganizationUsersRole(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedAction.Value, model.OrganizationId);
-					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersChangedRolesInOrg, numberChanged), Variety.Success));
+					Notifications.Add(new BootstrapAlert(string.Format(Strings.UsersChangedRolesInOrg, numberChanged), Variety.Success));
 				}
 			}
 			else if (model.SelectedAction != 0 && model.SubscriptionId != null && model.ProductId != null)
@@ -349,7 +349,7 @@ namespace AllyisApps.Controllers.Auth
 
 						if (!Enum.IsDefined(typeof(TimeTrackerRole), model.SelectedAction) && model.SelectedAction.Value != -1)
 						{
-							Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDidNotDefineATargetRole, Variety.Danger));
+							Notifications.Add(new BootstrapAlert(Strings.YouDidNotDefineATargetRole, Variety.Danger));
 							return Redirect(model.FromUrl);
 						}
 
@@ -362,7 +362,7 @@ namespace AllyisApps.Controllers.Auth
 						UsersAddedMessage = Strings.UserAddedToExpenseTracker;
 						if (!Enum.IsDefined(typeof(ExpenseTrackerRole), model.SelectedAction.Value) && model.SelectedAction != -1)
 						{
-							Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDidNotDefineATargetRole, Variety.Danger));
+							Notifications.Add(new BootstrapAlert(Strings.YouDidNotDefineATargetRole, Variety.Danger));
 							return Redirect(model.FromUrl);
 						}
 
@@ -402,7 +402,7 @@ namespace AllyisApps.Controllers.Auth
 				{
 					// TODO: instead of providing product id, provide subscription id of the subscription to be modified
 					AppService.DeleteSubscriptionUsers(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.OrganizationId, model.ProductId.Value);
-					Notifications.Add(new BootstrapAlert(Resources.Strings.UserDeletedSuccessfully, Variety.Success));
+					Notifications.Add(new BootstrapAlert(Strings.UserDeletedSuccessfully, Variety.Success));
 				}
 			}
 

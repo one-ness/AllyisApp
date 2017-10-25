@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using AllyisApps.Services.Auth;
 
 namespace AllyisApps.Services.Billing
 {

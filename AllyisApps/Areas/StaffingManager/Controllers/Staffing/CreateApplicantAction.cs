@@ -27,7 +27,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			SetNavData(subscriptionId);
 
 			StaffingApplicantViewModel model = new StaffingApplicantViewModel();
-			return this.View(model);
+			return View(model);
 		}
 
 		/// <summary>
@@ -40,10 +40,10 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> CreateApplicant(int subscriptionId, StaffingApplicantViewModel model)
 		{
-			var subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+			var subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			Applicant applicant = InitializeApplicant(subInfo.OrganizationId, model);
-			await this.AppService.CreateApplicant(applicant);
-			return this.RedirectToAction("ApplicantList");
+			await AppService.CreateApplicant(applicant);
+			return RedirectToAction("ApplicantList");
 		}
 
 		private static Applicant InitializeApplicant(int orgId, StaffingApplicantViewModel model)

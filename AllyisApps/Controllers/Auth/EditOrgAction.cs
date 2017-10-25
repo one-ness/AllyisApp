@@ -29,13 +29,13 @@ namespace AllyisApps.Controllers.Auth
 		{
 			if (ModelState.IsValid)
 			{
-				await this.AppService.UpdateOrganization(model.OrganizationId, model.OrganizationName, model.SiteUrl, model.AddressId, model.Address, model.City, model.SelectedStateId, model.SelectedCountryCode, model.PostalCode, model.PhoneNumber, model.FaxNumber, null);
+				await AppService.UpdateOrganization(model.OrganizationId, model.OrganizationName, model.SiteUrl, model.AddressId, model.Address, model.City, model.SelectedStateId, model.SelectedCountryCode, model.PostalCode, model.PhoneNumber, model.FaxNumber, null);
 				Notifications.Add(new BootstrapAlert(@Resources.Strings.OrganizationDetailsUpdated, Variety.Success));
-				return this.RedirectToAction(ActionConstants.OrganizationDetails, ControllerConstants.Account, new { id = model.OrganizationId });
+				return RedirectToAction(ActionConstants.OrganizationDetails, ControllerConstants.Account, new { id = model.OrganizationId });
 			}
 
 			// Model is invalid, try again
-			return this.View(model);
+			return View(model);
 		}
 
 		/// <summary>
@@ -46,9 +46,9 @@ namespace AllyisApps.Controllers.Auth
 		[HttpGet]
 		public async Task<ActionResult> EditOrg(int id)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
-			bool canDelete = this.AppService.CheckOrgAction(AppService.OrgAction.DeleteOrganization, id, false);
-			var organization = await this.AppService.GetOrganization(id);
+			AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
+			bool canDelete = AppService.CheckOrgAction(AppService.OrgAction.DeleteOrganization, id, false);
+			var organization = await AppService.GetOrganization(id);
 			var model = new EditOrganizationViewModel()
 			{
 				OrganizationId = organization.OrganizationId,
@@ -65,11 +65,11 @@ namespace AllyisApps.Controllers.Auth
 				FaxNumber = organization.FaxNumber,
 				CanDelete = canDelete,
 				EmployeeId = "value",//Value needed for model TODO: Seperate Edit and Create
-				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
-				LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService, organization.Address?.CountryCode ?? string.Empty)
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
+				LocalizedStates = ModelHelper.GetLocalizedStates(AppService, organization.Address?.CountryCode ?? string.Empty)
 			};
 
-			return this.View(model);
+			return View(model);
 		}
 	}
 }
