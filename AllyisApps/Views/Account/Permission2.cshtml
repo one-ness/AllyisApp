@@ -4,15 +4,14 @@
 @Html.HiddenFor(m => m.OrganizationId)
 @{
 	ViewBag.Title = Strings.Permissions;
-	Layout = "~/Views/Shared/_Layout.cshtml";
 
 	bool hasTimeTracker = Model.Subscriptions.Where(s => s.ProductId == Model.TimeTrackerId).Any();
 	bool hasExpenseTracker = Model.Subscriptions.Where(s => s.ProductId == Model.ExpenseTrackerId).Any();
 
 	Dictionary<int, string> organizationRoles = new Dictionary<int, string>
 	{
-		{ (int)OrganizationRole.Member, Strings.Member },
-		{ (int)OrganizationRole.Owner, Strings.Owner }
+		{ (int)OrganizationRoleEnum.Member, Strings.Member },
+		{ (int)OrganizationRoleEnum.Owner, Strings.Owner }
 	};
 	Dictionary<int, string> ttRoles = new Dictionary<int, string>
 	{
@@ -32,8 +31,8 @@
 	Dictionary<string, int> setOrganizationRoles = new Dictionary<string, int>
 	{
 		{ Strings.RemoveOrg, -1 },
-		{ Strings.SetMember, (int)OrganizationRole.Member },
-		{ Strings.SetOwner, (int)OrganizationRole.Owner }
+		{ Strings.SetMember, (int)OrganizationRoleEnum.Member },
+		{ Strings.SetOwner, (int)OrganizationRoleEnum.Owner }
 	};
 	Dictionary<string, int> setTTRoles = new Dictionary<string, int>
 	{
