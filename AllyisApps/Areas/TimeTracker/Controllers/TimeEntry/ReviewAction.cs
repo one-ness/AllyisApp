@@ -7,10 +7,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Resources;
+using AllyisApps.Services.Crm;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
@@ -30,16 +32,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="startDate">The start date of the time entries to pull.</param>
 		/// <param name="endDate">The start date of the time entries to pull.</param>
 		/// <returns>The action result.</returns>
-		public ActionResult Review(int subscriptionId, DateTime? startDate = null, DateTime? endDate = null)
+		public async Task<ActionResult> Review(int subscriptionId, DateTime? startDate = null, DateTime? endDate = null)
 		{
 			DateTime calculatedStartDate = startDate ?? DateTime.Now.AddMonths(-1);
 			DateTime calculatedEndDate = endDate ?? DateTime.Now;
 			int organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-			var payClasses = AppService.GetPayClassesByOrganizationId(organizationId).Select(x => new PayClassInfoViewModel(x)).ToList();
+			var payClassesGet = await AppService.GetPayClassesByOrganizationId(organizationId);
+			var payClasses = payClassesGet.Select(x => new PayClassInfoViewModel(x)).ToList();
 			var allTimeEntries = AppService.GetTimeEntriesOverDateRange(organizationId, calculatedStartDate, calculatedEndDate)
 				.Select(entry =>
 				{
-					var project = AppService.GetProject(entry.ProjectId);
+					CompleteProject project = AppService.GetProject(entry.ProjectId);
 					return new TimeEntryViewModel(entry)
 					{
 						ProjectName = project.ProjectName,
@@ -59,12 +62,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
+			var subGet = await AppService.GetSubscription(subscriptionId);
 			var model = new ReviewViewModel
 			{
 				UserId = AppService.UserContext.UserId,
 				SubscriptionId = subscriptionId,
 				OrganizationId = organizationId,
-				SubscriptionName = AppService.GetSubscription(subscriptionId).SubscriptionName,
+				SubscriptionName = subGet.SubscriptionName,
 				PayClasses = payClasses.ToList(),
 				TimeEntriesByUser = timeEntriesByUser,
 				TimeEntryTotalsByUserByPayClass = timeEntryTotalsByUserByPayClass,
@@ -85,10 +89,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="endDate">Date range for reloading the page.</param>
 		/// <param name="startDate">Date range for reloading the page.</param>
 		/// <returns>Redirect to same page.</returns>
-		public ActionResult UpdateTimeEntryStatus(int subscriptionId, string timeEntryIdsJSON, int timeEntryStatusId, DateTime startDate, DateTime endDate)
+		public async Task<ActionResult> UpdateTimeEntryStatus(int subscriptionId, string timeEntryIdsJSON, int timeEntryStatusId, DateTime startDate, DateTime endDate)
 		{
 			var timeEntryIds = JsonConvert.DeserializeObject<List<int>>(timeEntryIdsJSON);
-			timeEntryIds.ForEach(entryId => AppService.UpdateTimeEntryStatusById(entryId, timeEntryStatusId));
+			foreach (int i in timeEntryIds)
+			{
+				await AppService.UpdateTimeEntryStatusById(i, timeEntryStatusId);
+			}
 			Notifications.Add(new BootstrapAlert(Strings.UpdateTimeEntryStatusSuccess, Variety.Success));
 			return RedirectToAction(ActionConstants.Review, new { subscriptionId, startDate, endDate });
 		}

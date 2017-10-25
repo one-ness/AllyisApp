@@ -4,14 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using AllyisApps.Core.Alert;
-using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.Auth;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -25,8 +22,13 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		public async Task<ActionResult> EditMember2(int id)
 		{
-			var model = await Task.Run(() => new EditMemberViewModel2());
-			User user = this.AppService.GetUser(id);
+			EditMemberViewModel2 model = await Task.Run(() => new EditMemberViewModel2());
+			User user = await AppService.GetUser(id);
+			model.Address = user.Address?.Address1;
+			model.City = user.Address?.City;
+			model.Country = user.Address?.CountryName;
+			model.DateOfBirth = user.DateOfBirth?.ToString("d") ?? string.Empty;
+			model.Email = user.Email;
 			return View("editmember", model);
 		}
 	}

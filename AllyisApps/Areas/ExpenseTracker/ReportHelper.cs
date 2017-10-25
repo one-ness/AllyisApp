@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
 using AllyisApps.Services;
@@ -14,18 +15,23 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 	/// </summary>
 	public partial class ExpenseController : BaseController
 	{
-		private void SetNavData(int subscriptionId)
+		private async Task SetNavData(int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
-			ViewData["SubscriptionName"] = AppService.GetSubscriptionName(subscriptionId);
+			var subNameTask = AppService.GetSubscriptionName(subscriptionId);
+			var orgMaxUserTask = AppService.GetOrganizationUserMaxAmount(AppService.UserContext.UserId, subInfo.OrganizationId);
+
+			await Task.WhenAll(new Task[] { subNameTask, orgMaxUserTask });
+
+			ViewData["SubscriptionName"] = subNameTask.Result;
 			ViewData["SubscriptionId"] = subscriptionId;
 			ViewData["ProductRole"] = subInfo.ProductRoleId;
-			ViewData["MaxAmount"] = AppService.GetOrganizationUserMaxAmount(AppService.UserContext.UserId, subInfo.OrganizationId);
+			ViewData["MaxAmount"] = orgMaxUserTask.Result;
 		}
 
-		private void UploadItems(ExpenseCreateModel model, ExpenseReport report)
+		private async Task UploadItems(ExpenseCreateModel model, ExpenseReport report)
 		{
-			IList<ExpenseItem> oldItems = AppService.GetExpenseItemsByReportId(report.ExpenseReportId);
+			IList<ExpenseItem> oldItems = await AppService.GetExpenseItemsByReportId(report.ExpenseReportId);
 			List<int> itemIds = new List<int>();
 			foreach (ExpenseItem oldItem in oldItems)
 			{

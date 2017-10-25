@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using AllyisApps.Services.Auth;
 using AllyisApps.Services.Expense;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
@@ -23,11 +22,17 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="model">The account model.</param>
 		/// <returns>The account page.</returns>
-		public ActionResult SaveAccount(int subscriptionId, CreateAccountViewModel model)
+		public async Task<ActionResult> SaveAccount(int subscriptionId, CreateAccountViewModel model)
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Accounts, subscriptionId);
-			var subInfo = AppService.GetSubscription(subscriptionId);
-			var canDisable = CanDisableAccount(subscriptionId, model.AccountId, model.SelectedStatus);
+			var subInfoTask = AppService.GetSubscription(subscriptionId);
+			var canDisableTask = CanDisableAccount(subscriptionId, model.AccountId, model.SelectedStatus);
+
+			await Task.WhenAll(new Task[] { subInfoTask, canDisableTask });
+
+			var subInfo = subInfoTask.Result;
+			var canDisable = canDisableTask.Result;
+
 			bool success = false;
 			if (model != null)
 			{
@@ -42,7 +47,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					ParentAccountId = Convert.ToInt32(model.SelectedAccount) != 0 ? (int?)Convert.ToInt32(model.SelectedAccount) : null
 				};
 
-				if (CheckAccountParent(subscriptionId, acc))
+				if (await CheckAccountParent(subscriptionId, acc))
 				{
 					if (acc.AccountId == 0)
 					{
@@ -87,15 +92,15 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="childAcc">The child account</param>
 		/// <returns></returns>
-		public bool CheckAccountParent(int subscriptionId, Account childAcc)
+		public async Task<bool> CheckAccountParent(int subscriptionId, Account childAcc)
 		{
 			bool results = true;
-			var subInfo = AppService.GetSubscription(subscriptionId);
+			var subInfo = await AppService.GetSubscription(subscriptionId);
 			var childId = childAcc.AccountId;
 
 			var currentAccount = childAcc;
-
-			List<Account> accounts = AppService.GetAccounts(subInfo.OrganizationId).ToList();
+			var accountResult = await AppService.GetAccounts(subInfo.OrganizationId);
+			List<Account> accounts = accountResult.ToList();
 
 			while (currentAccount.ParentAccountId != null && accounts.Count != 0)
 			{
@@ -118,22 +123,23 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="accId">The acccount id.</param>
 		/// <param name="selectedStatus">The new selcted status.</param>
 		/// <returns></returns>
-		public bool CanDisableAccount(int subId, int accId, string selectedStatus)
+		public async Task<bool> CanDisableAccount(int subId, int accId, string selectedStatus)
 		{
 			var results = true;
-			var subInfo = AppService.GetSubscription(subId);
-			var account = AppService.GetAccounts(subInfo.OrganizationId).Where(x => x.AccountId == accId).FirstOrDefault();
+			var subInfo = await AppService.GetSubscription(subId);
+			var accResults = await AppService.GetAccounts(subInfo.OrganizationId);
+			var account = accResults.Where(x => x.AccountId == accId).FirstOrDefault();
 
 			if (account != null && string.Equals(selectedStatus, "1"))
 			{
 				return results;
 			}
 
-			var orgReports = AppService.GetExpenseReportByOrgId(subInfo.OrganizationId);
+			var orgReports = await AppService.GetExpenseReportByOrgId(subInfo.OrganizationId);
 
 			foreach (var report in orgReports)
 			{
-				var reportItems = AppService.GetExpenseItemsByReportId(report.ExpenseReportId);
+				var reportItems = await AppService.GetExpenseItemsByReportId(report.ExpenseReportId);
 				var accItems = reportItems.Where(x => x.AccountId == accId);
 
 				if (accItems.Count() > 0 && (ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Paid)

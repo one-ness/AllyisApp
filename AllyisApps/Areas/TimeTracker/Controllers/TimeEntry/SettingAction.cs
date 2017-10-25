@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
@@ -24,15 +25,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <returns>The settings page.</returns>
-		public ActionResult Settings(int subscriptionId)
+		public async Task<ActionResult> Settings(int subscriptionId)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			int organizaionID = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			var infos = AppService.GetAllSettings(organizaionID);
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			string subName = AppService.GetSubscription(subscriptionId).SubscriptionName;
-			var infoOrg = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
+			var subGet = await AppService.GetSubscription(subscriptionId);
+			string subName = subGet.SubscriptionName;
+			var infoOrg = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infoOrg.Item1.StartOfWeek));
 			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
 			Services.TimeTracker.Setting settings = infos.Item1;

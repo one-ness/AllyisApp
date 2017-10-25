@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Resources;
@@ -26,7 +27,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="orgId">Id of the org the member is in.</param>
 		/// <param name="invited">Is the user invited or a already a member?.</param>
 		/// <returns>Returns info for a view about the member to be edited.</returns>
-		public ActionResult EditMember(int userId, int orgId, int invited)
+		public async Task<ActionResult> EditMember(int userId, int orgId, int invited)
 		{
 			bool isInvited = invited == 0 ? false : true;
 			EditMemberViewModel model;
@@ -34,8 +35,9 @@ namespace AllyisApps.Controllers.Auth
 
 			if (!isInvited)
 			{
-				OrganizationUser userOrgInfo = AppService.GetOrganizationManagementInfo(orgId).Users.Find(m => m.UserId == userId);
-				User userBasicInfo = AppService.GetUser(userId);
+				var orgResult = await AppService.GetOrganizationManagementInfo(orgId);
+				OrganizationUser userOrgInfo = orgResult.Users.Find(m => m.UserId == userId);
+				User userBasicInfo = await AppService.GetUser(userId);
 
 				model = new EditMemberViewModel
 				{
@@ -71,7 +73,8 @@ namespace AllyisApps.Controllers.Auth
 			}
 			else
 			{
-				Invitation userOrgInfo = AppService.GetOrganizationManagementInfo(orgId).Invitations.Find(m => m.InvitationId == userId);
+				var orgResult = await AppService.GetOrganizationManagementInfo(orgId);
+				Invitation userOrgInfo = orgResult.Invitations.Find(m => m.InvitationId == userId);
 
 				model = new EditMemberViewModel
 				{
@@ -101,11 +104,11 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult EditMember(EditMemberViewModel model)
+		public async Task<ActionResult> EditMember(EditMemberViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
-				if (this.AppService.UpdateMember(model.UserInfo.UserId, model.OrganizationId, model.EmployeeId, model.EmployeeRoleId, model.FirstName, model.LastName, model.IsInvited))
+				if (await this.AppService.UpdateMember(model.UserInfo.UserId, model.OrganizationId, model.EmployeeId, model.EmployeeRoleId, model.FirstName, model.LastName, model.IsInvited))
 				{
 					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UpdateMemberSuccessMessage, model.UserInfo.FirstName, model.UserInfo.LastName), Variety.Success));
 				}
@@ -114,6 +117,7 @@ namespace AllyisApps.Controllers.Auth
 					Notifications.Add(new BootstrapAlert(Resources.Strings.CannotEditEmployeeId, Variety.Danger));
 				}
 
+				await Task.Delay(1);
 				return this.RedirectToAction(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { id = model.OrganizationId });
 			}
 

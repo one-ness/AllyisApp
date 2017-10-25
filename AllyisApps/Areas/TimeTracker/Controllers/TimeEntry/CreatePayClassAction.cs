@@ -5,12 +5,13 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using System.Linq;
 using AllyisApps.Lib;
+using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
@@ -26,15 +27,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <returns>The settings page.</returns>
-		public ActionResult SettingsPayClass(int subscriptionId)
+		public async Task<ActionResult> SettingsPayClass(int subscriptionId)
 		{
 			this.AppService.CheckTimeTrackerAction((AppService.TimeTrackerAction.EditOthers), subscriptionId);
 			int organizaionID = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			var infos = AppService.GetAllSettings(organizaionID);
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			string subName = AppService.GetSubscriptionName(subscriptionId);
-			var infoOrg = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
+			string subName = await AppService.GetSubscriptionName(subscriptionId);
+			var infoOrg = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infoOrg.Item1.StartOfWeek));
 			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
 			Services.TimeTracker.Setting settings = infos.Item1;
@@ -75,7 +76,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="newPayClass">The pay class to create.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>Redirects to the settings view.</returns>
-		public ActionResult CreatePayClass(string newPayClass, int subscriptionId)
+		public async Task<ActionResult> CreatePayClass(string newPayClass, int subscriptionId)
 		{
 			if (string.IsNullOrWhiteSpace(newPayClass))
 			{
@@ -88,7 +89,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				// should put try catch in 'else'. Creating a blank pay class results in Two alerts: "Cannot create blank pay class" and "pay class already exists"
 				try
 				{
-					if (AppService.CreatePayClass(newPayClass, orgId, subscriptionId))
+					if (await AppService.CreatePayClass(newPayClass, orgId, subscriptionId))
 					{
 						Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulCreatePayClass, Variety.Success));
 					}

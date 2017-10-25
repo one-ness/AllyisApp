@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -37,7 +38,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="pageNum">The page of results to view.</param>
 		/// <param name="projectSelect">The project's id (not required).</param>
 		/// <returns>The data in a view dependent on the button's value.</returns>
-		public ActionResult ViewReport(string viewDataButton, List<int> userSelect, int subscriptionId, int organizationId, int? dateRangeStart, int? dateRangeEnd, bool showExport, int customerSelect, int pageNum, int projectSelect = 0)
+		public async Task<ActionResult> ViewReport(string viewDataButton, List<int> userSelect, int subscriptionId, int organizationId, int? dateRangeStart, int? dateRangeEnd, bool showExport, int customerSelect, int pageNum, int projectSelect = 0)
 		{
 			if (viewDataButton.Equals(Resources.Strings.Preview))
 			{
@@ -61,10 +62,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					reportVMselect.Users = userSelect;
 				}
 
-				var infos = AppService.GetReportInfo(subscriptionId);
 				UserContext.SubscriptionAndRole subInfo = null;
 				this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-				string subName = AppService.GetSubscriptionName(subscriptionId);
+
+				var infosTask = AppService.GetReportInfo(subscriptionId);
+				var subNameTask = AppService.GetSubscriptionName(subscriptionId);
+
+				await Task.WhenAll(new Task[] { infosTask, subNameTask });
+
+				var infos = infosTask.Result;
+				string subName = subNameTask.Result;
 
 				bool canEditOthers = this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId, false);
 				ReportViewModel reportVM = this.ConstructReportViewModel(this.AppService.UserContext.UserId, organizationId, canEditOthers, infos.Customers, infos.CompleteProject, showExport, reportVMselect);
@@ -73,7 +80,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				DataExportViewModel dataVM = null;
 				try
 				{
-					dataVM = this.ConstructDataExportViewModel(subscriptionId, organizationId, reportVMselect.Users, Utility.GetDateTimeFromDays(dateRangeStart.Value), Utility.GetDateTimeFromDays(dateRangeEnd.Value), projectSelect, customerSelect);
+					dataVM = await this.ConstructDataExportViewModel(subscriptionId, organizationId, reportVMselect.Users, Utility.GetDateTimeFromDays(dateRangeStart.Value), Utility.GetDateTimeFromDays(dateRangeEnd.Value), projectSelect, customerSelect);
 				}
 				catch (Exception ex)
 				{
@@ -133,7 +140,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else if (viewDataButton.Equals(Resources.Strings.Export))
 			{
-				return this.ExportReport(subscriptionId, organizationId, userSelect, Utility.GetDateTimeFromDays(dateRangeStart.Value), Utility.GetDateTimeFromDays(dateRangeEnd.Value), customerSelect, projectSelect);
+				return await this.ExportReport(subscriptionId, organizationId, userSelect, Utility.GetDateTimeFromDays(dateRangeStart.Value), Utility.GetDateTimeFromDays(dateRangeEnd.Value), customerSelect, projectSelect);
 			}
 
 			return this.RedirectToAction(ActionConstants.Report);

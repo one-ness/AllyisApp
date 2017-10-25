@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
@@ -26,14 +27,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="customerId">Customer id.</param>
 		/// <returns>The edit customer view - info on all the customer details.</returns>
 		[HttpGet]
-		public ActionResult Details(int subscriptionId, int customerId)
+		public async Task<ActionResult> Details(int subscriptionId, int customerId)
 		{
 			if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
 			{
 				AppService.CheckTimeTrackerAction(TimeTrackerAction.ViewCustomer, subscriptionId);
 			}
 
-			var infos = AppService.GetCustomerInfo(customerId);
+			var infos = await AppService.GetCustomerInfo(customerId);
 			var customer = infos;
 			return this.View(new EditCustomerInfoViewModel
 			{

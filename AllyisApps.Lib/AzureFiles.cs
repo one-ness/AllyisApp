@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
@@ -97,7 +98,7 @@ namespace AllyisApps.Lib
 		/// <param name="attName">the attachment name.</param>
 		/// <param name="fileStream"></param>
 		/// <returns></returns>
-		public static string DownloadReportAttachment(int reportId, string attName, Stream fileStream)
+		public static async Task<string> DownloadReportAttachment(int reportId, string attName, Stream fileStream)
 		{
 			CloudStorageAccount account = CloudStorageAccount.Parse(
 				CloudConfigurationManager.GetSetting("StorageConnectionString"));
@@ -108,16 +109,21 @@ namespace AllyisApps.Lib
 
 			CloudBlockBlob blob = blobContainer.GetBlockBlobReference(attName);
 
-			blob.DownloadToStream(fileStream);
+			await blob.DownloadToStreamAsync(fileStream);
 
 			return blob.Properties.ContentType;
 		}
 
-		public static Tuple<Stream, string, string> GetFile(int reportId, string attName)
+		public static async Task<Tuple<Stream, string, string>> GetFile(int reportId, string attName)
 		{
 			Stream stream = new MemoryStream();
-			string contentType = DownloadReportAttachment(reportId, attName, stream);
+			string contentType = await DownloadReportAttachment(reportId, attName, stream);
 			return new Tuple<Stream, string, string>(stream, contentType, attName);
+		}
+
+		public static Tuple<Stream, string, string> GetFileRazor(int reportId, string attName)
+		{
+			return Task.Run(async () => { return await GetFile(reportId, attName); }).Result;
 		}
 
 		public static bool SaveApplicationDocument(int applicationId, Stream stream, string documentName)

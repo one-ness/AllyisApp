@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using AllyisApps.Services.Expense;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -19,7 +16,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// Action to delete an account.
 		/// </summary>
 		/// <returns></returns>
-		public ActionResult DeleteAccount(int subscriptionId, int accountId)
+		public async Task<ActionResult> DeleteAccount(int subscriptionId, int accountId)
 		{
 			List<Account> associatedAccounts = new List<Account>();
 
@@ -28,7 +25,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				associatedAccounts.Reverse();
 				foreach (var account in associatedAccounts)
 				{
-					AppService.DeleteAccount(account.AccountId);
+					await AppService.DeleteAccount(account.AccountId);
 				}
 			}
 			else

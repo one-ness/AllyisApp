@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -27,10 +28,15 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="userId">The Customer id.</param>
 		/// <returns>Presents a page to edit Customer data.</returns>
 		[HttpGet]
-		public ActionResult Edit(int subscriptionId, int userId)
+		public async Task<ActionResult> Edit(int subscriptionId, int userId)
 		{
-			var customer = AppService.GetCustomerInfo(userId);
-			string subscriptionNameToDisplay = AppService.GetSubscriptionName(subscriptionId);
+			var customerTask = AppService.GetCustomerInfo(userId);
+			var subscriptionNameToDisplayTask = AppService.GetSubscriptionName(subscriptionId);
+
+			await Task.WhenAll(new Task[] { customerTask, subscriptionNameToDisplayTask });
+
+			var customer = customerTask.Result;
+			var subscriptionNameToDisplay = subscriptionNameToDisplayTask.Result;
 
 			return this.View(new EditCustomerInfoViewModel
 			{
@@ -69,11 +75,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns>The ActionResult.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Edit(EditCustomerInfoViewModel model)
+		public async Task<ActionResult> Edit(EditCustomerInfoViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
-				var result = AppService.UpdateCustomer(
+				var result = await AppService.UpdateCustomer(
 					new Customer()
 					{
 						CustomerId = model.CustomerId,

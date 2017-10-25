@@ -5,15 +5,15 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
+using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
-using AllyisApps.ViewModels.Auth;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using AllyisApps.Services.Billing;
-using AllyisApps.Resources;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -41,8 +41,8 @@ namespace AllyisApps.Controllers.Auth
 
 			List<SelectListItem> orgRoles = new List<SelectListItem>()
 			{
-				new SelectListItem() { Text = OrganizationRole.Member.ToString(), Value = "1"},
-				new SelectListItem() { Text = OrganizationRole.Owner.ToString(), Value = "2" }
+				new SelectListItem() { Text = OrganizationRoleEnum.Member.ToString(), Value = "1"},
+				new SelectListItem() { Text = OrganizationRoleEnum.Owner.ToString(), Value = "2" }
 			};
 
 			List<SelectListItem> etRoles = new List<SelectListItem>()
@@ -75,20 +75,20 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>The result of this action.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult AddMember(AddMemberViewModel model)
+		public async Task<ActionResult> AddMember(AddMemberViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
 				try
 				{
-					User usr = AppService.GetUserByEmail(model.Email);
+					User usr = await AppService.GetUserByEmail(model.Email);
 					string url = usr != null ?
 						Url.Action(ActionConstants.Index, ControllerConstants.Account, null, protocol: Request.Url.Scheme) :
 						Url.Action(ActionConstants.Register, ControllerConstants.Account, null, protocol: Request.Url.Scheme);
 
 					string prodJson = string.Format("{{ \"" + (int)SkuIdEnum.TimeTrackerBasic + "\" : {0}, \"" + (int)SkuIdEnum.ExpenseTrackerBasic + "\" : {1}, \"" + (int)SkuIdEnum.StaffingManagerBasic + "\" : 0 }}", model.ttSelection, model.etSelection);
 
-					int invitationId = AppService.InviteUser(url, model.Email.Trim(), model.FirstName, model.LastName, model.OrganizationId, model.OrgRoleSelection == 2 ? OrganizationRole.Owner : OrganizationRole.Member, model.EmployeeId, prodJson);
+					int invitationId = await AppService.InviteUser(url, model.Email.Trim(), model.FirstName, model.LastName, model.OrganizationId, model.OrgRoleSelection == 2 ? OrganizationRoleEnum.Owner : OrganizationRoleEnum.Member, model.EmployeeId, prodJson);
 
 					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserEmailed, model.FirstName, model.LastName), Variety.Success));
 					return this.RedirectToAction(ActionConstants.OrganizationMembers, new { id = model.OrganizationId });

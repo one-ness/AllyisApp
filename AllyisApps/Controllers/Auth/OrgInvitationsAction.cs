@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.ViewModels.Auth;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -42,7 +42,7 @@ namespace AllyisApps.Controllers.Auth
 				model.Invitations.Add(data);
 			}
 
-			var org = this.AppService.GetOrganization(id);
+			var org = await this.AppService.GetOrganization(id);
 			model.OrganizationName = org.OrganizationName;
 			model.TabInfo.OrganizationId = id;
 			model.CanDeleteInvitations = this.AppService.CheckOrgAction(Services.AppService.OrgAction.DeleteInvitation, id, false);

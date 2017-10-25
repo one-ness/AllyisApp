@@ -4,20 +4,17 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using System.Dynamic;
 using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
-using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
-using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.ViewModels;
-using System.Web.Script.Serialization;
-using System;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -32,11 +29,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="positionId">The position id.</param>
 		/// <param name="subscriptionId">the subscription</param>
 		/// <returns>Presents a page for the creation of a new position.</returns>
-		public ActionResult ViewPosition(int positionId, int subscriptionId)
+		public async Task<ActionResult> ViewPosition(int positionId, int subscriptionId)
 		{
 			SetNavData(subscriptionId);
 
-			var viewModel = setupViewPositionViewModel(positionId, subscriptionId);
+			var viewModel = await setupViewPositionViewModel(positionId, subscriptionId);
 
 			return this.View(viewModel);
 		}
@@ -45,17 +42,23 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// setup position setup viewmodel
 		/// </summary>
 		/// <returns></returns>
-		public ViewPositionViewModel setupViewPositionViewModel(int positionId, int subscriptionId)
+		public async Task<ViewPositionViewModel> setupViewPositionViewModel(int positionId, int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			Position pos = AppService.GetPosition(positionId);
-			List<Application> applicationsSerive = AppService.GetFullApplicationInfoByPositionId(positionId);
+			Position pos = await AppService.GetPosition(positionId);
+			List<Application> applicationsSerive = await AppService.GetFullApplicationInfoByPositionId(positionId);
 			List<ApplicationInfoViewModel> applications = new List<ApplicationInfoViewModel>();
 
-			string subscriptionNameToDisplay = AppService.GetSubscriptionName(subscriptionId);
+			var subscriptionNameToDisplayTask = AppService.GetSubscriptionName(subscriptionId);
 			//TODO: this is piggy-backing off the get index action, create a new action that just gets items 3-5.
-			var infos = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
+			var infosTask = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
+
+			await Task.WhenAll(new Task[] { infosTask, subscriptionNameToDisplayTask });
+
+			var infos = infosTask.Result;
+			var subscriptionNameToDisplay = subscriptionNameToDisplayTask.Result;
+
 			foreach (Application app in applicationsSerive)
 			{
 				var viewApp = BuildApplications(app);
@@ -87,7 +90,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			DateTime formatingStartDate = new DateTime(); //this formating variable is nessicary if the view doesnt want to include time of day. You can't ToShortDateFormat a nullable DateTime
 			formatingStartDate = DateTime.Now;
 			if (pos.StartDate != null) formatingStartDate = (DateTime)pos.StartDate;
-			foreach(var tag in pos.Tags) assignedTags += "," + tag.TagName;
+			foreach (var tag in pos.Tags) assignedTags += "," + tag.TagName;
 			return new ViewPositionViewModel
 			{
 				PositionId = pos.PositionId,
@@ -142,7 +145,8 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				HiringManager = pos.HiringManager,
 				TeamName = pos.TeamName,
 				TagsToSubmit = assignedTags,
-				PositionAddress = new AddressViewModel {
+				PositionAddress = new AddressViewModel
+				{
 					Country = pos.Address.CountryName,
 					City = pos.Address.City,
 					State = pos.Address.StateName
@@ -179,9 +183,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				ApplicationModifiedUTC = app.ApplicationModifiedUtc,
 				Notes = app.Notes,
 				ApplicationDocuments = docs
-
 			};
 		}
-
 	}
 }

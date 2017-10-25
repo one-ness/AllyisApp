@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Lib;
@@ -21,11 +22,11 @@ namespace AllyisApps.Controllers.Auth
 		/// GET: /Account/EditProfile.
 		/// </summary>
 		/// <returns>Edit profile view.</returns>
-		public ActionResult EditProfile()
+		public async Task<ActionResult> EditProfile()
 		{
 			var model = new EditProfileViewModel();
 			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
-			var user = this.AppService.GetCurrentUser();
+			var user = await this.AppService.GetCurrentUser();
 			model.Address = user.Address?.Address1;
 			model.AddressId = user.Address?.AddressId;
 			model.City = user.Address?.City;
@@ -49,11 +50,11 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>Tje Edit profile view.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult EditProfile(EditProfileViewModel model)
+		public async Task<ActionResult> EditProfile(EditProfileViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
-				this.AppService.UpdateCurrentUserProfile(model.DateOfBirth, model.FirstName, model.LastName, model.PhoneNumber, model.AddressId, model.Address, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode);
+				await this.AppService.UpdateCurrentUserProfile(model.DateOfBirth, model.FirstName, model.LastName, model.PhoneNumber, model.AddressId, model.Address, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode);
 				Notifications.Add(new BootstrapAlert(Resources.Strings.UpdateProfileSuccessMessage, Variety.Success));
 				return this.RouteUserHome();
 			}
@@ -61,6 +62,7 @@ namespace AllyisApps.Controllers.Auth
 			// model error
 			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
 			model.LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService, model.SelectedCountryCode);
+
 			return View(model);
 		}
 	}

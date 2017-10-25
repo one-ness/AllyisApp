@@ -4,13 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using AllyisApps.Services.Auth;
-using AllyisApps.Services.Billing;
-using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -23,9 +19,9 @@ namespace AllyisApps.Controllers.Auth
 		/// Removes the selected subscription from the database.
 		/// </summary>
 		[HttpGet]
-		public ActionResult Unsubscribe(int id)
+		public async Task<ActionResult> Unsubscribe(int id)
 		{
-			int orgId = this.AppService.DeleteSubscription(id);
+			int orgId = await this.AppService.DeleteSubscription(id);
 			Notifications.Add(new BootstrapAlert("Your subscription was deleted successfully.", Variety.Success));
 			return this.RedirectToAction(ActionConstants.OrganizationSubscriptions, new { id = orgId });
 		}

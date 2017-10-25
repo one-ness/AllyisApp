@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -22,9 +23,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subscriptionId">Subscription id.</param>
 		/// <param name="userId">The project's Id.</param>
 		/// <returns>Deletes the project from the database.</returns>
-		public ActionResult Delete(int subscriptionId, int userId)
+		public async Task<ActionResult> Delete(int subscriptionId, int userId)
 		{
-			var result = AppService.DeleteProject(userId, subscriptionId);
+			var result = await AppService.DeleteProject(userId, subscriptionId);
 
 			if (!string.IsNullOrEmpty(result))
 			{

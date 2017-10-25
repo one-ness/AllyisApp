@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -23,11 +24,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	{
 		/// <summary>
 		/// GET: Customer/Create.
-		/// </summary>
+		/// </summary>.
 		/// <param name="subscriptionId">The subscription.</param>
 		/// <returns>Presents a page for the creation of a new Customer.</returns>
 		[HttpGet]
-		public ActionResult Create(int subscriptionId)
+		public async Task<ActionResult> Create(int subscriptionId)
 		{
 			if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
 			{
@@ -35,8 +36,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			int orgId = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 
-			var NextCustomerId = AppService.GetNextCustId(subscriptionId);
-			string subscriptionNameToDisplay = AppService.GetSubscriptionName(subscriptionId);
+			var NextCustomerId = await AppService.GetNextCustId(subscriptionId);
+			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
 			return this.View(new EditCustomerInfoViewModel
 			{
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
@@ -56,11 +57,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Create(EditCustomerInfoViewModel model)
+		public async Task<ActionResult> Create(EditCustomerInfoViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
-				int? customerId = AppService.CreateCustomer(
+				int? customerId = await AppService.CreateCustomer(
 					new Customer()
 					{
 						ContactEmail = model.ContactEmail,

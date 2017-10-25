@@ -1,7 +1,7 @@
-﻿using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using AllyisApps.ViewModels.Auth;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
+using AllyisApps.Core.Alert;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -16,9 +16,9 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="id">Subscription id.</param>
 		/// <returns>The result of this action.</returns>
 		[HttpGet]
-		public ActionResult EditSubscription(int id)
+		public async Task<ActionResult> EditSubscription(int id)
 		{
-			var sub = this.AppService.GetSubscription(id);
+			var sub = await this.AppService.GetSubscription(id);
 			var model = new EditSubscriptionViewModel();
 			model.OrganizationId = sub.OrganizationId;
 			model.ProductName = sub.ProductName;
@@ -27,6 +27,7 @@ namespace AllyisApps.Controllers.Auth
 			model.SkuName = sub.SkuName;
 			model.SubscriptionId = id;
 			model.SubscriptionName = sub.SubscriptionName;
+
 			return this.View(model);
 		}
 
@@ -41,15 +42,14 @@ namespace AllyisApps.Controllers.Auth
 		/// .</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult EditSubscription(EditSubscriptionViewModel model)
+		public async Task<ActionResult> EditSubscription(EditSubscriptionViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
-				this.AppService.UpdateSubscriptionName(model.SubscriptionId, model.SubscriptionName);
+				await this.AppService.UpdateSubscriptionName(model.SubscriptionId, model.SubscriptionName);
 				Notifications.Add(new BootstrapAlert(string.Format("{0} updated successfully!", model.SubscriptionName), Variety.Success));
 				return this.RedirectToAction(ActionConstants.OrganizationSubscriptions, new { id = model.OrganizationId });
 			}
-
 			// error
 			return this.View(model);
 		}

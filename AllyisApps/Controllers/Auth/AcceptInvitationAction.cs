@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 using AllyisApps.Services;
 
 namespace AllyisApps.Controllers.Auth
@@ -12,9 +13,9 @@ namespace AllyisApps.Controllers.Auth
 		/// Action that accepts an invitation to an organization.
 		/// </summary>
 		[HttpPost]
-		public ActionResult AcceptInvitation(int id)
+		public async Task<ActionResult> AcceptInvitation(int id)
 		{
-			bool result = this.AppService.AcceptUserInvitation(id);
+			bool result = await this.AppService.AcceptUserInvitation(id);
 
 			if (!result)
 			{

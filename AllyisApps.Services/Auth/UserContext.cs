@@ -84,8 +84,7 @@ namespace AllyisApps.Services.Auth
 		public class OrganizationAndRole
 		{
 			public int OrganizationId { get; set; }
-			public OrganizationRole OrganizationRole { get; set; }
-			public decimal MaxAmount { get; set; }
+			public OrganizationRoleEnum OrganizationRole { get; set; }
 		}
 
 		/// <summary>
@@ -99,7 +98,6 @@ namespace AllyisApps.Services.Auth
 			public ProductIdEnum ProductId { get; set; }
 			public int ProductRoleId { get; set; }
 			public string AreaUrl { get; set; }
-			public decimal MaxAmount { get; set; }
 		}
 	}
 }

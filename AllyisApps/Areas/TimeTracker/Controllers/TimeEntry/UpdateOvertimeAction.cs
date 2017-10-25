@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -24,15 +25,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// returns the view for overtime settings.
 		/// </summary>
 		/// <returns></returns>
-		public ActionResult SettingsOvertime(int subscriptionId)
+		public async Task<ActionResult> SettingsOvertime(int subscriptionId)
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			int organizaionID = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			var infos = AppService.GetAllSettings(organizaionID);
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			string subName = AppService.GetSubscriptionName(subscriptionId);
-			var infoOrg = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
+			string subName = await AppService.GetSubscriptionName(subscriptionId);
+			var infoOrg = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infoOrg.Item1.StartOfWeek));
 			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
 			Services.TimeTracker.Setting settings = infos.Item1;
@@ -77,11 +78,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="mult">Overtime pay multiplier.</param>
 		/// <returns>Redirects to the settings view.</returns>
 		[HttpPost]
-		public ActionResult UpdateOvertime(int subscriptionId, string setting, int hours = -1, string period = "", float mult = 1)
+		public async Task<ActionResult> UpdateOvertime(int subscriptionId, string setting, int hours = -1, string period = "", float mult = 1)
 		{
 			int actualHours = string.Equals(setting, "No") ? -1 : hours;
 
-			if (AppService.UpdateOvertime(subscriptionId, AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId, actualHours, period, mult))
+			if (await AppService.UpdateOvertime(subscriptionId, AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId, actualHours, period, mult))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.OvertimeUpdate, Variety.Success));
 			}

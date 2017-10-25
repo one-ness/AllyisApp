@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
@@ -23,7 +24,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="startDate">The start date.</param>
 		/// <param name="endDate">The end date.</param>
 		/// <returns>A FileStreamResult.</returns>
-		public ActionResult ExportExpenseReport(int subscriptionId, int organizationId, AdminReportModel model, DateTime? startDate = null, DateTime? endDate = null)
+		public async Task<ActionResult> ExportExpenseReport(int subscriptionId, int organizationId, AdminReportModel model, DateTime? startDate = null, DateTime? endDate = null)
 		{
 			List<ExpenseReport> expenses = new List<ExpenseReport>();
 
@@ -32,7 +33,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			foreach (var user in model.Selection.SelectedUsers)
 			{
-				var reports = AppService.GetExpenseReportBySubmittedId(user).Select(x => x).Where(x => DateTime.Compare(x.CreatedUtc, start) >= 0 && DateTime.Compare(x.CreatedUtc, end) <= 0);
+				var results = await AppService.GetExpenseReportBySubmittedId(user);
+				var reports = results.Select(x => x).Where(x => DateTime.Compare(x.CreatedUtc, start) >= 0 && DateTime.Compare(x.CreatedUtc, end) <= 0);
 				reports = reports.Select(x => x).Where(y => model.Selection.Status.IndexOf(y.ReportStatus) != -1);
 				expenses.AddRange(reports);
 			}

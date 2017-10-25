@@ -46,7 +46,8 @@ namespace AllyisApps.Controllers.Auth
 				model.Users.Add(data);
 			}
 
-			model.OrganizationName = AppService.GetOrganization(id).OrganizationName;
+			var org = await this.AppService.GetOrganization(id);
+			model.OrganizationName = org.OrganizationName;
 
 			return View(model);
 		}

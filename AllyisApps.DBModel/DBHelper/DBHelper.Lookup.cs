@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using AllyisApps.DBModel.Lookup;
 using Dapper;
 
@@ -65,11 +66,12 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Retrieves a collection of language settings from the database.
 		/// </summary>
-		public List<LanguageDBEntity> ValidLanguages()
+		public async Task<List<LanguageDBEntity>> ValidLanguages()
 		{
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				return con.Query<LanguageDBEntity>("[Lookup].[GetLanguages]").ToList();
+				var result = await con.QueryAsync<LanguageDBEntity>("[Lookup].[GetLanguages]");
+				return result.ToList();
 			}
 		}
 

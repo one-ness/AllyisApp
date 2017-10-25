@@ -104,7 +104,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// check permissions for the given action in the given org for the logged in user.
 		/// </summary>
-		public bool CheckOrgAction(OrgAction action, int orgId, bool throwException = true)
+		 public bool CheckOrgAction(OrgAction action, int orgId, bool throwException = true)
 		{
 			bool result = false;
 			UserContext.OrganizationAndRole orgInfo = null;
@@ -114,7 +114,7 @@ namespace AllyisApps.Services
 			{
 				switch (orgInfo.OrganizationRole)
 				{
-					case OrganizationRole.Owner:
+					case OrganizationRoleEnum.Owner:
 						result = true;
 						break;
 

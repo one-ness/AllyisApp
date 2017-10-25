@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
-using AllyisApps.Lib;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using Newtonsoft.Json;
 
@@ -21,29 +19,29 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <returns></returns>
 		[HttpPost]
-		public ActionResult TimeEntryCURD(string data)
+		public async Task<ActionResult> TimeEntryCURD(string data)
 		{
 
 			var items = JsonConvert.DeserializeObject<TimeEntryCRUDModel>(data);
 
 			//var list = ConvertToEditTimeEntry(items);
 
-			
+
 			foreach (var entry in items.Entries.OrderBy(item => item.Date))
 			{
-				
+
 				JsonResult res = null;
 				if (entry.TimeEntryId.HasValue)
 				{
 					if (entry.IsDeleted)
 					{
-						 res = (JsonResult) DeleteTimeEntryJson(entry);
+						res = (JsonResult)await DeleteTimeEntryJson(entry);
 					}
 					else
 					{
 						if (entry.IsEdited)
 						{
-							res = (JsonResult)EditTimeEntryJson(entry);
+							res = (JsonResult)await EditTimeEntryJson(entry);
 						}
 					}
 				}
@@ -51,16 +49,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					if (entry.IsCreated && !entry.IsDeleted)
 					{
-						res = (JsonResult)CreateTimeEntryJson(entry);
+						res = (JsonResult)await CreateTimeEntryJson(entry);
 					}
 				}
-				
+
 			}
-			
+
 			int sDate = items.StartingDate;
 			int eDate = items.EndingDate;
 			return RedirectToAction(ActionConstants.IndexNoUserId, new { subscriptionId = items.SubscriptionId, startDate = sDate, endDate = eDate });
-		
+
 		}
 	}
 
@@ -68,7 +66,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	/// Time Entry Model for Action Triggred above
 	/// Creted by Index2.js with setup form allyis-timeentry-index2.js
 	/// </summary>
-	public class TimeEntryCRUDModel{
+	public class TimeEntryCRUDModel
+	{
 
 		/// <summary>
 		/// Entries for edit time view model

@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -43,9 +44,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="model">The model of changes to the project.</param>
 		/// <returns>Redirection to customer index page on success, or project index on failure.</returns>
 		[HttpPost]
-		public ActionResult Edit(EditProjectViewModel model)
+		public async Task<ActionResult> Edit(EditProjectViewModel model)
 		{
-			var list = AppService.GetNextProjectIdAndSubUsers(model.ParentCustomerId, model.SubscriptionId).Item2;
+			var listGet = await AppService.GetNextProjectIdAndSubUsers(model.ParentCustomerId, model.SubscriptionId);
+			var list = listGet.Item2;
 			var subList = new List<BasicUserInfoViewModel>();
 			foreach (var user in list)
 			{
@@ -58,7 +60,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
 
-				Services.Project.Project projIdMatch = AppService.GetAllProjectsForOrganization(orgId).Where(project => project.ProjectOrgId == model.ProjectOrgId && project.owningCustomer?.CustomerId == model.ParentCustomerId).SingleOrDefault();
+				var projIdMatchGet = await AppService.GetAllProjectsForOrganization(orgId);
+				Services.Project.Project projIdMatch = projIdMatchGet.Where(project => project.ProjectOrgId == model.ProjectOrgId && project.owningCustomer?.CustomerId == model.ParentCustomerId).SingleOrDefault();
 				if (projIdMatch != null && projIdMatch.ProjectId != model.ProjectId)
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
@@ -98,7 +101,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="projectId">Project Id.</param>
 		/// <param name="subscriptionId">Subscription id.</param>
 		/// <returns>The EditProjectViewModel.</returns>
-		public EditProjectViewModel ConstructEditProjectViewModel(int projectId, int subscriptionId)
+		public async Task<EditProjectViewModel> ConstructEditProjectViewModel(int projectId, int subscriptionId)
 		{
 			var infos = AppService.GetProjectEditInfo(projectId, subscriptionId);
 
@@ -117,7 +120,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				subscriptionUsers.Add(new BasicUserInfoViewModel(su.FirstName, su.LastName, su.UserId));
 			}
 
-			string subscriptionNameToDisplay = AppService.GetSubscription(subscriptionId).SubscriptionName;
+			var subscriptionNameToDisplayGet = await AppService.GetSubscription(subscriptionId);
+			string subscriptionNameToDisplay = subscriptionNameToDisplayGet.SubscriptionName;
 
 			return new EditProjectViewModel
 			{

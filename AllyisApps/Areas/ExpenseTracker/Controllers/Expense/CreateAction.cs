@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -21,11 +22,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="reportId">The report id.</param>
 		/// <returns>Returns an action result.</returns>
-		public ActionResult Create(int subscriptionId, int reportId = -1)
+		public async Task<ActionResult> Create(int subscriptionId, int reportId = -1)
 		{
-			SetNavData(subscriptionId);
-
-			IList<Account> accounts = AppService.GetAccounts(subscriptionId).ToList();
+			await SetNavData(subscriptionId);
+			var organizationId = (await AppService.GetSubscription(subscriptionId)).OrganizationId;
+			var results = await AppService.GetAccounts(organizationId);
+			IList<Account> accounts = results.ToList();
 			List<AccountViewModel> accountViewModels = new List<AccountViewModel>();
 			foreach (Account account in accounts)
 			{
@@ -41,7 +43,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				return RedirectToAction("Index");
 			}
 
-			ExpenseReport report = reportId == -1 ? null : AppService.GetExpenseReport(reportId);
+			ExpenseReport report = reportId == -1 ? null : await AppService.GetExpenseReport(reportId);
 			if (reportId != -1)
 			{
 				if (report != null
@@ -60,7 +62,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, subscriptionId);
 			}
 
-			IList<ExpenseItem> items = report == null ? null : AppService.GetExpenseItemsByReportId(reportId);
+			IList<ExpenseItem> items = report == null ? null : await AppService.GetExpenseItemsByReportId(reportId);
 			List<ExpenseItemCreateViewModel> itemViewModels = new List<ExpenseItemCreateViewModel>();
 			if (items != null)
 			{

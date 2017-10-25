@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
 using AllyisApps.ViewModels.Billing;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Controllers.Auth
 {

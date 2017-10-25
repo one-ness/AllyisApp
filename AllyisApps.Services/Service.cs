@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.Hrm;
 using AllyisApps.DBModel.StaffingManager;
@@ -39,7 +40,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="timeEntryId">Time entry Id.</param>
 		/// <returns>A TimeEntryDBEntity.</returns>
-		public TimeEntry GetTimeEntry(int timeEntryId)
+		public async Task<TimeEntry> GetTimeEntry(int timeEntryId)
 		{
 			#region Validation
 
@@ -50,7 +51,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return InitializeTimeEntryInfo(DBHelper.GetTimeEntryById(timeEntryId));
+			return InitializeTimeEntryInfo(await DBHelper.GetTimeEntryById(timeEntryId));
 		}
 
 		/// <summary>
@@ -58,7 +59,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="entry">Time entry info.</param>
 		/// <returns>Time entry id.</returns>
-		public int CreateTimeEntry(TimeEntry entry)
+		public async Task<int> CreateTimeEntry(TimeEntry entry)
 		{
 			#region Validation
 
@@ -69,7 +70,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return DBHelper.CreateTimeEntry(GetDBEntityFromTimeEntryInfo(entry));
+			return await DBHelper.CreateTimeEntry(GetDBEntityFromTimeEntryInfo(entry));
 		}
 
 		/// <summary>
@@ -95,7 +96,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="timeEntryId">The Id of the time entry to be updated.</param>
 		/// <param name="timeEntryStatusId">The new status.</param>
-		public int UpdateTimeEntryStatusById(int timeEntryId, int timeEntryStatusId)
+		public async Task<int> UpdateTimeEntryStatusById(int timeEntryId, int timeEntryStatusId)
 		{
 			if (timeEntryId <= 0)
 			{
@@ -107,14 +108,14 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException(nameof(timeEntryStatusId), $"{nameof(timeEntryStatusId)} must not be negative.");
 			}
 
-			return DBHelper.UpdateTimeEntryStatusById(timeEntryId, timeEntryStatusId);
+			return await DBHelper.UpdateTimeEntryStatusById(timeEntryId, timeEntryStatusId);
 		}
 
 		/// <summary>
 		/// Deletes a time entry.
 		/// </summary>
 		/// <param name="timeEntryId">Time entry Id.</param>
-		public void DeleteTimeEntry(int timeEntryId)
+		public async void DeleteTimeEntry(int timeEntryId)
 		{
 			#region Validation
 
@@ -126,6 +127,7 @@ namespace AllyisApps.Services
 			#endregion Validation
 
 			DBHelper.DeleteTimeEntry(timeEntryId);
+			await Task.Yield();
 		}
 
 		/// <summary>
@@ -165,7 +167,7 @@ namespace AllyisApps.Services
 		/// <param name="start">Starting. <see cref="DateTime"/>.</param>
 		/// <param name="end">Ending. <see cref="DateTime"/>.</param>
 		/// <returns><see cref="IEnumerable{TimeEntryInfo}"/>.</returns>
-		public IEnumerable<TimeEntry> GetTimeEntriesByUserOverDateRange(List<int> userIds, DateTime? start, DateTime? end, int organizationId = -1)
+		public async Task<IEnumerable<TimeEntry>> GetTimeEntriesByUserOverDateRange(List<int> userIds, DateTime? start, DateTime? end, int organizationId = -1)
 		{
 			#region Validation
 
@@ -192,31 +194,31 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return DBHelper.GetTimeEntriesByUserOverDateRange(userIds, organizationId, start ?? DateTime.Now, end ?? DateTime.Now).Select(te => InitializeTimeEntryInfo(te));
+			var results = await DBHelper.GetTimeEntriesByUserOverDateRange(userIds, organizationId, start ?? DateTime.Now, end ?? DateTime.Now);
+			return results.Select(te => InitializeTimeEntryInfo(te));
 		}
 
 		/// <summary>
 		/// Gets a list of Customers for all customers in the organization, a list of CompleteProjectInfos for all
 		/// projects in the organization, and a list of SubscriptionUserInfos for all users in the current subscription.
 		/// </summary>
-		public ReportInfo GetReportInfo(int subscriptionId)
+		public async Task<ReportInfo> GetReportInfo(int subscriptionId)
 		{
-			UserContext.SubscriptionAndRole subInfo = null;
-			UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			var spResults = DBHelper.GetReportInfo(subInfo.OrganizationId, subscriptionId);
+			UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out UserContext.SubscriptionAndRole subInfo);
+			var spResults = await DBHelper.GetReportInfo(subInfo.OrganizationId, subscriptionId);
 			return new ReportInfo(
 				spResults.Item1.Select(cdb => (Customer)InitializeCustomer(cdb)).ToList(),
-				spResults.Item2.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
-				spResults.Item3.Select(sudb => InitializeSubscriptionUser(sudb)).ToList());
+				spResults.Item2.Select(InitializeCompleteProjectInfo).ToList(),
+				spResults.Item3.Select(InitializeSubscriptionUser).ToList());
 		}
 
 		/// <summary>
 		/// Gets the lock date for the current organization.
 		/// </summary>
 		/// <returns>Lock date.</returns>
-		public DateTime? GetLockDateByOrganizationId(int organizationId)
+		public async Task<DateTime?> GetLockDate(int organizationId)
 		{
-			LockDateDBEntity lockDate = DBHelper.GetLockDateByOrganizationId(organizationId);
+			LockDateDBEntity lockDate = await DBHelper.GetLockDateByOrganizationId(organizationId);
 			return GetLockDateFromParameters(lockDate.IsLockDateUsed, lockDate.LockDatePeriod, lockDate.LockDateQuantity);
 		}
 
@@ -234,8 +236,9 @@ namespace AllyisApps.Services
 				return null;
 			}
 
-			DateTime date = lockDatePeriod.Equals(3) ? DateTime.Now.AddMonths(-1 * lockDateQuantity) :
-				DateTime.Now.AddDays(-1 * lockDateQuantity * (lockDatePeriod.Equals(2) ? 7 : 1));
+			DateTime date = lockDatePeriod.Equals(3)
+				? DateTime.Now.AddMonths(-1 * lockDateQuantity)
+				: DateTime.Now.AddDays(-1 * lockDateQuantity * (lockDatePeriod.Equals(2) ? 7 : 1));
 			return date;
 		}
 
@@ -245,11 +248,12 @@ namespace AllyisApps.Services
 		/// <param name="holiday">Holiday.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool CreateHoliday(Holiday holiday, int subscriptionId)
+		public async Task<bool> CreateHoliday(Holiday holiday, int subscriptionId)
 		{
 			if (holiday == null) throw new ArgumentException("holiday");
 			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 			DBHelper.CreateHoliday(GetDBEntityFromHoliday(holiday));
+			await Task.Yield();
 			return true;
 		}
 
@@ -260,7 +264,7 @@ namespace AllyisApps.Services
 		/// <param name="orgId">The organization's Id.</param>
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool DeleteHoliday(int holidayId, int orgId, int subscriptionId)
+		public async Task<bool> DeleteHoliday(int holidayId, int orgId, int subscriptionId)
 		{
 			if (holidayId <= 0) throw new ArgumentException("holidayId");
 			if (orgId <= 0) throw new ArgumentException("orgId");
@@ -271,6 +275,7 @@ namespace AllyisApps.Services
 			if (deletedHoliday != null)
 			{
 				DBHelper.DeleteHoliday(deletedHoliday.HolidayName, deletedHoliday.Date, orgId);
+				await Task.Yield();
 			}
 
 			return true;
@@ -283,10 +288,11 @@ namespace AllyisApps.Services
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool CreatePayClass(string payClassName, int orgId, int subscriptionId)
+		public async Task<bool> CreatePayClass(string payClassName, int orgId, int subscriptionId)
 		{
 			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 			DBHelper.CreatePayClass(payClassName, orgId);
+			await Task.Yield();
 			return true;
 		}
 
@@ -298,10 +304,11 @@ namespace AllyisApps.Services
 		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <param name="destPayClass">The id of the destination payclass.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool DeletePayClass(int payClassId, int orgId, int subscriptionId, int? destPayClass)
+		public async Task<bool> DeletePayClass(int payClassId, int orgId, int subscriptionId, int? destPayClass)
 		{
 			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 			DBHelper.DeletePayClass(payClassId, destPayClass);
+			await Task.Yield();
 			return true;
 		}
 
@@ -327,17 +334,19 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets a list of <see cref="PayClass"/>'s for an organization.
 		/// </summary>
-		public IEnumerable<PayClass> GetPayClassesBySubscriptionId(int subscriptionId)
+		public async Task<IEnumerable<PayClass>> GetPayClassesBySubscriptionId(int subscriptionId)
 		{
-			return DBHelper.GetPayClasses(UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId).Select(pc => InitializePayClassInfo(pc));
+			var getClass = await DBHelper.GetPayClasses(UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
+			return getClass.Select(pc => InitializePayClassInfo(pc));
 		}
 
 		/// <summary>
 		/// Gets a list of <see cref="PayClass"/>'s for an organization.
 		/// </summary>
-		public IEnumerable<PayClass> GetPayClassesByOrganizationId(int organizationId)
+		public async Task<IEnumerable<PayClass>> GetPayClassesByOrganizationId(int organizationId)
 		{
-			return DBHelper.GetPayClasses(organizationId).Select(pc => InitializePayClassInfo(pc));
+			var getClass = await DBHelper.GetPayClasses(organizationId);
+			return getClass.Select(pc => InitializePayClassInfo(pc));
 		}
 
 		/// <summary>
@@ -347,7 +356,7 @@ namespace AllyisApps.Services
 		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <param name="startOfWeek">Start of Week.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool UpdateStartOfWeek(int organizationId, int subscriptionId, int startOfWeek)
+		public async Task<bool> UpdateStartOfWeek(int organizationId, int subscriptionId, int startOfWeek)
 		{
 			#region Validation
 
@@ -360,6 +369,7 @@ namespace AllyisApps.Services
 
 			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 			DBHelper.UpdateTimeTrackerStartOfWeek(organizationId, startOfWeek);
+			await Task.Yield();
 			return true;
 		}
 
@@ -372,7 +382,7 @@ namespace AllyisApps.Services
 		/// <param name="overtimePeriod">Time period for hours until overtime.</param>
 		/// <param name="overtimeMultiplier">Overtime pay multiplier.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool UpdateOvertime(int subscriptionId, int organizationId, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
+		public async Task<bool> UpdateOvertime(int subscriptionId, int organizationId, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
 		{
 			#region Validation
 
@@ -395,6 +405,7 @@ namespace AllyisApps.Services
 
 			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 			DBHelper.UpdateOvertime(organizationId, overtimeHours, overtimePeriod, overtimeMultiplier);
+			await Task.Yield();
 			return true;
 		}
 
@@ -408,7 +419,7 @@ namespace AllyisApps.Services
 		/// <param name="projectId">Project id to filter by.</param>
 		/// <param name="customerId">Customer id to filter by.</param>
 		/// <returns>The stream writer.</returns>
-		public StreamWriter PrepareCSVExport(int orgId, List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
+		public async Task<StreamWriter> PrepareCSVExport(int orgId, List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
 		{
 			// Preparing data
 			IEnumerable<TimeEntry> data = new List<TimeEntry>();
@@ -420,7 +431,7 @@ namespace AllyisApps.Services
 			}
 			else
 			{
-				data = GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1), orgId);
+				data = await this.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1), orgId);
 			}
 
 			if (projectId > 0)
@@ -431,14 +442,15 @@ namespace AllyisApps.Services
 			{
 				if (customerId > 0)
 				{
-					IEnumerable<int> customerProjects = GetProjectsByCustomer(customerId).Select(p => p.ProjectId);
+					var proj = await GetProjectsByCustomer(customerId);
+					IEnumerable<int> customerProjects = proj.Select(p => p.ProjectId);
 					data = data.Where(t => customerProjects.Contains(t.ProjectId));
 				}
 			}
 
 			if (userIds != null && userIds.Count == 1 && userIds[0] > 0)
 			{
-				projects = GetProjectsByUserAndOrganization(userIds[0], orgId, onlyActive: false);
+				projects = await GetProjectsByUserAndOrganization(userIds[0], orgId, onlyActive: false);
 			}
 			else
 			{
@@ -498,7 +510,7 @@ namespace AllyisApps.Services
 		/// <param name="lockDateQuantity">The quantity of the selected period.</param>
 		/// <param name="orgId">.</param>
 		/// <returns>.</returns>
-		public bool UpdateOldLockDate(bool lockDateUsed, int lockDatePeriod, int lockDateQuantity, int orgId)
+		public async Task<bool> UpdateOldLockDate(bool lockDateUsed, int lockDatePeriod, int lockDateQuantity, int orgId)
 		{
 			if (!new[] { 1, 2, 3 }.Contains(lockDatePeriod))
 			{
@@ -510,7 +522,7 @@ namespace AllyisApps.Services
 				throw new ArgumentException($"{nameof(lockDateQuantity)} cannot be less than zero.");
 			}
 
-			return DBHelper.UpdateOldLockDate(orgId, lockDateUsed, lockDatePeriod, lockDateQuantity);
+			return await DBHelper.UpdateOldLockDate(orgId, lockDateUsed, lockDatePeriod, lockDateQuantity);
 		}
 
 		public int UpdateLockDate(int organizationId, DateTime? lockDate)
@@ -553,7 +565,7 @@ namespace AllyisApps.Services
 		/// <param name="startingDate">Start of date range.</param>
 		/// <param name="endingDate">End of date range.</param>
 		/// <returns>.</returns>
-		public Tuple<Setting, List<PayClass>, List<Holiday>, List<CompleteProject>, List<User>, List<TimeEntry>>
+		public async Task<Tuple<Setting, List<PayClass>, List<Holiday>, List<CompleteProject>, List<User>, List<TimeEntry>>>
 			GetTimeEntryIndexInfo(int orgId, DateTime? startingDate, DateTime? endingDate, int? userId = null)
 		{
 			#region Validation
@@ -577,7 +589,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			var spResults = DBHelper.GetTimeEntryIndexPageInfo(orgId, (int)ProductIdEnum.TimeTracker, userId.Value, startingDate, endingDate);
+			var spResults = await DBHelper.GetTimeEntryIndexPageInfo(orgId, (int)ProductIdEnum.TimeTracker, userId.Value, startingDate, endingDate);
 
 			return Tuple.Create(InitializeSettingsInfo(spResults.Item1),
 				spResults.Item2.Select(InitializePayClassInfo).ToList(),
@@ -725,7 +737,7 @@ namespace AllyisApps.Services
 		/// <param name="userId">User Id.</param>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<ApplicationStatus>, List<Customer>>
+		public async Task<Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<ApplicationStatus>, List<Customer>>>
 			GetStaffingIndexInfo(int orgId, int? userId = null)
 		{
 			#region Validation
@@ -745,7 +757,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			var results = DBHelper.GetStaffingIndexPageInfo(orgId);
+			var results = await DBHelper.GetStaffingIndexPageInfo(orgId);
 
 			return Tuple.Create(
 				results.Item1.Select(posdb => InitializePositionThumbnailInfo(posdb, results.Item2, results.Item5)).ToList(),
@@ -767,7 +779,7 @@ namespace AllyisApps.Services
 		/// <param name="tags">tags.</param>
 		/// <param name="userId">User Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<ApplicationStatus>, List<Customer>>
+		public async Task<Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<ApplicationStatus>, List<Customer>>>
 			GetStaffingIndexInfoFiltered(int orgId, List<string> statusName, List<string> typeName, List<string> tags = null, int? userId = 0)
 		{
 			#region Validation
@@ -787,7 +799,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			var results = DBHelper.GetStaffingIndexPageInfoFiltered(orgId, statusName, typeName, tags);
+			var results = await DBHelper.GetStaffingIndexPageInfoFiltered(orgId, statusName, typeName, tags);
 
 			return Tuple.Create(
 				results.Item1.Select(posdb => InitializePositionThumbnailInfo(posdb, results.Item2, results.Item5)).ToList(),

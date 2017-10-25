@@ -6,6 +6,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Lib;
 using AllyisApps.Services;
@@ -27,10 +28,10 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		/// <param name="id">The organization Id.</param>
 		/// <returns>The organization's management page.</returns>
-		public ActionResult ManageOrg(int id)
+		public async Task<ActionResult> ManageOrg(int id)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
-			ManageOrgViewModel model = this.ConstructOrganizationManageViewModel(id);
+			ManageOrgViewModel model = await this.ConstructOrganizationManageViewModel(id);
 
 			var sub = model.Subscriptions.Select(x => x).Where(y => y.ProductId == ProductIdEnum.TimeTracker).FirstOrDefault();
 			if (sub != null && model.Subscriptions.Count() > 0)
@@ -51,11 +52,12 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="organizationId">Organization id.</param>
 		/// <returns>The OrganizationManageViewModel.</returns>
 		[CLSCompliant(false)]
-		public ManageOrgViewModel ConstructOrganizationManageViewModel(int organizationId)
+		public async Task<ManageOrgViewModel> ConstructOrganizationManageViewModel(int organizationId)
 		{
-			var orgInfo = AppService.GetOrganizationManagementInfo(organizationId);
+			var orgInfo = await AppService.GetOrganizationManagementInfo(organizationId);
 
 			BillingServicesCustomer customer = (orgInfo.StripeToken == null) ? null : AppService.RetrieveCustomer(new BillingServicesCustomerId(orgInfo.StripeToken));
+			await Task.Delay(1);
 			return new ManageOrgViewModel
 			{
 				Details = new OrganizationInfoViewModel()
@@ -81,7 +83,7 @@ namespace AllyisApps.Controllers.Auth
 						EmployeeId = oui.EmployeeId,
 						FullName = string.Format("{0} {1}", oui.FirstName, oui.LastName),
 						OrganizationId = oui.OrganizationId,
-						PermissionLevel = ((OrganizationRole)oui.OrganizationRoleId).ToString(),
+						PermissionLevel = ((OrganizationRoleEnum)oui.OrganizationRoleId).ToString(),
 						UserId = oui.UserId
 					}),
 					OrganizationId = orgInfo.OrganizationId,
