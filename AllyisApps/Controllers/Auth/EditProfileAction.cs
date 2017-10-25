@@ -26,7 +26,7 @@ namespace AllyisApps.Controllers.Auth
 		{
 			var model = new EditProfileViewModel();
 			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
-			var user = await this.AppService.GetCurrentUser();
+			var user = await this.AppService.GetCurrentUserAsync();
 			model.Address = user.Address?.Address1;
 			model.AddressId = user.Address?.AddressId;
 			model.City = user.Address?.City;

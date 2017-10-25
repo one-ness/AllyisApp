@@ -52,7 +52,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			foreach (var item in expenses)
 			{
 				var expItemsTask = AppService.GetExpenseItemsByReportId(item.ExpenseReportId);
-				var userTask = AppService.GetUser(item.SubmittedById);
+				var userTask = AppService.GetUserAsync(item.SubmittedById);
 
 				await Task.WhenAll(new Task[] { expItemsTask, userTask });
 

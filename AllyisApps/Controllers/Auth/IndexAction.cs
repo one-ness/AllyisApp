@@ -39,7 +39,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>The Accound Index view model.</returns>
 		public async Task<AccountIndexViewModel> ConstuctIndexViewModel()
 		{
-			User accountInfo = await AppService.GetCurrentUser();
+			User accountInfo = await AppService.GetCurrentUserAsync();
 
 			AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel()
 			{
