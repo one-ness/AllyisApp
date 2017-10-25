@@ -26,14 +26,14 @@ namespace AllyisApps.ViewModels.Auth
 		/// <param name="sub">Subscription display.</param>
 		public SubscriptionDisplayViewModel(Subscription sub) : this()
 		{
-			this.ProductId = sub.ProductId;
-			this.ProductName = sub.ProductName;
-			this.SubscriptionId = sub.SubscriptionId;
-			this.SubscriptionName = sub.SubscriptionName;
-			this.OrganizationId = sub.OrganizationId;
-			this.AreaUrl = sub.ProductAreaUrl;
-			this.NumberofUsers = sub.NumberOfUsers;
-			this.SkuId = sub.SkuId;
+			ProductId = sub.ProductId;
+			ProductName = sub.ProductName;
+			SubscriptionId = sub.SubscriptionId;
+			SubscriptionName = sub.SubscriptionName;
+			OrganizationId = sub.OrganizationId;
+			AreaUrl = sub.ProductAreaUrl;
+			NumberofUsers = sub.NumberOfUsers;
+			SkuId = sub.SkuId;
 		}
 
 		/// <summary>

@@ -1,7 +1,4 @@
 ﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-@using AllyisApps.Core;
-@using AllyisApps.Services;
-@using AllyisApps.Services.TimeTracker;
 @model SettingsPayClassesViewModel
 
 @{
@@ -42,7 +39,7 @@
 							<th><span class="pull-right">@Strings.Delete</span></th>
 						</tr>
 					</thead>
-					@foreach (SettingsPayClassesViewModel.PayClassViewModel PayClass in Model.PayClasses)
+					@foreach (SettingsViewModel.PayClassViewModel PayClass in Model.PayClasses)
 				{
 						<tr>
 							@{

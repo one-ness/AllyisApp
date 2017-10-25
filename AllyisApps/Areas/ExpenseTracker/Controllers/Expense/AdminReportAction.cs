@@ -29,7 +29,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			string tempDataKey = "ARVM";
 
-			if (this.TempData[tempDataKey] != null)
+			if (TempData[tempDataKey] != null)
 			{
 				adminReportVM = (AdminReportModel)TempData[tempDataKey];
 			}
@@ -126,7 +126,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				Statuses = enumList,
 				SubscriptionId = subInfo.SubscriptionId,
 				SubscriptionName = subInfo.SubscriptionName,
-				UserId = this.AppService.UserContext.UserId,
+				UserId = AppService.UserContext.UserId,
 				Users = userList,
 				Selection = new AdminReportSelectionModel
 				{

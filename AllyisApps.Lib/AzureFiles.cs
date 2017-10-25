@@ -22,7 +22,7 @@ namespace AllyisApps.Lib
 
 				CloudBlobClient client = account.CreateCloudBlobClient();
 
-				CloudBlobContainer blobContainer = client.GetContainerReference("application_" + applicationId.ToString());
+				CloudBlobContainer blobContainer = client.GetContainerReference("application_" + applicationId);
 
 				foreach (CloudBlockBlob blob in blobContainer.ListBlobs().OfType<CloudBlockBlob>())
 				{
@@ -75,7 +75,7 @@ namespace AllyisApps.Lib
 
 			CloudBlobClient client = account.CreateCloudBlobClient();
 
-			CloudBlobContainer blobContainer = client.GetContainerReference("application_" + applicationId.ToString());
+			CloudBlobContainer blobContainer = client.GetContainerReference("application_" + applicationId);
 
 			CloudBlockBlob blob = blobContainer.GetBlockBlobReference(applicationName);
 
@@ -135,7 +135,7 @@ namespace AllyisApps.Lib
 
 				CloudBlobClient client = account.CreateCloudBlobClient();
 
-				CloudBlobContainer blobContainer = client.GetContainerReference("application_" + applicationId.ToString());
+				CloudBlobContainer blobContainer = client.GetContainerReference("application_" + applicationId);
 
 				blobContainer.CreateIfNotExists();
 
@@ -198,7 +198,7 @@ namespace AllyisApps.Lib
 
 				CloudBlobClient client = account.CreateCloudBlobClient();
 
-				CloudBlobContainer blobContainer = client.GetContainerReference("application_" + applicationId.ToString());
+				CloudBlobContainer blobContainer = client.GetContainerReference("application_" + applicationId);
 
 				CloudBlockBlob blockBlob = blobContainer.GetBlockBlobReference(documentName);
 

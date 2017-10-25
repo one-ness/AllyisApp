@@ -10,16 +10,15 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AllyisApps.DBModel;
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Lookup;
 using AllyisApps.Lib;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
+using AllyisApps.Services.Cache;
 using AllyisApps.Services.Lookup;
 using Newtonsoft.Json.Linq;
-using AllyisApps.Services.Cache;
 
 namespace AllyisApps.Services
 {
@@ -47,7 +46,7 @@ namespace AllyisApps.Services
 
 		public bool DeleteExpenseItem(int itemId)
 		{
-			return this.DBHelper.DeleteExpenseItem(itemId);
+			return DBHelper.DeleteExpenseItem(itemId);
 		}
 
 		/// <summary>
@@ -69,7 +68,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="invitationId">Id of invite.</param>
 		/// <returns>Inviation info </returns>
-		public async Task<Invitation> GetInvitationByID(int invitationId)
+		public async Task<Invitation> GetInvitationById(int invitationId)
 		{
 			var results = InitializeInvitationInfo(await DBHelper.GetInvitation(invitationId));
 			return results;
@@ -82,8 +81,8 @@ namespace AllyisApps.Services
 		{
 			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId");
 
-			Invitation inviteInfo = InitializeInvitationInfo(await this.DBHelper.GetInvitation(invitationId));
-			var result = (this.DBHelper.AcceptInvitation(invitationId, this.UserContext.UserId) == 1);
+			Invitation inviteInfo = InitializeInvitationInfo(await DBHelper.GetInvitation(invitationId));
+			var result = (DBHelper.AcceptInvitation(invitationId, UserContext.UserId) == 1);
 			if (result)
 			{
 				if (inviteInfo.ProductRolesJson != null)
@@ -96,19 +95,19 @@ namespace AllyisApps.Services
 
 					if (ttRole > 0)
 					{
-						var result2 = await (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, ttRole, (int)ProductIdEnum.TimeTracker));
+						var result2 = await (DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, ttRole, (int)ProductIdEnum.TimeTracker));
 					}
 
 					if (etRole > 0)
 					{
 						var prodId = GetProductSubscriptionInfo(inviteInfo.OrganizationId, SkuIdEnum.ExpenseTrackerBasic).Product.ProductId;
-						var result3 = await (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, etRole, (int)ProductIdEnum.ExpenseTracker));
+						var result3 = await (DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, etRole, (int)ProductIdEnum.ExpenseTracker));
 					}
 
 					if (smRole > 0)
 					{
 						var prodId = GetProductSubscriptionInfo(inviteInfo.OrganizationId, SkuIdEnum.StaffingManagerBasic).Product.ProductId;
-						var result4 = await (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, smRole, (int)ProductIdEnum.StaffingManager));
+						var result4 = await (DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, smRole, (int)ProductIdEnum.StaffingManager));
 					}
 				}
 				NotifyInviteAcceptAsync(invitationId);
@@ -160,12 +159,12 @@ namespace AllyisApps.Services
 			var result = 0;
 			try
 			{
-				result = await this.DBHelper.CreateUserAsync(
+				result = await DBHelper.CreateUserAsync(
 					email, Crypto.GetPasswordHash(password), firstName, lastName, emailConfirmationCode, dateOfBirth, phoneNumber, Language.DefaultLanguageCultureName,
 					address1, address2, city, stateId, postalCode, countryCode);
 
 				// user created, send confirmation email
-				await Mailer.SendEmailAsync(this.ServiceSettings.SupportEmail, email, confirmEmailSubject, confirmEmailMessage);
+				await Mailer.SendEmailAsync(ServiceSettings.SupportEmail, email, confirmEmailSubject, confirmEmailMessage);
 			}
 			catch (SqlException ex)
 			{
@@ -193,7 +192,7 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
 
 			User result = null;
-			result = InitializeUser(await this.DBHelper.GetUserByEmail(email), false);
+			result = InitializeUser(await DBHelper.GetUserByEmail(email), false);
 
 			if (result != null)
 			{
@@ -227,7 +226,7 @@ namespace AllyisApps.Services
 			UserContext result = null;
 
 			// get context from db
-			dynamic expando = this.DBHelper.GetUserContext(userId);
+			dynamic expando = DBHelper.GetUserContext(userId);
 
 			// get user information
 			if (expando != null && expando.User != null)
@@ -265,7 +264,7 @@ namespace AllyisApps.Services
 				}
 
 				// set result to self
-				this.SetUserContext(result);
+				SetUserContext(result);
 			}
 
 			return result;
@@ -276,7 +275,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		public async Task<User> GetCurrentUserAsync()
 		{
-			return await this.GetUserAsync(this.UserContext.UserId);
+			return await GetUserAsync(UserContext.UserId);
 		}
 
 		/// <summary>
@@ -286,85 +285,93 @@ namespace AllyisApps.Services
 		{
 			if (userId <= 0) throw new ArgumentOutOfRangeException("userId");
 
-			dynamic sets = await this.DBHelper.GetUser(userId);
+			dynamic sets = await DBHelper.GetUser(userId);
 			User user = this.InitializeUser(sets.User);
 			dynamic subs = sets.Subscriptions;
 			foreach (var item in subs)
 			{
-				UserSubscription sub = new UserSubscription();
-				sub.IsActive = item.IsActive;
-				sub.NumberOfUsers = item.NumberOfUsers;
-				sub.OrganizationId = item.OrganizationId;
-				sub.ProductAreaUrl = item.ProductAreaUrl;
-				sub.ProductDescription = item.ProductDescription;
-				sub.ProductId = (ProductIdEnum)item.ProductId;
-				sub.ProductName = item.ProductName;
-				sub.ProductRoleId = item.ProductRole;
-				sub.PromoExpirationDateUtc = item.PromotionExpirationDateUtc;
-				sub.SkuDescription = item.SkuDescription;
-				sub.SkuIconUrl = item.SkuIconUrl;
-				sub.SkuId = (SkuIdEnum)item.SkuId;
-				sub.SkuName = item.SkuName;
-				sub.CreatedUtc = item.SubscriptionCreatedUtc;
-				sub.SubscriptionId = item.SubscriptionId;
-				sub.SubscriptionName = item.SubscriptionName;
-				sub.JoinedDateUtc = item.SubscriptionUserCreatedUtc;
-				sub.UserId = item.UserId;
+				UserSubscription sub = new UserSubscription
+				{
+					IsActive = item.IsActive,
+					NumberOfUsers = item.NumberOfUsers,
+					OrganizationId = item.OrganizationId,
+					ProductAreaUrl = item.ProductAreaUrl,
+					ProductDescription = item.ProductDescription,
+					ProductId = (ProductIdEnum)item.ProductId,
+					ProductName = item.ProductName,
+					ProductRoleId = item.ProductRole,
+					PromoExpirationDateUtc = item.PromotionExpirationDateUtc,
+					SkuDescription = item.SkuDescription,
+					SkuIconUrl = item.SkuIconUrl,
+					SkuId = (SkuIdEnum)item.SkuId,
+					SkuName = item.SkuName,
+					CreatedUtc = item.SubscriptionCreatedUtc,
+					SubscriptionId = item.SubscriptionId,
+					SubscriptionName = item.SubscriptionName,
+					JoinedDateUtc = item.SubscriptionUserCreatedUtc,
+					UserId = item.UserId
+				};
 				user.Subscriptions.Add(sub);
 			}
 
 			dynamic orgs = sets.Organizations;
 			foreach (var item in orgs)
 			{
-				UserOrganization org = new UserOrganization();
-				org.Address = new Address();
-				org.Address.Address1 = item.Address1;
-				org.Address.AddressId = item.AddressId;
-				org.Address.City = item.City;
-				org.Address.CountryCode = item.CountryCode;
-				org.Address.CountryName = item.CountryName;
-				org.Address.PostalCode = item.PostalCode;
-				org.Address.StateId = item.StateId;
-				org.Address.StateName = item.StateName;
-				org.CreatedUtc = item.OrganizationCreatedUtc;
-				org.EmployeeId = item.EmployeeId;
-				org.FaxNumber = item.FaxNumber;
-				org.IsActive = item.IsActive;
-				org.JoinedDateUtc = item.OrganizationUserCreatedUtc;
-				org.MaxApprovalAmount = item.ApprovalAmount;
-				org.OrganizationId = item.OrganizationId;
-				org.OrganizationName = item.OrganizationName;
-				org.OrganizationRole = (OrganizationRoleEnum)item.OrganizationRoleId;
-				org.PhoneNumber = item.PhoneNumber;
-				org.SiteUrl = item.SiteUrl;
-				org.UserId = item.UserId;
+				UserOrganization org = new UserOrganization
+				{
+					Address = new Address
+					{
+						Address1 = item.Address1,
+						AddressId = item.AddressId,
+						City = item.City,
+						CountryCode = item.CountryCode,
+						CountryName = item.CountryName,
+						PostalCode = item.PostalCode,
+						StateId = item.StateId,
+						StateName = item.StateName
+					},
+					CreatedUtc = item.OrganizationCreatedUtc,
+					EmployeeId = item.EmployeeId,
+					FaxNumber = item.FaxNumber,
+					IsActive = item.IsActive,
+					JoinedDateUtc = item.OrganizationUserCreatedUtc,
+					MaxApprovalAmount = item.ApprovalAmount,
+					OrganizationId = item.OrganizationId,
+					OrganizationName = item.OrganizationName,
+					OrganizationRole = (OrganizationRoleEnum)item.OrganizationRoleId,
+					PhoneNumber = item.PhoneNumber,
+					SiteUrl = item.SiteUrl,
+					UserId = item.UserId
+				};
 				user.Organizations.Add(org);
 			}
 
 			dynamic invites = sets.Invitations;
 			foreach (var item in invites)
 			{
-				Invitation invite = new Invitation();
-				invite.CompressedEmail = item.Email;
-				invite.Email = item.Email;
-				invite.EmployeeId = item.EmployeeId;
-				invite.FirstName = item.FirstName;
-				invite.InvitationCreatedUtc = item.InvitationCreatedUtc;
-				invite.InvitationId = item.InvitationId;
-				invite.InvitationStatus = (InvitationStatusEnum)item.InvitationStatus;
-				invite.LastName = item.LastName;
-				invite.OrganizationId = item.OrganizationId;
-				invite.OrganizationName = item.OrganizationName;
-				invite.ProductRolesJson = item.ProductRolesJson;
+				Invitation invite = new Invitation
+				{
+					CompressedEmail = item.Email,
+					Email = item.Email,
+					EmployeeId = item.EmployeeId,
+					FirstName = item.FirstName,
+					InvitationCreatedUtc = item.InvitationCreatedUtc,
+					InvitationId = item.InvitationId,
+					InvitationStatus = (InvitationStatusEnum)item.InvitationStatus,
+					LastName = item.LastName,
+					OrganizationId = item.OrganizationId,
+					OrganizationName = item.OrganizationName,
+					ProductRolesJson = item.ProductRolesJson
+				};
 				user.Invitations.Add(invite);
 			}
 
-			if (this.UserContext.UserId != user.UserId)
+			if (UserContext.UserId != user.UserId)
 			{
 				// logged in user is trying to read a different user's information
 				// get the list of organizations that both of them are member of
 				List<int> orgIds = new List<int>();
-				foreach (var item in this.UserContext.OrganizationsAndRoles)
+				foreach (var item in UserContext.OrganizationsAndRoles)
 				{
 					var orgId = item.Value.OrganizationId;
 					var org = user.Organizations.Where(x => x.OrganizationId == orgId).FirstOrDefault();
@@ -381,19 +388,17 @@ namespace AllyisApps.Services
 					// no
 					throw new AccessViolationException(string.Format("User {0} not found in any of the organizations.", user.UserId));
 				}
-				else
+
+				// yes, does the logged in user have readuser permission in at least one of them?
+				foreach (var item in orgIds)
 				{
-					// yes, does the logged in user have readuser permission in at least one of them?
-					foreach (var item in orgIds)
-					{
-						permFound = this.CheckOrgAction(OrgAction.ReadUser, item, false);
-					}
+					permFound = CheckOrgAction(OrgAction.ReadUser, item, false);
 				}
 
 				if (!permFound)
 				{
 					// no
-					throw new AccessViolationException(string.Format("User {0} does not have permission to read user {1}.", this.UserContext.UserId, user.UserId));
+					throw new AccessViolationException(string.Format("User {0} does not have permission to read user {1}.", UserContext.UserId, user.UserId));
 				}
 			}
 
@@ -405,7 +410,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		public async Task UpdateCurrentUserProfile(int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
 		{
-			await this.DBHelper.UpdateUserProfile(this.UserContext.UserId, firstName, lastName, Utility.GetDateTimeFromDays((int)dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
+			await DBHelper.UpdateUserProfile(UserContext.UserId, firstName, lastName, Utility.GetDateTimeFromDays((int)dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
 		}
 
 		/// <summary>
@@ -413,7 +418,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		public async Task UpdateUserProfile(int userId, int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
 		{
-			await this.DBHelper.UpdateUserProfile(userId, firstName, lastName, Utility.GetDateTimeFromDays((int)dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
+			await DBHelper.UpdateUserProfile(userId, firstName, lastName, Utility.GetDateTimeFromDays((int)dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
 		}
 
 		/// <summary>
@@ -448,7 +453,7 @@ namespace AllyisApps.Services
 		{
 			if (string.IsNullOrWhiteSpace(cultureName)) throw new ArgumentNullException("cultureName");
 
-			this.DBHelper.UpdateUserLanguagePreference(UserContext.UserId, cultureName);
+			DBHelper.UpdateUserLanguagePreference(UserContext.UserId, cultureName);
 		}
 
 		/// <summary>
@@ -461,7 +466,7 @@ namespace AllyisApps.Services
 				cultureName = System.Globalization.CultureInfo.CurrentCulture.Name;
 			}
 
-			LanguageDBEntity language = this.DBHelper.GetLanguage(cultureName);
+			LanguageDBEntity language = DBHelper.GetLanguage(cultureName);
 			return new Language
 			{
 				LanguageName = language.LanguageName,
@@ -483,14 +488,14 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(callbackUrl)) throw new ArgumentNullException("callbackUrl");
 
 			bool result = false;
-			int rowsUpdated = this.DBHelper.UpdateUserPasswordResetCode(email, code);
+			int rowsUpdated = DBHelper.UpdateUserPasswordResetCode(email, code);
 			if (rowsUpdated > 0)
 			{
 				// Send reset email
 				StringBuilder sb = new StringBuilder();
 				sb.AppendFormat("Please reset your password by clicking <a href=\"{0}\">this reset link</a>.", callbackUrl);
 				string msgbody = new System.Web.HtmlString(sb.ToString()).ToString();
-				result = await Mailer.SendEmailAsync(this.ServiceSettings.SupportEmail, email, "Reset password", msgbody);
+				result = await Mailer.SendEmailAsync(ServiceSettings.SupportEmail, email, "Reset password", msgbody);
 			}
 
 			return result;
@@ -508,7 +513,7 @@ namespace AllyisApps.Services
 			await Task.Run(() =>
 			{
 				// update password for user and reset password code to null
-				result = this.DBHelper.UpdateUserPasswordUsingCode(Crypto.GetPasswordHash(password), code);
+				result = DBHelper.UpdateUserPasswordUsingCode(Crypto.GetPasswordHash(password), code);
 			});
 
 			return result;
@@ -526,7 +531,7 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(newPassword)) throw new ArgumentNullException("newPassword");
 
 			bool result = false;
-			string passwordHash = this.DBHelper.GetPasswordHashById(UserContext.UserId);
+			string passwordHash = DBHelper.GetPasswordHashById(UserContext.UserId);
 			if (!string.IsNullOrWhiteSpace(passwordHash))
 			{
 				PassWordValidationResult validation = Crypto.ValidateAndUpdate(oldPassword, passwordHash);
@@ -534,7 +539,7 @@ namespace AllyisApps.Services
 				{
 					// old password is correct.
 					result = true;
-					await this.DBHelper.UpdateUserPassword(UserContext.UserId, Crypto.GetPasswordHash(newPassword));
+					await DBHelper.UpdateUserPassword(UserContext.UserId, Crypto.GetPasswordHash(newPassword));
 				}
 			}
 
@@ -638,8 +643,8 @@ namespace AllyisApps.Services
 				LastName = userRoles.LastName,
 				Name = userRoles.Name,
 				OrganizationRoleId = userRoles.OrganizationRoleId,
-				ProductRoleId = userRoles.ProductRoleId == null ? -1 : userRoles.ProductRoleId.Value,
-				SubscriptionId = userRoles.SubscriptionId == null ? -1 : userRoles.SubscriptionId.Value,
+				ProductRoleId = userRoles.ProductRoleId ?? -1,
+				SubscriptionId = userRoles.SubscriptionId ?? -1,
 				UserId = userRoles.UserId
 			};
 		}
@@ -690,7 +695,7 @@ namespace AllyisApps.Services
 		{
 			if (organizationId <= 0) throw new ArgumentOutOfRangeException("organizationId");
 
-			string maxId = await this.DBHelper.GetMaxEmployeeId(organizationId);
+			string maxId = await DBHelper.GetMaxEmployeeId(organizationId);
 			char[] idchars = maxId.ToCharArray();
 
 			// define legal characters
@@ -724,21 +729,18 @@ namespace AllyisApps.Services
 		public async Task<List<ProductRole>> GetProductRolesAsync(int orgId, ProductIdEnum pid)
 		{
 			// NOTE: orgid is ignored for now
-			if ((int)pid < 0) throw new ArgumentOutOfRangeException("pid");
+			if (pid < 0) throw new ArgumentOutOfRangeException("pid");
 
-			var collection = await this.DBHelper.GetProductRolesAsync(orgId, (int)pid);
-			var result = new List<ProductRole>();
-			foreach (var item in collection)
+			var collection = await DBHelper.GetProductRolesAsync(orgId, (int)pid);
+
+			return collection.Select(item => new ProductRole
 			{
-				var role = new ProductRole();
-				role.OrganizationId = orgId;
-				role.ProductId = (ProductIdEnum)item.ProductId;
-				role.ProductRoleId = item.ProductRoleId;
-				role.ProductRoleName = item.ProductRoleName;
-				result.Add(role);
-			}
-
-			return result;
+				OrganizationId = orgId,
+				ProductId = (ProductIdEnum)item.ProductId,
+				ProductRoleId = item.ProductRoleId,
+				ProductRoleName = item.ProductRoleName
+			})
+			.ToList();
 		}
 	}
 }

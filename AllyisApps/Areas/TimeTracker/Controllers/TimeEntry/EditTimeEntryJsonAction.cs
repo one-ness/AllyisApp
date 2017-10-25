@@ -35,31 +35,31 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (model.ApprovalState == -1)
 			{
-				EditTimeEntryViewModel defaults = await this.ConstructEditTimeEntryViewModel(model.TimeEntryId.Value, model.SubscriptionId);
-				return this.Json(new
+				EditTimeEntryViewModel defaults = await ConstructEditTimeEntryViewModel(model.TimeEntryId.Value, model.SubscriptionId);
+				return Json(new
 				{
 					status = "error",
 					message = Resources.Strings.InvalidApprovalState,
 					reason = "UNDEFINED_APPROVAL",
 					action = "REVERT",
-					values = new { duration = this.GetDurationDisplay(defaults.Duration), description = defaults.Description, id = model.TimeEntryId }
+					values = new { duration = GetDurationDisplay(defaults.Duration), description = defaults.Description, id = model.TimeEntryId }
 				});
 			}
 
 			int organizationId = AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId;
 
 			// Check permissions
-			if (model.UserId != this.AppService.UserContext.UserId)
+			if (model.UserId != AppService.UserContext.UserId)
 			{
-				if (!this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId))
+				if (!AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId))
 				{
-					EditTimeEntryViewModel defaults = await this.ConstructEditTimeEntryViewModel(model.TimeEntryId.Value, model.SubscriptionId);
-					return this.Json(new
+					EditTimeEntryViewModel defaults = await ConstructEditTimeEntryViewModel(model.TimeEntryId.Value, model.SubscriptionId);
+					return Json(new
 					{
 						status = "error",
 						message = Resources.Strings.NotAuthZTimeEntryOtherUserEdit,
 						action = "REVERT",
-						values = new { duration = this.GetDurationDisplay(defaults.Duration), description = defaults.Description, id = model.TimeEntryId }
+						values = new { duration = GetDurationDisplay(defaults.Duration), description = defaults.Description, id = model.TimeEntryId }
 					});
 				}
 			}
@@ -68,13 +68,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var timeGet = await AppService.GetTimeEntry(model.TimeEntryId.Value);
 			if (timeGet.ApprovalState == (int)ApprovalState.Approved)
 			{
-				EditTimeEntryViewModel defaults = await this.ConstructEditTimeEntryViewModel(model.TimeEntryId.Value, model.SubscriptionId);
-				return this.Json(new
+				EditTimeEntryViewModel defaults = await ConstructEditTimeEntryViewModel(model.TimeEntryId.Value, model.SubscriptionId);
+				return Json(new
 				{
 					status = "error",
 					message = Resources.Strings.AlreadyApprovedCannotEdit,
 					action = "REVERT",
-					values = new { duration = this.GetDurationDisplay(defaults.Duration), description = defaults.Description, id = model.TimeEntryId }
+					values = new { duration = GetDurationDisplay(defaults.Duration), description = defaults.Description, id = model.TimeEntryId }
 				});
 			}
 
@@ -82,7 +82,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				EditTimeEntry(model, true);
 
-				return this.Json(new { status = "success", values = new { duration = this.GetDurationDisplay(model.Duration), description = model.Description, id = model.TimeEntryId, projectId = model.ProjectId } });
+				return Json(new { status = "success", values = new { duration = GetDurationDisplay(model.Duration), description = model.Description, id = model.TimeEntryId, projectId = model.ProjectId } });
 			}
 			catch (ArgumentException e)
 			{
@@ -92,7 +92,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					message = e.Message
 				};
 
-				return this.Json(temp);
+				return Json(temp);
 			}
 		}
 
@@ -105,12 +105,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			float? durationResult;
 			model.IsManager = canManage;
-			if (!(durationResult = this.ParseDuration(model.Duration)).HasValue)
+			if (!(durationResult = ParseDuration(model.Duration)).HasValue)
 			{
 				throw new ArgumentException(Resources.Strings.DurationFormat);
 			}
 
-			if (this.ParseDuration(model.Duration) == 0)
+			if (ParseDuration(model.Duration) == 0)
 			{
 				throw new ArgumentException(Resources.Strings.EnterATimeLongerThanZero);
 			}
@@ -145,12 +145,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			DateTime? lockDate = await AppService.GetLockDate(AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId);
-			if ((!this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId, false)) && model.Date <= (lockDate == null ? -1 : Utility.GetDaysFromDateTime(lockDate.Value)))
+			if ((!AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId, false)) && model.Date <= (lockDate == null ? -1 : Utility.GetDaysFromDateTime(lockDate.Value)))
 			{
 				throw new ArgumentException(Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
 			}
 
-			AppService.UpdateTimeEntry(new AllyisApps.Services.TimeTracker.TimeEntry()
+			AppService.UpdateTimeEntry(new Services.TimeTracker.TimeEntry()
 			{
 				TimeEntryId = model.TimeEntryId.Value,
 				ProjectId = model.ProjectId,
@@ -158,7 +158,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Duration = durationResult.Value,
 				Description = model.Description,
 				ApprovalState = (int)ApprovalState.NoApprovalState,
-				IsLockSaved = (model.ApprovalState == (int)Core.ApprovalState.Approved || model.Date <= model.LockDate || model.IsProjectDeleted || model.IsLockSaved) && !canManage
+				IsLockSaved = (model.ApprovalState == (int)ApprovalState.Approved || model.Date <= model.LockDate || model.IsProjectDeleted || model.IsLockSaved) && !canManage
 			});
 		}
 

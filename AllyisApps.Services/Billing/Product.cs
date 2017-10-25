@@ -48,7 +48,7 @@ namespace AllyisApps.Services.Billing
 		/// </summary>
 		public Product()
 		{
-			this.Skus = new List<Sku>();
+			Skus = new List<Sku>();
 		}
 	}
 }

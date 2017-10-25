@@ -41,7 +41,7 @@ namespace AllyisApps.Services.Common.Types
 		{
 			get
 			{
-				return this.token;
+				return token;
 			}
 		}
 

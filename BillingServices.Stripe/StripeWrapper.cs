@@ -35,14 +35,14 @@ namespace BillingServices.StripeService
 		/// </summary>
 		public StripeWrapper()
 		{
-			Stripe.StripeConfiguration.SetApiKey("sk_test_6Z1XooVuPiXjbn0DwndaHF8P");
+			StripeConfiguration.SetApiKey("sk_test_6Z1XooVuPiXjbn0DwndaHF8P");
 
-			this.customerService = new StripeCustomerService();
-			this.planService = new StripePlanService();
-			this.subscriptionService = new StripeSubscriptionService();
-			this.tokenService = new StripeTokenService();
-			this.invoiceService = new StripeInvoiceService();
-			this.chargeService = new StripeChargeService();
+			customerService = new StripeCustomerService();
+			planService = new StripePlanService();
+			subscriptionService = new StripeSubscriptionService();
+			tokenService = new StripeTokenService();
+			invoiceService = new StripeInvoiceService();
+			chargeService = new StripeChargeService();
 		}
 
 		#endregion constructor
@@ -60,7 +60,7 @@ namespace BillingServices.StripeService
 		/// <returns>A bool representing the success state of the plan creation.</returns>
 		public bool CreatePlan(int amount, string interval, string planName)
 		{
-			this.CreateStripePlan(amount, interval, planName);
+			CreateStripePlan(amount, interval, planName);
 
 			return true;
 		}
@@ -106,9 +106,9 @@ namespace BillingServices.StripeService
 		{
 			StripeCustomerCreateOptions customerOptions = new StripeCustomerCreateOptions();
 			customerOptions.Email = email;
-			customerOptions.SourceToken = this.GenerateStripeToken(token.Token).ToString();
+			customerOptions.SourceToken = GenerateStripeToken(token.Token).ToString();
 
-			StripeCustomer customer = this.customerService.Create(customerOptions);
+			StripeCustomer customer = customerService.Create(customerOptions);
 
 			return new BillingServicesCustomerId(customer.Id);
 		}
@@ -121,7 +121,7 @@ namespace BillingServices.StripeService
 		public BillingServicesCustomer RetrieveCustomer(BillingServicesCustomerId customerId)
 		{
 			// there is almost definitely some exception handling that will need to be done here.
-			StripeCustomer stripeCustomer = this.customerService.Get(customerId.Id);
+			StripeCustomer stripeCustomer = customerService.Get(customerId.Id);
 
 			BillingServicesCustomer customer = new BillingServicesCustomer(
 				customerId,
@@ -149,9 +149,9 @@ namespace BillingServices.StripeService
 		{
 			StripeCustomerUpdateOptions currentCustomer = new StripeCustomerUpdateOptions();
 
-			currentCustomer.SourceToken = this.GenerateStripeToken(token.Token).ToString();
+			currentCustomer.SourceToken = GenerateStripeToken(token.Token).ToString();
 
-			this.customerService.Update(customerId.Id, currentCustomer);
+			customerService.Update(customerId.Id, currentCustomer);
 
 			return true;  // need to return false if the operation fails.
 		}
@@ -179,9 +179,9 @@ namespace BillingServices.StripeService
 		/// <returns>The id of the newly created stripe subscription.</returns>
 		public BillingServicesSubscriptionId CreateSubscription(int amount, string interval, string planName, BillingServicesCustomerId customerId)
 		{
-			StripePlan newPlan = this.CreateStripePlan(amount, interval, planName);
+			StripePlan newPlan = CreateStripePlan(amount, interval, planName);
 
-			StripeSubscription sub = this.subscriptionService.Create(customerId.Id, newPlan.Id);
+			StripeSubscription sub = subscriptionService.Create(customerId.Id, newPlan.Id);
 
 			return new BillingServicesSubscriptionId(sub.Id);
 		}
@@ -215,7 +215,7 @@ namespace BillingServices.StripeService
 		/// <returns>A bool representing the success state of updating the subscription.</returns>
 		public bool UpdateSubscription(int amount, string interval, string planName, string subscriptionId, BillingServicesCustomerId customerId)
 		{
-			StripePlan newPlan = this.CreateStripePlan(amount, interval, planName);
+			StripePlan newPlan = CreateStripePlan(amount, interval, planName);
 
 			StripePlanUpdateOptions planUpdateOptions = new StripePlanUpdateOptions();
 
@@ -224,13 +224,13 @@ namespace BillingServices.StripeService
 			StripeSubscriptionUpdateOptions subUpdateOptions = new StripeSubscriptionUpdateOptions();
 			subUpdateOptions.PlanId = newPlan.Id;
 
-			StripeSubscription sub = this.subscriptionService.Get(customerId.Id, subscriptionId);
+			StripeSubscription sub = subscriptionService.Get(customerId.Id, subscriptionId);
 			if (sub.TrialEnd != null)
 			{
 				subUpdateOptions.TrialEnd = sub.TrialEnd;
 			}
 
-			StripeSubscription stripeSubscription = this.subscriptionService.Update(customerId.Id, subscriptionId, subUpdateOptions); // optional StripeSubscriptionUpdateOptions
+			StripeSubscription stripeSubscription = subscriptionService.Update(customerId.Id, subscriptionId, subUpdateOptions); // optional StripeSubscriptionUpdateOptions
 
 			return true;
 		}
@@ -242,7 +242,7 @@ namespace BillingServices.StripeService
 		/// <param name="subscriptionId">The id of the stripe subscription to delete.</param>
 		public void DeleteSubscription(BillingServicesCustomerId customerId, string subscriptionId)
 		{
-			this.subscriptionService.Cancel(customerId.Id, subscriptionId);
+			subscriptionService.Cancel(customerId.Id, subscriptionId);
 		}
 
 		#endregion subscriptions
@@ -302,7 +302,7 @@ namespace BillingServices.StripeService
 			StripeInvoiceListOptions invoiceListOptions = new StripeInvoiceListOptions();
 			invoiceListOptions.CustomerId = customerId.Id;
 			invoiceListOptions.Limit = 10000;
-			IEnumerable<StripeInvoice> stripeInvoices = this.invoiceService.List(invoiceListOptions); // optional StripeInvoiceListOptions
+			IEnumerable<StripeInvoice> stripeInvoices = invoiceService.List(invoiceListOptions); // optional StripeInvoiceListOptions
 
 			List<BillingServicesInvoice> invoiceList = new List<BillingServicesInvoice>();
 			foreach (StripeInvoice stripeInvoice in stripeInvoices)
@@ -321,7 +321,7 @@ namespace BillingServices.StripeService
 
 		private StripeToken GenerateStripeToken(string billingServicesToken)
 		{
-			return this.tokenService.Get(billingServicesToken);
+			return tokenService.Get(billingServicesToken);
 		}
 
 		private StripePlan CreateStripePlan(int amount, string interval, string planName)
@@ -338,7 +338,7 @@ namespace BillingServices.StripeService
 
 			newPlan.Id = i.ToString();
 
-			return this.planService.Create(newPlan);
+			return planService.Create(newPlan);
 		}
 
 		#endregion helper methods

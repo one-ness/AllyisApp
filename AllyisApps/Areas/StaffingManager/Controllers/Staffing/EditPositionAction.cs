@@ -37,7 +37,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 
 			var editModel = await setupEditPositionViewModel(positionId, subscriptionId);
 
-			return this.View(editModel);
+			return View(editModel);
 		}
 
 		/// <summary>
@@ -47,7 +47,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		public async Task<EditPositionViewModel> setupEditPositionViewModel(int positionId, int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			Position pos = await AppService.GetPosition(positionId);
 
 			var subscriptionNameToDisplayTask = AppService.GetSubscriptionName(subscriptionId);
@@ -81,7 +81,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			return new EditPositionViewModel
 			{
 				PositionId = pos.PositionId,
-				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
 				LocalizedStates = ModelHelper.GetLocalizedStates(AppService, pos.Address.CountryCode),
 				IsCreating = false,
 				OrganizationId = subInfo.OrganizationId,
@@ -150,7 +150,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				if (model.OrganizationId == 0)
 				{
 					UserContext.SubscriptionAndRole subInfo = null;
-					this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+					AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 					model.OrganizationId = subInfo.OrganizationId;
 					if (model.TagsToSubmit != null)
 					{
@@ -210,17 +210,17 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					Notifications.Add(new BootstrapAlert("Successfully created a new Position", Variety.Success));
 
 					// Redirect to the user position page
-					return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
+					return RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
 				}
 
 				// No customer value, should only happen because of a permission failure
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 
-				return this.RedirectToAction(ActionConstants.Index);
+				return RedirectToAction(ActionConstants.Index);
 			}
 
 			// Invalid model TODO: redirect back to form page
-			return this.RedirectToAction(ActionConstants.CreatePosition, new { subscriptionId = subscriptionId });
+			return RedirectToAction(ActionConstants.CreatePosition, new { subscriptionId = subscriptionId });
 		}
 	}
 }

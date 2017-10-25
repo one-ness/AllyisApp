@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace AllyisApps.Services.Lookup
+﻿namespace AllyisApps.Services.Lookup
 {
 	/// <summary>
 	/// An object for keeping track of all info related to a given Address

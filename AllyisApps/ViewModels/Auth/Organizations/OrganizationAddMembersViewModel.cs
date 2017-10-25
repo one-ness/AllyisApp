@@ -19,9 +19,9 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public OrganizationAddMembersViewModel()
 		{
-			this.AddedUsers = new HashSet<string>();
-			this.UsersAlreadyExisting = new HashSet<string>();
-			this.EmailedUsers = new HashSet<string>();
+			AddedUsers = new HashSet<string>();
+			UsersAlreadyExisting = new HashSet<string>();
+			EmailedUsers = new HashSet<string>();
 		}
 
 		/// <summary>

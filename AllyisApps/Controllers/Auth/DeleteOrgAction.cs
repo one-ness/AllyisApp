@@ -29,7 +29,7 @@ namespace AllyisApps.Controllers.Auth
 			string notification = string.Format("{0} {1}", Resources.Strings.YourOrg, Resources.Strings.OrganizationDeleteNotification);
 			Notifications.Add(new BootstrapAlert(notification, Variety.Success));
 			await Task.Delay(1);
-			return this.RouteUserHome();
+			return RouteUserHome();
 		}
 	}
 }

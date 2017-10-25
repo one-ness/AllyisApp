@@ -21,7 +21,7 @@ namespace AllyisApps.Core
 		/// <param name="area">The area to be routed to.</param>
 		public SubdomainRoute(string url, string area) : base(url, new MvcRouteHandler())
 		{
-			this.Area = area;
+			Area = area;
 		}
 
 		/// <summary>

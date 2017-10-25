@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
-using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Expense;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;

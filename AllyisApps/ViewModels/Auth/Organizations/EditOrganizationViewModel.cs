@@ -22,9 +22,9 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public EditOrganizationViewModel()
 		{
-			this.LocalizedCountries = new Dictionary<string, string>();
-			this.LocalizedStates = new Dictionary<string, string>();
-			this.IsCreating = false;
+			LocalizedCountries = new Dictionary<string, string>();
+			LocalizedStates = new Dictionary<string, string>();
+			IsCreating = false;
 		}
 
 		/// <summary>

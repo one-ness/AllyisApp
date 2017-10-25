@@ -30,8 +30,8 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>The organization's management page.</returns>
 		public async Task<ActionResult> ManageOrg(int id)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
-			ManageOrgViewModel model = await this.ConstructOrganizationManageViewModel(id);
+			AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
+			ManageOrgViewModel model = await ConstructOrganizationManageViewModel(id);
 
 			var sub = model.Subscriptions.Select(x => x).Where(y => y.ProductId == ProductIdEnum.TimeTracker).FirstOrDefault();
 			if (sub != null && model.Subscriptions.Count() > 0)
@@ -42,8 +42,8 @@ namespace AllyisApps.Controllers.Auth
 				ViewBag.EndDate = Utility.GetDaysFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
 			}
 
-			ViewData["UserId"] = this.AppService.UserContext.UserId;
-			return this.View(model);
+			ViewData["UserId"] = AppService.UserContext.UserId;
+			return View(model);
 		}
 
 		/// <summary>
@@ -76,7 +76,7 @@ namespace AllyisApps.Controllers.Auth
 				LastFour = customer == null ? string.Empty : customer.Last4,
 				Members = new OrganizationMembersViewModel
 				{
-					CurrentUserId = this.AppService.UserContext.UserId,
+					CurrentUserId = AppService.UserContext.UserId,
 					DisplayUsers = orgInfo.Users.Select(oui => new OrganizationUserViewModel
 					{
 						Email = oui.Email,

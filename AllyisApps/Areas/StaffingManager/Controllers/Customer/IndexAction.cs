@@ -32,8 +32,8 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		public async Task<ActionResult> Index(int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			return this.View(await this.ConstructManageCustomerViewModel(subscriptionId));
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			return View(await ConstructManageCustomerViewModel(subscriptionId));
 		}
 
 		/// <summary>
@@ -45,15 +45,15 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		{
 			if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
 			{
-				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
+				AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
 			}
 
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 
 			var infos = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 
-			return this.View("Index", this.ConstructManageCustomerViewModel(subscriptionId));
+			return View("Index", ConstructManageCustomerViewModel(subscriptionId));
 		}
 
 		/// <summary>
@@ -64,7 +64,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		public async Task<AllyisApps.ViewModels.Staffing.Customer.ManageCustomerViewModel> ConstructManageCustomerViewModel(int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			var infosTask = AppService.GetProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
 			var inactiveInfoTask = AppService.GetInactiveProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
 
@@ -111,7 +111,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				CanEdit = canEditProjects,
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subName,
-				UserId = this.AppService.UserContext.UserId
+				UserId = AppService.UserContext.UserId
 			};
 		}
 	}

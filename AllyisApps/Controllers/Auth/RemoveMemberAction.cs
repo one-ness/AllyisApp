@@ -26,10 +26,10 @@ namespace AllyisApps.Controllers.Auth
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> RemoveMember(int organizationId, int userId)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, organizationId);
+			AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, organizationId);
 			await AppService.RemoveOrganizationUser(organizationId, userId);
 			Notifications.Add(new BootstrapAlert(Resources.Strings.UserDeletedSuccessfully, Variety.Success));
-			return this.RedirectToAction(ActionConstants.OrganizationMembers, new { id = organizationId });
+			return RedirectToAction(ActionConstants.OrganizationMembers, new { id = organizationId });
 		}
 	}
 }

@@ -25,9 +25,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.UserSettings, subscriptionId);
 
-			int userId = this.AppService.UserContext.UserId;
+			int userId = AppService.UserContext.UserId;
 
-			UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+			UserContext.SubscriptionAndRole subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 
 			var productNameTask = AppService.GetProductNameBySubscriptionId(subInfo.SubscriptionId);
 			var allInfosTask = AppService.GetOrganizationManagementInfo(subInfo.OrganizationId);

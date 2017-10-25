@@ -29,9 +29,9 @@ namespace AllyisApps.Controllers.Auth
 			model.IsCreating = true;
 
 			// create localized countries
-			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
+			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService);
 
-			return this.View(model);
+			return View(model);
 		}
 
 		/// <summary>
@@ -45,22 +45,22 @@ namespace AllyisApps.Controllers.Auth
 		{
 			if (ModelState.IsValid)
 			{
-				int orgId = await this.AppService.SetupOrganization(model.EmployeeId, model.OrganizationName, model.PhoneNumber, model.FaxNumber, model.SiteUrl, null, model.Address, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode);
+				int orgId = await AppService.SetupOrganization(model.EmployeeId, model.OrganizationName, model.PhoneNumber, model.FaxNumber, model.SiteUrl, null, model.Address, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode);
 
 				if (orgId < 0)
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.SubdomainTaken, Variety.Danger));
-					return this.View(model);
+					return View(model);
 				}
 				else
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.OrganizationCreatedNotification, Variety.Success));
-					return this.RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id = orgId });
+					return RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id = orgId });
 				}
 			}
 
 			// Something happened, reload this view
-			return this.View(model);
+			return View(model);
 		}
 	}
 }

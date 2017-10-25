@@ -19,7 +19,7 @@ namespace AllyisApps.Controllers
 		/// <returns>The users home route.</returns>
 		public ActionResult Index()
 		{
-			return this.RouteUserHome();
+			return RouteUserHome();
 		}
 	}
 }

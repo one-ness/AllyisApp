@@ -15,14 +15,14 @@ namespace AllyisApps.ViewModels.Auth
 		/// <param name="info">Invitation Infos.</param>
 		public InvitationInfoViewModel(Invitation info)
 		{
-			this.CompressedEmail = info.CompressedEmail;
-			this.DecisionDateUtc = info.DecisionDateUtc;
-			this.Email = info.Email;
-			this.EmployeeId = info.EmployeeId;
-			this.FirstName = info.FirstName;
-			this.InvitationId = info.InvitationId;
-			this.LastName = info.LastName;
-			this.OrganizationId = info.OrganizationId;
+			CompressedEmail = info.CompressedEmail;
+			DecisionDateUtc = info.DecisionDateUtc;
+			Email = info.Email;
+			EmployeeId = info.EmployeeId;
+			FirstName = info.FirstName;
+			InvitationId = info.InvitationId;
+			LastName = info.LastName;
+			OrganizationId = info.OrganizationId;
 		}
 
 		/// <summary>

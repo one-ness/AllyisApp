@@ -21,9 +21,9 @@ namespace AllyisApps.Utilities
 		/// </summary>
 		public InviteMap()
 		{
-			this.Map(m => m.FirstName);
-			this.Map(m => m.LastName);
-			this.Map(m => m.Email);
+			Map(m => m.FirstName);
+			Map(m => m.LastName);
+			Map(m => m.Email);
 		}
 	}
 }
