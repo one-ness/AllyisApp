@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -14,7 +15,6 @@ using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.Services.Crm;
 using AllyisApps.ViewModels.TimeTracker.Project;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -31,7 +31,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="userId">Customer Id for the project.</param>
 		/// <returns>The ActionResult for the Create view.</returns>
 		[HttpGet]
-		async public Task<ActionResult> Create(int subscriptionId, int userId)
+		public async Task<ActionResult> Create(int subscriptionId, int userId)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
 			DateTime? defaultStart = null;
@@ -73,7 +73,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>If successful, notifies and redirects to Project/Index. Else, returns to the create project form.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> Create(EditProjectViewModel model)
+		public async Task<ActionResult> Create(EditProjectViewModel model)
 		{
 			var listGet = await AppService.GetNextProjectIdAndSubUsers(model.ParentCustomerId, model.SubscriptionId);
 			var list = listGet.Item2;
@@ -133,7 +133,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="model"><see cref="EditProjectViewModel"/> representing new project.</param>
 		/// <returns>The Project Id if succeed, -1 if the ProjectOrgId is taken by another project under the same customer.</returns>
-		async public Task<int> CreateProjectAndUpdateItsUserList(EditProjectViewModel model)
+		public async Task<int> CreateProjectAndUpdateItsUserList(EditProjectViewModel model)
 		{
 			IEnumerable<int> userIds = model.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString));
 
@@ -158,7 +158,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="model"><see cref="EditProjectViewModel"/> representing new project.</param>
 		/// <returns>The Project Id.</returns>
-		async public Task<int> CreateProject(EditProjectViewModel model)
+		public async Task<int> CreateProject(EditProjectViewModel model)
 		{
 			return await AppService.CreateProject(new Services.Project.Project()
 			{

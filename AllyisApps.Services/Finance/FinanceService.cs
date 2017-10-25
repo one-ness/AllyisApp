@@ -12,7 +12,7 @@ namespace AllyisApps.Services
 	/// </summary>
 	public partial class AppService : BaseService
 	{
-		async public Task<IList<Account>> GetAccounts(int orgId)
+		public async Task<IList<Account>> GetAccounts(int orgId)
 		{
 			var results = await DBHelper.GetAccounts(orgId);
 			return results.Select(x => InitializeAccountModel(x)).ToList();
@@ -32,7 +32,7 @@ namespace AllyisApps.Services
 			return result != -1 ? true : false;
 		}
 
-		async public Task DeleteAccount(int id)
+		public async Task DeleteAccount(int id)
 		{
 			await DBHelper.DeleteAccount(id);
 			return;

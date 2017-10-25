@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -24,7 +24,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>Redirects to the manage org action.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> RemoveMember(int organizationId, int userId)
+		public async Task<ActionResult> RemoveMember(int organizationId, int userId)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, organizationId);
 			await AppService.RemoveOrganizationUser(organizationId, userId);

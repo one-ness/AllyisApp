@@ -38,7 +38,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="pageNum">The page of results to view.</param>
 		/// <param name="projectSelect">The project's id (not required).</param>
 		/// <returns>The data in a view dependent on the button's value.</returns>
-		async public Task<ActionResult> ViewReport(string viewDataButton, List<int> userSelect, int subscriptionId, int organizationId, int? dateRangeStart, int? dateRangeEnd, bool showExport, int customerSelect, int pageNum, int projectSelect = 0)
+		public async Task<ActionResult> ViewReport(string viewDataButton, List<int> userSelect, int subscriptionId, int organizationId, int? dateRangeStart, int? dateRangeEnd, bool showExport, int customerSelect, int pageNum, int projectSelect = 0)
 		{
 			if (viewDataButton.Equals(Resources.Strings.Preview))
 			{

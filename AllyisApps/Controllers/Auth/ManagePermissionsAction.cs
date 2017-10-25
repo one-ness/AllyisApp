@@ -76,7 +76,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="id">The Organization Id.</param>
 		/// <returns>Action result.</returns>
 		[HttpGet]
-		async public Task<ActionResult> ManagePermissions(int id)
+		public async Task<ActionResult> ManagePermissions(int id)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id);
 			var infos = AppService.GetOrgAndSubRoles(id);
@@ -151,7 +151,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="id">Organizaion Id.</param>
 		/// <returns></returns>
 		[HttpGet]
-		async public Task<ActionResult> ManageOrgPermissions(int id)
+		public async Task<ActionResult> ManageOrgPermissions(int id)
 		{
 			//Get OrganizaionUser Rows
 			AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id);
@@ -197,7 +197,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="id">Subscription ID</param>
 		/// <returns></returns>
 		[HttpGet]
-		async public Task<ActionResult> ManageSubPermissions(int id)
+		public async Task<ActionResult> ManageSubPermissions(int id)
 		{
 			var sub = await AppService.GetSubscription(id);
 			var orgSubs = AppService.GetSubscriptionsByOrg(sub.OrganizationId);
@@ -278,7 +278,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="data">The JSON string of the model of actions and users.</param>
 		/// <returns>A Json object representing the results of the actions.</returns>
 		[HttpPost]
-		async public Task<ActionResult> ManagePermissions(string data)
+		public async Task<ActionResult> ManagePermissions(string data)
 		{
 			UserPermissionsAction model = JsonConvert.DeserializeObject<UserPermissionsAction>(data);
 

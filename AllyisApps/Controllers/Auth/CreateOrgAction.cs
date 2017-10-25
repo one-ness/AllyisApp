@@ -7,8 +7,6 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Auth;
 
@@ -43,7 +41,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>The resulting page, Create if unsuccessful else Account Management.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> CreateOrg(EditOrganizationViewModel model)
+		public async Task<ActionResult> CreateOrg(EditOrganizationViewModel model)
 		{
 			if (ModelState.IsValid)
 			{

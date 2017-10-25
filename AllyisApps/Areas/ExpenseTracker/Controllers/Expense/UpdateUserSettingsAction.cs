@@ -18,7 +18,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="model">User settings information.</param>
 		/// <returns>The action result.</returns>
 		[HttpPost]
-		async public Task<ActionResult> UpdateUserSettings(UserSettingsViewModel model)
+		public async Task<ActionResult> UpdateUserSettings(UserSettingsViewModel model)
 		{
 			UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId];
 			if (!ModelState.IsValid)

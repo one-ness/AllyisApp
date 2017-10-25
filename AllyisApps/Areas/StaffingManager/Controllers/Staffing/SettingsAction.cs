@@ -30,7 +30,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// </summary>
 		/// <param name="subscriptionId"></param>
 		/// <returns></returns>
-		async public Task<ActionResult> Settings(int subscriptionId)
+		public async Task<ActionResult> Settings(int subscriptionId)
 		{
 			SetNavData(subscriptionId);
 

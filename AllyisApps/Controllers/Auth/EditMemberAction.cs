@@ -27,7 +27,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="orgId">Id of the org the member is in.</param>
 		/// <param name="invited">Is the user invited or a already a member?.</param>
 		/// <returns>Returns info for a view about the member to be edited.</returns>
-		async public Task<ActionResult> EditMember(int userId, int orgId, int invited)
+		public async Task<ActionResult> EditMember(int userId, int orgId, int invited)
 		{
 			bool isInvited = invited == 0 ? false : true;
 			EditMemberViewModel model;
@@ -104,7 +104,7 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> EditMember(EditMemberViewModel model)
+		public async Task<ActionResult> EditMember(EditMemberViewModel model)
 		{
 			if (ModelState.IsValid)
 			{

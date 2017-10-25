@@ -6,6 +6,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -14,7 +15,6 @@ using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -28,7 +28,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId"></param>
 		/// <returns></returns>
-		async public Task<ActionResult> SettingsHoliday(int subscriptionId)
+		public async Task<ActionResult> SettingsHoliday(int subscriptionId)
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			int organizaionID = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
@@ -79,7 +79,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="newHolidayDate">The date of the holiday.</param>
 		/// <param name="subscriptionId">The Id of the subscription.</param>
 		/// <returns>Redirects to the settings view.</returns>
-		async public Task<ActionResult> CreateHoliday(string newHolidayName, string newHolidayDate, int subscriptionId)
+		public async Task<ActionResult> CreateHoliday(string newHolidayName, string newHolidayDate, int subscriptionId)
 		{
 			bool isValid = true;
 			if (string.IsNullOrWhiteSpace(newHolidayName))

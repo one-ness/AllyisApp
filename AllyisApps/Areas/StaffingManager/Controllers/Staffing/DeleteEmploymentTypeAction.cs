@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -23,7 +23,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="userId">The id of the Status to delete.</param> // TODO: update this after changing the route
 		/// <param name="subscriptionId">The subscription's id.</param>
 		/// <returns>Redirects to the settings view.</returns>
-		async public Task<ActionResult> DeleteEmploymentType(int employmentTypeId, int userId, int subscriptionId)
+		public async Task<ActionResult> DeleteEmploymentType(int employmentTypeId, int userId, int subscriptionId)
 		{
 			int orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			try

@@ -17,9 +17,9 @@ using AllyisApps.DBModel.Lookup;
 using AllyisApps.Lib;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
+using AllyisApps.Services.Cache;
 using AllyisApps.Services.Lookup;
 using Newtonsoft.Json.Linq;
-using AllyisApps.Services.Cache;
 
 namespace AllyisApps.Services
 {
@@ -54,7 +54,7 @@ namespace AllyisApps.Services
 		/// Gets the list of valid languages selections.
 		/// </summary>
 		/// <returns>A list of languages.</returns>
-		async public Task<IEnumerable<Language>> ValidLanguages()
+		public async Task<IEnumerable<Language>> ValidLanguages()
 		{
 			var results = await DBHelper.ValidLanguages();
 			return results.Select(s => new Language
@@ -69,7 +69,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="invitationId">Id of invite.</param>
 		/// <returns>Inviation info </returns>
-		async public Task<Invitation> GetInvitationByID(int invitationId)
+		public async Task<Invitation> GetInvitationByID(int invitationId)
 		{
 			var results = InitializeInvitationInfo(await DBHelper.GetInvitation(invitationId));
 			return results;
@@ -78,9 +78,9 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Accepts an invitation, adding the user to the invitation's organization, subscriptions, and projects, then deletes the invitations.
 		/// </summary>
-		async public Task<bool> AcceptUserInvitation(int invitationId)
+		public async Task<bool> AcceptUserInvitation(int invitationId)
 		{
-			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId");
+			if (invitationId <= 0) throw new ArgumentOutOfRangeException(nameof(invitationId));
 
 			Invitation inviteInfo = InitializeInvitationInfo(await this.DBHelper.GetInvitation(invitationId));
 			var result = (this.DBHelper.AcceptInvitation(invitationId, this.UserContext.UserId) == 1);
@@ -121,7 +121,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="invitationId">The id of the invitation to reject.</param>
 		/// <returns>The resulting message.</returns>
-		async public Task<bool> RejectInvitation(int invitationId)
+		public async Task<bool> RejectInvitation(int invitationId)
 		{
 			bool rejected = (await DBHelper.RejectInvitation(invitationId) == 1);
 			if (rejected)
@@ -152,11 +152,11 @@ namespace AllyisApps.Services
 			string confirmEmailSubject,
 			string confirmEmailMessage)
 		{
-			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
-			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException("firstName:");
-			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException("lastName");
-			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
-			if (emailConfirmationCode == null) throw new ArgumentException("emailConfirmationCode");
+			if (!Utility.IsValidEmail(email)) throw new ArgumentException(nameof(email));
+			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException(nameof(firstName));
+			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException(nameof(lastName));
+			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException(nameof(password));
+			if (emailConfirmationCode == null) throw new ArgumentException(nameof(emailConfirmationCode));
 			var result = 0;
 			try
 			{
@@ -187,7 +187,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="email">The login email.</param>
 		/// <param name="password">The login password.</param>
-		async public Task<User> ValidateLogin(string email, string password)
+		public async Task<User> ValidateLogin(string email, string password)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
@@ -274,7 +274,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// get the current logged in user
 		/// </summary>
-		async public Task<User> GetCurrentUser()
+		public async Task<User> GetCurrentUser()
 		{
 			return await this.GetUser(this.UserContext.UserId);
 		}
@@ -371,7 +371,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// update the current user profile
 		/// </summary>
-		async public Task UpdateCurrentUserProfile(int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
+		public async Task UpdateCurrentUserProfile(int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
 		{
 			await this.DBHelper.UpdateUserProfile(this.UserContext.UserId, firstName, lastName, Utility.GetDateTimeFromDays((int)dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
 		}
@@ -379,7 +379,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// update the current user profile
 		/// </summary>
-		async public Task UpdateUserProfile(int userId, int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
+		public async Task UpdateUserProfile(int userId, int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
 		{
 			await this.DBHelper.UpdateUserProfile(userId, firstName, lastName, Utility.GetDateTimeFromDays((int)dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
 		}
@@ -389,7 +389,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="email">Email address.</param>
 		/// <returns>A UserInfo instance with the user's info.</returns>
-		async public Task<User> GetUserByEmail(string email)
+		public async Task<User> GetUserByEmail(string email)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
 
@@ -399,7 +399,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Updates an organization member's info.
 		/// </summary>
-		async public Task<bool> UpdateMember(int userId, int orgId, string employeeId, int roleId, string firstName, string lastName, bool isInvited)
+		public async Task<bool> UpdateMember(int userId, int orgId, string employeeId, int roleId, string firstName, string lastName, bool isInvited)
 		{
 			if (userId <= 0) throw new ArgumentOutOfRangeException("userId");
 			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
@@ -488,7 +488,7 @@ namespace AllyisApps.Services
 		/// <param name="oldPassword">Old password, for verification.</param>
 		/// <param name="newPassword">New password to change it to.</param>
 		/// <returns>True for a successful change, false if anything fails.</returns>
-		async public Task<bool> ChangePassword(string oldPassword, string newPassword)
+		public async Task<bool> ChangePassword(string oldPassword, string newPassword)
 		{
 			if (string.IsNullOrWhiteSpace(oldPassword)) throw new ArgumentNullException("oldPassword");
 			if (string.IsNullOrWhiteSpace(newPassword)) throw new ArgumentNullException("newPassword");
@@ -636,7 +636,7 @@ namespace AllyisApps.Services
 			};
 		}
 
-		async public Task UpdateUserOrgMaxAmount(OrganizationUser userInfo)
+		public async Task UpdateUserOrgMaxAmount(OrganizationUser userInfo)
 		{
 			OrganizationUserDBEntity entity = new OrganizationUserDBEntity()
 			{
@@ -646,7 +646,7 @@ namespace AllyisApps.Services
 			await DBHelper.UpdateUserMaxAmount(entity);
 		}
 
-		async public Task<decimal> GetOrganizationUserMaxAmount(int userId, int orgId)
+		public async Task<decimal> GetOrganizationUserMaxAmount(int userId, int orgId)
 		{
 			return await DBHelper.GetUserOrgMaxAmount(userId, orgId);
 		}

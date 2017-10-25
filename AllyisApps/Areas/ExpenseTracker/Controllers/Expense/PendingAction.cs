@@ -19,7 +19,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <returns>Returns an action result.</returns>
-		async public Task<ActionResult> Pending(int subscriptionId)
+		public async Task<ActionResult> Pending(int subscriptionId)
 		{
 			await SetNavData(subscriptionId);
 
@@ -42,7 +42,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="userId">The user id.</param>
 		/// <param name="reports">A list of expense reports.</param>
 		/// <returns>A Expense Pending model.</returns>
-		async public Task<ExpensePendingModel> InitializeViewModel(int subId, int userId, IEnumerable<ExpenseReport> reports)
+		public async Task<ExpensePendingModel> InitializeViewModel(int subId, int userId, IEnumerable<ExpenseReport> reports)
 		{
 			List<ExpenseItemViewModel> reportModels = new List<ExpenseItemViewModel>();
 			foreach (ExpenseReport report in reports)

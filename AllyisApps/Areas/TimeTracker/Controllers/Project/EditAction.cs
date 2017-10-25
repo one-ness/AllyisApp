@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -15,7 +16,6 @@ using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.TimeTracker.Project;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -44,7 +44,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="model">The model of changes to the project.</param>
 		/// <returns>Redirection to customer index page on success, or project index on failure.</returns>
 		[HttpPost]
-		async public Task<ActionResult> Edit(EditProjectViewModel model)
+		public async Task<ActionResult> Edit(EditProjectViewModel model)
 		{
 			var listGet = await AppService.GetNextProjectIdAndSubUsers(model.ParentCustomerId, model.SubscriptionId);
 			var list = listGet.Item2;
@@ -101,7 +101,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="projectId">Project Id.</param>
 		/// <param name="subscriptionId">Subscription id.</param>
 		/// <returns>The EditProjectViewModel.</returns>
-		async public Task<EditProjectViewModel> ConstructEditProjectViewModel(int projectId, int subscriptionId)
+		public async Task<EditProjectViewModel> ConstructEditProjectViewModel(int projectId, int subscriptionId)
 		{
 			var infos = AppService.GetProjectEditInfo(projectId, subscriptionId);
 

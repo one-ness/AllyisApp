@@ -20,7 +20,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="reportId">The report id.</param>
 		/// <returns>The view with selected report details.</returns>
-		async public Task<ActionResult> ReportView(int subscriptionId, int reportId)
+		public async Task<ActionResult> ReportView(int subscriptionId, int reportId)
 		{
 			await SetNavData(subscriptionId);
 
@@ -35,7 +35,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="id">The report id.</param>
 		/// <returns>The view model.</returns>
-		async public Task<ReportViewModel> InitializeReportViewModel(int subscriptionId, int id)
+		public async Task<ReportViewModel> InitializeReportViewModel(int subscriptionId, int id)
 		{
 			await SetNavData(subscriptionId);
 

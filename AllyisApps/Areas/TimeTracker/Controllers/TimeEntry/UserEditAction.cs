@@ -25,7 +25,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subscriptionId">The subscription's id.</param>
 		/// <param name="userId">The Id of the user to edit.</param>
 		/// <returns>The user edit page.</returns>
-		async public Task<ActionResult> UserEdit(int subscriptionId, int userId)
+		public async Task<ActionResult> UserEdit(int subscriptionId, int userId)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
 			var infosTask = AppService.GetProjectsForOrgAndUser(userId, subscriptionId);
@@ -67,7 +67,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>Json object representing the results of the action.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<JsonResult> UserEditAJAX(int userId, int subscriptionId, List<int> offUser, List<int> onUser)
+		public async Task<JsonResult> UserEditAJAX(int userId, int subscriptionId, List<int> offUser, List<int> onUser)
 		{
 			int organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			if (this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId, false))

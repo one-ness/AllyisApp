@@ -34,7 +34,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="applicant">The applicant object to be added to the db.</param>
 		/// <returns>The id of the created address and applicant</returns>
-		async public Task<int> CreateApplicant(dynamic applicant)
+		public async Task<int> CreateApplicant(dynamic applicant)
 		{
 			if (applicant == null)
 			{
@@ -67,7 +67,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="application">The application object to be added to the db.</param>
 		/// <returns>The id of the created application</returns>
-		async public Task<int> CreateApplication(dynamic application)
+		public async Task<int> CreateApplication(dynamic application)
 		{
 			if (application == null)
 			{
@@ -92,7 +92,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="applicationDocument">The application document object to be added to the db.</param>
 		/// <returns>The id of the created application document</returns>
-		async public Task<int> CreateApplicationDocument(dynamic applicationDocument)
+		public async Task<int> CreateApplicationDocument(dynamic applicationDocument)
 		{
 			if (applicationDocument == null)
 			{
@@ -116,7 +116,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="obj">The account object to be created.</param>
 		/// <returns>The id of the created position</returns>
-		async public Task<int> SetupPosition(dynamic obj)
+		public async Task<int> SetupPosition(dynamic obj)
 		{
 			if (obj == null)
 			{
@@ -221,7 +221,7 @@ namespace AllyisApps.DBModel
 		/// <param name="tagName">The name of the tag to be added to the db.</param>
 		/// <param name="positionId">The position the tag will be added to .</param>
 		/// <returns>The id of the created Tag or -1 if the tag name is already in use.</returns>
-		async public Task<int> CreateTag(string tagName, int positionId)
+		public async Task<int> CreateTag(string tagName, int positionId)
 		{
 			if (tagName == null)
 			{
@@ -320,7 +320,7 @@ namespace AllyisApps.DBModel
 		///  - Applicant info
 		///  - Application document info
 		/// </returns>
-		async public Task<IEnumerable<ApplicationDBEntity>> GetApplicationsByPositionId(int positionId)
+		public async Task<IEnumerable<ApplicationDBEntity>> GetApplicationsByPositionId(int positionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@positionId", positionId);
@@ -338,7 +338,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="applicantId">The id of the applicant.</param>
 		/// <returns>All applications that have been submitted by the given applicant.</returns>
-		async public Task<IEnumerable<ApplicationDBEntity>> GetApplicationsByApplicantId(int applicantId)
+		public async Task<IEnumerable<ApplicationDBEntity>> GetApplicationsByApplicantId(int applicantId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicantId", applicantId);
@@ -356,7 +356,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="applicationDocumentId">The id of the application document.</param>
 		/// <returns>One application document, if present.</returns>
-		async public Task<ApplicationDocumentDBEntity> GetApplicationDocumentById(int applicationDocumentId)
+		public async Task<ApplicationDocumentDBEntity> GetApplicationDocumentById(int applicationDocumentId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicationDocumentId", applicationDocumentId);
@@ -373,7 +373,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="applicationId">The id of the application, containing multiple application documents.</param>
 		/// <returns>All application documents attached to the given application.</returns>
-		async public Task<IEnumerable<ApplicationDocumentDBEntity>> GetApplicationDocumentsByApplicationId(int applicationId)
+		public async Task<IEnumerable<ApplicationDocumentDBEntity>> GetApplicationDocumentsByApplicationId(int applicationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicationId", applicationId);
@@ -389,7 +389,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId"></param>
 		/// <returns>All the applicants in a subscription.</returns>
-		async public Task<List<ApplicantDBEntity>> GetApplicantsBySubscriptionId(int orgId)
+		public async Task<List<ApplicantDBEntity>> GetApplicantsBySubscriptionId(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@orgId", orgId);
@@ -406,7 +406,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId"></param>
 		/// <returns>All the applicants in a subscription.</returns>
-		async public Task<List<ApplicantAddressDBEntity>> GetApplicantAddressesBySubscriptionId(int orgId)
+		public async Task<List<ApplicantAddressDBEntity>> GetApplicantAddressesBySubscriptionId(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@orgId", orgId);
@@ -423,7 +423,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="applicantId">The id of the applicant.</param>
 		/// <returns>One applicant, if present.</returns>
-		async public Task<ApplicantAddressDBEntity> GetApplicantAddressById(int applicantId)
+		public async Task<ApplicantAddressDBEntity> GetApplicantAddressById(int applicantId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicantId", applicantId);
@@ -440,7 +440,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="applicantId">The id of the applicant.</param>
 		/// <returns>One applicant, if present.</returns>
-		async public Task<ApplicantDBEntity> GetApplicantById(int applicantId)
+		public async Task<ApplicantDBEntity> GetApplicantById(int applicantId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicantId", applicantId);
@@ -457,7 +457,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="applicationId">The id of the application.</param>
 		/// <returns>The applicant that submitted the given application.</returns>
-		async public Task<ApplicantDBEntity> GetApplicantByApplicationId(int applicationId)
+		public async Task<ApplicantDBEntity> GetApplicantByApplicationId(int applicationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicationId", applicationId);
@@ -474,7 +474,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="PositionId">The id of the position.</param>
 		/// <returns>The applicant that submitted the given application.</returns>
-		async public Task<dynamic> GetFullApplicationInfoByPositionId(int PositionId)
+		public async Task<dynamic> GetFullApplicationInfoByPositionId(int PositionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@positionId", PositionId);
@@ -497,7 +497,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="positionId">The id of the position.</param>
 		/// <returns>One Position.</returns>
-		async public Task<dynamic> GetPositionById(int positionId)
+		public async Task<dynamic> GetPositionById(int positionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@positionId", positionId);
@@ -517,7 +517,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">The id of the organization.</param>
 		/// <returns>One Position.</returns>
-		async public Task<dynamic> GetPositionsByOrganizationId(int organizationId)
+		public async Task<dynamic> GetPositionsByOrganizationId(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
@@ -627,7 +627,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="positionId">The id of the posiion.</param>
 		/// <returns>One Position.</returns>
-		async public Task<IEnumerable<TagDBEntity>> GetTagsByPositionId(int positionId)
+		public async Task<IEnumerable<TagDBEntity>> GetTagsByPositionId(int positionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@positionId", positionId);
@@ -642,7 +642,7 @@ namespace AllyisApps.DBModel
 		/// Retrieves All tags
 		/// </summary>
 		/// <returns>All the tags</returns>
-		async public Task<IEnumerable<TagDBEntity>> GetTags()
+		public async Task<IEnumerable<TagDBEntity>> GetTags()
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
@@ -655,7 +655,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		async public Task<Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>, List<ApplicationStatusDBEntity>, List<CustomerDBEntity>>>
+		public async Task<Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>, List<ApplicationStatusDBEntity>, List<CustomerDBEntity>>>
 			GetStaffingIndexPageInfo(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -687,7 +687,7 @@ namespace AllyisApps.DBModel
 		/// <param name="types">Organization Id.</param>
 		/// <param name="tags">Organization Id.</param>
 		/// <returns>.</returns>
-		async public Task<Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>, List<ApplicationStatusDBEntity>, List<CustomerDBEntity>>>
+		public async Task<Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>, List<ApplicationStatusDBEntity>, List<CustomerDBEntity>>>
 			GetStaffingIndexPageInfoFiltered(int orgId, List<string> statuses, List<string> types, List<string> tags = null)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -732,7 +732,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">org ID thats getting a new setting </param>
 		/// <returns>Creates an orgs staffing object</returns>
-		async public Task<List<int>> GetStaffingDefaultStatus(int orgId)
+		public async Task<List<int>> GetStaffingDefaultStatus(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
@@ -758,7 +758,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="applicant">The applicant object to be updated.</param>
 		/// <returns>The number of rows updated.</returns>
-		async public Task<int> UpdateApplicant(dynamic applicant)
+		public async Task<int> UpdateApplicant(dynamic applicant)
 		{
 			if (applicant == null)
 			{
@@ -790,7 +790,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="application">The application object to be updated.</param>
 		/// <returns>The number of rows updated.</returns>
-		async public Task<int> UpdateApplication(ApplicationDBEntity application)
+		public async Task<int> UpdateApplication(ApplicationDBEntity application)
 		{
 			if (application == null)
 			{
@@ -813,7 +813,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="applicationDocument">The application document object to be updated.</param>
 		/// <returns>The number of rows updated.</returns>
-		async public Task<int> UpdateApplicationDocument(ApplicationDocumentDBEntity applicationDocument)
+		public async Task<int> UpdateApplicationDocument(ApplicationDocumentDBEntity applicationDocument)
 		{
 			if (applicationDocument == null)
 			{
@@ -836,7 +836,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="position">The account object to be updated.</param>
 		/// <returns>Returns the number of rows updated.</returns>
-		async public Task<int> UpdatePosition(dynamic position)
+		public async Task<int> UpdatePosition(dynamic position)
 		{
 			if (position == null)
 			{
@@ -906,7 +906,7 @@ namespace AllyisApps.DBModel
 		/// Deletes an applicant from the database
 		/// </summary>
 		/// <param name="applicantId">The applicant to be deleted</param>
-		async public void DeleteApplicant(int applicantId)
+		public async void DeleteApplicant(int applicantId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicantId", applicantId);
@@ -921,7 +921,7 @@ namespace AllyisApps.DBModel
 		/// Deletes an application from the database
 		/// </summary>
 		/// <param name="applicationId">The applicant to be deleted</param>
-		async public void DeleteApplication(int applicationId)
+		public async void DeleteApplication(int applicationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicationId", applicationId);
@@ -996,7 +996,7 @@ namespace AllyisApps.DBModel
 		/// Deletes a employment level from the database
 		/// </summary>
 		/// <param name="employmentTypeId">Parameter @employmentTypeId.</param>
-		async public void DeleteEmploymentType(int employmentTypeId)
+		public async void DeleteEmploymentType(int employmentTypeId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@employmentTypeId", employmentTypeId);

@@ -31,7 +31,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="Types"></param>
 		/// <param name="Tags"></param>
 		/// <returns>The index view.</returns>
-		async public Task<ActionResult> Index(int subscriptionId, string Statuses, string Types, string Tags)
+		public async Task<ActionResult> Index(int subscriptionId, string Statuses, string Types, string Tags)
 		{
 			SetNavData(subscriptionId);
 

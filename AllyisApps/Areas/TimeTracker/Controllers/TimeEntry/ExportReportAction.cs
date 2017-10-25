@@ -6,10 +6,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -29,7 +29,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="customerId">The Customer's id (not required).</param>
 		/// <param name="projectId">The project's id (not required).</param>
 		/// <returns>CSV report File.</returns>
-		async public Task<ActionResult> ExportReport(int subscriptionId, int organizationId, List<int> userId, DateTime? dateRangeStart = null, DateTime? dateRangeEnd = null, int customerId = 0, int projectId = 0)
+		public async Task<ActionResult> ExportReport(int subscriptionId, int organizationId, List<int> userId, DateTime? dateRangeStart = null, DateTime? dateRangeEnd = null, int customerId = 0, int projectId = 0)
 		{
 			if (userId == null)
 			{

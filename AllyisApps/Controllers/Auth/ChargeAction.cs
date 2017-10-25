@@ -25,7 +25,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="billingServicesEmail">The email associated with this customer.</param>
 		/// <returns>A page.</returns>
 		[CLSCompliant(false)]
-		async public Task<ActionResult> Charge(int id, BillingServicesToken token, string billingServicesEmail)
+		public async Task<ActionResult> Charge(int id, BillingServicesToken token, string billingServicesEmail)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditBilling, id);
 			await AppService.UpdateBillingInfo(billingServicesEmail, token, id);

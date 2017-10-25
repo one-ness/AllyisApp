@@ -39,7 +39,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="email">Parameter @email.</param>
 		/// <returns>UserDBEntity obj.</returns>
-		async public Task<UserDBEntity> GetUserByEmail(string email)
+		public async Task<UserDBEntity> GetUserByEmail(string email)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -98,7 +98,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Get user from the db
 		/// </summary>
-		async public Task<dynamic> GetUser(int userId)
+		public async Task<dynamic> GetUser(int userId)
 		{
 			dynamic result = new ExpandoObject();
 			using (var con = new SqlConnection(this.SqlConnectionString))
@@ -116,7 +116,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		///  update the given user profile
 		/// </summary>
-		async public Task UpdateUserProfile(int userId, string firstName, string lastName, DateTime? dateOfBirth, string phoneNumber, int? addressId, string address1, string address2, string city, int? stateId, string postalCode, string countryCode)
+		public async Task UpdateUserProfile(int userId, string firstName, string lastName, DateTime? dateOfBirth, string phoneNumber, int? addressId, string address1, string address2, string city, int? stateId, string postalCode, string countryCode)
 		{
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
@@ -179,7 +179,7 @@ namespace AllyisApps.DBModel
 		/// <param name="organizationId">The organization's Id.</param>
 		/// <param name="productId">The product's Id.</param>
 		/// <returns>A collection of user data.</returns>
-		async public Task<IEnumerable<UserDBEntity>> GetUsersWithSubscriptionToProductInOrganization(int organizationId, int productId)
+		public async Task<IEnumerable<UserDBEntity>> GetUsersWithSubscriptionToProductInOrganization(int organizationId, int productId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
@@ -195,7 +195,7 @@ namespace AllyisApps.DBModel
 		/// Updates the max amount a user can approve of in a report.
 		/// </summary>
 		/// <param name="orgUser"></param>
-		async public Task UpdateUserMaxAmount(OrganizationUserDBEntity orgUser)
+		public async Task UpdateUserMaxAmount(OrganizationUserDBEntity orgUser)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", orgUser.UserId);
@@ -233,7 +233,7 @@ namespace AllyisApps.DBModel
 		/// <param name = "userId">Target user's Id.</param>
 		/// <param name = "passwordHash">The new password hash.</param>
 		/// <returns>The password hash retreived independently after the update, for verification.</returns>
-		async public Task UpdateUserPassword(int userId, string passwordHash)
+		public async Task UpdateUserPassword(int userId, string passwordHash)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
@@ -281,7 +281,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// create a new organization, add the user in the given role
 		/// </summary>
-		async public Task<int> SetupOrganization(int userId, int roleId, string employeeId, string organizationName, string phoneNumber, string faxNumber, string siteUrl, string subDomainName, string address1, string city, int? stateId, string postalCode, string countryCode)
+		public async Task<int> SetupOrganization(int userId, int roleId, string employeeId, string organizationName, string phoneNumber, string faxNumber, string siteUrl, string subDomainName, string address1, string city, int? stateId, string postalCode, string countryCode)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
@@ -308,7 +308,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updates the specified organization with new information.
 		/// </summary>
-		async public Task<int> UpdateOrganization(int organizationId, string organizationName, string siteUrl, int? addressId, string address1, string city, int? stateId, string countryCode, string postalCode, string phoneNumber, string faxNumber, string subDomain)
+		public async Task<int> UpdateOrganization(int organizationId, string organizationName, string siteUrl, int? addressId, string address1, string city, int? stateId, string countryCode, string postalCode, string phoneNumber, string faxNumber, string subDomain)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
@@ -334,7 +334,7 @@ namespace AllyisApps.DBModel
 		/// Executes [Auth].[DeleteOrg].
 		/// </summary>
 		/// <param name="organizationId">Parameter @organizationId. .</param>
-		async public Task DeleteOrganization(int organizationId)
+		public async Task DeleteOrganization(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@orgId", organizationId);
@@ -389,7 +389,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updates an organization member's info.
 		/// </summary>
-		async public Task<int> UpdateMember(int userId, int orgId, string employeeId, int roleId, string firstName, string lastName, bool isInvited)
+		public async Task<int> UpdateMember(int userId, int orgId, string employeeId, int roleId, string firstName, string lastName, bool isInvited)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
@@ -411,7 +411,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">The organization's Id.</param>
 		/// <param name="userId">The user's Id.</param>
-		async public Task RemoveOrganizationUser(int organizationId, int userId)
+		public async Task RemoveOrganizationUser(int organizationId, int userId)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -489,7 +489,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">The organization's Id.</param>
 		/// <returns>The TableOrganizations containing the organization's information, null if an error is encountered.</returns>
-		async public Task<dynamic> GetOrganization(int organizationId)
+		public async Task<dynamic> GetOrganization(int organizationId)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -582,7 +582,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Adds an Invitation to the invitations table and invitation sub roles table.
 		/// </summary>
-		async public Task<int> CreateInvitation(string email, string firstName, string lastName, int organizationId, int organizationRoleId, string employeedId, string prodJson)
+		public async Task<int> CreateInvitation(string email, string firstName, string lastName, int organizationId, int organizationRoleId, string employeedId, string prodJson)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@email", email);
@@ -665,7 +665,7 @@ namespace AllyisApps.DBModel
 		/// Deletes the defined invitation.
 		/// </summary>
 		/// <param name="invitationId">The invitation's Id.</param>
-		async public Task<int> RejectInvitation(int invitationId)
+		public async Task<int> RejectInvitation(int invitationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@invitationId", invitationId);
@@ -711,7 +711,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="inviteId">The invite Id.</param>
 		/// <returns>List of all roles.</returns>
-		async public Task<InvitationDBEntity> GetInvitation(int inviteId)
+		public async Task<InvitationDBEntity> GetInvitation(int inviteId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@inviteId", inviteId);
@@ -784,7 +784,7 @@ namespace AllyisApps.DBModel
 		/// for any invitations pending in the organization, the organization's billing stripe handle, and the complete list of products.
 		/// </summary>
 		/// <param name="organizationId">The organization Id.</param>
-		async public Task<Tuple<dynamic, List<OrganizationUserDBEntity>, List<SubscriptionDisplayDBEntity>, List<InvitationDBEntity>, string>> GetOrganizationManagementInfo(int organizationId)
+		public async Task<Tuple<dynamic, List<OrganizationUserDBEntity>, List<SubscriptionDisplayDBEntity>, List<InvitationDBEntity>, string>> GetOrganizationManagementInfo(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);

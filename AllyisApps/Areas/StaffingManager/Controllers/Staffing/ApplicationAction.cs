@@ -6,17 +6,12 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
-using AllyisApps.Services;
-using AllyisApps.Services.Auth;
-using AllyisApps.Services.Crm;
-using AllyisApps.Services.StaffingManager;
-using AllyisApps.Services.Lookup;
-using System;
 using AllyisApps.Lib;
-using System.Threading.Tasks;
+using AllyisApps.Services.StaffingManager;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -30,7 +25,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// </summary>
 		/// <returns>A create application page.</returns>
 		[HttpGet]
-		async public Task<ActionResult> Application(int subscriptionId, int applicantId)
+		public async Task<ActionResult> Application(int subscriptionId, int applicantId)
 		{
 			var subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			List<Position> positions = await this.AppService.GetPositionsByOrganizationId(subInfo.OrganizationId);
@@ -60,7 +55,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns>A redirect to staffing index page.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> Application(StaffingApplicationViewModel model)
+		public async Task<ActionResult> Application(StaffingApplicationViewModel model)
 		{
 			Application application = InitializeApplication(model);
 			application.ApplicationId = await this.AppService.CreateApplication(application);
@@ -98,7 +93,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				DocumentName = d.DocumentName
 			};
 		}
-		
+
 		private void UploadAttachments(StaffingApplicationViewModel model, Application application)
 		{
 			foreach (string name in AzureFiles.GetReportAttachments(application.ApplicationId))

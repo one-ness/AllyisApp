@@ -31,7 +31,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> Import(int id, HttpPostedFileBase upload)
+		public async Task<ActionResult> Import(int id, HttpPostedFileBase upload)
 		{
 			// TODO: Replace ModelState errors with exception catches and notifications
 			// TODO: Buff up the error handling (catch errors from import functions, etc.)

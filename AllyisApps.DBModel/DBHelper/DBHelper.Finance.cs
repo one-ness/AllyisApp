@@ -113,7 +113,7 @@ namespace AllyisApps.DBModel
 		/// Retrieves all of the accounts in the database.
 		/// </summary>
 		/// <returns></returns>
-		async public Task<IEnumerable<AccountDBEntity>> GetAccounts(int orgId)
+		public async Task<IEnumerable<AccountDBEntity>> GetAccounts(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
@@ -166,7 +166,7 @@ namespace AllyisApps.DBModel
 		/// Deletes and account from the database.
 		/// </summary>
 		/// <param name="accountId">The.</param>
-		async public Task DeleteAccount(int accountId)
+		public async Task DeleteAccount(int accountId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@accountId", accountId);
@@ -199,7 +199,7 @@ namespace AllyisApps.DBModel
 		/// <param name="userId"></param>
 		/// <param name="orgId"></param>
 		/// <returns>The ORganizationUserDBEntity object.</returns>
-		async public Task<decimal> GetUserOrgMaxAmount(int userId, int orgId)
+		public async Task<decimal> GetUserOrgMaxAmount(int userId, int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);

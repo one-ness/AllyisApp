@@ -21,7 +21,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <returns>The action result.</returns>
-		async public Task<ActionResult> Index(int subscriptionId)
+		public async Task<ActionResult> Index(int subscriptionId)
 		{
 			await SetNavData(subscriptionId);
 
@@ -45,7 +45,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="endDate">The end date.</param>
 		/// <param name="expenses">The expenses.</param>
 		/// <returns>Returns the view model.</returns>
-		async public Task<ExpenseIndexViewModel> InitializeViewModel(int subId, int userId, DateTime startDate, DateTime endDate, IEnumerable<ExpenseReport> expenses)
+		public async Task<ExpenseIndexViewModel> InitializeViewModel(int subId, int userId, DateTime startDate, DateTime endDate, IEnumerable<ExpenseReport> expenses)
 		{
 			List<ExpenseItemViewModel> items = new List<ExpenseItemViewModel>();
 

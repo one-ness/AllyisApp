@@ -22,7 +22,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="reportId">The report id.</param>
 		/// <returns>Returns an action result.</returns>
-		async public Task<ActionResult> Create(int subscriptionId, int reportId = -1)
+		public async Task<ActionResult> Create(int subscriptionId, int reportId = -1)
 		{
 			await SetNavData(subscriptionId);
 			var organizationId = (await AppService.GetSubscription(subscriptionId)).OrganizationId;

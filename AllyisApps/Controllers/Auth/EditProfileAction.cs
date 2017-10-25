@@ -22,7 +22,7 @@ namespace AllyisApps.Controllers.Auth
 		/// GET: /Account/EditProfile.
 		/// </summary>
 		/// <returns>Edit profile view.</returns>
-		async public Task<ActionResult> EditProfile()
+		public async Task<ActionResult> EditProfile()
 		{
 			var model = new EditProfileViewModel();
 			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
@@ -50,7 +50,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>Tje Edit profile view.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> EditProfile(EditProfileViewModel model)
+		public async Task<ActionResult> EditProfile(EditProfileViewModel model)
 		{
 			if (ModelState.IsValid)
 			{

@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.ViewModels.Auth;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -19,7 +19,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <summary>
 		/// Get: Account/OrgInvitations
 		/// </summary>
-		async public Task<ActionResult> OrgInvitations(int id)
+		public async Task<ActionResult> OrgInvitations(int id)
 		{
 			var model = await Task.Run(() => new OrganizationInvitationsViewModel());
 

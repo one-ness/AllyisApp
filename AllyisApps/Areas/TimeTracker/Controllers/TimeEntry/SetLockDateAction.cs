@@ -4,15 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using System.Linq;
 using AllyisApps.Lib;
+using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -26,7 +26,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <returns>The settings page.</returns>
-		async public Task<ActionResult> SettingsLockDate(int subscriptionId)
+		public async Task<ActionResult> SettingsLockDate(int subscriptionId)
 		{
 			this.AppService.CheckTimeTrackerAction((AppService.TimeTrackerAction.EditOthers), subscriptionId);
 			int organizaionID = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
@@ -78,7 +78,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="LDquantity">The quantity of the selected period.</param>
 		/// <returns>Provides the view for the user.</returns>
 		[HttpPost]
-		async public Task<ActionResult> SetLockDate(int subscriptionId, bool LDsetting, int LDperiod, int LDquantity)
+		public async Task<ActionResult> SetLockDate(int subscriptionId, bool LDsetting, int LDperiod, int LDquantity)
 		{
 			this.AppService.CheckTimeTrackerAction(Services.AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			int orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;

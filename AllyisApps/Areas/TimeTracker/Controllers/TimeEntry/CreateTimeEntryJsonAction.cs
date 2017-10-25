@@ -6,14 +6,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
-using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -27,7 +26,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="model">The model representing a time entry.</param>
 		/// <returns>A JSON object with the results of the action.</returns>
-		async public Task<ActionResult> CreateTimeEntryJson(CreateTimeEntryViewModel model)
+		public async Task<ActionResult> CreateTimeEntryJson(CreateTimeEntryViewModel model)
 		{
 			if (model.UserId != this.AppService.UserContext.UserId)
 			{
@@ -118,7 +117,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="model"></param>
 		/// <returns></returns>
-		async protected Task<ActionResult> CreateTimeEntryJson(EditTimeEntryViewModel model)
+		protected async Task<ActionResult> CreateTimeEntryJson(EditTimeEntryViewModel model)
 		{
 			if (model.IsCreated && (!model.TimeEntryId.HasValue || model.TimeEntryId.Value == 0))
 			{

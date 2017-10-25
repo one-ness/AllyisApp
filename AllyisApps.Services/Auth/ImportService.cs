@@ -30,7 +30,7 @@ namespace AllyisApps.Services
 		/// <param name="importData">Workbook with data to import.</param>
 		/// <param name="organizationId">The organization's Id.</param>
 		/// <param name="inviteUrl">Used for userImport when adding users via AddMemberPage</param>
-		async public Task<ImportActionResult> Import(DataSet importData, int subscriptionId = 0, int organizationId = 0, string inviteUrl = null)
+		public async Task<ImportActionResult> Import(DataSet importData, int subscriptionId = 0, int organizationId = 0, string inviteUrl = null)
 		{
 			int orgId;
 			if (subscriptionId > 0 && UserContext.SubscriptionsAndRoles[subscriptionId] != null)
@@ -70,7 +70,7 @@ namespace AllyisApps.Services
 
 			// Retrieval of existing user data
 			var userGet = await this.GetUser(UserContext.UserId);
-			List<Tuple<string, User>> users = this.GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, userGet )).ToList();
+			List<Tuple<string, User>> users = this.GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, userGet)).ToList();
 
 			// Retrieval of existing user product subscription data
 			int ttProductId = (int)ProductIdEnum.TimeTracker;

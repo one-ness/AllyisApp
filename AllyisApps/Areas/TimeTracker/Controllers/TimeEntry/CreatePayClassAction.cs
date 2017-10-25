@@ -5,15 +5,15 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using System.Linq;
 using AllyisApps.Lib;
+using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -27,7 +27,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <returns>The settings page.</returns>
-		async public Task<ActionResult> SettingsPayClass(int subscriptionId)
+		public async Task<ActionResult> SettingsPayClass(int subscriptionId)
 		{
 			this.AppService.CheckTimeTrackerAction((AppService.TimeTrackerAction.EditOthers), subscriptionId);
 			int organizaionID = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
@@ -76,7 +76,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="newPayClass">The pay class to create.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>Redirects to the settings view.</returns>
-		async public Task<ActionResult> CreatePayClass(string newPayClass, int subscriptionId)
+		public async Task<ActionResult> CreatePayClass(string newPayClass, int subscriptionId)
 		{
 			if (string.IsNullOrWhiteSpace(newPayClass))
 			{

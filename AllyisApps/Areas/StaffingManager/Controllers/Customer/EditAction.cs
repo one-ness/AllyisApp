@@ -28,7 +28,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="userId">The Customer id.</param>
 		/// <returns>Presents a page to edit Customer data.</returns>
 		[HttpGet]
-		async public Task<ActionResult> Edit(int subscriptionId, int userId)
+		public async Task<ActionResult> Edit(int subscriptionId, int userId)
 		{
 			var customerTask = AppService.GetCustomerInfo(userId);
 			var subscriptionNameToDisplayTask = AppService.GetSubscriptionName(subscriptionId);
@@ -75,7 +75,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns>The ActionResult.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> Edit(EditCustomerInfoViewModel model)
+		public async Task<ActionResult> Edit(EditCustomerInfoViewModel model)
 		{
 			if (ModelState.IsValid)
 			{

@@ -32,7 +32,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>The async task responsible for this action.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
+		public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
 		{
 			ActionResult result = this.View(model);
 			if (ModelState.IsValid)

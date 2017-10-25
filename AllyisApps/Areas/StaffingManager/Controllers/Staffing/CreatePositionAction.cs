@@ -30,7 +30,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription.</param>
 		/// <returns>Presents a page for the creation of a new position.</returns>
-		async public Task<ActionResult> CreatePosition(int subscriptionId)
+		public async Task<ActionResult> CreatePosition(int subscriptionId)
 		{
 			SetNavData(subscriptionId);
 
@@ -43,7 +43,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// setup position setup viewmodel
 		/// </summary>
 		/// <returns></returns>
-		async public Task<EditPositionViewModel> setupPositionEditViewModel(int subscriptionId)
+		public async Task<EditPositionViewModel> setupPositionEditViewModel(int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
@@ -108,7 +108,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="model">The Customer ViewModel.</param>
 		/// <param name="subscriptionId">The sub id from the ViewModel.</param>
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
-		async public Task<ActionResult> SubmitCreatePosition(EditPositionViewModel model, int subscriptionId)
+		public async Task<ActionResult> SubmitCreatePosition(EditPositionViewModel model, int subscriptionId)
 		{
 			if (ModelState.IsValid)
 			{

@@ -9,12 +9,12 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.Lookup;
 using Dapper;
-using System.Threading.Tasks;
 
 namespace AllyisApps.DBModel
 {
@@ -29,7 +29,7 @@ namespace AllyisApps.DBModel
 		/// <param name="project">ProjectDBEntity with new project info.</param>
 		/// <param name="userIds">List of users to be assigned to this project.</param>
 		/// <returns>Returns the id of the created project, else returns -1.</returns>
-		async public Task<int> CreateProjectAndUpdateItsUserList(ProjectDBEntity project, IEnumerable<int> userIds)
+		public async Task<int> CreateProjectAndUpdateItsUserList(ProjectDBEntity project, IEnumerable<int> userIds)
 		{
 			if (string.IsNullOrWhiteSpace(project.ProjectName))
 			{
@@ -69,7 +69,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="project">ProjectDBEntity with new project info.</param>
 		/// <returns>Returns the id of the created project, else returns -1.</returns>
-		async public Task<int> CreateProject(ProjectDBEntity project)
+		public async Task<int> CreateProject(ProjectDBEntity project)
 		{
 			if (string.IsNullOrWhiteSpace(project.ProjectName))
 			{
@@ -101,7 +101,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="projectId">The id of the project to be deleted.</param>
 		/// <returns>Returns project name if successful, return empty string if not found.</returns>
-		async public Task<string> DeleteProject(int projectId)
+		public async Task<string> DeleteProject(int projectId)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -153,7 +153,7 @@ namespace AllyisApps.DBModel
 		/// Updates project properties.
 		/// </summary>
 		/// <param name="project">The ProjectDBEntity with the updated properties.</param>
-		async public void UpdateProject(ProjectDBEntity project)
+		public async void UpdateProject(ProjectDBEntity project)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@projectId", project.ProjectId);
@@ -177,7 +177,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="customerId">The id of the customer.</param>
 		/// <returns>A collection of projects with the definied customer.</returns>
-		async public Task<IEnumerable<ProjectDBEntity>> GetProjectsByCustomer(int customerId)
+		public async Task<IEnumerable<ProjectDBEntity>> GetProjectsByCustomer(int customerId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@customerId", customerId);
@@ -196,7 +196,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="customerId">The id of the customer.</param>
 		/// <returns>A collection of projects with the definied customer.</returns>
-		async public Task<IEnumerable<ProjectDBEntity>> GetInactiveProjectsByCustomer(int customerId)
+		public async Task<IEnumerable<ProjectDBEntity>> GetInactiveProjectsByCustomer(int customerId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@customerId", customerId);
@@ -243,7 +243,7 @@ namespace AllyisApps.DBModel
 		/// <param name="customerId">Customer Id.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>.</returns>
-		async public Task<Tuple<string, List<SubscriptionUserDBEntity>>> GetNextProjectIdAndSubUsers(int customerId, int subscriptionId)
+		public async Task<Tuple<string, List<SubscriptionUserDBEntity>>> GetNextProjectIdAndSubUsers(int customerId, int subscriptionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@customerId", customerId);
@@ -287,7 +287,7 @@ namespace AllyisApps.DBModel
 		/// <param name="userId">The User Id.</param>
 		/// <param name="isActive">Is active.</param>
 		/// <returns>The number of rows successfully updated.</returns>C:\Users\v-trsan\Desktop\AllyisApps\aa\src\main\aadb\StoredProcedures\TimeTracker
-		async public Task<int> UpdateProjectUser(int projectId, int userId, int isActive)
+		public async Task<int> UpdateProjectUser(int projectId, int userId, int isActive)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@projectId", projectId);
@@ -334,7 +334,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="customerInfo">The table with the customer to create.</param>
 		/// <returns>The Id of the customer if one was created -1 if not.</returns>
-		async public Task<int> CreateCustomerInfo(Tuple<CustomerDBEntity, AddressDBEntity> customerInfo)
+		public async Task<int> CreateCustomerInfo(Tuple<CustomerDBEntity, AddressDBEntity> customerInfo)
 		{
 			if (customerInfo == null)
 			{
@@ -373,7 +373,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="customerInfo">The table with the customer to create.</param>
 		/// <return>1 if succeed, -1 if fail because CustOrgId is not unique.</return>
-		async public Task<int> UpdateCustomer(Tuple<CustomerDBEntity, AddressDBEntity> customerInfo)
+		public async Task<int> UpdateCustomer(Tuple<CustomerDBEntity, AddressDBEntity> customerInfo)
 		{
 			if (customerInfo == null)
 			{
@@ -476,7 +476,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		async public Task<Tuple<string>> GetNextCustId(int orgId)
+		public async Task<Tuple<string>> GetNextCustId(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@orgId", orgId);
@@ -498,7 +498,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="customerId">Customer Id.</param>
 		/// <returns>.</returns>
-		async public Task<Tuple<dynamic, AddressDBEntity>> GetCustomerProfile(int customerId)
+		public async Task<Tuple<dynamic, AddressDBEntity>> GetCustomerProfile(int customerId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@customerId", customerId);
@@ -519,7 +519,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="customerId">The customer's Id.</param>
 		/// <returns>Customer's name if successful, empty string if not found.</returns>
-		async public Task<string> DeleteCustomer(int customerId)
+		public async Task<string> DeleteCustomer(int customerId)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -553,7 +553,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="customerId">The customer's Id.</param>
 		/// <returns>True if successful.</returns>
-		async public Task<string> ReactivateCustomer(int customerId)
+		public async Task<string> ReactivateCustomer(int customerId)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -571,7 +571,7 @@ namespace AllyisApps.DBModel
 		/// <param name="orgId">The organization's Id.</param>
 		/// <param name="activity">The level of activity you wish to allow. Specifying 0 includes inactive projects.</param>
 		/// <returns>A collection of CompleteProjectDBEntity objects for each project the user has access to within the organization.</returns>
-		async public Task<IEnumerable<ProjectDBEntity>> GetProjectsByUserAndOrganization(int userId, int orgId, int activity)
+		public async Task<IEnumerable<ProjectDBEntity>> GetProjectsByUserAndOrganization(int userId, int orgId, int activity)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
@@ -632,7 +632,7 @@ namespace AllyisApps.DBModel
 		/// <param name="projectId">The project's Id.</param>
 		/// <param name="userId">The user Id.</param>
 		/// <returns>Info about the requested project.</returns>
-		async public Task<ProjectDBEntity> GetProjectByIdAndUser(int projectId, int userId)
+		public async Task<ProjectDBEntity> GetProjectByIdAndUser(int projectId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@projectId", projectId);
@@ -658,7 +658,7 @@ namespace AllyisApps.DBModel
 		/// <param name="start">The start date assigned to the project.</param>
 		/// <param name="end">The end date assigned to the project.</param>
 		/// <param name="userIds">The updated list of project users, by their Ids.</param>
-		async public void UpdateProjectAndUsers(int projectId, string projectName, string orgId, bool isHourly, DateTime? start, DateTime? end, IEnumerable<int> userIds)
+		public async void UpdateProjectAndUsers(int projectId, string projectName, string orgId, bool isHourly, DateTime? start, DateTime? end, IEnumerable<int> userIds)
 		{
 			if (string.IsNullOrWhiteSpace(projectName))
 			{
@@ -703,7 +703,7 @@ namespace AllyisApps.DBModel
 		/// <param name="userId">User Id.</param>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		async public Task<Tuple<List<ProjectDBEntity>, List<ProjectDBEntity>, UserDBEntity>> GetProjectsForOrgAndUser(int userId, int orgId)
+		public async Task<Tuple<List<ProjectDBEntity>, List<ProjectDBEntity>, UserDBEntity>> GetProjectsForOrgAndUser(int userId, int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
@@ -728,7 +728,7 @@ namespace AllyisApps.DBModel
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="userId">User Id.</param>
 		/// <returns>.</returns>
-		async public Task<Tuple<List<ProjectDBEntity>, List<dynamic>>> GetProjectsAndCustomersForOrgAndUser(int orgId, int userId)
+		public async Task<Tuple<List<ProjectDBEntity>, List<dynamic>>> GetProjectsAndCustomersForOrgAndUser(int orgId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
@@ -752,7 +752,7 @@ namespace AllyisApps.DBModel
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="userId">User Id.</param>
 		/// <returns>.</returns>
-		async public Task<Tuple<List<ProjectDBEntity>, List<dynamic>>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId, int userId)
+		public async Task<Tuple<List<ProjectDBEntity>, List<dynamic>>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);

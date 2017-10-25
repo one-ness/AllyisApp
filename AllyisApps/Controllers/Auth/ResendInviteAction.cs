@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Resources;
 using AllyisApps.Services.Auth;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -18,7 +15,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="id">Invitation ID</param>
 		/// <returns></returns>
 		[HttpGet]
-		async public Task<ActionResult> ResendInvite(int id)
+		public async Task<ActionResult> ResendInvite(int id)
 		{
 			var invite = await AppService.GetInvitationByID(id);
 			AppService.CheckOrgAction(Services.AppService.OrgAction.AddUserToOrganization, invite.OrganizationId);

@@ -17,7 +17,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The Subscription Id.</param>
 		/// <returns>The account view page.</returns>
-		async public Task<ActionResult> Accounts(int subscriptionId)
+		public async Task<ActionResult> Accounts(int subscriptionId)
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Accounts, subscriptionId);
 

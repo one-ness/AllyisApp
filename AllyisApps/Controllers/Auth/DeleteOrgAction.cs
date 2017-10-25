@@ -22,7 +22,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>Redirection to account index, or an error page.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> DeleteOrg(int id)
+		public async Task<ActionResult> DeleteOrg(int id)
 		{
 			// Method includes permissions check
 			await AppService.DeleteOrganization(id);

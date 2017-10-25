@@ -5,13 +5,12 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Areas.TimeTracker.Core;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
-using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -27,7 +26,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="model">The model representing the time entry to be deleted.</param>
 		/// <returns>JSON Status. {status: 'success|error', message: 'a string'}.</returns>
 		[HttpPost]
-		async public Task<ActionResult> DeleteTimeEntryJson(DeleteTimeEntryViewModel model)
+		public async Task<ActionResult> DeleteTimeEntryJson(DeleteTimeEntryViewModel model)
 		{
 			// Check for permissions
 			Services.TimeTracker.TimeEntry entry = await AppService.GetTimeEntry(model.TimeEntryId);
@@ -79,7 +78,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="model"></param>
 		/// <returns></returns>
-		async protected Task<ActionResult> DeleteTimeEntryJson(EditTimeEntryViewModel model)
+		protected async Task<ActionResult> DeleteTimeEntryJson(EditTimeEntryViewModel model)
 		{
 			if (!model.IsDeleted)
 			{

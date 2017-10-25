@@ -27,7 +27,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="subscriptionId">The subscription.</param>
 		/// <returns>Presents a page for the creation of a new Customer.</returns>
 		[HttpGet]
-		async public Task<ActionResult> Create(int subscriptionId)
+		public async Task<ActionResult> Create(int subscriptionId)
 		{
 			var nextCustomerIdTask = AppService.GetNextCustId(subscriptionId);
 			var subscriptionNameToDisplayTask = AppService.GetSubscriptionName(subscriptionId);
@@ -57,7 +57,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> Create(EditCustomerInfoViewModel model)
+		public async Task<ActionResult> Create(EditCustomerInfoViewModel model)
 		{
 			if (ModelState.IsValid)
 			{

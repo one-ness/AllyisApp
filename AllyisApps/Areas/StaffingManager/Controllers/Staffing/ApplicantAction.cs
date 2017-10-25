@@ -4,19 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
-using AllyisApps.Services;
-using AllyisApps.Services.Auth;
-using AllyisApps.Services.Crm;
 using AllyisApps.Services.StaffingManager;
-using AllyisApps.Services.Lookup;
-using AllyisApps.ViewModels.Staffing;
-using System;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -29,11 +22,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// Applicant page.
 		/// </summary>
 		/// <returns></returns>
-		async public Task<ActionResult> Applicant(int subscriptionId, int applicantId)
+		public async Task<ActionResult> Applicant(int subscriptionId, int applicantId)
 		{
 			SetNavData(subscriptionId);
 
-			Applicant applicant =  await this.AppService.GetApplicantAddressById(applicantId);
+			Applicant applicant = await this.AppService.GetApplicantAddressById(applicantId);
 			StaffingApplicantViewModel model = InitializeStaffingApplicantViewModel(applicant);
 			var applicationsGet = await this.AppService.GetApplicationsByApplicantId(applicantId);
 			model.Applications = applicationsGet.Select(a => InitializeStaffingApplicationViewModel(a)).ToList();

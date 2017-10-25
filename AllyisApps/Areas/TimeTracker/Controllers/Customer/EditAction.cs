@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -14,7 +15,6 @@ using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.TimeTracker.Customer;
 using static AllyisApps.Services.AppService;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -30,7 +30,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="userId">The Customer id.</param>
 		/// <returns>Presents a page to edit Customer data.</returns>
 		[HttpGet]
-		async public Task<ActionResult> Edit(int subscriptionId, int userId)
+		public async Task<ActionResult> Edit(int subscriptionId, int userId)
 		{
 			if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
 			{
@@ -76,7 +76,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The ActionResult.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> Edit(EditCustomerInfoViewModel model)
+		public async Task<ActionResult> Edit(EditCustomerInfoViewModel model)
 		{
 			if (ModelState.IsValid)
 			{

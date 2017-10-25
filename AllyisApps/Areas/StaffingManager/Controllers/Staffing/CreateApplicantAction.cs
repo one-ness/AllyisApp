@@ -4,17 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
-using AllyisApps.Services;
-using AllyisApps.Services.Auth;
-using AllyisApps.Services.Crm;
 using AllyisApps.Services.StaffingManager;
-using AllyisApps.Services.Lookup;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -44,7 +38,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns></returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> CreateApplicant(int subscriptionId, StaffingApplicantViewModel model)
+		public async Task<ActionResult> CreateApplicant(int subscriptionId, StaffingApplicantViewModel model)
 		{
 			var subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			Applicant applicant = InitializeApplicant(subInfo.OrganizationId, model);

@@ -28,7 +28,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="startDate">The start date range.</param>
 		/// <param name="endDate">The end date range.</param>
 		/// <returns>Returns File or a Redirect to the admin report page.</returns>
-		async public Task<ActionResult> ViewAdminReport(string viewDataButton, AdminReportModel model, int subscriptionId, int organizationId, DateTime? startDate, DateTime? endDate)
+		public async Task<ActionResult> ViewAdminReport(string viewDataButton, AdminReportModel model, int subscriptionId, int organizationId, DateTime? startDate, DateTime? endDate)
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.AdminReport, subscriptionId);
 
@@ -93,7 +93,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="startDate">The start date range.</param>
 		/// <param name="endDate">The end date range.</param>
 		/// <returns>An ExpenseDataExportViewModel.</returns>
-		async public Task<ExpenseDataExportViewModel> ConstructAdminDataExportViewModel(int subscriptionId, int organizationId, List<int> userId, List<int> selectedStatus, DateTime? startDate = null, DateTime? endDate = null)
+		public async Task<ExpenseDataExportViewModel> ConstructAdminDataExportViewModel(int subscriptionId, int organizationId, List<int> userId, List<int> selectedStatus, DateTime? startDate = null, DateTime? endDate = null)
 		{
 			List<ExpenseReportViewModel> expenses = new List<ExpenseReportViewModel>();
 

@@ -21,7 +21,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Updates a project.
 		/// </summary>
 		/// <param name="project">The model containing the project information.</param>
-		async public void UpdateProject(EditProjectViewModel project)
+		public async void UpdateProject(EditProjectViewModel project)
 		{
 			if (string.IsNullOrWhiteSpace(project.ProjectName))
 			{

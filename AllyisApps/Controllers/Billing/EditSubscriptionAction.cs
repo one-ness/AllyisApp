@@ -1,8 +1,7 @@
-﻿using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using AllyisApps.ViewModels.Auth;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
-using System.Threading.Tasks;
+using AllyisApps.Core.Alert;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -17,7 +16,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="id">Subscription id.</param>
 		/// <returns>The result of this action.</returns>
 		[HttpGet]
-		async public Task<ActionResult> EditSubscription(int id)
+		public async Task<ActionResult> EditSubscription(int id)
 		{
 			var sub = await this.AppService.GetSubscription(id);
 			var model = new EditSubscriptionViewModel();
@@ -43,7 +42,7 @@ namespace AllyisApps.Controllers.Auth
 		/// .</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> EditSubscription(EditSubscriptionViewModel model)
+		public async Task<ActionResult> EditSubscription(EditSubscriptionViewModel model)
 		{
 			if (ModelState.IsValid)
 			{

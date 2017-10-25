@@ -20,7 +20,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="model">The model.</param>
 		/// <returns> A redirect to index view.</returns>
 		[HttpPost]
-		async public Task<ActionResult> UpdateReport(ExpenseCreateModel model)
+		public async Task<ActionResult> UpdateReport(ExpenseCreateModel model)
 		{
 			if (!ModelState.IsValid)
 			{

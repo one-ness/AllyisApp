@@ -28,7 +28,7 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		/// <param name="id">The organization Id.</param>
 		/// <returns>The organization's management page.</returns>
-		async public Task<ActionResult> ManageOrg(int id)
+		public async Task<ActionResult> ManageOrg(int id)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
 			ManageOrgViewModel model = await this.ConstructOrganizationManageViewModel(id);
@@ -52,7 +52,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="organizationId">Organization id.</param>
 		/// <returns>The OrganizationManageViewModel.</returns>
 		[CLSCompliant(false)]
-		async public Task<ManageOrgViewModel> ConstructOrganizationManageViewModel(int organizationId)
+		public async Task<ManageOrgViewModel> ConstructOrganizationManageViewModel(int organizationId)
 		{
 			var orgInfo = await AppService.GetOrganizationManagementInfo(organizationId);
 

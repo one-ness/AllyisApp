@@ -49,7 +49,7 @@ namespace AllyisApps.Controllers.Auth
 		[HttpPost]
 		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> LogOn(LogOnViewModel model, string returnUrl)
+		public async Task<ActionResult> LogOn(LogOnViewModel model, string returnUrl)
 		{
 			if (ModelState.IsValid)
 			{

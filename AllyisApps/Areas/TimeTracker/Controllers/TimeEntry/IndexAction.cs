@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
@@ -17,7 +18,6 @@ using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.Project;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using static AllyisApps.ViewModels.TimeTracker.TimeEntry.TimeEntryOverDateRangeViewModel;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -34,7 +34,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="startDate">The beginning of the Date Range.</param>
 		/// <param name="endDate">The ending of the Date Range.</param>
 		/// <returns>Provides the view for the defined user over the date range defined.</returns>
-		async public Task<ActionResult> Index(int subscriptionId, int userId, int? startDate = null, int? endDate = null)
+		public async Task<ActionResult> Index(int subscriptionId, int userId, int? startDate = null, int? endDate = null)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
 
@@ -62,7 +62,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				manager,
 				startDate,
 				endDate);
-			return this.View("Index2",model);
+			return this.View("Index2", model);
 		}
 
 		/// <summary>
@@ -72,7 +72,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="startDate">The beginning of the Date Range.</param>
 		/// <param name="endDate">The ending of the Date Range.</param>
 		/// <returns>Provides the view for the defined user over the date range defined.</returns>
-		async public Task<ActionResult> IndexNoUserId(int subscriptionId, int? startDate = null, int? endDate = null)
+		public async Task<ActionResult> IndexNoUserId(int subscriptionId, int? startDate = null, int? endDate = null)
 		{
 			int userId = this.AppService.UserContext.UserId;
 
@@ -127,7 +127,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="startingDate">The Starting Date.</param>
 		/// <param name="endingDate">The Ending date.</param>
 		/// <returns>The constructed TimeEntryOverDateRangeViewModel.</returns>
-		async public Task<TimeEntryOverDateRangeViewModel> ConstructTimeEntryOverDataRangeViewModel(int orgId, int subId, string subName, int userId, bool manager, int? startingDate, int? endingDate)
+		public async Task<TimeEntryOverDateRangeViewModel> ConstructTimeEntryOverDataRangeViewModel(int orgId, int subId, string subName, int userId, bool manager, int? startingDate, int? endingDate)
 		{
 			DateTime? startingDateTime = null;
 			if (startingDate.HasValue)

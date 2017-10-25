@@ -32,7 +32,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> CustomerImport(int subscriptionId, ExpenseFile file)
+		public async Task<ActionResult> CustomerImport(int subscriptionId, ExpenseFile file)
 		{
 			// TODO: Replace ModelState errors with exception catches and notifications
 			// TODO: Buff up the error handling (catch errors from import functions, etc.)

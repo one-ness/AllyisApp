@@ -20,7 +20,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="model">The model object.</param>
 		/// <returns>An action result.</returns>
 		[HttpPost]
-		async public Task<ActionResult> CreateReport(ExpenseCreateModel model)
+		public async Task<ActionResult> CreateReport(ExpenseCreateModel model)
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, model.SubscriptionId);
 

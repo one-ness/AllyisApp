@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -12,7 +13,6 @@ using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -25,7 +25,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// returns the view for overtime settings.
 		/// </summary>
 		/// <returns></returns>
-		async public Task<ActionResult> SettingsOvertime(int subscriptionId)
+		public async Task<ActionResult> SettingsOvertime(int subscriptionId)
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			int organizaionID = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
@@ -78,7 +78,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="mult">Overtime pay multiplier.</param>
 		/// <returns>Redirects to the settings view.</returns>
 		[HttpPost]
-		async public Task<ActionResult> UpdateOvertime(int subscriptionId, string setting, int hours = -1, string period = "", float mult = 1)
+		public async Task<ActionResult> UpdateOvertime(int subscriptionId, string setting, int hours = -1, string period = "", float mult = 1)
 		{
 			int actualHours = string.Equals(setting, "No") ? -1 : hours;
 

@@ -26,7 +26,7 @@ namespace AllyisApps.Controllers.Auth
 		/// Displays the account index page.
 		/// </summary>
 		/// <returns>The async task responsible for this action.</returns>
-		async public Task<ActionResult> Index()
+		public async Task<ActionResult> Index()
 		{
 			AccountIndexViewModel viewModel = await ConstuctIndexViewModel();
 
@@ -37,7 +37,7 @@ namespace AllyisApps.Controllers.Auth
 		/// Constuct index view Model for Accounts.
 		/// </summary>
 		/// <returns>The Accound Index view model.</returns>
-		async public Task<AccountIndexViewModel> ConstuctIndexViewModel()
+		public async Task<AccountIndexViewModel> ConstuctIndexViewModel()
 		{
 			User accountInfo = await AppService.GetCurrentUser();
 

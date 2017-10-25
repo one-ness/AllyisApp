@@ -19,7 +19,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <returns>The action result.</returns>
-		async public Task<ActionResult> UserSettings(int subscriptionId)
+		public async Task<ActionResult> UserSettings(int subscriptionId)
 		{
 			await SetNavData(subscriptionId);
 

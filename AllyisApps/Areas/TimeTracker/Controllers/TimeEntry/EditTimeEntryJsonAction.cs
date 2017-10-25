@@ -7,14 +7,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Areas.TimeTracker.Core;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
 using AllyisApps.Services;
-using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -32,7 +31,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="model">The model representing a time entry.</param>
 		/// <returns>The edited version of Time Entry.</returns>
-		async public Task<ActionResult> EditTimeEntryJson(EditTimeEntryViewModel model)
+		public async Task<ActionResult> EditTimeEntryJson(EditTimeEntryViewModel model)
 		{
 			if (model.ApprovalState == -1)
 			{
@@ -102,7 +101,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="model"><see cref="EditTimeEntryViewModel"/> to use for edit.</param>
 		/// <param name="canManage">Whether user has permission to manage time entry.</param>
-		async public void EditTimeEntry(EditTimeEntryViewModel model, bool canManage)
+		public async void EditTimeEntry(EditTimeEntryViewModel model, bool canManage)
 		{
 			float? durationResult;
 			model.IsManager = canManage;
@@ -169,7 +168,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="timeEntryId">The time entry Id.</param>
 		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <returns>The EditTimeEntryViewModel.</returns>
-		async public Task<EditTimeEntryViewModel> ConstructEditTimeEntryViewModel(int timeEntryId, int subscriptionId)
+		public async Task<EditTimeEntryViewModel> ConstructEditTimeEntryViewModel(int timeEntryId, int subscriptionId)
 		{
 			var entry = await AppService.GetTimeEntry(timeEntryId);
 

@@ -4,14 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using AllyisApps.Services.Auth;
-using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Auth;
 
@@ -29,7 +25,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>Manage Page.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> EditOrg(EditOrganizationViewModel model)
+		public async Task<ActionResult> EditOrg(EditOrganizationViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
@@ -48,7 +44,7 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		/// <param name="id">The organization id.</param>
 		[HttpGet]
-		async public Task<ActionResult> EditOrg(int id)
+		public async Task<ActionResult> EditOrg(int id)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
 			bool canDelete = this.AppService.CheckOrgAction(AppService.OrgAction.DeleteOrganization, id, false);

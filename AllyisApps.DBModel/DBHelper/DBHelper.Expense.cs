@@ -70,7 +70,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="ReportId">The report id.</param>
 		/// <returns>IEnumerable of Expense items.</returns>
-		async public Task<IList<ExpenseItemDBEntity>> GetExpenseItemsByReportId(int ReportId)
+		public async Task<IList<ExpenseItemDBEntity>> GetExpenseItemsByReportId(int ReportId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@reportId", ReportId);
@@ -179,7 +179,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="ExpenseReportId">The id of the Report</param>
 		/// <returns>An Expense Reports.</returns>
-		async public Task<ExpenseReportDBEntity> GetExpenseReport(int ExpenseReportId)
+		public async Task<ExpenseReportDBEntity> GetExpenseReport(int ExpenseReportId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@expenseReportId", ExpenseReportId);
@@ -197,7 +197,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="SubmittedById">The id of the parent account</param>
 		/// <returns>A collection of Expense Reports.</returns>
-		async public Task<IEnumerable<ExpenseReportDBEntity>> GetExpenseReportsBySubmittedById(int SubmittedById)
+		public async Task<IEnumerable<ExpenseReportDBEntity>> GetExpenseReportsBySubmittedById(int SubmittedById)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@submittedById", SubmittedById);
@@ -214,7 +214,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="OrganizationId">The id of the parent organization</param>
 		/// <returns>A collection of Expense Reports.</returns>
-		async public Task<IEnumerable<ExpenseReportDBEntity>> GetExpenseReportsByOrganizationId(int OrganizationId)
+		public async Task<IEnumerable<ExpenseReportDBEntity>> GetExpenseReportsByOrganizationId(int OrganizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", OrganizationId);
@@ -230,7 +230,7 @@ namespace AllyisApps.DBModel
 		/// Updates the Expense Report with the specified ID.
 		/// </summary>
 		/// <param name="report">The expense report object that will replace the previous entry.</param>
-		async public Task UpdateExpenseReport(ExpenseReportDBEntity report)
+		public async Task UpdateExpenseReport(ExpenseReportDBEntity report)
 		{
 			if (report == null)
 			{
@@ -276,7 +276,7 @@ namespace AllyisApps.DBModel
 		/// Creates an expense history item.
 		/// </summary>
 		/// <param name="entity">An ExpenseHistoryDBEntity</param>
-		async public Task CreateExpenseHistory(ExpenseHistoryDBEntity entity)
+		public async Task CreateExpenseHistory(ExpenseHistoryDBEntity entity)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@historyId", entity.HistoryId);
@@ -298,7 +298,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="reportId">The report id.</param>
 		/// <returns></returns>
-		async public Task<IEnumerable<ExpenseHistoryDBEntity>> GetExpenseHistory(int reportId)
+		public async Task<IEnumerable<ExpenseHistoryDBEntity>> GetExpenseHistory(int reportId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add(@"reportId", reportId);
