@@ -9,6 +9,8 @@ using System.Linq;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.Auth;
 using System.Threading.Tasks;
+using AllyisApps.Services;
+using AllyisApps.ViewModels;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -24,7 +26,8 @@ namespace AllyisApps.Controllers.Auth
 		{
 			User user = await AppService.GetUserAsync(userId); // this call makes sure that both logged in user and userId have at least one common org
 			var org = user.Organizations.Where(x => x.OrganizationId == id).FirstOrDefault();
-			var model = await Task.Run(() => new EditMemberViewModel2());
+			var model = new EditMemberViewModel2();
+			model.CanEditMember = this.AppService.CheckOrgAction(AppService.OrgAction.EditUser, id, false);
 			model.Address = user.Address?.Address1;
 			model.City = user.Address?.City;
 			model.CountryName = user.Address?.CountryName;
@@ -35,7 +38,7 @@ namespace AllyisApps.Controllers.Auth
 			model.LastName = user.LastName;
 			model.OrganizationId = id;
 			model.OrganizationName = org.OrganizationName;
-			//model.OrgRolesList = 
+			model.OrgRolesList = ModelHelper.GetOrgRolesList();
 			model.PhoneNumber = user.PhoneNumber;
 			model.PostalCode = user.Address?.PostalCode;
 			//model.Roles = 

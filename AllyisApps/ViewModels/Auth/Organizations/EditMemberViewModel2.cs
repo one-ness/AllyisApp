@@ -73,6 +73,11 @@ namespace AllyisApps.ViewModels.Auth
 		public string EmployeeId { get; set; }
 
 		/// <summary>
+		/// can edit member?
+		/// </summary>
+		public bool CanEditMember { get; set; }
+
+		/// <summary>
 		/// organization role id
 		/// </summary>
 		public int SelectedOrganizationRoleId { get; set; }
