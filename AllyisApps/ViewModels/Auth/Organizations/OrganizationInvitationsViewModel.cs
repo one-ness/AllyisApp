@@ -26,6 +26,11 @@ namespace AllyisApps.ViewModels.Auth
 		public List<ViewModelItem> Invitations { get; set; }
 
 		/// <summary>
+		/// list of invitations checked
+		/// </summary>
+		public string CheckedInvitations { get; set; }
+
+		/// <summary>
 		/// information for members and invitations tab
 		/// </summary>
 		public MembersAndInvitationsTabViewModel TabInfo { get; set; }

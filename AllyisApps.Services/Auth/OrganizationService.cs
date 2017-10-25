@@ -270,6 +270,28 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// Removes an invitation.
+		/// </summary>
+		/// <param name="InvitationIds">Invitation Id.</param>
+		/// <param name="orgId">organizaitons Id. </param>>
+		/// <returns>Returns false if permissions fail.</returns>
+		public async Task<bool> RemoveInvitations(int[] InvitationIds, int orgId)
+		{
+			if (InvitationIds[0] <= 0) throw new ArgumentException("invitationId");
+
+			bool worked = true;
+			this.CheckOrgAction(OrgAction.DeleteInvitation, orgId);
+
+			foreach (var invitationId in InvitationIds)
+			{
+				var invite = await GetInvitationByID(invitationId);
+				if (!DBHelper.DeleteInvitation(invitationId)) worked = false;
+			}
+
+			return worked;
+		}
+
+		/// <summary>
 		/// Gets the member list for an organization.
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
