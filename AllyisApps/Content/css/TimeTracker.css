@@ -1,4 +1,118 @@
 body {
+	margin-bottom: 85px;
+}
+
+a {
+	color: #595959;
+}
+
+a:hover, a:focus {
+	text-decoration: none;
+	color: #333333;
+}
+
+.shrink-wrap-center {
+	text-align: center;
+}
+
+.shrink-wrap-center > div {
+	text-align: left;
+	display: inline-block;
+}
+
+.min300 {
+	min-width: 300px;
+}
+
+.footer-bar {
+	background-color: #efefef;
+	bottom: 0;
+	font-size: smaller;
+	height: 40px;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	margin-top: 85px;
+	width: inherit;
+}
+
+.footer-bar a {
+	margin-right: 10px;
+}
+
+.header-bar {
+	position: relative;
+	min-height: 50px;
+	margin-bottom: 20px;
+	margin-top: 15px;
+	border: 1px solid #72a8d7;
+	border-width: 1px 5px;
+}
+
+.header-nav {
+	margin: 0 15px 0 0;
+}
+
+.link-zone {
+	background-color: #dbe9f5;
+	cursor: pointer;
+}
+
+#TheDropdown1, #TheDropdown1:hover, #TheDropdown1:focus {
+	background-color: transparent;
+	color: #337ab7;
+}
+
+#TheDropdown2 > li > a {
+	display: block;
+	padding: 3px 20px;
+	clear: both;
+	font-weight: normal;
+	line-height: 1.42857143;
+	color: #337ab7;
+	white-space: nowrap;
+}
+
+.navbar li.dropdown.link-zone .dropdown-menu {
+	background-color: #dbe9f5;
+}
+
+.navbar li.dropdown.link-zone .dropdown-menu a:hover, .navbar li.dropdown.link-zone .dropdown-menu a:focus {
+	background-color: #b4d1ea;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*body {
 	margin: 0;
 }
 
@@ -2076,33 +2190,4 @@ button[disabled], html input[disabled] {
 	.push {
 		margin-top: 14px;
 	}
-}
-
-/*! CSS Used fontfaces */
-@font-face {
-	font-family: 'Glyphicons Halflings';
-	src: url(http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/fonts/glyphicons-halflings-regular.eot);
-	src: url(http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/fonts/glyphicons-halflings-regular.eot#iefix) format('embedded-opentype'),url(http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/fonts/glyphicons-halflings-regular.woff2) format('woff2'),url(http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/fonts/glyphicons-halflings-regular.woff) format('woff'),url(http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/fonts/glyphicons-halflings-regular.ttf) format('truetype'),url(http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular) format('svg');
-}
-
-@font-face {
-	font-family: 'Glyphicons Halflings';
-	src: url(http://localhost:62707/Content/bootstrap/fonts/glyphicons-halflings-regular.eot);
-	src: url(http://localhost:62707/Content/bootstrap/fonts/glyphicons-halflings-regular.eot#iefix) format('embedded-opentype'), url(http://localhost:62707/Content/bootstrap/fonts/glyphicons-halflings-regular.woff2) format('woff2'), url(http://localhost:62707/Content/bootstrap/fonts/glyphicons-halflings-regular.woff) format('woff'), url(http://localhost:62707/Content/bootstrap/fonts/glyphicons-halflings-regular.ttf) format('truetype'), url(http://localhost:62707/Content/bootstrap/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular) format('svg');
-}
-
-@font-face {
-	font-family: 'FontAwesome';
-	src: url(http://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.eot?v=4.4.0);
-	src: url(http://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.eot#iefix&v=4.4.0) format('embedded-opentype'),url(http://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.woff2?v=4.4.0) format('woff2'),url(http://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.woff?v=4.4.0) format('woff'),url(http://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.ttf?v=4.4.0) format('truetype'),url(http://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.svg?v=4.4.0#fontawesomeregular) format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: 'FontAwesome';
-	src: url(//netdna.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.eot?v=4.4.0);
-	src: url(//netdna.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.eot?#iefix&v=4.4.0) format('embedded-opentype'), url(//netdna.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.svg?v=4.4.0#fontawesomeregular) format('svg'), url(//netdna.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.woff2?v=4.4.0) format('woff2'), url(//netdna.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.woff?v=4.4.0) format('woff'), url(//netdna.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.ttf?v=4.4.0) format('truetype');
-	font-weight: normal;
-	font-style: normal;
-}
+}*/
