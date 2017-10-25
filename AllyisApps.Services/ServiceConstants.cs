@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Constants for file column header strings (like excel), to be used in imports and exports.
 	/// </summary>
-	internal class ColumnHeaders
+	internal static class ColumnHeaders
 	{
 		#region customer
 
@@ -185,7 +185,7 @@
 		public const string PayClass = "Pay Class";
 
 		/// <summary>
-		/// Time Entry-Property: Pay Class.
+		/// Time Entry-Property: Status.
 		/// </summary>
 		public const string Status = "Status";
 

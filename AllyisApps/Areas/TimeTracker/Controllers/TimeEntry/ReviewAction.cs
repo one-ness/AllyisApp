@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Resources;
+using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels;
@@ -62,13 +63,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			var subGet = await AppService.GetSubscription(subscriptionId);
+			Subscription subscription = await AppService.GetSubscription(subscriptionId);
 			var model = new ReviewViewModel
 			{
 				UserId = AppService.UserContext.UserId,
 				SubscriptionId = subscriptionId,
 				OrganizationId = organizationId,
-				SubscriptionName = subGet.SubscriptionName,
+				SubscriptionName = subscription.SubscriptionName,
 				PayClasses = payClasses.ToList(),
 				TimeEntriesByUser = timeEntriesByUser,
 				TimeEntryTotalsByUserByPayClass = timeEntryTotalsByUserByPayClass,

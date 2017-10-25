@@ -143,9 +143,6 @@ namespace AllyisApps.Controllers.Auth
 									controller = ControllerConstants.Staffing
 								});
 							break;
-
-						default:
-							break;
 					}
 
 					subViewModel.ProductName = subItem.ProductName;

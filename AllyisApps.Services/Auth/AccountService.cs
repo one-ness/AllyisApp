@@ -17,9 +17,9 @@ using AllyisApps.DBModel.Lookup;
 using AllyisApps.Lib;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
+using AllyisApps.Services.Cache;
 using AllyisApps.Services.Lookup;
 using Newtonsoft.Json.Linq;
-using AllyisApps.Services.Cache;
 
 namespace AllyisApps.Services
 {
@@ -292,25 +292,27 @@ namespace AllyisApps.Services
 			dynamic subs = sets.Subscriptions;
 			foreach (var item in subs)
 			{
-				UserSubscription sub = new UserSubscription();
-				sub.IsActive = item.IsActive;
-				sub.NumberOfUsers = item.NumberOfUsers;
-				sub.OrganizationId = item.OrganizationId;
-				sub.ProductAreaUrl = item.ProductAreaUrl;
-				sub.ProductDescription = item.ProductDescription;
-				sub.ProductId = (ProductIdEnum)item.ProductId;
-				sub.ProductName = item.ProductName;
-				sub.ProductRoleId = item.ProductRole;
-				sub.PromoExpirationDateUtc = item.PromotionExpirationDateUtc;
-				sub.SkuDescription = item.SkuDescription;
-				sub.SkuIconUrl = item.SkuIconUrl;
-				sub.SkuId = (SkuIdEnum)item.SkuId;
-				sub.SkuName = item.SkuName;
-				sub.CreatedUtc = item.SubscriptionCreatedUtc;
-				sub.SubscriptionId = item.SubscriptionId;
-				sub.SubscriptionName = item.SubscriptionName;
-				sub.JoinedDateUtc = item.SubscriptionUserCreatedUtc;
-				sub.UserId = item.UserId;
+				UserSubscription sub = new UserSubscription
+				{
+					IsActive = item.IsActive,
+					NumberOfUsers = item.NumberOfUsers,
+					OrganizationId = item.OrganizationId,
+					ProductAreaUrl = item.ProductAreaUrl,
+					ProductDescription = item.ProductDescription,
+					ProductId = (ProductIdEnum)item.ProductId,
+					ProductName = item.ProductName,
+					ProductRoleId = item.ProductRoleId,
+					PromoExpirationDateUtc = item.PromotionExpirationDateUtc,
+					SkuDescription = item.SkuDescription,
+					SkuIconUrl = item.IconUrl,
+					SkuId = (SkuIdEnum)item.SkuId,
+					SkuName = item.SkuName,
+					CreatedUtc = item.SubscriptionCreatedUtc,
+					SubscriptionId = item.SubscriptionId,
+					SubscriptionName = item.SubscriptionName,
+					JoinedDateUtc = item.SubscriptionUserCreatedUtc,
+					UserId = item.UserId
+				};
 				user.Subscriptions.Add(sub);
 			}
 
