@@ -673,7 +673,6 @@ input[type="file"]:focus {
 .ovrd-navbar {
 	position: relative;
 	min-height: 50px;
-	margin-bottom: 20px;
 	border: 1px solid transparent;
 }
 
