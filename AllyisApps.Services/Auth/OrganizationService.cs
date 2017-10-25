@@ -263,7 +263,7 @@ namespace AllyisApps.Services
 		{
 			if (invitationId <= 0) throw new ArgumentException("invitationId");
 
-			var invite = await GetInvitationById(invitationId);
+			var invite = await this.GetInvitationById(invitationId);
 			CheckOrgAction(OrgAction.DeleteInvitation, invite.OrganizationId);
 			return DBHelper.DeleteInvitation(invitationId);
 		}

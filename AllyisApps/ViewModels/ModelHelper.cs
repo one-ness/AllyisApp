@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using AllyisApps.Lib;
+using AllyisApps.Resources;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.TimeTracker;
 
@@ -58,6 +60,50 @@ namespace AllyisApps.ViewModels
 				result.Add(item.StateId.ToString(), localized);
 			}
 
+			return result;
+		}
+
+		/// <summary>
+		/// get org roles
+		/// </summary>
+		public static Dictionary<int, string> GetOrgRolesList()
+		{
+			var result = new Dictionary<int, string>();
+			result.Add((int)OrganizationRoleEnum.Member, Strings.Member);
+			result.Add((int)OrganizationRoleEnum.Owner, Strings.Owner);
+			return result;
+		}
+
+		/// <summary>
+		/// get time tracker roles
+		/// </summary>
+		public static Dictionary<int, string> GetTimeTrackerRolesList()
+		{
+			var result = new Dictionary<int, string>();
+			result.Add((int)OrganizationRoleEnum.Member, Strings.Member);
+			result.Add((int)OrganizationRoleEnum.Owner, Strings.Owner);
+			return result;
+		}
+
+		/// <summary>
+		/// get expense tracker roles
+		/// </summary>
+		public static Dictionary<int, string> GetExpenseTrackerRolesList()
+		{
+			var result = new Dictionary<int, string>();
+			result.Add((int)OrganizationRoleEnum.Member, Strings.Member);
+			result.Add((int)OrganizationRoleEnum.Owner, Strings.Owner);
+			return result;
+		}
+
+		/// <summary>
+		/// get staffing manager roles
+		/// </summary>
+		public static Dictionary<int, string> GetStaffingManagerRolesList()
+		{
+			var result = new Dictionary<int, string>();
+			result.Add((int)OrganizationRoleEnum.Member, Strings.Member);
+			result.Add((int)OrganizationRoleEnum.Owner, Strings.Owner);
 			return result;
 		}
 
