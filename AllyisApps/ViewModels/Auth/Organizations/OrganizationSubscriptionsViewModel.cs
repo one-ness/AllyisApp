@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -40,7 +38,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public OrganizationSubscriptionsViewModel()
 		{
-			this.Subscriptions = new List<ViewModelItem>();
+			Subscriptions = new List<ViewModelItem>();
 		}
 
 		/// <summary>
@@ -90,7 +88,7 @@ namespace AllyisApps.ViewModels.Auth
 			{
 				get
 				{
-					return this.SubscriptionCreatedUtc.ToString("d");
+					return SubscriptionCreatedUtc.ToString("d");
 				}
 			}
 		}

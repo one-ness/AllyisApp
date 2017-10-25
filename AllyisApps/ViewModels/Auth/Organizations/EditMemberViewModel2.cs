@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -120,7 +117,7 @@ namespace AllyisApps.ViewModels.Auth
 			/// </summary>
 			public RoleItem()
 			{
-				this.RoleList = new Dictionary<int, string>();
+				RoleList = new Dictionary<int, string>();
 			}
 		}
 
@@ -129,7 +126,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public EditMemberViewModel2()
 		{
-			this.Roles = new List<RoleItem>();
+			Roles = new List<RoleItem>();
 		}
 	}
 }

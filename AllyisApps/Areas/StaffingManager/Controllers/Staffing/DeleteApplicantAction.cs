@@ -21,9 +21,9 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns></returns>
 		public async Task<ActionResult> DeleteApplicant(int subscriptionId, int applicantId)
 		{
-			this.AppService.DeleteApplicant(applicantId);
+			AppService.DeleteApplicant(applicantId);
 			await Task.Yield();
-			return this.RedirectToAction("ApplicantList");
+			return RedirectToAction("ApplicantList");
 		}
 	}
 }

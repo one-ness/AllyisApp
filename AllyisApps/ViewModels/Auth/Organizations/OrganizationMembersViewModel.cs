@@ -24,7 +24,7 @@ namespace AllyisApps.ViewModels.Auth
 		{
 			get
 			{
-				return (int)Math.Ceiling(this.TotalUsers / (double)PageUserLimit);
+				return (int)Math.Ceiling(TotalUsers / (double)PageUserLimit);
 			}
 		}
 

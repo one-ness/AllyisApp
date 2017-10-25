@@ -53,7 +53,7 @@ namespace AllyisApps.Services.Common.Types
 		{
 			get
 			{
-				return this.amount;
+				return amount;
 			}
 		}
 
@@ -64,7 +64,7 @@ namespace AllyisApps.Services.Common.Types
 		{
 			get
 			{
-				return this.created;
+				return created;
 			}
 		}
 
@@ -75,7 +75,7 @@ namespace AllyisApps.Services.Common.Types
 		{
 			get
 			{
-				return this.id;
+				return id;
 			}
 		}
 
@@ -86,7 +86,7 @@ namespace AllyisApps.Services.Common.Types
 		{
 			get
 			{
-				return this.statementDescriptor;
+				return statementDescriptor;
 			}
 		}
 
@@ -97,7 +97,7 @@ namespace AllyisApps.Services.Common.Types
 		{
 			get
 			{
-				return this.service;
+				return service;
 			}
 		}
 

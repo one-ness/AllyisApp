@@ -1,6 +1,6 @@
 ﻿namespace AllyisApps.Services.TimeTracker
 {
-	public enum PayClassId : int
+	public enum PayClassId
 	{
 		/// <summary>
 		/// Regular.

@@ -23,7 +23,7 @@ namespace AllyisApps.Controllers.Auth
 		{
 			var model = await Task.Run(() => new OrganizationInvitationsViewModel());
 
-			var collection = await this.AppService.GetInvitationsAsync(id);
+			var collection = await AppService.GetInvitationsAsync(id);
 			foreach (var item in collection)
 			{
 				var data = new OrganizationInvitationsViewModel.ViewModelItem();
@@ -42,11 +42,11 @@ namespace AllyisApps.Controllers.Auth
 				model.Invitations.Add(data);
 			}
 
-			var org = await this.AppService.GetOrganization(id);
+			var org = await AppService.GetOrganization(id);
 			model.OrganizationName = org.OrganizationName;
 			model.TabInfo.OrganizationId = id;
-			model.CanDeleteInvitations = this.AppService.CheckOrgAction(Services.AppService.OrgAction.DeleteInvitation, id, false);
-			model.CanResendInvitations = this.AppService.CheckOrgAction(Services.AppService.OrgAction.AddUserToOrganization, id, false);
+			model.CanDeleteInvitations = AppService.CheckOrgAction(Services.AppService.OrgAction.DeleteInvitation, id, false);
+			model.CanResendInvitations = AppService.CheckOrgAction(Services.AppService.OrgAction.AddUserToOrganization, id, false);
 			return View(model);
 		}
 	}

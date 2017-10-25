@@ -29,9 +29,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				return RedirectToAction("Create", new { subscriptionId = model.SubscriptionId, reportId = model.Report.ExpenseReportId });
 			}
 
-			if (this.AppService.UserContext.UserId != model.CurrentUser)
+			if (AppService.UserContext.UserId != model.CurrentUser)
 			{
-				string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.CreateReport.ToString());
+				string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.CreateReport);
 				throw new AccessViolationException(message);
 			}
 

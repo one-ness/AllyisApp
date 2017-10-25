@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Resources;
-using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.Auth;
 
@@ -31,7 +30,7 @@ namespace AllyisApps.Controllers.Auth
 		{
 			bool isInvited = invited == 0 ? false : true;
 			EditMemberViewModel model;
-			ViewBag.SignedInUserId = this.AppService.UserContext.UserId;
+			ViewBag.SignedInUserId = AppService.UserContext.UserId;
 
 			if (!isInvited)
 			{
@@ -57,7 +56,7 @@ namespace AllyisApps.Controllers.Auth
 						PostalCode = userBasicInfo.Address?.PostalCode,
 						StateName = userBasicInfo.Address?.StateName,
 					},
-					CurrentUserId = this.AppService.UserContext.UserId,
+					CurrentUserId = AppService.UserContext.UserId,
 					FirstName = userBasicInfo.FirstName,
 					LastName = userBasicInfo.LastName,
 					OrganizationId = orgId,
@@ -108,17 +107,17 @@ namespace AllyisApps.Controllers.Auth
 		{
 			if (ModelState.IsValid)
 			{
-				if (await this.AppService.UpdateMember(model.UserInfo.UserId, model.OrganizationId, model.EmployeeId, model.EmployeeRoleId, model.FirstName, model.LastName, model.IsInvited))
+				if (await AppService.UpdateMember(model.UserInfo.UserId, model.OrganizationId, model.EmployeeId, model.EmployeeRoleId, model.FirstName, model.LastName, model.IsInvited))
 				{
-					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UpdateMemberSuccessMessage, model.UserInfo.FirstName, model.UserInfo.LastName), Variety.Success));
+					Notifications.Add(new BootstrapAlert(string.Format(Strings.UpdateMemberSuccessMessage, model.UserInfo.FirstName, model.UserInfo.LastName), Variety.Success));
 				}
 				else
 				{
-					Notifications.Add(new BootstrapAlert(Resources.Strings.CannotEditEmployeeId, Variety.Danger));
+					Notifications.Add(new BootstrapAlert(Strings.CannotEditEmployeeId, Variety.Danger));
 				}
 
 				await Task.Delay(1);
-				return this.RedirectToAction(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { id = model.OrganizationId });
+				return RedirectToAction(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { id = model.OrganizationId });
 			}
 
 			return View(model);

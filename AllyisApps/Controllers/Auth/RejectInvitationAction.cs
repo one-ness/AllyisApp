@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Mvc;
-using AllyisApps.Services;
 
 namespace AllyisApps.Controllers.Auth
 {

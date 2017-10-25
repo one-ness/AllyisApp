@@ -26,9 +26,9 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		{
 			SetNavData(subscriptionId);
 
-			Applicant applicant = await this.AppService.GetApplicantAddressById(applicantId);
+			Applicant applicant = await AppService.GetApplicantAddressById(applicantId);
 			StaffingApplicantViewModel model = InitializeStaffingApplicantViewModel(applicant);
-			var applicationsGet = await this.AppService.GetApplicationsByApplicantId(applicantId);
+			var applicationsGet = await AppService.GetApplicationsByApplicantId(applicantId);
 			model.Applications = applicationsGet.Select(a => InitializeStaffingApplicationViewModel(a)).ToList();
 
 			foreach (var application in model.Applications)
@@ -36,7 +36,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				application.Applicant = applicant;
 			}
 
-			return this.View(model);
+			return View(model);
 		}
 
 		private static StaffingApplicationViewModel InitializeStaffingApplicationViewModel(Application application)

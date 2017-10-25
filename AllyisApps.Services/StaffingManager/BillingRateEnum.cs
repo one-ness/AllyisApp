@@ -11,7 +11,7 @@ namespace AllyisApps.Services
 	/// <summary>
 	/// Rates of pay for positions.
 	/// </summary>
-	public enum BillingRateEnum : int
+	public enum BillingRateEnum
 	{
 		/// <summary>
 		/// Hourly Pay Rate.

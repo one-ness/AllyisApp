@@ -19,7 +19,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// </summary>
 		public EditTimeEntryViewModel()
 		{
-			this.Sample = false;
+			Sample = false;
 		}
 
 		/// <summary>

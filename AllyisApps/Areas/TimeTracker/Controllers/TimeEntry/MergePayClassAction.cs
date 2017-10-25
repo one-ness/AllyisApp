@@ -31,7 +31,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpGet]
 		public async Task<ActionResult> MergePayClass(int subscriptionId, int userId)
 		{
-			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
+			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			var allPayClasses = await AppService.GetPayClassesBySubscriptionId(subscriptionId);
 			var destPayClasses = allPayClasses.Where(pc => pc.PayClassId != userId);
 			string sourcePayClassName = allPayClasses.Where(pc => pc.PayClassId == userId).ElementAt(0).PayClassName;
@@ -40,11 +40,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			if (sourcePayClassName == "Regular" || sourcePayClassName == "Overtime" || sourcePayClassName == "Holiday" || sourcePayClassName == "Paid Time Off" || sourcePayClassName == "Unpaid Time Off")
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.CannotMergePayClass, Variety.Warning));
-				return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId });
+				return RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId });
 			}
 
 			MergePayClassViewModel model = ConstructMergePayClassViewModel(userId, sourcePayClassName, subscriptionId, destPayClasses);
-			return this.View(ViewConstants.MergePayClass, model);
+			return View(ViewConstants.MergePayClass, model);
 		}
 
 		/// <summary>
@@ -89,7 +89,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
 
-			return this.RedirectToAction(ActionConstants.SettingsPayClass, new { subscriptionId = model.SubscriptionId });
+			return RedirectToAction(ActionConstants.SettingsPayClass, new { subscriptionId = model.SubscriptionId });
 		}
 	}
 }

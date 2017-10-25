@@ -15,9 +15,9 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public AccountIndexViewModel()
 		{
-			this.Invitations = new List<InvitationViewModel>();
-			this.Organizations = new List<OrganizationViewModel>();
-			this.UserInfo = new UserViewModel();
+			Invitations = new List<InvitationViewModel>();
+			Organizations = new List<OrganizationViewModel>();
+			UserInfo = new UserViewModel();
 		}
 
 		/// <summary>
@@ -122,7 +122,7 @@ namespace AllyisApps.ViewModels.Auth
 			/// </summary>
 			public OrganizationViewModel()
 			{
-				this.Subscriptions = new List<SubscriptionViewModel>();
+				Subscriptions = new List<SubscriptionViewModel>();
 			}
 
 			/// <summary>

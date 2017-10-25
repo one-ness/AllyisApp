@@ -28,21 +28,21 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>A JSON object with the results of the action.</returns>
 		public async Task<ActionResult> CreateTimeEntryJson(CreateTimeEntryViewModel model)
 		{
-			if (model.UserId != this.AppService.UserContext.UserId)
+			if (model.UserId != AppService.UserContext.UserId)
 			{
-				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId);
+				AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId);
 			}
 
 			// Authorized to edit this entry
 			try
 			{
 				float? durationResult;
-				if (!(durationResult = this.ParseDuration(model.Duration)).HasValue)
+				if (!(durationResult = ParseDuration(model.Duration)).HasValue)
 				{
 					throw new ArgumentException(Resources.Strings.DurationFormat);
 				}
 
-				if (this.ParseDuration(model.Duration) == 0)
+				if (ParseDuration(model.Duration) == 0)
 				{
 					throw new ArgumentException(Resources.Strings.EnterATimeLongerThanZero);
 				}
@@ -59,7 +59,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 
 				UserContext.SubscriptionAndRole subInfo = null;
-				this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(model.SubscriptionId, out subInfo);
+				AppService.UserContext.SubscriptionsAndRoles.TryGetValue(model.SubscriptionId, out subInfo);
 
 				DateTime? lockDate = await AppService.GetLockDate(AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId);
 				if (durationResult + durationOther > 24.00)
@@ -93,7 +93,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Description = model.Description
 				});
 
-				return this.Json(new { status = "success", values = new { duration = this.GetDurationDisplay(model.Duration), description = model.Description, projectId = model.ProjectId, id = id, projectName = AppService.GetProject(model.ProjectId).ProjectName } });
+				return Json(new { status = "success", values = new { duration = GetDurationDisplay(model.Duration), description = model.Description, projectId = model.ProjectId, id = id, projectName = AppService.GetProject(model.ProjectId).ProjectName } });
 			}
 			catch (ArgumentException e)
 			{
@@ -103,7 +103,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					message = e.Message
 				};
 
-				return this.Json(temp);
+				return Json(temp);
 			}
 			catch (Exception e)
 			{

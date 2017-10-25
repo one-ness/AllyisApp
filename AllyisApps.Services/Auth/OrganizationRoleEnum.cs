@@ -9,7 +9,7 @@ namespace AllyisApps.Services.Auth
 	/// <summary>
 	/// Role of the user in an organization.
 	/// </summary>
-	public enum OrganizationRoleEnum : int
+	public enum OrganizationRoleEnum
 	{
 		/// <summary>
 		/// Organization member.

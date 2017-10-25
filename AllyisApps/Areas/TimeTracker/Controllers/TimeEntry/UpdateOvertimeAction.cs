@@ -28,16 +28,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public async Task<ActionResult> SettingsOvertime(int subscriptionId)
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
-			int organizaionID = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			int organizaionID = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			var infos = AppService.GetAllSettings(organizaionID);
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			string subName = await AppService.GetSubscriptionName(subscriptionId);
 			var infoOrg = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infoOrg.Item1.StartOfWeek));
 			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
 			Services.TimeTracker.Setting settings = infos.Item1;
-			return this.View(new SettingsViewModel()
+			return View(new SettingsViewModel()
 			{
 				Settings = new SettingsViewModel.SettingsInfoViewModel()
 				{
@@ -64,7 +64,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}),
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subName,
-				UserId = this.AppService.UserContext.UserId
+				UserId = AppService.UserContext.UserId
 			});
 		}
 
@@ -91,7 +91,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
 
-			return this.RedirectToAction(ActionConstants.SettingsOvertime, new { subscriptionid = subscriptionId, id = this.AppService.UserContext.UserId });
+			return RedirectToAction(ActionConstants.SettingsOvertime, new { subscriptionid = subscriptionId, id = AppService.UserContext.UserId });
 		}
 	}
 }

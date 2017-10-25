@@ -27,7 +27,7 @@ namespace AllyisApps.ViewModels.Billing
 		/// </summary>
 		public SkusViewModel()
 		{
-			this.Products = new List<ProductItem>();
+			Products = new List<ProductItem>();
 		}
 
 		/// <summary>
@@ -50,7 +50,7 @@ namespace AllyisApps.ViewModels.Billing
 			/// </summary>
 			public ProductItem()
 			{
-				this.Skus = new List<SkuItem>();
+				Skus = new List<SkuItem>();
 			}
 
 			/// <summary>

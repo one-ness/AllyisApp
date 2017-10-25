@@ -36,7 +36,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			var infos = await AppService.GetCustomerInfo(customerId);
 			var customer = infos;
-			return this.View(new EditCustomerInfoViewModel
+			return View(new EditCustomerInfoViewModel
 			{
 				ContactEmail = customer.ContactEmail,
 				CustomerName = customer.CustomerName,
@@ -54,9 +54,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				EIN = infos.EIN,
 				OrganizationId = customer.OrganizationId,
 				CustomerId = customerId,
-				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
 				CustomerOrgId = infos.CustomerOrgId,
-				CanEditCustomers = this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId, false)
+				CanEditCustomers = AppService.CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId, false)
 			});
 		}
 	}

@@ -33,7 +33,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpGet]
 		public async Task<ActionResult> Create(int subscriptionId, int userId)
 		{
-			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
+			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
 			DateTime? defaultStart = null;
 			DateTime? defaultEnd = null;
 			var idAndUsers = await AppService.GetNextProjectIdAndSubUsers(userId, subscriptionId);
@@ -47,7 +47,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
-			return this.View(
+			return View(
 				new EditProjectViewModel()
 				{
 					IsCreating = true,
@@ -86,7 +86,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			model.SubscriptionUsers = subList;
 			if (ModelState.IsValid)
 			{
-				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
+				AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
 				if (model == null)
 				{
 					throw new ArgumentNullException("model");
@@ -116,7 +116,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 					// Create failure
 					Notifications.Add(new BootstrapAlert(message, Variety.Danger));
-					return this.View(model);
+					return View(model);
 				}
 
 				return RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = model.SubscriptionId });
@@ -124,7 +124,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			else
 			{
 				// Invalid Model
-				return this.View(model);
+				return View(model);
 			}
 		}
 

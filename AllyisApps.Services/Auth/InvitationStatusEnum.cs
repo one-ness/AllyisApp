@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Invitation status used to
 	/// </summary>
-	public enum InvitationStatusEnum : int
+	public enum InvitationStatusEnum
 	{
 		/// <summary>
 		/// any

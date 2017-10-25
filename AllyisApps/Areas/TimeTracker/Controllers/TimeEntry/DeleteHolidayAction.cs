@@ -35,7 +35,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
 
-			return this.RedirectToAction(ActionConstants.SettingsHoliday, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId });
+			return RedirectToAction(ActionConstants.SettingsHoliday, new { subscriptionId = subscriptionId, id = AppService.UserContext.UserId });
 		}
 	}
 }

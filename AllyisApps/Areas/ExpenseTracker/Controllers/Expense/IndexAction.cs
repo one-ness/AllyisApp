@@ -27,9 +27,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, subscriptionId);
 
-			int userId = this.AppService.UserContext.UserId;
+			int userId = AppService.UserContext.UserId;
 
-			UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+			UserContext.SubscriptionAndRole subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			var results = await AppService.GetExpenseReportBySubmittedId(userId);
 			var items = results.Select(x => x).Where(y => y.OrganizationId == subInfo.OrganizationId);
 

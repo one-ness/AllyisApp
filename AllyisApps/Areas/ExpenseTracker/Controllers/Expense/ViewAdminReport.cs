@@ -32,7 +32,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.AdminReport, subscriptionId);
 
-			var selectedUsers = model.Selection != null ? model.Selection.SelectedUsers : new List<int>() { this.AppService.UserContext.UserId };
+			var selectedUsers = model.Selection != null ? model.Selection.SelectedUsers : new List<int>() { AppService.UserContext.UserId };
 			var selectedStatus = model.Selection != null ? model.Selection.Status : new List<int> { 1, 2, 3, 4 };
 
 			if (viewDataButton.Equals(Strings.Preview))
@@ -72,12 +72,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				}
 
 				adminReportVM.PreviewReports = dataVM.PreviewData;
-				this.TempData["ARVM"] = adminReportVM;
-				return this.RedirectToAction(ActionConstants.AdminReport);
+				TempData["ARVM"] = adminReportVM;
+				return RedirectToAction(ActionConstants.AdminReport);
 			}
 			else if (viewDataButton.Equals(Strings.Export))
 			{
-				return await this.ExportExpenseReport(subscriptionId, organizationId, model, startDate, endDate);
+				return await ExportExpenseReport(subscriptionId, organizationId, model, startDate, endDate);
 			}
 
 			return RedirectToAction(ActionConstants.AdminReport);

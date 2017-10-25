@@ -1,7 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using AllyisApps.Resources;
-using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Auth

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AllyisApps.DBModel;
 using AllyisApps.DBModel.Finance;
 using AllyisApps.Services.Expense;
 

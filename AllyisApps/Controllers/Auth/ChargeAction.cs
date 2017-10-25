@@ -27,11 +27,11 @@ namespace AllyisApps.Controllers.Auth
 		[CLSCompliant(false)]
 		public async Task<ActionResult> Charge(int id, BillingServicesToken token, string billingServicesEmail)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditBilling, id);
+			AppService.CheckOrgAction(AppService.OrgAction.EditBilling, id);
 			await AppService.UpdateBillingInfo(billingServicesEmail, token, id);
 			Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Strings.Billing, Core.Alert.Variety.Success));
 			await Task.Yield();
-			return this.RedirectToAction(ActionConstants.ManageOrg);
+			return RedirectToAction(ActionConstants.ManageOrg);
 		}
 	}
 }
