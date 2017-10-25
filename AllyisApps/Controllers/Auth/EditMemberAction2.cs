@@ -4,11 +4,16 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
+using System.Linq;
+using AllyisApps.Core.Alert;
+using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.Auth;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -20,15 +25,27 @@ namespace AllyisApps.Controllers.Auth
 		/// <summary>
 		/// GET: /Account/EditMember.
 		/// </summary>
-		public async Task<ActionResult> EditMember2(int id)
+		public async Task<ActionResult> EditMember2(int id, int userId)
 		{
-			EditMemberViewModel2 model = await Task.Run(() => new EditMemberViewModel2());
-			User user = await AppService.GetUser(id);
+			User user = await this.AppService.GetUserAsync(userId); // this call makes sure that both logged in user and userId have at least one common org
+			var org = user.Organizations.Where(x => x.OrganizationId == id).FirstOrDefault();
+			var model = await Task.Run(() => new EditMemberViewModel2());
 			model.Address = user.Address?.Address1;
 			model.City = user.Address?.City;
-			model.Country = user.Address?.CountryName;
-			model.DateOfBirth = user.DateOfBirth?.ToString("d") ?? string.Empty;
+			model.CountryName = user.Address?.CountryName;
+			model.DateOfBirth = user.DateOfBirth == null ? string.Empty : user.DateOfBirth.Value.ToString("d");
 			model.Email = user.Email;
+			model.EmployeeId = org.EmployeeId;
+			model.FirstName = user.FirstName;
+			model.LastName = user.LastName;
+			model.OrganizationId = id;
+			model.OrganizationName = org.OrganizationName;
+			//model.OrgRolesList = 
+			model.PhoneNumber = user.PhoneNumber;
+			model.PostalCode = user.Address?.PostalCode;
+			//model.Roles = 
+			model.SelectedOrganizationRoleId = (int)org.OrganizationRole;
+			model.StateName = user.Address?.StateName;
 			return View("editmember", model);
 		}
 	}

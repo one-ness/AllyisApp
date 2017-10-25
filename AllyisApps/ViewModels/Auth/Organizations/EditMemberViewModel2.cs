@@ -58,12 +58,12 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the state
 		/// </summary>
-		public string State { get; set; }
+		public string StateName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the country
 		/// </summary>
-		public string Country { get; set; }
+		public string CountryName { get; set; }
 
 		/// <summary>
 		/// Gets or sets Date of birth.

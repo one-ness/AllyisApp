@@ -48,7 +48,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			foreach (ExpenseReport report in reports)
 			{
 				var expItemsTask = AppService.GetExpenseItemsByReportId(report.ExpenseReportId);
-				var userTask = AppService.GetUser(report.SubmittedById);
+				var userTask = AppService.GetUserAsync(report.SubmittedById);
 
 				await Task.WhenAll(new Task[] { expItemsTask, userTask });
 

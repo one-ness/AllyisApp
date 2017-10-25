@@ -37,7 +37,7 @@ namespace AllyisApps.Controllers.Auth
 			{
 				var orgResult = await AppService.GetOrganizationManagementInfo(orgId);
 				OrganizationUser userOrgInfo = orgResult.Users.Find(m => m.UserId == userId);
-				User userBasicInfo = await AppService.GetUser(userId);
+				User userBasicInfo = await AppService.GetUserAsync(userId);
 
 				model = new EditMemberViewModel
 				{

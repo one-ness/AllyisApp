@@ -69,8 +69,8 @@ namespace AllyisApps.Services
 			}
 
 			// Retrieval of existing user data
-			var userGet = await this.GetUser(UserContext.UserId);
-			List<Tuple<string, User>> users = this.GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, userGet)).ToList();
+			var userGet = await this.GetUserAsync(UserContext.UserId);
+			List<Tuple<string, User>> users = this.GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, userGet )).ToList();
 
 			// Retrieval of existing user product subscription data
 			int ttProductId = (int)ProductIdEnum.TimeTracker;

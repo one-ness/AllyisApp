@@ -17,9 +17,9 @@ using AllyisApps.DBModel.Lookup;
 using AllyisApps.Lib;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
-using AllyisApps.Services.Cache;
 using AllyisApps.Services.Lookup;
 using Newtonsoft.Json.Linq;
+using AllyisApps.Services.Cache;
 
 namespace AllyisApps.Services
 {
@@ -80,7 +80,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		public async Task<bool> AcceptUserInvitation(int invitationId)
 		{
-			if (invitationId <= 0) throw new ArgumentOutOfRangeException(nameof(invitationId));
+			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId");
 
 			Invitation inviteInfo = InitializeInvitationInfo(await this.DBHelper.GetInvitation(invitationId));
 			var result = (this.DBHelper.AcceptInvitation(invitationId, this.UserContext.UserId) == 1);
@@ -152,11 +152,11 @@ namespace AllyisApps.Services
 			string confirmEmailSubject,
 			string confirmEmailMessage)
 		{
-			if (!Utility.IsValidEmail(email)) throw new ArgumentException(nameof(email));
-			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException(nameof(firstName));
-			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException(nameof(lastName));
-			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException(nameof(password));
-			if (emailConfirmationCode == null) throw new ArgumentException(nameof(emailConfirmationCode));
+			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
+			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException("firstName:");
+			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException("lastName");
+			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
+			if (emailConfirmationCode == null) throw new ArgumentException("emailConfirmationCode");
 			var result = 0;
 			try
 			{
@@ -274,15 +274,15 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// get the current logged in user
 		/// </summary>
-		public async Task<User> GetCurrentUser()
+		public async Task<User> GetCurrentUserAsync()
 		{
-			return await this.GetUser(this.UserContext.UserId);
+			return await this.GetUserAsync(this.UserContext.UserId);
 		}
 
 		/// <summary>
 		/// Get User Address, Organizaiontins, and Inviations for account page
 		/// </summary>
-		public async Task<User> GetUser(int userId)
+		public async Task<User> GetUserAsync(int userId)
 		{
 			if (userId <= 0) throw new ArgumentOutOfRangeException("userId");
 
@@ -362,7 +362,39 @@ namespace AllyisApps.Services
 			if (this.UserContext.UserId != user.UserId)
 			{
 				// logged in user is trying to read a different user's information
+				// get the list of organizations that both of them are member of
+				List<int> orgIds = new List<int>();
+				foreach (var item in this.UserContext.OrganizationsAndRoles)
+				{
+					var orgId = item.Value.OrganizationId;
+					var org = user.Organizations.Where(x => x.OrganizationId == orgId).FirstOrDefault();
+					if (org != null)
+					{
+						orgIds.Add(orgId);
+					}
+				}
 
+				// is there any?
+				bool permFound = false;
+				if (orgIds.Count <= 0)
+				{
+					// no
+					throw new AccessViolationException(string.Format("User {0} not found in any of the organizations.", user.UserId));
+				}
+				else
+				{
+					// yes, does the logged in user have readuser permission in at least one of them?
+					foreach (var item in orgIds)
+					{
+						permFound = this.CheckOrgAction(OrgAction.ReadUser, item, false);
+					}
+				}
+
+				if (!permFound)
+				{
+					// no
+					throw new AccessViolationException(string.Format("User {0} does not have permission to read user {1}.", this.UserContext.UserId, user.UserId));
+				}
 			}
 
 			return user;

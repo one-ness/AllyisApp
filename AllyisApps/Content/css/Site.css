@@ -70,6 +70,20 @@ a:hover {
 	}
 }
 
+#footer-bar {
+	background-color: #efefef;
+	bottom: 0;
+	font-size: smaller;
+	height: 40px;
+	padding-bottom: 2px;
+	padding-top: 2px;
+	position: absolute;
+	width: 100%;
+}
+
+	#footer-bar a {
+		margin-right: 10px;
+	}
 
 
 
@@ -120,13 +134,12 @@ a:hover {
 /*Compiled css with overrides*/
 
 html {
-	height: 100%;
+	position: relative;
+	min-height: 100%;
 }
 
 body {
-	position: relative;
-	margin: 0;
-	min-height: 100%;
+	margin-bottom: 40px;
 }
 
 nav {
@@ -673,7 +686,6 @@ input[type="file"]:focus {
 .ovrd-navbar {
 	position: relative;
 	min-height: 50px;
-	margin-bottom: 20px;
 	border: 1px solid transparent;
 }
 
