@@ -389,7 +389,6 @@
     <Compile Include="Controllers\Auth\DownloadImportUsersTemplateAction.cs" />
     <Compile Include="Controllers\Auth\EditOrgAction.cs" />
     <Compile Include="Controllers\Auth\RemoveInvitationAction.cs" />
-    <Compile Include="Controllers\Auth\ManageOrgAction.cs" />
     <Compile Include="Controllers\Auth\ManagePermissionsAction.cs" />
     <Compile Include="Controllers\Auth\RemoveMemberAction.cs" />
     <Compile Include="Controllers\Billing\SubscribeAction.cs" />
@@ -444,7 +443,6 @@
     <Compile Include="ViewModels\Billing\EditSubscriptionViewModel.cs" />
     <Compile Include="ViewModels\Auth\User\AccountIndexViewModel.cs" />
     <Compile Include="ViewModels\Auth\Invitation\InvitationInfoViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\ManageOrgViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\ManagePermissionsViewModel.cs" />
     <Compile Include="ViewModels\Auth\User\RegisterViewModel.cs" />
     <Compile Include="ViewModels\Auth\User\EditProfileViewModel.cs" />
@@ -457,8 +455,6 @@
     <Compile Include="ViewModels\Auth\Organizations\EditOrganizationViewModel.cs" />
     <Compile Include="ViewModels\Auth\User\EditUserPermissionViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\OrganizationAddMembersViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\OrganizationMembersViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\OrganizationUserViewModel.cs" />
     <Compile Include="ViewModels\Billing\SubscriptionDisplayViewModel.cs" />
     <Compile Include="ViewModels\Billing\SubscriptionRoleSelectionModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
