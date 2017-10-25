@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="IndexAction.cs" company="Allyis, Inc.">
+// <copyright file="ApplicantAction.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -29,7 +29,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			Applicant applicant = await AppService.GetApplicantAddressById(applicantId);
 			StaffingApplicantViewModel model = InitializeStaffingApplicantViewModel(applicant);
 			var applicationsGet = await AppService.GetApplicationsByApplicantId(applicantId);
-			model.Applications = applicationsGet.Select(a => InitializeStaffingApplicationViewModel(a)).ToList();
+			model.Applications = applicationsGet.Select(InitializeStaffingApplicationViewModel).ToList();
 
 			foreach (var application in model.Applications)
 			{

@@ -107,8 +107,7 @@ namespace AllyisApps.Services
 		public bool CheckOrgAction(OrgAction action, int orgId, bool throwException = true)
 		{
 			bool result = false;
-			UserContext.OrganizationAndRole orgInfo;
-			UserContext.OrganizationsAndRoles.TryGetValue(orgId, out orgInfo);
+			UserContext.OrganizationsAndRoles.TryGetValue(orgId, out UserContext.OrganizationAndRole orgInfo);
 
 			if (orgInfo != null)
 			{
@@ -130,9 +129,6 @@ namespace AllyisApps.Services
 								// all members can read other user list
 								result = true;
 								break;
-
-							default:
-								break;
 						}
 
 						break;
@@ -153,8 +149,7 @@ namespace AllyisApps.Services
 			bool result = false;
 			organizationId = 0;
 
-			UserContext.SubscriptionAndRole sar = null;
-			if (UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out sar))
+			if (UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out UserContext.SubscriptionAndRole sar))
 			{
 				organizationId = sar.OrganizationId;
 				result = CheckOrgAction(action, organizationId, throwException);
@@ -172,8 +167,7 @@ namespace AllyisApps.Services
 		public bool CheckStaffingManagerAction(StaffingManagerAction action, int subId, bool throwException = true)
 		{
 			bool result = false;
-			UserContext.SubscriptionAndRole subInfo = null;
-			UserContext.SubscriptionsAndRoles.TryGetValue(subId, out subInfo);
+			UserContext.SubscriptionsAndRoles.TryGetValue(subId, out UserContext.SubscriptionAndRole subInfo);
 
 			if (subInfo != null && subInfo.ProductId == ProductIdEnum.StaffingManager)
 			{
@@ -201,8 +195,7 @@ namespace AllyisApps.Services
 		public bool CheckTimeTrackerAction(TimeTrackerAction action, int subId, bool throwException = true)
 		{
 			bool result = false;
-			UserContext.SubscriptionAndRole subInfo = null;
-			UserContext.SubscriptionsAndRoles.TryGetValue(subId, out subInfo);
+			UserContext.SubscriptionsAndRoles.TryGetValue(subId, out UserContext.SubscriptionAndRole subInfo);
 
 			if (subInfo != null && subInfo.ProductId == ProductIdEnum.TimeTracker)
 			{
@@ -250,8 +243,7 @@ namespace AllyisApps.Services
 		{
 			bool result = false;
 
-			UserContext.SubscriptionAndRole subInfo = null;
-			UserContext.SubscriptionsAndRoles.TryGetValue(subId, out subInfo);
+			UserContext.SubscriptionsAndRoles.TryGetValue(subId, out UserContext.SubscriptionAndRole subInfo);
 			if (subInfo != null)
 			{
 				ExpenseTrackerRole etRole = (ExpenseTrackerRole)subInfo.ProductRoleId;

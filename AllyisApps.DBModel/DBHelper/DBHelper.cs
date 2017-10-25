@@ -13,7 +13,7 @@ namespace AllyisApps.DBModel
 	/// Contains data and information that is not linked to a schema
 	/// but is still required for the appllication.
 	/// </summary>
-	public partial class DBHelper
+	public partial class DBHelper : IDisposable
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DBHelper"/> class.
@@ -90,5 +90,60 @@ namespace AllyisApps.DBModel
 				}
 			}
 		}
+
+		#region IDisposable Support
+		private bool alreadyDisposed; // To detect redundant calls
+
+		/// <summary>
+		/// Helper method to implement IDisposable.  An override with a boolean to differentiate
+		/// between user calls (also delete managed objects), and finalizer calls (managed objects are already deleted).
+		/// Neccessary because this class contains disposable objects SqlConnection and SqlTransaction.
+		/// </summary>
+		/// <param name="itIsSafeToAlsoFreeManagedObjects">Used for calling from either the finalizer or user-called.</param>
+		protected virtual void Dispose(bool itIsSafeToAlsoFreeManagedObjects)
+		{
+			lock (lockObject)
+			{
+				if (alreadyDisposed) return;
+
+				// Free managed resources here
+				if (itIsSafeToAlsoFreeManagedObjects)
+				{
+					if (transaction != null)
+					{
+						transaction.Dispose();
+						transaction = null;
+					}
+
+					if (connection != null)
+					{
+						connection.Dispose();
+						connection = null;
+					}
+				}
+
+				// TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+				// TODO: set large fields to null.
+
+				alreadyDisposed = true;
+			}
+		}
+
+		///// TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+		//~DBHelper()
+		//{
+		//	// Do not change this code. Put cleanup code in Dispose(bool itIsSafeToAlsoFreeManagedObjects) above.
+		//	Dispose(false);
+		//}
+
+		/// <summary>
+		/// Implements the disposable pattern.
+		/// </summary>
+		public void Dispose()
+		{
+			Dispose(true);
+			//GC.SuppressFinalize(this);
+		}
+		#endregion
 	}
 }

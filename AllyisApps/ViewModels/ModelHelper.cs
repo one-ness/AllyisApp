@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AllyisApps.Lib;
 using AllyisApps.Services;
+using AllyisApps.Services.Lookup;
 using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.ViewModels
@@ -46,15 +48,14 @@ namespace AllyisApps.ViewModels
 		{
 			var result = new Dictionary<string, string>();
 
-			if (!string.IsNullOrWhiteSpace(countryCode))
+			if (string.IsNullOrWhiteSpace(countryCode)) return result;
+
+			var states = service.GetStates(countryCode);
+			foreach (State item in states)
 			{
-				var states = service.GetStates(countryCode);
-				foreach (var item in states)
-				{
-					var stateName = Utility.AggregateSpaces(item.StateName);
-					var localized = Resources.States.ResourceManager.GetString(stateName) ?? item.StateName;
-					result.Add(item.StateId.ToString(), localized);
-				}
+				string stateName = Utility.AggregateSpaces(item.StateName);
+				string localized = Resources.States.ResourceManager.GetString(stateName) ?? item.StateName;
+				result.Add(item.StateId.ToString(), localized);
 			}
 
 			return result;
@@ -67,12 +68,12 @@ namespace AllyisApps.ViewModels
 		/// <returns>A dictionary of all time entry statuses, localized.</returns>
 		public static Dictionary<int, string> GetLocalizedTimeEntryStatuses(AppService service)
 		{
-			var results = new Dictionary<int, string>();
-			foreach (TimeEntryStatus enumValue in Enum.GetValues(typeof(TimeEntryStatus)))
-			{
-				results.Add((int)enumValue, Resources.Strings.ResourceManager.GetString(enumValue.ToString()));
-			}
-			return results;
+			return Enum
+				.GetValues(typeof(TimeEntryStatus))
+				.Cast<TimeEntryStatus>()
+				.ToDictionary(
+					enumValue => (int)enumValue,
+					enumValue => Resources.Strings.ResourceManager.GetString(enumValue.ToString()));
 		}
 	}
 }
