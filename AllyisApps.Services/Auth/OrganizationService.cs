@@ -123,25 +123,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets a list of UserRolesInfos for users in the current organization and their roles/subscription roles,
-		/// and a list of Subscriptions (with only SubscriptionId, ProductId, and ProductName populated) for
-		/// all subscriptions in the current organization.
-		/// TODO: Redisign to populate Organization Service object and child objects.
-		/// </summary>
-		/// <param name="orgId">The Organization Id.</param>
-		/// <returns>.</returns>
-		public OrganizaionPermissions GetOrgAndSubRoles(int orgId)
-		{
-			var spResults = DBHelper.GetOrgAndSubRoles(orgId);
-
-			return new OrganizaionPermissions()
-			{
-				UserRoles = spResults.Item1.Select(urdb => InitializeUserRole(urdb)).ToList(),
-				Subscriptions = spResults.Item2.Select(sddb => InitializeSubscription(sddb)).ToList()
-			};
-		}
-
-		/// <summary>
 		/// Updates an organization chosen by the current user.
 		/// </summary>
 		public async Task<bool> UpdateOrganization(int organizationId, string organizationName, string siteUrl, int? addressId, string address1, string city, int? stateId, string countryCode, string postalCode, string phoneNumber, string faxNumber, string subDomain)
