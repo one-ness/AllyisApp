@@ -47,17 +47,16 @@ namespace AllyisApps.Controllers.Auth
 		/// <summary>
 		/// Removes the provided invitation from the invitations table.
 		/// </summary>
-		/// <param name="id">Organization's id.</param>
+		/// <param name="checkedIds">Organization's id.</param>
 		/// <param name="orgId">organizaitons Id. </param>>
 		/// <returns>Redirects to the manage org action.</returns>
 		[HttpPost]
-		public async Task<ActionResult> RemoveInvitation(string id, int orgId)
+		public async Task<ActionResult> RemoveInvitation(string checkedIds, int orgId)
 		{	
-			if (id.Length != 0)
+			if (checkedIds != "")
 			{
 				//concat stuff here
-				int[] concat = StringToIntList(id);
-				var orgGet = await AppService.GetInvitationByID(concat[0]);
+				int[] concat = StringToIntList(checkedIds);
 				this.AppService.CheckOrgAction(AppService.OrgAction.DeleteInvitation, orgId);
 				var results = await AppService.RemoveInvitations(concat, orgId);
 

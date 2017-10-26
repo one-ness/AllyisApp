@@ -81,34 +81,22 @@ else
 			   class="btn btn-default pull-left" title="@Strings.Back"><i class="fa fa-caret-left"></i>&nbsp;@Strings.Back</a>
 			@if (Model.CanResendInvitations)
 			{
-				using (Html.BeginForm(ActionConstants.ResendInvite, ControllerConstants.Account, new { @id = Model.OrganizationId }, FormMethod.Post, new { @onsubmit = "return getInvitationIdsAndResend();" }))
+				using (Html.BeginForm(ActionConstants.ResendInvite, ControllerConstants.Account, new { @resendIds = Model.CheckedInvitations, @orgId = Model.OrganizationId }, FormMethod.Get))
 				{
+					@Html.Hidden("checkedResendIds", Model.CheckedInvitations)
+					@Html.Hidden("orgId", Model.OrganizationId)
 					@Html.AntiForgeryToken();
 					<input type="hidden" id="csvResendInvitationIds" />
-					<button type="submit" class="btn btn-default pull-left" title="@Strings.ResendInvite" style="margin-left: 10px;">@Strings.ResendInvite</button>
-					<script type="text/javascript">
-						function getInvitationIdsAndResend() {
-							var csvIds = "";
+					<button type="submit" class="btn btn-default pull-left" title="@Strings.ResendInvite" style="margin-left: 10px;" onclick="getInvitationIdsAndResend()">@Strings.ResendInvite</button>
 
-							// gather all the ids to resend as a csv
-
-							if (csvIds == "") {
-								alert("You have not chosen an invitation to resend");
-								return false;
-							}
-
-							// submit the form
-
-							return false; // for now, delete this line later
-						}
-					</script>
 				}
-			}
+			} 
 			@if (Model.CanDeleteInvitations)
 			{
-				using (Html.BeginForm(ActionConstants.RemoveInvitation, ControllerConstants.Account, new { @id = Model.CheckedInvitations, @orgId = Model.OrganizationId }, FormMethod.Post))
+				using (Html.BeginForm(ActionConstants.RemoveInvitation, ControllerConstants.Account, new { @checkedIds = Model.CheckedInvitations, @orgId = Model.OrganizationId }, FormMethod.Post))
 				{
 					@Html.Hidden("checkedIds", Model.CheckedInvitations)
+					@Html.Hidden("orgId", Model.OrganizationId)
 					@Html.AntiForgeryToken();
 					<input type="hidden" id="csvDeleteInvitationIds" />
 					<button type="submit" class="btn btn-danger pull-right" title="@Strings.Back" onclick="getInvitationIdsAndSubmit()">@Strings.Delete</button>
@@ -130,6 +118,30 @@ else
 		console.log("check all toggle, updated " + checkboxes.length + " to: " + checking);
 	}
 
+	function getInvitationIdsAndResend() {
+		var ids = [];
+		var checkboxes = [];
+		checkboxes = document.getElementsByName("checkbox");
+		var k = 0;
+		for (var i = 0, n = checkboxes.length; i < n; i++) {
+			if (checkboxes[i].checked) {
+				ids[k] = checkboxes[i].value;
+				k++;
+			}
+		}
+		if (ids.length == 0) {
+			alert("You have not chosen an invitation to delete");
+			return false;
+		}
+		else {
+			document.getElementById('checkedResendIds').value = ids;
+			document.getElementById('ResendOrgId').value =  @Model.OrganizationId;
+		}
+		console.log("updated checkedIds: " + document.getElementById('checkedResendIds').value);
+		console.log("updated orgId: " + document.getElementById('ResendOrgId').value);
+		return;
+	}
+
 	function getInvitationIdsAndSubmit() {
 		var ids = [];
 		var checkboxes = [];
@@ -147,8 +159,10 @@ else
 		}
 		else {
 			document.getElementById('checkedIds').value = ids;
+			document.getElementById('orgId').value =  @Model.OrganizationId;
 		}
 		console.log("updated checkedIds: " + document.getElementById('checkedIds').value);
+		console.log("updated orgId: " + document.getElementById('orgId').value);
 		return;
 	}
 </script>

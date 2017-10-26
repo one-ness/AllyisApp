@@ -283,7 +283,7 @@ namespace AllyisApps.Services
 
 			foreach (var invitationId in InvitationIds)
 			{
-				var invite = await GetInvitationByID(invitationId);
+				var invite = await GetInvitationById(invitationId);
 				if (!DBHelper.DeleteInvitation(invitationId)) worked = false;
 			}
 
