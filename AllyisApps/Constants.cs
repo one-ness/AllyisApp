@@ -52,7 +52,6 @@ namespace AllyisApps
 		public const string LogOff = "logoff";
 		public const string LogOn = "logon";
 		public const string ManageOrg = "manageorg";
-		public const string ManagePermissions = "managepermissions";
 		public const string ManageOrgPermissions = "manageorgpermissions";
 		public const string ManageSubPermissions = "managesubpermissions";
 		public const string ManagePermissions2 = "managepermissions2";

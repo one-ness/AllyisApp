@@ -96,7 +96,7 @@ namespace AllyisApps.Services
 				data.PromoExpirationDateUtc = item.PromoExpirationDateUtc;
 				data.SkuId = (SkuIdEnum)item.SkuId;
 				data.SkuName = item.SkuName;
-				data.SubscriptionCreatedUtc = item.SubscriptionCreatedUtc;
+				data.CreatedUtc = item.SubscriptionCreatedUtc;
 				data.SubscriptionId = item.SubscriptionId;
 				data.SubscriptionName = item.SubscriptionName;
 				result.Add(data);
@@ -120,25 +120,6 @@ namespace AllyisApps.Services
 			org.Invitations = spResults.Item4.Select(idb => InitializeInvitationInfo(idb)).ToList();
 			org.StripeToken = spResults.Item5;
 			return org;
-		}
-
-		/// <summary>
-		/// Gets a list of UserRolesInfos for users in the current organization and their roles/subscription roles,
-		/// and a list of Subscriptions (with only SubscriptionId, ProductId, and ProductName populated) for
-		/// all subscriptions in the current organization.
-		/// TODO: Redisign to populate Organization Service object and child objects.
-		/// </summary>
-		/// <param name="orgId">The Organization Id.</param>
-		/// <returns>.</returns>
-		public OrganizaionPermissions GetOrgAndSubRoles(int orgId)
-		{
-			var spResults = DBHelper.GetOrgAndSubRoles(orgId);
-
-			return new OrganizaionPermissions()
-			{
-				UserRoles = spResults.Item1.Select(urdb => InitializeUserRole(urdb)).ToList(),
-				Subscriptions = spResults.Item2.Select(sddb => InitializeSubscription(sddb)).ToList()
-			};
 		}
 
 		/// <summary>
