@@ -76,7 +76,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var projGet = await AppService.GetProjectsByCustomer(customerId);
 			model.Projects = projGet.AsParallel()
 			.Select(proj => new
-			CustomerProjectViewModel.ProjectViewModel()
+			CustomerProjectViewModel.ProjectViewModel
 			{
 				CustomerId = proj.owningCustomer.CustomerId,
 				OrganizationId = proj.OrganizationId,
@@ -98,7 +98,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			model.CustomerInfo = new CustomerProjectViewModel.CustomerViewModel { CustomerId = customerId };
 			var projects = await AppService.GetInactiveProjectsByCustomer(customerId);
 			model.Projects = projects.AsParallel().Select(proj => new
-			CustomerProjectViewModel.ProjectViewModel()
+			CustomerProjectViewModel.ProjectViewModel
 			{
 				CustomerId = proj.owningCustomer.CustomerId,
 				OrganizationId = proj.OrganizationId,
@@ -132,9 +132,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			IList<CustomerProjectViewModel> customersList = new List<CustomerProjectViewModel>();
 			foreach (Customer currentCustomer in customers)
 			{
-				CustomerProjectViewModel customerResult = new CustomerProjectViewModel()
+				CustomerProjectViewModel customerResult = new CustomerProjectViewModel
 				{
-					CustomerInfo = new CustomerProjectViewModel.CustomerViewModel()
+					CustomerInfo = new CustomerProjectViewModel.CustomerViewModel
 					{
 						CustomerName = currentCustomer.CustomerName,
 						CustomerId = currentCustomer.CustomerId,
@@ -164,9 +164,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			IList<CustomerProjectViewModel> inactiveCustomersList = new List<CustomerProjectViewModel>();
 			foreach (Customer currentCustomer in inactiveCustomers)
 			{
-				CustomerProjectViewModel customerResult = new CustomerProjectViewModel()
+				CustomerProjectViewModel customerResult = new CustomerProjectViewModel
 				{
-					CustomerInfo = new CustomerProjectViewModel.CustomerViewModel()
+					CustomerInfo = new CustomerProjectViewModel.CustomerViewModel
 					{
 						CustomerId = currentCustomer.CustomerId,
 						CustomerName = currentCustomer.CustomerName,
@@ -225,7 +225,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				int daysLeftInWeek = (int)today.DayOfWeek < startOfWeek
 					? startOfWeek - (int)today.DayOfWeek - 1
-					: (6 - (int)today.DayOfWeek) + startOfWeek;
+					: 6 - (int)today.DayOfWeek + startOfWeek;
 
 				date = today.AddDays(daysLeftInWeek);
 			}

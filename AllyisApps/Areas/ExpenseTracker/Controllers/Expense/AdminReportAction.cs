@@ -95,7 +95,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 				if (value != 0)
 				{
-					enumList.Add(new SelectListItem()
+					enumList.Add(new SelectListItem
 					{
 						Disabled = false,
 						Text = item.ToString(),
@@ -107,7 +107,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			foreach (var user in users)
 			{
-				userList.Add(new SelectListItem()
+				userList.Add(new SelectListItem
 				{
 					Disabled = false,
 					Text = string.Format("{0} {1}", user.FirstName, user.LastName),
@@ -116,7 +116,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				});
 			}
 
-			AdminReportModel model = new AdminReportModel()
+			AdminReportModel model = new AdminReportModel
 			{
 				CanManage = true,
 				OrganizationId = subInfo.OrganizationId,
@@ -142,7 +142,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 		private ExpenseReportViewModel InitializeExpenseReportViewModel(ExpenseReport report)
 		{
-			return report == null ? null : new ExpenseReportViewModel()
+			return report == null ? null : new ExpenseReportViewModel
 			{
 				BusinessJustification = report.BusinessJustification,
 				CreatedUtc = report.CreatedUtc,

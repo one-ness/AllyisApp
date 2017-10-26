@@ -39,7 +39,7 @@ namespace AllyisApps.Services
 
 		public Account InitializeAccountModel(AccountDBEntity account)
 		{
-			return new Account()
+			return new Account
 			{
 				AccountId = account.AccountId,
 				AccountName = account.AccountName,
@@ -53,7 +53,7 @@ namespace AllyisApps.Services
 
 		public AccountDBEntity InitializeAccountDbModel(Account account)
 		{
-			return new AccountDBEntity()
+			return new AccountDBEntity
 			{
 				AccountId = account.AccountId,
 				AccountName = account.AccountName,

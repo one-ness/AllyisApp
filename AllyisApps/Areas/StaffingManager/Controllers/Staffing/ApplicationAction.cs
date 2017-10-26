@@ -32,14 +32,14 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			List<SelectListItem> positionList = new List<SelectListItem>();
 			foreach (Position pos in positions)
 			{
-				positionList.Add(new SelectListItem()
+				positionList.Add(new SelectListItem
 				{
 					Text = pos.PositionTitle,
 					Value = pos.PositionId.ToString()
 				});
 			}
 
-			StaffingApplicationViewModel model = new StaffingApplicationViewModel()
+			StaffingApplicationViewModel model = new StaffingApplicationViewModel
 			{
 				ApplicantId = applicantId,
 				PositionList = positionList
@@ -69,7 +69,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				model.ApplicationDocuments.Select(d => InitializeApplicationDocument(d)).ToList() :
 				new List<ApplicationDocument>();
 
-			return new Application()
+			return new Application
 			{
 				Applicant = model.Applicant,
 				ApplicantId = model.ApplicantId,
@@ -85,7 +85,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 
 		private static ApplicationDocument InitializeApplicationDocument(ApplicationDocumentViewModel d)
 		{
-			return new ApplicationDocument()
+			return new ApplicationDocument
 			{
 				ApplicationDocumentId = d.ApplicationDocumentId,
 				ApplicationId = d.ApplicationId,

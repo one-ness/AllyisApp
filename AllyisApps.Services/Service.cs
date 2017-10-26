@@ -470,7 +470,7 @@ namespace AllyisApps.Services
 				{
 					var project = projects.Where(x => x.ProjectId == entry.ProjectId).FirstOrDefault();
 					if (project.ProjectId == 0) project = null;
-					output.WriteLine("\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\",\"{10}\",\"{11}\"", entry.LastName, entry.FirstName, entry.EmployeeId, entry.Email, entry.Date.ToShortDateString(), entry.Duration, entry.PayClassName, project != null ? (project.ProjectName ?? string.Empty) : string.Empty, project != null ? (project.ProjectOrgId ?? string.Empty) : string.Empty, project != null ? (project.owningCustomer.CustomerName ?? string.Empty) : string.Empty, project != null ? (project.owningCustomer.CustomerOrgId ?? string.Empty) : string.Empty, entry.Description, ((TimeEntryStatus)entry.TimeEntryStatusId));
+					output.WriteLine("\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\",\"{10}\",\"{11}\"", entry.LastName, entry.FirstName, entry.EmployeeId, entry.Email, entry.Date.ToShortDateString(), entry.Duration, entry.PayClassName, project != null ? (project.ProjectName ?? string.Empty) : string.Empty, project != null ? (project.ProjectOrgId ?? string.Empty) : string.Empty, project != null ? (project.owningCustomer.CustomerName ?? string.Empty) : string.Empty, project != null ? (project.owningCustomer.CustomerOrgId ?? string.Empty) : string.Empty, entry.Description, (TimeEntryStatus)entry.TimeEntryStatusId);
 				}
 				catch (Exception ex)
 				{

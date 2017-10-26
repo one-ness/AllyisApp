@@ -84,7 +84,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					ProjectId = 0,
 					ProjectName = Resources.Strings.NoFilter,
-					owningCustomer = new Customer()
+					owningCustomer = new Customer
 					{
 						CustomerId = 0
 					}

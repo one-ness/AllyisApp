@@ -49,7 +49,7 @@ namespace AllyisApps.Controllers.Auth
 			AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
 			bool canDelete = AppService.CheckOrgAction(AppService.OrgAction.DeleteOrganization, id, false);
 			var organization = await AppService.GetOrganization(id);
-			var model = new EditOrganizationViewModel()
+			var model = new EditOrganizationViewModel
 			{
 				OrganizationId = organization.OrganizationId,
 				OrganizationName = organization.OrganizationName,

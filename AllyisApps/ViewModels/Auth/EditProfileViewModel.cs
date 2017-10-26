@@ -41,15 +41,15 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the account e-mail.
 		/// </summary>
-		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "EmailValidation")]
-		[EmailAddress(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "EmailFormatValidation")]
+		[Required(ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "EmailValidation")]
+		[EmailAddress(ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "EmailFormatValidation")]
 		[Display(Name = "Email")]
 		public string Email { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user's first name.
 		/// </summary>
-		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "FirstNameValidation")]
+		[Required(ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "FirstNameValidation")]
 		[DataType(DataType.Text)]
 		[Display(Name = "First Name")]
 		public string FirstName { get; set; }
@@ -57,7 +57,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the user's last name.
 		/// </summary>
-		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "LastNameValidation")]
+		[Required(ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "LastNameValidation")]
 		[DataType(DataType.Text)]
 		[Display(Name = "Last Name")]
 		public string LastName { get; set; }
