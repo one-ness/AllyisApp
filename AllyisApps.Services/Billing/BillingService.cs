@@ -335,7 +335,7 @@ namespace AllyisApps.Services
 
 			// TODO: split updating user roles and creating new sub users
 			var UpdatedRows = await DBHelper.UpdateSubscriptionUserRoles(userIds, orgId, newProductRole, productId);
-			return new UpdateSubscriptionUserRolesResuts()
+			return new UpdateSubscriptionUserRolesResuts
 			{
 				UsersChanged = UpdatedRows.Item1,
 				UsersAddedToSubscription = UpdatedRows.Item2

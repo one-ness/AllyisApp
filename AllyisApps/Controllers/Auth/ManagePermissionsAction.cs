@@ -83,14 +83,14 @@ namespace AllyisApps.Controllers.Auth
 			var orgUsers = AppService.GetOrganizationMemberList(id);
 			var orgSubs = AppService.GetSubscriptionsByOrg(id);
 
-			PermissionsViewModel perModel = new PermissionsViewModel()
+			PermissionsViewModel perModel = new PermissionsViewModel
 			{
 				Actions = setOrganizationRoles,
 				ActionGroup = Strings.Organization,
 				PossibleRoles = organizationRoles,
 				RemoveUserMessage = Strings.RemoveFromOrgNoName,
 				RoleHeader = Strings.OrganizationRole,
-				CurrentSubscriptions = orgSubs.Select(sub => new PermissionsViewModel.OrganizaionSubscriptionsViewModel()
+				CurrentSubscriptions = orgSubs.Select(sub => new PermissionsViewModel.OrganizaionSubscriptionsViewModel
 				{
 					ProductId = (int)sub.ProductId,
 					ProductName = sub.ProductName,
@@ -101,14 +101,14 @@ namespace AllyisApps.Controllers.Auth
 				OrganizationId = id,
 				ProductId = null,
 				SubscriptionId = null,
-				Users = orgUsers.Select(orgU => new UserPermssionViewModel()
+				Users = orgUsers.Select(orgU => new UserPermssionViewModel
 				{
-					currentRole = orgU.OrganizationRoleId,
+					CurrentRole = orgU.OrganizationRoleId,
 					CurrentRoleName = organizationRoles[orgU.OrganizationRoleId],
 					Email = orgU.Email,
 					FullName = orgU.FirstName + " " + orgU.LastName,
 					UserId = orgU.UserId,
-					isChecked = false
+					IsChecked = false
 				}).OrderBy(orgU => orgU.FullName).ToList()
 			};
 
@@ -133,53 +133,53 @@ namespace AllyisApps.Controllers.Auth
 			//Get Strings speffic to Product for page
 			Dictionary<int, string> roles = null;
 			Dictionary<string, int> actions = null;
-			String roleHeader = null;
-			String ActionGroup = null;
+			string roleHeader = null;
+			string actionGroup = null;
 			switch (sub.ProductId)
 			{
 				case ProductIdEnum.TimeTracker:
 					roles = ttRoles;
 					actions = setTTRoles;
 					roleHeader = Strings.TimeTrackerRole;
-					ActionGroup = Strings.TimeTracker;
+					actionGroup = Strings.TimeTracker;
 					break;
 
 				case ProductIdEnum.ExpenseTracker:
 					roles = etRoles;
 					actions = setETRoles;
 					roleHeader = Strings.ExpenseTrackerRole;
-					ActionGroup = Strings.ExpenseTracker;
+					actionGroup = Strings.ExpenseTracker;
 					break;
 
 				case ProductIdEnum.StaffingManager:
 					throw new NotImplementedException("StaffingManager permissions not implmented");
 			}
 
-			List<UserPermssionViewModel> OrgUsers = organizationMembers.Select(orgU => new UserPermssionViewModel()
+			List<UserPermssionViewModel> OrgUsers = organizationMembers.Select(orgU => new UserPermssionViewModel
 			{
-				currentRole = (int)ProductRole.NotInProduct,
+				CurrentRole = ProductRole.NotInProduct,
 				CurrentRoleName = Strings.Unassigned,
-				FullName = orgU.FirstName + " " + orgU.LastName,
+				FullName = $"{orgU.FirstName} {orgU.LastName}",
 				Email = orgU.Email,
-				isChecked = false,
+				IsChecked = false,
 				UserId = orgU.UserId
 			}).OrderBy(orgU => orgU.FullName).ToList();
 
 			foreach (var subU in subUsers)
 			{
-				var OrgUserWithSub = OrgUsers.First(orgU => orgU.UserId == subU.UserId);
-				OrgUserWithSub.currentRole = subU.ProductRoleId;
-				OrgUserWithSub.CurrentRoleName = roles[subU.ProductRoleId];
+				var orgUserWithSub = OrgUsers.First(orgU => orgU.UserId == subU.UserId);
+				orgUserWithSub.CurrentRole = subU.ProductRoleId;
+				orgUserWithSub.CurrentRoleName = roles[subU.ProductRoleId];
 			}
 
-			PermissionsViewModel model = new PermissionsViewModel()
+			PermissionsViewModel model = new PermissionsViewModel
 			{
 				Actions = actions,
 				OrganizationId = sub.OrganizationId,
-				ActionGroup = ActionGroup,
+				ActionGroup = actionGroup,
 				PossibleRoles = roles,
 				ProductId = (int)sub.ProductId,
-				CurrentSubscriptions = orgSubs.Select(cursub => new PermissionsViewModel.OrganizaionSubscriptionsViewModel()
+				CurrentSubscriptions = orgSubs.Select(cursub => new PermissionsViewModel.OrganizaionSubscriptionsViewModel
 				{
 					ProductId = (int)cursub.ProductId,
 					ProductName = cursub.ProductName,
@@ -206,10 +206,11 @@ namespace AllyisApps.Controllers.Auth
 		public async Task<ActionResult> ManagePermissions(string data)
 		{
 			UserPermissionsAction model = JsonConvert.DeserializeObject<UserPermissionsAction>(data);
+			var modelSelectedUsers = model.SelectedUsers as IList<TargetUser> ?? model.SelectedUsers?.ToList();
 
 			AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, model.OrganizationId);
 
-			if (model.SelectedUsers == null || model.SelectedUsers.Count() == 0)
+			if (modelSelectedUsers == null || !modelSelectedUsers.Any())
 			{
 				Notifications.Add(new BootstrapAlert(Strings.NoUsersSelected, Variety.Danger));
 				return Redirect(model.FromUrl);
@@ -231,19 +232,14 @@ namespace AllyisApps.Controllers.Auth
 					return Redirect(model.FromUrl);
 				}
 
-				if (model.SelectedUsers.Where(tu => tu.UserId == AppService.UserContext.UserId).Any())
+				if (model.SelectedUsers.Any(tu => tu.UserId == AppService.UserContext.UserId))
 				{
-					if (model.SelectedAction == -1)
-					{
-						Notifications.Add(new BootstrapAlert(Strings.YouAreUnableToRemoveYourself, Variety.Danger));
-					}
-					else
-					{
-						Notifications.Add(new BootstrapAlert(Strings.YouAreUnableToChangeYourOwnRole, Variety.Danger));
-					}
+					Notifications.Add(model.SelectedAction == -1
+						? new BootstrapAlert(Strings.YouAreUnableToRemoveYourself, Variety.Danger)
+						: new BootstrapAlert(Strings.YouAreUnableToChangeYourOwnRole, Variety.Danger));
 
 					model.SelectedUsers = model.SelectedUsers.Where(tu => tu.UserId != AppService.UserContext.UserId);
-					if (model.SelectedUsers.Count() == 0)
+					if (!modelSelectedUsers.Any())
 					{
 						return Redirect(model.FromUrl);
 					}
@@ -251,26 +247,26 @@ namespace AllyisApps.Controllers.Auth
 
 				if (model.SelectedAction == -1 && model.SubscriptionId == null)
 				{
-					int numberChanged = AppService.DeleteOrganizationUsers(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.OrganizationId);
+					int numberChanged = AppService.DeleteOrganizationUsers(modelSelectedUsers.Select(tu => tu.UserId).ToList(), model.OrganizationId);
 					Notifications.Add(new BootstrapAlert(string.Format(Strings.UsersRemovedFromOrg, numberChanged), Variety.Success));
 				}
 				else
 				{
-					int numberChanged = AppService.UpdateOrganizationUsersRole(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedAction.Value, model.OrganizationId);
+					int numberChanged = AppService.UpdateOrganizationUsersRole(modelSelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedAction.Value, model.OrganizationId);
 					Notifications.Add(new BootstrapAlert(string.Format(Strings.UsersChangedRolesInOrg, numberChanged), Variety.Success));
 				}
 			}
 			else if (model.SelectedAction != 0 && model.SubscriptionId != null && model.ProductId != null)
 			{
-				string UsersModifiedMessage = null;
-				string UsersAddedMessage = null;
+				string usersModifiedMessage;
+				string usersAddedMessage;
 				//Varify that roleId is correct
 				switch ((ProductIdEnum)model.ProductId)
 				{
 					case ProductIdEnum.TimeTracker:
 						// Changing time tracker roles
-						UsersModifiedMessage = Strings.UsersChangedRolesInTimeTracker;
-						UsersAddedMessage = Strings.UsersAddedToTimeTracker;
+						usersModifiedMessage = Strings.UsersChangedRolesInTimeTracker;
+						usersAddedMessage = Strings.UsersAddedToTimeTracker;
 
 						if (!Enum.IsDefined(typeof(TimeTrackerRole), model.SelectedAction) && model.SelectedAction.Value != -1)
 						{
@@ -283,8 +279,8 @@ namespace AllyisApps.Controllers.Auth
 					case ProductIdEnum.ExpenseTracker:
 
 						// Changing expense tracker roles
-						UsersModifiedMessage = Strings.UserChangedRolesInExpenseTracker;
-						UsersAddedMessage = Strings.UserAddedToExpenseTracker;
+						usersModifiedMessage = Strings.UserChangedRolesInExpenseTracker;
+						usersAddedMessage = Strings.UserAddedToExpenseTracker;
 						if (!Enum.IsDefined(typeof(ExpenseTrackerRole), model.SelectedAction.Value) && model.SelectedAction != -1)
 						{
 							Notifications.Add(new BootstrapAlert(Strings.YouDidNotDefineATargetRole, Variety.Danger));
@@ -315,12 +311,12 @@ namespace AllyisApps.Controllers.Auth
 					var updatedAndAdded = await AppService.UpdateSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedAction.Value, model.OrganizationId, model.ProductId.Value);
 					if (updatedAndAdded.UsersChanged > 0)
 					{
-						Notifications.Add(new BootstrapAlert(string.Format(UsersModifiedMessage, updatedAndAdded.UsersChanged), Variety.Success));
+						Notifications.Add(new BootstrapAlert(string.Format(usersModifiedMessage, updatedAndAdded.UsersChanged), Variety.Success));
 					}
 
 					if (updatedAndAdded.UsersAddedToSubscription > 0)
 					{
-						Notifications.Add(new BootstrapAlert(string.Format(UsersAddedMessage, updatedAndAdded.UsersAddedToSubscription), Variety.Success));
+						Notifications.Add(new BootstrapAlert(string.Format(usersAddedMessage, updatedAndAdded.UsersAddedToSubscription), Variety.Success));
 					}
 				}
 				else

@@ -129,7 +129,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		/// <param name="userId">User Id.</param>
 		public BasicUserInfoViewModel(string firstName, string lastName, int userId)
 		{
-			Name = string.Format("{0} {1}", firstName, lastName);
+			Name = $"{firstName} {lastName}";
 			UserId = userId.ToString();
 		}
 

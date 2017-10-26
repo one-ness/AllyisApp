@@ -55,7 +55,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				reportStatus = ExpenseStatusEnum.Draft;
 			}
 
-			var report = new ExpenseReport()
+			var report = new ExpenseReport
 			{
 				ReportTitle = model.Report.ReportTitle,
 				BusinessJustification = model.Report.BusinessJustification,

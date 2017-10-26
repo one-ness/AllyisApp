@@ -48,7 +48,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 
 		private static Applicant InitializeApplicant(int orgId, StaffingApplicantViewModel model)
 		{
-			return new Applicant()
+			return new Applicant
 			{
 				Address = model.Address,
 				//AddressId = model.AddressId,

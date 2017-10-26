@@ -27,7 +27,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			var subInfo = await AppService.GetSubscription(subscriptionId);
 			var accounts = await AppService.GetAccounts(subInfo.OrganizationId);
 			var results = accounts.Select(x =>
-				new AccountManagementViewModel()
+				new AccountManagementViewModel
 				{
 					AccountId = x.AccountId,
 					AccountName = x.AccountName,

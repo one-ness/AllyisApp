@@ -55,7 +55,7 @@
 				{
 					<tr>
 						@{
-							string _payClassName = Strings.ResourceManager.GetString((PayClass.PayClassName).Replace(" ", string.Empty)) ?? PayClass.PayClassName;
+							string _payClassName = Strings.ResourceManager.GetString(PayClass.PayClassName.Replace(" ", string.Empty)) ?? PayClass.PayClassName;
 						}
 						<td>@_payClassName</td>
 						@if (_payClassName != Strings.Regular && _payClassName != Strings.Overtime && _payClassName != Strings.Holiday && _payClassName != Strings.PaidTimeOff && _payClassName != Strings.UnpaidTimeOff)
@@ -174,7 +174,7 @@
 				{
 					<tr class="@Holiday.Date.Year">
 						@{
-							string _holidayName = Strings.ResourceManager.GetString(((Holiday.HolidayName).Replace(" ", string.Empty)).Replace("'", string.Empty)) ?? Holiday.HolidayName;
+							string _holidayName = Strings.ResourceManager.GetString(Holiday.HolidayName.Replace(" ", string.Empty).Replace("'", string.Empty)) ?? Holiday.HolidayName;
 						}
 						<td>@_holidayName</td>
 						<td>@Holiday.Date.ToShortDateString()</td>

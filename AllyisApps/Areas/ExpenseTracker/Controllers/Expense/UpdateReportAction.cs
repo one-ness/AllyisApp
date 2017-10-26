@@ -31,8 +31,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			if (model.Report.ExpenseReportId != -1)
 			{
 				if (oldReport.SubmittedById != AppService.UserContext.UserId
-					|| ((ExpenseStatusEnum)oldReport.ReportStatus != ExpenseStatusEnum.Draft
-					&& (ExpenseStatusEnum)oldReport.ReportStatus != ExpenseStatusEnum.Rejected))
+					|| (ExpenseStatusEnum)oldReport.ReportStatus != ExpenseStatusEnum.Draft
+					&& (ExpenseStatusEnum)oldReport.ReportStatus != ExpenseStatusEnum.Rejected)
 				{
 					string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.UpdateReport);
 					throw new AccessViolationException(message);
@@ -67,7 +67,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			if (oldReport.ReportStatus == (int)ExpenseStatusEnum.Draft || oldReport.ReportStatus == (int)ExpenseStatusEnum.Rejected)
 			{
-				var report = new ExpenseReport()
+				var report = new ExpenseReport
 				{
 					ExpenseReportId = model.Report.ExpenseReportId,
 					ReportTitle = model.Report.ReportTitle,

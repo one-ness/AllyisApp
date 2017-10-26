@@ -36,7 +36,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			bool success = false;
 			if (model != null)
 			{
-				Account acc = new Account()
+				Account acc = new Account
 				{
 					AccountId = model.AccountId,
 					AccountName = model.AccountName,

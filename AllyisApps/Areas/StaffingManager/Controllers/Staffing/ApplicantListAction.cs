@@ -30,7 +30,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 
 			var subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			List<Applicant> applicants = await AppService.GetApplicantAddressesByOrgId(subInfo.OrganizationId);
-			ApplicantListViewModel model = new ApplicantListViewModel()
+			ApplicantListViewModel model = new ApplicantListViewModel
 			{
 				Applicants = applicants.Select(a => InitializeStaffingApplicantViewModel(a)).ToList()
 			};

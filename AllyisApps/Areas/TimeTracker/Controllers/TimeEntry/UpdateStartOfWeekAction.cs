@@ -28,7 +28,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The settings page.</returns>
 		public async Task<ActionResult> SettingsStartOfWeek(int subscriptionId)
 		{
-			AppService.CheckTimeTrackerAction((AppService.TimeTrackerAction.EditOthers), subscriptionId);
+			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			int organizaionID = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			var infos = AppService.GetAllSettings(organizaionID);
 			UserContext.SubscriptionAndRole subInfo = null;
@@ -38,9 +38,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infoOrg.Item1.StartOfWeek));
 			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
 			Services.TimeTracker.Setting settings = infos.Item1;
-			return View(new SettingsWeekStartViewModel()
+			return View(new SettingsWeekStartViewModel
 			{
-				Settings = new SettingsWeekStartViewModel.SettingsInfoViewModel()
+				Settings = new SettingsWeekStartViewModel.SettingsInfoViewModel
 				{
 					IsLockDateUsed = settings.IsLockDateUsed,
 					LockDatePeriod = settings.LockDatePeriod,
@@ -52,12 +52,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					StartOfWeek = settings.StartOfWeek,
 					Today = System.DateTime.UtcNow.Date
 				},
-				PayClasses = infos.Item2.AsParallel().Select(payClass => new SettingsWeekStartViewModel.PayClassViewModel()
+				PayClasses = infos.Item2.AsParallel().Select(payClass => new SettingsWeekStartViewModel.PayClassViewModel
 				{
 					PayClassId = payClass.PayClassId,
 					PayClassName = payClass.PayClassName
 				}),
-				Holidays = infos.Item3.AsParallel().Select(holiday => new SettingsWeekStartViewModel.HolidayViewModel()
+				Holidays = infos.Item3.AsParallel().Select(holiday => new SettingsWeekStartViewModel.HolidayViewModel
 				{
 					Date = holiday.Date,
 					HolidayId = holiday.HolidayId,

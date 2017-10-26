@@ -29,7 +29,7 @@
 												@if (Model.CanSubscribe)
 												{
 													<div class="ovrd-row row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;">
-														<a href="@Url.Action(ActionConstants.Subscribe, ControllerConstants.Account, new { id = Model.OrganizationId, skuId = (int)sku.SkuId })" style="text-decoration: none" class="ovrd-btn btn ovrd-btn-default btn-default">@Strings.Subscribe</a>
+														<a href="@Url.Action(ActionConstants.Subscribe, ControllerConstants.Account, new { id = Model.OrganizationId, skuId = sku.SkuId })" style="text-decoration: none" class="ovrd-btn btn ovrd-btn-default btn-default">@Strings.Subscribe</a>
 													</div>
 												}
 											</div>

@@ -57,7 +57,7 @@ namespace AllyisApps.Controllers.Auth
 			{
 				if (item.ProductId == ProductIdEnum.TimeTracker)
 				{
-					model.SubscriptionRoles.Add(new EditMemberViewModel.RoleItem()
+					model.SubscriptionRoles.Add(new EditMemberViewModel.RoleItem
 					{
 						RoleList = ModelHelper.GetTimeTrackerRolesList(),
 						SelectedRoleId = user.Subscriptions.Where(x => x.SubscriptionId == item.SubscriptionId).FirstOrDefault().ProductRoleId,
@@ -67,7 +67,7 @@ namespace AllyisApps.Controllers.Auth
 				}
 				else if (item.ProductId == ProductIdEnum.ExpenseTracker)
 				{
-					model.SubscriptionRoles.Add(new EditMemberViewModel.RoleItem()
+					model.SubscriptionRoles.Add(new EditMemberViewModel.RoleItem
 					{
 						RoleList = ModelHelper.GetExpenseTrackerRolesList(),
 						SelectedRoleId = user.Subscriptions.Where(x => x.SubscriptionId == item.SubscriptionId).FirstOrDefault().ProductRoleId,
@@ -77,7 +77,7 @@ namespace AllyisApps.Controllers.Auth
 				}
 				else if (item.ProductId == ProductIdEnum.StaffingManager)
 				{
-					model.SubscriptionRoles.Add(new EditMemberViewModel.RoleItem()
+					model.SubscriptionRoles.Add(new EditMemberViewModel.RoleItem
 					{
 						RoleList = ModelHelper.GetStaffingManagerRolesList(),
 						SelectedRoleId = user.Subscriptions.Where(x => x.SubscriptionId == item.SubscriptionId).FirstOrDefault().ProductRoleId,

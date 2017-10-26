@@ -4,14 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services.Billing;
-using AllyisApps.ViewModels.Auth;
-using System.Threading.Tasks;
 using AllyisApps.Services.Cache;
-using System.Collections.Generic;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -45,7 +45,7 @@ namespace AllyisApps.Controllers.Auth
 				{
 					// no, get the product of this subscription
 					var pid = item.ProductId;
-					Product product = null;
+					Product product;
 					if (!CacheContainer.ProductsCache.TryGetValue(pid, out product) || !product.IsActive)
 					{
 						// inactive or invalid product
@@ -54,10 +54,10 @@ namespace AllyisApps.Controllers.Auth
 					}
 
 					// is it a sku of this product?
-					List<Sku> skus = null;
+					List<Sku> skus;
 					if (CacheContainer.SkusCache.TryGetValue(pid, out skus))
 					{
-						var sku = skus.Where(x => x.IsActive && x.SkuId == skuId).FirstOrDefault();
+						var sku = skus.FirstOrDefault(x => x.IsActive && x.SkuId == skuId);
 						if (sku != null)
 						{
 							// yes, user is subscribing to another sku of an existing subscription (i.e., product)
@@ -86,7 +86,7 @@ namespace AllyisApps.Controllers.Auth
 			}
 
 			// get product for the sku
-			Product selectedProduct = null;
+			Product selectedProduct;
 			if (!CacheContainer.ProductsCache.TryGetValue(selectedSku.ProductId, out selectedProduct) || !selectedProduct.IsActive)
 			{
 				// inactive or invalid product

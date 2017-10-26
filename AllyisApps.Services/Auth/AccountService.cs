@@ -83,7 +83,7 @@ namespace AllyisApps.Services
 			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId");
 
 			Invitation inviteInfo = InitializeInvitationInfo(await this.DBHelper.GetInvitation(invitationId));
-			var result = (this.DBHelper.AcceptInvitation(invitationId, this.UserContext.UserId) == 1);
+			var result = this.DBHelper.AcceptInvitation(invitationId, this.UserContext.UserId) == 1;
 			if (result)
 			{
 				if (inviteInfo.ProductRolesJson != null)
@@ -96,19 +96,19 @@ namespace AllyisApps.Services
 
 					if (ttRole > 0)
 					{
-						var result2 = await (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, ttRole, (int)ProductIdEnum.TimeTracker));
+						var result2 = await this.DBHelper.UpdateSubscriptionUserRoles(new List<int> { UserContext.UserId }, inviteInfo.OrganizationId, ttRole, (int)ProductIdEnum.TimeTracker);
 					}
 
 					if (etRole > 0)
 					{
 						var prodId = GetProductSubscriptionInfo(inviteInfo.OrganizationId, SkuIdEnum.ExpenseTrackerBasic).Product.ProductId;
-						var result3 = await (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, etRole, (int)ProductIdEnum.ExpenseTracker));
+						var result3 = await this.DBHelper.UpdateSubscriptionUserRoles(new List<int> { UserContext.UserId }, inviteInfo.OrganizationId, etRole, (int)ProductIdEnum.ExpenseTracker);
 					}
 
 					if (smRole > 0)
 					{
 						var prodId = GetProductSubscriptionInfo(inviteInfo.OrganizationId, SkuIdEnum.StaffingManagerBasic).Product.ProductId;
-						var result4 = await (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, smRole, (int)ProductIdEnum.StaffingManager));
+						var result4 = await this.DBHelper.UpdateSubscriptionUserRoles(new List<int> { UserContext.UserId }, inviteInfo.OrganizationId, smRole, (int)ProductIdEnum.StaffingManager);
 					}
 				}
 				NotifyInviteAcceptAsync(invitationId);
@@ -123,7 +123,7 @@ namespace AllyisApps.Services
 		/// <returns>The resulting message.</returns>
 		public async Task<bool> RejectInvitation(int invitationId)
 		{
-			bool rejected = (await DBHelper.RejectInvitation(invitationId) == 1);
+			bool rejected = await DBHelper.RejectInvitation(invitationId) == 1;
 			if (rejected)
 			{
 				NotifyInviteRejectAsync(invitationId);
@@ -242,7 +242,7 @@ namespace AllyisApps.Services
 				// get organization and roles
 				foreach (var item in expando.OrganizationsAndRoles)
 				{
-					result.OrganizationsAndRoles.Add(item.OrganizationId, new UserContext.OrganizationAndRole()
+					result.OrganizationsAndRoles.Add(item.OrganizationId, new UserContext.OrganizationAndRole
 					{
 						OrganizationId = item.OrganizationId,
 						OrganizationRole = (OrganizationRoleEnum)item.OrganizationRoleId,
@@ -253,7 +253,7 @@ namespace AllyisApps.Services
 				foreach (var item in expando.SubscriptionsAndRoles)
 				{
 					result.SubscriptionsAndRoles.Add(item.SubscriptionId,
-						new UserContext.SubscriptionAndRole()
+						new UserContext.SubscriptionAndRole
 						{
 							AreaUrl = item.AreaUrl,
 							ProductId = (ProductIdEnum)item.ProductId,
@@ -579,7 +579,7 @@ namespace AllyisApps.Services
 
 		private User InitializeUser(dynamic user)
 		{
-			User newUser = new User()
+			User newUser = new User
 			{
 				AccessFailedCount = user.AccessFailedCount,
 				DateOfBirth = user.DateOfBirth,
@@ -692,7 +692,7 @@ namespace AllyisApps.Services
 
 		public async Task UpdateUserOrgMaxAmount(OrganizationUser userInfo)
 		{
-			OrganizationUserDBEntity entity = new OrganizationUserDBEntity()
+			OrganizationUserDBEntity entity = new OrganizationUserDBEntity
 			{
 				UserId = userInfo.UserId,
 				OrganizationId = userInfo.OrganizationId
@@ -752,7 +752,7 @@ namespace AllyisApps.Services
 			var result = new List<ProductRole>();
 			foreach (var item in collection)
 			{
-				result.Add(new ProductRole()
+				result.Add(new ProductRole
 				{
 					OrganizationId = orgId,
 					ProductId = (ProductIdEnum)item.ProductId,

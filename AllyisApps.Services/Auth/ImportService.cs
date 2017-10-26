@@ -52,7 +52,7 @@ namespace AllyisApps.Services
 			List<Tuple<DataTable, int>> sortableTables = new List<Tuple<DataTable, int>>();
 			foreach (DataTable table in importData.Tables)
 			{
-				int rank = (table.Columns.Contains(ColumnHeaders.CustomerName) || table.Columns.Contains(ColumnHeaders.CustomerId) ? 3 : 0);
+				int rank = table.Columns.Contains(ColumnHeaders.CustomerName) || table.Columns.Contains(ColumnHeaders.CustomerId) ? 3 : 0;
 				rank = table.Columns.Contains(ColumnHeaders.ProjectName) || table.Columns.Contains(ColumnHeaders.ProjectId) ? rank == 3 ? 2 : 1 : rank;
 				sortableTables.Add(new Tuple<DataTable, int>(table, rank));
 			}
@@ -404,7 +404,7 @@ namespace AllyisApps.Services
 								// All required information is known: time to create the project
 								project = new Project.Project
 								{
-									owningCustomer = new Customer()
+									owningCustomer = new Customer
 									{
 										CustomerId = customer.CustomerId,
 										OrganizationId = orgId,
@@ -513,7 +513,7 @@ namespace AllyisApps.Services
 									// All required information is known: time to create the project
 									project = new Project.Project
 									{
-										owningCustomer = new Customer()
+										owningCustomer = new Customer
 										{
 											CustomerId = customer.CustomerId
 										},
@@ -673,8 +673,8 @@ namespace AllyisApps.Services
 								{
 									// Couldn't get all the information
 									bool[] fieldStatuses = fields.Select(f => string.IsNullOrEmpty(f)).ToArray();
-									result.UserFailures.Add(string.Format("Could not create user {0}: missing {1}{2}.", (fieldStatuses[0] ? fieldStatuses[1] ?
-										fields[2] != null ? string.Join(" ", fields[2].Split(new string[] { "__IMPORT__" }, StringSplitOptions.None)) : null : fields[1] : fields[0]),
+									result.UserFailures.Add(string.Format("Could not create user {0}: missing {1}{2}.", fieldStatuses[0] ? fieldStatuses[1] ?
+											fields[2] != null ? string.Join(" ", fields[2].Split(new string[] { "__IMPORT__" }, StringSplitOptions.None)) : null : fields[1] : fields[0],
 										fieldStatuses[0] ? ColumnHeaders.UserEmail : fieldStatuses[1] ? ColumnHeaders.EmployeeId : string.Format("{0}/{1}", ColumnHeaders.UserFirstName, ColumnHeaders.UserLastName),
 										fieldStatuses.Where(s => s).Count() == 2 ? string.Format(" and {0}", !fieldStatuses[2] ? ColumnHeaders.EmployeeId : string.Format("{0}/{1}", ColumnHeaders.UserFirstName, ColumnHeaders.UserLastName)) : ""));
 									continue;
@@ -771,7 +771,7 @@ namespace AllyisApps.Services
 								if (!userSubs.Where(u => u.UserId == userInOrg.UserId).Any())
 								{
 									// No existing subscription for this user, so we create one.
-									DBHelper.UpdateSubscriptionUserProductRole((int)(TimeTrackerRole.User), ttSub.SubscriptionId, userInOrg.UserId);
+									DBHelper.UpdateSubscriptionUserProductRole((int)TimeTrackerRole.User, ttSub.SubscriptionId, userInOrg.UserId);
 									userSubs.Add(userInOrg);
 									result.UsersAddedToSubscription += 1;
 									canImportThisEntry = true; // Successfully created.
@@ -838,7 +838,7 @@ namespace AllyisApps.Services
 									// Find existing entry. If none, create new one     TODO: See if there's a good way to populate this by sheet rather than by row, or once at the top
 									var entryGet = await DBHelper.GetTimeEntriesByUserOverDateRange(new List<int> { userInOrg.UserId }, orgId, theDate, theDate);
 									List<TimeEntryDBEntity> entries = entryGet.ToList();
-									if (!entries.Where(e => ((e.Description == null && description.Equals("")) || description.Equals(e.Description)) && e.Duration == theDuration && e.PayClassId == payClass.PayClassId && e.ProjectId == project.ProjectId).Any())
+									if (!entries.Where(e => (e.Description == null && description.Equals("") || description.Equals(e.Description)) && e.Duration == theDuration && e.PayClassId == payClass.PayClassId && e.ProjectId == project.ProjectId).Any())
 									{
 										if (entries.Select(e => e.Duration).Sum() + theDuration > 24)
 										{
