@@ -60,7 +60,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 		private ExpenseItem InitializeExpenseItem(ExpenseItemCreateViewModel itemViewModel)
 		{
-			return new ExpenseItem()
+			return new ExpenseItem
 			{
 				AccountId = itemViewModel.AccountId,
 				Amount = itemViewModel.Amount,

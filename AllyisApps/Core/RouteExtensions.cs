@@ -31,7 +31,7 @@ namespace AllyisApps.Extensions.RouteExtensions
 				{
 					Defaults = new RouteValueDictionary(defaults),
 					Constraints = new RouteValueDictionary(constraints),
-					DataTokens = new RouteValueDictionary() { { "Namespaces", namespaces } }
+					DataTokens = new RouteValueDictionary { { "Namespaces", namespaces } }
 				});
 		}
 
@@ -53,7 +53,7 @@ namespace AllyisApps.Extensions.RouteExtensions
 				{
 					Defaults = new RouteValueDictionary(defaults),
 					Constraints = new RouteValueDictionary(constraints),
-					DataTokens = new RouteValueDictionary() { { "Namespaces", namespaces }, { "UseNamespaceFallback", false } }
+					DataTokens = new RouteValueDictionary { { "Namespaces", namespaces }, { "UseNamespaceFallback", false } }
 				});
 		}
 	}

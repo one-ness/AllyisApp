@@ -259,8 +259,8 @@ namespace AllyisApps.Services
         {
             if (InvitationIds[0] <= 0) throw new ArgumentException("invitationId");
 
-            bool worked = true;
-            this.CheckOrgAction(OrgAction.DeleteInvitation, orgId);
+			bool worked = true;
+			CheckOrgAction(OrgAction.DeleteInvitation, orgId);
 
             foreach (var invitationId in InvitationIds)
             {

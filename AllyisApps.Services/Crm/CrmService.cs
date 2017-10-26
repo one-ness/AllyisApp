@@ -607,7 +607,7 @@ namespace AllyisApps.Services
 				return null;
 			}
 
-			return new Address()
+			return new Address
 			{
 				AddressId = address.AddressId,
 				Address1 = address.Address1,
@@ -633,7 +633,7 @@ namespace AllyisApps.Services
 				return null;
 			}
 
-			return new Address()
+			return new Address
 			{
 				AddressId = address.AddressId,
 				Address1 = address.Address1 ?? address.Address,
@@ -649,7 +649,7 @@ namespace AllyisApps.Services
 
 		public static AddressDBEntity GetDBEntityFromAddress(Address address)
 		{
-			return new AddressDBEntity()
+			return new AddressDBEntity
 			{
 				AddressId = address?.AddressId,
 				Address1 = address?.Address1,
@@ -670,7 +670,7 @@ namespace AllyisApps.Services
 			{
 				return null;
 			}
-			return new Customer()
+			return new Customer
 			{
 				Address = loadAddress ? getAddress(customer.AddressId) : null,
 				ContactEmail = customer.ContactEmail,
@@ -701,7 +701,7 @@ namespace AllyisApps.Services
 			Address address = null;
 			if (customer.AddressId != null)
 			{
-				address = new Address()
+				address = new Address
 				{
 					Address1 = customer.Address,
 					Address2 = null,
@@ -714,7 +714,7 @@ namespace AllyisApps.Services
 					CountryName = customer.CountryName
 				};
 			}
-			return new Customer()
+			return new Customer
 			{
 				Address = address,
 				ContactEmail = customer.ContactEmail,
@@ -773,7 +773,7 @@ namespace AllyisApps.Services
 		public Tuple<CustomerDBEntity, AddressDBEntity> GetDBEntitiesFromCustomerInfo(Customer customer)
 		{
 			return new Tuple<CustomerDBEntity, AddressDBEntity>(
-				new CustomerDBEntity()
+				new CustomerDBEntity
 				{
 					AddressId = customer.Address?.AddressId,
 					ContactEmail = customer.ContactEmail,
@@ -788,7 +788,7 @@ namespace AllyisApps.Services
 					Website = customer.Website,
 					IsActive = customer.IsActive
 				},
-				new AddressDBEntity()
+				new AddressDBEntity
 				{
 					AddressId = customer.Address?.AddressId,
 					Address1 = customer.Address?.Address1,
@@ -815,7 +815,7 @@ namespace AllyisApps.Services
 
 			return new Project.Project
 			{
-				owningCustomer = new Customer()
+				owningCustomer = new Customer
 				{
 					CustomerId = project.CustomerId,
 					CustomerName = project.CustomerName,
@@ -870,7 +870,7 @@ namespace AllyisApps.Services
 			return new CompleteProject
 			{
 				CreatedUtc = completeProject.CreatedUtc,
-				owningCustomer = new Customer()
+				owningCustomer = new Customer
 				{
 					CustomerId = completeProject.CustomerId,
 					CustomerName = completeProject.CustomerName,

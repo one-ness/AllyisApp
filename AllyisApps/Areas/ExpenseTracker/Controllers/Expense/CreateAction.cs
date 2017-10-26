@@ -47,9 +47,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			if (reportId != -1)
 			{
 				if (report != null
-					&& (report.SubmittedById != AppService.UserContext.UserId)
-					|| ((ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Draft
-					&& (ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Rejected))
+					&& report.SubmittedById != AppService.UserContext.UserId
+					|| (ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Draft
+					&& (ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Rejected)
 				{
 					string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.EditReport);
 					throw new AccessViolationException(message);
@@ -72,7 +72,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				}
 			}
 
-			var model = new ExpenseCreateModel()
+			var model = new ExpenseCreateModel
 			{
 				CurrentUser = AppService.UserContext.UserId,
 				Items = itemViewModels,
@@ -88,7 +88,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 		private AccountViewModel InitializeAccountViewModel(Account entity)
 		{
-			return new AccountViewModel()
+			return new AccountViewModel
 			{
 				AccountId = entity.AccountId,
 				AccountName = entity.AccountName

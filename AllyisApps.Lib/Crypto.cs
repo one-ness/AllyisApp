@@ -102,7 +102,7 @@ namespace AllyisApps.Lib
 				}
 			}
 
-			return new PassWordValidationResult()
+			return new PassWordValidationResult
 			{
 				successfulMatch = result,
 				updatedHash = newHash

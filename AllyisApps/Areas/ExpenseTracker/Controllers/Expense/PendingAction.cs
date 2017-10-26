@@ -57,7 +57,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 				decimal totalAmount = expItems.Sum(x => x.Amount);
 
-				reportModels.Add(new ExpenseItemViewModel()
+				reportModels.Add(new ExpenseItemViewModel
 				{
 					Amount = totalAmount,
 					Reason = report.BusinessJustification,
@@ -70,7 +70,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				});
 			}
 
-			ExpensePendingModel model = new ExpensePendingModel()
+			ExpensePendingModel model = new ExpensePendingModel
 			{
 				PendingReports = reportModels
 			};

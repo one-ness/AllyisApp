@@ -117,7 +117,7 @@
 									@if (currentDate.DayOfWeek == startOfWeek)
 									{
 										<td style="padding-right:5px; padding-bottom:5px;">
-											<a class="btn btn-primary weekcopier" name='@((theSample.Date <= theSample.LockDate && !theSample.IsManager) ? "disabledButton" : "")'
+											<a class="btn btn-primary weekcopier" name='@(theSample.Date <= theSample.LockDate && !theSample.IsManager ? "disabledButton" : "")'
 											   href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
 														{
 															startDateTarget=currentDate,
@@ -136,7 +136,7 @@
 										</td>
 									}
 									<td style="padding-bottom:5px;">
-										<a class="btn btn-primary daycopier" name='@((theSample.Date <= theSample.LockDate && !theSample.IsManager) ? "disabledButton" : "")'
+										<a class="btn btn-primary daycopier" name='@(theSample.Date <= theSample.LockDate && !theSample.IsManager ? "disabledButton" : "")'
 										   href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
 													{
 														startDateTarget=currentDate,

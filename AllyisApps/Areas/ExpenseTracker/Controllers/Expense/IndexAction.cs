@@ -61,7 +61,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 				decimal totalAmount = expItems.Sum(x => x.Amount);
 
-				items.Add(new ExpenseItemViewModel()
+				items.Add(new ExpenseItemViewModel
 				{
 					Amount = totalAmount,
 					Reason = item.BusinessJustification,
@@ -74,7 +74,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				});
 			}
 
-			ExpenseIndexViewModel model = new ExpenseIndexViewModel()
+			ExpenseIndexViewModel model = new ExpenseIndexViewModel
 			{
 				CanManage = true,
 				CurrentUser = userId,
