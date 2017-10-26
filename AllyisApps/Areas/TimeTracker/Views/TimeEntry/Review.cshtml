@@ -12,7 +12,7 @@
 
 
 <div class="row" style="padding-bottom: 20px">
-	<div class="col-sm-6 col-sm-offset-6">
+	<div class="col-xs-12">
 		@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "form-inline pull-right", role = "form" }))
 		{
 			<label>Set status for selected entries as: </label>
@@ -55,13 +55,53 @@
 					@data_selected_text_format = "count > 2",
 					@data_width = "fit"
 				})
-			<div class="btn-group pull-right" style="padding-right:15px;">
+			<div class="pull-right dropdown" style="padding-right:15px;">
 				<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					Actions
 				</button>
 				<div class="dropdown-menu">
-					<a class="dropdown-item" id="lock-entries-link">Lock Entries</a>
-					<a class="dropdown-item" id="payroll-process-link">Payroll Process</a>
+					@Html.ActionLink(
+						Strings.LockEntries,
+						ActionConstants.LockTimeEntries,
+						ControllerConstants.TimeEntry,
+						new
+						{
+							subscriptionId = Model.SubscriptionId,
+							startDate = Model.StartDate,
+							lockDate = Model.EndDate
+						},
+						new
+						{
+							@class = "dropdown-item"
+						})
+					@Html.ActionLink(
+						Strings.UnlockEntries,
+						ActionConstants.UnlockTimeEntries,
+						ControllerConstants.TimeEntry,
+						new
+						{
+							subscriptionId = Model.SubscriptionId,
+							startDate = Model.StartDate,
+							endDate = Model.EndDate
+						},
+						new
+						{
+							@class = "dropdown-item"
+						})
+					@Html.ActionLink(
+						Strings.PayrollProcess,
+						ActionConstants.PayrollProcessTimeEntries,
+						ControllerConstants.TimeEntry,
+						new
+						{
+							subscriptionId = Model.SubscriptionId,
+							startDate = Model.StartDate,
+							endDate = Model.EndDate
+						},
+						new
+						{
+							@class = "dropdown-item"
+						})
 				</div>
 			</div>
 			<div class="clearfix"></div>
@@ -137,51 +177,47 @@
 	<div class="pageContainer"></div>
 </div>
 
-<div class="row">
-	<div class="col-xs-12">
-		<div class="panel panel-default pull-left">
-			<div class="panel-heading">Legend</div>
-			<div class="panel-body">
-				<div class="row">
-					<div class="color-box color-code-Pending"></div>
-					- Pending
-				</div>
-				<div class="row">
-					<div class="color-box color-code-Rejected"></div>
-					- Rejected
-				</div>
-				<div class="row">
-					<div class="color-box color-code-Approved"></div>
-					<div class="text-box-padded">- Approved</div>
-				</div>
-				<div class="row">
-					<div class="color-box color-code-PayrollProcessed"></div>
-					- PayrollProcessed
-				</div>
+<div class="row" style="padding-right: 15px; padding-left: 15px;">
+	<div class="panel panel-default pull-left">
+		<div class="panel-heading" style="background-color:transparent !important; padding:5px 10px;">Legend</div>
+		<div class="panel-body" style="padding:5px;">
+			<div style="float:left; margin-right:15px;">
+				<i class="fa fa-square color-code-Pending" aria-hidden="true"></i>
+				- Pending
+			</div>
+			<div style="float:left; margin-right:15px;">
+				<i class="fa fa-square color-code-Rejected" aria-hidden="true"></i>
+				- Rejected
+			</div>
+			<div style="float:left; margin-right:15px;">
+				<i class="fa fa-square color-code-Approved" aria-hidden="true"></i>
+				- Approved
+			</div>
+			<div style="padding-right: 10px; float:left; margin-right:15px;">
+				<i class="fa fa-square color-code-PayrollProcessed" aria-hidden="true"></i>
+				- PayrollProcessed
 			</div>
 		</div>
-		<div class="pull-right">
-			@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "form-inline pull-right", role = "form" }))
-			{
-				<label>Set status for selected entries as: </label>
-				<div class="input-group">
-					@Html.DropDownList("timeEntryStatusId",
-				new SelectList(Model.TimeEntryStatusOptions, "Key", "Value"),
-				new
-				{
-					@class = "form-control selectpicker set-status-select",
-					@data_width = "fit"
-				})
-					<span class="input-group-btn">
-						<button id="submit-status" class="btn btn-primary" type="submit" tabindex="-1">Save</button>
-					</span>
-				</div>
-				<input type="hidden" name="timeEntryIdsJSON" class="time-entries-input" value="[]" />
-				@Html.HiddenFor(m => m.StartDate)
-				@Html.HiddenFor(m => m.EndDate)
-			}
-		</div>
 	</div>
+	@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "form-inline pull-right", role = "form" }))
+	{
+		<label>Set status for selected entries as: </label>
+		<div class="input-group">
+			@Html.DropDownList("timeEntryStatusId",
+			new SelectList(Model.TimeEntryStatusOptions, "Key", "Value"),
+			new
+			{
+				@class = "form-control selectpicker set-status-select",
+				@data_width = "fit"
+			})
+			<span class="input-group-btn">
+				<button id="submit-status" class="btn btn-primary" type="submit" tabindex="-1">Save</button>
+			</span>
+		</div>
+		<input type="hidden" name="timeEntryIdsJSON" class="time-entries-input" value="[]" />
+		@Html.HiddenFor(m => m.StartDate)
+		@Html.HiddenFor(m => m.EndDate)
+	}
 </div>
 
 <div class="modal fade" id="time-entry-details-modal" tabindex="-1" role="dialog" aria-labelledby="details-modal-title" aria-hidden="true">
@@ -194,35 +230,37 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<div class="slim">
-					<div class="row">
-						<div class="col-xs-6">User Name:</div>
-						<div class="col-xs-6" id="modal-details-name"></div>
-					</div>
-					<div class="row">
-						<div class="col-xs-6">Customer:</div>
-						<div class="col-xs-6" id="modal-details-customer"></div>
-					</div>
-					<div class="row">
-						<div class="col-xs-6">Project:</div>
-						<div class="col-xs-6" id="modal-details-project"></div>
-					</div>
-					<div class="row">
-						<div class="col-xs-6">Pay Type:</div>
-						<div class="col-xs-6" id="modal-details-pay-type"></div>
-					</div>
-					<div class="row">
-						<div class="col-xs-6">Duration:</div>
-						<div class="col-xs-6" id="modal-details-duration"></div>
-					</div>
-					<div class="row">
-						<div class="col-xs-6">Description:</div>
-						<div class="col-xs-6" id="modal-details-description"></div>
-					</div>
-					<div class="row">
-						<div class="col-xs-6">Status:</div>
-						<div class="col-xs-6" id="modal-details-status"></div>
-					</div>
+				<div class="row">
+					<div class="col-xs-6">User Name:</div>
+					<div class="col-xs-6" id="modal-details-name"></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">Customer:</div>
+					<div class="col-xs-6" id="modal-details-customer"></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">Project:</div>
+					<div class="col-xs-6" id="modal-details-project"></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">Pay Type:</div>
+					<div class="col-xs-6" id="modal-details-pay-type"></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">Duration:</div>
+					<div class="col-xs-6" id="modal-details-duration"></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">Description:</div>
+					<div class="col-xs-6" id="modal-details-description"></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">Status:</div>
+					<div class="col-xs-6" id="modal-details-status"></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">Locked:</div>
+					<div class="col-xs-6" id="modal-details-locked"></div>
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -258,20 +296,12 @@
 			background-color: rgba(128, 128, 128, .4);
 		}
 
-		.color-box.color-code-Pending {
-			background-color: rgb(128, 128, 128);
-		}
-
 		i.color-code-Approved {
 			color: rgb(30, 144, 255);
 		}
 
 		tr.color-code-Approved {
 			background-color: rgba(30, 144, 255, .4);
-		}
-
-		.color-box.color-code-Approved {
-			background-color: rgb(30, 144, 255);
 		}
 
 		i.color-code-Rejected {
@@ -282,10 +312,6 @@
 			background: rgba(255, 99, 71, .4);
 		}
 
-		.color-box.color-code-Rejected {
-			background-color: rgb(255, 99, 71);
-		}
-
 		i.color-code-PayrollProcessed {
 			color: rgb(60, 179, 113);
 		}
@@ -294,12 +320,12 @@
 			background-color: rgba(60, 179, 113, .4);
 		}
 
-		.color-box.color-code-PayrollProcessed {
-			background-color: rgb(60, 179, 113);
-		}
-
 		i.greyed-out {
 			color: lightgrey;
+		}
+
+		tr.greyed-out {
+			background-color: #d6d6d6;
 		}
 
 		.status-dots {
@@ -326,8 +352,8 @@
 
 		.color-box {
 			float: left;
-			width: 20px;
-			height: 20px;
+			width: 15px;
+			height: 15px;
 			margin: 5px;
 			border: 1px solid rgba(0, 0, 0, .2);
 		}
@@ -366,7 +392,7 @@
 
 		//logic for check-all check boxes
 		$(".check-all").change(function () {
-			$(".check[check-id=" + $(this).attr("check-all-id") + "]").prop("checked", $(this).is(":checked")).change();
+			$(".check[check-id=" + $(this).attr("check-all-id") + "]:not(:disabled)").prop("checked", $(this).is(":checked")).change();
 		});
 
 		//updates form hidden input values with all selected time entries
@@ -427,7 +453,7 @@
 
 		//html5 autofocus fix for model
 		$('#time-entry-details-modal').on('shown.bs.modal', function () {
-			$('#details-modal-input').focus();
+			$('.details-modal-input').focus();
 		});
 
 		//populates the details model with time entry data when the model needs to pop up
@@ -440,6 +466,7 @@
 			$("#modal-details-duration").text(timeEntry.Duration);
 			$("#modal-details-description").text(timeEntry.Description || "None");
 			$("#modal-details-status").text(timeEntry.TimeEntryStatusName);
+			$("#modal-details-locked").text(timeEntry.IsLocked ? "Yes" : "No");
 			$('#time-entry-details-modal').modal();
 		});
 
@@ -461,23 +488,6 @@
 			$(".parent-row").filter(function () {
 				return !$(this).nextAll(":not(.filtered)").hasClass("child-row");
 			}).addClass("filtered");
-		});
-
-		$("#lock-entries-link").click(function () {
-			var newForm = jQuery('<form>', {
-				'action': '/@ProductNameConstants.TimeTracker/@Model.SubscriptionId/@ControllerConstants.TimeEntry/@ActionConstants.LockTimeEntries',
-				'target': '_top',
-				'method': 'post'
-			}).append(jQuery('<input>', {
-				'name': 'lockDate',
-				'value': "@Model.EndDate",
-				'type': 'hidden'
-			})).append(jQuery('<input>', {
-				'name': 'startDate',
-				'value': "@Model.StartDate",
-				'type': 'hidden'
-			}));
-			newForm.appendTo(document.body).submit();
 		});
 	});
 </script>

@@ -8,7 +8,6 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.Auth;
 
@@ -26,7 +25,7 @@ namespace AllyisApps.Controllers.Auth
 		[AllowAnonymous]
 		public ActionResult ForgotPassword()
 		{
-			return this.View(new ForgotPasswordViewModel());
+			return View(new ForgotPasswordViewModel());
 		}
 
 		/// <summary>
@@ -45,7 +44,7 @@ namespace AllyisApps.Controllers.Auth
 				// NOTE: do not check for failure, always display success message and redirect to login page
 				string code = Guid.NewGuid().ToString();
 				string callbackUrl = Url.Action(ActionConstants.ResetPassword, ControllerConstants.Account, null, protocol: Request.Url.Scheme);
-				User user = this.AppService.GetUserByEmail(model.Email);
+				User user = await AppService.GetUserByEmail(model.Email);
 				if (user != null)
 				{
 					StringBuilder sb = new StringBuilder();
@@ -55,10 +54,10 @@ namespace AllyisApps.Controllers.Auth
 
 				// add a success notification, irrespective of user is null or not.
 				Notifications.Add(new Core.Alert.BootstrapAlert(string.Format("{0} {1}.", Resources.Strings.ResetEmailHasBeenSent, model.Email), Core.Alert.Variety.Success));
-				return this.RedirectToAction(ActionConstants.LogOn);
+				return RedirectToAction(ActionConstants.LogOn);
 			}
 
-			return this.View(model);
+			return View(model);
 		}
 	}
 }

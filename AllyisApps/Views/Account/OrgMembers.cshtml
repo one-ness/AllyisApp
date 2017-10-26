@@ -1,4 +1,4 @@
-﻿@model OrganizationMembersViewModel2
+﻿@model OrganizationMembersViewModel
 @{
 	var sb = new System.Text.StringBuilder();
 	sb.AppendFormat("{0}: {1}", Strings.Members, Model.OrganizationName);
@@ -51,7 +51,7 @@
 					<td class="col-md-1">
 						@if (Model.CanEditUser)
 						{
-							<a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account, new { @id = item.UserId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a>
+							<a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account, new { @id = Model.OrganizationId, @userId = item.UserId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a>
 						}
 					</td>
 				</tr>

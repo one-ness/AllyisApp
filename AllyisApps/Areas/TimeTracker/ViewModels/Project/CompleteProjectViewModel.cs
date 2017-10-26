@@ -105,23 +105,23 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		/// </summary>
 		public CompleteProjectViewModel(CompleteProject proj)
 		{
-			this.CanEditProject = proj.CanEditProject;
-			this.CreatedUtc = proj.CreatedUtc;
-			this.CustomerId = proj.owningCustomer?.CustomerId;
-			this.CustomerName = proj.owningCustomer?.CustomerName;
-			this.CustomerOrgId = proj.owningCustomer?.CustomerOrgId;
-			this.EndDate = proj.EndDate;
-			this.IsActive = proj.IsActive;
-			this.IsCustomerActive = proj.IsCustomerActive;
-			this.IsProjectUser = proj.IsProjectUser;
-			this.IsUserActive = proj.IsUserActive;
-			this.OrganizationId = proj.OrganizationId;
-			this.OrganizationName = proj.OrganizationName;
-			this.PriceType = proj.PriceType;
-			this.ProjectId = proj.ProjectId;
-			this.ProjectName = proj.ProjectName;
-			this.ProjectOrgId = proj.ProjectOrgId;
-			this.StartDate = proj.StartDate;
+			CanEditProject = proj.CanEditProject;
+			CreatedUtc = proj.CreatedUtc;
+			CustomerId = proj.owningCustomer?.CustomerId;
+			CustomerName = proj.owningCustomer?.CustomerName;
+			CustomerOrgId = proj.owningCustomer?.CustomerOrgId;
+			EndDate = proj.EndDate;
+			IsActive = proj.IsActive;
+			IsCustomerActive = proj.IsCustomerActive;
+			IsProjectUser = proj.IsProjectUser;
+			IsUserActive = proj.IsUserActive;
+			OrganizationId = proj.OrganizationId;
+			OrganizationName = proj.OrganizationName;
+			PriceType = proj.PriceType;
+			ProjectId = proj.ProjectId;
+			ProjectName = proj.ProjectName;
+			ProjectOrgId = proj.ProjectOrgId;
+			StartDate = proj.StartDate;
 		}
 	}
 }

@@ -1,7 +1,7 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -16,10 +16,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <param name = "userId" > The Customer id.</param>
 		/// <returns>The Customer index.</returns>
-		public ActionResult Reactivate(int subscriptionId, int userId)
+		public async Task<ActionResult> Reactivate(int subscriptionId, int userId)
 		{
 			int orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-			var result = AppService.ReactivateCustomer(userId, subscriptionId, orgId);
+			var result = await AppService.ReactivateCustomer(userId, subscriptionId, orgId);
 
 			if (!string.IsNullOrEmpty(result))
 			{
@@ -31,7 +31,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
 
-			return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
+			return RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
 		}
 	}
 }

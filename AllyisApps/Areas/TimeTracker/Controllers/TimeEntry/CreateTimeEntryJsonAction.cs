@@ -6,12 +6,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
-using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -26,28 +26,28 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="model">The model representing a time entry.</param>
 		/// <returns>A JSON object with the results of the action.</returns>
-		public ActionResult CreateTimeEntryJson(CreateTimeEntryViewModel model)
+		public async Task<ActionResult> CreateTimeEntryJson(CreateTimeEntryViewModel model)
 		{
-			if (model.UserId != this.AppService.UserContext.UserId)
+			if (model.UserId != AppService.UserContext.UserId)
 			{
-				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId);
+				AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId);
 			}
 
 			// Authorized to edit this entry
 			try
 			{
 				float? durationResult;
-				if (!(durationResult = this.ParseDuration(model.Duration)).HasValue)
+				if (!(durationResult = ParseDuration(model.Duration)).HasValue)
 				{
 					throw new ArgumentException(Resources.Strings.DurationFormat);
 				}
 
-				if (this.ParseDuration(model.Duration) == 0)
+				if (ParseDuration(model.Duration) == 0)
 				{
 					throw new ArgumentException(Resources.Strings.EnterATimeLongerThanZero);
 				}
 
-				IEnumerable<Services.TimeTracker.TimeEntry > otherEntriesToday = AppService.GetTimeEntriesByUserOverDateRange(
+				IEnumerable<Services.TimeTracker.TimeEntry> otherEntriesToday = await AppService.GetTimeEntriesByUserOverDateRange(
 					new List<int> { model.UserId },
 					Utility.GetDateTimeFromDays(model.Date),
 					Utility.GetDateTimeFromDays(model.Date),
@@ -59,9 +59,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 
 				UserContext.SubscriptionAndRole subInfo = null;
-				this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(model.SubscriptionId, out subInfo);
+				AppService.UserContext.SubscriptionsAndRoles.TryGetValue(model.SubscriptionId, out subInfo);
 
-				DateTime? lockDate = AppService.GetLockDateByOrganizationId(AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId);
+				DateTime? lockDate = await AppService.GetLockDate(AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId);
 				if (durationResult + durationOther > 24.00)
 				{
 					throw new ArgumentException(Resources.Strings.CannotExceed24);
@@ -79,18 +79,21 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					throw new ArgumentException(Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
 				}
 
-				int id = AppService.CreateTimeEntry(new Services.TimeTracker.TimeEntry()
+				var dateGet = new DateTime();
+				if (model.Date != 0) dateGet = Utility.GetDateTimeFromDays(model.Date);
+				else dateGet = DateTime.Now;
+
+				int id = await AppService.CreateTimeEntry(new Services.TimeTracker.TimeEntry()
 				{
 					UserId = model.UserId,
 					ProjectId = model.ProjectId,
 					PayClassId = model.PayClassId,
-					Date = Utility.GetNullableDateTimeFromDays(model.Date) ?? DateTime.Now,
+					Date = dateGet,
 					Duration = durationResult.Value,
-					Description = model.Description,
-					TimeEntryStatusId = (int)TimeEntryStatus.Pending
+					Description = model.Description
 				});
 
-				return this.Json(new { status = "success", values = new { duration = this.GetDurationDisplay(model.Duration), description = model.Description, projectId = model.ProjectId, id = id, projectName = AppService.GetProject(model.ProjectId).ProjectName } });
+				return Json(new { status = "success", values = new { duration = GetDurationDisplay(model.Duration), description = model.Description, projectId = model.ProjectId, id = id, projectName = AppService.GetProject(model.ProjectId).ProjectName } });
 			}
 			catch (ArgumentException e)
 			{
@@ -100,7 +103,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					message = e.Message
 				};
 
-				return this.Json(temp);
+				return Json(temp);
 			}
 			catch (Exception e)
 			{
@@ -110,15 +113,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		}
 
 		/// <summary>
-		/// Create Action for TimeEntry 
+		/// Create Action for TimeEntry
 		/// </summary>
 		/// <param name="model"></param>
 		/// <returns></returns>
-		protected ActionResult CreateTimeEntryJson(EditTimeEntryViewModel model)
+		protected async Task<ActionResult> CreateTimeEntryJson(EditTimeEntryViewModel model)
 		{
 			if (model.IsCreated && (!model.TimeEntryId.HasValue || model.TimeEntryId.Value == 0))
 			{
-				return CreateTimeEntryJson(new CreateTimeEntryViewModel()
+				return await CreateTimeEntryJson(new CreateTimeEntryViewModel()
 				{
 					Date = model.Date,
 					Description = model.Description,
@@ -128,13 +131,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					SubscriptionId = model.SubscriptionId,
 					UserId = model.UserId
 				});
-
 			}
 			else
 			{
 				throw new Exception("Attempt to create entry that should have been edited");
 			}
-
 		}
 	}
 }

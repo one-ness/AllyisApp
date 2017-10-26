@@ -1,21 +1,15 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="IndexAction.cs" company="Allyis, Inc.">
+// <copyright file="ApplicantAction.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
-using AllyisApps.Services;
-using AllyisApps.Services.Auth;
-using AllyisApps.Services.Crm;
 using AllyisApps.Services.StaffingManager;
-using AllyisApps.Services.Lookup;
-using AllyisApps.ViewModels.Staffing;
-using System;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -28,20 +22,21 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// Applicant page.
 		/// </summary>
 		/// <returns></returns>
-		public ActionResult Applicant(int subscriptionId, int applicantId)
+		public async Task<ActionResult> Applicant(int subscriptionId, int applicantId)
 		{
 			SetNavData(subscriptionId);
 
-			Applicant applicant = this.AppService.GetApplicantAddressById(applicantId);
+			Applicant applicant = await AppService.GetApplicantAddressById(applicantId);
 			StaffingApplicantViewModel model = InitializeStaffingApplicantViewModel(applicant);
-			model.Applications = this.AppService.GetApplicationsByApplicantId(applicantId).Select(a => InitializeStaffingApplicationViewModel(a)).ToList();
+			var applicationsGet = await AppService.GetApplicationsByApplicantId(applicantId);
+			model.Applications = applicationsGet.Select(InitializeStaffingApplicationViewModel).ToList();
 
 			foreach (var application in model.Applications)
 			{
 				application.Applicant = applicant;
 			}
 
-			return this.View(model);
+			return View(model);
 		}
 
 		private static StaffingApplicationViewModel InitializeStaffingApplicationViewModel(Application application)

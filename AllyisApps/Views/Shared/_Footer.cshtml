@@ -1,9 +1,7 @@
-﻿<div class="container navbar-fixed-bottom">
-	<div class="row footer-bar">
-		<div class="col-xs-12">
-			<a class="pull-left" href="@Url.Action(ActionConstants.PrivacyPolicy, ControllerConstants.Home)">@Strings.PrivacyPolicy</a>
-			<a class="pull-left" href="@Url.Action(ActionConstants.Help, ControllerConstants.Home)">@Strings.Help</a>
-			<span class="pull-right">&copy; @DateTime.Now.Year - Allyis, Inc.</span>
-		</div>
+﻿<footer id="footer-bar">
+	<div class="container">
+		<a class="pull-left" href="@Url.Action(ActionConstants.PrivacyPolicy, ControllerConstants.Home)">@Strings.PrivacyPolicy</a>
+		<a class="pull-left" href="@Url.Action(ActionConstants.Help, ControllerConstants.Home)">@Strings.Help</a>
+		<span class="pull-right">&copy; @DateTime.Now.Year - Allyis, Inc.</span>
 	</div>
-</div>
+</footer>

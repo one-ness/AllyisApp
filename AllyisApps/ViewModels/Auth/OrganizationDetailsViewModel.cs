@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace AllyisApps.ViewModels.Auth
+﻿namespace AllyisApps.ViewModels.Auth
 {
 	/// <summary>
 	/// organization details view model

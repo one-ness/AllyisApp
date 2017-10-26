@@ -5,12 +5,12 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Web.Security;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.Auth;
 
@@ -31,11 +31,12 @@ namespace AllyisApps.Controllers.Auth
 		{
 			if (Request.IsAuthenticated)
 			{
-				return this.RedirectToLocal(returnUrl);
+				return RedirectToLocal(returnUrl);
 			}
 
 			ViewBag.ReturnUrl = returnUrl;
-			return this.View(new LogOnViewModel());
+
+			return View(new LogOnViewModel());
 		}
 
 		/// <summary>
@@ -47,24 +48,24 @@ namespace AllyisApps.Controllers.Auth
 		[HttpPost]
 		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
-		public ActionResult LogOn(LogOnViewModel model, string returnUrl)
+		public async Task<ActionResult> LogOn(LogOnViewModel model, string returnUrl)
 		{
 			if (ModelState.IsValid)
 			{
 				User result = null;
-				if ((result = AppService.ValidateLogin(model.Email, model.Password)) != null)
+				if ((result = await AppService.ValidateLogin(model.Email, model.Password)) != null)
 				{
 					// sign in
 					if (result.IsEmailConfirmed || (WebConfigurationManager.AppSettings["RequireEmailConfirmation"] ?? "true").ToLower().Equals("false"))
 					{
-						this.SignIn(result.UserId, result.Email, model.RememberMe);
-						return this.RedirectToLocal(returnUrl);
+						SignIn(result.UserId, result.Email, model.RememberMe);
+						return RedirectToLocal(returnUrl);
 					}
 					else
 					{
 						Notifications.Add(new BootstrapAlert(Resources.Strings.YouMustRegisterYourEmailAddress, Variety.Danger));
-						this.SignIn(result.UserId, result.Email, model.RememberMe);
-						return this.RedirectToLocal(returnUrl);
+						SignIn(result.UserId, result.Email, model.RememberMe);
+						return RedirectToLocal(returnUrl);
 					}
 				}
 				else
@@ -75,7 +76,8 @@ namespace AllyisApps.Controllers.Auth
 
 			// login failed
 			ViewBag.ReturnUrl = returnUrl;
-			return this.View(model);
+			await Task.Delay(1);
+			return View(model);
 		}
 
 		/// <summary>
@@ -86,7 +88,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="isPersisted">Is persisted.</param>
 		private void SignIn(int userId, string userName, bool isPersisted = false)
 		{
-			this.SetAuthCookie(userId, userName, isPersisted);
+			SetAuthCookie(userId, userName, isPersisted);
 		}
 
 		/// <summary>
@@ -101,7 +103,7 @@ namespace AllyisApps.Controllers.Auth
 		private void SetAuthCookie(int userId, string userName, bool isPersisted = false)
 		{
 			// serialize the cookie data object, then ecnrypt it using formsauthentication module
-			string serialized = this.SerializeCookie(new CookieData(userId));
+			string serialized = SerializeCookie(new CookieData(userId));
 			FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(
 				/*AuthenticationTicketVersion*/ 1,
 				userName,
@@ -117,7 +119,7 @@ namespace AllyisApps.Controllers.Auth
 			cookie.Value = encryptedTicket;
 
 			// set the cookie to response
-			this.Response.Cookies.Add(cookie);
+			Response.Cookies.Add(cookie);
 		}
 	}
 }

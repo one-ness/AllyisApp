@@ -23,7 +23,7 @@ namespace AllyisApps.Controllers.Auth
 		[AllowAnonymous]
 		public ActionResult ConfirmEmail(Guid id)
 		{
-			if (this.AppService.ConfirmUserEmail(id))
+			if (AppService.ConfirmUserEmail(id))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.NotifyYourEmailIsConfirmed, Variety.Success));
 			}
@@ -32,7 +32,7 @@ namespace AllyisApps.Controllers.Auth
 				Notifications.Add(new BootstrapAlert(Resources.Strings.WarnYourEmailHasAlreadyBeenConfirmed, Variety.Warning));
 			}
 
-			return this.RouteUserHome();
+			return RouteUserHome();
 		}
 	}
 }

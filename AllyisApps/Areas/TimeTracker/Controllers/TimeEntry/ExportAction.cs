@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
@@ -29,18 +30,19 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="startingDate">The Starting date of the range (nullable).</param>
 		/// <param name="endingDate">The Ending date of the range (nullable).</param>
 		/// <returns>CSV export of time entries.</returns>
-		public FileStreamResult Export(int userId, int subscriptionId, int? startingDate = null, int? endingDate = null)
+		public async Task<FileStreamResult> Export(int userId, int subscriptionId, int? startingDate = null, int? endingDate = null)
 		{
 			int orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-			if (userId != this.AppService.UserContext.UserId)
+			if (userId != AppService.UserContext.UserId)
 			{
-				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
+				AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			}
 
 			DateTime? start = startingDate.HasValue ? (DateTime?)Utility.GetDateTimeFromDays(startingDate.Value) : null;
 			DateTime? end = endingDate.HasValue ? (DateTime?)Utility.GetDateTimeFromDays(endingDate.Value) : null;
 
-			return this.File(AppService.PrepareCSVExport(orgId, new List<int> { userId }, start, end).BaseStream, "text/csv", "export.csv");
+			var file = await AppService.PrepareCSVExport(orgId, new List<int> { userId }, start, end);
+			return File(file.BaseStream, "text/csv", "export.csv");
 		}
 
 		/// <summary>
@@ -54,7 +56,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="projectId">The project's Id (optional).</param>
 		/// <param name="customerId">The Customer's Id (optional).</param>
 		/// <returns>The DataExportViewModel.</returns>
-		public DataExportViewModel ConstructDataExportViewModel(int subscriptionId, int orgId = -1, List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
+		public async Task<DataExportViewModel> ConstructDataExportViewModel(int subscriptionId, int orgId = -1, List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
 		{
 			if (-1 <= orgId)
 			{
@@ -69,8 +71,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else
 			{
-				result.Data = AppService.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1), orgId)
-				.AsParallel().Select(timeEntry => new TimeEntryViewModel(timeEntry));
+				var Get = await AppService.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1), orgId);
+				result.Data = Get.AsParallel().Select(timeEntry => new TimeEntryViewModel(timeEntry));
 			}
 
 			if (projectId != 0)
@@ -81,7 +83,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else if (customerId != 0)
 			{
-				IEnumerable<int> projects = AppService.GetProjectsByCustomer(customerId).Select(proj => proj.ProjectId).ToList();
+				var projGet = await AppService.GetProjectsByCustomer(customerId);
+				IEnumerable<int> projects = projGet.Select(proj => proj.ProjectId).ToList();
 				result.Data = from c in result.Data
 							  where projects.Contains(c.ProjectId)
 							  select c;
@@ -97,7 +100,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				else
 				{
 					// single user selected
-					result.Projects = AppService.GetProjectsByUserAndOrganization(userIds[0], orgId, false).AsParallel().Select(proj =>
+					var getProj = await AppService.GetProjectsByUserAndOrganization(userIds[0], orgId, false);
+					result.Projects = getProj.AsParallel().Select(proj =>
 					new CompleteProjectViewModel(proj));
 				}
 

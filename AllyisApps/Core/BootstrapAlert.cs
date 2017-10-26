@@ -34,9 +34,9 @@ namespace AllyisApps.Core.Alert
 		/// <param name="variety">The type of notification.</param>
 		public BootstrapAlert(string text, Variety variety)
 		{
-			this.Text = text;
-			this.Type = variety;
-			this.IsHtmlString = false;
+			Text = text;
+			Type = variety;
+			IsHtmlString = false;
 		}
 
 		/// <summary>
@@ -46,9 +46,9 @@ namespace AllyisApps.Core.Alert
 		/// <param name="varietyName">The name of the type of notification.</param>
 		public BootstrapAlert(string text, string varietyName)
 		{
-			this.Text = text;
-			this.Type = Variety.GetByName(varietyName);
-			this.IsHtmlString = false;
+			Text = text;
+			Type = Variety.GetByName(varietyName);
+			IsHtmlString = false;
 		}
 
 		/// <summary>
@@ -104,7 +104,7 @@ namespace AllyisApps.Core.Alert
 		/// <param name="classes">The string of CSS classes to include in the display markup.</param>
 		private Variety(string classes)
 		{
-			this.Classes = classes;
+			Classes = classes;
 		}
 
 		/// <summary>
@@ -119,27 +119,27 @@ namespace AllyisApps.Core.Alert
 		/// <returns>The Variety object with specified by name, else returns Variety.Primary.</returns>
 		public static Variety GetByName(string name)
 		{
-			Variety result = Variety.Primary;
+			Variety result = Primary;
 			switch (name.ToLower())
 			{
 				case "primary":
-					result = Variety.Primary;
+					result = Primary;
 					break;
 
 				case "success":
-					result = Variety.Success;
+					result = Success;
 					break;
 
 				case "info":
-					result = Variety.Info;
+					result = Info;
 					break;
 
 				case "warning":
-					result = Variety.Warning;
+					result = Warning;
 					break;
 
 				case "Danger":
-					result = Variety.Danger;
+					result = Danger;
 					break;
 			}
 

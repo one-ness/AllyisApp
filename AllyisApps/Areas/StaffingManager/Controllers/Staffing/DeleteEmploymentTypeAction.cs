@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -22,7 +23,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="userId">The id of the Status to delete.</param> // TODO: update this after changing the route
 		/// <param name="subscriptionId">The subscription's id.</param>
 		/// <returns>Redirects to the settings view.</returns>
-		public ActionResult DeleteEmploymentType(int employmentTypeId, int userId, int subscriptionId)
+		public async Task<ActionResult> DeleteEmploymentType(int employmentTypeId, int userId, int subscriptionId)
 		{
 			int orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			try
@@ -35,8 +36,8 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				// Should only be here because of permission failures
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
-
-			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId });
+			await Task.Yield();
+			return RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId });
 		}
 	}
 }

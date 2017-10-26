@@ -21,7 +21,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Updates a project.
 		/// </summary>
 		/// <param name="project">The model containing the project information.</param>
-		public void UpdateProject(EditProjectViewModel project)
+		public async void UpdateProject(EditProjectViewModel project)
 		{
 			if (string.IsNullOrWhiteSpace(project.ProjectName))
 			{
@@ -38,7 +38,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new InvalidOperationException("Project requires an organization. Cannot update.");
 			}
 
-			AppService.UpdateProjectAndUsers(
+			await AppService.UpdateProjectAndUsers(
 				project.ProjectId,
 				project.ProjectName,
 				project.ProjectOrgId,

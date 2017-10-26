@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
@@ -19,21 +20,21 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="model">The model.</param>
 		/// <returns> A redirect to index view.</returns>
 		[HttpPost]
-		public ActionResult UpdateReport(ExpenseCreateModel model)
+		public async Task<ActionResult> UpdateReport(ExpenseCreateModel model)
 		{
 			if (!ModelState.IsValid)
 			{
 				return RedirectToAction("Create", new { subscriptionId = model.SubscriptionId, reportId = model.Report.ExpenseReportId });
 			}
 
-			var oldReport = AppService.GetExpenseReport(model.Report.ExpenseReportId);
+			var oldReport = await AppService.GetExpenseReport(model.Report.ExpenseReportId);
 			if (model.Report.ExpenseReportId != -1)
 			{
-				if (oldReport.SubmittedById != this.AppService.UserContext.UserId
+				if (oldReport.SubmittedById != AppService.UserContext.UserId
 					|| ((ExpenseStatusEnum)oldReport.ReportStatus != ExpenseStatusEnum.Draft
 					&& (ExpenseStatusEnum)oldReport.ReportStatus != ExpenseStatusEnum.Rejected))
 				{
-					string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.UpdateReport.ToString());
+					string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.UpdateReport);
 					throw new AccessViolationException(message);
 				}
 
@@ -49,7 +50,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				model.Items = new List<ExpenseItemCreateViewModel>();
 			}
 
-			var subscription = AppService.GetSubscription(model.SubscriptionId);
+			var subscription = await AppService.GetSubscription(model.SubscriptionId);
 			var organizationId = subscription.OrganizationId;
 			ExpenseStatusEnum reportStatus;
 			DateTime? submittedUtc = null;
@@ -78,9 +79,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					ReportStatus = (int)reportStatus
 				};
 
-				AppService.UpdateExpenseReport(report, model.Report.ExpenseReportId);
+				await AppService.UpdateExpenseReport(report, model.Report.ExpenseReportId);
 				UploadAttachments(model, report);
-				UploadItems(model, report);
+				await UploadItems(model, report);
 			}
 
 			return RedirectToAction("Index");

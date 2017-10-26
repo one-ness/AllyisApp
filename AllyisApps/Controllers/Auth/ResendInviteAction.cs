@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Resources;
@@ -17,15 +14,15 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="id">Invitation ID</param>
 		/// <returns></returns>
 		[HttpGet]
-		public ActionResult ResendInvite(int id)
+		public async Task<ActionResult> ResendInvite(int id)
 		{
-			var invite = AppService.GetInvitationByID(id);
+			var invite = await AppService.GetInvitationById(id);
 			AppService.CheckOrgAction(Services.AppService.OrgAction.AddUserToOrganization, invite.OrganizationId);
-			User usr = AppService.GetUserByEmail(invite.Email);
+			User usr = await AppService.GetUserByEmail(invite.Email);
 			string url = usr != null ?
 						Url.Action(ActionConstants.Index, ControllerConstants.Account, null, protocol: Request.Url.Scheme) :
 						Url.Action(ActionConstants.Register, ControllerConstants.Account, null, protocol: Request.Url.Scheme);
-			Notifications.Add(new BootstrapAlert(String.Format(Strings.InviteResentTo, invite.Email), Variety.Success));
+			Notifications.Add(new BootstrapAlert(string.Format(Strings.InviteResentTo, invite.Email), Variety.Success));
 			AppService.SendInviteEmail(url, invite.Email.Trim());
 			return RedirectToAction(ActionConstants.OrganizationInvitations, ControllerConstants.Account, new { id = invite.OrganizationId });
 		}

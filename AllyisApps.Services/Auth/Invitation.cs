@@ -69,5 +69,10 @@ namespace AllyisApps.Services.Auth
 		/// invitation status
 		/// </summary>
 		public InvitationStatusEnum InvitationStatus { get; set; }
+
+		/// <summary>
+		/// organization name
+		/// </summary>
+		public string OrganizationName { get; set; }
 	}
 }

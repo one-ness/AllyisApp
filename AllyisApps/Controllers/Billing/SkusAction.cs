@@ -4,11 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Services;
-using AllyisApps.ViewModels.Auth;
 using AllyisApps.ViewModels.Billing;
 
 namespace AllyisApps.Controllers.Auth
@@ -26,9 +23,9 @@ namespace AllyisApps.Controllers.Auth
 		public ActionResult Skus(int id)
 		{
 			var model = new SkusViewModel();
-			model.CanSubscribe = this.AppService.CheckOrgAction(AppService.OrgAction.CreateSubscription, id);
+			model.CanSubscribe = AppService.CheckOrgAction(AppService.OrgAction.CreateSubscription, id);
 			model.OrganizationId = id;
-			var collection = this.AppService.GetAllActiveProductsAndSkus();
+			var collection = AppService.GetAllActiveProductsAndSkus();
 			foreach (var item in collection)
 			{
 				var pi = new SkusViewModel.ProductItem();

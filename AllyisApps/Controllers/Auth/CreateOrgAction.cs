@@ -4,10 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Auth;
 
@@ -30,9 +29,9 @@ namespace AllyisApps.Controllers.Auth
 			model.IsCreating = true;
 
 			// create localized countries
-			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
+			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService);
 
-			return this.View(model);
+			return View(model);
 		}
 
 		/// <summary>
@@ -42,26 +41,26 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>The resulting page, Create if unsuccessful else Account Management.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult CreateOrg(EditOrganizationViewModel model)
+		public async Task<ActionResult> CreateOrg(EditOrganizationViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
-				int orgId = this.AppService.SetupOrganization(model.EmployeeId, model.OrganizationName, model.PhoneNumber, model.FaxNumber, model.SiteUrl, null, model.Address, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode);
+				int orgId = await AppService.SetupOrganization(model.EmployeeId, model.OrganizationName, model.PhoneNumber, model.FaxNumber, model.SiteUrl, null, model.Address, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode);
 
 				if (orgId < 0)
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.SubdomainTaken, Variety.Danger));
-					return this.View(model);
+					return View(model);
 				}
 				else
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.OrganizationCreatedNotification, Variety.Success));
-					return this.RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id = orgId });
+					return RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id = orgId });
 				}
 			}
 
 			// Something happened, reload this view
-			return this.View(model);
+			return View(model);
 		}
 	}
 }

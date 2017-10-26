@@ -4,16 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
-using AllyisApps.Services;
-using AllyisApps.Services.Auth;
-using AllyisApps.Services.Crm;
 using AllyisApps.Services.StaffingManager;
-using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -32,7 +27,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			SetNavData(subscriptionId);
 
 			StaffingApplicantViewModel model = new StaffingApplicantViewModel();
-			return this.View(model);
+			return View(model);
 		}
 
 		/// <summary>
@@ -43,12 +38,12 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns></returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult CreateApplicant(int subscriptionId, StaffingApplicantViewModel model)
+		public async Task<ActionResult> CreateApplicant(int subscriptionId, StaffingApplicantViewModel model)
 		{
-			var subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+			var subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			Applicant applicant = InitializeApplicant(subInfo.OrganizationId, model);
-			this.AppService.CreateApplicant(applicant);
-			return this.RedirectToAction("ApplicantList");
+			await AppService.CreateApplicant(applicant);
+			return RedirectToAction("ApplicantList");
 		}
 
 		private static Applicant InitializeApplicant(int orgId, StaffingApplicantViewModel model)

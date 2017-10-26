@@ -38,7 +38,7 @@ namespace AllyisApps.Controllers
 		{
 			// init the service
 			ServiceSettings settings = new ServiceSettings(GlobalSettings.SqlConnectionString, GlobalSettings.SupportEmail, GlobalSettings.SendGridApiKey);
-			this.AppService = new AppService(settings);
+			AppService = new AppService(settings);
 		}
 
 		/// <summary>
@@ -49,8 +49,8 @@ namespace AllyisApps.Controllers
 			get
 			{
 				const string TempDataKey = "Alerts";
-				this.TempData[TempDataKey] = this.TempData[TempDataKey] ?? new List<BootstrapAlert>();
-				return (ICollection<BootstrapAlert>)this.TempData[TempDataKey];
+				TempData[TempDataKey] = TempData[TempDataKey] ?? new List<BootstrapAlert>();
+				return (ICollection<BootstrapAlert>)TempData[TempDataKey];
 			}
 		}
 
@@ -65,7 +65,7 @@ namespace AllyisApps.Controllers
 		/// <returns>Redirection to the user home page.</returns>
 		public ActionResult RouteUserHome()
 		{
-			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
+			return RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
 		}
 
 		/// <summary>
@@ -77,11 +77,11 @@ namespace AllyisApps.Controllers
 		{
 			if (Url.IsLocalUrl(returnUrl))
 			{
-				return this.Redirect(returnUrl);
+				return Redirect(returnUrl);
 			}
 			else
 			{
-				return this.RouteUserHome();
+				return RouteUserHome();
 			}
 		}
 
@@ -103,25 +103,25 @@ namespace AllyisApps.Controllers
 			if (Request.IsAuthenticated)
 			{
 				// an authenticated request MUST have user id in the cookie.
-				CookieData cookie = this.GetCookieData();
+				CookieData cookie = GetCookieData();
 				if (cookie != null && cookie.UserId > 0)
 				{
-					this.AppService.PopulateUserContext(cookie.UserId);
+					AppService.PopulateUserContext(cookie.UserId);
 				}
 
-				if (this.AppService.UserContext != null)
+				if (AppService.UserContext != null)
 				{
 					// user context obtained. set user's language on the thread.
-					if (string.Compare(cultureName, this.AppService.UserContext.PreferedLanguageId, true) != 0)
+					if (string.Compare(cultureName, AppService.UserContext.PreferedLanguageId, true) != 0)
 					{
 						// change it
-						cultureName = ChangeLanguage(this.AppService.UserContext.PreferedLanguageId);
+						cultureName = ChangeLanguage(AppService.UserContext.PreferedLanguageId);
 					}
 				}
 				else
 				{
 					// User context not found
-					this.SignOut();
+					SignOut();
 					Response.Redirect(FormsAuthentication.LoginUrl);
 					return;
 				}
@@ -149,7 +149,7 @@ namespace AllyisApps.Controllers
 				return string.Empty;
 			}
 
-			Language language = this.AppService.GetLanguage(cultureName);
+			Language language = AppService.GetLanguage(cultureName);
 			if (language != null)
 			{
 				CultureInfo cInfo = CultureInfo.CreateSpecificCulture(language.CultureName);
@@ -168,7 +168,7 @@ namespace AllyisApps.Controllers
 		private CookieData GetCookieData()
 		{
 			CookieData result = null;
-			HttpCookie cookie = this.Request.Cookies[FormsAuthentication.FormsCookieName];
+			HttpCookie cookie = Request.Cookies[FormsAuthentication.FormsCookieName];
 			if (cookie != null)
 			{
 				try
@@ -177,7 +177,7 @@ namespace AllyisApps.Controllers
 					{
 						//// decrypt and deserialize the UserContext from the cookie data
 						FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
-						result = this.DeserializeCookie(ticket.UserData);
+						result = DeserializeCookie(ticket.UserData);
 					}
 				}
 				catch
@@ -219,7 +219,7 @@ namespace AllyisApps.Controllers
 			//// get the cookie, set expire time in the past, and set it in response to delete it
 			HttpCookie cookie = FormsAuthentication.GetAuthCookie(FormsAuthentication.FormsCookieName, false);
 			cookie.Expires = DateTime.UtcNow.AddDays(-5);
-			this.Response.Cookies.Add(cookie);
+			Response.Cookies.Add(cookie);
 		}
 	}
 }

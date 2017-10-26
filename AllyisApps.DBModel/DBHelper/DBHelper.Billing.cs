@@ -9,8 +9,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using AllyisApps.DBModel.Billing;
 using System.Threading.Tasks;
+using AllyisApps.DBModel.Billing;
 using Dapper;
 
 namespace AllyisApps.DBModel
@@ -25,13 +25,14 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <returns>The product area string.</returns>
-		public string GetProductAreaBySubscription(int subscriptionId)
+		public async Task<string> GetProductAreaBySubscription(int subscriptionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@subscriptionId", subscriptionId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<string>("[Billing].[GetProductAreaBySubscription]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				var results = await connection.QueryAsync<string>("[Billing].[GetProductAreaBySubscription]", parameters, commandType: CommandType.StoredProcedure);
+				return results.FirstOrDefault();
 			}
 		}
 
@@ -44,7 +45,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@productName", productName);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<int>("[Billing].[GetProductIdByName]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
@@ -63,7 +64,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@productRoleId", productRoleId);
 			parameters.Add("@subscriptionId", subscriptionId);
 			parameters.Add("@userId", userId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				connection.Query("[Billing].[UpdateSubscriptionUserProductRole]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -79,7 +80,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@subscriptionId", subscriptionId);
 			parameters.Add("@userId", userId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				connection.Query("[Billing].[DeleteSubscriptionUser]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -93,7 +94,7 @@ namespace AllyisApps.DBModel
 		/// <param name="productRoleId">Product role to assign (or -1 to remove from organization).</param>
 		/// <param name="productId">ID of Product in question.</param>
 		/// <returns>The number of updated and number of added users.</returns>
-		public Tuple<int, int> UpdateSubscriptionUserRoles(List<int> userIds, int organizationId, int productRoleId, int productId)
+		public async Task<Tuple<int, int>> UpdateSubscriptionUserRoles(List<int> userIds, int organizationId, int productRoleId, int productId)
 		{
 			DataTable userIdsTable = new DataTable();
 			userIdsTable.Columns.Add("userId", typeof(int));
@@ -107,10 +108,10 @@ namespace AllyisApps.DBModel
 			// TODO: instead of providing product id, provide subscription id of the subscription to be modified
 			parameters.Add("@productId", productId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// TODO: split updating user roles and creating new sub users
-				var results = connection.QueryMultiple("[Billing].[UpdateSubscriptionUserRoles]", parameters, commandType: CommandType.StoredProcedure);
+				var results = await connection.QueryMultipleAsync("[Billing].[UpdateSubscriptionUserRoles]", parameters, commandType: CommandType.StoredProcedure);
 				int usersUpdated = results.Read<int>().SingleOrDefault();
 				int usersAdded = results.Read<int>().SingleOrDefault();
 				return Tuple.Create(usersUpdated, usersAdded);
@@ -135,7 +136,7 @@ namespace AllyisApps.DBModel
 			// TODO: instead of providing product id, provide subscription id of the subscription to be modified
 			parameters.Add("@productId", productId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				connection.Execute("[Billing].[DeleteSubscriptionUsers]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -146,26 +147,28 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="subscriptionId">Subscription id.</param>
 		/// <returns>The name of the Sku for the deleted subscription, or null if none was found.</returns>
-		public string Unsubscribe(int subscriptionId)
+		public async Task<string> Unsubscribe(int subscriptionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 
 			parameters.Add("@subscriptionId", subscriptionId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<string>("[Billing].[DeleteSubscription]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				var results = await connection.QueryAsync<string>("[Billing].[DeleteSubscription]", parameters, commandType: CommandType.StoredProcedure);
+				return results.FirstOrDefault();
 			}
 		}
 
 		/// <summary>
 		/// Get Subscription Details by Id.
 		/// </summary>
-		public dynamic GetSubscriptionDetailsById(int subscriptionId)
+		public async Task<dynamic> GetSubscriptionDetailsById(int subscriptionId)
 		{
-			using (var con = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
 				// default blank object
-				return con.Query<dynamic>("[Billing].[GetSubscriptionDetailsById] @a", new { a = subscriptionId }).FirstOrDefault();
+				var results = await con.QueryAsync<dynamic>("[Billing].[GetSubscriptionDetailsById] @a", new { a = subscriptionId });
+				return results.FirstOrDefault();
 			}
 		}
 
@@ -174,7 +177,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		public async Task<dynamic> GetSubscriptionsAsync(int orgId)
 		{
-			using (var con = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
 				return (await con.QueryAsync<dynamic>("Billing.GetSubscriptions @a", new { a = orgId })).ToList();
 			}
@@ -189,7 +192,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@subscriptionId", subscriptionId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default blank object
 				return connection.Query<SubscriptionUserDBEntity>("[Billing].[GetSubscriptionUsersBySubscriptionId]", parameters, commandType: CommandType.StoredProcedure);
@@ -201,13 +204,14 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="subscriptionId"></param>
 		/// <returns></returns>
-		public string GetSubscriptionName(int subscriptionId)
+		public async Task<string> GetSubscriptionName(int subscriptionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@subscriptionId", subscriptionId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<string>("[Billing].[GetSubscriptionName]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				var results = await connection.QueryAsync<string>("[Billing].[GetSubscriptionName]", parameters, commandType: CommandType.StoredProcedure);
+				return results.SingleOrDefault();
 			}
 		}
 
@@ -220,7 +224,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@productId", productId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<ProductDBEntity>("[Billing].[GetProductById]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
@@ -232,7 +236,7 @@ namespace AllyisApps.DBModel
 		/// <returns>List of ProductDBEntity.</returns>
 		public List<ProductDBEntity> GetProductList()
 		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default blank list
 				return connection.Query<ProductDBEntity>("[Billing].[GetProductList]").ToList();
@@ -245,28 +249,24 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		public void UpdateSubscriptionName(int subscriptionId, string subscriptionName)
 		{
-			using (var con = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
 				con.Execute("Billing.UpdateSubscriptionName @a, @b", new { a = subscriptionId, b = subscriptionName });
 			}
 		}
 
 		/// <summary>
-		/// updates the sku and name for the given subscription
-		/// </summary>
-		public void UpdateSubscriptionSkuAndName(int subscriptionId, string subscriptionName, int skuId)
-		{
-			using (var con = new SqlConnection(this.SqlConnectionString))
-			{
-				con.Execute("Billing.UpdateSubscriptionSkuAndName @a, @b, @c", new { a = subscriptionId, b = subscriptionName, c = skuId });
-			}
-		}
-		/// <summary>
 		/// Creates subscription
 		/// Adds all the organization users as users to the subscription
 		/// Adds the user who subscribed to the subscription as a manager.
 		/// </summary>
-		public int CreateSubscription(int organizationId, int skuId, string subscriptionName, int userId, int productRoleId)
+		/// <param name="organizationId">Sets OrganizationId.</param>
+		/// <param name="skuId">Sku -- the subscription item you're subscribing to.</param>
+		/// <param name="subscriptionName">The subscription name.</param>
+		/// <param name="userId">The user who is subscribing -- we need to make them manager.</param>
+		/// <param name="productRoleId">product role</param>
+		/// <returns>The new subscription id.</returns>
+		public async Task<int> CreateSubscription(int organizationId, int skuId, string subscriptionName, int userId, int productRoleId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
@@ -275,9 +275,10 @@ namespace AllyisApps.DBModel
 			parameters.Add("@userId", userId);
 			parameters.Add("@productRoleId", productRoleId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<int>("[Billing].[CreateSubscription]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				var results = await connection.QueryAsync<int>("[Billing].[CreateSubscription]", parameters, commandType: CommandType.StoredProcedure);
+				return results.SingleOrDefault();
 			}
 		}
 
@@ -290,7 +291,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@skuId", skuId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default empty object
 				return connection.Query<SkuDBEntity>("[Billing].[GetSkuById]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
@@ -302,7 +303,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		public List<SkuDBEntity> GetAllSkus()
 		{
-			using (var con = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
 				return con.Query<SkuDBEntity>("Billing.GetAllSkus").ToList();
 			}
@@ -334,7 +335,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@skuId", productId);
 			parameters.Add("@description", productId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				connection.Execute("[Billing].[CreateSubscriptionPlan]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -348,7 +349,7 @@ namespace AllyisApps.DBModel
 		/// <param name="customerId">The id of the customer object.</param>
 		/// <param name="skuId">The id of the selected sku, for the billing history item.</param>
 		/// <param name="description">A description for the billing history item.</param>
-		public void CreateStripeOrganizationCustomer(int organizationId, int userId, string customerId, int? skuId, string description)
+		public async Task CreateStripeOrganizationCustomer(int organizationId, int userId, string customerId, int? skuId, string description)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
@@ -357,9 +358,9 @@ namespace AllyisApps.DBModel
 			parameters.Add("@skuId", skuId);
 			parameters.Add("@description", description);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				connection.Query("[Billing].[CreateStripeOrganizationCustomer]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.QueryAsync("[Billing].[CreateStripeOrganizationCustomer]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -368,17 +369,18 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">The id of the organization.</param>
 		/// <returns>The Organization custormer.</returns>
-		public string GetOrgCustomer(int orgId)
+		public async Task<string> GetOrgCustomer(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@orgId", orgId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default -1
-				return connection.Query<string>(
+				var queryResults = await connection.QueryAsync<string>(
 				   "[Billing].[GetStripeOrgCustomer]",
 				   parameters,
-				   commandType: CommandType.StoredProcedure).SingleOrDefault();
+				   commandType: CommandType.StoredProcedure);
+				return queryResults.SingleOrDefault();
 			}
 		}
 
@@ -393,7 +395,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgid);
 			parameters.Add("@customerId", customerid);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default -1
 				return connection.Query<string>(
@@ -426,12 +428,23 @@ namespace AllyisApps.DBModel
 			parameters.Add("@userId", userId);
 			parameters.Add("@skuId", skuId);
 			parameters.Add("@description", description);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				connection.Query(
 				   "[Billing].[UpdateCustomerSubscription]",
 				   parameters,
 				   commandType: CommandType.StoredProcedure).SingleOrDefault();
+			}
+		}
+
+		/// <summary>
+		/// updates the sku and name for the given subscription
+		/// </summary>
+		public async void UpdateSubscriptionSkuAndName(int subscriptionId, string subscriptionName, int skuId)
+		{
+			using (var con = new SqlConnection(SqlConnectionString))
+			{
+				await con.ExecuteAsync("Billing.UpdateSubscriptionSkuAndName @a, @b, @c", new { a = subscriptionId, b = subscriptionName, c = skuId });
 			}
 		}
 
@@ -445,7 +458,7 @@ namespace AllyisApps.DBModel
 		/// <param name="skuId">Sku Id for the history item.</param>
 		/// <param name="description">Description for the history item.</param>
 		/// <returns>The subscription plan id of the delted subscription, or null if none found.</returns>
-		public string DeleteSubscriptionPlanAndAddHistory(int orgId, string customerId, int userId, int? skuId, string description)
+		public async Task<string> DeleteSubscriptionPlanAndAddHistory(int orgId, string customerId, int userId, int? skuId, string description)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
@@ -453,23 +466,24 @@ namespace AllyisApps.DBModel
 			parameters.Add("@userId", userId);
 			parameters.Add("@skuId", skuId);
 			parameters.Add("@description", description);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<string>(
+				var results = await connection.QueryAsync<string>(
 				   "[Billing].[DeleteSubPlanAndAddHistory]",
 				   parameters,
-				   commandType: CommandType.StoredProcedure).FirstOrDefault();
+				   commandType: CommandType.StoredProcedure);
+				return results.FirstOrDefault();
 			}
 		}
 
 		/// <summary>
 		/// Deletes a subscription.
 		/// </summary>
-		public void DeleteSubscription(int subscriptionid)
+		public async void DeleteSubscription(int subscriptionid)
 		{
-			using (var con = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				con.Execute("Billing.DeleteSubscription @a", new { a = subscriptionid });
+				await con.ExecuteAsync("Billing.DeleteSubscription @a", new { a = subscriptionid });
 			}
 		}
 
@@ -480,7 +494,7 @@ namespace AllyisApps.DBModel
 		/// <param name="orgid">The associated organization id.</param>
 		/// <param name="userid">The associated user id.</param>
 		/// <param name="skuid">Optional product id.</param>
-		public void AddBillingHistory(string description, int orgid, int userid, int? skuid)
+		public async Task AddBillingHistory(string description, int orgid, int userid, int? skuid)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@description", description);
@@ -488,9 +502,9 @@ namespace AllyisApps.DBModel
 			parameters.Add("@userId", userid);
 			parameters.Add("@skuId", skuid);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				connection.Execute("[Billing].[CreateBillingHistory]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[Billing].[CreateBillingHistory]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -498,18 +512,19 @@ namespace AllyisApps.DBModel
 		/// Removes billing information for an organization.
 		/// </summary>
 		/// <param name="orgid">The id of the organization to remove the billing information for.</param>
-		public void RemoveBilling(int orgid)
+		public async void RemoveBilling(int orgid)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@orgId", orgid);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default -1
-				connection.Query<int>(
+				var results = await connection.QueryAsync<int>(
 				  "[Billing].[DeleteBillingInformation]",
 				  parameters,
-				  commandType: CommandType.StoredProcedure).SingleOrDefault();
+				  commandType: CommandType.StoredProcedure);
+				results.SingleOrDefault();
 			}
 		}
 
@@ -518,17 +533,18 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgid">Sets productId.</param>
 		/// <returns>List of prices.</returns>
-		public IEnumerable<int> GetSubscriptionPlanPrices(int orgid)
+		public async Task<IEnumerable<int>> GetSubscriptionPlanPrices(int orgid)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@orgId", orgid);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default empty list
-				return connection.Query<int>(
+				var results = await connection.QueryAsync<int>(
 				  "[Billing].[GetSubscriptionPlanPricesByOrg]",
 				  parameters,
 				  commandType: CommandType.StoredProcedure);
+				return results;
 			}
 		}
 
@@ -539,7 +555,7 @@ namespace AllyisApps.DBModel
 		/// <returns>The collection of OrganizationSubscription objects for this org.</returns>
 		public IEnumerable<SubscriptionDBEntity> GetSubscriptionDetails(int organizationId)
 		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default empty list
 				return connection.Query<SubscriptionDBEntity>("[Billing].[GetOrgSkus]", new { OrganizationId = organizationId }, commandType: CommandType.StoredProcedure);
@@ -555,7 +571,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default empty list
 				return connection.Query<SubscriptionDisplayDBEntity>("[Billing].[GetSubscriptionsDisplayByOrg]", parameters, commandType: CommandType.StoredProcedure);
@@ -571,7 +587,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@subscriptionId", subscriptionId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default null
 				return connection.Query<SubscriptionRoleDBEntity>("[Billing].[GetProductRolesFromSubscription]", parameters, commandType: CommandType.StoredProcedure);
@@ -583,13 +599,13 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>List of BillingHistoryItem.</returns>
-		public IEnumerable<BillingHistoryItemDBEntity> GetBillingHistoryByOrg(int orgId)
+		public async Task<IEnumerable<BillingHistoryItemDBEntity>> GetBillingHistoryByOrg(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<BillingHistoryItemDBEntity>("[Billing].[GetBillingHistoryByOrg]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.QueryAsync<BillingHistoryItemDBEntity>("[Billing].[GetBillingHistoryByOrg]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -607,7 +623,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@orgId", orgId);
 			parameters.Add("@skuId", skuId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
 					"[Billing].[GetProductSubscriptionInfo]",
@@ -627,7 +643,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		public Tuple<List<ProductDBEntity>, List<SkuDBEntity>> GetAllActiveProductsAndSkus()
 		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
 					"[Billing].[GetAllActiveProductsAndSkus]",
