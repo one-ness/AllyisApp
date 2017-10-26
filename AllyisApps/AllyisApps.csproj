@@ -359,6 +359,8 @@
     <Compile Include="Controllers\Auth\CreateOrgAction.cs" />
     <Compile Include="Controllers\Auth\EditMemberAction.cs" />
     <Compile Include="Controllers\Auth\EditProfileAction.cs" />
+    <Compile Include="Controllers\Auth\Permissions\ManageOrgPermissionsAction.cs" />
+    <Compile Include="Controllers\Auth\Permissions\ManageSubPermissionsAction.cs" />
     <Compile Include="Controllers\Billing\EditSubscriptionAction.cs" />
     <Compile Include="Controllers\Auth\ForgotPasswordAction.cs" />
     <Compile Include="Controllers\Auth\ImportAction.cs" />
