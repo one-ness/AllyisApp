@@ -6,71 +6,71 @@
 		{
 			@Html.AntiForgeryToken()
 			@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
-			<div class="ovrd-row row">
-				<div class="ovrd-col-md-6 col-md-6 col sm-control-width">
+			<div class="row">
+				<div class="col-md-6 sm-control-width">
 
-					<div class="ovrd-form-group form-group">
+					<div class="form-group">
 						@Html.ReqLabelFor(model => model.CustomerName, Strings.Name)
-						@Html.EditorFor(model => model.CustomerName, new { htmlAttributes = new { @class = "ovrd-form-control form-control" } })
+						@Html.EditorFor(model => model.CustomerName, new { htmlAttributes = new { @class = "form-control" } })
 						@Html.ValidationMessageFor(model => model.CustomerName, string.Empty, new { @class = "text-danger" })
 					</div>
 
-					<div class="ovrd-form-group form-group">
+					<div class="form-group">
 						@Html.LabelFor(model => model.Address, Strings.Address)
-						@Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "ovrd-form-control form-control" } })
+						@Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
 						@Html.ValidationMessageFor(model => model.Address, string.Empty, new { @class = "text-danger" })
 					</div>
 
-					<div class="ovrd-form-group form-group">
+					<div class="form-group">
 						@Html.LabelFor(model => model.City, Strings.City)
-						@Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "ovrd-form-control form-control" } })
+						@Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
 						@Html.ValidationMessageFor(model => model.City, string.Empty, new { @class = "text-danger" })
 					</div>
 
-					<div class="ovrd-form-group form-group">
+					<div class="form-group">
 						@Html.LabelFor(m => m.Country, Strings.Country)
-						@Html.DropDownListFor(m => m.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new { @class = "ovrd-form-control form-control", @id = ViewConstants.DdlCountriesId })
+						@Html.DropDownListFor(m => m.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new { @class = "form-control", @id = ViewConstants.DdlCountriesId })
 					</div>
-					<div class="ovrd-form-group form-group">
+					<div class="form-group">
 						@Html.LabelFor(m => m.State, Strings.State)
-						@Html.DropDownListFor(m => m.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @class = "ovrd-form-control form-control", @id = ViewConstants.DdlStatesId })
+						@Html.DropDownListFor(m => m.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @class = "form-control", @id = ViewConstants.DdlStatesId })
 					</div>
 
-					<div class="ovrd-form-group form-group">
+					<div class="form-group">
 						@Html.LabelFor(model => model.PostalCode, Strings.PostalCode)
-						@Html.EditorFor(model => model.PostalCode, new { htmlAttributes = new { @class = "ovrd-form-control form-control" } })
+						@Html.EditorFor(model => model.PostalCode, new { htmlAttributes = new { @class = "form-control" } })
 						@Html.ValidationMessageFor(model => model.PostalCode, string.Empty, new { @class = "text-danger" })
 					</div>
 				</div>
-				<div class="ovrd-col-md-6 col-md-6 col sm-control-width">
+				<div class="col-md-6 sm-control-width">
 
-					<div class="ovrd-form-group form-group">
+					<div class="form-group">
 						@Html.ReqLabelFor(model => model.ContactEmail, Strings.ContactEmail)
-						@Html.EditorFor(model => model.ContactEmail, new { htmlAttributes = new { @class = "ovrd-form-control form-control" } })
+						@Html.EditorFor(model => model.ContactEmail, new { htmlAttributes = new { @class = "form-control" } })
 						@Html.ValidationMessageFor(model => model.ContactEmail, string.Empty, new { @class = "text-danger" })
 					</div>
 
-					<div class="ovrd-form-group form-group">
+					<div class="form-group">
 						@Html.LabelFor(model => model.ContactPhoneNumber, Strings.ContactPhoneNumber)
-						@Html.EditorFor(model => model.ContactPhoneNumber, new { htmlAttributes = new { @class = "ovrd-form-control form-control" } })
+						@Html.EditorFor(model => model.ContactPhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
 						@Html.ValidationMessageFor(model => model.ContactPhoneNumber, string.Empty, new { @class = "text-danger" })
 					</div>
 
-					<div class="ovrd-form-group form-group">
+					<div class="form-group">
 						@Html.LabelFor(model => model.FaxNumber, Strings.FaxNumber)
-						@Html.EditorFor(model => model.FaxNumber, new { htmlAttributes = new { @class = "ovrd-form-control form-control" } })
+						@Html.EditorFor(model => model.FaxNumber, new { htmlAttributes = new { @class = "form-control" } })
 						@Html.ValidationMessageFor(model => model.FaxNumber, string.Empty, new { @class = "text-danger" })
 					</div>
 
-					<div class="ovrd-form-group form-group">
+					<div class="form-group">
 						@Html.LabelFor(model => model.EIN, Strings.EIN)
-						@Html.EditorFor(model => model.EIN, new { htmlAttributes = new { @class = "ovrd-form-control form-control" } })
+						@Html.EditorFor(model => model.EIN, new { htmlAttributes = new { @class = "form-control" } })
 						@Html.ValidationMessageFor(model => model.EIN, string.Empty, new { @class = "text-danger" })
 					</div>
 
-					<div class="ovrd-form-group form-group">
+					<div class="form-group">
 						@Html.ReqLabelFor(m => m.CustomerOrgId, Strings.CustomerOrgId)
-						@Html.TextBoxFor(m => m.CustomerOrgId, new { @class = "ovrd-form-control form-control", @maxlength = "16", @placeholder = Model.CustomerOrgId })
+						@Html.TextBoxFor(m => m.CustomerOrgId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.CustomerOrgId })
 						@Html.ValidationMessageFor(model => model.CustomerOrgId, string.Empty, new { @class = "text-danger" })
 					</div>
 
@@ -80,16 +80,16 @@
 					@Html.HiddenFor(m => m.SubscriptionId)
 					@Html.HiddenFor(m => m.AddressId)
 
-					<div class="ovrd-form-group form-group allyis-action-buttons">
+					<div class="form-group allyis-action-buttons">
 						@if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)
 						{
-							<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Customer)" class="ovrd-btn btn ovrd-btn-default btn-default">@Strings.Cancel</a>
-							<input type="submit" value="@Strings.Create" class="ovrd-btn btn ovrd-btn-primary btn-primary" />
+							<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Customer)" class="btn btn-default">@Strings.Cancel</a>
+							<input type="submit" value="@Strings.Create" class="btn btn-primary" />
 						}
 						else
 						{
-							<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Customer)" class="ovrd-btn btn ovrd-btn-default btn-default">@Strings.Cancel</a>
-							<input type="submit" value="@Strings.Save" class="ovrd-btn btn ovrd-btn-primary btn-primary" />
+							<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Customer)" class="btn btn-default">@Strings.Cancel</a>
+							<input type="submit" value="@Strings.Save" class="btn btn-primary" />
 						}
 					</div>
 				</div>
@@ -98,8 +98,8 @@
 		<br />
 		@if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)
 		{
-			<div class="ovrd-row row">
-				<div class="ovrd-col-md-6 col-md-6 col sm-control-width">
+			<div class="row">
+				<div class="col-md-6 sm-control-width">
 					<label>@Strings.Upload</label>
 					@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
 					{
@@ -113,13 +113,13 @@
 
 							<div style="margin-top: 10px; margin-bottom: 15px; float:right;">
 								<a class="btn btn-primary" onclick="$('input[id=upload-box]').click();" title="Choose customers Excel entries to upload">@Strings.ChooseFile</a>
-								<input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="ovrd-btn btn ovrd-btn-primary btn-primary" title="Upload customers Excel entries" />
+								<input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" title="Upload customers Excel entries" />
 							</div>
 					}
 					@using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Customer, null, FormMethod.Get, new { style = "display: flex; justify-content: space-between;", id = "template-form" }))
 					{
 						<div style="margin-top:10px; float:left">
-							<input type="submit" form="template-form" id="template-button" value="@Strings.Template" class="ovrd-btn btn ovrd-btn-primary btn-primary" title="Download customers Excel template" />
+							<input type="submit" form="template-form" id="template-button" value="@Strings.Template" class="btn btn-primary" title="Download customers Excel template" />
 						</div>
 					}
 				</div>

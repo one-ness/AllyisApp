@@ -6,11 +6,11 @@
 
 <div class="flexbox-row flexbox-row-2-col-collapse">
 
-	<div class="ovrd-panel panel ovrd-panel-info panel-info" style="position: relative">
-		<div class="ovrd-panel-heading panel-heading">
-			<h1 class="ovrd-panel-title panel-title">@Strings.CustomerList</h1>
+	<div class="panel panel-info" style="position: relative">
+		<div class="panel-heading">
+			<h1 class="panel-title">@Strings.CustomerList</h1>
 		</div>
-		<div class="ovrd-panel-body panel-body list-group" id="Customers">
+		<div class="panel-body list-group" id="Customers">
 			@foreach (CustomerProjectViewModel customer in Model.InactiveCustomerAndProjects)
 			{
 				if (customer.CustomerInfo.IsActive.Value)
@@ -29,11 +29,11 @@
 		</div>
 	</div>
 
-	<div class="ovrd-panel panel ovrd-panel-info panel-info" style="position: relative">
-		<div class="ovrd-panel-heading panel-heading">
-			<h1 class="ovrd-panel-title panel-title">@Strings.Projects</h1>
+	<div class="panel panel-info" style="position: relative">
+		<div class="panel-heading">
+			<h1 class="panel-title">@Strings.Projects</h1>
 		</div>
-		<div class="ovrd-panel-body panel-body list-group" id="InactiveProjects">
+		<div class="panel-body list-group" id="InactiveProjects">
 			<!--inactive projects belong to chosen customer will be populated here-->
 		</div>
 	</div>
@@ -41,12 +41,12 @@
 	{
 		<div style="position: relative">
 			<div class="pull-right">
-				<button type="button" onclick="ReactivateCustomer()" class="ovrd-btn btn ovrd-btn-primary btn-primary" id="reactivateCustomerButton" title="Reactivate Customer"><i class="glyphicon glyphicon-plus"></i></button>
+				<button type="button" onclick="ReactivateCustomer()" class="btn btn-primary" id="reactivateCustomerButton" title="Reactivate Customer"><i class="glyphicon glyphicon-plus"></i></button>
 			</div>
 		</div>
 		<div style="position: relative">
 			<div class="pull-right">
-				<button type="button" onclick="ReactivateProject()" class="ovrd-btn btn ovrd-btn-primary btn-primary" id="reactivateProjectButton" title="Reactivate Project"><i class="glyphicon glyphicon-plus"></i></button>
+				<button type="button" onclick="ReactivateProject()" class="btn btn-primary" id="reactivateProjectButton" title="Reactivate Project"><i class="glyphicon glyphicon-plus"></i></button>
 			</div>
 		</div>
 	}

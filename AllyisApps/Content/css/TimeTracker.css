@@ -214,6 +214,9 @@ a:hover, a:focus {
 	background-color: #c5dcef;
 }
 
+.sidebar-offcanvas {
+	padding: 0 15px 0 10px;
+}
 
 
 
@@ -245,7 +248,8 @@ a:hover, a:focus {
 
 
 
-/*nav {
+
+nav {
 	display: block;
 }
 
