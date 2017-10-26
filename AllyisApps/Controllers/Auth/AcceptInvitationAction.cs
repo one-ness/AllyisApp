@@ -22,6 +22,7 @@ namespace AllyisApps.Controllers.Auth
             }
             else
             {
+                AppService.PopulateUserContext(AppService.UserContext.UserId);
                 var invitation = await AppService.GetInvitationByID(id);
                 var org = await AppService.GetOrganization(invitation.OrganizationId);
                 string res = string.Format("You have successfully joined {0}", org.OrganizationName);

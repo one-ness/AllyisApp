@@ -113,7 +113,7 @@ namespace AllyisApps.Services
                         var result4 = await (this.DBHelper.UpdateSubscriptionUserRoles(new List<int>() { UserContext.UserId }, inviteInfo.OrganizationId, smRole, (int)ProductIdEnum.StaffingManager));
                     }
                 }
-                NotifyInviteAcceptAsync(invitationId);
+                //NotifyInviteAcceptAsync(invitationId);
             }
             return result;
         }
