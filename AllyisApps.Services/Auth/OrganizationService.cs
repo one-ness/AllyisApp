@@ -32,8 +32,8 @@ namespace AllyisApps.Services
             if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException("employeeId");
             if (string.IsNullOrWhiteSpace(organizationName)) throw new ArgumentNullException("organizationName");
 
-			return await DBHelper.SetupOrganization(UserContext.UserId, (int)OrganizationRoleEnum.Owner, employeeId, organizationName, phoneNumber, faxNumber, siteUrl, subDomainName, address1, city, stateId, postalCode, countryCode);
-		}
+            return await DBHelper.SetupOrganization(UserContext.UserId, (int)OrganizationRoleEnum.Owner, employeeId, organizationName, phoneNumber, faxNumber, siteUrl, subDomainName, address1, city, stateId, postalCode, countryCode);
+        }
 
         /// <summary>
         /// Gets an <see cref="Organization"/>.
@@ -44,63 +44,63 @@ namespace AllyisApps.Services
         {
             if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
 
-			CheckOrgAction(OrgAction.ReadOrganization, orgId);
-			return InitializeOrganization(await DBHelper.GetOrganization(orgId));
-		}
+            CheckOrgAction(OrgAction.ReadOrganization, orgId);
+            return InitializeOrganization(await DBHelper.GetOrganization(orgId));
+        }
 
         public async Task<List<Invitation>> GetInvitationsAsync(int orgId)
         {
             if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
 
-			CheckOrgAction(OrgAction.ReadInvitationsList, orgId);
-			var collection = await DBHelper.GetInvitationsAsync(orgId, (int)InvitationStatusEnum.Any);
-			var result = new List<Invitation>();
-			foreach (var item in collection)
-			{
-				var data = new Invitation();
-				data.DecisionDateUtc = item.DecisionDateUtc;
-				data.Email = item.Email;
-				data.EmployeeId = item.EmployeeId;
-				data.FirstName = item.FirstName;
-				data.InvitationCreatedUtc = item.InvitationCreatedUtc;
-				data.InvitationId = item.InvitationId;
-				data.InvitationStatus = (InvitationStatusEnum)item.InvitationStatus;
-				data.LastName = item.LastName;
-				data.OrganizationId = orgId;
-				data.ProductRolesJson = item.ProductRolesJson;
-				result.Add(data);
-			}
+            CheckOrgAction(OrgAction.ReadInvitationsList, orgId);
+            var collection = await DBHelper.GetInvitationsAsync(orgId, (int)InvitationStatusEnum.Any);
+            var result = new List<Invitation>();
+            foreach (var item in collection)
+            {
+                var data = new Invitation();
+                data.DecisionDateUtc = item.DecisionDateUtc;
+                data.Email = item.Email;
+                data.EmployeeId = item.EmployeeId;
+                data.FirstName = item.FirstName;
+                data.InvitationCreatedUtc = item.InvitationCreatedUtc;
+                data.InvitationId = item.InvitationId;
+                data.InvitationStatus = (InvitationStatusEnum)item.InvitationStatus;
+                data.LastName = item.LastName;
+                data.OrganizationId = orgId;
+                data.ProductRolesJson = item.ProductRolesJson;
+                result.Add(data);
+            }
 
             return result;
         }
 
-		/// <summary>
-		/// get a list of subscriptions for the given organization
-		/// </summary>
-		public async Task<List<Subscription>> GetSubscriptionsAsync(int orgId)
-		{
-			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
-			CheckOrgAction(OrgAction.ReadSubscriptionsList, orgId);
-			var result = new List<Subscription>();
-			dynamic entities = await DBHelper.GetSubscriptionsAsync(orgId);
-			foreach (var item in entities)
-			{
-				var data = new Subscription();
-				data.ProductAreaUrl = item.ArealUrl;
-				data.IsActive = item.IsActive;
-				data.NumberOfUsers = item.NumberOfUsers ?? 0;
-				data.OrganizationId = item.OrganizationId;
-				data.ProductDescription = item.ProductDescription;
-				data.ProductId = (ProductIdEnum)item.ProductId;
-				data.ProductName = item.ProductName;
-				data.PromoExpirationDateUtc = item.PromoExpirationDateUtc;
-				data.SkuId = (SkuIdEnum)item.SkuId;
-				data.SkuName = item.SkuName;
-				data.CreatedUtc = item.SubscriptionCreatedUtc;
-				data.SubscriptionId = item.SubscriptionId;
-				data.SubscriptionName = item.SubscriptionName;
-				result.Add(data);
-			}
+        /// <summary>
+        /// get a list of subscriptions for the given organization
+        /// </summary>
+        public async Task<List<Subscription>> GetSubscriptionsAsync(int orgId)
+        {
+            if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
+            CheckOrgAction(OrgAction.ReadSubscriptionsList, orgId);
+            var result = new List<Subscription>();
+            dynamic entities = await DBHelper.GetSubscriptionsAsync(orgId);
+            foreach (var item in entities)
+            {
+                var data = new Subscription();
+                data.ProductAreaUrl = item.ArealUrl;
+                data.IsActive = item.IsActive;
+                data.NumberOfUsers = item.NumberOfUsers ?? 0;
+                data.OrganizationId = item.OrganizationId;
+                data.ProductDescription = item.ProductDescription;
+                data.ProductId = (ProductIdEnum)item.ProductId;
+                data.ProductName = item.ProductName;
+                data.PromoExpirationDateUtc = item.PromoExpirationDateUtc;
+                data.SkuId = (SkuIdEnum)item.SkuId;
+                data.SkuName = item.SkuName;
+                data.CreatedUtc = item.SubscriptionCreatedUtc;
+                data.SubscriptionId = item.SubscriptionId;
+                data.SubscriptionName = item.SubscriptionName;
+                result.Add(data);
+            }
 
             return result;
         }
@@ -117,48 +117,48 @@ namespace AllyisApps.Services
             Organization org = InitializeOrganization(spResults.Item1);
             org.Users = spResults.Item2.Select(oudb => InitializeOrganizationUser(oudb)).ToList();
             org.Subscriptions = spResults.Item3.Select(sddb => InitializeSubscription(sddb)).ToList();
-            org.Invitations = spResults.Item4.Select(idb => InitializeInvitationInfo(idb, org)).ToList();
+            org.Invitations = spResults.Item4.Select(idb => InitializeInvitationInfo(idb)).ToList();
             org.StripeToken = spResults.Item5;
             return org;
         }
 
-		/// <summary>
-		/// Updates an organization chosen by the current user.
-		/// </summary>
-		public async Task<bool> UpdateOrganization(int organizationId, string organizationName, string siteUrl, int? addressId, string address1, string city, int? stateId, string countryCode, string postalCode, string phoneNumber, string faxNumber, string subDomain)
-		{
-			if (organizationId <= 0) throw new ArgumentOutOfRangeException("organizationId");
-			if (string.IsNullOrWhiteSpace(organizationName)) throw new ArgumentNullException("organizationName");
+        /// <summary>
+        /// Updates an organization chosen by the current user.
+        /// </summary>
+        public async Task<bool> UpdateOrganization(int organizationId, string organizationName, string siteUrl, int? addressId, string address1, string city, int? stateId, string countryCode, string postalCode, string phoneNumber, string faxNumber, string subDomain)
+        {
+            if (organizationId <= 0) throw new ArgumentOutOfRangeException("organizationId");
+            if (string.IsNullOrWhiteSpace(organizationName)) throw new ArgumentNullException("organizationName");
 
-			CheckOrgAction(OrgAction.EditOrganization, organizationId);
+            CheckOrgAction(OrgAction.EditOrganization, organizationId);
 
-			return await DBHelper.UpdateOrganization(organizationId, organizationName, siteUrl, addressId, address1, city, stateId, countryCode, postalCode, phoneNumber, faxNumber, subDomain) > 0;
-		}
+            return await DBHelper.UpdateOrganization(organizationId, organizationName, siteUrl, addressId, address1, city, stateId, countryCode, postalCode, phoneNumber, faxNumber, subDomain) > 0;
+        }
 
-		/// <summary>
-		/// Deletes the user's current chosen organization.
-		/// </summary>
-		/// <returns>Returns false if permissions fail.</returns>
-		public async Task DeleteOrganization(int orgId)
-		{
-			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
-			CheckOrgAction(OrgAction.DeleteOrganization, orgId);
-			await DBHelper.DeleteOrganization(orgId);
-		}
+        /// <summary>
+        /// Deletes the user's current chosen organization.
+        /// </summary>
+        /// <returns>Returns false if permissions fail.</returns>
+        public async Task DeleteOrganization(int orgId)
+        {
+            if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
+            CheckOrgAction(OrgAction.DeleteOrganization, orgId);
+            await DBHelper.DeleteOrganization(orgId);
+        }
 
-		/// <summary>
-		/// Creates an invitation for a new user in the database, and also sends an email to the new user with their access code.
-		/// </summary>
-		public async Task<int> InviteUser(string url, string email, string firstName, string lastName, int organizationId, OrganizationRoleEnum organizationRoleId, string employeedId, string prodJson)
-		{
-			if (organizationId <= 0) throw new ArgumentOutOfRangeException("organizationId");
-			CheckOrgAction(OrgAction.AddUserToOrganization, organizationId);
-			if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException("url");
-			if (string.IsNullOrWhiteSpace(email)) throw new ArgumentNullException("email");
-			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException("firstName");
-			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException("lastName");
-			if (string.IsNullOrWhiteSpace(employeedId)) throw new ArgumentNullException("employeedId");
-			if (string.IsNullOrWhiteSpace(prodJson)) throw new ArgumentNullException("employeedId");
+        /// <summary>
+        /// Creates an invitation for a new user in the database, and also sends an email to the new user with their access code.
+        /// </summary>
+        public async Task<int> InviteUser(string url, string email, string firstName, string lastName, int organizationId, OrganizationRoleEnum organizationRoleId, string employeedId, string prodJson)
+        {
+            if (organizationId <= 0) throw new ArgumentOutOfRangeException("organizationId");
+            CheckOrgAction(OrgAction.AddUserToOrganization, organizationId);
+            if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException("url");
+            if (string.IsNullOrWhiteSpace(email)) throw new ArgumentNullException("email");
+            if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException("firstName");
+            if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException("lastName");
+            if (string.IsNullOrWhiteSpace(employeedId)) throw new ArgumentNullException("employeedId");
+            if (string.IsNullOrWhiteSpace(prodJson)) throw new ArgumentNullException("employeedId");
 
             // Creation of invitation
             var result = await DBHelper.CreateInvitation(email, firstName, lastName, organizationId, (int)organizationRoleId, employeedId, prodJson);
@@ -179,31 +179,31 @@ namespace AllyisApps.Services
             return result;
         }
 
-		/// <summary>
-		/// Send email for invite.
-		/// </summary>
-		/// <param name="url"></param>
-		/// <param name="email"></param>
-		public void SendInviteEmail(string url, string email)
-		{
-			// Send invitation email
-			string orgName = string.Empty;
-			string htmlbody = string.Format(
-				"{0} {1} has requested you join their organization on Allyis Apps{2}!<br /> Click <a href={3}>Here</a> to create an account and join!",
-				UserContext.FirstName,
-				UserContext.LastName,
-				orgName,
-				url);
+        /// <summary>
+        /// Send email for invite.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="email"></param>
+        public void SendInviteEmail(string url, string email)
+        {
+            // Send invitation email
+            string orgName = string.Empty;
+            string htmlbody = string.Format(
+                "{0} {1} has requested you join their organization on Allyis Apps{2}!<br /> Click <a href={3}>Here</a> to create an account and join!",
+                UserContext.FirstName,
+                UserContext.LastName,
+                orgName,
+                url);
 
-			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
-			var task = Mailer.SendEmailAsync(
-				ServiceSettings.SupportEmail,
-				email,
-				"Join Allyis Apps!",
-				msgbody);
-			// TODO: how to indicate there was an error sending the email? how to send the invite email again in that case?
-			var mailSuccess = task.Result;
-		}
+            string msgbody = new System.Web.HtmlString(htmlbody).ToString();
+            var task = Mailer.SendEmailAsync(
+                ServiceSettings.SupportEmail,
+                email,
+                "Join Allyis Apps!",
+                msgbody);
+            // TODO: how to indicate there was an error sending the email? how to send the invite email again in that case?
+            var mailSuccess = task.Result;
+        }
 
         public async void NotifyInviteAcceptAsync(int inviteId)
         {
@@ -271,14 +271,14 @@ namespace AllyisApps.Services
         {
             if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
 
-			CheckOrgAction(OrgAction.ReadUsersList, orgId);
-			var result = new List<OrganizationUser>();
-			var collection = await DBHelper.GetOrganizationUsersAsync(orgId);
-			foreach (var item in collection)
-			{
-				var data = this.InitializeOrganizationUser(item);
-				result.Add(data);
-			}
+            CheckOrgAction(OrgAction.ReadUsersList, orgId);
+            var result = new List<OrganizationUser>();
+            var collection = await DBHelper.GetOrganizationUsersAsync(orgId);
+            foreach (var item in collection)
+            {
+                var data = this.InitializeOrganizationUser(item);
+                result.Add(data);
+            }
 
             return result;
         }
@@ -504,9 +504,8 @@ namespace AllyisApps.Services
         /// Translates an InvitationDBEntity into an Invitation business object.
         /// </summary>
         /// <param name="invitation">InvitationDBEntity instance.</param>
-        /// <param name="org"></param>
         /// <returns>Invitation instance.</returns>
-        public static Invitation InitializeInvitationInfo(InvitationDBEntity invitation, Organization org)
+        public static Invitation InitializeInvitationInfo(InvitationDBEntity invitation)
         {
             if (invitation == null)
             {
@@ -521,7 +520,6 @@ namespace AllyisApps.Services
                 InvitationId = invitation.InvitationId,
                 LastName = invitation.LastName,
                 OrganizationId = invitation.OrganizationId,
-                OrganizationName = org.OrganizationName,
                 EmployeeId = invitation.EmployeeId,
                 DecisionDateUtc = invitation.DecisionDateUtc,
                 InvitationStatus = (InvitationStatusEnum)invitation.InvitationStatus,

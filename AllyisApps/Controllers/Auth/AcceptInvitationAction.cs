@@ -23,8 +23,8 @@ namespace AllyisApps.Controllers.Auth
             else
             {
                 var invitation = await AppService.GetInvitationByID(id);
-
-                string res = string.Format("You have successfully joined {0}.", invitation.OrganizationName);
+                var org = await AppService.GetOrganization(invitation.OrganizationId);
+                string res = string.Format("You have successfully joined {0}", org.OrganizationName);
                 Notifications.Add(new Core.Alert.BootstrapAlert(res, Core.Alert.Variety.Success));
             }
 
