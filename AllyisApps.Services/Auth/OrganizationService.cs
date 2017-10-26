@@ -19,38 +19,38 @@ using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services
 {
-    /// <summary>
-    /// Business logic for all Organization related services.
-    /// </summary>
-    public partial class AppService : BaseService
-    {
-        /// <summary>
-        /// Creates an organization.
-        /// </summary>
-        public async Task<int> SetupOrganization(string employeeId, string organizationName, string phoneNumber, string faxNumber, string siteUrl, string subDomainName, string address1, string city, int? stateId, string postalCode, string countryCode)
-        {
-            if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException("employeeId");
-            if (string.IsNullOrWhiteSpace(organizationName)) throw new ArgumentNullException("organizationName");
+	/// <summary>
+	/// Business logic for all Organization related services.
+	/// </summary>
+	public partial class AppService : BaseService
+	{
+		/// <summary>
+		/// Creates an organization.
+		/// </summary>
+		public async Task<int> SetupOrganization(string employeeId, string organizationName, string phoneNumber, string faxNumber, string siteUrl, string subDomainName, string address1, string city, int? stateId, string postalCode, string countryCode)
+		{
+			if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException(nameof(employeeId));
+			if (string.IsNullOrWhiteSpace(organizationName)) throw new ArgumentNullException(nameof(organizationName));
 
             return await DBHelper.SetupOrganization(UserContext.UserId, (int)OrganizationRoleEnum.Owner, employeeId, organizationName, phoneNumber, faxNumber, siteUrl, subDomainName, address1, city, stateId, postalCode, countryCode);
         }
 
-        /// <summary>
-        /// Gets an <see cref="Organization"/>.
-        /// </summary>
-        /// <param name="orgId">Organization Id.</param>
-        /// <returns>The Organization.</returns>
-        public async Task<Organization> GetOrganization(int orgId)
-        {
-            if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
+		/// <summary>
+		/// Gets an <see cref="Organization"/>.
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <returns>The Organization.</returns>
+		public async Task<Organization> GetOrganization(int orgId)
+		{
+			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
 
             CheckOrgAction(OrgAction.ReadOrganization, orgId);
             return InitializeOrganization(await DBHelper.GetOrganization(orgId));
         }
 
-        public async Task<List<Invitation>> GetInvitationsAsync(int orgId)
-        {
-            if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
+		public async Task<List<Invitation>> GetInvitationsAsync(int orgId)
+		{
+			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
 
             CheckOrgAction(OrgAction.ReadInvitationsList, orgId);
             var collection = await DBHelper.GetInvitationsAsync(orgId, (int)InvitationStatusEnum.Any);
@@ -74,33 +74,33 @@ namespace AllyisApps.Services
             return result;
         }
 
-        /// <summary>
-        /// get a list of subscriptions for the given organization
-        /// </summary>
-        public async Task<List<Subscription>> GetSubscriptionsAsync(int orgId)
-        {
-            if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
-            CheckOrgAction(OrgAction.ReadSubscriptionsList, orgId);
-            var result = new List<Subscription>();
-            dynamic entities = await DBHelper.GetSubscriptionsAsync(orgId);
-            foreach (var item in entities)
-            {
-                var data = new Subscription();
-                data.ProductAreaUrl = item.ArealUrl;
-                data.IsActive = item.IsActive;
-                data.NumberOfUsers = item.NumberOfUsers ?? 0;
-                data.OrganizationId = item.OrganizationId;
-                data.ProductDescription = item.ProductDescription;
-                data.ProductId = (ProductIdEnum)item.ProductId;
-                data.ProductName = item.ProductName;
-                data.PromoExpirationDateUtc = item.PromoExpirationDateUtc;
-                data.SkuId = (SkuIdEnum)item.SkuId;
-                data.SkuName = item.SkuName;
-                data.CreatedUtc = item.SubscriptionCreatedUtc;
-                data.SubscriptionId = item.SubscriptionId;
-                data.SubscriptionName = item.SubscriptionName;
-                result.Add(data);
-            }
+		/// <summary>
+		/// get a list of subscriptions for the given organization
+		/// </summary>
+		public async Task<List<Subscription>> GetSubscriptionsAsync(int orgId)
+		{
+			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
+			CheckOrgAction(OrgAction.ReadSubscriptionsList, orgId);
+			var result = new List<Subscription>();
+			dynamic entities = await DBHelper.GetSubscriptionsAsync(orgId);
+			foreach (var item in entities)
+			{
+				var data = new Subscription();
+				data.ProductAreaUrl = item.ArealUrl;
+				data.IsActive = item.IsActive;
+				data.NumberOfUsers = item.NumberOfUsers ?? 0;
+				data.OrganizationId = item.OrganizationId;
+				data.ProductDescription = item.ProductDescription;
+				data.ProductId = (ProductIdEnum)item.ProductId;
+				data.ProductName = item.ProductName;
+				data.PromoExpirationDateUtc = item.PromoExpirationDateUtc;
+				data.SkuId = (SkuIdEnum)item.SkuId;
+				data.SkuName = item.SkuName;
+				data.CreatedUtc = item.SubscriptionCreatedUtc;
+				data.SubscriptionId = item.SubscriptionId;
+				data.SubscriptionName = item.SubscriptionName;
+				result.Add(data);
+			}
 
             return result;
         }
@@ -122,43 +122,43 @@ namespace AllyisApps.Services
             return org;
         }
 
-        /// <summary>
-        /// Updates an organization chosen by the current user.
-        /// </summary>
-        public async Task<bool> UpdateOrganization(int organizationId, string organizationName, string siteUrl, int? addressId, string address1, string city, int? stateId, string countryCode, string postalCode, string phoneNumber, string faxNumber, string subDomain)
-        {
-            if (organizationId <= 0) throw new ArgumentOutOfRangeException("organizationId");
-            if (string.IsNullOrWhiteSpace(organizationName)) throw new ArgumentNullException("organizationName");
+		/// <summary>
+		/// Updates an organization chosen by the current user.
+		/// </summary>
+		public async Task<bool> UpdateOrganization(int organizationId, string organizationName, string siteUrl, int? addressId, string address1, string city, int? stateId, string countryCode, string postalCode, string phoneNumber, string faxNumber, string subDomain)
+		{
+			if (organizationId <= 0) throw new ArgumentOutOfRangeException(nameof(organizationId));
+			if (string.IsNullOrWhiteSpace(organizationName)) throw new ArgumentNullException(nameof(organizationName));
 
             CheckOrgAction(OrgAction.EditOrganization, organizationId);
 
             return await DBHelper.UpdateOrganization(organizationId, organizationName, siteUrl, addressId, address1, city, stateId, countryCode, postalCode, phoneNumber, faxNumber, subDomain) > 0;
         }
 
-        /// <summary>
-        /// Deletes the user's current chosen organization.
-        /// </summary>
-        /// <returns>Returns false if permissions fail.</returns>
-        public async Task DeleteOrganization(int orgId)
-        {
-            if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
-            CheckOrgAction(OrgAction.DeleteOrganization, orgId);
-            await DBHelper.DeleteOrganization(orgId);
-        }
+		/// <summary>
+		/// Deletes the user's current chosen organization.
+		/// </summary>
+		/// <returns>Returns false if permissions fail.</returns>
+		public async Task DeleteOrganization(int orgId)
+		{
+			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
+			CheckOrgAction(OrgAction.DeleteOrganization, orgId);
+			await DBHelper.DeleteOrganization(orgId);
+		}
 
-        /// <summary>
-        /// Creates an invitation for a new user in the database, and also sends an email to the new user with their access code.
-        /// </summary>
-        public async Task<int> InviteUser(string url, string email, string firstName, string lastName, int organizationId, OrganizationRoleEnum organizationRoleId, string employeedId, string prodJson)
-        {
-            if (organizationId <= 0) throw new ArgumentOutOfRangeException("organizationId");
-            CheckOrgAction(OrgAction.AddUserToOrganization, organizationId);
-            if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException("url");
-            if (string.IsNullOrWhiteSpace(email)) throw new ArgumentNullException("email");
-            if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException("firstName");
-            if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException("lastName");
-            if (string.IsNullOrWhiteSpace(employeedId)) throw new ArgumentNullException("employeedId");
-            if (string.IsNullOrWhiteSpace(prodJson)) throw new ArgumentNullException("employeedId");
+		/// <summary>
+		/// Creates an invitation for a new user in the database, and also sends an email to the new user with their access code.
+		/// </summary>
+		public async Task<int> InviteUser(string url, string email, string firstName, string lastName, int organizationId, OrganizationRoleEnum organizationRoleId, string employeedId, string prodJson)
+		{
+			if (organizationId <= 0) throw new ArgumentOutOfRangeException(nameof(organizationId));
+			CheckOrgAction(OrgAction.AddUserToOrganization, organizationId);
+			if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
+			if (string.IsNullOrWhiteSpace(email)) throw new ArgumentNullException(nameof(email));
+			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException(nameof(firstName));
+			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException(nameof(lastName));
+			if (string.IsNullOrWhiteSpace(employeedId)) throw new ArgumentNullException(nameof(employeedId));
+			if (string.IsNullOrWhiteSpace(prodJson)) throw new ArgumentNullException(nameof(employeedId));
 
             // Creation of invitation
             var result = await DBHelper.CreateInvitation(email, firstName, lastName, organizationId, (int)organizationRoleId, employeedId, prodJson);
@@ -271,27 +271,27 @@ namespace AllyisApps.Services
             return worked;
         }
 
-        /// <summary>
-        /// Gets the member list for an organization.
-        /// </summary>
-        /// <param name="orgId">Organization Id.</param>
-        /// <returns>The member list.</returns>
-        public IEnumerable<OrganizationUser> GetOrganizationMemberList(int orgId)
-        {
-            if (orgId < 0)
-            {
-                throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
-            }
+		/// <summary>
+		/// Gets the member list for an organization.
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <returns>The member list.</returns>
+		public IEnumerable<OrganizationUser> GetOrganizationMemberList(int orgId)
+		{
+			if (orgId < 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(orgId), "Organization Id cannot be negative.");
+			}
 
             return DBHelper.GetOrganizationMemberList(orgId).Select(o => InitializeOrganizationUser(o));
         }
 
-        /// <summary>
-        /// get the list of users in the given organization
-        /// </summary>
-        public async Task<List<OrganizationUser>> GetOrganizationUsersAsync(int orgId)
-        {
-            if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
+		/// <summary>
+		/// get the list of users in the given organization
+		/// </summary>
+		public async Task<List<OrganizationUser>> GetOrganizationUsersAsync(int orgId)
+		{
+			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
 
             CheckOrgAction(OrgAction.ReadUsersList, orgId);
             var result = new List<OrganizationUser>();
@@ -305,38 +305,38 @@ namespace AllyisApps.Services
             return result;
         }
 
-        /// <summary>
-        /// Removes an organization user.
-        /// </summary>
-        /// <param name="orgId">Organization Id.</param>
-        /// <param name="userId">User Id.</param>
-        public async Task RemoveOrganizationUser(int orgId, int userId)
-        {
-            if (orgId < 0)
-            {
-                throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
-            }
+		/// <summary>
+		/// Removes an organization user.
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <param name="userId">User Id.</param>
+		public async Task RemoveOrganizationUser(int orgId, int userId)
+		{
+			if (orgId < 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(orgId), "Organization Id cannot be negative.");
+			}
 
-            if (userId <= 0)
-            {
-                throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
-            }
+			if (userId <= 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(userId), "User Id cannot be 0 or negative.");
+			}
 
             await DBHelper.RemoveOrganizationUser(orgId, userId);
         }
 
-        /// <summary>
-        /// Gets all the projects in an organization.
-        /// </summary>
-        /// <param name="orgId">Organization Id.</param>
-        /// <param name="onlyActive">True (default) to only return active projects, false to include all projects, active or not.</param>
-        /// <returns>A list of project info objects based on Organization.</returns>
-        public IEnumerable<CompleteProject> GetProjectsByOrganization(int orgId, bool onlyActive = true)
-        {
-            if (orgId < 0)
-            {
-                throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
-            }
+		/// <summary>
+		/// Gets all the projects in an organization.
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <param name="onlyActive">True (default) to only return active projects, false to include all projects, active or not.</param>
+		/// <returns>A list of project info objects based on Organization.</returns>
+		public IEnumerable<CompleteProject> GetProjectsByOrganization(int orgId, bool onlyActive = true)
+		{
+			if (orgId < 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(orgId), "Organization Id cannot be negative.");
+			}
 
             return DBHelper.GetProjectsByOrgId(orgId, onlyActive ? 1 : 0).Select(c => InitializeCompleteProjectInfo(c));
         }
@@ -352,10 +352,10 @@ namespace AllyisApps.Services
         {
             #region Validation
 
-            if (!Enum.IsDefined(typeof(OrganizationRoleEnum), newOrganizationRole))
-            {
-                throw new ArgumentOutOfRangeException("newOrganizationRole", "Organization role must match a value of the OrganizationRole enum.");
-            }
+			if (!Enum.IsDefined(typeof(OrganizationRoleEnum), newOrganizationRole))
+			{
+				throw new ArgumentOutOfRangeException(nameof(newOrganizationRole), "Organization role must match a value of the OrganizationRole enum.");
+			}
 
             if (userIds == null || userIds.Count == 0)
             {
@@ -377,10 +377,10 @@ namespace AllyisApps.Services
         {
             #region Validation
 
-            if (userIds == null || userIds.Count == 0)
-            {
-                throw new ArgumentException("No user ids provided.", "userIds");
-            }
+			if (userIds == null || userIds.Count == 0)
+			{
+				throw new ArgumentException("No user ids provided.", nameof(userIds));
+			}
 
             #endregion Validation
 
@@ -398,9 +398,9 @@ namespace AllyisApps.Services
         {
             #region Validation
 
-            if (string.IsNullOrEmpty(productName)) throw new ArgumentNullException("productName", "Product name must have a value.");
-            if (userId <= 0) throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
-            if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be 0 or negative.");
+			if (string.IsNullOrEmpty(productName)) throw new ArgumentNullException(nameof(productName), "Product name must have a value.");
+			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId), "User Id cannot be 0 or negative.");
+			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId), "Organization Id cannot be 0 or negative.");
 
             #endregion Validation
 

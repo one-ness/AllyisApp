@@ -89,7 +89,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
 				if (model == null)
 				{
-					throw new ArgumentNullException("model");
+					throw new ArgumentNullException(nameof(model));
 				}
 
 				try
