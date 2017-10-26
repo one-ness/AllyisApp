@@ -151,7 +151,7 @@ a:hover, a:focus {
 	visibility: hidden;
 }
 
-.allyisicon-submit {
+.very-inline-form.edit .allyisicon-submit {
 	display: inline-block;
 	font: normal normal normal 14px/1 FontAwesome;
 	font-size: inherit;
@@ -162,6 +162,15 @@ a:hover, a:focus {
 
 .very-inline-form.edit .allyisicon-submit:before {
 	content: "\f00c";
+}
+
+.very-inline-form.create .allyisicon-submit {
+	display: inline-block;
+	font: normal normal normal 14px/1 FontAwesome;
+	font-size: inherit;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 .very-inline-form.create .allyisicon-submit:before {
@@ -216,6 +225,45 @@ a:hover, a:focus {
 
 .sidebar-offcanvas {
 	padding: 0 15px 0 10px;
+}
+
+.btn-sharp {
+	display: inline-block;
+	border-radius: 0px;
+	float: right;
+	overflow: visible;
+}
+
+.btn-fa {
+	padding: 6px 7px;
+}
+
+.btn-fa:not(.btn-sm):not(.btn-lg) i {
+	font-size: 1.33333333em !important;
+	line-height: 0.75em !important;
+	vertical-align: -15% !important;
+}
+
+.btn-fa i {
+	width: 1.28571429em !important;
+	text-align: center !important;
+}
+
+.very-inline-form.edit .button-anim-wrap {
+	width: 80px;
+}
+
+.very-inline-form.edit .allyisicon-delete {
+	display: inline-block;
+	font: normal normal normal 14px/1 FontAwesome;
+	font-size: inherit;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.very-inline-form.edit .allyisicon-delete:before {
+	content: "\f00d";
 }
 
 
