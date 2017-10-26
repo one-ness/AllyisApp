@@ -119,7 +119,7 @@ namespace AllyisApps.ViewModels
 				.Cast<TimeEntryStatus>()
 				.ToDictionary(
 					enumValue => (int)enumValue,
-					enumValue => Resources.Strings.ResourceManager.GetString(enumValue.ToString()));
+					enumValue => Strings.ResourceManager.GetString(enumValue.ToString()));
 		}
 	}
 }

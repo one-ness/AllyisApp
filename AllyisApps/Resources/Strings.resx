@@ -1601,7 +1601,7 @@
     <value>Cannot lock time entries &lt;= {0} because of a db error.</value>
   </data>
 	<data name="LockTimeEntriesSuccess" xml:space="preserve">
-    <value>Successfully locked all time entries &lt;= {0}.</value>
+    <value>Successfully locked all dates for time entries &lt;= {0}.</value>
   </data>
 	<data name="UpdateTimeEntryStatusSuccess" xml:space="preserve">
     <value>Successfully updated selected time entry statuses.</value>
@@ -1638,5 +1638,14 @@
   </data>
 	<data name="PayrollProcessSuccess" xml:space="preserve">
     <value>Successfully marked all locked and approved time entries as payroll processed.</value>
+  </data>
+	<data name="UpdateTimeEntryStatusNoStatusSelected" xml:space="preserve">
+    <value>Cannot update time entries status, there are no statuses selected.</value>
+  </data>
+	<data name="LockTimeEntriesInvalidLockDate" xml:space="preserve">
+    <value>Cannot set new lock date {0} because the date is on or before the previous lock or payroll processed date</value>
+  </data>
+	<data name="PayrollProcessConfirm" xml:space="preserve">
+    <value>Are you sure you want to payroll process all approved time entries at and before {0}?</value>
   </data>
 </root>

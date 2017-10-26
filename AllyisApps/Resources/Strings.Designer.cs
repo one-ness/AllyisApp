@@ -2077,6 +2077,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot set new lock date {0} because the date is on or before the previous lock or payroll processed date.
+        /// </summary>
+        public static string LockTimeEntriesInvalidLockDate {
+            get {
+                return ResourceManager.GetString("LockTimeEntriesInvalidLockDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot lock time entries &lt;= {0} because not all of them are status Approved or Rejected..
         /// </summary>
         public static string LockTimeEntriesInvalidStatuses {
@@ -2086,7 +2095,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Successfully locked all time entries &lt;= {0}..
+        ///   Looks up a localized string similar to Successfully locked all dates for time entries &lt;= {0}..
         /// </summary>
         public static string LockTimeEntriesSuccess {
             get {
@@ -2937,6 +2946,15 @@ namespace AllyisApps.Resources {
         public static string PayrollProcess {
             get {
                 return ResourceManager.GetString("PayrollProcess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to payroll process all approved time entries at and before {0}?.
+        /// </summary>
+        public static string PayrollProcessConfirm {
+            get {
+                return ResourceManager.GetString("PayrollProcessConfirm", resourceCulture);
             }
         }
         
@@ -4233,6 +4251,15 @@ namespace AllyisApps.Resources {
         public static string UpdateProfileSuccessMessage {
             get {
                 return ResourceManager.GetString("UpdateProfileSuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot update time entries status, there are no statuses selected..
+        /// </summary>
+        public static string UpdateTimeEntryStatusNoStatusSelected {
+            get {
+                return ResourceManager.GetString("UpdateTimeEntryStatusNoStatusSelected", resourceCulture);
             }
         }
         

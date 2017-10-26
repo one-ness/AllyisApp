@@ -64,9 +64,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			DataExportViewModel result = new DataExportViewModel();
-			if ((userIds == null) || (userIds[0] == -1))
+			if (userIds == null || userIds[0] == -1)
 			{
-				result.Data = AppService.GetTimeEntriesOverDateRange(orgId, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1))
+				result.Data = (await AppService.GetTimeEntriesOverDateRange(orgId, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1)))
 				.AsParallel().Select(timeEntry => new TimeEntryViewModel(timeEntry)).AsEnumerable();
 			}
 			else
@@ -92,7 +92,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			if (userIds != null && userIds.Count > 0)
 			{
-				if ((userIds.Count > 1) || (userIds[0] == -1))
+				if (userIds.Count > 1 || userIds[0] == -1)
 				{
 					result.Projects = AppService.GetProjectsByOrganization(orgId).AsParallel().Select(proj =>
 					new CompleteProjectViewModel(proj));
