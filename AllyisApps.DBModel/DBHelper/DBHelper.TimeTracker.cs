@@ -207,7 +207,7 @@ namespace AllyisApps.DBModel
 		/// <param name="startingDate">The beginning date of the date range.</param>
 		/// <param name="endingDate">The ending date of the date range.</param>
 		/// <returns>A collection of time entries.</returns>
-		public IEnumerable<TimeEntryDBEntity> GetTimeEntriesOverDateRange(int orgId, DateTime startingDate, DateTime endingDate)
+		public async Task<List<TimeEntryDBEntity>> GetTimeEntriesOverDateRange(int orgId, DateTime startingDate, DateTime endingDate)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
@@ -216,12 +216,12 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				IEnumerable<TimeEntryDBEntity> result = connection.Query<TimeEntryDBEntity>(
+				IEnumerable<TimeEntryDBEntity> result = await connection.QueryAsync<TimeEntryDBEntity>(
 																	"[TimeTracker].[GetTimeEntriesOverDateRange]",
 																	parameters,
 																	commandType: CommandType.StoredProcedure);
 
-				return result ?? new List<TimeEntryDBEntity>();
+				return result?.ToList() ?? new List<TimeEntryDBEntity>();
 			}
 		}
 
@@ -363,17 +363,18 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">The organization Id for which the settings are to be retrieved.</param>
 		/// <returns>Settings for an organization.</returns>
-		public SettingDBEntity GetSettingsByOrganizationId(int organizationId)
+		public async Task<SettingDBEntity> GetSettingsByOrganizationId(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<SettingDBEntity>(
+				var result = await connection.QueryAsync<SettingDBEntity>(
 					"[TimeTracker].[GetSettings]",
 					parameters,
-					commandType: CommandType.StoredProcedure).Single();
+					commandType: CommandType.StoredProcedure);
+				return result.Single();
 			}
 		}
 
@@ -381,11 +382,11 @@ namespace AllyisApps.DBModel
 		/// Initializes time tracker settings.
 		/// </summary>
 		/// <param name="orgId">The organization Id.</param>
-		public void InitializeTimeTrackerSettings(int orgId)
+		public async Task InitializeTimeTrackerSettings(int orgId)
 		{
 			try
 			{
-				GetSettingsByOrganizationId(orgId);
+				await GetSettingsByOrganizationId(orgId);
 			}
 			catch
 			{
@@ -399,7 +400,7 @@ namespace AllyisApps.DBModel
 				parameters.Add("@overTimeMultiplier", 1.5);
 				using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 				{
-					connection.Execute("[TimeTracker].[UpdateSettings]", parameters, commandType: CommandType.StoredProcedure);
+					await connection.ExecuteAsync("[TimeTracker].[UpdateSettings]", parameters, commandType: CommandType.StoredProcedure);
 				}
 			}
 		}

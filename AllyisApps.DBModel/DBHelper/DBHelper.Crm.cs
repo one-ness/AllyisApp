@@ -682,13 +682,13 @@ namespace AllyisApps.DBModel
 			parameters.Add("@projectName", projectName);
 			parameters.Add("@orgId", orgId);
 			parameters.Add("@isHourly", isHourly);
-			parameters.Add("@startingDate", start == null ? null : start.Value.ToShortDateString());
-			parameters.Add("@endingDate", end == null ? null : end.Value.ToShortDateString());
+			parameters.Add("@startingDate", start?.ToShortDateString());
+			parameters.Add("@endingDate", end?.ToShortDateString());
 			parameters.Add("@userIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				await connection.QueryAsync(
+				await connection.ExecuteAsync(
 					"[Pjm].[UpdateProjectAndUsers]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
