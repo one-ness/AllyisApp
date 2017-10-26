@@ -21,7 +21,7 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		public async Task<ActionResult> OrgMembers(int id)
 		{
-			var model = new OrganizationMembersViewModel2();
+			var model = new OrganizationMembersViewModel();
 			model.CanAddUser = AppService.CheckOrgAction(AppService.OrgAction.AddUserToOrganization, id, false);
 			model.CanDeleteUser = AppService.CheckOrgAction(AppService.OrgAction.DeleteUserFromOrganization, id, false);
 			model.CanEditUser = AppService.CheckOrgAction(AppService.OrgAction.EditUser, id, false);
@@ -33,7 +33,7 @@ namespace AllyisApps.Controllers.Auth
 			{
 				var roles = await AppService.GetProductRolesAsync(id, Services.Billing.ProductIdEnum.AllyisApps);
 				var role = roles.Where(x => x.ProductRoleId == item.OrganizationRoleId).FirstOrDefault();
-				var data = new OrganizationMembersViewModel2.ViewModelItem
+				var data = new OrganizationMembersViewModel.ViewModelItem
 				{
 					Email = item.Email,
 					EmployeeId = item.EmployeeId,

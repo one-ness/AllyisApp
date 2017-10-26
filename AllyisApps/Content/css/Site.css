@@ -85,9 +85,18 @@ a:hover {
 		margin-right: 10px;
 	}
 
+.role-drop-down {
+	width: 300px;
+	margin-bottom: 2px;
+}
 
+#edit-member select.ovrd-form-control {
+	width: 300px;
+}
 
-
+#edit-member input[type=text].ovrd-form-control {
+	width: 300px;
+}
 
 
 

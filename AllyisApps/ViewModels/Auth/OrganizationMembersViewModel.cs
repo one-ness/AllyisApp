@@ -6,7 +6,7 @@ namespace AllyisApps.ViewModels.Auth
 	/// <summary>
 	/// organization members page
 	/// </summary>
-	public class OrganizationMembersViewModel2 : BaseViewModel
+	public class OrganizationMembersViewModel : BaseViewModel
 	{
 		/// <summary>
 		/// organization id
@@ -72,7 +72,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// constructor
 		/// </summary>
-		public OrganizationMembersViewModel2()
+		public OrganizationMembersViewModel()
 		{
 			PageSize = 25; // default page number
 			CurrentPageNumber = 1; // default page

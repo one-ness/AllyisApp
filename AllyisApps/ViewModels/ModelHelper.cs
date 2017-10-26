@@ -80,8 +80,9 @@ namespace AllyisApps.ViewModels
 		public static Dictionary<int, string> GetTimeTrackerRolesList()
 		{
 			var result = new Dictionary<int, string>();
-			result.Add((int)OrganizationRoleEnum.Member, Strings.Member);
-			result.Add((int)OrganizationRoleEnum.Owner, Strings.Owner);
+			result.Add((int)TimeTrackerRole.NotInProduct, Strings.Unassigned);
+			result.Add((int)TimeTrackerRole.User, Strings.User);
+			result.Add((int)TimeTrackerRole.Manager, Strings.Manager);
 			return result;
 		}
 
@@ -91,8 +92,10 @@ namespace AllyisApps.ViewModels
 		public static Dictionary<int, string> GetExpenseTrackerRolesList()
 		{
 			var result = new Dictionary<int, string>();
-			result.Add((int)OrganizationRoleEnum.Member, Strings.Member);
-			result.Add((int)OrganizationRoleEnum.Owner, Strings.Owner);
+			result.Add((int)ExpenseTrackerRole.NotInProduct, Strings.Unassigned);
+			result.Add((int)ExpenseTrackerRole.User, Strings.User);
+			result.Add((int)ExpenseTrackerRole.Manager, Strings.Manager);
+			result.Add((int)ExpenseTrackerRole.SuperUser, Strings.SuperUser);
 			return result;
 		}
 
@@ -102,8 +105,9 @@ namespace AllyisApps.ViewModels
 		public static Dictionary<int, string> GetStaffingManagerRolesList()
 		{
 			var result = new Dictionary<int, string>();
-			result.Add((int)OrganizationRoleEnum.Member, Strings.Member);
-			result.Add((int)OrganizationRoleEnum.Owner, Strings.Owner);
+			result.Add((int)StaffingManagerRole.NotInProduct, Strings.Unassigned);
+			result.Add((int)StaffingManagerRole.User, Strings.User);
+			result.Add((int)StaffingManagerRole.Manager, Strings.Manager);
 			return result;
 		}
 
