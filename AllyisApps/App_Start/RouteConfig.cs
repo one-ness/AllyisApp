@@ -26,6 +26,15 @@ namespace AllyisApps
 			routes.MapMvcAttributeRoutes();
 
 			routes.Add(
+				"editmember",
+				new Route(
+					url: string.Format("{0}/{1}/{{id}}/{{userId}}", ControllerConstants.Account, ActionConstants.EditMember),
+					defaults: new RouteValueDictionary(new { controller = ControllerConstants.Account, action = ActionConstants.EditMember }),
+					constraints: new RouteValueDictionary(new { id = @"\d+", userId = @"\d+" }),
+					dataTokens: new RouteValueDictionary(new { Namespaces = new string[] { "AllyisApps.Controllers", "AllyisApps.Controllers.Auth", "AllyisApps.Controllers.Home", "AllyisApps.Controllers.Shared" }, UseNamespaceFallback = false /*Use ONLY this namespace */ }),
+					routeHandler: new MvcRouteHandler()));
+
+			routes.Add(
 				"subscribe",
 				new Route(
 					url: string.Format("{0}/{1}/{{id}}/{{skuid}}", ControllerConstants.Account, ActionConstants.Subscribe),
