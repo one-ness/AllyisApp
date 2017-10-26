@@ -305,41 +305,22 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Assigns a new TimeTracker role to the given users for the current organization.
+		/// assigns role in the given subscription, for the given user
 		/// </summary>
-		/// <param name="userIds">List of user Ids.</param>
-		/// <param name="newProductRole">Product role to assign.</param>
-		/// <param name="orgId">The Organization Id.</param>
-		/// <param name="productId">The subscribed Product Id.</param>
-		/// <returns>A tuple containing the number of updated users and the number of added users.</returns>
-		public async Task<UpdateSubscriptionUserRolesResuts> UpdateSubscriptionUserRoles(List<int> userIds, int newProductRole, int orgId, int productId)
+		public async Task UpdateSubscriptionUserRoles(int userId, Dictionary<int, int> roles)
 		{
-			#region Validation
+			// TODO: do this in a transaction
+			if (userId <= 0) throw new ArgumentOutOfRangeException("userId");
+			if (roles == null || roles.Count <= 0) throw new ArgumentOutOfRangeException("roles");
 
-			if (!Enum.IsDefined(typeof(TimeTrackerRole), newProductRole) && !Enum.IsDefined(typeof(ExpenseTrackerRole), newProductRole))
+			foreach (var item in roles)
 			{
-				throw new ArgumentOutOfRangeException("newProductRole", "Product role must match a value of the ProductRoleIdEnum enum.");
+				int orgId = 0;
+				var subId = item.Key;
+				var roleId = item.Value;
+				this.CheckSubscriptionAction(OrgAction.EditSubscriptionUser, subId, out orgId);
+				await this.DBHelper.UpdateSubscriptionUserProductRole(roleId, subId, userId);
 			}
-
-			if (!Enum.IsDefined(typeof(ProductIdEnum), productId))
-			{
-				throw new ArgumentOutOfRangeException("newProductRole", "Product role must match a value of the ProductRoleIdEnum enum.");
-			}
-
-			if (userIds == null || userIds.Count == 0)
-			{
-				throw new ArgumentException("userIds", "No user ids provided.");
-			}
-
-			#endregion Validation
-
-			// TODO: split updating user roles and creating new sub users
-			var UpdatedRows = await DBHelper.UpdateSubscriptionUserRoles(userIds, orgId, newProductRole, productId);
-			return new UpdateSubscriptionUserRolesResuts()
-			{
-				UsersChanged = UpdatedRows.Item1,
-				UsersAddedToSubscription = UpdatedRows.Item2
-			};
 		}
 
 		/// <summary>Deletes the given users in the given organization's subscription</summary>

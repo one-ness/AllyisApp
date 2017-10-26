@@ -69,11 +69,11 @@
 																								  {
 																									  Selected = (Model.ProjectsWithInactive.Count() == 2) ? (!(c.ProjectId < 0)) : (Model.ProjectId == c.ProjectId), //Automatically selects project if it is the only one - Select Project is a project with Id of 0
 																																																					  //Selected = (Model.ProjectId == c.ProjectId),
-																									  Text = (c.ProjectId != 0) ? (string.Format("{0} - {1}", c.CustomerName, c.ProjectName)) : c.ProjectName,    //Only need customer - project text for project ids !=0
+																									  Text = (c.ProjectId != -1) ? (string.Format("{0} - {1}", c.CustomerName, c.ProjectName)) : c.ProjectName,    //Only need customer - project text for project ids !=0
 																																																				  //Text = ((Model.Projects.Count() == 2) ? (!(c.ProjectId == 0)) : (Model.ProjectId == c.ProjectId)).ToString(),
 																									  Value = c.ProjectId.ToString(),
 																									  //Disabled = !c.IsUserActive
-																								  }, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" }).RemoveIdAttribute()
+																								  }, locked, new {  @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" }).RemoveIdAttribute()
 				}
 				else
 				{
@@ -82,7 +82,7 @@
 																								  {
 																									  Selected = (Model.Projects.Count() == 2) ? (!(c.ProjectId < 0)) : (Model.ProjectId == c.ProjectId), //Automatically selects project if it is the only one - Select Project is a project with Id of 0
 																																																		  //Selected = (Model.ProjectId == c.ProjectId),
-																									  Text = (c.ProjectId != 0) ? (string.Format("{0} - {1}", c.CustomerName, c.ProjectName)) : c.ProjectName,    //Only need customer - project text for project ids !=0
+																									  Text = (c.ProjectId != -1) ? (string.Format("{0} - {1}", c.CustomerName, c.ProjectName)) : c.ProjectName,    //Only need customer - project text for project ids !=0
 																																																				  //Text = ((Model.Projects.Count() == 2) ? (!(c.ProjectId == 0)) : (Model.ProjectId == c.ProjectId)).ToString(),
 																									  Value = c.ProjectId.ToString(),
 																									  //Disabled = !c.IsUserActive

@@ -1591,52 +1591,64 @@
   <data name="Status" xml:space="preserve">
     <value>Status</value>
   </data>
-	<data name="LockEntriesResultOutOfRange" xml:space="preserve">
+  <data name="LockEntriesResultOutOfRange" xml:space="preserve">
     <value>Value of var \"{0}\" is not a valid option for LockEntriesResult</value>
   </data>
-	<data name="LockTimeEntriesInvalidStatuses" xml:space="preserve">
+  <data name="LockTimeEntriesInvalidStatuses" xml:space="preserve">
     <value>Cannot lock time entries &lt;= {0} because not all of them are status Approved or Rejected.</value>
   </data>
-	<data name="LockTimeEntriesDBError" xml:space="preserve">
+  <data name="LockTimeEntriesDBError" xml:space="preserve">
     <value>Cannot lock time entries &lt;= {0} because of a db error.</value>
   </data>
-	<data name="LockTimeEntriesSuccess" xml:space="preserve">
-    <value>Successfully locked all time entries &lt;= {0}.</value>
+  <data name="LockTimeEntriesSuccess" xml:space="preserve">
+    <value>Successfully locked all dates for time entries &lt;= {0}.</value>
   </data>
-	<data name="UpdateTimeEntryStatusSuccess" xml:space="preserve">
+  <data name="UpdateTimeEntryStatusSuccess" xml:space="preserve">
     <value>Successfully updated selected time entry statuses.</value>
   </data>
-	<data name="UnlockTimeEntriesNoLockDate" xml:space="preserve">
+  <data name="UnlockTimeEntriesNoLockDate" xml:space="preserve">
     <value>Cannot unlock time entries because no time entries are locked</value>
   </data>
-	<data name="UnlockTimeEntriesDbError" xml:space="preserve">
+  <data name="UnlockTimeEntriesDbError" xml:space="preserve">
     <value>Cannot unlock time entries because of a db error</value>
   </data>
-	<data name="UnlockTimeEntriesSuccess" xml:space="preserve">
+  <data name="UnlockTimeEntriesSuccess" xml:space="preserve">
     <value>Successfully unlocked all locked time entries</value>
   </data>
-	<data name="InvalidEnum" xml:space="preserve">
+  <data name="InvalidEnum" xml:space="preserve">
     <value>Value of var \"{0}\" is not a valid enum in {1}.</value>
   </data>
-	<data name="LockEntries" xml:space="preserve">
+  <data name="LockEntries" xml:space="preserve">
     <value>Lock Entries</value>
   </data>
-	<data name="UnlockEntries" xml:space="preserve">
+  <data name="UnlockEntries" xml:space="preserve">
     <value>Unlock Entries</value>
   </data>
-	<data name="PayrollProcess" xml:space="preserve">
+  <data name="PayrollProcess" xml:space="preserve">
     <value>Payroll Process</value>
   </data>
-	<data name="PayrollProcessNoLockDate" xml:space="preserve">
+  <data name="PayrollProcessNoLockDate" xml:space="preserve">
     <value>You must lock time entries before changing them to payroll processed.</value>
   </data>
-	<data name="PayrollProcessDBError" xml:space="preserve">
+  <data name="PayrollProcessDBError" xml:space="preserve">
     <value>Cannot payroll process time entries because of a DB error.</value>
   </data>
-	<data name="PayrollProcessInvalidStatuses" xml:space="preserve">
+  <data name="PayrollProcessInvalidStatuses" xml:space="preserve">
     <value>Cannot payroll process time entries because some of them are still pending.</value>
   </data>
-	<data name="PayrollProcessSuccess" xml:space="preserve">
+  <data name="PayrollProcessSuccess" xml:space="preserve">
     <value>Successfully marked all locked and approved time entries as payroll processed.</value>
+  </data>
+  <data name="CannotSelfUpdateOrgRole" xml:space="preserve">
+    <value>You cannot update your organization role yourself.</value>
+  </data>
+	<data name="UpdateTimeEntryStatusNoStatusSelected" xml:space="preserve">
+    <value>Cannot update time entries status, there are no statuses selected.</value>
+  </data>
+	<data name="LockTimeEntriesInvalidLockDate" xml:space="preserve">
+    <value>Cannot set new lock date {0} because the date is on or before the previous lock or payroll processed date</value>
+  </data>
+	<data name="PayrollProcessConfirm" xml:space="preserve">
+    <value>Are you sure you want to payroll process all approved time entries at and before {0}?</value>
   </data>
 </root>

@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using AllyisApps.Services;
 using AllyisApps.ViewModels;
 using AllyisApps.Services.Billing;
+using System.Collections.Generic;
+using AllyisApps.Resources;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -25,10 +27,16 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		public async Task<ActionResult> EditMember(int id, int userId)
 		{
+			var model = await this.ConstructViewModel(id, userId);
+			return View("editmember", model);
+		}
+
+		private async Task<EditMemberViewModel> ConstructViewModel(int orgId, int userId)
+		{
 			User user = await AppService.GetUserAsync(userId); // this call makes sure that both logged in user and userId have at least one common org
-			var org = user.Organizations.Where(x => x.OrganizationId == id).FirstOrDefault();
+			var org = user.Organizations.Where(x => x.OrganizationId == orgId).FirstOrDefault();
 			var model = new EditMemberViewModel();
-			model.CanEditMember = this.AppService.CheckOrgAction(AppService.OrgAction.EditUser, id, false);
+			model.CanEditMember = this.AppService.CheckOrgAction(AppService.OrgAction.EditUser, orgId, false);
 			model.Address = user.Address?.Address1;
 			model.City = user.Address?.City;
 			model.CountryName = user.Address?.CountryName;
@@ -37,30 +45,30 @@ namespace AllyisApps.Controllers.Auth
 			model.EmployeeId = org.EmployeeId;
 			model.FirstName = user.FirstName;
 			model.LastName = user.LastName;
-			model.OrganizationId = id;
+			model.OrganizationId = orgId;
 			model.OrganizationName = org.OrganizationName;
 			model.OrgRolesList = ModelHelper.GetOrgRolesList();
 			model.PhoneNumber = user.PhoneNumber;
 			model.PostalCode = user.Address?.PostalCode;
-			await this.PopulateRoles(model, user);
-			model.SelectedOrganizationRoleId = (int)org.OrganizationRole;
-			model.StateName = user.Address?.StateName;
-			model.UserId = userId;
-			return View("editmember", model);
-		}
 
-		private async Task PopulateRoles(EditMemberViewModel model, User user)
-		{
 			// get all subscriptions of this organization, get a list of roles for each subscription and user's role in each subscription
 			var subs = await this.AppService.GetSubscriptionsAsync(model.OrganizationId);
 			foreach (var item in subs)
 			{
+				int selectedRoleId = 0;
+				var sub = user.Subscriptions.Where(x => x.SubscriptionId == item.SubscriptionId).FirstOrDefault();
+				if (sub != null)
+				{
+					// user is part of this subscription
+					selectedRoleId = sub.ProductRoleId;
+				}
+
 				if (item.ProductId == ProductIdEnum.TimeTracker)
 				{
 					model.SubscriptionRoles.Add(new EditMemberViewModel.RoleItem()
 					{
 						RoleList = ModelHelper.GetTimeTrackerRolesList(),
-						SelectedRoleId = user.Subscriptions.Where(x => x.SubscriptionId == item.SubscriptionId).FirstOrDefault().ProductRoleId,
+						SelectedRoleId = selectedRoleId,
 						SubscriptionId = item.SubscriptionId,
 						SubscriptionName = item.SubscriptionName
 					});
@@ -70,7 +78,7 @@ namespace AllyisApps.Controllers.Auth
 					model.SubscriptionRoles.Add(new EditMemberViewModel.RoleItem()
 					{
 						RoleList = ModelHelper.GetExpenseTrackerRolesList(),
-						SelectedRoleId = user.Subscriptions.Where(x => x.SubscriptionId == item.SubscriptionId).FirstOrDefault().ProductRoleId,
+						SelectedRoleId = selectedRoleId,
 						SubscriptionId = item.SubscriptionId,
 						SubscriptionName = item.SubscriptionName
 					});
@@ -80,12 +88,17 @@ namespace AllyisApps.Controllers.Auth
 					model.SubscriptionRoles.Add(new EditMemberViewModel.RoleItem()
 					{
 						RoleList = ModelHelper.GetStaffingManagerRolesList(),
-						SelectedRoleId = user.Subscriptions.Where(x => x.SubscriptionId == item.SubscriptionId).FirstOrDefault().ProductRoleId,
+						SelectedRoleId = selectedRoleId,
 						SubscriptionId = item.SubscriptionId,
 						SubscriptionName = item.SubscriptionName
 					});
 				}
 			}
+
+			model.SelectedOrganizationRoleId = (int)org.OrganizationRole;
+			model.StateName = user.Address?.StateName;
+			model.UserId = userId;
+			return model;
 		}
 
 		/// <summary>
@@ -97,18 +110,48 @@ namespace AllyisApps.Controllers.Auth
 		{
 			if (ModelState.IsValid)
 			{
-				foreach (var item in model.SubscriptionRoles)
-				{
-					if (item.SelectedRoleId > 0)
-					{
+				// TODO: do this in a transaction
 
+				// update employee id 
+				var result = await this.AppService.UpdateEmployeeIdAndOrgRole(model.OrganizationId, model.UserId, model.EmployeeId, (OrganizationRoleEnum)model.SelectedOrganizationRoleId);
+				if (result == UpdateEmployeeIdAndOrgRoleResult.CannotSelfUpdateOrgRole)
+				{
+					this.Notifications.Add(new Core.Alert.BootstrapAlert(Strings.CannotSelfUpdateOrgRole, Core.Alert.Variety.Danger));
+				}
+				else if (result == UpdateEmployeeIdAndOrgRoleResult.EmployeeIdNotUnique)
+				{
+					this.Notifications.Add(new Core.Alert.BootstrapAlert(Strings.EmployeeIdNotUniqueError, Core.Alert.Variety.Danger));
+				}
+				else
+				{
+					// get the subscription roles in to a dictionary
+					Dictionary<int, int> subRoles = new Dictionary<int, int>();
+					foreach (var item in model.SubscriptionRoles)
+					{
+						if (item.SelectedRoleId > 0)
+						{
+							subRoles.Add(item.SubscriptionId, item.SelectedRoleId);
+						}
 					}
+
+					// update the subscription roles
+					await this.AppService.UpdateSubscriptionUserRoles(model.UserId, subRoles);
+					return RedirectToAction(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { @id = model.OrganizationId });
 				}
 			}
 
-			// error
-			User user = await AppService.GetUserAsync(model.UserId); // this call makes sure that both logged in user and userId have at least one common org
-			await this.PopulateRoles(model, user);
+			// error, copy values from existing model
+			var newModel = await this.ConstructViewModel(model.OrganizationId, model.UserId);
+			newModel.SelectedOrganizationRoleId = model.SelectedOrganizationRoleId;
+			foreach (var item in model.SubscriptionRoles)
+			{
+				var sub = newModel.SubscriptionRoles.Where(x => x.SubscriptionId == item.SubscriptionId).FirstOrDefault();
+				if (sub != null)
+				{
+					sub.SelectedRoleId = item.SelectedRoleId;
+				}
+			}
+
 			return View(model);
 		}
 	}
