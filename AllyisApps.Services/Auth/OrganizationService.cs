@@ -96,7 +96,7 @@ namespace AllyisApps.Services
 				data.PromoExpirationDateUtc = item.PromoExpirationDateUtc;
 				data.SkuId = (SkuIdEnum)item.SkuId;
 				data.SkuName = item.SkuName;
-				data.SubscriptionCreatedUtc = item.SubscriptionCreatedUtc;
+				data.CreatedUtc = item.SubscriptionCreatedUtc;
 				data.SubscriptionId = item.SubscriptionId;
 				data.SubscriptionName = item.SubscriptionName;
 				result.Add(data);

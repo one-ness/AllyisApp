@@ -8,9 +8,10 @@
 	@:<form action="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account)" method="post">
 	@Html.AntiForgeryToken()
 	@Html.HiddenFor(m => m.OrganizationId)
+	@Html.HiddenFor(m => m.UserId)
 }
 
-<div class="row">
+<div class="row" id="edit-member">
 	<div class="col-xs-12">
 		<table id="org-details" class="table table-striped table-condensed">
 			<tr>
@@ -53,16 +54,50 @@
 			{
 				<tr>
 					<td>
-						<div class="form-group ovrd-form-group">
+						<div>
 							@Html.ReqLabelFor(m => m.EmployeeId, Strings.EmployeeId)
 						</div>
 					</td>
 					<td>
-						<div class="form-group ovrd-form-group" style="width:300px;">
+						<div>
 							@Html.TextBoxFor(m => m.EmployeeId, new { @class = "form-control ovrd-form-control" })
 						</div>
 					</td>
 				</tr>
+				<tr>
+					<td>
+						<div>
+							@Html.ReqLabelFor(m => m.OrgRolesList, string.Format("{0} Role", Model.OrganizationName))
+						</div>
+					</td>
+					<td>
+						<div class="role-drop-down">
+							@Html.HiddenFor(m => m.OrgRolesList)
+							@Html.DropDownListFor(m => m.SelectedOrganizationRoleId, new SelectList(Model.OrgRolesList, "Key", "Value"), new { @class = "form-control ovrd-form-control" })
+						</div>
+					</td>
+				</tr>
+
+					int count = 0;
+
+				foreach (var item in Model.SubscriptionRoles)
+				{
+					<tr>
+						<td>
+							<div>
+								@Html.HiddenFor(x => x.SubscriptionRoles[count].SubscriptionId)
+								@Html.HiddenFor(x => x.SubscriptionRoles[count].SubscriptionName)
+								@Html.ReqLabelFor(x => x.SubscriptionRoles[count].RoleList, string.Format("{0} Role", item.SubscriptionName))
+							</div>
+						</td>
+						<td>
+							<div class="role-drop-down">
+								@Html.DropDownListFor(x => x.SubscriptionRoles[count].SelectedRoleId, new SelectList(item.RoleList, "Key", "Value"), new { @class = "form-control ovrd-form-control" })
+							</div>
+						</td>
+					</tr>
+					count++;
+				}
 			}
 			else
 			{
@@ -79,13 +114,13 @@
 		<a href = "@Url.Action(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { @id = Model.OrganizationId })"
 		   class="btn btn-default pull-left" title="@Strings.Back"><i class="fa fa-caret-left"></i>&nbsp;@Strings.Back</a>
 		@if(Model.CanEditMember)
-		{
-			<button type = "submit" value = "@Strings.Save" class="btn btn-default pull-right" id="saveMemeber">@Strings.Save</button>
+								{
+			<button type="submit" value="@Strings.Save" class="btn btn-default pull-right" id="saveMemeber">@Strings.Save</button>
 		}
 	</div>
 </div>
 
 @if(Model.CanEditMember)
-{
+								{
 	@:</form>
 }

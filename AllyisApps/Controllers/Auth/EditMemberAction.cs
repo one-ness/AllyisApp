@@ -11,6 +11,7 @@ using AllyisApps.ViewModels.Auth;
 using System.Threading.Tasks;
 using AllyisApps.Services;
 using AllyisApps.ViewModels;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -41,10 +42,74 @@ namespace AllyisApps.Controllers.Auth
 			model.OrgRolesList = ModelHelper.GetOrgRolesList();
 			model.PhoneNumber = user.PhoneNumber;
 			model.PostalCode = user.Address?.PostalCode;
-			//model.Roles = 
+			await this.PopulateRoles(model, user);
 			model.SelectedOrganizationRoleId = (int)org.OrganizationRole;
 			model.StateName = user.Address?.StateName;
+			model.UserId = userId;
 			return View("editmember", model);
+		}
+
+		private async Task PopulateRoles(EditMemberViewModel model, User user)
+		{
+			// get all subscriptions of this organization, get a list of roles for each subscription and user's role in each subscription
+			var subs = await this.AppService.GetSubscriptionsAsync(model.OrganizationId);
+			foreach (var item in subs)
+			{
+				if (item.ProductId == ProductIdEnum.TimeTracker)
+				{
+					model.SubscriptionRoles.Add(new EditMemberViewModel.RoleItem()
+					{
+						RoleList = ModelHelper.GetTimeTrackerRolesList(),
+						SelectedRoleId = user.Subscriptions.Where(x => x.SubscriptionId == item.SubscriptionId).FirstOrDefault().ProductRoleId,
+						SubscriptionId = item.SubscriptionId,
+						SubscriptionName = item.SubscriptionName
+					});
+				}
+				else if (item.ProductId == ProductIdEnum.ExpenseTracker)
+				{
+					model.SubscriptionRoles.Add(new EditMemberViewModel.RoleItem()
+					{
+						RoleList = ModelHelper.GetExpenseTrackerRolesList(),
+						SelectedRoleId = user.Subscriptions.Where(x => x.SubscriptionId == item.SubscriptionId).FirstOrDefault().ProductRoleId,
+						SubscriptionId = item.SubscriptionId,
+						SubscriptionName = item.SubscriptionName
+					});
+				}
+				else if (item.ProductId == ProductIdEnum.StaffingManager)
+				{
+					model.SubscriptionRoles.Add(new EditMemberViewModel.RoleItem()
+					{
+						RoleList = ModelHelper.GetStaffingManagerRolesList(),
+						SelectedRoleId = user.Subscriptions.Where(x => x.SubscriptionId == item.SubscriptionId).FirstOrDefault().ProductRoleId,
+						SubscriptionId = item.SubscriptionId,
+						SubscriptionName = item.SubscriptionName
+					});
+				}
+			}
+		}
+
+		/// <summary>
+		/// edit member
+		/// </summary>
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<ActionResult> EditMember(EditMemberViewModel model)
+		{
+			if (ModelState.IsValid)
+			{
+				foreach (var item in model.SubscriptionRoles)
+				{
+					if (item.SelectedRoleId > 0)
+					{
+
+					}
+				}
+			}
+
+			// error
+			User user = await AppService.GetUserAsync(model.UserId); // this call makes sure that both logged in user and userId have at least one common org
+			await this.PopulateRoles(model, user);
+			return View(model);
 		}
 	}
 }
