@@ -4,27 +4,27 @@
 @model AllyisApps.ViewModels.Auth.OrganizationMembersViewModel
 @Html.HiddenFor(x => x.OrganizationId)
 
-<div class="ovrd-panel-heading panel-heading">
-	<h1 class="ovrd-panel-title panel-title">
+<div class="panel-heading">
+	<h1 class="panel-title">
 		@Strings.Members: @Model.TotalUsers
-		<span class="pull-right ovrd-panel-title panel-title">
-			<a href="@Url.Action(ActionConstants.ManageOrgPermissions, ControllerConstants.Account, new { id = Model.OrganizationId })" class="ovrd-fa fa ovrd-fa-fw fa-fw ovrd-fa-unlock fa-unlock" title="@Strings.ManagePermissions"></a>&nbsp;
-			<a href="@Url.Action(ActionConstants.AddMember, ControllerConstants.Account, new { id = Model.OrganizationId })" class="ovrd-fa fa ovrd-fa-fw fa-fw ovrd-fa-user-plus fa-user-plus" title="@Strings.AddMembers"></a>
+		<span class="pull-right panel-title">
+			<a href="@Url.Action(ActionConstants.ManageOrgPermissions, ControllerConstants.Account, new { id = Model.OrganizationId })" class="fa fa-fw fa-unlock" title="@Strings.ManagePermissions"></a>&nbsp;
+			<a href="@Url.Action(ActionConstants.AddMember, ControllerConstants.Account, new { id = Model.OrganizationId })" class="fa fa-fw fa-user-plus" title="@Strings.AddMembers"></a>
 		</span>
 	</h1>
 </div>
-<div class="ovrd-panel-body panel-body" style="padding: 0px;">
+<div class="panel-body" style="padding: 0px;">
 	<div style="padding: 5px;">
-		<span class="ovrd-col-xs-9 col-xs-9 col" style="padding: 0px;"><input id="org-members-search" type="search" placeholder="🔍 " class="ovrd-form-control form-control" /></span>
-		<span class="ovrd-col-xs-2 col-xs-2 ovrd-col-xs-push-1 col-xs-push-1 col" style="vertical-align: middle; padding: 0px;">
-			<select id="org-members-role" class="ovrd-form-control form-control">
+		<span class="col-xs-9" style="padding: 0px;"><input id="org-members-search" type="search" placeholder="🔍 " class="form-control" /></span>
+		<span class="col-xs-2 col-xs-push-1" style="vertical-align: middle; padding: 0px;">
+			<select id="org-members-role" class="form-control">
 				<option>@Strings.Any</option>
 				<option>@Strings.Member</option>
 				<option>@Strings.Owner</option>
 			</select>
 		</span>
 	</div>
-	<table class="ovrd-table ovrd-table-hover table-hover ovrd-table-condensed table-condensed">
+	<table class="table table-hover table-condensed">
 		<thead>
 			<tr class="double-bottom-border">
 				<th style="width: 24%">@Strings.Name</th>
@@ -45,10 +45,10 @@
 					<td class="memberOrgRole">-</td>
 					<td class="text-right icon-strip">
 						<a href="@Url.Action(ActionConstants.ResendInvite, ControllerConstants.Account ,new { id = invite.InvitationId })" title="@Strings.ResendInvite">
-							<span class="ovrd-fa fa ovrd-fa-fw fa-fw ovrd-fa-envelope fa-envelope"></span>
+							<span class="fa fa-fw fa-envelope"></span>
 						</a>
 						<a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account)@pars" title="@Strings.EditEmployee">
-							<span class="ovrd-fa fa ovrd-fa-fw fa-fw ovrd-fa-edit fa-edit"></span>
+							<span class="fa fa-fw fa-edit"></span>
 						</a>
 					</td>
 				</tr>
@@ -68,7 +68,7 @@
 									onclick='removeUser("@user.OrganizationId", "@user.UserId", "@user.FullName", false)'><span class="fa fa-fw fa-remove text-danger"></span></a>
 							}*@
 						<a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account)@pars" title="@Strings.EditEmployee">
-							<span class="ovrd-fa fa ovrd-fa-fw fa-fw ovrd-fa-edit fa-edit"></span>
+							<span class="fa fa-fw fa-edit"></span>
 						</a>
 					</td>
 				</tr>

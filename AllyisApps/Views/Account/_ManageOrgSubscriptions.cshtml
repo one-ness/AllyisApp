@@ -16,10 +16,10 @@
 }
 
 <tr>
-	<td class="ovrd-col-md-8 col-md-8 col">@Model.SubscriptionName</td>
-	<td class="ovrd-col-md-2 col-md-2 col" style="text-align: center">@userDisplay</td>
-	<td class="text-right ovrd-col-md-2 col-md-2 col">
-		<a href="@Url.Action(ActionConstants.ManageSubPermissions, ControllerConstants.Account, new { id = Model.SubscriptionId })" class="text-muted" title="@Strings.ManagePermissions" style="color:inherit"><span class="ovrd-fa fa ovrd-fa-fw fa-fw ovrd-fa-unlock fa-unlock"></span></a>
-		<a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = Model.SubscriptionId })" class="text-muted" title="@Strings.EditSubscription" style="color:inherit"><span class="ovrd-fa fa ovrd-fa-fw fa-fw ovrd-fa-edit fa-edit"></span></a>
+	<td class="col-md-8">@Model.SubscriptionName</td>
+	<td class="col-md-2" style="text-align: center">@userDisplay</td>
+	<td class="text-right col-md-2">
+		<a href="@Url.Action(ActionConstants.ManageSubPermissions, ControllerConstants.Account, new { id = Model.SubscriptionId })" class="text-muted" title="@Strings.ManagePermissions" style="color:inherit"><span class="fa fa-fw fa-unlock"></span></a>
+		<a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = Model.SubscriptionId })" class="text-muted" title="@Strings.EditSubscription" style="color:inherit"><span class="fa fa-fw fa-edit"></span></a>
 	</td>
 </tr>
