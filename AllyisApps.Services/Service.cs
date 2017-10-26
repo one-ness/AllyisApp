@@ -137,17 +137,17 @@ namespace AllyisApps.Services
 		/// <param name="start">Starting. <see cref="DateTime"/>.</param>
 		/// <param name="end">Ending. <see cref="DateTime"/>.</param>
 		/// <returns>A list of TimeEntry's for a given organization and start/end times.</returns>
-		public IEnumerable<TimeEntry> GetTimeEntriesOverDateRange(int orgId, DateTime start, DateTime end)
+		public async Task<IEnumerable<TimeEntry>> GetTimeEntriesOverDateRange(int orgId, DateTime start, DateTime end)
 		{
 			#region Validation
 
 			if (start == null)
 			{
-				throw new ArgumentNullException("start", "Project must have a start time");
+				throw new ArgumentNullException(nameof(start), "Project must have a start time");
 			}
 			if (end == null)
 			{
-				throw new ArgumentNullException("end", "Project must have an end time");
+				throw new ArgumentNullException(nameof(end), "Project must have an end time");
 			}
 			if (DateTime.Compare(start, end) > 0)
 			{
@@ -156,7 +156,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return DBHelper.GetTimeEntriesOverDateRange(orgId, start, end).Select(te => InitializeTimeEntryInfo(te));
+			return (await DBHelper.GetTimeEntriesOverDateRange(orgId, start, end)).Select(InitializeTimeEntryInfo);
 		}
 
 		/// <summary>
@@ -173,29 +173,28 @@ namespace AllyisApps.Services
 
 			if (userIds == null || userIds.Count == 0)
 			{
-				throw new ArgumentNullException("userIds", "There must be at least one provided user id.");
+				throw new ArgumentNullException(nameof(userIds), "There must be at least one provided user id.");
 			}
-			if (userIds.Where(u => u <= 0).Count() > 0)
+			if (userIds.Any(u => u <= 0))
 			{
-				throw new ArgumentOutOfRangeException("userIds", "User ids cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(userIds), "User ids cannot be 0 or negative.");
 			}
 			if (start == null)
 			{
-				throw new ArgumentNullException("start", "Date range must have a start date.");
+				throw new ArgumentNullException(nameof(start), "Date range must have a start date.");
 			}
 			if (end == null)
 			{
-				throw new ArgumentNullException("end", "Date range must have an end date.");
+				throw new ArgumentNullException(nameof(end), "Date range must have an end date.");
 			}
-			if (DateTime.Compare(start ?? DateTime.Now, end ?? DateTime.Now) > 0)
+			if (DateTime.Compare(start.Value, end.Value) > 0)
 			{
 				throw new ArgumentException("Date range cannot end before it starts.");
 			}
 
 			#endregion Validation
 
-			var results = await DBHelper.GetTimeEntriesByUserOverDateRange(userIds, organizationId, start ?? DateTime.Now, end ?? DateTime.Now);
-			return results.Select(te => InitializeTimeEntryInfo(te));
+			return (await DBHelper.GetTimeEntriesByUserOverDateRange(userIds, organizationId, start.Value, end.Value)).Select(InitializeTimeEntryInfo);
 		}
 
 		/// <summary>
@@ -427,7 +426,7 @@ namespace AllyisApps.Services
 
 			if (userIds == null || userIds.Count == 0 || userIds[0] == -1)
 			{
-				data = GetTimeEntriesOverDateRange(orgId, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1));
+				data = await GetTimeEntriesOverDateRange(orgId, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1));
 			}
 			else
 			{

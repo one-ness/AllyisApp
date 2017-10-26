@@ -31,10 +31,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subscriptionId">Subscription id.</param>
 		/// <param name="userId">The project's Id.</param>
 		/// <returns>The ActionResult for the Edit view.</returns>
-		public ActionResult Edit(int subscriptionId, int userId)
+		public async Task<ActionResult> Edit(int subscriptionId, int userId)
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
-			return View(ConstructEditProjectViewModel(userId, subscriptionId));
+			return View(await ConstructEditProjectViewModel(userId, subscriptionId));
 		}
 
 		/// <summary>
@@ -77,7 +77,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					string message = Resources.Strings.FailureProjectEdited;
 					if (ex.Message != null)
 					{
-						message = string.Format("{0} {1}", message, ex.Message);
+						message = $"{message} {ex.Message}";
 					}
 
 					// Update failure

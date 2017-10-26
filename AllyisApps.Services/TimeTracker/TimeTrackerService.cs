@@ -6,6 +6,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using AllyisApps.DBModel.TimeTracker;
 using AllyisApps.Services.TimeTracker;
 
@@ -16,14 +17,14 @@ namespace AllyisApps.Services
 	/// </summary>
 	public partial class AppService : BaseService
 	{
-		public Setting GetSettingsByOrganizationId(int organizationId)
+		public async Task<Setting> GetSettingsByOrganizationId(int organizationId)
 		{
 			if (organizationId < 0)
 			{
 				throw new ArgumentOutOfRangeException(nameof(organizationId), $"{nameof(organizationId)} must be greater than 0.");
 			}
 
-			return DBEntityToServiceObject(DBHelper.GetSettingsByOrganizationId(organizationId));
+			return DBEntityToServiceObject(await DBHelper.GetSettingsByOrganizationId(organizationId));
 		}
 
 		/// <summary>
@@ -32,7 +33,7 @@ namespace AllyisApps.Services
 		/// <param name="subscriptionId">Subscription that the lock operation will be performed on.</param>
 		/// <param name="lockDate">The date from which to all all time entries before.  Also the end date of the review page's date range.</param>
 		/// <returns>Redirect to same page.</returns>
-		public LockEntriesResult LockTimeEntries(int subscriptionId, DateTime lockDate)
+		public async Task<LockEntriesResult> LockTimeEntries(int subscriptionId, DateTime lockDate)
 		{
 			if (subscriptionId < 0)
 			{
@@ -40,13 +41,19 @@ namespace AllyisApps.Services
 			}
 
 			int organizationId = UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-			Setting timeTrackerSettings = GetSettingsByOrganizationId(organizationId);
-			DateTime startDate = timeTrackerSettings.LockDate ?? System.Data.SqlTypes.SqlDateTime.MinValue.Value;
-			var timeEntries = GetTimeEntriesOverDateRange(organizationId, startDate, lockDate);
+			Setting timeTrackerSettings = await GetSettingsByOrganizationId(organizationId);
+			DateTime startDate = timeTrackerSettings.LockDate ?? timeTrackerSettings.PayrollProcessedDate ?? System.Data.SqlTypes.SqlDateTime.MinValue.Value;
+			startDate = startDate.AddDays(1);
 
+			if (startDate > lockDate)
+			{
+				return LockEntriesResult.InvalidLockDate;
+			}
+
+			var timeEntries = await GetTimeEntriesOverDateRange(organizationId, startDate, lockDate);
 			if (timeEntries.Any(entry =>
-				(TimeEntryStatus)entry.TimeEntryStatusId != TimeEntryStatus.Approved ||
-				(TimeEntryStatus)entry.TimeEntryStatusId != TimeEntryStatus.Rejected))
+				entry.TimeEntryStatusId == (int)TimeEntryStatus.Pending ||
+				entry.TimeEntryStatusId == (int)TimeEntryStatus.PayrollProcessed))
 			{
 				return LockEntriesResult.InvalidStatuses;
 			}
@@ -54,7 +61,7 @@ namespace AllyisApps.Services
 			return UpdateLockDate(organizationId, lockDate) == 1 ? LockEntriesResult.Success : LockEntriesResult.DBError;
 		}
 
-		public UnlockEntriesResult UnlockTimeEntries(int subscriptionId)
+		public async Task<UnlockEntriesResult> UnlockTimeEntries(int subscriptionId)
 		{
 			if (subscriptionId < 0)
 			{
@@ -62,19 +69,17 @@ namespace AllyisApps.Services
 			}
 
 			int organizationId = UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-			Setting timeTrackerSettings = GetSettingsByOrganizationId(organizationId);
+			Setting timeTrackerSettings = await GetSettingsByOrganizationId(organizationId);
 
 			if (timeTrackerSettings.LockDate == null)
 			{
 				return UnlockEntriesResult.NoLockDate;
 			}
 
-			DateTime? lockDate = timeTrackerSettings.PayrollProcessedDate == null ? null : timeTrackerSettings.LockDate;
-
-			return UpdateLockDate(organizationId, lockDate) == 1 ? UnlockEntriesResult.Success : UnlockEntriesResult.DBError;
+			return UpdateLockDate(organizationId, null) == 1 ? UnlockEntriesResult.Success : UnlockEntriesResult.DBError;
 		}
 
-		public PayrollProcessEntriesResult PayrollProcessTimeEntries(int subscriptionId)
+		public async Task<PayrollProcessEntriesResult> PayrollProcessTimeEntriesAsync(int subscriptionId)
 		{
 			// Validate params
 			if (subscriptionId < 0)
@@ -89,7 +94,7 @@ namespace AllyisApps.Services
 			}
 
 			// Validate that there are locked entries to process
-			Setting timeTrackerSettings = GetSettingsByOrganizationId(organizationId);
+			Setting timeTrackerSettings = await GetSettingsByOrganizationId(organizationId);
 			if (timeTrackerSettings.LockDate == null)
 			{
 				return PayrollProcessEntriesResult.NoLockDate;
@@ -97,10 +102,21 @@ namespace AllyisApps.Services
 
 			// Validate that all statuses in the affected date range are correct (!Pending)
 			DateTime startDate = timeTrackerSettings.PayrollProcessedDate ?? System.Data.SqlTypes.SqlDateTime.MinValue.Value;
-			var timeEntries = DBHelper.GetTimeEntriesOverDateRange(organizationId, startDate, timeTrackerSettings.LockDate.Value).ToList();
-			if (timeEntries.Any(entry => entry.TimeEntryStatusId == (int)TimeEntryStatus.Pending))
+			startDate = startDate.AddDays(1);
+			var timeEntries = await DBHelper.GetTimeEntriesOverDateRange(organizationId, startDate, timeTrackerSettings.LockDate.Value);
+			if (timeEntries.Any(entry =>
+				entry.TimeEntryStatusId == (int)TimeEntryStatus.Pending ||
+				entry.TimeEntryStatusId == (int)TimeEntryStatus.PayrollProcessed))
 			{
 				return PayrollProcessEntriesResult.InvalidStatuses;
+			}
+
+			//Update approved entries to payroll processed
+			timeEntries = timeEntries.Where(entry => entry.TimeEntryStatusId == (int)TimeEntryStatus.Approved).ToList();
+
+			foreach (var entry in timeEntries)
+			{
+				await DBHelper.UpdateTimeEntryStatusById(entry.TimeEntryId, (int)TimeEntryStatus.PayrollProcessed);
 			}
 
 			// Perform payroll process and lock date update,
@@ -110,12 +126,6 @@ namespace AllyisApps.Services
 			{
 				return PayrollProcessEntriesResult.DBError;
 			}
-
-			//Update approved entries to payroll processed
-			timeEntries
-				.Where(entry => entry.TimeEntryStatusId == (int)TimeEntryStatus.Approved)
-				.ToList()
-				.ForEach(entry => DBHelper.UpdateTimeEntryStatusById(entry.TimeEntryId, (int)TimeEntryStatus.PayrollProcessed));
 
 			return PayrollProcessEntriesResult.Success;
 		}
