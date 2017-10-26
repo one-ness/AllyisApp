@@ -23,9 +23,9 @@ namespace AllyisApps.ViewModels.Staffing.Customer
 		{
 			// Note: this is included soley to keep the model constructed during a POST from complaining about a null reference
 			//   as it builds the countries list, even though the list isn't used anymore.
-			this.LocalizedCountries = new Dictionary<string, string>();
-			this.LocalizedStates = new Dictionary<string, string>();
-			this.IsCreating = false;
+			LocalizedCountries = new Dictionary<string, string>();
+			LocalizedStates = new Dictionary<string, string>();
+			IsCreating = false;
 		}
 
 		/// <summary>

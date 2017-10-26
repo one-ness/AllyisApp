@@ -49,7 +49,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			return this.RedirectToAction(ActionConstants.SettingsPayClass, new { subscriptionId = subscriptionId });
+			return RedirectToAction(ActionConstants.SettingsPayClass, new { subscriptionId = subscriptionId });
 		}
 	}
 }

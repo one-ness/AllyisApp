@@ -49,13 +49,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Page = pageNum,
 					ProjectId = projectSelect,
 					StartDate = dateRangeStart.Value,
-					Users = userSelect ?? (List<int>)this.TempData["USelect"]
+					Users = userSelect ?? (List<int>)TempData["USelect"]
 				};
 
 				// when selecting page
 				if (userSelect == null)
 				{
-					reportVMselect.Users = (List<int>)this.TempData["USelect"];
+					reportVMselect.Users = (List<int>)TempData["USelect"];
 				}
 				else
 				{
@@ -63,7 +63,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 
 				UserContext.SubscriptionAndRole subInfo = null;
-				this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+				AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 
 				var infosTask = AppService.GetReportInfo(subscriptionId);
 				var subNameTask = AppService.GetSubscriptionName(subscriptionId);
@@ -73,14 +73,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				var infos = infosTask.Result;
 				string subName = subNameTask.Result;
 
-				bool canEditOthers = this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId, false);
-				ReportViewModel reportVM = this.ConstructReportViewModel(this.AppService.UserContext.UserId, organizationId, canEditOthers, infos.Customers, infos.CompleteProject, showExport, reportVMselect);
+				bool canEditOthers = AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId, false);
+				ReportViewModel reportVM = ConstructReportViewModel(AppService.UserContext.UserId, organizationId, canEditOthers, infos.Customers, infos.CompleteProject, showExport, reportVMselect);
 				reportVM.SubscriptionName = subName;
 
 				DataExportViewModel dataVM = null;
 				try
 				{
-					dataVM = await this.ConstructDataExportViewModel(subscriptionId, organizationId, reportVMselect.Users, Utility.GetDateTimeFromDays(dateRangeStart.Value), Utility.GetDateTimeFromDays(dateRangeEnd.Value), projectSelect, customerSelect);
+					dataVM = await ConstructDataExportViewModel(subscriptionId, organizationId, reportVMselect.Users, Utility.GetDateTimeFromDays(dateRangeStart.Value), Utility.GetDateTimeFromDays(dateRangeEnd.Value), projectSelect, customerSelect);
 				}
 				catch (Exception ex)
 				{
@@ -92,7 +92,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 					// Update failure
 					Notifications.Add(new BootstrapAlert(message, Variety.Danger));
-					return this.RedirectToAction(ActionConstants.Report, ControllerConstants.TimeEntry);
+					return RedirectToAction(ActionConstants.Report, ControllerConstants.TimeEntry);
 				}
 
 				dataVM.PageTotal = SetPageTotal(dataVM.Data, reportVM.PreviewPageSize, pageNum); // must set PageTotal first and seperately like this.
@@ -135,15 +135,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					reportVM.PreviewPageNum = 1;
 				}
 
-				this.TempData["RVM"] = reportVM;
-				return this.RedirectToAction(ActionConstants.Report);
+				TempData["RVM"] = reportVM;
+				return RedirectToAction(ActionConstants.Report);
 			}
 			else if (viewDataButton.Equals(Resources.Strings.Export))
 			{
-				return await this.ExportReport(subscriptionId, organizationId, userSelect, Utility.GetDateTimeFromDays(dateRangeStart.Value), Utility.GetDateTimeFromDays(dateRangeEnd.Value), customerSelect, projectSelect);
+				return await ExportReport(subscriptionId, organizationId, userSelect, Utility.GetDateTimeFromDays(dateRangeStart.Value), Utility.GetDateTimeFromDays(dateRangeEnd.Value), customerSelect, projectSelect);
 			}
 
-			return this.RedirectToAction(ActionConstants.Report);
+			return RedirectToAction(ActionConstants.Report);
 		}
 
 		/// <summary>

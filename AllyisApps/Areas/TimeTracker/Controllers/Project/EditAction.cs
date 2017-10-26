@@ -33,8 +33,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The ActionResult for the Edit view.</returns>
 		public ActionResult Edit(int subscriptionId, int userId)
 		{
-			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
-			return this.View(this.ConstructEditProjectViewModel(userId, subscriptionId));
+			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
+			return View(ConstructEditProjectViewModel(userId, subscriptionId));
 		}
 
 		/// <summary>
@@ -58,14 +58,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			int orgId = AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId;
 			if (ModelState.IsValid)
 			{
-				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
+				AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
 
 				var projIdMatchGet = await AppService.GetAllProjectsForOrganization(orgId);
 				Services.Project.Project projIdMatch = projIdMatchGet.Where(project => project.ProjectOrgId == model.ProjectOrgId && project.owningCustomer?.CustomerId == model.ParentCustomerId).SingleOrDefault();
 				if (projIdMatch != null && projIdMatch.ProjectId != model.ProjectId)
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
-					return this.View(model);
+					return View(model);
 				}
 
 				try
@@ -82,16 +82,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 					// Update failure
 					Notifications.Add(new BootstrapAlert(message, Variety.Danger));
-					return this.View(model);
+					return View(model);
 				}
 
 				Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessProjectEdited, Variety.Success));
 
-				return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = model.SubscriptionId }), model.ParentCustomerId));
+				return Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = model.SubscriptionId }), model.ParentCustomerId));
 			}
 			else
 			{
-				return this.View(model);
+				return View(model);
 			}
 		}
 

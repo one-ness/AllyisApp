@@ -1,14 +1,11 @@
 ﻿﻿@using AllyisApps.Areas.ExpenseTracker.Controllers
-@using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense
-@using AllyisApps.DBModel.Finance
-@using AllyisApps.Services
 @using AllyisApps.ViewModels.ExpenseTracker.Expense
 @using HtmlHelpers.BeginCollectionItem
 @model ExpenseItemCreateViewModel
 @{
-	if (this.ViewContext.FormContext == null)
+	if (ViewContext.FormContext == null)
 	{
-		this.ViewContext.FormContext = new FormContext();
+		ViewContext.FormContext = new FormContext();
 	}
 }
 <tr id="@String.Format("item-input_{0}", Model.Index)" class="item-div" style="margin: 10px; margin-bottom: 0px;">

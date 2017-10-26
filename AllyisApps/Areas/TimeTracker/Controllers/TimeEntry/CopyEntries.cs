@@ -40,23 +40,23 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			// TODO flesh these out
 			if (startDateCopy > endDateCopy)
 			{
-				return this.View(ViewConstants.Error);
+				return View(ViewConstants.Error);
 			}
 			else if (startDateCopy > startDateTarget)
 			{
-				return this.View(ViewConstants.Error);
+				return View(ViewConstants.Error);
 			}
 
 			#endregion Validation
 
-			if (userId != this.AppService.UserContext.UserId)
+			if (userId != AppService.UserContext.UserId)
 			{
 				// editing the entries of another user
-				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
+				AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			}
 
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			int organizationId = subInfo.OrganizationId;
 
 			// Reference for checking status of entries
@@ -120,7 +120,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			return this.RedirectToAction(
+			return RedirectToAction(
 				ActionConstants.Index,
 				new
 				{

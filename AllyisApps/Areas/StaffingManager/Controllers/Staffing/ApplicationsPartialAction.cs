@@ -25,8 +25,8 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		[HttpGet]
 		public async Task<ActionResult> ApplicationsPartial(int subscriptionId, List<StaffingApplicationViewModel> model)
 		{
-			var subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
-			List<Position> positions = await this.AppService.GetPositionsByOrganizationId(subInfo.OrganizationId);
+			var subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+			List<Position> positions = await AppService.GetPositionsByOrganizationId(subInfo.OrganizationId);
 			List<SelectListItem> positionList = new List<SelectListItem>();
 			foreach (Position pos in positions)
 			{
@@ -42,7 +42,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				mod.PositionList = positionList;
 			}
 
-			return this.PartialView(model);
+			return PartialView(model);
 		}
 	}
 }

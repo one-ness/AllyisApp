@@ -1,6 +1,6 @@
 ﻿namespace AllyisApps.Services.StaffingManager
 {
-	public enum ApplicationStatusEnum : int
+	public enum ApplicationStatusEnum
 	{
 		/// <summary>
 		/// In Progress.

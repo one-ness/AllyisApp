@@ -6,7 +6,23 @@
 
 namespace AllyisApps.Services.Auth
 {
-	public enum StaffingManagerRole : int
+	/// <summary>
+	/// Role of the user in an organization.
+	/// </summary>
+	public enum OrganizationRoleEnum
+	{
+		/// <summary>
+		/// Organization member.
+		/// </summary>
+		Member = 1,
+
+		/// <summary>
+		/// Organization owner.
+		/// </summary>
+		Owner = 2
+	}
+
+	public enum StaffingManagerRole
 	{
 		/// <summary>
 		/// Staffing Manager Unavailable.
@@ -27,7 +43,7 @@ namespace AllyisApps.Services.Auth
 	/// <summary>
 	/// Product role aka Subscription role.
 	/// </summary>
-	public enum TimeTrackerRole : int
+	public enum TimeTrackerRole
 	{
 		/// <summary>
 		/// TimeTracker Unavailable.
@@ -45,7 +61,7 @@ namespace AllyisApps.Services.Auth
 		Manager = 2
 	}
 
-	public enum ExpenseTrackerRole : int
+	public enum ExpenseTrackerRole
 	{
 		/// <summary>
 		/// Expense Tracker Unavailable.

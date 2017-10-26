@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -31,7 +30,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			if (!parsed)
 			{
-				return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
+				return RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
 			}
 			else
 			{
@@ -50,7 +49,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 				}
 
-				return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
+				return RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
 			}
 		}
 	}

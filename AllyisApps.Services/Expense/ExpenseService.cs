@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AllyisApps.DBModel;
 using AllyisApps.DBModel.Finance;
 using AllyisApps.Services.Expense;
 
@@ -87,7 +86,7 @@ namespace AllyisApps.Services
 			ExpenseItemDBEntity itemEntity = new ExpenseItemDBEntity()
 			{
 				AccountId = item.AccountId,
-				Amount = Decimal.Parse(String.Format("{0:c}", item.Amount.ToString())),
+				Amount = Decimal.Parse(String.Format("{0:c}", item.Amount)),
 				ExpenseItemId = item.ExpenseItemId,
 				ExpenseReportId = item.ExpenseReportId,
 				IsBillableToCustomer = item.IsBillableToCustomer,
@@ -242,7 +241,7 @@ namespace AllyisApps.Services
 			ExpenseItemDBEntity itemEntity = new ExpenseItemDBEntity()
 			{
 				AccountId = item.AccountId,
-				Amount = Decimal.Parse(String.Format("{0:c}", item.Amount.ToString())),
+				Amount = Decimal.Parse(String.Format("{0:c}", item.Amount)),
 				CreatedUtc = item.ExpenseItemCreatedUtc,
 				ExpenseItemId = item.ExpenseItemId,
 				ExpenseReportId = item.ExpenseReportId,

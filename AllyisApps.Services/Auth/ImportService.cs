@@ -60,22 +60,22 @@ namespace AllyisApps.Services
 
 			// Retrieval of existing customer and project data
 			List<Tuple<Customer, List<Project.Project>>> customersProjects = new List<Tuple<Customer, List<Project.Project>>>();
-			foreach (Customer customer in this.GetCustomerList(orgId))
+			foreach (Customer customer in GetCustomerList(orgId))
 			{
 				customersProjects.Add(new Tuple<Customer, List<Project.Project>>(
 					customer,
-					(await this.GetProjectsByCustomer(customer.CustomerId)).ToList()
+					(await GetProjectsByCustomer(customer.CustomerId)).ToList()
 				));
 			}
 
 			// Retrieval of existing user data
-			var userGet = await this.GetUserAsync(UserContext.UserId);
-			List<Tuple<string, User>> users = this.GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, userGet )).ToList();
+			var userGet = await GetUserAsync(UserContext.UserId);
+			List<Tuple<string, User>> users = GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, userGet)).ToList();
 
 			// Retrieval of existing user product subscription data
 			int ttProductId = (int)ProductIdEnum.TimeTracker;
 			SubscriptionDisplayDBEntity ttSub = DBHelper.GetSubscriptionsDisplayByOrg(orgId).Where(s => s.ProductId == ttProductId).SingleOrDefault();
-			List<User> userSubs = (await this.GetUsersWithSubscriptionToProductInOrganization(orgId, ttProductId)).ToList();
+			List<User> userSubs = (await GetUsersWithSubscriptionToProductInOrganization(orgId, ttProductId)).ToList();
 
 			// Retrieval of existing pay class data
 			var classGet = await DBHelper.GetPayClasses(orgId);
@@ -209,8 +209,8 @@ namespace AllyisApps.Services
 									// If customerImportLinks is empty, it's because all the information is on this sheet.
 									string name = null;
 									string custOrgId = null;
-									this.readColumn(row, ColumnHeaders.CustomerName, n => name = n);
-									this.readColumn(row, ColumnHeaders.CustomerId, n => custOrgId = n);
+									readColumn(row, ColumnHeaders.CustomerName, n => name = n);
+									readColumn(row, ColumnHeaders.CustomerId, n => custOrgId = n);
 									if (name == null && custOrgId == null)
 									{
 										result.CustomerFailures.Add(string.Format("Error importing customer on sheet {0}, row {1}: both {2} and {3} cannot be read.", table.TableName, table.Rows.IndexOf(row) + 2, ColumnHeaders.CustomerName, ColumnHeaders.CustomerId));
@@ -235,7 +235,7 @@ namespace AllyisApps.Services
 									// If customerImportLinks has been set, we have to grab some information from another sheet.
 									string knownValue = null;
 									string readValue = null;
-									this.readColumn(row, hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId, n => knownValue = n);
+									readColumn(row, hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId, n => knownValue = n);
 									if (knownValue == null)
 									{
 										result.CustomerFailures.Add(string.Format("Error importing customer on sheet {0}, row {1}: {2} cannot be read.", table.TableName, table.Rows.IndexOf(row) + 2, hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId));
@@ -268,7 +268,7 @@ namespace AllyisApps.Services
 
 								if (newCustomer != null)
 								{
-									int? newCustomerId = await this.CreateCustomer(newCustomer, subscriptionId);
+									int? newCustomerId = await CreateCustomer(newCustomer, subscriptionId);
 									if (newCustomerId == null)
 									{
 										result.CustomerFailures.Add(string.Format("Could not create customer {0}: permission failure.", newCustomer.CustomerName));
@@ -293,7 +293,7 @@ namespace AllyisApps.Services
 							else
 							{
 								// Not enough information to create customer
-								result.CustomerFailures.Add(string.Format("Could not create customer {0}: no matching {1}.", row[hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId].ToString(), hasCustomerName ? ColumnHeaders.CustomerId : ColumnHeaders.CustomerName));
+								result.CustomerFailures.Add(string.Format("Could not create customer {0}: no matching {1}.", row[hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId], hasCustomerName ? ColumnHeaders.CustomerId : ColumnHeaders.CustomerName));
 							}
 						}
 
@@ -302,19 +302,19 @@ namespace AllyisApps.Services
 						{
 							bool updated = false;
 
-							if (hasCustomerStreetAddress) updated = this.readColumn(row, ColumnHeaders.CustomerStreetAddress, val => customer.Address.Address1 = val) || updated;
-							if (hasCustomerCity) updated = this.readColumn(row, ColumnHeaders.CustomerCity, val => customer.Address.City = val) || updated;
-							if (hasCustomerCountry) updated = this.readColumn(row, ColumnHeaders.CustomerCountry, val => customer.Address.CountryName = val) || updated;
-							if (hasCustomerState) updated = this.readColumn(row, ColumnHeaders.CustomerState, val => customer.Address.StateName = val) || updated;
-							if (hasCustomerPostalCode) updated = this.readColumn(row, ColumnHeaders.CustomerPostalCode, val => customer.Address.PostalCode = val) || updated;
-							if (hasCustomerEmail) updated = this.readColumn(row, ColumnHeaders.CustomerEmail, val => customer.ContactEmail = val) || updated;
-							if (hasCustomerPhoneNumber) updated = this.readColumn(row, ColumnHeaders.CustomerPhoneNumber, val => customer.ContactPhoneNumber = val) || updated;
-							if (hasCustomerFaxNumber) updated = this.readColumn(row, ColumnHeaders.CustomerFaxNumber, val => customer.FaxNumber = val) || updated;
-							if (hasCustomerEIN) updated = this.readColumn(row, ColumnHeaders.CustomerEIN, val => customer.EIN = val) || updated;
+							if (hasCustomerStreetAddress) updated = readColumn(row, ColumnHeaders.CustomerStreetAddress, val => customer.Address.Address1 = val) || updated;
+							if (hasCustomerCity) updated = readColumn(row, ColumnHeaders.CustomerCity, val => customer.Address.City = val) || updated;
+							if (hasCustomerCountry) updated = readColumn(row, ColumnHeaders.CustomerCountry, val => customer.Address.CountryName = val) || updated;
+							if (hasCustomerState) updated = readColumn(row, ColumnHeaders.CustomerState, val => customer.Address.StateName = val) || updated;
+							if (hasCustomerPostalCode) updated = readColumn(row, ColumnHeaders.CustomerPostalCode, val => customer.Address.PostalCode = val) || updated;
+							if (hasCustomerEmail) updated = readColumn(row, ColumnHeaders.CustomerEmail, val => customer.ContactEmail = val) || updated;
+							if (hasCustomerPhoneNumber) updated = readColumn(row, ColumnHeaders.CustomerPhoneNumber, val => customer.ContactPhoneNumber = val) || updated;
+							if (hasCustomerFaxNumber) updated = readColumn(row, ColumnHeaders.CustomerFaxNumber, val => customer.FaxNumber = val) || updated;
+							if (hasCustomerEIN) updated = readColumn(row, ColumnHeaders.CustomerEIN, val => customer.EIN = val) || updated;
 
 							if (updated)
 							{
-								await this.UpdateCustomer(customer, subscriptionId);
+								await UpdateCustomer(customer, subscriptionId);
 							}
 						}
 					}
@@ -337,11 +337,11 @@ namespace AllyisApps.Services
 						// Start with getting the project information that is known from this sheet
 						string knownValue = null;
 						string readValue = null;
-						this.readColumn(row, hasProjectName ? ColumnHeaders.ProjectName : ColumnHeaders.ProjectId, p => knownValue = p);
+						readColumn(row, hasProjectName ? ColumnHeaders.ProjectName : ColumnHeaders.ProjectId, p => knownValue = p);
 						if (hasProjectName && hasProjectId)
 						{
 							// If both columns exist, knownValue is Name and readValue will be Id
-							if (!this.readColumn(row, ColumnHeaders.ProjectId, p => readValue = p))
+							if (!readColumn(row, ColumnHeaders.ProjectId, p => readValue = p))
 							{
 								if (knownValue == null)
 								{
@@ -416,7 +416,7 @@ namespace AllyisApps.Services
 									StartingDate = defaultProjectStartDate,
 									EndingDate = defaultProjectEndDate
 								};
-								project.ProjectId = await this.CreateProject(project);
+								project.ProjectId = await CreateProject(project);
 								if (project.ProjectId == -1)
 								{
 									result.ProjectFailures.Add(string.Format("Database error while creating project {0}", project.ProjectName));
@@ -524,7 +524,7 @@ namespace AllyisApps.Services
 										StartingDate = defaultProjectStartDate,
 										EndingDate = defaultProjectEndDate
 									};
-									project.ProjectId = await this.CreateProject(project);
+									project.ProjectId = await CreateProject(project);
 									if (project.ProjectId == -1)
 									{
 										result.ProjectFailures.Add(string.Format("Database error while creating project {0}", project.ProjectName));
@@ -565,14 +565,14 @@ namespace AllyisApps.Services
 
 							// TODO use this line once project isHourly property is supported.  Currently disabled
 							// if (hasProjectType) updated = this.readColumn(row, ColumnHeaders.ProjectType, val => project.isHourly = val) || updated;
-							if (hasProjectStartDate) updated = this.readColumn(row, ColumnHeaders.ProjectStartDate, val => startDate = val) || updated;
-							if (hasProjectEndDate) updated = this.readColumn(row, ColumnHeaders.ProjectEndDate, val => endDate = val) || updated;
+							if (hasProjectStartDate) updated = readColumn(row, ColumnHeaders.ProjectStartDate, val => startDate = val) || updated;
+							if (hasProjectEndDate) updated = readColumn(row, ColumnHeaders.ProjectEndDate, val => endDate = val) || updated;
 							if (startDate != null) project.StartingDate = DateTime.Parse(startDate);
 							if (endDate != null) project.EndingDate = DateTime.Parse(endDate);
 
 							if (updated)
 							{
-								this.UpdateProject(subscriptionId, project);
+								UpdateProject(subscriptionId, project);
 							}
 						}
 					}
@@ -590,7 +590,7 @@ namespace AllyisApps.Services
 						string readValue = null;
 						if (hasUserEmail)
 						{
-							if (this.readColumn(row, ColumnHeaders.UserEmail, e => readValue = e))
+							if (readColumn(row, ColumnHeaders.UserEmail, e => readValue = e))
 							{
 								userTuple = users.Where(tup => tup.Item2.Email.Equals(readValue)).FirstOrDefault();
 							}
@@ -599,7 +599,7 @@ namespace AllyisApps.Services
 						{
 							if (hasEmployeeId)
 							{
-								if (this.readColumn(row, ColumnHeaders.EmployeeId, e => readValue = e))
+								if (readColumn(row, ColumnHeaders.EmployeeId, e => readValue = e))
 								{
 									userTuple = users.Where(tup => tup.Item1.Equals(readValue)).FirstOrDefault();
 								}
@@ -607,7 +607,7 @@ namespace AllyisApps.Services
 							if (userTuple == null)
 							{
 								string readLastName = null;
-								if (this.readColumn(row, ColumnHeaders.UserFirstName, e => readValue = e) && this.readColumn(row, ColumnHeaders.UserLastName, e => readLastName = e))
+								if (readColumn(row, ColumnHeaders.UserFirstName, e => readValue = e) && readColumn(row, ColumnHeaders.UserLastName, e => readLastName = e))
 								{
 									userTuple = users.Where(tup => tup.Item2.FirstName.Equals(readValue) && tup.Item2.LastName.Equals(readLastName)).FirstOrDefault();
 								}
@@ -627,7 +627,7 @@ namespace AllyisApps.Services
 									hasEmployeeId ? row[ColumnHeaders.EmployeeId].ToString() : null,
 									// Since first and last name must be together and treated as one piece of information, they are joined in this datastructure. Hopefully, we'll never
 									// have a user who's name includes the text __IMPORT__
-									hasUserName ? (row[ColumnHeaders.UserFirstName].ToString() == "" || row[ColumnHeaders.UserLastName].ToString() == "" ? null : row[ColumnHeaders.UserFirstName].ToString() + "__IMPORT__" + row[ColumnHeaders.UserLastName].ToString()) : null
+									hasUserName ? (row[ColumnHeaders.UserFirstName].ToString() == "" || row[ColumnHeaders.UserLastName].ToString() == "" ? null : row[ColumnHeaders.UserFirstName] + "__IMPORT__" + row[ColumnHeaders.UserLastName]) : null
 								};
 								// if (fields[2] == "__IMPORT__") fields[2] = null;
 
@@ -655,7 +655,7 @@ namespace AllyisApps.Services
 													{
 														try
 														{
-															fields[j] = this.readUserDataColumn(k, j, link, fields[k]); // A private method that can handle reading one column or the case of both name columns, with no difference in usage here.
+															fields[j] = readUserDataColumn(k, j, link, fields[k]); // A private method that can handle reading one column or the case of both name columns, with no difference in usage here.
 															if (fields[j] != null)
 															{
 																break;
@@ -715,11 +715,11 @@ namespace AllyisApps.Services
 						{
 							bool updated = false;
 							/* This allows any org to change thier users infomation Org are items of users, users are not properties of orgs */
-							if (hasUserAddress) updated = this.readColumn(row, ColumnHeaders.UserAddress, val => userInOrg.Address.Address1 = val) || updated;
-							if (hasUserCity) updated = this.readColumn(row, ColumnHeaders.UserCity, val => userInOrg.Address.City = val) || updated;
-							if (hasUserCountry) updated = this.readColumn(row, ColumnHeaders.UserCountry, val => userInOrg.Address.CountryName = val) || updated;
+							if (hasUserAddress) updated = readColumn(row, ColumnHeaders.UserAddress, val => userInOrg.Address.Address1 = val) || updated;
+							if (hasUserCity) updated = readColumn(row, ColumnHeaders.UserCity, val => userInOrg.Address.City = val) || updated;
+							if (hasUserCountry) updated = readColumn(row, ColumnHeaders.UserCountry, val => userInOrg.Address.CountryName = val) || updated;
 							string dateOfBirth = null;
-							if (hasUserDateOfBirth) updated = this.readColumn(row, ColumnHeaders.UserDateOfBirth, val => dateOfBirth = val) || updated;
+							if (hasUserDateOfBirth) updated = readColumn(row, ColumnHeaders.UserDateOfBirth, val => dateOfBirth = val) || updated;
 							if (!string.IsNullOrEmpty(dateOfBirth))
 							{
 								DateTime dob;
@@ -734,14 +734,14 @@ namespace AllyisApps.Services
 								}
 							}
 
-							if (hasUserPhoneExtension) updated = this.readColumn(row, ColumnHeaders.UserPhoneExtension, val => userInOrg.PhoneExtension = val) || updated;
-							if (hasUserPhoneNumber) updated = this.readColumn(row, ColumnHeaders.UserPhoneNumber, val => userInOrg.PhoneNumber = val) || updated;
-							if (hasUserPostalCode) updated = this.readColumn(row, ColumnHeaders.UserPostalCode, val => userInOrg.Address.PostalCode = val) || updated;
-							if (hasUserState) updated = this.readColumn(row, ColumnHeaders.UserState, val => userInOrg.Address.StateName = val) || updated;
+							if (hasUserPhoneExtension) updated = readColumn(row, ColumnHeaders.UserPhoneExtension, val => userInOrg.PhoneExtension = val) || updated;
+							if (hasUserPhoneNumber) updated = readColumn(row, ColumnHeaders.UserPhoneNumber, val => userInOrg.PhoneNumber = val) || updated;
+							if (hasUserPostalCode) updated = readColumn(row, ColumnHeaders.UserPostalCode, val => userInOrg.Address.PostalCode = val) || updated;
+							if (hasUserState) updated = readColumn(row, ColumnHeaders.UserState, val => userInOrg.Address.StateName = val) || updated;
 
 							if (updated)
 							{
-								await this.UpdateUserProfile(userInOrg.UserId, Utility.GetDaysFromDateTime(userInOrg.DateOfBirth), userInOrg.FirstName, userInOrg.LastName, userInOrg.PhoneNumber, userInOrg.Address?.AddressId, userInOrg.Address?.Address1, userInOrg.Address?.City, userInOrg.Address?.StateId, userInOrg.Address?.PostalCode, userInOrg.Address?.CountryCode);
+								await UpdateUserProfile(userInOrg.UserId, Utility.GetDaysFromDateTime(userInOrg.DateOfBirth), userInOrg.FirstName, userInOrg.LastName, userInOrg.PhoneNumber, userInOrg.Address?.AddressId, userInOrg.Address?.Address1, userInOrg.Address?.City, userInOrg.Address?.StateId, userInOrg.Address?.PostalCode, userInOrg.Address?.CountryCode);
 							}
 						}
 					}
@@ -756,11 +756,11 @@ namespace AllyisApps.Services
 						if (project != null && userInOrg != null)
 						{
 							// Find existing project user
-							var proj = await this.GetProjectsByUserAndOrganization(userInOrg.UserId);
+							var proj = await GetProjectsByUserAndOrganization(userInOrg.UserId);
 							if (!proj.Where(p => p.ProjectId == project.ProjectId).Any())
 							{
 								// If no project user entry exists for this user and project, we create one.
-								this.CreateProjectUser(project.ProjectId, userInOrg.UserId);
+								CreateProjectUser(project.ProjectId, userInOrg.UserId);
 							}
 
 							// Time Entry Import
@@ -771,7 +771,7 @@ namespace AllyisApps.Services
 								if (!userSubs.Where(u => u.UserId == userInOrg.UserId).Any())
 								{
 									// No existing subscription for this user, so we create one.
-									this.DBHelper.UpdateSubscriptionUserProductRole((int)(TimeTrackerRole.User), ttSub.SubscriptionId, userInOrg.UserId);
+									DBHelper.UpdateSubscriptionUserProductRole((int)(TimeTrackerRole.User), ttSub.SubscriptionId, userInOrg.UserId);
 									userSubs.Add(userInOrg);
 									result.UsersAddedToSubscription += 1;
 									canImportThisEntry = true; // Successfully created.
@@ -791,10 +791,10 @@ namespace AllyisApps.Services
 									string payclass = "Regular";
 									string timeEntryStatusString = null;
 
-									this.readColumn(row, ColumnHeaders.Date, val => date = val);
-									this.readColumn(row, ColumnHeaders.Duration, val => duration = val);
-									if (hasTTDescription) this.readColumn(row, ColumnHeaders.Description, val => description = val);
-									this.readColumn(row, ColumnHeaders.PayClass, val => payclass = val);
+									readColumn(row, ColumnHeaders.Date, val => date = val);
+									readColumn(row, ColumnHeaders.Duration, val => duration = val);
+									if (hasTTDescription) readColumn(row, ColumnHeaders.Description, val => description = val);
+									readColumn(row, ColumnHeaders.PayClass, val => payclass = val);
 									readColumn(row, ColumnHeaders.Status, val => timeEntryStatusString = val);
 
 									PayClass payClass = payClasses.Where(p => p.PayClassName.ToUpper().Equals(payclass.ToUpper())).SingleOrDefault();
@@ -824,12 +824,12 @@ namespace AllyisApps.Services
 										continue;
 									}
 
-									if (!(theDuration = this.ParseDuration(duration)).HasValue)
+									if (!(theDuration = ParseDuration(duration)).HasValue)
 									{
 										result.TimeEntryFailures.Add(string.Format("You must enter the duration as HH:MM or H.HH format for the date {0}", theDate));
 										continue;
 									}
-									if (this.ParseDuration(duration) == 0)
+									if (ParseDuration(duration) == 0)
 									{
 										result.TimeEntryFailures.Add(string.Format("You must enter a time larger than 00:00 for the date {0}", theDate));
 										continue;
@@ -917,7 +917,7 @@ namespace AllyisApps.Services
 			try
 			{
 				fromValue = fromValue.Replace("'", "''"); // Escape any 's in the names
-				string selectText = null;
+				string selectText;
 				if (fieldIdFrom == 2)
 				{
 					string[] names = fromValue.Split(new string[] { "__IMPORT__" }, StringSplitOptions.None);
@@ -931,7 +931,7 @@ namespace AllyisApps.Services
 				if (fieldIdTo == 2)
 				{
 					if (row[ColumnHeaders.UserFirstName].ToString() == "" || row[ColumnHeaders.UserLastName].ToString() == "") return null;
-					else return row[ColumnHeaders.UserFirstName].ToString() + "__IMPORT__" + row[ColumnHeaders.UserLastName].ToString();
+					else return row[ColumnHeaders.UserFirstName] + "__IMPORT__" + row[ColumnHeaders.UserLastName];
 				}
 				else
 				{

@@ -17,9 +17,9 @@ using AllyisApps.DBModel.Lookup;
 using AllyisApps.Lib;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
+using AllyisApps.Services.Cache;
 using AllyisApps.Services.Lookup;
 using Newtonsoft.Json.Linq;
-using AllyisApps.Services.Cache;
 
 namespace AllyisApps.Services
 {
@@ -283,40 +283,42 @@ namespace AllyisApps.Services
             return await this.GetUserAsync(this.UserContext.UserId);
         }
 
-        /// <summary>
-        /// Get User Address, Organizaiontins, and Inviations for account page
-        /// </summary>
-        public async Task<User> GetUserAsync(int userId)
-        {
-            if (userId <= 0) throw new ArgumentOutOfRangeException("userId");
+		/// <summary>
+		/// get user
+		/// - address, organizations, subscriptions and invitations
+		/// </summary>
+		public async Task<User> GetUserAsync(int userId, int organizationId = 0)
+		{
+			if (userId <= 0) throw new ArgumentOutOfRangeException("userId");
 
-            dynamic sets = await this.DBHelper.GetUser(userId);
-            User user = this.InitializeUser(sets.User);
-            dynamic subs = sets.Subscriptions;
-            foreach (var item in subs)
-            {
-                UserSubscription sub = new UserSubscription();
-                sub.IsActive = item.IsActive;
-                sub.NumberOfUsers = item.NumberOfUsers;
-                sub.OrganizationId = item.OrganizationId;
-                sub.ProductAreaUrl = item.ProductAreaUrl;
-                sub.ProductDescription = item.ProductDescription;
-                sub.ProductId = (ProductIdEnum)item.ProductId;
-                sub.ProductName = item.ProductName;
-
-                sub.ProductRoleId = item.ProductRoleId;
-                sub.PromoExpirationDateUtc = item.PromotionExpirationDateUtc;
-                sub.SkuDescription = item.SkuDescription;
-                sub.SkuIconUrl = item.SkuIconUrl;
-                sub.SkuId = (SkuIdEnum)item.SkuId;
-                sub.SkuName = item.SkuName;
-                sub.CreatedUtc = item.SubscriptionCreatedUtc;
-                sub.SubscriptionId = item.SubscriptionId;
-                sub.SubscriptionName = item.SubscriptionName;
-                sub.JoinedDateUtc = item.SubscriptionUserCreatedUtc;
-                sub.UserId = item.UserId;
-                user.Subscriptions.Add(sub);
-            }
+			dynamic sets = await this.DBHelper.GetUser(userId);
+			User user = this.InitializeUser(sets.User);
+			dynamic subs = sets.Subscriptions;
+			foreach (var item in subs)
+			{
+				UserSubscription sub = new UserSubscription
+				{
+					IsActive = item.IsActive,
+					NumberOfUsers = item.NumberOfUsers,
+					OrganizationId = item.OrganizationId,
+					ProductAreaUrl = item.ProductAreaUrl,
+					ProductDescription = item.ProductDescription,
+					ProductId = (ProductIdEnum)item.ProductId,
+					ProductName = item.ProductName,
+					ProductRoleId = item.ProductRoleId,
+					PromoExpirationDateUtc = item.PromotionExpirationDateUtc,
+					SkuDescription = item.SkuDescription,
+					SkuIconUrl = item.IconUrl,
+					SkuId = (SkuIdEnum)item.SkuId,
+					SkuName = item.SkuName,
+					CreatedUtc = item.SubscriptionCreatedUtc,
+					SubscriptionId = item.SubscriptionId,
+					SubscriptionName = item.SubscriptionName,
+					JoinedDateUtc = item.SubscriptionUserCreatedUtc,
+					UserId = item.UserId
+				};
+				user.Subscriptions.Add(sub);
+			}
 
             dynamic orgs = sets.Organizations;
             foreach (var item in orgs)
@@ -364,43 +366,62 @@ namespace AllyisApps.Services
                 user.Invitations.Add(invite);
             }
 
-            if (this.UserContext.UserId != user.UserId)
-            {
-                // logged in user is trying to read a different user's information
-                // get the list of organizations that both of them are member of
-                List<int> orgIds = new List<int>();
-                foreach (var item in this.UserContext.OrganizationsAndRoles)
-                {
-                    var orgId = item.Value.OrganizationId;
-                    var org = user.Organizations.Where(x => x.OrganizationId == orgId).FirstOrDefault();
-                    if (org != null)
-                    {
-                        orgIds.Add(orgId);
-                    }
-                }
+			if (this.UserContext.UserId != user.UserId)
+			{
+				// logged in user is trying to read a different user's information
+				// was an org id provided?
+				if (organizationId <= 0)
+				{
+					// no, get the list of organizations that both of them are member of
+					List<int> orgIds = new List<int>();
+					foreach (var item in this.UserContext.OrganizationsAndRoles)
+					{
+						var orgId = item.Value.OrganizationId;
+						var org = user.Organizations.Where(x => x.OrganizationId == orgId).FirstOrDefault();
+						if (org != null)
+						{
+							orgIds.Add(orgId);
+						}
+					}
 
-                // is there any?
-                bool permFound = false;
-                if (orgIds.Count <= 0)
-                {
-                    // no
-                    throw new AccessViolationException(string.Format("User {0} not found in any of the organizations.", user.UserId));
-                }
-                else
-                {
-                    // yes, does the logged in user have readuser permission in at least one of them?
-                    foreach (var item in orgIds)
-                    {
-                        permFound = this.CheckOrgAction(OrgAction.ReadUser, item, false);
-                    }
-                }
+					// is there any?
+					bool permFound = false;
+					if (orgIds.Count <= 0)
+					{
+						// no
+						throw new AccessViolationException(string.Format("User {0} not found in any of the organizations.", user.UserId));
+					}
+					else
+					{
+						// yes, does the logged in user have readuser permission in at least one of them?
+						foreach (var item in orgIds)
+						{
+							permFound = this.CheckOrgAction(OrgAction.ReadUser, item, false);
+						}
+					}
 
-                if (!permFound)
-                {
-                    // no
-                    throw new AccessViolationException(string.Format("User {0} does not have permission to read user {1}.", this.UserContext.UserId, user.UserId));
-                }
-            }
+					if (!permFound)
+					{
+						// no
+						throw new AccessViolationException(string.Format("User {0} does not have permission to read user {1}.", this.UserContext.UserId, user.UserId));
+					}
+				}
+				else
+				{
+					// does the user belong to that organization?
+					var org = user.Organizations.Where(x => x.OrganizationId == organizationId).FirstOrDefault();
+					if (org == null)
+					{
+						// no
+						throw new AccessViolationException(string.Format("User {0} not found in the organization {1}.", user.UserId, organizationId));
+					}
+					else
+					{
+						// yes, check the logged in user's permission
+						this.CheckOrgAction(OrgAction.ReadUser, organizationId);
+					}
+				}
+			}
 
             return user;
         }
@@ -731,19 +752,20 @@ namespace AllyisApps.Services
             // NOTE: orgid is ignored for now
             if ((int)pid < 0) throw new ArgumentOutOfRangeException("pid");
 
-            var collection = await this.DBHelper.GetProductRolesAsync(orgId, (int)pid);
-            var result = new List<ProductRole>();
-            foreach (var item in collection)
-            {
-                var role = new ProductRole();
-                role.OrganizationId = orgId;
-                role.ProductId = (ProductIdEnum)item.ProductId;
-                role.ProductRoleId = item.ProductRoleId;
-                role.ProductRoleName = item.ProductRoleName;
-                result.Add(role);
-            }
+			var collection = await this.DBHelper.GetProductRolesAsync(orgId, (int)pid);
+			var result = new List<ProductRole>();
+			foreach (var item in collection)
+			{
+				result.Add(new ProductRole()
+				{
+					OrganizationId = orgId,
+					ProductId = (ProductIdEnum)item.ProductId,
+					ProductRoleId = item.ProductRoleId,
+					ProductRoleName = item.ProductRoleName
+				});
+			}
 
-            return result;
-        }
-    }
+			return result;
+		}
+	}
 }

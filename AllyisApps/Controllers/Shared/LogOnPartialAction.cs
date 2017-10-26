@@ -23,12 +23,12 @@ namespace AllyisApps.Controllers
 		public ActionResult LogOnPartial(string returnUrl)
 		{
 			LogOnPartialViewModel model = null;
-			if (this.AppService.UserContext != null)
+			if (AppService.UserContext != null)
 			{
 				model = new LogOnPartialViewModel
 				{
-					FirstName = this.AppService.UserContext.FirstName,
-					LastName = this.AppService.UserContext.LastName
+					FirstName = AppService.UserContext.FirstName,
+					LastName = AppService.UserContext.LastName
 				};
 			}
 			else
@@ -37,7 +37,7 @@ namespace AllyisApps.Controllers
 			}
 
 			ViewBag.ReturnUrl = returnUrl;
-			return this.PartialView(ViewConstants.LogOnPartial, model);
+			return PartialView(ViewConstants.LogOnPartial, model);
 		}
 	}
 }

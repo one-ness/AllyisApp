@@ -29,7 +29,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The view.</returns>
 		public ActionResult Index(int subscriptionId)
 		{
-			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry);
+			return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry);
 		}
 	}
 }

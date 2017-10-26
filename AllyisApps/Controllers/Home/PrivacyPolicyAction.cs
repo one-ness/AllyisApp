@@ -21,7 +21,7 @@ namespace AllyisApps.Controllers
 		/// .</returns>
 		public ActionResult PrivacyPolicy()
 		{
-			return this.View();
+			return View();
 		}
 	}
 }

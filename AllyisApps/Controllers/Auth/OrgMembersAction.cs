@@ -21,19 +21,19 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		public async Task<ActionResult> OrgMembers(int id)
 		{
-			var model = new OrganizationMembersViewModel2();
-			model.CanAddUser = this.AppService.CheckOrgAction(AppService.OrgAction.AddUserToOrganization, id, false);
-			model.CanDeleteUser = this.AppService.CheckOrgAction(AppService.OrgAction.DeleteUserFromOrganization, id, false);
-			model.CanEditUser = this.AppService.CheckOrgAction(AppService.OrgAction.EditUser, id, false);
-			model.CanManagePermissions = this.AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id, false);
+			var model = new OrganizationMembersViewModel();
+			model.CanAddUser = AppService.CheckOrgAction(AppService.OrgAction.AddUserToOrganization, id, false);
+			model.CanDeleteUser = AppService.CheckOrgAction(AppService.OrgAction.DeleteUserFromOrganization, id, false);
+			model.CanEditUser = AppService.CheckOrgAction(AppService.OrgAction.EditUser, id, false);
+			model.CanManagePermissions = AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id, false);
 			model.OrganizationId = id;
 			model.TabInfo.OrganizationId = id;
-			var collection = await this.AppService.GetOrganizationUsersAsync(id);
+			var collection = await AppService.GetOrganizationUsersAsync(id);
 			foreach (var item in collection)
 			{
-				var roles = await this.AppService.GetProductRolesAsync(id, Services.Billing.ProductIdEnum.AllyisApps);
+				var roles = await AppService.GetProductRolesAsync(id, Services.Billing.ProductIdEnum.AllyisApps);
 				var role = roles.Where(x => x.ProductRoleId == item.OrganizationRoleId).FirstOrDefault();
-				var data = new OrganizationMembersViewModel2.ViewModelItem
+				var data = new OrganizationMembersViewModel.ViewModelItem
 				{
 					Email = item.Email,
 					EmployeeId = item.EmployeeId,
@@ -46,7 +46,7 @@ namespace AllyisApps.Controllers.Auth
 				model.Users.Add(data);
 			}
 
-			var org = await this.AppService.GetOrganization(id);
+			var org = await AppService.GetOrganization(id);
 			model.OrganizationName = org.OrganizationName;
 
 			return View(model);

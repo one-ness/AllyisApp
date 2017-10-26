@@ -27,8 +27,8 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		[HttpGet]
 		public async Task<ActionResult> Application(int subscriptionId, int applicantId)
 		{
-			var subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
-			List<Position> positions = await this.AppService.GetPositionsByOrganizationId(subInfo.OrganizationId);
+			var subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+			List<Position> positions = await AppService.GetPositionsByOrganizationId(subInfo.OrganizationId);
 			List<SelectListItem> positionList = new List<SelectListItem>();
 			foreach (Position pos in positions)
 			{
@@ -45,7 +45,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				PositionList = positionList
 			};
 
-			return this.PartialView(model);
+			return PartialView(model);
 		}
 
 		/// <summary>
@@ -58,9 +58,9 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		public async Task<ActionResult> Application(StaffingApplicationViewModel model)
 		{
 			Application application = InitializeApplication(model);
-			application.ApplicationId = await this.AppService.CreateApplication(application);
+			application.ApplicationId = await AppService.CreateApplication(application);
 			UploadAttachments(model, application);
-			return this.RedirectToAction("Applicant", new { applicantId = model.ApplicantId });
+			return RedirectToAction("Applicant", new { applicantId = model.ApplicantId });
 		}
 
 		private static Application InitializeApplication(StaffingApplicationViewModel model)

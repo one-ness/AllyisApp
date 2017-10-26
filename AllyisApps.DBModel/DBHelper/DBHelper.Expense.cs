@@ -43,7 +43,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@isBillableToCustomer", item.IsBillableToCustomer);
 			parameters.Add("@accountId", item.AccountId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				connection.Execute("[Expense].[CreateExpenseItem]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -59,7 +59,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@accountId", AccountId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<ExpenseItemDBEntity>("[Expense].[GetExpenseItemsByAccountId]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable();
 			}
@@ -75,7 +75,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@reportId", ReportId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				var results = await connection.QueryAsync<ExpenseItemDBEntity>("[Expense].[GetExpenseItemsByExpenseReportId]", parameters, commandType: CommandType.StoredProcedure);
 				return results.AsEnumerable().ToList();
@@ -92,7 +92,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@expenseItemId", ExpenseItemId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<ExpenseItemDBEntity>("[Expense].[GetExpenseItemsByExpenseItemId]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable().FirstOrDefault();
 			}
@@ -118,7 +118,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@isBillableToCustomer", item.IsBillableToCustomer);
 			parameters.Add("@accountId", item.AccountId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				connection.Execute("[Expense].[UpdateExpenseItem]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -134,7 +134,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@expenseItemId", ExpenseItemId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<int>("[Expense].[DeleteExpenseItem]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault() == 1;
 			}
@@ -167,7 +167,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@submittedUtc", report.ExpenseReportSubmittedUtc);
 			parameters.Add("@reportId");
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				int reportId = connection.ExecuteScalar<int>("[Expense].[CreateExpenseReport]", parameters, commandType: CommandType.StoredProcedure);
 				return reportId;
@@ -184,7 +184,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@expenseReportId", ExpenseReportId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				var results = await connection.QueryAsync<ExpenseReportDBEntity>("[Expense].[GetExpenseReportByExpenseReportId]", parameters, commandType: CommandType.StoredProcedure);
 				var entity = results.FirstOrDefault();
@@ -202,7 +202,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@submittedById", SubmittedById);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				var results = await connection.QueryAsync<ExpenseReportDBEntity>("[Expense].[GetExpenseReportsBySubmittedById]", parameters, commandType: CommandType.StoredProcedure);
 				return results.AsEnumerable();
@@ -219,7 +219,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", OrganizationId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				var results = await connection.QueryAsync<ExpenseReportDBEntity>("[Expense].[GetExpenseReportsByOrganizationId]", parameters, commandType: CommandType.StoredProcedure);
 				return results.AsEnumerable();
@@ -246,7 +246,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@businessJustification", report.BusinessJustification);
 			parameters.Add("@submittedUtc", report.ExpenseReportSubmittedUtc);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				await connection.ExecuteAsync("[Expense].[UpdateExpenseReport]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -262,7 +262,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@expenseReportId", ExpenseReportId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<int>("[Expense].[DeleteExpenseReport]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault() == 1;
 			}
@@ -287,7 +287,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@createdUtc", entity.CreatedUtc);
 			parameters.Add("@modifiedUtc", entity.ModifiedUtc);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				await connection.ExecuteAsync("[Expense].[CreateExpenseHistory]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -303,7 +303,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add(@"reportId", reportId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return await connection.QueryAsync<ExpenseHistoryDBEntity>("[Expense].[GetExpenseHistory]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -319,7 +319,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@historyId", entity.HistoryId);
 			parameters.Add("@text", entity.Text);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				connection.Execute("[Expense].[UpdateExpenseHistory]", parameters, commandType: CommandType.StoredProcedure);
 			}

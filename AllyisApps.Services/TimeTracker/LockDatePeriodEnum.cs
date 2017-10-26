@@ -1,6 +1,6 @@
 ﻿namespace AllyisApps.Services.TimeTracker
 {
-	public enum LockDatePeriodEnum : int
+	public enum LockDatePeriodEnum
 	{
 		/// <summary>
 		/// Days.
