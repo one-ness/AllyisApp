@@ -44,6 +44,7 @@ namespace AllyisApps.Controllers.Auth
 
 			var org = await AppService.GetOrganization(id);
 			model.OrganizationName = org.OrganizationName;
+			model.OrganizationId = id;
 			model.TabInfo.OrganizationId = id;
 			model.CanDeleteInvitations = AppService.CheckOrgAction(Services.AppService.OrgAction.DeleteInvitation, id, false);
 			model.CanResendInvitations = AppService.CheckOrgAction(Services.AppService.OrgAction.AddUserToOrganization, id, false);

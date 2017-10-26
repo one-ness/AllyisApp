@@ -140,6 +140,17 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// update employee id and org role for the given user in the given organization
+		/// </summary>
+		public async Task<int> UpdateEmployeeIdAndOrgRole(int orgId, int userId, string employeeId, int orgRoleId)
+		{
+			using (var con = new SqlConnection(this.SqlConnectionString))
+			{
+				return (await con.QueryAsync<int>("Auth.UpdateEmployeeIdAndOrgRole @a, @b, @c, @d", new { a = orgId, b = userId, c = employeeId, d = orgRoleId })).FirstOrDefault();
+			}
+		}
+
+		/// <summary>
 		/// Populates a user's last used subscription.
 		/// </summary>
 		/// <param name = "userId">Target user's Id.</param>
