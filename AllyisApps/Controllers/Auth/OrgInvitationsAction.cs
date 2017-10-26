@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.ViewModels.Auth;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -23,7 +23,7 @@ namespace AllyisApps.Controllers.Auth
 		{
 			var model = await Task.Run(() => new OrganizationInvitationsViewModel());
 
-			var collection = await this.AppService.GetInvitationsAsync(id);
+			var collection = await AppService.GetInvitationsAsync(id);
 			foreach (var item in collection)
 			{
 				var data = new OrganizationInvitationsViewModel.ViewModelItem();
@@ -32,8 +32,8 @@ namespace AllyisApps.Controllers.Auth
 				data.EmployeeId = item.EmployeeId;
 				data.InvitationId = item.InvitationId;
 				data.InvitedOn = item.InvitationCreatedUtc;
-				//data.ProductAndRoleNames = ;
-				//data.Status = ;
+				//data.ProductAndRoleNames = item.ProductRolesJson; TODO: parse the json to get the product names and roles
+				data.Status = item.InvitationStatus.ToString();
 				StringBuilder sb = new StringBuilder();
 				sb.Append(item.FirstName);
 				sb.Append(" ");
@@ -42,9 +42,12 @@ namespace AllyisApps.Controllers.Auth
 				model.Invitations.Add(data);
 			}
 
-			var org = this.AppService.GetOrganization(id);
+			var org = await AppService.GetOrganization(id);
 			model.OrganizationName = org.OrganizationName;
-
+			model.OrganizationId = id;
+			model.TabInfo.OrganizationId = id;
+			model.CanDeleteInvitations = AppService.CheckOrgAction(Services.AppService.OrgAction.DeleteInvitation, id, false);
+			model.CanResendInvitations = AppService.CheckOrgAction(Services.AppService.OrgAction.AddUserToOrganization, id, false);
 			return View(model);
 		}
 	}

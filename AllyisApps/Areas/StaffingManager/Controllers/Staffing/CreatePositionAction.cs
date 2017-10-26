@@ -6,12 +6,12 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
@@ -29,28 +29,28 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription.</param>
 		/// <returns>Presents a page for the creation of a new position.</returns>
-		public ActionResult CreatePosition(int subscriptionId)
+		public async Task<ActionResult> CreatePosition(int subscriptionId)
 		{
 			SetNavData(subscriptionId);
 
-			var newmodel = setupPositionEditViewModel(subscriptionId);
+			var newmodel = await setupPositionEditViewModel(subscriptionId);
 
-			return this.View(newmodel);
+			return View(newmodel);
 		}
 
 		/// <summary>
 		/// setup position setup viewmodel
 		/// </summary>
 		/// <returns></returns>
-		public EditPositionViewModel setupPositionEditViewModel(int subscriptionId)
+		public async Task<EditPositionViewModel> setupPositionEditViewModel(int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 
-			string subscriptionNameToDisplay = AppService.GetSubscriptionName(subscriptionId);
+			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
 
 			//TODO: this is piggy-backing off the get index action, create a new action that just gets items 3-5.
-			var infos = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
+			var infos = await AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
 			var temp = new string[infos.Item2.Count];
 			var count = 0;
 			for (int i = 0; i < infos.Item2.Count; i++)
@@ -70,7 +70,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			for (int k = 0; k < count; k++) tags[k] = temp[k];
 			return new EditPositionViewModel
 			{
-				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
 				LocalizedStates = new Dictionary<string, string>(),
 				IsCreating = true,
 				OrganizationId = subInfo.OrganizationId,
@@ -107,7 +107,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="model">The Customer ViewModel.</param>
 		/// <param name="subscriptionId">The sub id from the ViewModel.</param>
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
-		public ActionResult SubmitCreatePosition(EditPositionViewModel model, int subscriptionId)
+		public async Task<ActionResult> SubmitCreatePosition(EditPositionViewModel model, int subscriptionId)
 		{
 			if (ModelState.IsValid)
 			{
@@ -115,7 +115,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				if (model.OrganizationId == 0)
 				{
 					UserContext.SubscriptionAndRole subInfo = null;
-					this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+					AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 					model.OrganizationId = subInfo.OrganizationId;
 					if (model.TagsToSubmit != null)
 					{
@@ -130,10 +130,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					}
 					if (model.PositionStatusId == 0)
 					{
-						model.PositionStatusId = AppService.GetStaffingDefaultStatus(subInfo.OrganizationId)[0];
+						var defaultGet = await AppService.GetStaffingDefaultStatus(subInfo.OrganizationId);
+						model.PositionStatusId = defaultGet[0];
 					}
 				}
-				int? positionId = AppService.CreatePosition(
+				int? positionId = await AppService.CreatePosition(
 					new Position()
 					{
 						OrganizationId = model.OrganizationId,
@@ -174,17 +175,17 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					Notifications.Add(new BootstrapAlert("Successfully created a new Position", Variety.Success));
 
 					// Redirect to the user position page
-					return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
+					return RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
 				}
 
 				// No customer value, should only happen because of a permission failure
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 
-				return this.RedirectToAction(ActionConstants.Index);
+				return RedirectToAction(ActionConstants.Index);
 			}
 
 			// Invalid model TODO: redirect back to form page
-			return this.RedirectToAction(ActionConstants.CreatePosition, new { subscriptionId = subscriptionId });
+			return RedirectToAction(ActionConstants.CreatePosition, new { subscriptionId = subscriptionId });
 		}
 	}
 }

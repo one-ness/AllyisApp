@@ -44,9 +44,9 @@ namespace AllyisApps
 			Exception objErr = Server.GetLastError().GetBaseException();
 			System.Text.StringBuilder sb = new System.Text.StringBuilder();
 			sb.AppendLine("Error Caught in Application_Error event");
-			sb.AppendLine(string.Format("Error in: {0}", Request.Url.ToString()));
-			sb.AppendLine(string.Format("Error Message: {0}", objErr.Message.ToString()));
-			sb.Append(string.Format("Stack Trace:{0}", objErr.StackTrace.ToString()));
+			sb.AppendLine(string.Format("Error in: {0}", Request.Url));
+			sb.AppendLine(string.Format("Error Message: {0}", objErr.Message));
+			sb.Append(string.Format("Stack Trace:{0}", objErr.StackTrace));
 
 			EventLog.WriteEntry("AllyisApps", sb.ToString(), EventLogEntryType.Error);
 		}

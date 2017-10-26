@@ -22,11 +22,11 @@ namespace AllyisApps.Services
 
 		public ProductSubscription(Product product, Subscription subscriptionInfo, List<SkuInfo> list, string stripeTokenCustId, int userCount)
 		{
-			this.Product = product;
-			this.SubscriptionInfo = subscriptionInfo;
-			this.SkuList = list;
-			this.StripeTokenCustId = stripeTokenCustId;
-			this.UserCount = userCount;
+			Product = product;
+			SubscriptionInfo = subscriptionInfo;
+			SkuList = list;
+			StripeTokenCustId = stripeTokenCustId;
+			UserCount = userCount;
 		}
 	}
 }

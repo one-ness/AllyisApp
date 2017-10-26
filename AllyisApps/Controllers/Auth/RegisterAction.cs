@@ -10,7 +10,6 @@ using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Lib;
 using AllyisApps.Resources;
-using AllyisApps.Services;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Auth;
 
@@ -31,15 +30,15 @@ namespace AllyisApps.Controllers.Auth
 		{
 			if (Request.IsAuthenticated)
 			{
-				return this.RedirectToLocal(returnUrl);
+				return RedirectToLocal(returnUrl);
 			}
 
 			ViewBag.ReturnUrl = returnUrl;
 			var model = new RegisterViewModel();
 			model.DateOfBirth = Utility.GetDaysFromDateTime(DateTime.UtcNow.AddYears(-18).AddDays(-1));
-			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
+			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService);
 
-			return this.View(model);
+			return View(model);
 		}
 
 		/// <summary>
@@ -61,7 +60,7 @@ namespace AllyisApps.Controllers.Auth
 				string confirmEmailBody = string.Format(Strings.ConfirmEmailMessage, Strings.ApplicationTitle, confirmUrl);
 
 				// compute birthdate
-				var birthdate = Utility.GetDateTimeFromDays(model.DateOfBirth);
+				var birthdate = Utility.GetNullableDateTimeFromDays(model.DateOfBirth);
 
 				// create new user in the db and get back the userId and count of invitations
 				int userId = await AppService.SetupNewUser(model.Email, model.Password, model.FirstName, model.LastName, code, birthdate, model.PhoneNumber, model.Address, null, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode, confirmEmailSubject, confirmEmailBody);
@@ -70,7 +69,7 @@ namespace AllyisApps.Controllers.Auth
 					// sign in (and set cookie) do not set cookie need to confirm email
 					// this.SignIn(userId, model.Email);
 					Notifications.Add(new BootstrapAlert(Strings.RegistationSucessful, Variety.Success));
-					return this.RedirectToLocal(returnUrl);
+					return RedirectToLocal(returnUrl);
 				}
 				else
 				{
@@ -79,8 +78,8 @@ namespace AllyisApps.Controllers.Auth
 			}
 
 			// model error
-			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
-			model.LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService, model.SelectedCountryCode);
+			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService);
+			model.LocalizedStates = ModelHelper.GetLocalizedStates(AppService, model.SelectedCountryCode);
 			return View(model);
 		}
 	}

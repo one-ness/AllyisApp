@@ -10,6 +10,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Dynamic;
 using System.Linq;
+using System.Threading.Tasks;
 using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.Lookup;
 using AllyisApps.DBModel.StaffingManager;
@@ -33,7 +34,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="applicant">The applicant object to be added to the db.</param>
 		/// <returns>The id of the created address and applicant</returns>
-		public int CreateApplicant(dynamic applicant)
+		public async Task<int> CreateApplicant(dynamic applicant)
 		{
 			if (applicant == null)
 			{
@@ -56,7 +57,8 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-			return connection.Query<int>("[StaffingManager].[CreateApplicant]", parameters, commandType: CommandType.StoredProcedure).Single();
+				var result = await connection.QueryAsync<int>("[StaffingManager].[CreateApplicant]", parameters, commandType: CommandType.StoredProcedure);
+				return result.Single();
 			}
 		}
 
@@ -65,7 +67,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="application">The application object to be added to the db.</param>
 		/// <returns>The id of the created application</returns>
-		public int CreateApplication(dynamic application)
+		public async Task<int> CreateApplication(dynamic application)
 		{
 			if (application == null)
 			{
@@ -80,7 +82,8 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<int>("[StaffingManager].[CreateApplication]", parameters, commandType: CommandType.StoredProcedure).Single();
+				var result = await connection.QueryAsync<int>("[StaffingManager].[CreateApplication]", parameters, commandType: CommandType.StoredProcedure);
+				return result.Single();
 			}
 		}
 
@@ -89,7 +92,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="applicationDocument">The application document object to be added to the db.</param>
 		/// <returns>The id of the created application document</returns>
-		public int CreateApplicationDocument(dynamic applicationDocument)
+		public async Task<int> CreateApplicationDocument(dynamic applicationDocument)
 		{
 			if (applicationDocument == null)
 			{
@@ -103,7 +106,8 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<int>("[StaffingManager].[CreateApplicationDocument]", parameters, commandType: CommandType.StoredProcedure).Single();
+				var result = await connection.QueryAsync<int>("[StaffingManager].[CreateApplicationDocument]", parameters, commandType: CommandType.StoredProcedure);
+				return result.Single();
 			}
 		}
 
@@ -112,7 +116,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="obj">The account object to be created.</param>
 		/// <returns>The id of the created position</returns>
-		public int SetupPosition(dynamic obj)
+		public async Task<int> SetupPosition(dynamic obj)
 		{
 			if (obj == null)
 			{
@@ -159,7 +163,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Execute("[StaffingManager].[SetupPosition]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.ExecuteAsync("[StaffingManager].[SetupPosition]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -217,7 +221,7 @@ namespace AllyisApps.DBModel
 		/// <param name="tagName">The name of the tag to be added to the db.</param>
 		/// <param name="positionId">The position the tag will be added to .</param>
 		/// <returns>The id of the created Tag or -1 if the tag name is already in use.</returns>
-		public int CreateTag(string tagName, int positionId)
+		public async Task<int> CreateTag(string tagName, int positionId)
 		{
 			if (tagName == null)
 			{
@@ -231,7 +235,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default -1
-				connection.Execute("[Lookup].[SetupTag]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[StaffingManager].[SetupTag]", parameters, commandType: CommandType.StoredProcedure);
 			}
 
 			return parameters.Get<int>("@returnValue");
@@ -316,7 +320,7 @@ namespace AllyisApps.DBModel
 		///  - Applicant info
 		///  - Application document info
 		/// </returns>
-		public IEnumerable<ApplicationDBEntity> GetApplicationsByPositionId(int positionId)
+		public async Task<IEnumerable<ApplicationDBEntity>> GetApplicationsByPositionId(int positionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@positionId", positionId);
@@ -324,7 +328,7 @@ namespace AllyisApps.DBModel
 			dynamic applicationsAndDocuments = new ExpandoObject();
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var results = connection.Query<ApplicationDBEntity>("[StaffingManager].[GetApplicationsByPositionId]", parameters, commandType: CommandType.StoredProcedure);
+				var results = await connection.QueryAsync<ApplicationDBEntity>("[StaffingManager].[GetApplicationsByPositionId]", parameters, commandType: CommandType.StoredProcedure);
 			}
 			return applicationsAndDocuments;
 		}
@@ -334,7 +338,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="applicantId">The id of the applicant.</param>
 		/// <returns>All applications that have been submitted by the given applicant.</returns>
-		public IEnumerable<ApplicationDBEntity> GetApplicationsByApplicantId(int applicantId)
+		public async Task<IEnumerable<ApplicationDBEntity>> GetApplicationsByApplicantId(int applicantId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicantId", applicantId);
@@ -342,7 +346,7 @@ namespace AllyisApps.DBModel
 			IEnumerable<ApplicationDBEntity> applications;
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				applications = connection.Query<ApplicationDBEntity>("[StaffingManager].[GetApplicationsByApplicantId]", parameters, commandType: CommandType.StoredProcedure);
+				applications = await connection.QueryAsync<ApplicationDBEntity>("[StaffingManager].[GetApplicationsByApplicantId]", parameters, commandType: CommandType.StoredProcedure);
 			}
 			return applications;
 		}
@@ -352,14 +356,15 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="applicationDocumentId">The id of the application document.</param>
 		/// <returns>One application document, if present.</returns>
-		public ApplicationDocumentDBEntity GetApplicationDocumentById(int applicationDocumentId)
+		public async Task<ApplicationDocumentDBEntity> GetApplicationDocumentById(int applicationDocumentId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicationDocumentId", applicationDocumentId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<ApplicationDocumentDBEntity>("[StaffingManager].[GetApplicationDocumentById]", parameters, commandType: CommandType.StoredProcedure).Single();
+				var result = await connection.QueryAsync<ApplicationDocumentDBEntity>("[StaffingManager].[GetApplicationDocumentById]", parameters, commandType: CommandType.StoredProcedure);
+				return result.Single();
 			}
 		}
 
@@ -368,14 +373,14 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="applicationId">The id of the application, containing multiple application documents.</param>
 		/// <returns>All application documents attached to the given application.</returns>
-		public IEnumerable<ApplicationDocumentDBEntity> GetApplicationDocumentsByApplicationId(int applicationId)
+		public async Task<IEnumerable<ApplicationDocumentDBEntity>> GetApplicationDocumentsByApplicationId(int applicationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicationId", applicationId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<ApplicationDocumentDBEntity>("[StaffingManager].[GetApplicationDocumentsByApplicationId]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.QueryAsync<ApplicationDocumentDBEntity>("[StaffingManager].[GetApplicationDocumentsByApplicationId]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -384,14 +389,15 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId"></param>
 		/// <returns>All the applicants in a subscription.</returns>
-		public List<ApplicantDBEntity> GetApplicantsBySubscriptionId(int orgId)
+		public async Task<List<ApplicantDBEntity>> GetApplicantsBySubscriptionId(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@orgId", orgId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<ApplicantDBEntity>("[StaffingManager].[GetApplicantsByOrgId]", parameters, commandType: CommandType.StoredProcedure).ToList();
+				var result = await connection.QueryAsync<ApplicantDBEntity>("[StaffingManager].[GetApplicantsByOrgId]", parameters, commandType: CommandType.StoredProcedure);
+				return result.ToList();
 			}
 		}
 
@@ -400,14 +406,15 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId"></param>
 		/// <returns>All the applicants in a subscription.</returns>
-		public List<ApplicantAddressDBEntity> GetApplicantAddressesBySubscriptionId(int orgId)
+		public async Task<List<ApplicantAddressDBEntity>> GetApplicantAddressesBySubscriptionId(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@orgId", orgId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<ApplicantAddressDBEntity>("[StaffingManager].[GetApplicantsByOrgId]", parameters, commandType: CommandType.StoredProcedure).ToList();
+				var result = await connection.QueryAsync<ApplicantAddressDBEntity>("[StaffingManager].[GetApplicantsByOrgId]", parameters, commandType: CommandType.StoredProcedure);
+				return result.ToList();
 			}
 		}
 
@@ -416,14 +423,15 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="applicantId">The id of the applicant.</param>
 		/// <returns>One applicant, if present.</returns>
-		public ApplicantAddressDBEntity GetApplicantAddressById(int applicantId)
+		public async Task<ApplicantAddressDBEntity> GetApplicantAddressById(int applicantId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicantId", applicantId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<ApplicantAddressDBEntity>("[StaffingManager].[GetApplicantById]", parameters, commandType: CommandType.StoredProcedure).Single();
+				var result = await connection.QueryAsync<ApplicantAddressDBEntity>("[StaffingManager].[GetApplicantById]", parameters, commandType: CommandType.StoredProcedure);
+				return result.Single();
 			}
 		}
 
@@ -432,14 +440,15 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="applicantId">The id of the applicant.</param>
 		/// <returns>One applicant, if present.</returns>
-		public ApplicantDBEntity GetApplicantById(int applicantId)
+		public async Task<ApplicantDBEntity> GetApplicantById(int applicantId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicantId", applicantId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<ApplicantDBEntity>("[StaffingManager].[GetApplicantById]", parameters, commandType: CommandType.StoredProcedure).Single();
+				var result = await connection.QueryAsync<ApplicantDBEntity>("[StaffingManager].[GetApplicantById]", parameters, commandType: CommandType.StoredProcedure);
+				return result.Single();
 			}
 		}
 
@@ -448,23 +457,24 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="applicationId">The id of the application.</param>
 		/// <returns>The applicant that submitted the given application.</returns>
-		public ApplicantDBEntity GetApplicantByApplicationId(int applicationId)
+		public async Task<ApplicantDBEntity> GetApplicantByApplicationId(int applicationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicationId", applicationId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<ApplicantDBEntity>("[StaffingManager].[GetApplicantByApplicationId]", parameters, commandType: CommandType.StoredProcedure).Single();
+				var result = await connection.QueryAsync<ApplicantDBEntity>("[StaffingManager].[GetApplicantByApplicationId]", parameters, commandType: CommandType.StoredProcedure);
+				return result.Single();
 			}
 		}
-		
+
 		/// <summary>
 		/// Retrieves the all applications, the applicants and documents associated with those applications, for a position.
 		/// </summary>
 		/// <param name="PositionId">The id of the position.</param>
 		/// <returns>The applicant that submitted the given application.</returns>
-		public dynamic GetFullApplicationInfoByPositionId(int PositionId)
+		public async Task<dynamic> GetFullApplicationInfoByPositionId(int PositionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@positionId", PositionId);
@@ -472,7 +482,7 @@ namespace AllyisApps.DBModel
 			dynamic applicationsAndApplicantInfo = new ExpandoObject();
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var results = connection.QueryMultiple("[StaffingManager].[GetFullApplicationInfosByPositionId]", parameters, commandType: CommandType.StoredProcedure);
+				var results = await connection.QueryMultipleAsync("[StaffingManager].[GetFullApplicationInfosByPositionId]", parameters, commandType: CommandType.StoredProcedure);
 
 				applicationsAndApplicantInfo.applications = results.Read<dynamic>().ToList();
 				applicationsAndApplicantInfo.applicants = results.Read<dynamic>().ToList();
@@ -487,7 +497,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="positionId">The id of the position.</param>
 		/// <returns>One Position.</returns>
-		public dynamic GetPositionById(int positionId)
+		public async Task<dynamic> GetPositionById(int positionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@positionId", positionId);
@@ -495,7 +505,7 @@ namespace AllyisApps.DBModel
 			dynamic positionAndTags = new ExpandoObject();
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var results = connection.QueryMultiple("[StaffingManager].[GetPosition]", parameters, commandType: CommandType.StoredProcedure);
+				var results = await connection.QueryMultipleAsync("[StaffingManager].[GetPosition]", parameters, commandType: CommandType.StoredProcedure);
 				positionAndTags.position = results.Read<dynamic>().First();
 				positionAndTags.tags = results.Read<dynamic>().ToList();
 			}
@@ -507,7 +517,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">The id of the organization.</param>
 		/// <returns>One Position.</returns>
-		public dynamic GetPositionsByOrganizationId(int organizationId)
+		public async Task<dynamic> GetPositionsByOrganizationId(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
@@ -515,7 +525,7 @@ namespace AllyisApps.DBModel
 			dynamic positionsAndTags = new ExpandoObject();
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var results = connection.QueryMultiple("[StaffingManager].[GetPositionsByOrganizationId]", parameters, commandType: CommandType.StoredProcedure);
+				var results = await connection.QueryMultipleAsync("[StaffingManager].[GetPositionsByOrganizationId]", parameters, commandType: CommandType.StoredProcedure);
 				positionsAndTags.positions = results.Read<dynamic>().ToList();
 				//positionsAndTags.tags = results.Read<dynamic>().ToDictionary(t => t.PositionId, t => t);
 			}
@@ -617,14 +627,14 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="positionId">The id of the posiion.</param>
 		/// <returns>One Position.</returns>
-		public IEnumerable<TagDBEntity> GetTagsByPositionId(int positionId)
+		public async Task<IEnumerable<TagDBEntity>> GetTagsByPositionId(int positionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@positionId", positionId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<TagDBEntity>("[StaffingManager].[GetPositionTagsByPosition]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.QueryAsync<TagDBEntity>("[StaffingManager].[GetTagsByPositionId]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -632,11 +642,11 @@ namespace AllyisApps.DBModel
 		/// Retrieves All tags
 		/// </summary>
 		/// <returns>All the tags</returns>
-		public IEnumerable<TagDBEntity> GetTags()
+		public async Task<IEnumerable<TagDBEntity>> GetTags()
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<TagDBEntity>("[Lookup].[GetTags]", commandType: CommandType.StoredProcedure);
+				return await connection.QueryAsync<TagDBEntity>("[StaffingManager].[GetTags]", commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -645,15 +655,15 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>, List<ApplicationStatusDBEntity>, List<CustomerDBEntity>>
+		public async Task<Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>, List<ApplicationStatusDBEntity>, List<CustomerDBEntity>>>
 			GetStaffingIndexPageInfo(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var results = connection.QueryMultiple(
+				var results = await connection.QueryMultipleAsync(
 					"[StaffingManager].[GetStaffingIndexInfo]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
@@ -677,7 +687,7 @@ namespace AllyisApps.DBModel
 		/// <param name="types">Organization Id.</param>
 		/// <param name="tags">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>, List<ApplicationStatusDBEntity>, List<CustomerDBEntity>>
+		public async Task<Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>, List<ApplicationStatusDBEntity>, List<CustomerDBEntity>>>
 			GetStaffingIndexPageInfoFiltered(int orgId, List<string> statuses, List<string> types, List<string> tags = null)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -698,10 +708,10 @@ namespace AllyisApps.DBModel
 			parameters.Add("@status", StatusesTable.AsTableValuedParameter("[StaffingManager].[StatusesTable]"));
 			parameters.Add("@type", TypesTable.AsTableValuedParameter("[StaffingManager].[TypesTable]"));
 			parameters.Add("@tags", TagTable.AsTableValuedParameter("[Lookup].[TagTable]"));
-			
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var results = connection.QueryMultiple(
+				var results = await connection.QueryMultipleAsync(
 					"[StaffingManager].[GetStaffingIndexInfoFiltered]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
@@ -716,20 +726,20 @@ namespace AllyisApps.DBModel
 					results.Read<CustomerDBEntity>().ToList());
 			}
 		}
-		
+
 		/// <summary>
 		/// Updates an organizations staffing settings.
 		/// </summary>
 		/// <param name="orgId">org ID thats getting a new setting </param>
 		/// <returns>Creates an orgs staffing object</returns>
-		public List<int> GetStaffingDefaultStatus(int orgId)
+		public async Task<List<int>> GetStaffingDefaultStatus(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var result = connection.QueryMultiple("[StaffingManager].[GetStaffingDefaultStatus]", parameters, commandType: CommandType.StoredProcedure);
+				var result = await connection.QueryMultipleAsync("[StaffingManager].[GetStaffingDefaultStatus]", parameters, commandType: CommandType.StoredProcedure);
 
 				return result.Read<int>().ToList();
 			}
@@ -748,7 +758,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="applicant">The applicant object to be updated.</param>
 		/// <returns>The number of rows updated.</returns>
-		public int UpdateApplicant(dynamic applicant)
+		public async Task<int> UpdateApplicant(dynamic applicant)
 		{
 			if (applicant == null)
 			{
@@ -771,7 +781,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Execute("[StaffingManager].[UpdateApplicant]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.ExecuteAsync("[StaffingManager].[UpdateApplicant]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -780,7 +790,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="application">The application object to be updated.</param>
 		/// <returns>The number of rows updated.</returns>
-		public int UpdateApplication(ApplicationDBEntity application)
+		public async Task<int> UpdateApplication(ApplicationDBEntity application)
 		{
 			if (application == null)
 			{
@@ -794,7 +804,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Execute("[StaffingManager].[UpdateApplication]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.ExecuteAsync("[StaffingManager].[UpdateApplication]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -803,7 +813,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="applicationDocument">The application document object to be updated.</param>
 		/// <returns>The number of rows updated.</returns>
-		public int UpdateApplicationDocument(ApplicationDocumentDBEntity applicationDocument)
+		public async Task<int> UpdateApplicationDocument(ApplicationDocumentDBEntity applicationDocument)
 		{
 			if (applicationDocument == null)
 			{
@@ -817,7 +827,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Execute("[StaffingManager].[UpdateApplicationDocument]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.ExecuteAsync("[StaffingManager].[UpdateApplicationDocument]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -826,7 +836,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="position">The account object to be updated.</param>
 		/// <returns>Returns the number of rows updated.</returns>
-		public int UpdatePosition(dynamic position)
+		public async Task<int> UpdatePosition(dynamic position)
 		{
 			if (position == null)
 			{
@@ -861,7 +871,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Execute("[StaffingManager].[UpdatePosition]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.ExecuteAsync("[StaffingManager].[UpdatePosition]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -883,6 +893,7 @@ namespace AllyisApps.DBModel
 				connection.Execute("[StaffingManager].[UpdateStaffingSettings]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
+
 		#endregion Update Methods
 
 		////////////////////////////
@@ -895,14 +906,14 @@ namespace AllyisApps.DBModel
 		/// Deletes an applicant from the database
 		/// </summary>
 		/// <param name="applicantId">The applicant to be deleted</param>
-		public void DeleteApplicant(int applicantId)
+		public async void DeleteApplicant(int applicantId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicantId", applicantId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				connection.Execute("[StaffingManager].[DeleteApplicant]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[StaffingManager].[DeleteApplicant]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -910,14 +921,14 @@ namespace AllyisApps.DBModel
 		/// Deletes an application from the database
 		/// </summary>
 		/// <param name="applicationId">The applicant to be deleted</param>
-		public void DeleteApplication(int applicationId)
+		public async void DeleteApplication(int applicationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicationId", applicationId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				connection.Execute("[StaffingManager].[DeleteApplication]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[StaffingManager].[DeleteApplication]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -985,14 +996,14 @@ namespace AllyisApps.DBModel
 		/// Deletes a employment level from the database
 		/// </summary>
 		/// <param name="employmentTypeId">Parameter @employmentTypeId.</param>
-		public void DeleteEmploymentType(int employmentTypeId)
+		public async void DeleteEmploymentType(int employmentTypeId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@employmentTypeId", employmentTypeId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				connection.Execute("[StaffingManager].[DeleteEmploymentType]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[StaffingManager].[DeleteEmploymentType]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 

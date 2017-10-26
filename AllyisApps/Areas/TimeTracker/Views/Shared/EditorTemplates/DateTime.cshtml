@@ -1,12 +1,12 @@
-﻿@model System.DateTime?
+﻿@model DateTime?
 @{
 string date = DateTime.Today.ToShortDateString();
 if (Model != null)
 {
     date = string.Format("{0}-{1}-{2}",
-                         Model.Year,
-                        Model.Month >= 10 ? Model.Month.ToString() : string.Format("0{0}", Model.Month),
-                        Model.Day >= 10 ? Model.Day.ToString() : string.Format("0{0}", Model.Day));
+                         Model.Value.Year,
+                        Model.Value.Month >= 10 ? Model.Value.Month.ToString() : string.Format("0{0}", Model.Value.Month),
+                        Model.Value.Day >= 10 ? Model.Value.Day.ToString() : string.Format("0{0}", Model.Value.Day));
 }
 }
 @Html.TextBox(

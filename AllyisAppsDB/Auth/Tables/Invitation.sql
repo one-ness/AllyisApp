@@ -7,11 +7,13 @@
     [InvitationCreatedUtc] DATETIME2 (0)  CONSTRAINT [DF_Invitation_CreatedUtc] DEFAULT (getutcdate()) NOT NULL,
     [EmployeeId]           NVARCHAR (16)  NOT NULL,
     [DecisionDateUtc]      DATETIME2 (0)  NULL,
-    [InvitationStatus]     INT            CONSTRAINT [DF__Invitatio__Statu__7C4F7684] DEFAULT ((0)) NOT NULL,
+    [InvitationStatus]     INT            CONSTRAINT [DF__Invitatio__Statu__7C4F7684] DEFAULT ((1)) NOT NULL,
     [ProductRolesJson]     NVARCHAR (512) NOT NULL,
     CONSTRAINT [PK_Invitation] PRIMARY KEY CLUSTERED ([InvitationId] ASC),
     CONSTRAINT [FK_Invitation_OrganizationId] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId])
 );
+
+
 
 
 

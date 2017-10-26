@@ -1,15 +1,8 @@
 ﻿@model OrganizationInvitationsViewModel
 @{
 	var sb = new System.Text.StringBuilder();
-	sb.Append(Strings.Members);
-	sb.Append(": ");
-	sb.Append(Model.OrganizationName);
+	sb.AppendFormat("{0}: {1}", Strings.Invitations, Model.OrganizationName);
 	ViewBag.TitleBar = sb.ToString();
-
-	sb.Clear();
-	sb.Append("Invitations count");
-	sb.Append(": ");
-	string title = sb.ToString();
 }
 
 @Html.Partial("_MembersAndInvitationsTab", Model.TabInfo)
@@ -17,15 +10,159 @@
 <div class="row" style="margin-bottom:10px; margin-top:10px;">
 	<div class="col-xs-12">
 		<h1 style="margin-top:0px; margin-bottom:0px; display:inline;">@ViewBag.TitleBar</h1>
-		<span class="pull-right">
-			@if (Model.CanManagePermissions)
-			{
-				<a href="@Url.Action(ActionConstants.ManageOrgPermissions, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default" title="@Strings.ManagePermissions">@Strings.ManagePermissions <i class="fa fa-fw fa-lock"></i></a><span>&nbsp;&nbsp;</span>
-			}
-			@if (Model.CanAddUser)
-			{
-				<a href="@Url.Action(ActionConstants.AddMember, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default" title="@Strings.AddMembers">@Strings.AddMembers <i class="fa fa-fw fa-user-plus"></i></a>
-			}
-		</span>
 	</div>
 </div>
+<style>
+	.members-top-row div {
+		display: inline;
+		margin-right: 10px;
+		margin-bottom: 10px;
+	}
+
+	input.members-checkbox {
+		margin-left: 15px;
+	}
+</style>
+@if (Model.Invitations.Count <= 0)
+{
+	<div class="row" style="margin-bottom: 20px;">
+		<div class="col-xs-12">
+			<p><i>You have not sent any invitations.</i></p>
+			<p><i>Click on Members and then Add Members to invite users to your organization</i></p>
+		</div>
+	</div><br/>
+	<div class="row">
+		<div class="col-xs-12">
+			<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)"
+			   class="btn btn-default pull-left" title="@Strings.Back"><i class="fa fa-caret-left"></i>&nbsp;@Strings.Back</a>
+		</div>
+	</div>
+}
+else
+{
+	<div class="row">
+		<div class="col-xs-12">
+			<table class="table table-striped table-condensed">
+				<thead>
+					<tr>
+						<th><input class="checkbox-inline invitations-checkbox" type="checkbox" id="checkAll" onclick="CheckAllToggle()" /></th>
+						<th>Name</th>
+						<th>Email</th>
+						<th>Employee ID</th>
+						<th>Invite Date</th>
+						<th>Role(s)</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				@foreach (var item in Model.Invitations)
+				{
+					<tr>
+						<td class="col-md-1"><input class="checkbox-inline invitations-checkbox" name="checkbox" id="checkbox" type="checkbox" value="@item.InvitationId" /></td>
+						<td class="col-md-3">@item.Username</td>
+						<td class="col-md-2">@item.Email</td>
+						<td class="col-md-1">@item.EmployeeId</td>
+						<td class="col-md-2">@item.FormattedInvitedOnDate</td>
+						<td class="col-md-2">
+							@foreach (var role in item.ProductAndRoleNames)
+							{
+								var data = string.Format("{0}: {1}", role.Item1, role.Item2);
+								<div>@data</div>
+							}
+						</td>
+						<td>@item.Status</td>
+					</tr>
+				}
+			</table>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)"
+			   class="btn btn-default pull-left" title="@Strings.Back"><i class="fa fa-caret-left"></i>&nbsp;@Strings.Back</a>
+			@if (Model.CanResendInvitations)
+			{
+				using (Html.BeginForm(ActionConstants.ResendInvite, ControllerConstants.Account, new { @resendIds = Model.CheckedInvitations, @orgId = Model.OrganizationId }, FormMethod.Get))
+				{
+					@Html.Hidden("checkedResendIds", Model.CheckedInvitations)
+					@Html.Hidden("orgId", Model.OrganizationId)
+					@Html.AntiForgeryToken();
+					<input type="hidden" id="csvResendInvitationIds" />
+					<button type="submit" class="btn btn-default pull-left" title="@Strings.ResendInvite" style="margin-left: 10px;" onclick="getInvitationIdsAndResend()">@Strings.ResendInvite</button>
+
+				}
+			} 
+			@if (Model.CanDeleteInvitations)
+			{
+				using (Html.BeginForm(ActionConstants.RemoveInvitation, ControllerConstants.Account, new { @checkedIds = Model.CheckedInvitations, @orgId = Model.OrganizationId }, FormMethod.Post))
+				{
+					@Html.Hidden("checkedIds", Model.CheckedInvitations)
+					@Html.Hidden("orgId", Model.OrganizationId)
+					@Html.AntiForgeryToken();
+					<input type="hidden" id="csvDeleteInvitationIds" />
+					<button type="submit" class="btn btn-danger pull-right" title="@Strings.Back" onclick="getInvitationIdsAndSubmit()">@Strings.Delete</button>
+				}
+			}
+		</div>
+	</div>
+}
+
+<script type="text/javascript">
+	function CheckAllToggle()
+	{
+		var checkboxes = [];
+		var checking = document.getElementById("checkAll").checked;
+		checkboxes = document.getElementsByName("checkbox");
+		for (var i = 0, n = checkboxes.length; i < n; i++) {
+			checkboxes[i].checked = checking;
+		}
+		console.log("check all toggle, updated " + checkboxes.length + " to: " + checking);
+	}
+
+	function getInvitationIdsAndResend() {
+		var ids = [];
+		var checkboxes = [];
+		checkboxes = document.getElementsByName("checkbox");
+		var k = 0;
+		for (var i = 0, n = checkboxes.length; i < n; i++) {
+			if (checkboxes[i].checked) {
+				ids[k] = checkboxes[i].value;
+				k++;
+			}
+		}
+		if (ids.length == 0) {
+			alert("You have not chosen an invitation to delete");
+			return false;
+		}
+		else {
+			document.getElementById('checkedResendIds').value = ids;
+			document.getElementById('ResendOrgId').value =  @Model.OrganizationId;
+		}
+		console.log("updated checkedIds: " + document.getElementById('checkedResendIds').value);
+		console.log("updated orgId: " + document.getElementById('ResendOrgId').value);
+		return;
+	}
+
+	function getInvitationIdsAndSubmit() {
+		var ids = [];
+		var checkboxes = [];
+		checkboxes = document.getElementsByName("checkbox");
+		var k = 0;
+		for (var i = 0, n = checkboxes.length; i < n; i++) {
+			if (checkboxes[i].checked) {
+				ids[k] = checkboxes[i].value;
+				k++;
+			}
+		}
+		if (ids.length == 0) {
+			alert("You have not chosen an invitation to delete");
+			return false;
+		}
+		else {
+			document.getElementById('checkedIds').value = ids;
+			document.getElementById('orgId').value =  @Model.OrganizationId;
+		}
+		console.log("updated checkedIds: " + document.getElementById('checkedIds').value);
+		console.log("updated orgId: " + document.getElementById('orgId').value);
+		return;
+	}
+</script>

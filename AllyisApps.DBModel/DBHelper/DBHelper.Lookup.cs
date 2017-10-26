@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using AllyisApps.DBModel.Lookup;
 using Dapper;
 
@@ -21,11 +22,22 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// list of valid countries
 		/// </summary>
-		public Dictionary<string, string> GetCountries()
+		public Dictionary<string, CountryDBEntity> GetCountries()
 		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<CountryDBEntity>("[Lookup].[GetCountries]").ToDictionary(x => x.CountryCode, x => x.CountryName);
+				return con.Query<CountryDBEntity>("[Lookup].[GetCountries]").ToDictionary(x => x.CountryCode, x => x);
+			}
+		}
+
+		/// <summary>
+		/// get all states
+		/// </summary>
+		public Dictionary<int, StateDBEntity> GetAllStates()
+		{
+			using (var con = new SqlConnection(SqlConnectionString))
+			{
+				return con.Query<StateDBEntity>("Lookup.GetAllStates").ToDictionary(x => x.StateId, x => x);
 			}
 		}
 
@@ -34,21 +46,32 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		public Dictionary<int, string> GetStates(string countryCode)
 		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<StateDBEntity>("[Lookup].[GetStates] @a", new { a = countryCode }).ToDictionary(x => x.StateId, x => x.StateName);
+				return con.Query<StateDBEntity>("[Lookup].[GetStates] @a", new { a = countryCode }).ToDictionary(x => x.StateId, x => x.StateName);
+			}
+		}
+
+		/// <summary>
+		/// get a list of all languages
+		/// </summary>
+		public Dictionary<string, LanguageDBEntity> GetLanguages()
+		{
+			using (var con = new SqlConnection(SqlConnectionString))
+			{
+				return con.Query<LanguageDBEntity>("Lookup.GetLanguages").ToDictionary(x => x.CultureName, x => x);
 			}
 		}
 
 		/// <summary>
 		/// Retrieves a collection of language settings from the database.
 		/// </summary>
-		/// <returns>A collection of all valid language settings.</returns>
-		public IEnumerable<LanguageDBEntity> ValidLanguages()
+		public async Task<List<LanguageDBEntity>> ValidLanguages()
 		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<LanguageDBEntity>("[Lookup].[GetLanguages]", commandType: CommandType.StoredProcedure);
+				var result = await con.QueryAsync<LanguageDBEntity>("[Lookup].[GetLanguages]");
+				return result.ToList();
 			}
 		}
 
@@ -59,7 +82,7 @@ namespace AllyisApps.DBModel
 		/// <returns>A language setting row.</returns>
 		public LanguageDBEntity GetLanguage(string CultureName)
 		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<LanguageDBEntity>("[Lookup].[GetLanguageById]", new { CultureName = CultureName }, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
@@ -72,7 +95,7 @@ namespace AllyisApps.DBModel
 		/// <returns></returns>
 		public AddressDBEntity getAddreess(int? addressID)
 		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<AddressDBEntity>("[Lookup].[GetAddress]", new { addresId = addressID }, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}

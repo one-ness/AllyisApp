@@ -21,9 +21,9 @@ namespace AllyisApps.Services
 
 		public ReportInfo(List<Customer> customers, List<CompleteProject> completeProjectInfo, List<SubscriptionUser> subscriptionUserInfo)
 		{
-			this.Customers = customers;
-			this.CompleteProject = completeProjectInfo;
-			this.SubscriptionUserInfo = subscriptionUserInfo;
+			Customers = customers;
+			CompleteProject = completeProjectInfo;
+			SubscriptionUserInfo = subscriptionUserInfo;
 		}
 	}
 }

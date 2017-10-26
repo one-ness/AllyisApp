@@ -291,10 +291,13 @@
     <Compile Include="Areas\TimeTracker\Controllers\Customer\TemplateAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Home\HomeController.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Project\ReactivateAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ReviewAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\MergePayClassAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ImportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\TemplateAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\TimeEntryCURDAction.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\Project\CompleteProjectViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\ReviewViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\MergePayClassViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsLockDateViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsPayClassesViewModel.cs" />
@@ -355,9 +358,8 @@
     <Compile Include="Controllers\Auth\ConfirmEmailAction.cs" />
     <Compile Include="Controllers\Auth\CreateOrgAction.cs" />
     <Compile Include="Controllers\Auth\EditMemberAction.cs" />
-    <Compile Include="Controllers\Auth\EditMemberAction2.cs" />
     <Compile Include="Controllers\Auth\EditProfileAction.cs" />
-    <Compile Include="Controllers\Auth\EditSubscriptionAction.cs" />
+    <Compile Include="Controllers\Billing\EditSubscriptionAction.cs" />
     <Compile Include="Controllers\Auth\ForgotPasswordAction.cs" />
     <Compile Include="Controllers\Auth\ImportAction.cs" />
     <Compile Include="Controllers\Auth\IndexAction.cs" />
@@ -371,7 +373,7 @@
     <Compile Include="Controllers\Auth\RejectInvitationAction.cs" />
     <Compile Include="Controllers\Auth\ResendInviteAction.cs" />
     <Compile Include="Controllers\Auth\ResetPasswordAction.cs" />
-    <Compile Include="Controllers\Auth\SkusAction.cs" />
+    <Compile Include="Controllers\Billing\SkusAction.cs" />
     <Compile Include="Controllers\Auth\TemplateAction.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ErrorPageController.cs" />
@@ -385,14 +387,11 @@
     <Compile Include="Controllers\Auth\DeleteOrgAction.cs" />
     <Compile Include="Controllers\Auth\DownloadImportUsersTemplateAction.cs" />
     <Compile Include="Controllers\Auth\EditOrgAction.cs" />
-    <Compile Include="Controllers\Auth\GetBillingSummaryAction.cs" />
     <Compile Include="Controllers\Auth\RemoveInvitationAction.cs" />
-    <Compile Include="Controllers\Auth\ManageOrgAction.cs" />
     <Compile Include="Controllers\Auth\ManagePermissionsAction.cs" />
-    <Compile Include="Controllers\Auth\RemoveBillingAction.cs" />
     <Compile Include="Controllers\Auth\RemoveMemberAction.cs" />
-    <Compile Include="Controllers\Auth\SubscribeAction.cs" />
-    <Compile Include="Controllers\Auth\UnsubscribeAction.cs" />
+    <Compile Include="Controllers\Billing\SubscribeAction.cs" />
+    <Compile Include="Controllers\Billing\UnsubscribeAction.cs" />
     <Compile Include="Controllers\Shared\FooterPartialAction.cs" />
     <Compile Include="Controllers\Shared\LogOnPartialAction.cs" />
     <Compile Include="Controllers\Shared\SharedController.cs" />
@@ -401,8 +400,8 @@
     <Compile Include="Core\CookieData.cs" />
     <Compile Include="Core\CustomRoutes.cs" />
     <Compile Include="Core\GlobalSettings.cs" />
-    <Compile Include="Extensions\IEnumerableExtensions.cs" />
-    <Compile Include="Extensions\RouteExtensions.cs" />
+    <Compile Include="Core\RouteExtensions.cs" />
+    <Compile Include="Core\ViewExtensions.cs" />
     <Compile Include="Resources\Countries.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -428,65 +427,64 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\ApplicationExceptions.cs" />
+    <Compile Include="Utilities\Helpers.cs" />
     <Compile Include="Utilities\ImportMessageFormatter.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\OrganizationInvitationsViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\AddMemberViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\EditMemberViewModel2.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\ManageOrgMenuBarViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\MembersAndInvitationsTabViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\OrganizationDetailsViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\OrganizationMembersViewModel2.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\OrganizationSubscriptionsViewModel.cs" />
-    <Compile Include="ViewModels\Auth\User\ChangePasswordViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\EditMemberViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\EditSubscriptionViewModel.cs" />
-    <Compile Include="ViewModels\Auth\User\AccountIndexViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Invitation\InvitationInfoViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\ManageOrgViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\ManagePermissionsViewModel.cs" />
-    <Compile Include="ViewModels\Auth\User\RegisterViewModel.cs" />
-    <Compile Include="ViewModels\Auth\User\EditProfileViewModel.cs" />
-    <Compile Include="ViewModels\Auth\User\ForgotPasswordViewModel.cs" />
-    <Compile Include="ViewModels\Auth\User\LogOnViewModel.cs" />
-    <Compile Include="ViewModels\BillingProductSubscription\ProductRoleViewModel.cs" />
-    <Compile Include="ViewModels\BillingProductSubscription\SkusListViewModel.cs" />
-    <Compile Include="ViewModels\BillingProductSubscription\BillingHistoryItemViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\PermissionsManagementViewModel.cs" />
-    <Compile Include="ViewModels\Auth\User\ResetPasswordViewModel.cs" />
-    <Compile Include="ViewModels\Auth\User\UserInfoViewModel.cs" />
-    <Compile Include="ViewModels\BillingProductSubscription\BillingViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\EditOrganizationViewModel.cs" />
-    <Compile Include="ViewModels\Auth\User\EditUserPermissionViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\OrganizationAddMembersViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\OrganizationMembersViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\OrganizationUserViewModel.cs" />
-    <Compile Include="ViewModels\BillingProductSubscription\SubscriptionDisplayViewModel.cs" />
-    <Compile Include="ViewModels\BillingProductSubscription\SubscriptionRoleSelectionModel.cs" />
+    <Compile Include="ViewModels\Auth\ManagePermissionsViewModel.cs" />
+    <Compile Include="ViewModels\Auth\OrganizationInvitationsViewModel.cs" />
+    <Compile Include="ViewModels\Auth\AddMemberViewModel.cs" />
+    <Compile Include="ViewModels\Auth\EditMemberViewModel.cs" />
+    <Compile Include="ViewModels\Auth\MembersAndInvitationsTabViewModel.cs" />
+    <Compile Include="ViewModels\Auth\OrganizationDetailsViewModel.cs" />
+    <Compile Include="ViewModels\Auth\OrganizationMembersViewModel.cs" />
+    <Compile Include="ViewModels\Auth\OrganizationSubscriptionsViewModel.cs" />
+    <Compile Include="ViewModels\Auth\ChangePasswordViewModel.cs" />
+    <Compile Include="ViewModels\Billing\EditSubscriptionViewModel.cs" />
+    <Compile Include="ViewModels\Auth\AccountIndexViewModel.cs" />
+    <Compile Include="ViewModels\Auth\RegisterViewModel.cs" />
+    <Compile Include="ViewModels\Auth\EditProfileViewModel.cs" />
+    <Compile Include="ViewModels\Auth\ForgotPasswordViewModel.cs" />
+    <Compile Include="ViewModels\Auth\LogOnViewModel.cs" />
+    <Compile Include="ViewModels\Billing\ProductRoleViewModel.cs" />
+    <Compile Include="ViewModels\Auth\PermissionsManagementViewModel.cs" />
+    <Compile Include="ViewModels\Auth\ResetPasswordViewModel.cs" />
+    <Compile Include="ViewModels\Auth\EditOrganizationViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\Billing\SkusViewModel.cs" />
+    <Compile Include="ViewModels\Billing\SubscribeViewModel.cs" />
     <Compile Include="ViewModels\ModelHelper.cs" />
     <Compile Include="ViewModels\Shared\LanguageViewModel.cs" />
     <Compile Include="ViewModels\Shared\LogOnPartialViewModel.cs" />
     <Compile Include="ViewModels\Shared\SubscriptionsViewModel.cs" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-drp-init.js" />
+    <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-index2.js" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-settings.js" />
-    <Content Include="Content\ExpenseTracker\icons\ExpenseTracker.png" />
-    <Content Include="Content\StaffingManager\icons\StaffingManager.png" />
-    <Content Include="Content\TimeTracker\icons\TimeTrackerPro.png" />
-    <Content Include="Content\TimeTracker\icons\TimeTracker.png" />
-    <Content Include="Content\TimeTracker\icons\TimeTrackerOld.png" />
-    <Content Include="Content\Timetracker - Copy - Copy.css">
-      <DependentUpon>StaffingManager.less</DependentUpon>
+    <Content Include="Content\bootstrap\css\bootstrap-grid.css" />
+    <Content Include="Content\bootstrap\css\bootstrap-grid.min.css" />
+    <Content Include="Content\bootstrap\css\bootstrap-reboot.css" />
+    <Content Include="Content\bootstrap\css\bootstrap-reboot.min.css" />
+    <Content Include="Content\bootstrap\css\bootstrap.css" />
+    <Content Include="Content\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Content\css\bootstrap-select.min.css" />
+    <Content Include="Scripts\bootstrap\bootstrap.js" />
+    <Content Include="Scripts\bootstrap\bootstrap.min.js" />
+    <Content Include="Content\css\ExpenseTracker.css" />
+    <Content Include="Content\css\ExpenseTracker.min.css">
+      <DependentUpon>ExpenseTracker.css</DependentUpon>
     </Content>
-    <Content Include="Content\Timetracker - Copy.css">
-      <DependentUpon>ExpenseTracker.less</DependentUpon>
+    <Content Include="Content\css\Site.css" />
+    <Content Include="Content\css\StaffingManager.css" />
+    <Content Include="Content\css\StaffingManager.min.css">
+      <DependentUpon>StaffingManager.css</DependentUpon>
     </Content>
-    <Content Include="Content\Timetracker - Copy.min - Copy.css">
-      <DependentUpon>Timetracker - Copy - Copy.css</DependentUpon>
-    </Content>
-    <Content Include="Content\Timetracker - Copy.min.css">
-      <DependentUpon>Timetracker - Copy.css</DependentUpon>
-    </Content>
+    <Content Include="Content\css\TimeTracker.css" />
+    <Content Include="Content\font-awesome\css\font-awesome.css" />
+    <Content Include="Content\font-awesome\css\font-awesome.min.css" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\font-awesome\HELP-US-OUT.txt" />
+    <Content Include="Content\icons\ExpenseTracker.png" />
+    <Content Include="Content\icons\StaffingManager.png" />
+    <Content Include="Content\icons\TimeTrackerPro.png" />
+    <Content Include="Content\icons\TimeTracker.png" />
     <Content Include="Scripts\allyis-account-permission2.js" />
     <Content Include="Scripts\allyis-holidayDatepicker.js" />
     <Content Include="Scripts\allyis-birthDatepicker.js" />
@@ -505,7 +503,6 @@
     <Content Include="Areas\TimeTracker\Views\Project\_ProjectEdit.cshtml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Parameters.xml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\Settings.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\UserEdit.cshtml" />
@@ -518,104 +515,23 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Utilities\InviteMap.cs" />
-    <Compile Include="ViewModels\BillingProductSubscription\ProductSubscriptionViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Filters\NotificationFilter.cs" />
     <Compile Include="Utilities\ErrorHandler.cs" />
-    <Compile Include="Utilities\Helpers.cs" />
-    <Compile Include="Extensions\ViewExtensions.cs" />
     <Content Include="Content\icons\fav16.png" />
     <Content Include="Content\icons\fav32.png" />
     <Content Include="Content\icons\fav64.png" />
     <Content Include="Content\icons\poweredbystripe.png" />
     <Content Include="Content\jquery.comiseo.daterangepicker.css" />
-    <Content Include="Content\less\allyis-list-group-search.css">
-      <DependentUpon>allyis-list-group-search.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\allyis-list-group-search.min.css">
-      <DependentUpon>allyis-list-group-search.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\error.css">
-      <DependentUpon>error.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\error.min.css">
-      <DependentUpon>error.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\index.css">
-      <DependentUpon>index.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\index.min.css">
-      <DependentUpon>index.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\modal.css">
-      <DependentUpon>modal.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\modal.min.css">
-      <DependentUpon>modal.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\navigation.css">
-      <DependentUpon>navigation.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\navigation.min.css">
-      <DependentUpon>navigation.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\paneled_index.css">
-      <DependentUpon>paneled_index.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\paneled_index.min.css">
-      <DependentUpon>paneled_index.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\permissions.css">
-      <DependentUpon>permissions.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\permissions.min.css">
-      <DependentUpon>permissions.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\report.css">
-      <DependentUpon>report.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\report.min.css">
-      <DependentUpon>report.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\sale.css">
-      <DependentUpon>sale.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\sale.min.css">
-      <DependentUpon>sale.css</DependentUpon>
-    </Content>
     <Content Include="Content\icons\allyislogo.png" />
-    <Content Include="Content\less\swapper-ui.css">
-      <DependentUpon>swapper-ui.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\swapper-ui.min.css">
-      <DependentUpon>swapper-ui.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\tt_customer.css">
-      <DependentUpon>tt_customer.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\tt_customer.min.css">
-      <DependentUpon>tt_customer.css</DependentUpon>
-    </Content>
-    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Areas\TimeTracker\Views\Customer\_CustomerEdit.cshtml" />
-    <Content Include="Content\less\allyis-pages-with-filter.less" />
-    <Content Include="Content\less\allyis-tabs.less" />
     <Content Include="Areas\TimeTracker\Views\Customer\Details.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\MergePayClass.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Shared\_TimeTrackerSidebar.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\Reactivate.cshtml" />
-    <Content Include="Areas\TimeTracker\Views\Customer\ReactivateBackUp.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\_ProjectsByCustomer.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\_IndexPartial_Active.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\_IndexPartial_Inactive.cshtml" />
-    <Content Include="Content\ExpenseTracker.less" />
-    <Content Include="Content\Timetracker - Copy.css.map">
-      <DependentUpon>Timetracker - Copy.css</DependentUpon>
-    </Content>
     <Content Include="Areas\ExpenseTracker\Views\_ViewStart.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\Index.cshtml" />
@@ -639,10 +555,6 @@
     <Content Include="Areas\ExpenseTracker\Views\Expense\AdminReport.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\CreatePosition.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\_PositionEditDetails.cshtml" />
-    <Content Include="Content\StaffingManager.less" />
-    <Content Include="Content\Timetracker - Copy.css - Copy.map">
-      <DependentUpon>Timetracker - Copy - Copy.css</DependentUpon>
-    </Content>
     <Content Include="Areas\StaffingManager\Views\Staffing\settings.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\UserSettings.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Customer\Index.cshtml" />
@@ -662,6 +574,13 @@
     <Content Include="Areas\StaffingManager\Views\Staffing\_ApplicationInfoPartial.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\Application.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\ApplicationDocument.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\Index2.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\_AjaxTimeEntries2.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\_AjaxTimeEntryBody2.cshtml" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
     <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsStartOfWeek.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsPayClass.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsLockDate.cshtml" />
@@ -669,6 +588,18 @@
     <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsHoliday.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\_ManageSettingSideBar.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\_ManageSettingSideBar2.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\Review.cshtml" />
+    <Content Include="Content\bootstrap\css\bootstrap-grid.css.map" />
+    <Content Include="Content\bootstrap\css\bootstrap-grid.min.css.map" />
+    <Content Include="Content\bootstrap\css\bootstrap-reboot.css.map" />
+    <Content Include="Content\bootstrap\css\bootstrap-reboot.min.css.map" />
+    <Content Include="Content\bootstrap\css\bootstrap.css.map" />
+    <Content Include="Content\bootstrap\css\bootstrap.min.css.map" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\font-awesome\fonts\FontAwesome.otf" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
@@ -685,6 +616,7 @@
     <Content Include="Scripts\allyis-account-permission.js" />
     <Content Include="Scripts\allyis-account-subscribe.js" />
     <Content Include="Scripts\allyis-list-group-search.js" />
+    <Content Include="Scripts\bootstrap-select.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <None Include="Resources\Files\CustomerProjectImportTemplate.xlsx" />
     <None Include="Resources\Files\TimeEntryImportTemplate.xlsx" />
@@ -707,7 +639,6 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js.map">
       <DependentUpon>jquery.validate.unobtrusive.min.js</DependentUpon>
     </Content>
-    <Content Include="Scripts\less.js" />
     <Content Include="Scripts\moment-2.14.1.js" />
     <Content Include="Scripts\moment-2.14.1.min.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js.map">
@@ -717,16 +648,14 @@
       <DependentUpon>respond.min.js</DependentUpon>
     </Content>
     <Content Include="favicon.ico" />
+    <Content Include="Scripts\tether.min.js" />
     <Content Include="Scripts\underscore-1.8.3.js" />
     <Content Include="Scripts\underscore-1.8.3.min.js" />
-    <Content Include="Views\Account\_Terms.cshtml" />
     <Content Include="Views\Shared\ErrorQuiet.cshtml" />
     <Content Include="Views\Account\AddMember.cshtml" />
     <Content Include="Views\Shared\Oops.cshtml" />
     <Content Include="Views\Account\GetBillingSummary.cshtml" />
-    <Content Include="Views\Account\ManageOrg.cshtml" />
     <Content Include="Views\Account\OrgDetails.cshtml" />
-    <Content Include="Views\Account\_ManageOrgSubscriptions.cshtml" />
     <Content Include="Views\Account\_OrganizationEditDetails.cshtml" />
     <Content Include="Views\Account\Subscribe.cshtml" />
     <Content Include="Views\Account\NewMemberJoin.cshtml" />
@@ -738,17 +667,12 @@
     <Content Include="Views\Account\CreateOrg.cshtml" />
     <Content Include="Views\Account\ConfirmRemoveBillingInformation.cshtml" />
     <Content Include="Views\Account\EditOrg.cshtml" />
-    <Content Include="Views\Account\Permission2.cshtml" />
-    <Content Include="Views\Account\_OrgMembers2.cshtml" />
-    <Content Include="Views\Account\_OrganizationPanel.cshtml" />
     <Content Include="Views\Account\EditSubscription.cshtml" />
     <Content Include="Views\Account\Skus.cshtml" />
     <Content Include="Views\Account\EditMember.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Collection.cshtml" />
     <Content Include="Views\Account\_PremissionsLinkView.cshtml" />
     <Content Include="Views\Account\PermissionsOrg.cshtml" />
-    <Content Include="Views\Account\ManageOrg2.cshtml" />
-    <Content Include="Views\Account\_ManageOrgMenuBar.cshtml" />
     <Content Include="Views\Account\OrgSubscriptions.cshtml" />
     <Content Include="Views\Account\OrgMembers.cshtml" />
     <Content Include="Views\Account\OrgInvitations.cshtml" />
@@ -760,232 +684,21 @@
       <SubType>Designer</SubType>
     </CodeAnalysisDictionary>
     <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="Content\bootstrap\less\bootstrap.css">
-      <DependentUpon>bootstrap.less</DependentUpon>
-    </Content>
-    <Content Include="Content\bootstrap\less\bootstrap.min.css">
-      <DependentUpon>bootstrap.css</DependentUpon>
-    </Content>
-    <Content Include="Content\ExpenseTracker\icons\ExpenseTrackerPro.png" />
+    <Content Include="Content\icons\ExpenseTrackerPro.png" />
     <Content Include="Content\icons\invoice.png" />
     <Content Include="Content\icons\tasks-list.png" />
-    <Content Include="Content\less\breadcrumbs.css">
-      <DependentUpon>breadcrumbs.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\breadcrumbs.min.css">
-      <DependentUpon>breadcrumbs.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\form.css">
-      <DependentUpon>form.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\form.min.css">
-      <DependentUpon>form.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\general.css">
-      <DependentUpon>general.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\general.min.css">
-      <DependentUpon>general.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\offcanvas.css">
-      <DependentUpon>offcanvas.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\offcanvas.min.css">
-      <DependentUpon>offcanvas.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\sticky_footer.css">
-      <DependentUpon>sticky_footer.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\sticky_footer.min.css">
-      <DependentUpon>sticky_footer.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\utilities.css">
-      <DependentUpon>utilities.less</DependentUpon>
-    </Content>
-    <Content Include="Content\less\utilities.min.css">
-      <DependentUpon>utilities.css</DependentUpon>
-    </Content>
-    <Content Include="Content\Site.css">
-      <DependentUpon>Site.less</DependentUpon>
-    </Content>
-    <Content Include="Content\Site.min.css">
-      <DependentUpon>Site.css</DependentUpon>
-    </Content>
-    <Content Include="Content\Timetracker.css">
-      <DependentUpon>Timetracker.less</DependentUpon>
-    </Content>
-    <Content Include="Content\Timetracker.min.css">
-      <DependentUpon>Timetracker.css</DependentUpon>
-    </Content>
-    <Content Include="Scripts\bootstrap\affix.js" />
-    <Content Include="Scripts\bootstrap\alert.js" />
-    <Content Include="Scripts\bootstrap\button.js" />
-    <Content Include="Scripts\bootstrap\carousel.js" />
-    <Content Include="Scripts\bootstrap\collapse.js" />
-    <Content Include="Scripts\bootstrap\dropdown.js" />
-    <Content Include="Scripts\bootstrap\modal.js" />
-    <Content Include="Scripts\bootstrap\popover.js" />
-    <Content Include="Scripts\bootstrap\scrollspy.js" />
-    <Content Include="Scripts\bootstrap\tab.js" />
-    <Content Include="Scripts\bootstrap\tests\index.html" />
-    <Content Include="Scripts\bootstrap\tests\unit\affix.js" />
-    <Content Include="Scripts\bootstrap\tests\unit\alert.js" />
-    <Content Include="Scripts\bootstrap\tests\unit\button.js" />
-    <Content Include="Scripts\bootstrap\tests\unit\carousel.js" />
-    <Content Include="Scripts\bootstrap\tests\unit\collapse.js" />
-    <Content Include="Scripts\bootstrap\tests\unit\dropdown.js" />
-    <Content Include="Scripts\bootstrap\tests\unit\modal.js" />
-    <Content Include="Scripts\bootstrap\tests\unit\phantom.js" />
-    <Content Include="Scripts\bootstrap\tests\unit\popover.js" />
-    <Content Include="Scripts\bootstrap\tests\unit\scrollspy.js" />
-    <Content Include="Scripts\bootstrap\tests\unit\tab.js" />
-    <Content Include="Scripts\bootstrap\tests\unit\tooltip.js" />
-    <Content Include="Scripts\bootstrap\tests\vendor\jquery.min.js" />
-    <Content Include="Scripts\bootstrap\tests\vendor\qunit.css" />
-    <Content Include="Scripts\bootstrap\tests\vendor\qunit.js" />
-    <Content Include="Scripts\bootstrap\tests\visual\affix-with-sticky-footer.html" />
-    <Content Include="Scripts\bootstrap\tests\visual\affix.html" />
-    <Content Include="Scripts\bootstrap\tests\visual\alert.html" />
-    <Content Include="Scripts\bootstrap\tests\visual\button.html" />
-    <Content Include="Scripts\bootstrap\tests\visual\carousel.html" />
-    <Content Include="Scripts\bootstrap\tests\visual\collapse.html" />
-    <Content Include="Scripts\bootstrap\tests\visual\dropdown.html" />
-    <Content Include="Scripts\bootstrap\tests\visual\modal.html" />
-    <Content Include="Scripts\bootstrap\tests\visual\popover.html" />
-    <Content Include="Scripts\bootstrap\tests\visual\scrollspy.html" />
-    <Content Include="Scripts\bootstrap\tests\visual\tab.html" />
-    <Content Include="Scripts\bootstrap\tests\visual\tooltip.html" />
-    <Content Include="Scripts\bootstrap\tooltip.js" />
-    <Content Include="Scripts\bootstrap\transition.js" />
     <Content Include="Global.asax" />
     <Content Include="Areas\TimeTracker\Views\web.config">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Areas\TimeTracker\Views\_ViewStart.cshtml" />
-    <Content Include="Content\Site.less" />
-    <Content Include="Content\bootstrap\less\.csscomb.json" />
-    <Content Include="Content\bootstrap\less\.csslintrc" />
-    <Content Include="Content\bootstrap\less\alerts.less" />
-    <Content Include="Content\bootstrap\less\badges.less" />
-    <Content Include="Content\bootstrap\less\bootstrap.less" />
-    <Content Include="Content\bootstrap\less\breadcrumbs.less" />
-    <Content Include="Content\bootstrap\less\button-groups.less" />
-    <Content Include="Content\bootstrap\less\buttons.less" />
-    <Content Include="Content\bootstrap\less\carousel.less" />
-    <Content Include="Content\bootstrap\less\close.less" />
-    <Content Include="Content\bootstrap\less\code.less" />
-    <Content Include="Content\bootstrap\less\component-animations.less" />
-    <Content Include="Content\bootstrap\less\dropdowns.less" />
-    <Content Include="Content\bootstrap\less\forms.less" />
-    <Content Include="Content\bootstrap\less\glyphicons.less" />
-    <Content Include="Content\bootstrap\less\grid.less" />
-    <Content Include="Content\bootstrap\less\input-groups.less" />
-    <Content Include="Content\bootstrap\less\jumbotron.less" />
-    <Content Include="Content\bootstrap\less\labels.less" />
-    <Content Include="Content\bootstrap\less\list-group.less" />
-    <Content Include="Content\bootstrap\less\media.less" />
-    <Content Include="Content\bootstrap\less\mixins.less" />
-    <Content Include="Content\bootstrap\less\mixins\alerts.less" />
-    <Content Include="Content\bootstrap\less\mixins\background-variant.less" />
-    <Content Include="Content\bootstrap\less\mixins\border-radius.less" />
-    <Content Include="Content\bootstrap\less\mixins\buttons.less" />
-    <Content Include="Content\bootstrap\less\mixins\center-block.less" />
-    <Content Include="Content\bootstrap\less\mixins\clearfix.less" />
-    <Content Include="Content\bootstrap\less\mixins\forms.less" />
-    <Content Include="Content\bootstrap\less\mixins\gradients.less" />
-    <Content Include="Content\bootstrap\less\mixins\grid-framework.less" />
-    <Content Include="Content\bootstrap\less\mixins\grid.less" />
-    <Content Include="Content\bootstrap\less\mixins\hide-text.less" />
-    <Content Include="Content\bootstrap\less\mixins\image.less" />
-    <Content Include="Content\bootstrap\less\mixins\labels.less" />
-    <Content Include="Content\bootstrap\less\mixins\list-group.less" />
-    <Content Include="Content\bootstrap\less\mixins\nav-divider.less" />
-    <Content Include="Content\bootstrap\less\mixins\nav-vertical-align.less" />
-    <Content Include="Content\bootstrap\less\mixins\opacity.less" />
-    <Content Include="Content\bootstrap\less\mixins\pagination.less" />
-    <Content Include="Content\bootstrap\less\mixins\panels.less" />
-    <Content Include="Content\bootstrap\less\mixins\progress-bar.less" />
-    <Content Include="Content\bootstrap\less\mixins\reset-filter.less" />
-    <Content Include="Content\bootstrap\less\mixins\reset-text.less" />
-    <Content Include="Content\bootstrap\less\mixins\resize.less" />
-    <Content Include="Content\bootstrap\less\mixins\responsive-visibility.less" />
-    <Content Include="Content\bootstrap\less\mixins\size.less" />
-    <Content Include="Content\bootstrap\less\mixins\tab-focus.less" />
-    <Content Include="Content\bootstrap\less\mixins\table-row.less" />
-    <Content Include="Content\bootstrap\less\mixins\text-emphasis.less" />
-    <Content Include="Content\bootstrap\less\mixins\text-overflow.less" />
-    <Content Include="Content\bootstrap\less\mixins\vendor-prefixes.less" />
-    <Content Include="Content\bootstrap\less\modals.less" />
-    <Content Include="Content\bootstrap\less\navbar.less" />
-    <Content Include="Content\bootstrap\less\navs.less" />
-    <Content Include="Content\bootstrap\less\normalize.less" />
-    <Content Include="Content\bootstrap\less\pager.less" />
-    <Content Include="Content\bootstrap\less\pagination.less" />
-    <Content Include="Content\bootstrap\less\panels.less" />
-    <Content Include="Content\bootstrap\less\popovers.less" />
-    <Content Include="Content\bootstrap\less\print.less" />
-    <Content Include="Content\bootstrap\less\progress-bars.less" />
-    <Content Include="Content\bootstrap\less\responsive-embed.less" />
-    <Content Include="Content\bootstrap\less\responsive-utilities.less" />
-    <Content Include="Content\bootstrap\less\scaffolding.less" />
-    <Content Include="Content\bootstrap\less\tables.less" />
-    <Content Include="Content\bootstrap\less\theme.less" />
-    <Content Include="Content\bootstrap\less\thumbnails.less" />
-    <Content Include="Content\bootstrap\less\tooltip.less" />
-    <Content Include="Content\bootstrap\less\type.less" />
-    <Content Include="Content\bootstrap\less\utilities.less" />
-    <Content Include="Content\bootstrap\less\variables.less" />
-    <Content Include="Content\bootstrap\less\wells.less" />
     <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="Scripts\bootstrap\.jscsrc" />
-    <Content Include="Scripts\bootstrap\.jshintrc" />
-    <Content Include="Scripts\bootstrap\tests\README.md" />
-    <Content Include="Scripts\bootstrap\tests\unit\.jshintrc" />
-    <Content Include="Content\less\_root.less" />
-    <Content Include="Content\less\sticky_footer.less" />
-    <Content Include="Content\less\sticky_footer.css.map">
-      <DependentUpon>sticky_footer.css</DependentUpon>
-    </Content>
-    <Content Include="Content\Site.css.map">
-      <DependentUpon>Site.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\_variables.less" />
-    <Content Include="Content\less\_mixins.less" />
-    <Content Include="Content\bootstrap\less\bootstrap.css.map">
-      <DependentUpon>bootstrap.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\utilities.less" />
-    <Content Include="Content\less\utilities.css.map">
-      <DependentUpon>utilities.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\form.less" />
-    <Content Include="Content\less\form.css.map">
-      <DependentUpon>form.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\general.less" />
-    <Content Include="Content\less\general.css.map">
-      <DependentUpon>general.css</DependentUpon>
-    </Content>
-    <Content Include="Content\bootstrap\LICENSE" />
-    <Content Include="Content\bootstrap\README.md" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\_ClearRow.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
-    <Content Include="Content\less\offcanvas.less" />
-    <Content Include="Content\less\offcanvas.css.map">
-      <DependentUpon>offcanvas.css</DependentUpon>
-    </Content>
     <Content Include="Areas\TimeTracker\Views\TimeEntry\Report.cshtml" />
-    <Content Include="Content\less\breadcrumbs.less" />
-    <Content Include="Content\less\breadcrumbs.css.map">
-      <DependentUpon>breadcrumbs.css</DependentUpon>
-    </Content>
-    <Content Include="Content\Timetracker.less" />
-    <Content Include="Content\Timetracker.css.map">
-      <DependentUpon>Timetracker.css</DependentUpon>
-    </Content>
     <Content Include="Areas\TimeTracker\Views\Shared\_BreadcrumbNavPartial.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\Index.cshtml" />
@@ -994,65 +707,8 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="Areas\TimeTracker\Views\TimeEntry\_AjaxTimeEntryBody.cshtml" />
-    <Content Include="Content\font-awesome\less\animated.less" />
-    <Content Include="Content\font-awesome\less\bordered-pulled.less" />
-    <Content Include="Content\font-awesome\less\core.less" />
-    <Content Include="Content\font-awesome\less\fixed-width.less" />
-    <Content Include="Content\font-awesome\less\font-awesome.less" />
-    <Content Include="Content\font-awesome\less\icons.less" />
-    <Content Include="Content\font-awesome\less\larger.less" />
-    <Content Include="Content\font-awesome\less\list.less" />
-    <Content Include="Content\font-awesome\less\mixins.less" />
-    <Content Include="Content\font-awesome\less\path.less" />
-    <Content Include="Content\font-awesome\less\rotated-flipped.less" />
-    <Content Include="Content\font-awesome\less\stacked.less" />
-    <Content Include="Content\font-awesome\less\variables.less" />
-    <Content Include="Content\less\report.less" />
-    <Content Include="Content\less\report.css.map">
-      <DependentUpon>report.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\error.less" />
-    <Content Include="Content\less\error.css.map">
-      <DependentUpon>error.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\paneled_index.less" />
-    <Content Include="Content\less\paneled_index.css.map">
-      <DependentUpon>paneled_index.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\sale.less" />
-    <Content Include="Content\less\sale.css.map">
-      <DependentUpon>sale.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\navigation.less" />
-    <Content Include="Content\less\navigation.css.map">
-      <DependentUpon>navigation.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\tt_customer.less" />
-    <Content Include="Content\less\tt_customer.css.map">
-      <DependentUpon>tt_customer.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\index.less" />
-    <Content Include="Content\less\index.css.map">
-      <DependentUpon>index.css</DependentUpon>
-    </Content>
     <Content Include="Scripts\bootstrap.min.js.map">
       <DependentUpon>bootstrap.min.js</DependentUpon>
-    </Content>
-    <Content Include="Content\less\allyis-list-group-search.less" />
-    <Content Include="Content\less\allyis-list-group-search.css.map">
-      <DependentUpon>allyis-list-group-search.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\modal.less" />
-    <Content Include="Content\less\modal.css.map">
-      <DependentUpon>modal.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\swapper-ui.less" />
-    <Content Include="Content\less\swapper-ui.css.map">
-      <DependentUpon>swapper-ui.css</DependentUpon>
-    </Content>
-    <Content Include="Content\less\permissions.less" />
-    <Content Include="Content\less\permissions.css.map">
-      <DependentUpon>permissions.css</DependentUpon>
     </Content>
     <None Include="Resources\Files\ImportUserTemplate.csv" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -1137,6 +793,7 @@
     <EmbeddedResource Include="Resources\Images.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Images.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\States.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1157,8 +814,8 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Strings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -47,8 +47,8 @@ namespace AllyisApps.Services.Auth
 		/// </summary>
 		public UserContext()
 		{
-			this.OrganizationsAndRoles = new Dictionary<int, OrganizationAndRole>();
-			this.SubscriptionsAndRoles = new Dictionary<int, SubscriptionAndRole>();
+			OrganizationsAndRoles = new Dictionary<int, OrganizationAndRole>();
+			SubscriptionsAndRoles = new Dictionary<int, SubscriptionAndRole>();
 		}
 
 		/// <summary>
@@ -61,11 +61,11 @@ namespace AllyisApps.Services.Auth
 			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentException("lastName");
 			if (string.IsNullOrWhiteSpace(email)) throw new ArgumentException("email");
 
-			this.Email = email;
-			this.UserId = userId;
-			this.FirstName = firstName;
-			this.LastName = lastName;
-			this.PreferedLanguageId = preferredLanguageId;
+			Email = email;
+			UserId = userId;
+			FirstName = firstName;
+			LastName = lastName;
+			PreferedLanguageId = preferredLanguageId;
 		}
 
 		/// <summary>
@@ -84,8 +84,7 @@ namespace AllyisApps.Services.Auth
 		public class OrganizationAndRole
 		{
 			public int OrganizationId { get; set; }
-			public OrganizationRole OrganizationRole { get; set; }
-			public decimal MaxAmount { get; set; }
+			public OrganizationRoleEnum OrganizationRole { get; set; }
 		}
 
 		/// <summary>
@@ -99,7 +98,6 @@ namespace AllyisApps.Services.Auth
 			public ProductIdEnum ProductId { get; set; }
 			public int ProductRoleId { get; set; }
 			public string AreaUrl { get; set; }
-			public decimal MaxAmount { get; set; }
 		}
 	}
 }

@@ -21,7 +21,7 @@ namespace AllyisApps.Core
 		/// <param name="area">The area to be routed to.</param>
 		public SubdomainRoute(string url, string area) : base(url, new MvcRouteHandler())
 		{
-			this.Area = area;
+			Area = area;
 		}
 
 		/// <summary>
@@ -36,22 +36,5 @@ namespace AllyisApps.Core
 		/// Gets the name of the Area to be routed to.
 		/// </summary>
 		public string Area { get; internal set; }
-
-		/// <summary>
-		/// Retrieves the relative path of the request based on the route.
-		/// </summary>
-		/// <param name="requestContext">The request context.</param>
-		/// <param name="values">The request values.</param>
-		/// <returns>The path as a string.</returns>
-		public override VirtualPathData GetVirtualPath(RequestContext requestContext, RouteValueDictionary values)
-		{
-			object subdomainParam = requestContext.HttpContext.Request.Params["subdomain"];
-			if (subdomainParam != null)
-			{
-				values["subdomain"] = subdomainParam;
-			}
-
-			return base.GetVirtualPath(requestContext, values);
-		}
 	}
 }

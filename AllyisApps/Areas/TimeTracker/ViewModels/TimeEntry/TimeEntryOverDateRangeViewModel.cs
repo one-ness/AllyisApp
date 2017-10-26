@@ -96,7 +96,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		{
 			get
 			{
-				return (int)Math.Ceiling(this.TotalUsers / (double)PageUserLimit);
+				return (int)Math.Ceiling(TotalUsers / (double)PageUserLimit);
 			}
 		}
 
@@ -165,7 +165,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		{
 			try
 			{
-				string time = string.Format("{0}:{1}", (int)this.Hours, ((int)Math.Round((this.Hours - (int)this.Hours) * 60.0f)).ToString("00"));
+				string time = string.Format("{0}:{1}", (int)Hours, ((int)Math.Round((Hours - (int)Hours) * 60.0f)).ToString("00"));
 				return time;
 			}
 			catch (Exception e)

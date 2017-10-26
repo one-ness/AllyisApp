@@ -87,5 +87,15 @@ namespace AllyisApps.DBModel.TimeTracker
 		/// Gets or sets a value indicating whether the data has changed since being approved or dissaproved.
 		/// </summary>
 		public bool ModSinceApproval { get; set; }
+
+		/// <summary>
+		/// Gets or sets the status of the time entry, e.g. "Pending", "Approved", "Rejected", "Payroll Processed".
+		/// </summary>
+		public int TimeEntryStatusId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the bool for whether or not the time entry is locked
+		/// </summary>
+		public bool IsLocked { get; set; }
 	}
 }

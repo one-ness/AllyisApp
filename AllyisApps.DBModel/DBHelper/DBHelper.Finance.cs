@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Finance;
 using Dapper;
@@ -43,7 +44,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@parentAccountId", account.ParentAccountId != null ? account.ParentAccountId.Value : account.ParentAccountId);
 			parameters.Add("@returnValue", -1, DbType.Int32, direction: ParameterDirection.Output);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default -1
 				connection.Execute("[Finance].[CreateAccount]", parameters, commandType: CommandType.StoredProcedure);
@@ -68,7 +69,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@parentAccountId", parentAccountId);
 			parameters.Add("@isActive", isActive);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<AccountDBEntity>("[Finance].[GetAccountsByParentId]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable();
 			}
@@ -86,7 +87,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@accountTypeId", accountTypeId);
 			parameters.Add("@isActive", isActive);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<AccountDBEntity>("[Finance].[GetAccountsByAccountTypeId]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable();
 			}
@@ -102,7 +103,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@accountId", accountId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<AccountDBEntity>("[Finance].[GetAccount]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable().FirstOrDefault();
 			}
@@ -112,14 +113,15 @@ namespace AllyisApps.DBModel
 		/// Retrieves all of the accounts in the database.
 		/// </summary>
 		/// <returns></returns>
-		public IEnumerable<AccountDBEntity> GetAccounts(int orgId)
+		public async Task<IEnumerable<AccountDBEntity>> GetAccounts(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<AccountDBEntity>("[Finance].[GetAccounts]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable();
+				var results = await connection.QueryAsync<AccountDBEntity>("[Finance].[GetAccounts]", parameters, commandType: CommandType.StoredProcedure);
+				return results.AsEnumerable();
 			}
 		}
 
@@ -147,7 +149,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@parentAccountId", account.ParentAccountId);
 			parameters.Add("@returnValue", -1, DbType.Int32, direction: ParameterDirection.Output);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default -1
 				connection.Execute("[Finance].[UpdateAccount]", parameters, commandType: CommandType.StoredProcedure);
@@ -164,14 +166,14 @@ namespace AllyisApps.DBModel
 		/// Deletes and account from the database.
 		/// </summary>
 		/// <param name="accountId">The.</param>
-		public void DeleteAccount(int accountId)
+		public async Task DeleteAccount(int accountId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@accountId", accountId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				connection.Execute("[Finance].[DeleteAccount]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[Finance].[DeleteAccount]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -185,7 +187,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<UserDBEntity>("[Auth].[GetOrganizationOwnerEmails]", parameters, commandType: CommandType.StoredProcedure).Select(x => x.Email);
 			}
@@ -197,15 +199,15 @@ namespace AllyisApps.DBModel
 		/// <param name="userId"></param>
 		/// <param name="orgId"></param>
 		/// <returns>The ORganizationUserDBEntity object.</returns>
-		public decimal GetUserOrgMaxAmount(int userId, int orgId)
+		public async Task<decimal> GetUserOrgMaxAmount(int userId, int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
 			parameters.Add("@orgId", orgId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var orgUsers = connection.Query<decimal>("[Auth].[GetOrgUserMaxAmount]", parameters, commandType: CommandType.StoredProcedure);
+				var orgUsers = await connection.QueryAsync<decimal>("[Auth].[GetOrgUserMaxAmount]", parameters, commandType: CommandType.StoredProcedure);
 				return orgUsers.FirstOrDefault();
 			}
 		}

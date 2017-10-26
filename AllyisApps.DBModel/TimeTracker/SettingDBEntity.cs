@@ -4,6 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+
 namespace AllyisApps.DBModel.TimeTracker
 {
 	/// <summary>
@@ -50,5 +52,37 @@ namespace AllyisApps.DBModel.TimeTracker
 		/// Gets or sets the LockDateQuantity.
 		/// </summary>
 		public int LockDateQuantity { get; set; }
+
+		/// <summary>
+		/// Gets or sets the payroll processed date.
+		/// All time entries before this date are completely processed
+		/// </summary>
+		public DateTime? PayrollProcessedDate { get; set; }
+
+		/// <summary>
+		/// Gets or sets the lock date.
+		/// All time entries inbetween the payroll processed date and the lock date are locked (can't be edited)
+		/// </summary>
+		public DateTime? LockDate { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Pay period.
+		/// This is a JSON string containing all info necessary to calculate the pay period.
+		/// It is one of two objects:
+		/// 
+		/// For a duration type pay period, the string will be like:
+		/// '{
+		///     "type": "duration",
+		///     "duration": "14",
+		///     "startDate": "2017-10-16"
+		///  }'
+		/// 
+		/// For a dates type pay period, the string will be like:
+		/// '{
+		///     "type": "dates",
+		///     "dates": [1, 16]
+		///  }'
+		/// </summary>
+		public string PayPeriod { get; set; }
 	}
 }

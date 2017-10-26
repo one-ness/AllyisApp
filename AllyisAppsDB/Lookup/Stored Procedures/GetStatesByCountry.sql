@@ -1,4 +1,4 @@
-CREATE PROCEDURE [Lookup].[GetStatesByCountry]
+﻿CREATE PROCEDURE [Lookup].[GetStatesByCountry]
 	@countryName NVARCHAR(50)
 AS
 BEGIN
@@ -11,7 +11,7 @@ BEGIN
 			FROM [Lookup].[State] WITH (NOLOCK) 
 			INNER JOIN [Lookup].[Country] WITH (NOLOCK) ON [Country].[CountryCode] = [State].[CountryCode]
 			WHERE [Country].[CountryName] = @countryName
-			ORDER BY [State].[StateName]
+			ORDER BY [State].[StateName] asc
 		
 	ELSE
 		SELECT @countryName

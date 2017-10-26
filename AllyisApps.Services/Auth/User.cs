@@ -133,10 +133,10 @@ namespace AllyisApps.Services.Auth
 		/// </summary>
 		public User()
 		{
-			this.Address = new Address();
-			this.Invitations = new List<Invitation>();
-			this.Organizations = new List<UserOrganization>();
-			this.Subscriptions = new List<UserSubscription>();
+			Address = new Address();
+			Invitations = new List<Invitation>();
+			Organizations = new List<UserOrganization>();
+			Subscriptions = new List<UserSubscription>();
 		}
 	}
 }

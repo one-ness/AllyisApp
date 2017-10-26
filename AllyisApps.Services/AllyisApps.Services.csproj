@@ -25,6 +25,7 @@
     <DocumentationFile>bin\Debug\AllyisApps.Services.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
     <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>AllyisApps.Services1.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -37,6 +38,7 @@
     <DocumentationFile>bin\Release\AllyisApps.Services.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
     <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>AllyisApps.Services1.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Dapper, Version=1.50.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -70,17 +72,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auth\InvitationStatusEnum.cs" />
-    <Compile Include="Auth\OrganizaionPermissions.cs" />
     <Compile Include="Auth\Organization.cs" />
     <Compile Include="Auth\AccountService.cs" />
     <Compile Include="Auth\AuthorizationService.cs" />
     <Compile Include="Auth\ImportService.cs" />
-    <Compile Include="Auth\OrganizationRoleEnum.cs" />
     <Compile Include="Auth\Account.cs" />
     <Compile Include="Auth\OrganizationUser.cs" />
     <Compile Include="Auth\ProductRoleEnums.cs" />
     <Compile Include="Auth\ProductSubscription.cs" />
     <Compile Include="Auth\ReportInfo.cs" />
+    <Compile Include="Auth\ServiceActionEnums.cs" />
     <Compile Include="Auth\UserContext.cs" />
     <Compile Include="Auth\UserOrganization.cs" />
     <Compile Include="Auth\UserSubscription.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="Billing\BlockBasedOnEnum.cs" />
     <Compile Include="Billing\Sku.cs" />
     <Compile Include="Billing\Subscription.cs" />
+    <Compile Include="Billing\UnitTypeEnum.cs" />
     <Compile Include="Billing\UpdateSubscriptionUserRolesResuts.cs" />
     <Compile Include="Cache\CacheContainer.cs" />
     <Compile Include="Expense\ExpenseHistory.cs" />
@@ -132,6 +134,8 @@
     <Compile Include="TimeTracker\LockDatePeriodEnum.cs" />
     <Compile Include="TimeTracker\PayClass.cs" />
     <Compile Include="Crm\CompleteProject.cs" />
+    <Compile Include="TimeTracker\ServiceResultEnums.cs" />
+    <Compile Include="TimeTracker\TimeEntryStatusIdEnum.cs" />
     <Compile Include="TimeTracker\PayClassIdEnum.cs" />
     <Compile Include="TimeTracker\Setting.cs" />
     <Compile Include="Billing\SkuIdEnum.cs" />
@@ -170,12 +174,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="AllyisApps.Services.ruleset" />
+    <None Include="AllyisApps.Services1.ruleset" />
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AllyisApps\Services\Billing\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

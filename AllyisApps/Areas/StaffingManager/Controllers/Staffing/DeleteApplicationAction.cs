@@ -4,18 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
-using AllyisApps.Services;
-using AllyisApps.Services.Auth;
-using AllyisApps.Services.Crm;
-using AllyisApps.Services.StaffingManager;
-using AllyisApps.Services.Lookup;
-using AllyisApps.ViewModels.Staffing;
-using System;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -28,11 +19,13 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// Applicant page.
 		/// </summary>
 		/// <returns></returns>
-		public ActionResult DeleteApplication(int applicationId)
+		public async Task<ActionResult> DeleteApplication(int applicationId)
 		{
-			int applicantId = this.AppService.GetApplicantAddressByApplicationId(applicationId).ApplicantId;
-			this.AppService.DeleteApplication(applicationId);
-			return this.RedirectToAction("Applicant", new { applicantId = applicantId });
+			var applicantGet = await AppService.GetApplicantAddressByApplicationId(applicationId);
+			int applicantId = applicantGet.ApplicantId;
+			AppService.DeleteApplication(applicationId);
+			await Task.Yield();
+			return RedirectToAction("Applicant", new { applicantId = applicantId });
 		}
 	}
 }

@@ -1,0 +1,525 @@
+﻿@using AllyisApps.Services.TimeTracker
+@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+@model ReviewViewModel
+
+@{
+	ViewBag.Title = Strings.Review;
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
+	ViewData["UserId"] = Model.UserId;
+	ViewData["SubscriptionId"] = Model.SubscriptionId;
+	ViewData["SubscriptionName"] = Model.SubscriptionName;
+}
+
+
+<div class="row" style="padding-right: 15px; padding-left: 15px;">
+	<div class="panel panel-default pull-left">
+		<div class="panel-body" style="padding:5px;">
+			<div class="pull-left" style="padding-right: 15px;">Legend: </div>
+			<div style="float:left; margin-right:15px;">
+				<i class="fa fa-square color-code-Pending" aria-hidden="true"></i>
+				- Pending
+			</div>
+			<div style="float:left; margin-right:15px;">
+				<i class="fa fa-square color-code-Rejected" aria-hidden="true"></i>
+				- Rejected
+			</div>
+			<div style="float:left; margin-right:15px;">
+				<i class="fa fa-square color-code-Approved" aria-hidden="true"></i>
+				- Approved
+			</div>
+			<div style="padding-right: 10px; float:left; margin-right:15px;">
+				<i class="fa fa-square color-code-PayrollProcessed" aria-hidden="true"></i>
+				- PayrollProcessed
+			</div>
+		</div>
+	</div>
+	@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new {@class = "form-inline pull-right", role = "form"}))
+	{
+		<label>Set status for selected entries as: </label>
+		<div class="input-group">
+			@Html.DropDownList("timeEntryStatusId",
+				new SelectList(Model.TimeEntryStatusOptions.Where(keyVal => keyVal.Key != (int)TimeEntryStatus.PayrollProcessed), "Key", "Value"),
+				new
+				{
+					@class = "form-control selectpicker set-status-select",
+					data_width = "fit"
+				})
+			<span class="input-group-btn">
+				<button id="submit-status" class="btn btn-primary" type="submit" tabindex="-1">Save</button>
+			</span>
+		</div>
+		<input type="hidden" name="timeEntryIdsJSON" class="time-entries-input" value="[]"/>
+		@Html.HiddenFor(m => m.StartDate)
+		@Html.HiddenFor(m => m.EndDate)
+	}
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-heading row" style="margin: 0; padding-left: 0; padding-right: 0;">
+		<div class="col-lg-4">
+			<h4 class="pull-left">Time Entry Totals for Date Range:</h4>
+		</div>
+		<div class="col-lg-8">
+			<div id="review-range" class="panel-title pull-right" style="display: inline; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px; margin-left: 15px;">
+				<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+				<span></span> <b class="caret"></b>
+			</div>
+			@Html.DropDownList("statusFilter",
+				new SelectList(Model.TimeEntryStatusOptions, "Key", "Value"),
+				new
+				{
+					@class = "selectpicker pull-right filter-status-select",
+					title = "Filter by status",
+					multiple = "multiple",
+					data_selected_text_format = "count > 2",
+					data_width = "fit"
+				})
+			<div class="pull-right dropdown" style="padding-right:15px;">
+				<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Actions
+				</button>
+				<div class="dropdown-menu">
+					@Html.ActionLink(
+						Strings.LockEntries,
+						ActionConstants.LockTimeEntries,
+						ControllerConstants.TimeEntry,
+						new
+						{
+							subscriptionId = Model.SubscriptionId,
+							startDate = Model.StartDate,
+							lockDate = Model.EndDate
+						},
+						new
+						{
+							@class = "dropdown-item"
+						})
+					@Html.ActionLink(
+						Strings.UnlockEntries,
+						ActionConstants.UnlockTimeEntries,
+						ControllerConstants.TimeEntry,
+						new
+						{
+							subscriptionId = Model.SubscriptionId,
+							startDate = Model.StartDate,
+							endDate = Model.EndDate
+						},
+						new
+						{
+							@class = "dropdown-item"
+						})
+					@Html.ActionLink(
+						Strings.PayrollProcess,
+						ActionConstants.PayrollProcessTimeEntries,
+						ControllerConstants.TimeEntry,
+						new
+						{
+							subscriptionId = Model.SubscriptionId,
+							startDate = Model.StartDate,
+							endDate = Model.EndDate
+						},
+						new
+						{
+							@class = "dropdown-item",
+							onclick = "return confirm('"+ string.Format(Strings.PayrollProcessConfirm, Model.EndDate.ToShortDateString()) + "');"
+						})
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+	<table class="table table-xtra-condensed table-responsive">
+		<thead>
+			<tr class="double-bottom-border">
+				<th><input type="checkbox" class="check-all" check-all-id="0"></th>
+				<th></th>
+				<th>Name</th>
+				@foreach (string payClassName in Model.PayClasses.Select(x => x.PayClassName))
+				{
+					<th>@payClassName</th>
+				}
+				<th>Total</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var group in Model.TimeEntriesByUser)
+			{
+				<tr class="parent-row">
+					<td><input type="checkbox" class="check check-all" check-id="0" check-all-id="@group.Key"></td>
+					<td><i class="fa fa-chevron-down toggle-on-click child-row-controller" rowId=@group.Key style="cursor:pointer"></i></td>
+					<td>@group.First().FirstName @group.First().LastName</td>
+					@foreach (int payClassId in Model.PayClasses.Select(x => x.PayClassId))
+					{
+						<td>@Model.TimeEntryTotalsByUserByPayClass[group.Key][payClassId]</td>
+					}
+					<td>
+						<div class="pull-left">@group.Sum(entry => entry.Duration)</div>
+						<div class="pull-right">
+							<div class="status-dots">
+								<i class="fa fa-circle status-dot color-code-Pending  @(group.All(entry => entry.TimeEntryStatusId != 0) ? "greyed-out" : "")" aria-hidden="true"></i>
+								<i class="fa fa-circle status-dot color-code-Rejected @(group.All(entry => entry.TimeEntryStatusId != 1) ? "greyed-out" : "")" aria-hidden="true"></i>
+								<i class="fa fa-circle status-dot color-code-Approved @(group.All(entry => entry.TimeEntryStatusId != 2) ? "greyed-out" : "")" aria-hidden="true"></i>
+								<i class="fa fa-circle status-dot color-code-PayrollProcessed @(group.All(entry => entry.TimeEntryStatusId != 3) ? "greyed-out" : "")" aria-hidden="true"></i>
+							</div>
+						</div>
+					</td>
+				</tr>
+				foreach (var timeEntry in group)
+				{
+					<tr class="child-row hidden @(timeEntry.IsLocked ? "greyed-out" : "")" rowId=@group.Key data-time-entry-status-id="@timeEntry.TimeEntryStatusId">
+						<td></td>
+						<td><input type="checkbox" class="check time-entry-check" check-id="@group.Key" data-time-entry-id="@timeEntry.TimeEntryId" @(timeEntry.IsLocked ? "disabled" : "")></td>
+						<td>
+							<a class="details-modal-input" data-time-entry-object='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(timeEntry))' style="cursor:pointer">
+								@timeEntry.Date.ToShortDateString()
+							</a>
+						</td>
+						@foreach (int payClassId in Model.PayClasses.Select(x => x.PayClassId))
+						{
+							if (timeEntry.PayClassId == payClassId)
+							{
+								<td>@timeEntry.Duration</td>
+							}
+							else
+							{
+								<td>-</td>
+							}
+						}
+						<td>
+							<div class="pull-left">@timeEntry.Duration</div>
+							<div class="pull-right">
+								<div class="status-dots">
+									<i class="fa fa-circle status-dot color-code-Pending  @(timeEntry.TimeEntryStatusId != 0 ? "hidden" : "")" aria-hidden="true"></i>
+									<i class="fa fa-circle status-dot color-code-Rejected @(timeEntry.TimeEntryStatusId != 1 ? "hidden" : "")" aria-hidden="true"></i>
+									<i class="fa fa-circle status-dot color-code-Approved @(timeEntry.TimeEntryStatusId != 2 ? "hidden" : "")" aria-hidden="true"></i>
+									<i class="fa fa-circle status-dot color-code-PayrollProcessed @(timeEntry.TimeEntryStatusId != 3 ? "hidden" : "")" aria-hidden="true"></i>
+								</div>
+							</div>
+						</td>
+					</tr>
+				}
+			}
+			@if (Model.TimeEntriesByUser.Count == 0)
+			{
+				<tr><td colspan="@(Model.PayClasses.Count + 3)">There are no time entries in this date range, please select a different date range.</td></tr>
+			}
+		</tbody>
+	</table>
+	<div class="pageContainer"></div>
+</div>
+
+<div class="row" style="padding-right: 15px; padding-left: 15px;">
+	<div class="panel panel-default pull-left">
+		<div class="panel-body" style="padding:5px;">
+			<div class="pull-left" style="padding-right: 15px;">Legend: </div>
+			<div style="float:left; margin-right:15px;">
+				<i class="fa fa-square color-code-Pending" aria-hidden="true"></i>
+				- Pending
+			</div>
+			<div style="float:left; margin-right:15px;">
+				<i class="fa fa-square color-code-Rejected" aria-hidden="true"></i>
+				- Rejected
+			</div>
+			<div style="float:left; margin-right:15px;">
+				<i class="fa fa-square color-code-Approved" aria-hidden="true"></i>
+				- Approved
+			</div>
+			<div style="padding-right: 10px; float:left; margin-right:15px;">
+				<i class="fa fa-square color-code-PayrollProcessed" aria-hidden="true"></i>
+				- PayrollProcessed
+			</div>
+		</div>
+	</div>
+	@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "form-inline pull-right", role = "form" }))
+	{
+		<label>Set status for selected entries as: </label>
+		<div class="input-group">
+			@Html.DropDownList("timeEntryStatusId",
+				new SelectList(Model.TimeEntryStatusOptions.Where(keyVal => keyVal.Key != (int)TimeEntryStatus.PayrollProcessed), "Key", "Value"),
+			new
+			{
+				@class = "form-control selectpicker set-status-select",
+				data_width = "fit"
+			})
+			<span class="input-group-btn">
+				<button id="submit-status" class="btn btn-primary" type="submit" tabindex="-1">Save</button>
+			</span>
+		</div>
+		<input type="hidden" name="timeEntryIdsJson" class="time-entries-input" value="[]" />
+		@Html.HiddenFor(m => m.StartDate)
+		@Html.HiddenFor(m => m.EndDate)
+	}
+</div>
+
+<div class="modal fade" id="time-entry-details-modal" tabindex="-1" role="dialog" aria-labelledby="details-modal-title" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="details-modal-title">Time Entry Details</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-xs-6">User Name:</div>
+					<div class="col-xs-6" id="modal-details-name"></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">Customer:</div>
+					<div class="col-xs-6" id="modal-details-customer"></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">Project:</div>
+					<div class="col-xs-6" id="modal-details-project"></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">Pay Type:</div>
+					<div class="col-xs-6" id="modal-details-pay-type"></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">Duration:</div>
+					<div class="col-xs-6" id="modal-details-duration"></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">Description:</div>
+					<div class="col-xs-6" id="modal-details-description"></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">Status:</div>
+					<div class="col-xs-6" id="modal-details-status"></div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">Locked:</div>
+					<div class="col-xs-6" id="modal-details-locked"></div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section css {
+	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+	<link rel="stylesheet" type="text/css" href="~/Content/BootstrapSelect" />
+
+	<style>
+		.filtered {
+			display: none;
+		}
+
+		.table-xtra-condensed > thead > tr > th,
+		.table-xtra-condensed > tbody > tr > th,
+		.table-xtra-condensed > tfoot > tr > th,
+		.table-xtra-condensed > thead > tr > td,
+		.table-xtra-condensed > tbody > tr > td,
+		.table-xtra-condensed > tfoot > tr > td {
+			padding: 3px !important;
+		}
+
+		i.color-code-Pending {
+			color: rgb(128, 128, 128);
+		}
+
+		tr.color-code-Pending {
+			background-color: rgba(128, 128, 128, .4);
+		}
+
+		i.color-code-Approved {
+			color: rgb(30, 144, 255);
+		}
+
+		tr.color-code-Approved {
+			background-color: rgba(30, 144, 255, .4);
+		}
+
+		i.color-code-Rejected {
+			color: rgb(255, 99, 71);
+		}
+
+		tr.color-code-Rejected {
+			background: rgba(255, 99, 71, .4);
+		}
+
+		i.color-code-PayrollProcessed {
+			color: rgb(60, 179, 113);
+		}
+
+		tr.color-code-PayrollProcessed {
+			background-color: rgba(60, 179, 113, .4);
+		}
+
+		i.greyed-out {
+			color: lightgrey;
+		}
+
+		tr.greyed-out {
+			background-color: #d6d6d6;
+		}
+
+		.status-dots {
+			height: 20px;
+			width: 20px;
+			-webkit-transform-origin: 50% 50%;
+			-moz-transform-origin: 50% 50%;
+			-ms-transform-origin: 50% 50%;
+			-o-transform-origin: 50% 50%;
+			transform-origin: 50% 50%;
+			-webkit-transform: rotate(45deg);
+			-moz-transform: rotate(45deg);
+			-ms-transform: rotate(20deg);
+			-o-transform: rotate(20deg);
+			transform: rotate(45deg);
+		}
+
+		.status-dot {
+			font-size: 10px !important;
+			height: 10px;
+			width: 10px;
+			float: left;
+		}
+
+		.color-box {
+			float: left;
+			width: 15px;
+			height: 15px;
+			margin: 5px;
+			border: 1px solid rgba(0, 0, 0, .2);
+		}
+	</style>
+}
+
+@section Scripts {
+@*Date range picker dependencies:*@
+@Scripts.Render("~/bundles/jqueryui")
+@Scripts.Render("~/bundles/moment")
+@Scripts.Render("~/bundles/BootstrapSelect")
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		//toggles the expand row icon up or down
+		$(".toggle-on-click").click(function () {
+			if ($(this).hasClass("fa-chevron-down")) {
+				$(this).removeClass("fa-chevron-down");
+				$(this).addClass("fa-chevron-up");
+			} else {
+				$(this).removeClass("fa-chevron-up");
+				$(this).addClass("fa-chevron-down");
+			}
+		});
+
+		//toggles the sub rows to be hidden or not
+		$(".child-row-controller").click(function () {
+			var rows = $(".child-row[rowId='" + $(this).attr("rowId") + "']");
+			if (rows.hasClass("hidden")) {
+				rows.removeClass("hidden");
+			} else {
+				rows.addClass("hidden")
+			}
+		});
+
+		//logic for check-all check boxes
+		$(".check-all").change(function () {
+			$(".check[check-id=" + $(this).attr("check-all-id") + "]:not(:disabled)").prop("checked", $(this).is(":checked")).change();
+		});
+
+		//updates form hidden input values with all selected time entries
+		$(".time-entry-check").change(function () {
+			var timeEntryId = $(this).data("time-entry-id");
+			var timeEntries = JSON.parse($(".time-entries-input").val());
+			if ($(this).is(":checked")) {
+				timeEntries.push(timeEntryId);
+			} else {
+				timeEntries.splice(timeEntries.indexOf(parseInt(timeEntryId, 10)), 1);
+			}
+			$(".time-entries-input").val(JSON.stringify(timeEntries));
+		});
+
+		//initialize date range picker
+		$(function () {
+			var start = moment(@(Model.StartDate.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds));
+			var end = moment(@(Model.EndDate.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds));
+
+			function cb(start, end) {
+				$('#review-range span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+			}
+
+			$('#review-range').daterangepicker({
+				locale: "us",
+				startDate: start,
+				endDate: end,
+				ranges: {
+					'Today': [moment(), moment()],
+					'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+					'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+					'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+					'This Month': [moment().startOf('month'), moment().endOf('month')],
+					'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+				}
+			}, cb);
+
+			cb(start, end);
+		});
+
+		//submit date range form to update the view with new date range
+		$("#review-range").on("apply.daterangepicker", function (dre, picker) {
+			var newForm = jQuery('<form>', {
+				'action': '/@ProductNameConstants.TimeTracker/@Model.SubscriptionId/@ControllerConstants.TimeEntry/@ActionConstants.Review',
+				'target': '_top',
+				'method': 'get'
+			}).append(jQuery('<input>', {
+				'name': 'startDate',
+				'value': picker.startDate.format().slice(0, 10),
+				'type': 'hidden'
+			})).append(jQuery('<input>', {
+				'name': 'endDate',
+				'value': picker.endDate.format().slice(0, 10),
+				'type': 'hidden'
+			}));
+			newForm.appendTo(document.body).submit();
+		});
+
+		//html5 autofocus fix for model
+		$('#time-entry-details-modal').on('shown.bs.modal', function () {
+			$('.details-modal-input').focus();
+		});
+
+		//populates the details model with time entry data when the model needs to pop up
+		$(".details-modal-input").click(function () {
+			var timeEntry = $(this).data("time-entry-object");
+			$("#modal-details-name").text(timeEntry.FirstName + " " + timeEntry.LastName);
+			$("#modal-details-customer").text(timeEntry.CustomerName);
+			$("#modal-details-project").text(timeEntry.ProjectName);
+			$("#modal-details-pay-type").text(timeEntry.PayClassName);
+			$("#modal-details-duration").text(timeEntry.Duration);
+			$("#modal-details-description").text(timeEntry.Description || "None");
+			$("#modal-details-status").text(timeEntry.TimeEntryStatusName);
+			$("#modal-details-locked").text(timeEntry.IsLocked ? "Yes" : "No");
+			$('#time-entry-details-modal').modal();
+		});
+
+		//filter out rows based on filter select
+		$(".selectpicker.filter-status-select").on("changed.bs.select", function () {
+			var selectionValues = $(this).selectpicker("val");
+
+			if (selectionValues.length > 0) {
+				$(".child-row").addClass("filtered");
+				for (let i = 0; i < selectionValues.length; i++) {
+					$(".child-row[data-time-entry-status-id='" + selectionValues[i] + "']").removeClass("filtered");
+				}
+			} else {
+				$(".child-row").removeClass("filtered");
+			}
+
+			//if a parent row has no children, filter that out too
+			$(".parent-row").removeClass("filtered");
+			$(".parent-row").filter(function () {
+				return !$(this).nextAll(":not(.filtered)").hasClass("child-row");
+			}).addClass("filtered");
+		});
+	});
+</script>
+}

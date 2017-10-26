@@ -34,6 +34,7 @@
     <DefineTrace>true</DefineTrace>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <RunSqlCodeAnalysis>False</RunSqlCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -46,6 +47,7 @@
     <DefineTrace>true</DefineTrace>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <RunSqlCodeAnalysis>False</RunSqlCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
@@ -125,7 +127,7 @@
     <Build Include="TimeTracker\Stored Procedures\CreateBulkTimeEntry.sql" />
     <Build Include="TimeTracker\Stored Procedures\DeleteTimeEntry.sql" />
     <Build Include="TimeTracker\Stored Procedures\GetHolidays.sql" />
-    <Build Include="TimeTracker\Stored Procedures\GetLockDate.sql" />
+    <Build Include="TimeTracker\Stored Procedures\GetOldLockDate.sql" />
     <Build Include="TimeTracker\Stored Procedures\GetPayClasses.sql" />
     <Build Include="TimeTracker\Stored Procedures\GetSettings.sql" />
     <Build Include="TimeTracker\Stored Procedures\GetTimeEntriesByUserOverDateRange.sql" />
@@ -134,7 +136,7 @@
     <Build Include="TimeTracker\Stored Procedures\UpdateSettings.sql" />
     <Build Include="TimeTracker\Stored Procedures\UpdateStartOfWeek.sql" />
     <Build Include="TimeTracker\Stored Procedures\UpdateTimeEntry.sql" />
-    <Build Include="TimeTracker\Stored Procedures\UpdateLockDate.sql" />
+    <Build Include="TimeTracker\Stored Procedures\UpdateOldLockDate.sql" />
     <Build Include="TimeTracker\Stored Procedures\UpdateOvertime.sql" />
     <Build Include="TimeTracker\Stored Procedures\CreatePayClass.sql" />
     <Build Include="TimeTracker\Stored Procedures\CreateTimeEntry.sql" />
@@ -400,7 +402,15 @@
     <Build Include="Billing\Stored Procedures\GetSubscriptionUsersBySubscriptionId.sql" />
     <Build Include="Billing\Stored Procedures\GetSubscriptions.sql" />
     <Build Include="Auth\Stored Procedures\GetOrganizationUsers.sql" />
+    <Build Include="TimeTracker\Stored Procedures\UpdateTimeEntryStatusById.sql" />
     <Build Include="Auth\Stored Procedures\GetProductRoles.sql" />
+    <Build Include="Billing\Stored Procedures\UpdateSubscriptionName.sql" />
+    <Build Include="Lookup\Stored Procedures\GetAllStates.sql" />
+    <Build Include="Billing\Stored Procedures\GetAllSkus.sql" />
+    <Build Include="Billing\Stored Procedures\UpdateSubscriptionSkuAndName.sql" />
+    <Build Include="TimeTracker\Stored Procedures\UpdateLockDate.sql" />
+    <Build Include="TimeTracker\Stored Procedures\UpdatePayrollProcessedDate.sql" />
+    <Build Include="Auth\Stored Procedures\UpdateEmployeeIdAndOrgRole.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

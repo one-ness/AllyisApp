@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
@@ -19,18 +20,18 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="btnAction">The button action.</param>
 		/// <param name="reasonText">The reason text.</param>
 		/// <returns>A redirect to the home page.</returns>
-		public RedirectToRouteResult StatusUpdate(int subscriptionId, int reportId, string btnAction, string reasonText)
+		public async Task<RedirectToRouteResult> StatusUpdate(int subscriptionId, int reportId, string btnAction, string reasonText)
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.StatusUpdate, subscriptionId);
 
 			switch (btnAction)
 			{
 				case "Approve":
-					UpdateReport(reportId, "Approve", reasonText);
+					await UpdateReport(reportId, "Approve", reasonText);
 					break;
 
 				case "Reject":
-					UpdateReport(reportId, "Reject", reasonText);
+					await UpdateReport(reportId, "Reject", reasonText);
 					break;
 
 				default:
@@ -46,9 +47,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="reportId">The report id.</param>
 		/// <param name="status">The new report status.</param>
 		/// <param name="text">The reason text.</param>
-		private void UpdateReport(int reportId, string status, string text)
+		private async Task UpdateReport(int reportId, string status, string text)
 		{
-			ExpenseReport report = AppService.GetExpenseReport(reportId);
+			ExpenseReport report = await AppService.GetExpenseReport(reportId);
 			ExpenseHistory history = new ExpenseHistory()
 			{
 				CreatedUtc = DateTime.UtcNow,
@@ -56,7 +57,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				HistoryId = GetHashCode(),
 				ReportId = reportId,
 				Text = text,
-				UserId = GetCookieData().UserId
+				UserId = AppService.UserContext.UserId
 			};
 
 			if (string.Equals(status, "Approve"))
@@ -74,8 +75,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				throw new Exception("Unknown status given to status update.");
 			}
 
-			AppService.UpdateExpenseReport(report, reportId);
-			AppService.CreateExpenseReportHistory(history);
+			await AppService.UpdateExpenseReport(report, reportId);
+			await AppService.CreateExpenseReportHistory(history);
 		}
 	}
 }

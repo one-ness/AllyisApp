@@ -7,12 +7,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Areas.TimeTracker.Core;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
 using AllyisApps.Services;
-using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -31,49 +31,50 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="model">The model representing a time entry.</param>
 		/// <returns>The edited version of Time Entry.</returns>
-		public ActionResult EditTimeEntryJson(EditTimeEntryViewModel model)
+		public async Task<ActionResult> EditTimeEntryJson(EditTimeEntryViewModel model)
 		{
 			if (model.ApprovalState == -1)
 			{
-				EditTimeEntryViewModel defaults = this.ConstructEditTimeEntryViewModel(model.TimeEntryId, model.SubscriptionId);
-				return this.Json(new
+				EditTimeEntryViewModel defaults = await ConstructEditTimeEntryViewModel(model.TimeEntryId.Value, model.SubscriptionId);
+				return Json(new
 				{
 					status = "error",
 					message = Resources.Strings.InvalidApprovalState,
 					reason = "UNDEFINED_APPROVAL",
 					action = "REVERT",
-					values = new { duration = this.GetDurationDisplay(defaults.Duration), description = defaults.Description, id = model.TimeEntryId }
+					values = new { duration = GetDurationDisplay(defaults.Duration), description = defaults.Description, id = model.TimeEntryId }
 				});
 			}
 
 			int organizationId = AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId;
 
 			// Check permissions
-			if (model.UserId != this.AppService.UserContext.UserId)
+			if (model.UserId != AppService.UserContext.UserId)
 			{
-				if (!this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId))
+				if (!AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId))
 				{
-					EditTimeEntryViewModel defaults = this.ConstructEditTimeEntryViewModel(model.TimeEntryId, model.SubscriptionId);
-					return this.Json(new
+					EditTimeEntryViewModel defaults = await ConstructEditTimeEntryViewModel(model.TimeEntryId.Value, model.SubscriptionId);
+					return Json(new
 					{
 						status = "error",
 						message = Resources.Strings.NotAuthZTimeEntryOtherUserEdit,
 						action = "REVERT",
-						values = new { duration = this.GetDurationDisplay(defaults.Duration), description = defaults.Description, id = model.TimeEntryId }
+						values = new { duration = GetDurationDisplay(defaults.Duration), description = defaults.Description, id = model.TimeEntryId }
 					});
 				}
 			}
 
 			// Authorized for editing
-			if (AppService.GetTimeEntry(model.TimeEntryId).ApprovalState == (int)ApprovalState.Approved)
+			var timeGet = await AppService.GetTimeEntry(model.TimeEntryId.Value);
+			if (timeGet.ApprovalState == (int)ApprovalState.Approved)
 			{
-				EditTimeEntryViewModel defaults = this.ConstructEditTimeEntryViewModel(model.TimeEntryId, model.SubscriptionId);
-				return this.Json(new
+				EditTimeEntryViewModel defaults = await ConstructEditTimeEntryViewModel(model.TimeEntryId.Value, model.SubscriptionId);
+				return Json(new
 				{
 					status = "error",
 					message = Resources.Strings.AlreadyApprovedCannotEdit,
 					action = "REVERT",
-					values = new { duration = this.GetDurationDisplay(defaults.Duration), description = defaults.Description, id = model.TimeEntryId }
+					values = new { duration = GetDurationDisplay(defaults.Duration), description = defaults.Description, id = model.TimeEntryId }
 				});
 			}
 
@@ -81,7 +82,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				EditTimeEntry(model, true);
 
-				return this.Json(new { status = "success", values = new { duration = this.GetDurationDisplay(model.Duration), description = model.Description, id = model.TimeEntryId, projectId = model.ProjectId } });
+				return Json(new { status = "success", values = new { duration = GetDurationDisplay(model.Duration), description = model.Description, id = model.TimeEntryId, projectId = model.ProjectId } });
 			}
 			catch (ArgumentException e)
 			{
@@ -91,7 +92,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					message = e.Message
 				};
 
-				return this.Json(temp);
+				return Json(temp);
 			}
 		}
 
@@ -100,27 +101,27 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="model"><see cref="EditTimeEntryViewModel"/> to use for edit.</param>
 		/// <param name="canManage">Whether user has permission to manage time entry.</param>
-		public void EditTimeEntry(EditTimeEntryViewModel model, bool canManage)
+		public async void EditTimeEntry(EditTimeEntryViewModel model, bool canManage)
 		{
 			float? durationResult;
 			model.IsManager = canManage;
-			if (!(durationResult = this.ParseDuration(model.Duration)).HasValue)
+			if (!(durationResult = ParseDuration(model.Duration)).HasValue)
 			{
 				throw new ArgumentException(Resources.Strings.DurationFormat);
 			}
 
-			if (this.ParseDuration(model.Duration) == 0)
+			if (ParseDuration(model.Duration) == 0)
 			{
 				throw new ArgumentException(Resources.Strings.EnterATimeLongerThanZero);
 			}
 
-			IEnumerable<TimeEntry> otherEntriesToday = AppService.GetTimeEntriesByUserOverDateRange(
+			var otherEntriesToday = await AppService.GetTimeEntriesByUserOverDateRange(
 				new List<int> { model.UserId },
 				Utility.GetDateTimeFromDays(model.Date),
 				Utility.GetDateTimeFromDays(model.Date),
 				AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId);
 			float durationOther = 0.0f;
-			foreach (TimeEntry otherEntry in otherEntriesToday)
+			foreach (var otherEntry in otherEntriesToday)
 			{
 				if (model.TimeEntryId != otherEntry.TimeEntryId)
 				{
@@ -143,21 +144,21 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new ArgumentException(Resources.Strings.MustSelectPayClass);
 			}
 
-			DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId);
-			if ((!this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId, false)) && model.Date <= (lockDate == null ? -1 : Utility.GetDaysFromDateTime(lockDate.Value)))
+			DateTime? lockDate = await AppService.GetLockDate(AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId);
+			if ((!AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId, false)) && model.Date <= (lockDate == null ? -1 : Utility.GetDaysFromDateTime(lockDate.Value)))
 			{
 				throw new ArgumentException(Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
 			}
 
-			AppService.UpdateTimeEntry(new TimeEntry()
+			AppService.UpdateTimeEntry(new Services.TimeTracker.TimeEntry()
 			{
-				TimeEntryId = model.TimeEntryId,
+				TimeEntryId = model.TimeEntryId.Value,
 				ProjectId = model.ProjectId,
 				PayClassId = model.PayClassId,
 				Duration = durationResult.Value,
 				Description = model.Description,
 				ApprovalState = (int)ApprovalState.NoApprovalState,
-				IsLockSaved = (model.ApprovalState == (int)Core.ApprovalState.Approved || model.Date <= model.LockDate || model.IsProjectDeleted || model.IsLockSaved) && !canManage
+				IsLockSaved = (model.ApprovalState == (int)ApprovalState.Approved || model.Date <= model.LockDate || model.IsProjectDeleted || model.IsLockSaved) && !canManage
 			});
 		}
 
@@ -167,11 +168,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="timeEntryId">The time entry Id.</param>
 		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <returns>The EditTimeEntryViewModel.</returns>
-		public EditTimeEntryViewModel ConstructEditTimeEntryViewModel(int timeEntryId, int subscriptionId)
+		public async Task<EditTimeEntryViewModel> ConstructEditTimeEntryViewModel(int timeEntryId, int subscriptionId)
 		{
-			TimeEntry entry = AppService.GetTimeEntry(timeEntryId);
+			var entry = await AppService.GetTimeEntry(timeEntryId);
 
-			DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
+			DateTime? lockDate = await AppService.GetLockDate(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
 			return new EditTimeEntryViewModel
 			{
 				UserId = entry.UserId,

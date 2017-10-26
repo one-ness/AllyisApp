@@ -1,4 +1,4 @@
-﻿namespace AllyisApps.Services
+﻿namespace AllyisApps.Controllers
 {
 	/// <summary>
 	/// Represents the user information serialized to the forms authentication cookie.
@@ -11,7 +11,7 @@
 		/// <param name="userId">User id.</param>
 		public CookieData(int userId)
 		{
-			this.UserId = userId;
+			UserId = userId;
 		}
 
 		/// <summary>

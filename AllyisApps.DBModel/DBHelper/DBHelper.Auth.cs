@@ -28,7 +28,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		public async Task<int> CreateUserAsync(string email, string passwordHash, string firstName, string lastName, Guid emailConfirmationCode, DateTime? dateOfBirth, string phoneNumber, string preferredLanguageId, string address1, string address2, string city, int? stateId, string postalCode, string countryCode)
 		{
-			using (var con = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
 				return (await con.QueryAsync<int>("Auth.CreateUser @a, @b, @c, @d, @e, @f, @g, @h, @i, @j, @k, @l, @m, @n", new { a = email, b = passwordHash, c = firstName, d = lastName, e = emailConfirmationCode, f = dateOfBirth, g = phoneNumber, h = preferredLanguageId, i = address1, j = address2, k = city, l = stateId, m = postalCode, n = countryCode })).FirstOrDefault();
 			}
@@ -39,11 +39,11 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="email">Parameter @email.</param>
 		/// <returns>UserDBEntity obj.</returns>
-		public UserDBEntity GetUserByEmail(string email)
+		public async Task<UserDBEntity> GetUserByEmail(string email)
 		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var result = connection.Query<UserDBEntity>("[Auth].[GetUserFromEmail] @a", new { a = email });
+				var result = await connection.QueryAsync<UserDBEntity>("[Auth].[GetUserFromEmail] @a", new { a = email });
 				return result.FirstOrDefault();
 			}
 		}
@@ -62,7 +62,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@userId", userId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<string>("[Auth].[GetActiveProductRoleForUser]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault() ?? "None";
 			}
@@ -78,7 +78,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				var results = connection.QueryMultiple("[Auth].[GetUserInfo]", parameters, commandType: CommandType.StoredProcedure);
 
@@ -98,12 +98,12 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Get user from the db
 		/// </summary>
-		public dynamic GetUser(int userId)
+		public async Task<dynamic> GetUser(int userId)
 		{
 			dynamic result = new ExpandoObject();
-			using (var con = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				var res = con.QueryMultiple("Auth.GetUser @a", new { a = userId });
+				var res = await con.QueryMultipleAsync("Auth.GetUser @a", new { a = userId });
 				result.User = res.Read().FirstOrDefault();
 				result.Organizations = res.Read().ToList();
 				result.Subscriptions = res.Read().ToList();
@@ -116,11 +116,11 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		///  update the given user profile
 		/// </summary>
-		public void UpdateUserProfile(int userId, string firstName, string lastName, DateTime? dateOfBirth, string phoneNumber, int? addressId, string address1, string address2, string city, int? stateId, string postalCode, string countryCode)
+		public async Task UpdateUserProfile(int userId, string firstName, string lastName, DateTime? dateOfBirth, string phoneNumber, int? addressId, string address1, string address2, string city, int? stateId, string postalCode, string countryCode)
 		{
-			using (var con = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				con.Execute("[Auth].[UpdateUserProfile] @a, @b, @c, @d, @e, @f, @g, @h, @i, @j, @k, @l",
+				await con.ExecuteAsync("[Auth].[UpdateUserProfile] @a, @b, @c, @d, @e, @f, @g, @h, @i, @j, @k, @l",
 						new
 						{
 							a = userId,
@@ -140,6 +140,17 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// update employee id and org role for the given user in the given organization
+		/// </summary>
+		public async Task<int> UpdateEmployeeIdAndOrgRole(int orgId, int userId, string employeeId, int orgRoleId)
+		{
+			using (var con = new SqlConnection(this.SqlConnectionString))
+			{
+				return (await con.QueryAsync<int>("Auth.UpdateEmployeeIdAndOrgRole @a, @b, @c, @d", new { a = orgId, b = userId, c = employeeId, d = orgRoleId })).FirstOrDefault();
+			}
+		}
+
+		/// <summary>
 		/// Populates a user's last used subscription.
 		/// </summary>
 		/// <param name = "userId">Target user's Id.</param>
@@ -150,7 +161,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@userId", userId);
 			parameters.Add("@subscriptionId", subId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				connection.Execute("[Auth].[UpdateUserActiveSub]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -167,7 +178,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@id", userId);
 			parameters.Add("@CultureName", CultureName);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				connection.Execute("[Auth].[UpdateUserLanguagePreference]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -179,15 +190,15 @@ namespace AllyisApps.DBModel
 		/// <param name="organizationId">The organization's Id.</param>
 		/// <param name="productId">The product's Id.</param>
 		/// <returns>A collection of user data.</returns>
-		public IEnumerable<UserDBEntity> GetUsersWithSubscriptionToProductInOrganization(int organizationId, int productId)
+		public async Task<IEnumerable<UserDBEntity>> GetUsersWithSubscriptionToProductInOrganization(int organizationId, int productId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@productId", productId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<UserDBEntity>("[Auth].[GetUsersWithSubscriptionToProductInOrganization]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.QueryAsync<UserDBEntity>("[Auth].[GetUsersWithSubscriptionToProductInOrganization]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -195,16 +206,16 @@ namespace AllyisApps.DBModel
 		/// Updates the max amount a user can approve of in a report.
 		/// </summary>
 		/// <param name="orgUser"></param>
-		public void UpdateUserMaxAmount(OrganizationUserDBEntity orgUser)
+		public async Task UpdateUserMaxAmount(OrganizationUserDBEntity orgUser)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", orgUser.UserId);
 			parameters.Add("@orgId", orgUser.OrganizationId);
 			parameters.Add("@maxAmount", orgUser.MaxAmount);
 
-			using (var connection = new SqlConnection(this.SqlConnectionString))
+			using (var connection = new SqlConnection(SqlConnectionString))
 			{
-				connection.Execute("[Auth].[UpdateUserMaxAmount]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[Auth].[UpdateUserMaxAmount]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -218,7 +229,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<string>(
 					"[Auth].[GetPasswordHashFromUserId]",
@@ -233,15 +244,15 @@ namespace AllyisApps.DBModel
 		/// <param name = "userId">Target user's Id.</param>
 		/// <param name = "passwordHash">The new password hash.</param>
 		/// <returns>The password hash retreived independently after the update, for verification.</returns>
-		public void UpdateUserPassword(int userId, string passwordHash)
+		public async Task UpdateUserPassword(int userId, string passwordHash)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
 			parameters.Add("@passwordHash", passwordHash);
 
-			using (var connection = new SqlConnection(this.SqlConnectionString))
+			using (var connection = new SqlConnection(SqlConnectionString))
 			{
-				connection.Execute("[Auth].[UpdateUserPassword]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[Auth].[UpdateUserPassword]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -254,7 +265,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@passwordHash", passwordHash);
 			parameters.Add("@passwordResetCode", code);
 
-			using (var connection = new SqlConnection(this.SqlConnectionString))
+			using (var connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Execute("[Auth].[UpdateUserPasswordUsingCode]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -272,7 +283,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@email", email);
 			parameters.Add("@passwordResetCode", resetCode);
 
-			using (var connection = new SqlConnection(this.SqlConnectionString))
+			using (var connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Execute("[Auth].[UpdateUserPasswordResetCode]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -281,7 +292,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// create a new organization, add the user in the given role
 		/// </summary>
-		public int SetupOrganization(int userId, int roleId, string employeeId, string organizationName, string phoneNumber, string faxNumber, string siteUrl, string subDomainName, string address1, string city, int? stateId, string postalCode, string countryCode)
+		public async Task<int> SetupOrganization(int userId, int roleId, string employeeId, string organizationName, string phoneNumber, string faxNumber, string siteUrl, string subDomainName, string address1, string city, int? stateId, string postalCode, string countryCode)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
@@ -298,16 +309,17 @@ namespace AllyisApps.DBModel
 			parameters.Add("@subdomainName", subDomainName);
 			parameters.Add("@employeeId", employeeId);
 
-			using (var con = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return con.Query<int>("[Auth].[SetupOrganization]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				var results = await con.QueryAsync<int>("[Auth].[SetupOrganization]", parameters, commandType: CommandType.StoredProcedure);
+				return results.SingleOrDefault();
 			}
 		}
 
 		/// <summary>
 		/// Updates the specified organization with new information.
 		/// </summary>
-		public int UpdateOrganization(int organizationId, string organizationName, string siteUrl, int? addressId, string address1, string city, int? stateId, string countryCode, string postalCode, string phoneNumber, string faxNumber, string subDomain)
+		public async Task<int> UpdateOrganization(int organizationId, string organizationName, string siteUrl, int? addressId, string address1, string city, int? stateId, string countryCode, string postalCode, string phoneNumber, string faxNumber, string subDomain)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
@@ -323,9 +335,9 @@ namespace AllyisApps.DBModel
 			parameters.Add("@faxNumber", faxNumber);
 			parameters.Add("@subdomainName", subDomain);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Execute("[Auth].[UpdateOrganization]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.ExecuteAsync("[Auth].[UpdateOrganization]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -333,14 +345,14 @@ namespace AllyisApps.DBModel
 		/// Executes [Auth].[DeleteOrg].
 		/// </summary>
 		/// <param name="organizationId">Parameter @organizationId. .</param>
-		public void DeleteOrganization(int organizationId)
+		public async Task DeleteOrganization(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@orgId", organizationId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				connection.Execute("[Auth].[DeleteOrg]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[Auth].[DeleteOrg]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -361,7 +373,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@roleId", organizationUser.OrganizationRoleId);
 			parameters.Add("@employeeId", organizationUser.EmployeeId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				connection.Execute("[Auth].[CreateOrganizationUser]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -379,7 +391,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@userId", userId);
 			parameters.Add("@organizationId", organizationId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<string>("[Auth].[GetOrgUserEmployeeId]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
@@ -388,7 +400,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updates an organization member's info.
 		/// </summary>
-		public int UpdateMember(int userId, int orgId, string employeeId, int roleId, string firstName, string lastName, bool isInvited)
+		public async Task<int> UpdateMember(int userId, int orgId, string employeeId, int roleId, string firstName, string lastName, bool isInvited)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
@@ -398,9 +410,10 @@ namespace AllyisApps.DBModel
 			parameters.Add("@firstName", firstName);
 			parameters.Add("@lastName", lastName);
 			parameters.Add("@isInvited", isInvited);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<int>("[Auth].[UpdateMember]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				var queryResults = await connection.QueryAsync<int>("[Auth].[UpdateMember]", parameters, commandType: CommandType.StoredProcedure);
+				return queryResults.FirstOrDefault();
 			}
 		}
 
@@ -409,15 +422,15 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">The organization's Id.</param>
 		/// <param name="userId">The user's Id.</param>
-		public void RemoveOrganizationUser(int organizationId, int userId)
+		public async Task RemoveOrganizationUser(int organizationId, int userId)
 		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				DynamicParameters parameters = new DynamicParameters();
 				parameters.Add("@organizationId", organizationId);
 				parameters.Add("@userId", userId);
 
-				connection.Execute("[Auth].[DeleteOrgUser]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[Auth].[DeleteOrgUser]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -439,7 +452,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@organizationRole", organizationRoleId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Execute("[Auth].[UpdateOrganizationUsersRole]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -461,7 +474,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@userIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
 			parameters.Add("@organizationId", organizationId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Execute("[Auth].[DeleteOrganizationUsers]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -475,7 +488,7 @@ namespace AllyisApps.DBModel
 		/// <returns>The TableOrganizationRole related to the user for the specified organization.</returns>
 		public OrganizationRoleDBEntity GetPermissionLevel(int organizationId, int userId)
 		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default null
 				return connection.Query<OrganizationRoleDBEntity>("[Auth].[GetOrgUserRole]", new { OrganizationId = organizationId, UserId = userId }, commandType: CommandType.StoredProcedure).FirstOrDefault();
@@ -487,11 +500,12 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">The organization's Id.</param>
 		/// <returns>The TableOrganizations containing the organization's information, null if an error is encountered.</returns>
-		public dynamic GetOrganization(int organizationId)
+		public async Task<dynamic> GetOrganization(int organizationId)
 		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<dynamic>("[Auth].[GetOrg] @a", new { a = organizationId }).FirstOrDefault();
+				var queryResults = await connection.QueryAsync<dynamic>("[Auth].[GetOrg] @a", new { a = organizationId });
+				return queryResults.FirstOrDefault();
 			}
 		}
 
@@ -502,7 +516,7 @@ namespace AllyisApps.DBModel
 		/// <returns>The collection of users in the organization, null on error.</returns>
 		public IEnumerable<OrganizationUserDBEntity> GetOrganizationMemberList(int organizationId)
 		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default null
 				return connection.Query<OrganizationUserDBEntity>(
@@ -520,7 +534,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		public async Task<List<dynamic>> GetOrganizationUsersAsync(int orgId)
 		{
-			using (var con = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
 				return (await con.QueryAsync<dynamic>("Auth.GetOrganizationUsers @a", new { a = orgId })).ToList();
 			}
@@ -535,7 +549,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters param = new DynamicParameters();
 			param.Add("@subdomain", subdomain);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<int>("[Auth].[GetOrgIdBySubdomain]", param, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
@@ -550,7 +564,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters param = new DynamicParameters();
 			param.Add("@orgId", id);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<string>("[Auth].[GetSubdomainByOrgId]", param, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
@@ -563,7 +577,7 @@ namespace AllyisApps.DBModel
 		/// <returns>A list of OrganizationDBEntities containing the organizations the user is subscribed to.</returns>
 		public IEnumerable<dynamic> GetOrganizationsByUserId(int userId)
 		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default empty list
 				return connection.Query<dynamic>(
@@ -579,7 +593,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Adds an Invitation to the invitations table and invitation sub roles table.
 		/// </summary>
-		public int CreateInvitation(string email, string firstName, string lastName, int organizationId, int organizationRoleId, string employeedId, string prodJson)
+		public async Task<int> CreateInvitation(string email, string firstName, string lastName, int organizationId, int organizationRoleId, string employeedId, string prodJson)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@email", email);
@@ -589,9 +603,10 @@ namespace AllyisApps.DBModel
 			parameters.Add("@organizationRole", organizationRoleId);
 			parameters.Add("@employeeId", employeedId);
 			parameters.Add("@prodJson", prodJson);
-			using (var con = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return con.Query<int>("[Auth].[CreateInvitation]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				var results = await con.QueryAsync<int>("[Auth].[CreateInvitation]", parameters, commandType: CommandType.StoredProcedure);
+				return results.FirstOrDefault();
 			}
 		}
 
@@ -607,7 +622,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@invitationId", invitationId);
 			parameters.Add("@callingUserId", userId);
-			using (var con = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
 				return con.Query<int>("[Auth].[AcceptInvitation]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
@@ -623,7 +638,7 @@ namespace AllyisApps.DBModel
 			var result = false;
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@invitationId", invitationId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				int affected = connection.Execute(
 					"[Auth].[DeleteInvitation]",
@@ -650,7 +665,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@email", user.Email);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default empty list
 				return connection.Query<InvitationDBEntity>("[Auth].[GetUserInvitationsByEmail]", parameters, commandType: CommandType.StoredProcedure);
@@ -661,14 +676,15 @@ namespace AllyisApps.DBModel
 		/// Deletes the defined invitation.
 		/// </summary>
 		/// <param name="invitationId">The invitation's Id.</param>
-		public int RejectInvitation(int invitationId)
+		public async Task<int> RejectInvitation(int invitationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@invitationId", invitationId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<int>("[Auth].[RejectInvitation]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				var results = await connection.QueryAsync<int>("[Auth].[RejectInvitation]", parameters, commandType: CommandType.StoredProcedure);
+				return results.FirstOrDefault();
 			}
 		}
 
@@ -684,7 +700,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@email", email);
 			parameters.Add("@orgId", organizationId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<string>("[Auth].[GetOrgUserByEmail]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
@@ -695,7 +711,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		public async Task<List<InvitationDBEntity>> GetInvitationsAsync(int organizationId, int statusMask)
 		{
-			using (var con = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
 				return (await con.QueryAsync<InvitationDBEntity>("[Auth].[GetInvitations] @a, @b", new { a = organizationId, b = statusMask })).ToList();
 			}
@@ -706,14 +722,15 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="inviteId">The invite Id.</param>
 		/// <returns>List of all roles.</returns>
-		public InvitationDBEntity GetInvitation(int inviteId)
+		public async Task<InvitationDBEntity> GetInvitation(int inviteId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@inviteId", inviteId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<InvitationDBEntity>("[Auth].[GetInvitation]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				var results = await connection.QueryAsync<InvitationDBEntity>("[Auth].[GetInvitation]", parameters, commandType: CommandType.StoredProcedure);
+				return results.FirstOrDefault();
 			}
 		}
 
@@ -726,7 +743,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@orgId", orgid);
-			using (var con = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
 				return con.Query<UserRolesDBEntity>(
 					"[Auth].[GetRolesAndPermissions]",
@@ -746,7 +763,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<UserContextDBEntity>(
 					"[Auth].[GetUserContextInfo]",
@@ -761,7 +778,7 @@ namespace AllyisApps.DBModel
 		public dynamic GetUserContext(int userId)
 		{
 			dynamic result = new ExpandoObject();
-			using (var con = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
 				var query = con.QueryMultiple("Auth.GetUserContext @a", new { a = userId });
 				result.User = query.Read<dynamic>().FirstOrDefault();
@@ -778,13 +795,13 @@ namespace AllyisApps.DBModel
 		/// for any invitations pending in the organization, the organization's billing stripe handle, and the complete list of products.
 		/// </summary>
 		/// <param name="organizationId">The organization Id.</param>
-		public Tuple<dynamic, List<OrganizationUserDBEntity>, List<SubscriptionDisplayDBEntity>, List<InvitationDBEntity>, string> GetOrganizationManagementInfo(int organizationId)
+		public async Task<Tuple<dynamic, List<OrganizationUserDBEntity>, List<SubscriptionDisplayDBEntity>, List<InvitationDBEntity>, string>> GetOrganizationManagementInfo(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var results = connection.QueryMultiple(
+				var results = await connection.QueryMultipleAsync(
 					"[Auth].[GetOrgManagementInfo]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
@@ -809,7 +826,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
 			parameters.Add("@userId", userId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
 					"[Auth].[GetOrgWithNextEmployeeId]",
@@ -833,7 +850,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
 					"[Auth].[GetAddMemberInfo]",
@@ -858,7 +875,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
-			using (var con = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
 				var results = con.QueryMultiple(
 					"[Auth].[GetOrgAndSubRoles]",
@@ -878,7 +895,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@emailConfirmCode", code);
 
-			using (var con = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
 				return con.ExecuteScalar<int>("[Auth].[UpdateEmailConfirmed]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -889,21 +906,21 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		public async Task<string> GetMaxEmployeeId(int organizationId)
 		{
-			using (var con = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
 				return (await con.QueryAsync<string>("Auth.GetMaxEmployeeId @a", new { a = organizationId })).FirstOrDefault();
 			}
 		}
+
 		/// <summary>
 		/// get the product roles for the given org and given product
 		/// </summary>
 		public async Task<List<ProductRoleDBEntity>> GetProductRolesAsync(int orgId, int productId)
 		{
-			using (var con = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
 				return (await con.QueryAsync<ProductRoleDBEntity>("Auth.GetProductRoles @a, @b", new { a = orgId, b = productId })).ToList();
 			}
 		}
-
 	}
 }

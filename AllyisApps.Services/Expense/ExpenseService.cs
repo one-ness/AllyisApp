@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AllyisApps.DBModel;
+using System.Threading.Tasks;
 using AllyisApps.DBModel.Finance;
 using AllyisApps.Services.Expense;
 
@@ -39,9 +39,10 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="reportId">The reports id</param>
 		/// <returns>A IEnumerabe of ExpenseItems for the report.</returns>
-		public IList<ExpenseItem> GetExpenseItemsByReportId(int reportId)
+		public async Task<IList<ExpenseItem>> GetExpenseItemsByReportId(int reportId)
 		{
-			return DBHelper.GetExpenseItemsByReportId(reportId).Select(x => InitializeExpenseItem(x)).AsEnumerable().ToList();
+			var results = await DBHelper.GetExpenseItemsByReportId(reportId);
+			return results.Select(x => InitializeExpenseItem(x)).AsEnumerable().ToList();
 		}
 
 		/// <summary>
@@ -49,9 +50,9 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="reportId">The report id.</param>
 		/// <returns></returns>
-		public ExpenseReport GetExpenseReport(int reportId)
+		public async Task<ExpenseReport> GetExpenseReport(int reportId)
 		{
-			return InitializeExpenseReport(DBHelper.GetExpenseReport(reportId));
+			return InitializeExpenseReport(await DBHelper.GetExpenseReport(reportId));
 		}
 
 		/// <summary>
@@ -59,7 +60,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="report"></param>
 		/// <param name="reportId"></param>
-		public void UpdateExpenseReport(ExpenseReport report, int reportId)
+		public async Task UpdateExpenseReport(ExpenseReport report, int reportId)
 		{
 			ExpenseReportDBEntity reportEntity = new ExpenseReportDBEntity()
 			{
@@ -73,7 +74,7 @@ namespace AllyisApps.Services
 				ReportTitle = report.ReportTitle,
 				SubmittedById = report.SubmittedById
 			};
-			DBHelper.UpdateExpenseReport(reportEntity);
+			await DBHelper.UpdateExpenseReport(reportEntity);
 		}
 
 		/// <summary>
@@ -85,7 +86,7 @@ namespace AllyisApps.Services
 			ExpenseItemDBEntity itemEntity = new ExpenseItemDBEntity()
 			{
 				AccountId = item.AccountId,
-				Amount = Decimal.Parse(String.Format("{0:c}", item.Amount.ToString())),
+				Amount = Decimal.Parse(String.Format("{0:c}", item.Amount)),
 				ExpenseItemId = item.ExpenseItemId,
 				ExpenseReportId = item.ExpenseReportId,
 				IsBillableToCustomer = item.IsBillableToCustomer,
@@ -101,9 +102,10 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">The organization id</param>
 		/// <returns></returns>
-		public IEnumerable<ExpenseReport> GetExpenseReportByOrgId(int orgId)
+		public async Task<IEnumerable<ExpenseReport>> GetExpenseReportByOrgId(int orgId)
 		{
-			return DBHelper.GetExpenseReportsByOrganizationId(orgId).Select(x => InitializeExpenseReport(x));
+			var results = await DBHelper.GetExpenseReportsByOrganizationId(orgId);
+			return results.Select(x => InitializeExpenseReport(x));
 		}
 
 		/// <summary>
@@ -111,14 +113,16 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="submittedId">The submitting users id.</param>
 		/// <returns>An IEnumerabe of expense reports.</returns>
-		public IEnumerable<ExpenseReport> GetExpenseReportBySubmittedId(int submittedId)
+		public async Task<IEnumerable<ExpenseReport>> GetExpenseReportBySubmittedId(int submittedId)
 		{
-			return DBHelper.GetExpenseReportsBySubmittedById(submittedId).Select(x => InitializeExpenseReport(x));
+			var results = await DBHelper.GetExpenseReportsBySubmittedById(submittedId);
+			return results.Select(x => InitializeExpenseReport(x));
 		}
 
-		public IEnumerable<ExpenseHistory> GetExpenseHistoryByReportId(int reportId)
+		public async Task<IEnumerable<ExpenseHistory>> GetExpenseHistoryByReportId(int reportId)
 		{
-			return DBHelper.GetExpenseHistory(reportId).Select(x => InitializeExpenseHistory(x));
+			var results = await DBHelper.GetExpenseHistory(reportId);
+			return results.Select(x => InitializeExpenseHistory(x));
 		}
 
 		/// <summary>
@@ -145,7 +149,7 @@ namespace AllyisApps.Services
 		/// Updates an expense report history.
 		/// </summary>
 		/// <param name="history">An expense history object.</param>
-		public void CreateExpenseReportHistory(ExpenseHistory history)
+		public async Task CreateExpenseReportHistory(ExpenseHistory history)
 		{
 			ExpenseHistoryDBEntity expHistory = new ExpenseHistoryDBEntity()
 			{
@@ -158,7 +162,7 @@ namespace AllyisApps.Services
 				UserId = history.UserId
 			};
 
-			DBHelper.CreateExpenseHistory(expHistory);
+			await DBHelper.CreateExpenseHistory(expHistory);
 		}
 
 		/// <summary>
@@ -237,7 +241,7 @@ namespace AllyisApps.Services
 			ExpenseItemDBEntity itemEntity = new ExpenseItemDBEntity()
 			{
 				AccountId = item.AccountId,
-				Amount = Decimal.Parse(String.Format("{0:c}", item.Amount.ToString())),
+				Amount = Decimal.Parse(String.Format("{0:c}", item.Amount)),
 				CreatedUtc = item.ExpenseItemCreatedUtc,
 				ExpenseItemId = item.ExpenseItemId,
 				ExpenseReportId = item.ExpenseReportId,

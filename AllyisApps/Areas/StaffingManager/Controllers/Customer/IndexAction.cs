@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
@@ -28,11 +29,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="subscriptionId">The Subscription Id.</param>
 		/// <returns>Customer Index.</returns>
 		[HttpGet]
-		public ActionResult Index(int subscriptionId)
+		public async Task<ActionResult> Index(int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			return this.View(this.ConstructManageCustomerViewModel(subscriptionId));
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			return View(await ConstructManageCustomerViewModel(subscriptionId));
 		}
 
 		/// <summary>
@@ -40,19 +41,19 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">Subscription id.</param>
 		/// <returns>The index page.</returns>
-		public ActionResult IndexNoUserId(int subscriptionId)
+		public async Task<ActionResult> IndexNoUserId(int subscriptionId)
 		{
 			if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
 			{
-				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
+				AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
 			}
 
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 
-			var infos = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
+			var infos = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 
-			return this.View("Index", this.ConstructManageCustomerViewModel(subscriptionId));
+			return View("Index", ConstructManageCustomerViewModel(subscriptionId));
 		}
 
 		/// <summary>
@@ -60,14 +61,20 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The id of the current subscription.</param>
 		/// <returns>The ManageCustomerViewModel.</returns>
-		public AllyisApps.ViewModels.Staffing.Customer.ManageCustomerViewModel ConstructManageCustomerViewModel(int subscriptionId)
+		public async Task<AllyisApps.ViewModels.Staffing.Customer.ManageCustomerViewModel> ConstructManageCustomerViewModel(int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			var infos = AppService.GetProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
-			var inactiveInfo = AppService.GetInactiveProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			var infosTask = AppService.GetProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
+			var inactiveInfoTask = AppService.GetInactiveProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
+
+			await Task.WhenAll(new Task[] { infosTask, inactiveInfoTask });
+
+			var infos = infosTask.Result;
+			var inactiveInfo = inactiveInfoTask.Result;
+
 			bool canEditProjects = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
-			string subName = AppService.GetSubscriptionName(subscriptionId);
+			string subName = await AppService.GetSubscriptionName(subscriptionId);
 			List<CompleteProject> projects = canEditProjects ? infos.Item1 : infos.Item1.Where(p => p.IsProjectUser == true).ToList();
 			List<Customer> customers = infos.Item2;
 			IList<CustomerProjectViewModel> customersList = new List<CustomerProjectViewModel>();
@@ -104,7 +111,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				CanEdit = canEditProjects,
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subName,
-				UserId = this.AppService.UserContext.UserId
+				UserId = AppService.UserContext.UserId
 			};
 		}
 	}

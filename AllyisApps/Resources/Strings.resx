@@ -1561,6 +1561,9 @@
   <data name="SuperUser" xml:space="preserve">
     <value>Super User</value>
   </data>
+  <data name="Review" xml:space="preserve">
+    <value>Review</value>
+  </data>
   <data name="Manage" xml:space="preserve">
     <value>Manage</value>
   </data>
@@ -1573,109 +1576,79 @@
   <data name="NoSubscriptionMessage" xml:space="preserve">
     <value>You are not part of a subscription yet. Please contact your employer to add you to a subscription.</value>
   </data>
-  <data name="AdditionalInformation" xml:space="preserve">
-    <value>Additional Information</value>
+  <data name="Pending" xml:space="preserve">
+    <value>Pending</value>
   </data>
-  <data name="Applications" xml:space="preserve">
-    <value>Applications</value>
+  <data name="Approved" xml:space="preserve">
+    <value>Approved</value>
   </data>
-  <data name="ApplicationStatuses" xml:space="preserve">
-    <value>Application Statuses</value>
+  <data name="Rejected" xml:space="preserve">
+    <value>Rejected</value>
   </data>
-  <data name="BillingAmount" xml:space="preserve">
-    <value>Billing Amount</value>
-  </data>
-  <data name="BillingRate" xml:space="preserve">
-    <value>Billing Rate</value>
-  </data>
-  <data name="Default" xml:space="preserve">
-    <value>Default</value>
-  </data>
-  <data name="EmploymentType" xml:space="preserve">
-    <value>Employment Type</value>
-  </data>
-  <data name="EmploymentTypes" xml:space="preserve">
-    <value>Employment Types</value>
-  </data>
-  <data name="ExpectedDuration" xml:space="preserve">
-    <value>Expected Duration</value>
-  </data>
-  <data name="FilterByEmploymentType" xml:space="preserve">
-    <value>Filter by Employment Type</value>
-  </data>
-  <data name="FilterByPositionStatus" xml:space="preserve">
-    <value>Filter by Position Status</value>
-  </data>
-  <data name="FilterByTags" xml:space="preserve">
-    <value>Filter by Tags</value>
-  </data>
-  <data name="LevelName" xml:space="preserve">
-    <value>Level Name</value>
-  </data>
-  <data name="Location" xml:space="preserve">
-    <value>Location</value>
-  </data>
-  <data name="NEW" xml:space="preserve">
-    <value>NEW</value>
-  </data>
-  <data name="NoActiveApplications" xml:space="preserve">
-    <value>No Active Applications</value>
-  </data>
-  <data name="NoActivePositions" xml:space="preserve">
-    <value>No Active Positions</value>
-  </data>
-  <data name="PositionCount" xml:space="preserve">
-    <value>Position Count</value>
-  </data>
-  <data name="PositionDetails" xml:space="preserve">
-    <value>Position Details</value>
-  </data>
-  <data name="PositionLevel" xml:space="preserve">
-    <value>Position Level</value>
-  </data>
-  <data name="PositionLevels" xml:space="preserve">
-    <value>Position Levels</value>
-  </data>
-  <data name="Positions" xml:space="preserve">
-    <value>Positions</value>
-  </data>
-  <data name="PositionsAvailable" xml:space="preserve">
-    <value>Positions Available</value>
-  </data>
-  <data name="PositionStatus" xml:space="preserve">
-    <value>PositionStatus</value>
-  </data>
-  <data name="PositionStatuses" xml:space="preserve">
-    <value>Position Statuses</value>
-  </data>
-  <data name="RequiredSkills" xml:space="preserve">
-    <value>Required Skills</value>
-  </data>
-  <data name="StaffingManager" xml:space="preserve">
-    <value>Staffing Manager</value>
-  </data>
-  <data name="StaffingManagerRole" xml:space="preserve">
-    <value>Staffing Manager Role</value>
+  <data name="PayrollProcessed" xml:space="preserve">
+    <value>Payroll Processed</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Status</value>
   </data>
-  <data name="StatusName" xml:space="preserve">
-    <value>StatusName</value>
+  <data name="LockEntriesResultOutOfRange" xml:space="preserve">
+    <value>Value of var \"{0}\" is not a valid option for LockEntriesResult</value>
   </data>
-  <data name="Tags" xml:space="preserve">
-    <value>Tags</value>
+  <data name="LockTimeEntriesInvalidStatuses" xml:space="preserve">
+    <value>Cannot lock time entries &lt;= {0} because not all of them are status Approved or Rejected.</value>
   </data>
-  <data name="Team" xml:space="preserve">
-    <value>Team</value>
+  <data name="LockTimeEntriesDBError" xml:space="preserve">
+    <value>Cannot lock time entries &lt;= {0} because of a db error.</value>
   </data>
-  <data name="TypeName" xml:space="preserve">
-    <value>Type Name</value>
+  <data name="LockTimeEntriesSuccess" xml:space="preserve">
+    <value>Successfully locked all dates for time entries &lt;= {0}.</value>
   </data>
-  <data name="UserAddedToStaffingManager" xml:space="preserve">
-    <value>User Added To Staffing Manager</value>
+  <data name="UpdateTimeEntryStatusSuccess" xml:space="preserve">
+    <value>Successfully updated selected time entry statuses.</value>
   </data>
-  <data name="UserChangedRolesInStaffingManager" xml:space="preserve">
-    <value>User Changed Roles In Staffing Manager</value>
+  <data name="UnlockTimeEntriesNoLockDate" xml:space="preserve">
+    <value>Cannot unlock time entries because no time entries are locked</value>
+  </data>
+  <data name="UnlockTimeEntriesDbError" xml:space="preserve">
+    <value>Cannot unlock time entries because of a db error</value>
+  </data>
+  <data name="UnlockTimeEntriesSuccess" xml:space="preserve">
+    <value>Successfully unlocked all locked time entries</value>
+  </data>
+  <data name="InvalidEnum" xml:space="preserve">
+    <value>Value of var \"{0}\" is not a valid enum in {1}.</value>
+  </data>
+  <data name="LockEntries" xml:space="preserve">
+    <value>Lock Entries</value>
+  </data>
+  <data name="UnlockEntries" xml:space="preserve">
+    <value>Unlock Entries</value>
+  </data>
+  <data name="PayrollProcess" xml:space="preserve">
+    <value>Payroll Process</value>
+  </data>
+  <data name="PayrollProcessNoLockDate" xml:space="preserve">
+    <value>You must lock time entries before changing them to payroll processed.</value>
+  </data>
+  <data name="PayrollProcessDBError" xml:space="preserve">
+    <value>Cannot payroll process time entries because of a DB error.</value>
+  </data>
+  <data name="PayrollProcessInvalidStatuses" xml:space="preserve">
+    <value>Cannot payroll process time entries because some of them are still pending.</value>
+  </data>
+  <data name="PayrollProcessSuccess" xml:space="preserve">
+    <value>Successfully marked all locked and approved time entries as payroll processed.</value>
+  </data>
+  <data name="CannotSelfUpdateOrgRole" xml:space="preserve">
+    <value>You cannot update your organization role yourself.</value>
+  </data>
+	<data name="UpdateTimeEntryStatusNoStatusSelected" xml:space="preserve">
+    <value>Cannot update time entries status, there are no statuses selected.</value>
+  </data>
+	<data name="LockTimeEntriesInvalidLockDate" xml:space="preserve">
+    <value>Cannot set new lock date {0} because the date is on or before the previous lock or payroll processed date</value>
+  </data>
+	<data name="PayrollProcessConfirm" xml:space="preserve">
+    <value>Are you sure you want to payroll process all approved time entries at and before {0}?</value>
   </data>
 </root>

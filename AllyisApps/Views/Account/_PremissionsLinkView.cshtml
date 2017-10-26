@@ -1,7 +1,6 @@
-﻿@using AllyisApps.ViewModels.Auth;
-@model AllyisApps.ViewModels.Auth.PermissionsViewModel
+﻿@model PermissionsViewModel
 
-<ul class="nav allyis-tabs">
+<ul class="ovrd-nav nav allyis-tabs">
 
 	<li @(Model.SubscriptionId == null ? "class = selected" : "") id="OrganizationTab">
 		<a style="display: inline" href="@Url.Action(ActionConstants.ManageOrgPermissions, new { id = Model.OrganizationId })">

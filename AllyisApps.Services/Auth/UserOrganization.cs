@@ -11,13 +11,12 @@ namespace AllyisApps.Services.Auth
 	/// <summary>
 	/// an organization that a user belongs to
 	/// </summary>
-	public class UserOrganization
+	public class UserOrganization : Organization
 	{
 		public int UserId { get; set; }
 		public string EmployeeId { get; set; }
-		public OrganizationRole OrganizationRole { get; set; }
-		public decimal MaxAmount { get; set; }
+		public OrganizationRoleEnum OrganizationRole { get; set; }
+		public decimal? MaxApprovalAmount { get; set; }
 		public DateTime JoinedDateUtc { get; set; }
-		public Organization Organization { get; set; }
 	}
 }

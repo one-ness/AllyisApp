@@ -1,4 +1,4 @@
-﻿@model System.DateTime
+﻿@model DateTime
 
 @{
     string date = DateTime.Today.ToShortDateString();
@@ -7,5 +7,5 @@
         date = string.Format("{0}-{1}-{2}", Model.Year, Model.Month, Model.Day);
     }
 
-    @Html.TextBox(string.Empty, date, new { @class = "form-control", type = "date" })
+    @Html.TextBox(string.Empty, date, new { @class = "ovrd-form-control form-control", type = "date" })
 }

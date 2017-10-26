@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels;
@@ -27,12 +27,17 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="userId">The Customer id.</param>
 		/// <returns>Presents a page to edit Customer data.</returns>
 		[HttpGet]
-		public ActionResult Edit(int subscriptionId, int userId)
+		public async Task<ActionResult> Edit(int subscriptionId, int userId)
 		{
-			var customer = AppService.GetCustomerInfo(userId);
-			string subscriptionNameToDisplay = AppService.GetSubscriptionName(subscriptionId);
+			var customerTask = AppService.GetCustomerInfo(userId);
+			var subscriptionNameToDisplayTask = AppService.GetSubscriptionName(subscriptionId);
 
-			return this.View(new EditCustomerInfoViewModel
+			await Task.WhenAll(new Task[] { customerTask, subscriptionNameToDisplayTask });
+
+			var customer = customerTask.Result;
+			var subscriptionNameToDisplay = subscriptionNameToDisplayTask.Result;
+
+			return View(new EditCustomerInfoViewModel
 			{
 				ContactEmail = customer.ContactEmail,
 				CustomerName = customer.CustomerName,
@@ -69,11 +74,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns>The ActionResult.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Edit(EditCustomerInfoViewModel model)
+		public async Task<ActionResult> Edit(EditCustomerInfoViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
-				var result = AppService.UpdateCustomer(
+				var result = await AppService.UpdateCustomer(
 					new Customer()
 					{
 						CustomerId = model.CustomerId,
@@ -103,24 +108,24 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				{
 					// the new CustOrgId is not unique
 					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerOrgIdNotUnique, Variety.Danger));
-					return this.View(model);
+					return View(model);
 				}
 				else if (result == 1)
 				{
 					// updated successfully
 					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerDetailsUpdated, Variety.Success));
-					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, new { subscriptionId = model.SubscriptionId }), model.CustomerId));
+					return Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, new { subscriptionId = model.SubscriptionId }), model.CustomerId));
 				}
 				else
 				{
 					// Permissions failure
 					Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-					return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = model.SubscriptionId });
+					return RedirectToAction(ActionConstants.Index, new { subscriptionId = model.SubscriptionId });
 				}
 			}
 
 			// Invalid model
-			return this.View(model);
+			return View(model);
 		}
 	}
 }

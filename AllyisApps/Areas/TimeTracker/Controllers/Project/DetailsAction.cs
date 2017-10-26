@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
@@ -22,12 +23,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subscriptionId">The subscription that the customer belongs to, which owns the project.</param>
 		/// <param name="projectId">The project's Id.</param>
 		/// <returns>The details view of the project.</returns>
-		public ActionResult Details(int subscriptionId, int projectId)
+		public async Task<ActionResult> Details(int subscriptionId, int projectId)
 		{
-			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
-			var model = AppService.GetProjectAsUser(projectId);
+			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
+			var model = await AppService.GetProjectAsUser(projectId);
 			model.CanEditProject = true;
-			return this.View(model);
+			return View(model);
 		}
 	}
 }

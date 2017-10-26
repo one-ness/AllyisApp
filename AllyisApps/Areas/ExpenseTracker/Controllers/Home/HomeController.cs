@@ -29,7 +29,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>A redirect to the expense tracker index page action.</returns>
 		public ActionResult Index(int subscriptionId)
 		{
-			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Expense);
+			return RedirectToAction(ActionConstants.Index, ControllerConstants.Expense);
 		}
 	}
 }

@@ -4,12 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using System.Linq;
 using AllyisApps.Lib;
+using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
@@ -25,19 +26,19 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <returns>The settings page.</returns>
-		public ActionResult SettingsStartOfWeek(int subscriptionId)
+		public async Task<ActionResult> SettingsStartOfWeek(int subscriptionId)
 		{
-			this.AppService.CheckTimeTrackerAction((AppService.TimeTrackerAction.EditOthers), subscriptionId);
-			int organizaionID = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			AppService.CheckTimeTrackerAction((AppService.TimeTrackerAction.EditOthers), subscriptionId);
+			int organizaionID = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			var infos = AppService.GetAllSettings(organizaionID);
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			string subName = AppService.GetSubscription(subscriptionId).SubscriptionName;
-			var infoOrg = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			string subName = await AppService.GetSubscriptionName(subscriptionId);
+			var infoOrg = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infoOrg.Item1.StartOfWeek));
 			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
 			Services.TimeTracker.Setting settings = infos.Item1;
-			return this.View(new SettingsWeekStartViewModel()
+			return View(new SettingsWeekStartViewModel()
 			{
 				Settings = new SettingsWeekStartViewModel.SettingsInfoViewModel()
 				{
@@ -64,7 +65,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}),
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subName,
-				UserId = this.AppService.UserContext.UserId
+				UserId = AppService.UserContext.UserId
 			});
 		}
 
@@ -74,14 +75,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subscriptionId">The subscription's id.</param>
 		/// <param name="startOfWeek">Start of week selected by Organization admin.</param>
 		/// <returns>Action result.</returns>
-		public ActionResult UpdateStartOfWeek(int subscriptionId, int startOfWeek)
+		public async Task<ActionResult> UpdateStartOfWeek(int subscriptionId, int startOfWeek)
 		{
 			System.Diagnostics.Debug.WriteLine("New Start Date: " + startOfWeek);
+			var upWeek = await AppService.UpdateStartOfWeek(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId, subscriptionId, startOfWeek);
 			if (startOfWeek < 0 || startOfWeek > 6)
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.InvalidSOW, Variety.Warning));
 			}
-			else if (!AppService.UpdateStartOfWeek(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId, subscriptionId, startOfWeek))
+			else if (!upWeek)
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
@@ -90,7 +92,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulSOW, Variety.Success));
 			}
 
-			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionid = subscriptionId, id = this.AppService.UserContext.UserId });
+			return RedirectToAction(ActionConstants.SettingsStartOfWeek, new { subscriptionid = subscriptionId, id = AppService.UserContext.UserId });
 		}
 	}
 }

@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
@@ -29,38 +30,39 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The Subscription Id.</param>
 		/// <returns>The reports page.</returns>
-		public ActionResult Report(int subscriptionId)
+		public async Task<ActionResult> Report(int subscriptionId)
 		{
-			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
+			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 
 			ReportViewModel reportVM = null;
 
-			var infos = AppService.GetReportInfo(subscriptionId);
+			var infos = await AppService.GetReportInfo(subscriptionId);
 
 			const string TempDataKey = "RVM";
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			string subName = AppService.GetSubscription(subscriptionId).SubscriptionName;
-			if (this.TempData[TempDataKey] != null)
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			var getSub = await AppService.GetSubscription(subscriptionId);
+			string subName = getSub.SubscriptionName;
+			if (TempData[TempDataKey] != null)
 			{
 				reportVM = (ReportViewModel)TempData[TempDataKey];
 			}
 			else
 			{
-				reportVM = this.ConstructReportViewModel(this.AppService.UserContext.UserId, subInfo.OrganizationId, true, infos.Customers, infos.CompleteProject);
+				reportVM = ConstructReportViewModel(AppService.UserContext.UserId, subInfo.OrganizationId, true, infos.Customers, infos.CompleteProject);
 				reportVM.SubscriptionName = subName;
 			}
 
-			reportVM.UserView = this.GetUserSelectList(infos.SubscriptionUserInfo, reportVM.Selection.Users);
-			reportVM.CustomerView = this.GetCustomerSelectList(infos.Customers, reportVM.Selection.CustomerId);
-			reportVM.ProjectView = this.GetProjectSelectList(infos.CompleteProject, reportVM.Selection.CustomerId, reportVM.Selection.ProjectId);
+			reportVM.UserView = GetUserSelectList(infos.SubscriptionUserInfo, reportVM.Selection.Users);
+			reportVM.CustomerView = GetCustomerSelectList(infos.Customers, reportVM.Selection.CustomerId);
+			reportVM.ProjectView = GetProjectSelectList(infos.CompleteProject, reportVM.Selection.CustomerId, reportVM.Selection.ProjectId);
 			reportVM.SubscriptionId = subscriptionId;
 
-			var infoOrg = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
+			var infoOrg = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infoOrg.Item1.StartOfWeek));
 			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
 
-			return this.View(reportVM);
+			return View(reportVM);
 		}
 
 		/// <summary>
@@ -81,7 +83,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				new CompleteProject
 				{
 					ProjectId = 0,
-					ProjectName = AllyisApps.Resources.Strings.NoFilter,
+					ProjectName = Resources.Strings.NoFilter,
 					owningCustomer = new Customer()
 					{
 						CustomerId = 0
@@ -98,7 +100,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				PreviewPageSize = 20,
 				PreviewTotal = string.Format("{0} {1}", 0, Resources.Strings.HoursTotal),
 				PreviewEntries = null,
-				PreviewMessage = AllyisApps.Resources.Strings.NoDataPreview,
+				PreviewMessage = Resources.Strings.NoDataPreview,
 				PreviewPageTotal = 1,
 				PreviewPageNum = 1,
 				Selection = previousSelections ?? new ReportSelectionModel
@@ -127,7 +129,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			// select current user by default
 			if (usersSelected.Count < 1)
 			{
-				usersSelected.Add(Convert.ToInt32(this.AppService.UserContext.UserId));
+				usersSelected.Add(Convert.ToInt32(AppService.UserContext.UserId));
 			}
 
 			var selectList = new List<SelectListItem>();

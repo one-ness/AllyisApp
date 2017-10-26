@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.Hrm;
 using AllyisApps.DBModel.StaffingManager;
@@ -39,7 +40,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="timeEntryId">Time entry Id.</param>
 		/// <returns>A TimeEntryDBEntity.</returns>
-		public TimeEntry GetTimeEntry(int timeEntryId)
+		public async Task<TimeEntry> GetTimeEntry(int timeEntryId)
 		{
 			#region Validation
 
@@ -50,7 +51,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return InitializeTimeEntryInfo(DBHelper.GetTimeEntryById(timeEntryId));
+			return InitializeTimeEntryInfo(await DBHelper.GetTimeEntryById(timeEntryId));
 		}
 
 		/// <summary>
@@ -58,7 +59,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="entry">Time entry info.</param>
 		/// <returns>Time entry id.</returns>
-		public int CreateTimeEntry(TimeEntry entry)
+		public async Task<int> CreateTimeEntry(TimeEntry entry)
 		{
 			#region Validation
 
@@ -69,7 +70,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return DBHelper.CreateTimeEntry(GetDBEntityFromTimeEntryInfo(entry));
+			return await DBHelper.CreateTimeEntry(GetDBEntityFromTimeEntryInfo(entry));
 		}
 
 		/// <summary>
@@ -91,10 +92,30 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// Sets the approval state of a time entry in the database.
+		/// </summary>
+		/// <param name="timeEntryId">The Id of the time entry to be updated.</param>
+		/// <param name="timeEntryStatusId">The new status.</param>
+		public async Task<int> UpdateTimeEntryStatusById(int timeEntryId, int timeEntryStatusId)
+		{
+			if (timeEntryId <= 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(timeEntryId), $"{nameof(timeEntryId)} must be greater than 0.");
+			}
+
+			if (timeEntryStatusId < 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(timeEntryStatusId), $"{nameof(timeEntryStatusId)} must not be negative.");
+			}
+
+			return await DBHelper.UpdateTimeEntryStatusById(timeEntryId, timeEntryStatusId);
+		}
+
+		/// <summary>
 		/// Deletes a time entry.
 		/// </summary>
 		/// <param name="timeEntryId">Time entry Id.</param>
-		public void DeleteTimeEntry(int timeEntryId)
+		public async void DeleteTimeEntry(int timeEntryId)
 		{
 			#region Validation
 
@@ -106,6 +127,7 @@ namespace AllyisApps.Services
 			#endregion Validation
 
 			DBHelper.DeleteTimeEntry(timeEntryId);
+			await Task.Yield();
 		}
 
 		/// <summary>
@@ -115,26 +137,26 @@ namespace AllyisApps.Services
 		/// <param name="start">Starting. <see cref="DateTime"/>.</param>
 		/// <param name="end">Ending. <see cref="DateTime"/>.</param>
 		/// <returns>A list of TimeEntry's for a given organization and start/end times.</returns>
-		public IEnumerable<TimeEntry> GetTimeEntriesOverDateRange(int orgId, DateTime start, DateTime end)
+		public async Task<IEnumerable<TimeEntry>> GetTimeEntriesOverDateRange(int orgId, DateTime start, DateTime end)
 		{
 			#region Validation
 
 			if (start == null)
 			{
-				throw new ArgumentNullException("start", "Project must have a start time");
+				throw new ArgumentNullException(nameof(start), "Project must have a start time");
 			}
-			else if (end == null)
+			if (end == null)
 			{
-				throw new ArgumentNullException("end", "Project must have an end time");
+				throw new ArgumentNullException(nameof(end), "Project must have an end time");
 			}
-			else if (DateTime.Compare(start, end) > 0)
+			if (DateTime.Compare(start, end) > 0)
 			{
 				throw new ArgumentException("Project cannot end before it starts.");
 			}
 
 			#endregion Validation
 
-			return DBHelper.GetTimeEntriesOverDateRange(orgId, start, end).Select(te => InitializeTimeEntryInfo(te));
+			return (await DBHelper.GetTimeEntriesOverDateRange(orgId, start, end)).Select(InitializeTimeEntryInfo);
 		}
 
 		/// <summary>
@@ -145,58 +167,57 @@ namespace AllyisApps.Services
 		/// <param name="start">Starting. <see cref="DateTime"/>.</param>
 		/// <param name="end">Ending. <see cref="DateTime"/>.</param>
 		/// <returns><see cref="IEnumerable{TimeEntryInfo}"/>.</returns>
-		public IEnumerable<TimeEntry> GetTimeEntriesByUserOverDateRange(List<int> userIds, DateTime? start, DateTime? end, int organizationId = -1)
+		public async Task<IEnumerable<TimeEntry>> GetTimeEntriesByUserOverDateRange(List<int> userIds, DateTime? start, DateTime? end, int organizationId = -1)
 		{
 			#region Validation
 
 			if (userIds == null || userIds.Count == 0)
 			{
-				throw new ArgumentNullException("userIds", "There must be at least one provided user id.");
+				throw new ArgumentNullException(nameof(userIds), "There must be at least one provided user id.");
 			}
-			else if (userIds.Where(u => u <= 0).Count() > 0)
+			if (userIds.Any(u => u <= 0))
 			{
-				throw new ArgumentOutOfRangeException("userIds", "User ids cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(userIds), "User ids cannot be 0 or negative.");
 			}
-			else if (start == null)
+			if (start == null)
 			{
-				throw new ArgumentNullException("start", "Date range must have a start date.");
+				throw new ArgumentNullException(nameof(start), "Date range must have a start date.");
 			}
-			else if (end == null)
+			if (end == null)
 			{
-				throw new ArgumentNullException("end", "Date range must have an end date.");
+				throw new ArgumentNullException(nameof(end), "Date range must have an end date.");
 			}
-			else if (DateTime.Compare(start ?? DateTime.Now, end ?? DateTime.Now) > 0)
+			if (DateTime.Compare(start.Value, end.Value) > 0)
 			{
 				throw new ArgumentException("Date range cannot end before it starts.");
 			}
 
 			#endregion Validation
 
-			return DBHelper.GetTimeEntriesByUserOverDateRange(userIds, organizationId, start ?? DateTime.Now, end ?? DateTime.Now).Select(te => InitializeTimeEntryInfo(te));
+			return (await DBHelper.GetTimeEntriesByUserOverDateRange(userIds, organizationId, start.Value, end.Value)).Select(InitializeTimeEntryInfo);
 		}
 
 		/// <summary>
 		/// Gets a list of Customers for all customers in the organization, a list of CompleteProjectInfos for all
 		/// projects in the organization, and a list of SubscriptionUserInfos for all users in the current subscription.
 		/// </summary>
-		public ReportInfo GetReportInfo(int subscriptionId)
+		public async Task<ReportInfo> GetReportInfo(int subscriptionId)
 		{
-			UserContext.SubscriptionAndRole subInfo = null;
-			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			var spResults = DBHelper.GetReportInfo(subInfo.OrganizationId, subscriptionId);
+			UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out UserContext.SubscriptionAndRole subInfo);
+			var spResults = await DBHelper.GetReportInfo(subInfo.OrganizationId, subscriptionId);
 			return new ReportInfo(
 				spResults.Item1.Select(cdb => (Customer)InitializeCustomer(cdb)).ToList(),
-				spResults.Item2.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
-				spResults.Item3.Select(sudb => InitializeSubscriptionUser(sudb)).ToList());
+				spResults.Item2.Select(InitializeCompleteProjectInfo).ToList(),
+				spResults.Item3.Select(InitializeSubscriptionUser).ToList());
 		}
 
 		/// <summary>
 		/// Gets the lock date for the current organization.
 		/// </summary>
 		/// <returns>Lock date.</returns>
-		public DateTime? GetLockDate(int organizationId)
+		public async Task<DateTime?> GetLockDate(int organizationId)
 		{
-			LockDateDBEntity lockDate = DBHelper.GetLockDate(organizationId);
+			LockDateDBEntity lockDate = await DBHelper.GetLockDateByOrganizationId(organizationId);
 			return GetLockDateFromParameters(lockDate.IsLockDateUsed, lockDate.LockDatePeriod, lockDate.LockDateQuantity);
 		}
 
@@ -214,8 +235,9 @@ namespace AllyisApps.Services
 				return null;
 			}
 
-			DateTime date = lockDatePeriod.Equals(3) ? DateTime.Now.AddMonths(-1 * lockDateQuantity) :
-				DateTime.Now.AddDays(-1 * lockDateQuantity * (lockDatePeriod.Equals(2) ? 7 : 1));
+			DateTime date = lockDatePeriod.Equals(3)
+				? DateTime.Now.AddMonths(-1 * lockDateQuantity)
+				: DateTime.Now.AddDays(-1 * lockDateQuantity * (lockDatePeriod.Equals(2) ? 7 : 1));
 			return date;
 		}
 
@@ -225,11 +247,12 @@ namespace AllyisApps.Services
 		/// <param name="holiday">Holiday.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool CreateHoliday(Holiday holiday, int subscriptionId)
+		public async Task<bool> CreateHoliday(Holiday holiday, int subscriptionId)
 		{
 			if (holiday == null) throw new ArgumentException("holiday");
-			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
+			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 			DBHelper.CreateHoliday(GetDBEntityFromHoliday(holiday));
+			await Task.Yield();
 			return true;
 		}
 
@@ -240,17 +263,18 @@ namespace AllyisApps.Services
 		/// <param name="orgId">The organization's Id.</param>
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool DeleteHoliday(int holidayId, int orgId, int subscriptionId)
+		public async Task<bool> DeleteHoliday(int holidayId, int orgId, int subscriptionId)
 		{
 			if (holidayId <= 0) throw new ArgumentException("holidayId");
 			if (orgId <= 0) throw new ArgumentException("orgId");
 			if (subscriptionId <= 0) throw new ArgumentException("subscriptionId");
-			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
+			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 
 			HolidayDBEntity deletedHoliday = DBHelper.GetHolidays(orgId).Where(h => h.HolidayId == holidayId).SingleOrDefault();
 			if (deletedHoliday != null)
 			{
 				DBHelper.DeleteHoliday(deletedHoliday.HolidayName, deletedHoliday.Date, orgId);
+				await Task.Yield();
 			}
 
 			return true;
@@ -263,10 +287,11 @@ namespace AllyisApps.Services
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool CreatePayClass(string payClassName, int orgId, int subscriptionId)
+		public async Task<bool> CreatePayClass(string payClassName, int orgId, int subscriptionId)
 		{
-			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
+			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 			DBHelper.CreatePayClass(payClassName, orgId);
+			await Task.Yield();
 			return true;
 		}
 
@@ -278,10 +303,11 @@ namespace AllyisApps.Services
 		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <param name="destPayClass">The id of the destination payclass.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool DeletePayClass(int payClassId, int orgId, int subscriptionId, int? destPayClass)
+		public async Task<bool> DeletePayClass(int payClassId, int orgId, int subscriptionId, int? destPayClass)
 		{
-			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
+			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 			DBHelper.DeletePayClass(payClassId, destPayClass);
+			await Task.Yield();
 			return true;
 		}
 
@@ -307,11 +333,19 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets a list of <see cref="PayClass"/>'s for an organization.
 		/// </summary>
-		public IEnumerable<PayClass> GetPayClasses(int subscriptionId)
+		public async Task<IEnumerable<PayClass>> GetPayClassesBySubscriptionId(int subscriptionId)
 		{
-			UserContext.SubscriptionAndRole subInfo = null;
-			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			return DBHelper.GetPayClasses(subInfo.OrganizationId).Select(pc => InitializePayClassInfo(pc));
+			var getClass = await DBHelper.GetPayClasses(UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
+			return getClass.Select(pc => InitializePayClassInfo(pc));
+		}
+
+		/// <summary>
+		/// Gets a list of <see cref="PayClass"/>'s for an organization.
+		/// </summary>
+		public async Task<IEnumerable<PayClass>> GetPayClassesByOrganizationId(int organizationId)
+		{
+			var getClass = await DBHelper.GetPayClasses(organizationId);
+			return getClass.Select(pc => InitializePayClassInfo(pc));
 		}
 
 		/// <summary>
@@ -321,7 +355,7 @@ namespace AllyisApps.Services
 		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <param name="startOfWeek">Start of Week.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool UpdateStartOfWeek(int organizationId, int subscriptionId, int startOfWeek)
+		public async Task<bool> UpdateStartOfWeek(int organizationId, int subscriptionId, int startOfWeek)
 		{
 			#region Validation
 
@@ -332,8 +366,9 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
+			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 			DBHelper.UpdateTimeTrackerStartOfWeek(organizationId, startOfWeek);
+			await Task.Yield();
 			return true;
 		}
 
@@ -346,7 +381,7 @@ namespace AllyisApps.Services
 		/// <param name="overtimePeriod">Time period for hours until overtime.</param>
 		/// <param name="overtimeMultiplier">Overtime pay multiplier.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool UpdateOvertime(int subscriptionId, int organizationId, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
+		public async Task<bool> UpdateOvertime(int subscriptionId, int organizationId, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
 		{
 			#region Validation
 
@@ -355,7 +390,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("overtimeHours", "Overtime hours cannot be negative, unless it is -1 to indicate overtime unavailable.");
 			}
 
-			if (!new string[] { "Day", "Week", "Month" }.Contains(overtimePeriod))
+			if (!new[] { "Day", "Week", "Month" }.Contains(overtimePeriod))
 			{
 				throw new ArgumentException(string.Format("{0} is not a valid value for lock date period.", overtimePeriod));
 			}
@@ -367,8 +402,9 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
+			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 			DBHelper.UpdateOvertime(organizationId, overtimeHours, overtimePeriod, overtimeMultiplier);
+			await Task.Yield();
 			return true;
 		}
 
@@ -382,7 +418,7 @@ namespace AllyisApps.Services
 		/// <param name="projectId">Project id to filter by.</param>
 		/// <param name="customerId">Customer id to filter by.</param>
 		/// <returns>The stream writer.</returns>
-		public StreamWriter PrepareCSVExport(int orgId, List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
+		public async Task<StreamWriter> PrepareCSVExport(int orgId, List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
 		{
 			// Preparing data
 			IEnumerable<TimeEntry> data = new List<TimeEntry>();
@@ -390,11 +426,11 @@ namespace AllyisApps.Services
 
 			if (userIds == null || userIds.Count == 0 || userIds[0] == -1)
 			{
-				data = this.GetTimeEntriesOverDateRange(orgId, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1));
+				data = await GetTimeEntriesOverDateRange(orgId, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1));
 			}
 			else
 			{
-				data = this.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1), orgId);
+				data = await GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1), orgId);
 			}
 
 			if (projectId > 0)
@@ -405,14 +441,15 @@ namespace AllyisApps.Services
 			{
 				if (customerId > 0)
 				{
-					IEnumerable<int> customerProjects = GetProjectsByCustomer(customerId).Select(p => p.ProjectId);
+					var proj = await GetProjectsByCustomer(customerId);
+					IEnumerable<int> customerProjects = proj.Select(p => p.ProjectId);
 					data = data.Where(t => customerProjects.Contains(t.ProjectId));
 				}
 			}
 
 			if (userIds != null && userIds.Count == 1 && userIds[0] > 0)
 			{
-				projects = GetProjectsByUserAndOrganization(userIds[0], orgId, onlyActive: false);
+				projects = await GetProjectsByUserAndOrganization(userIds[0], orgId, onlyActive: false);
 			}
 			else
 			{
@@ -425,22 +462,7 @@ namespace AllyisApps.Services
 			projects = projects.Concat(defaultProject);
 
 			StreamWriter output = new StreamWriter(new MemoryStream());
-			output.WriteLine(
-				string.Format(
-					"\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\",\"{10}\",\"{11}\"",
-					ColumnHeaders.UserLastName,
-					ColumnHeaders.UserFirstName,
-					ColumnHeaders.EmployeeId,
-					ColumnHeaders.UserEmail,
-					ColumnHeaders.Date,
-					ColumnHeaders.Duration,
-					ColumnHeaders.PayClass,
-					ColumnHeaders.ProjectName,
-					ColumnHeaders.ProjectId,
-					ColumnHeaders.CustomerName,
-					ColumnHeaders.CustomerId,
-					ColumnHeaders.Description
-				));
+			output.WriteLine("\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\",\"{10}\",\"{11}\"", ColumnHeaders.UserLastName, ColumnHeaders.UserFirstName, ColumnHeaders.EmployeeId, ColumnHeaders.UserEmail, ColumnHeaders.Date, ColumnHeaders.Duration, ColumnHeaders.PayClass, ColumnHeaders.ProjectName, ColumnHeaders.ProjectId, ColumnHeaders.CustomerName, ColumnHeaders.CustomerId, ColumnHeaders.Description, ColumnHeaders.Status);
 
 			foreach (TimeEntry entry in data)
 			{
@@ -448,21 +470,7 @@ namespace AllyisApps.Services
 				{
 					var project = projects.Where(x => x.ProjectId == entry.ProjectId).FirstOrDefault();
 					if (project.ProjectId == 0) project = null;
-					output.WriteLine(
-						string.Format(
-							"\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\",\"{10}\",\"{11}\"",
-							entry.LastName,
-							entry.FirstName,
-							entry.EmployeeId,
-							entry.Email,
-							entry.Date.ToShortDateString(),
-							entry.Duration,
-							entry.PayClassName,
-							project != null ? (project.ProjectName ?? string.Empty) : string.Empty,
-							project != null ? (project.ProjectOrgId ?? string.Empty) : string.Empty,
-							project != null ? (project.owningCustomer.CustomerName ?? string.Empty) : string.Empty,
-							project != null ? (project.owningCustomer.CustomerOrgId ?? string.Empty) : string.Empty,
-							entry.Description));
+					output.WriteLine("\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\",\"{10}\",\"{11}\"", entry.LastName, entry.FirstName, entry.EmployeeId, entry.Email, entry.Date.ToShortDateString(), entry.Duration, entry.PayClassName, project != null ? (project.ProjectName ?? string.Empty) : string.Empty, project != null ? (project.ProjectOrgId ?? string.Empty) : string.Empty, project != null ? (project.owningCustomer.CustomerName ?? string.Empty) : string.Empty, project != null ? (project.owningCustomer.CustomerOrgId ?? string.Empty) : string.Empty, entry.Description, ((TimeEntryStatus)entry.TimeEntryStatusId));
 				}
 				catch (Exception ex)
 				{
@@ -480,33 +488,11 @@ namespace AllyisApps.Services
 		{
 			StreamWriter output = new StreamWriter(new MemoryStream());
 
-			output.WriteLine(
-				string.Format(
-					"\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\"",
-					"Expense Report Id",
-					"Report Title",
-					"Organization Id",
-					"Submitted By",
-					"Report Status",
-					"Created On",
-					"Modified On",
-					"Submitted On"
-				));
+			output.WriteLine("\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\"", "Expense Report Id", "Report Title", "Organization Id", "Submitted By", "Report Status", "Created On", "Modified On", "Submitted On");
 
 			foreach (ExpenseReport report in reports)
 			{
-				output.WriteLine(
-					string.Format(
-						"\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\"",
-						report.ExpenseReportId,
-						report.ReportTitle,
-						report.OrganizationId,
-						report.SubmittedById,
-						report.ReportStatus,
-						report.CreatedUtc,
-						report.ModifiedUtc,
-						report.SubmittedUtc
-						));
+				output.WriteLine("\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\"", report.ExpenseReportId, report.ReportTitle, report.OrganizationId, report.SubmittedById, report.ReportStatus, report.CreatedUtc, report.ModifiedUtc, report.SubmittedUtc);
 			}
 
 			output.Flush();
@@ -523,19 +509,29 @@ namespace AllyisApps.Services
 		/// <param name="lockDateQuantity">The quantity of the selected period.</param>
 		/// <param name="orgId">.</param>
 		/// <returns>.</returns>
-		public bool UpdateLockDate(bool lockDateUsed, int lockDatePeriod, int lockDateQuantity, int orgId)
+		public async Task<bool> UpdateOldLockDate(bool lockDateUsed, int lockDatePeriod, int lockDateQuantity, int orgId)
 		{
-			if (!new int[] { 1, 2, 3 }.Contains(lockDatePeriod))
+			if (!new[] { 1, 2, 3 }.Contains(lockDatePeriod))
 			{
-				throw new ArgumentException(string.Format("{0} is not a valid value for lock date period.", lockDatePeriod));
+				throw new ArgumentException($"{lockDatePeriod} is not a valid value for {nameof(lockDatePeriod)}.");
 			}
 
 			if (lockDateQuantity < 0)
 			{
-				throw new ArgumentException("Lock date quantity cannot be less than zero.");
+				throw new ArgumentException($"{nameof(lockDateQuantity)} cannot be less than zero.");
 			}
 
-			return DBHelper.UpdateLockDate(orgId, lockDateUsed, lockDatePeriod, lockDateQuantity);
+			return await DBHelper.UpdateOldLockDate(orgId, lockDateUsed, lockDatePeriod, lockDateQuantity);
+		}
+
+		public int UpdateLockDate(int organizationId, DateTime? lockDate)
+		{
+			if (organizationId < 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(organizationId), $"{nameof(organizationId)} must be greater than 0.");
+			}
+
+			return DBHelper.UpdateLockDate(organizationId, lockDate);
 		}
 
 		/// <summary>
@@ -547,12 +543,12 @@ namespace AllyisApps.Services
 		public Tuple<Setting, List<PayClass>, List<Holiday>> GetAllSettings(int organizaionId)
 		{
 			UserContext.OrganizationAndRole orgInfo = null;
-			this.UserContext.OrganizationsAndRoles.TryGetValue(organizaionId, out orgInfo);
+			UserContext.OrganizationsAndRoles.TryGetValue(organizaionId, out orgInfo);
 			var spResults = DBHelper.GetAllSettings(orgInfo.OrganizationId);
 			return Tuple.Create(
 				InitializeSettingsInfo(spResults.Item1),
-				spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),
-				spResults.Item3.Select(hdb => InitializeHoliday(hdb)).ToList());
+				spResults.Item2.Select(InitializePayClassInfo).ToList(),
+				spResults.Item3.Select(InitializeHoliday).ToList());
 		}
 
 		/// <summary>
@@ -568,7 +564,7 @@ namespace AllyisApps.Services
 		/// <param name="startingDate">Start of date range.</param>
 		/// <param name="endingDate">End of date range.</param>
 		/// <returns>.</returns>
-		public Tuple<Setting, List<PayClass>, List<Holiday>, List<CompleteProject>, List<User>, List<TimeEntry>>
+		public async Task<Tuple<Setting, List<PayClass>, List<Holiday>, List<CompleteProject>, List<User>, List<TimeEntry>>>
 			GetTimeEntryIndexInfo(int orgId, DateTime? startingDate, DateTime? endingDate, int? userId = null)
 		{
 			#region Validation
@@ -592,14 +588,14 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			var spResults = DBHelper.GetTimeEntryIndexPageInfo(orgId, (int)ProductIdEnum.TimeTracker, userId.Value, startingDate, endingDate);
+			var spResults = await DBHelper.GetTimeEntryIndexPageInfo(orgId, (int)ProductIdEnum.TimeTracker, userId.Value, startingDate, endingDate);
 
 			return Tuple.Create(InitializeSettingsInfo(spResults.Item1),
-				spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),
-				spResults.Item3.Select(hdb => InitializeHoliday(hdb)).ToList(),
-				spResults.Item4.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
+				spResults.Item2.Select(InitializePayClassInfo).ToList(),
+				spResults.Item3.Select(InitializeHoliday).ToList(),
+				spResults.Item4.Select(InitializeCompleteProjectInfo).ToList(),
 				spResults.Item5.Select(udb => InitializeUser(udb, false)).ToList(),
-				spResults.Item6.Select(tedb => InitializeTimeEntryInfo(tedb)).ToList());
+				spResults.Item6.Select(InitializeTimeEntryInfo).ToList());
 		}
 
 		#region Info-DBEntity Conversions
@@ -616,7 +612,7 @@ namespace AllyisApps.Services
 				PayClassName = pc.PayClassName,
 				OrganizationId = pc.OrganizationId,
 				PayClassId = pc.PayClassId,
-				CreatedUtc = pc.CreatedUtc,
+				CreatedUtc = pc.CreatedUtc
 			};
 		}
 
@@ -685,7 +681,9 @@ namespace AllyisApps.Services
 				TimeEntryId = entity.TimeEntryId,
 				UserId = entity.UserId,
 				EmployeeId = entity.EmployeeId,
-				Email = entity.Email
+				Email = entity.Email,
+				TimeEntryStatusId = entity.TimeEntryStatusId,
+				IsLocked = entity.IsLocked
 			};
 		}
 
@@ -720,13 +718,13 @@ namespace AllyisApps.Services
 		/// <returns>The created HolidayDBEntity object.</returns>
 		public static HolidayDBEntity GetDBEntityFromHoliday(Holiday holiday)
 		{
-			return new HolidayDBEntity()
+			return new HolidayDBEntity
 			{
 				CreatedUtc = holiday.CreatedUtc,
 				Date = holiday.Date,
 				HolidayId = holiday.HolidayId,
 				HolidayName = holiday.HolidayName,
-				OrganizationId = holiday.OrganizationId,
+				OrganizationId = holiday.OrganizationId
 			};
 		}
 
@@ -738,7 +736,7 @@ namespace AllyisApps.Services
 		/// <param name="userId">User Id.</param>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<ApplicationStatus>, List<Customer>>
+		public async Task<Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<ApplicationStatus>, List<Customer>>>
 			GetStaffingIndexInfo(int orgId, int? userId = null)
 		{
 			#region Validation
@@ -758,16 +756,16 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			var results = DBHelper.GetStaffingIndexPageInfo(orgId);
+			var results = await DBHelper.GetStaffingIndexPageInfo(orgId);
 
 			return Tuple.Create(
 				results.Item1.Select(posdb => InitializePositionThumbnailInfo(posdb, results.Item2, results.Item5)).ToList(),
-				results.Item2.Select(tagsdb => InitializeTags(tagsdb)).ToList(),
-				results.Item3.Select(typedb => InitializeEmploymentTypes(typedb)).ToList(),
-				results.Item4.Select(leveldb => InitializePositionLevel(leveldb)).ToList(),
-				results.Item5.Select(statdb => InitializePositionStatus(statdb)).ToList(),
-				results.Item6.Select(Appstatdb => InitializeApplicationStatus(Appstatdb)).ToList(),
-				results.Item7.Select(cusdb => InitializeBaseCustomer(cusdb)).ToList()
+				results.Item2.Select(InitializeTags).ToList(),
+				results.Item3.Select(InitializeEmploymentTypes).ToList(),
+				results.Item4.Select(InitializePositionLevel).ToList(),
+				results.Item5.Select(InitializePositionStatus).ToList(),
+				results.Item6.Select(InitializeApplicationStatus).ToList(),
+				results.Item7.Select(InitializeBaseCustomer).ToList()
 				);
 		}
 
@@ -780,7 +778,7 @@ namespace AllyisApps.Services
 		/// <param name="tags">tags.</param>
 		/// <param name="userId">User Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<ApplicationStatus>, List<Customer>>
+		public async Task<Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<ApplicationStatus>, List<Customer>>>
 			GetStaffingIndexInfoFiltered(int orgId, List<string> statusName, List<string> typeName, List<string> tags = null, int? userId = 0)
 		{
 			#region Validation
@@ -800,16 +798,16 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			var results = DBHelper.GetStaffingIndexPageInfoFiltered(orgId, statusName, typeName, tags);
+			var results = await DBHelper.GetStaffingIndexPageInfoFiltered(orgId, statusName, typeName, tags);
 
 			return Tuple.Create(
 				results.Item1.Select(posdb => InitializePositionThumbnailInfo(posdb, results.Item2, results.Item5)).ToList(),
-				results.Item2.Select(tagsdb => InitializeTags(tagsdb)).ToList(),
-				results.Item3.Select(typedb => InitializeEmploymentTypes(typedb)).ToList(),
-				results.Item4.Select(leveldb => InitializePositionLevel(leveldb)).ToList(),
-				results.Item5.Select(statdb => InitializePositionStatus(statdb)).ToList(),
-				results.Item6.Select(appstatdb => InitializeApplicationStatus(appstatdb)).ToList(),
-				results.Item7.Select(custdb => InitializeBaseCustomer(custdb)).ToList()
+				results.Item2.Select(InitializeTags).ToList(),
+				results.Item3.Select(InitializeEmploymentTypes).ToList(),
+				results.Item4.Select(InitializePositionLevel).ToList(),
+				results.Item5.Select(InitializePositionStatus).ToList(),
+				results.Item6.Select(InitializeApplicationStatus).ToList(),
+				results.Item7.Select(InitializeBaseCustomer).ToList()
 				);
 		}
 
@@ -866,7 +864,7 @@ namespace AllyisApps.Services
 		/// <returns></returns>
 		public static Customer InitializeBaseCustomer(CustomerDBEntity customer)
 		{
-			return new Customer()
+			return new Customer
 			{
 				ContactEmail = customer.ContactEmail,
 				ContactPhoneNumber = customer.ContactPhoneNumber,

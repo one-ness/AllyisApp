@@ -1,4 +1,4 @@
-﻿@model AllyisApps.ViewModels.Auth.AddMemberViewModel
+﻿@model AddMemberViewModel
 
 @{
 	ViewBag.Title = Strings.AddMember;
@@ -11,62 +11,62 @@
 			@Html.AntiForgeryToken()
 			@Html.HiddenFor(m => m.OrganizationId)
 			@Html.ValidationSummary(true)
-			<div class="row">
-				<div class="col-md-6 sm-control-width">
-					<div class="form-group">
+			<div class="ovrd-row row">
+				<div class="ovrd-col-md-6 col-md-6 col sm-control-width">
+					<div class="ovrd-form-group form-group">
 						@Html.ReqLabelFor(model => model.Email, Strings.Email)
-						@Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+						@Html.TextBoxFor(model => model.Email, new { @class = "ovrd-form-control form-control" })
 						@Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
 					</div>
-					<div class="form-group">
+					<div class="ovrd-form-group form-group">
 						@Html.ReqLabelFor(model => model.EmployeeId, Strings.EmployeeId)
-						@Html.TextBoxFor(model => model.EmployeeId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.EmployeeId })
+						@Html.TextBoxFor(model => model.EmployeeId, new { @class = "ovrd-form-control form-control", @maxlength = "16", @placeholder = Model.EmployeeId })
 						@Html.ValidationMessageFor(model => model.EmployeeId, "", new { @class = "text-danger" })
 					</div>
-					<div class="form-group">
-						<div class="form-group col-md-6">
+					<div class="ovrd-form-group form-group">
+						<div class="ovrd-form-group form-group ovrd-col-md-6 col-md-6 col">
 							@Html.ReqLabelFor(x => x.OrgRole, "Org Role")
 						</div>
-						<div class="form-group col-md-6">
-							@Html.DropDownListFor(x => x.OrgRoleSelection, Model.OrgRole, new { @class = "form-control" })
+						<div class="ovrd-form-group form-group ovrd-col-md-6 col-md-6 col">
+							@Html.DropDownListFor(x => x.OrgRoleSelection, Model.OrgRole, new { @class = "ovrd-form-control form-control" })
 						</div>
 					</div>
-					<div class="form-group">
-						<div class="form-group col-md-6">
+					<div class="ovrd-form-group form-group">
+						<div class="ovrd-form-group form-group ovrd-col-md-6 col-md-6 col">
 							@if (Model.hasTT)
 							{ @Html.ReqLabelFor(x => x.TTRoles, "TimeTracker Role") }
 						</div>
-						<div class="form-group col-md-6">
+						<div class="ovrd-form-group form-group ovrd-col-md-6 col-md-6 col">
 							@if (Model.hasTT)
-							{ @Html.DropDownListFor(x => x.ttSelection, Model.TTRoles, new { @class = "form-control" }) }
+							{ @Html.DropDownListFor(x => x.ttSelection, Model.TTRoles, new { @class = "ovrd-form-control form-control" }) }
 						</div>
 					</div>
 
-					<div class="form-group">
-						<div class="form-group col-md-6">
+					<div class="ovrd-form-group form-group">
+						<div class="ovrd-form-group form-group ovrd-col-md-6 col-md-6 col">
 							@if (Model.hasET)
 							{ @Html.ReqLabelFor(x => x.ETRoles, "ExpenseTracker Role") }
 						</div>
-						<div class="form-group col-md-6">
+						<div class="ovrd-form-group form-group ovrd-col-md-6 col-md-6 col">
 							@if (Model.hasET)
-							{@Html.DropDownListFor(x => x.etSelection, Model.ETRoles, new { @class = "form-control" }) }
+							{@Html.DropDownListFor(x => x.etSelection, Model.ETRoles, new { @class = "ovrd-form-control form-control" }) }
 						</div>
 					</div>
 				</div>
-				<div class="col-md-6 sm-control-width">
+				<div class="ovrd-col-md-6 col-md-6 col sm-control-width">
 
-					<div class="form-group">
+					<div class="ovrd-form-group form-group">
 						@Html.ReqLabelFor(model => model.FirstName, Strings.FirstName)
-						@Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
+						@Html.TextBoxFor(model => model.FirstName, new { @class = "ovrd-form-control form-control" })
 						@Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
 					</div>
-					<div class="form-group">
+					<div class="ovrd-form-group form-group">
 						@Html.ReqLabelFor(model => model.LastName, Strings.LastName)
-						@Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+						@Html.TextBoxFor(model => model.LastName, new { @class = "ovrd-form-control form-control" })
 						@Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
 					</div>
 
-					@*<div class="form-group">
+					@*<div class="ovrd-form-group form-group">
 							<div class="text-right">
 								<span style="margin-right: 5px;">@Strings.AddAsOwner</span>
 								@Html.CheckBoxFor(m => m.AddAsOwner, new { @style = "display: inline;" })
@@ -74,17 +74,17 @@
 						</div>*@
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-xs-12">
-					<div class="form-group allyis-action-buttons pull-right">
-						<a href="@Url.Action(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { @id = Model.OrganizationId })" class="btn btn-default">@Strings.Cancel</a>&nbsp;
+			<div class="ovrd-row row">
+				<div class="ovrd-col-xs-12 col-xs-12 col">
+					<div class="ovrd-form-group form-group allyis-action-buttons pull-right">
+						<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { @id = Model.OrganizationId })" class="btn btn-default">@Strings.Cancel</a>&nbsp;
 						<input type="submit" id="addMember" value="@Strings.Add" class="btn btn-primary" />
 					</div>
 				</div>
 			</div>
 		}
-		<div class="row">
-			<div class="col-md-6 sm-control-width">
+		<div class="ovrd-row row">
+			<div class="ovrd-col-md-6 col-md-6 col sm-control-width">
 				<label>@Strings.AddMultipleMembers</label>
 				@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Account, new { id = Model.OrganizationId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
 				{
@@ -92,19 +92,19 @@
 					<div>
 						<input type="file" id="upload-box" name="upload" style="display:none;"
 							   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-						<input id="upload-file-name-display" class="form-control"
+						<input id="upload-file-name-display" class="ovrd-form-control form-control"
 							   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
 					</div>
 
 					<div style="margin-top: 10px; margin-bottom: 15px; float:right;">
-						<a class="btn btn-primary" onclick="$('input[id=upload-box]').click();">@Strings.ChooseFile</a>
-						<input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" />
+						<a class="ovrd-btn btn ovrd-btn-primary btn-primary" onclick="$('input[id=upload-box]').click();">@Strings.ChooseFile</a>
+						<input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="ovrd-btn btn ovrd-btn-primary btn-primary" />
 					</div>
 				}
 				@using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Account, null, FormMethod.Get, new { id = "template-form" }))
 				{
 					<div style="margin-top: 10px; margin-bottom: 15px; float:left">
-						<input type="submit" form="template-form" id="template-button" value="@Strings.Template" class="btn btn-primary" />
+						<input type="submit" form="template-form" id="template-button" value="@Strings.Template" class="ovrd-btn btn ovrd-btn-primary btn-primary" />
 					</div>
 				}
 			</div>

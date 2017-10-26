@@ -1,7 +1,5 @@
 ﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-@using AllyisApps.Core;
 @using AllyisApps.ViewModels.TimeTracker.Project;
-@using AllyisApps.Services.Crm;
 
 @model ReportViewModel
 
@@ -16,9 +14,9 @@
 	ViewData["SubscriptionName"] = Model.SubscriptionName;
 }
 
-<div class="row report-wrap">
-	<div class="col-md-12">
-		<div class="row">
+<div class="ovrd-row row report-wrap">
+	<div class="ovrd-col-md-12 col-md-12 col">
+		<div class="ovrd-row row">
 			@using (Html.BeginForm(ActionConstants.ViewReport, ControllerConstants.TimeEntry, FormMethod.Post, htmlAttributes: new { @id = "reportForm" }))
 			{
 				@Html.Hidden("OrganizationId", Model.OrganizationId)
@@ -26,30 +24,30 @@
                 <!--Get users By subscriptionUser-->
                 <!--Default selection: current user-->if (Model.CanManage)// was previously: (Permissions.Can(ProductAction.TimeTrackerCreateReportOthers, Model.OrganizationId, DB Helper.Instance.GetProductIDByName("TimeTracker")))
 				{
-					<div class="list-left container">
+					<div class="list-left slim">
 						<label for="UserSelect">@Strings.Employees</label>
 						@Html.DropDownList("UserSelect",
 											  Model.UserView,
-											  htmlAttributes: new { @class = "form-control", multiple = "multiple", size = "9" })
+											  htmlAttributes: new { @class = "ovrd-form-control form-control", multiple = "multiple", size = "9" })
 					</div>
 				}
 				else
 				{
-					<div class="list-left container" style="display: none;">
+					<div class="list-left slim" style="display: none;">
 						<label for="UserSelect">@Strings.Employees</label>
 						@Html.DropDownList("UserSelect",
 											  Model.UserView,
-											  htmlAttributes: new { @class = "form-control", /*disabled = "disabled",*/ multiple = "multiple", size = "9", style = "display: none;" })
+											  htmlAttributes: new { @class = "ovrd-form-control form-control", /*disabled = "disabled",*/ multiple = "multiple", size = "9", style = "display: none;" })
 					</div>
 				}
 				<div class="options-right container">
-					<div class="row">
-						<div class="form-group col-md-6 col-lg-6">
+					<div class="ovrd-row row">
+						<div class="ovrd-form-group form-group ovrd-col-md-6 col-md-6 ovrd-col-lg-6 col-lg-6 col">
 							<!--Get Customers by OrganizationId-->
 							<label for="CustomerSelect">@Strings.Customers</label>
 							@Html.DropDownList("CustomerSelect",
 											  Model.CustomerView,
-											  htmlAttributes: new { @class = "form-control", @style = "width:85%", @id = "ddl-customers" })
+											  htmlAttributes: new { @class = "ovrd-form-control form-control", @style = "width:85%", @id = "ddl-customers" })
 						</div>
 
 						<!-- A holder for all the projects, to draw from for populating the real selection list -->
@@ -62,22 +60,22 @@
 
 						@if (Model.Selection.CustomerId == 0)
 						{
-							<div class="form-group col-md-6 col-lg-6">
+							<div class="ovrd-form-group form-group ovrd-col-md-6 col-md-6 ovrd-col-lg-6 col-lg-6 col">
 								<label for="ddl-projects">@Strings.Projects</label>
 								<!--Get Projects by OrgID-->
 								@Html.DropDownList("ProjectSelect",
 											  Model.ProjectView,
-											  htmlAttributes: new { @class = "form-control", @style = "width:85%", @id = "ddl-projects", @disabled = "disabled" })
+											  htmlAttributes: new { @class = "ovrd-form-control form-control", @style = "width:85%", @id = "ddl-projects", @disabled = "disabled" })
 							</div>
 						}
 						else
 						{
-							<div class="form-group col-md-6 col-lg-6">
+							<div class="ovrd-form-group form-group ovrd-col-md-6 col-md-6 ovrd-col-lg-6 col-lg-6 col">
 								<label for="ddl-projects">@Strings.Projects</label>
 								@*@Html.DropDownList("ProjectSelect",
 									Model.ProjectView,
 									htmlAttributes: new { @class = "form-control", @id = "ddl-projects" })*@
-								<select name="ProjectSelect" class="form-control" id="ddl-projects">
+								<select name="ProjectSelect" class="ovrd-form-control form-control" id="ddl-projects">
 									@foreach (CompleteProjectViewModel project in Model.Projects)
 									{
 										if (Model.Selection.CustomerId == project.CustomerId)
@@ -90,31 +88,31 @@
 							</div>
 						}
 					</div>
-					<div class="row">
-						<div class="form-group col-md-6 col-lg-6">
+					<div class="ovrd-row row">
+						<div class="ovrd-form-group form-group ovrd-col-md-6 col-md-6 ovrd-col-lg-6 col-lg-6 col">
 							<label style="margin-right:200px">@Strings.StartDate</label>
 							<input type="hidden" id="DateRangeStart" name="DateRangeStart" value="@Model.Selection.StartDate" />
-							<input type="text" class="form-control" style="width: 50%; display: inline-block;" id="datePickerStart" />
-							<span class="fa fa-fw fa-calendar fa-lg" style="margin-top:10px;" id="datePickerStartButton" title="Choose start date"></span>
+							<input type="text" class="ovrd-form-control form-control" style="width: 50%; display: inline-block;" id="datePickerStart" />
+							<span class="ovrd-fa fa ovrd-fa-fw fa-fw ovrd-fa-calendar fa-calendar ovrd-fa-lg fa-lg" style="margin-top:10px;" id="datePickerStartButton" title="Choose start date"></span>
 						</div>
-						<div class="form-group col-md-6 col-lg-6">
+						<div class="ovrd-form-group form-group ovrd-col-md-6 col-md-6 ovrd-col-lg-6 col-lg-6 col">
 							<label style="margin-right:200px">@Strings.EndDate</label>
 							<input type="hidden" id="DateRangeEnd" name="DateRangeEnd" value="@Model.Selection.EndDate" />
-							<input type="text" class="form-control" style="width: 50%; display: inline-block;" id="datePickerEnd" />
-							<span class="fa fa-fw fa-calendar fa-lg" style="margin-top:10px;" id="datePickerEndButton" title="Choose end date"></span>
+							<input type="text" class="ovrd-form-control form-control" style="width: 50%; display: inline-block;" id="datePickerEnd" />
+							<span class="ovrd-fa fa ovrd-fa-fw fa-fw ovrd-fa-calendar fa-calendar ovrd-fa-lg fa-lg" style="margin-top:10px;" id="datePickerEndButton" title="Choose end date"></span>
 						</div>
 					</div>
-					<div class="row">
-						<div class="col-xs-12">
+					<div class="ovrd-row row">
+						<div class="ovrd-col-xs-12 col-xs-12 col">
 							@Html.Hidden("ShowExport", Model.ShowExport)
 							@if (Model.ShowExport)
 							{
 								<div>
-									<input class="btn btn-primary pull-left" type="submit" name="viewDataButton" value=@Strings.Export title="Export Excel Time Tracker entries" />
+									<input class="ovrd-btn btn ovrd-btn-primary btn-primary pull-left" type="submit" name="viewDataButton" value=@Strings.Export title="Export Excel Time Tracker entries" />
 								</div>
 							}
 							<div>
-								<input class="btn btn-primary pull-left" type="submit" name="viewDataButton" style="margin-left: 15px;" value=@Strings.Preview title="Preview Excel Time Tracker entries" />
+								<input class="ovrd-btn btn ovrd-btn-primary btn-primary pull-left" type="submit" name="viewDataButton" style="margin-left: 15px;" value=@Strings.Preview title="Preview Excel Time Tracker entries" />
 							</div>
 						</div>
 					</div>
@@ -125,13 +123,13 @@
 		<br>
 	</div>
 
-	<div class="col-xs-12">
-		<div class="panel panel-default">
-			<div class="panel-body" style="padding: 0px">
+	<div class="ovrd-col-xs-12 col-xs-12 col">
+		<div class="ovrd-panel panel ovrd-panel-default panel-default">
+			<div class="ovrd-panel-body panel-body" style="padding: 0px">
 				@if (Model.PreviewMessage == "")
 				{
-					<table class="table table-hover table-condensed">
-						<thead class="panel-heading">
+					<table class="ovrd-table table ovrd-table-hover table-hover ovrd-table-condensed table-condensed">
+						<thead class="ovrd-panel-heading panel-heading">
 							<tr class="double-bottom-border">
 								<th>@Strings.LastName</th>
 								<th>@Strings.FirstName</th>
@@ -141,6 +139,7 @@
 								<th>@Strings.Project</th>
 								<th>@Strings.Customer</th>
 								<th>@Strings.Description</th>
+								<th>@Strings.Status</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -155,6 +154,7 @@
 									<td>@pe.ProjectName</td>
 									<td>@pe.CustomerName</td>
 									<td>@pe.TimeEntry.Description</td>
+									<td>@pe.TimeEntry.TimeEntryStatusName</td>
 								</tr>
 							}
 
@@ -179,7 +179,7 @@
 					</p>
 				}
 			</div>
-			<div id="data-message" class="panel-footer">
+			<div id="data-message" class="ovrd-panel-footer panel-footer">
 				@Model.PreviewMessage
 			</div>
 		</div>

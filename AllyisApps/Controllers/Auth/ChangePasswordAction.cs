@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.ViewModels.Auth;
@@ -21,7 +22,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>The result of this action.</returns>
 		public ActionResult ChangePassword()
 		{
-			return this.View(new ChangePasswordViewModel());
+			return View(new ChangePasswordViewModel());
 		}
 
 		/// <summary>
@@ -31,20 +32,20 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>The async task responsible for this action.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult ChangePassword(ChangePasswordViewModel model)
+		public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
 		{
-			ActionResult result = this.View(model);
+			ActionResult result = View(model);
 			if (ModelState.IsValid)
 			{
 				// model state is valid
 				if (string.Compare(model.NewPassword, model.ConfirmPassword, true) == 0)
 				{
 					// passwords match
-					if (AppService.ChangePassword(model.OldPassword, model.NewPassword))
+					if (await AppService.ChangePassword(model.OldPassword, model.NewPassword))
 					{
 						// successfully changed
 						Notifications.Add(new BootstrapAlert(Resources.Strings.ChangePasswordSuccessMessage, Variety.Success));
-						result = this.RouteUserHome();
+						result = RouteUserHome();
 					}
 					else
 					{

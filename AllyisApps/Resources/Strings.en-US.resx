@@ -1474,4 +1474,10 @@
   <data name="UserChangedRolesInExpenseTracker" xml:space="preserve">
     <value>{0} users changed roles in Expense Tracker.</value>
   </data>
+  <data name="Review" xml:space="preserve">
+    <value>Review</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
 </root>

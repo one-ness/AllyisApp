@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
@@ -18,19 +19,24 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <returns>The action result.</returns>
-		public ActionResult UserSettings(int subscriptionId)
+		public async Task<ActionResult> UserSettings(int subscriptionId)
 		{
-			SetNavData(subscriptionId);
+			await SetNavData(subscriptionId);
 
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.UserSettings, subscriptionId);
 
-			int userId = GetCookieData().UserId;
+			int userId = AppService.UserContext.UserId;
 
-			UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+			UserContext.SubscriptionAndRole subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 
-			string productName = AppService.GetProductNameBySubscriptionId(subInfo.SubscriptionId);
+			var productNameTask = AppService.GetProductNameBySubscriptionId(subInfo.SubscriptionId);
+			var allInfosTask = AppService.GetOrganizationManagementInfo(subInfo.OrganizationId);
 
-			var allInfos = AppService.GetOrganizationManagementInfo(subInfo.OrganizationId);
+			await Task.WhenAll(new Task[] { productNameTask, allInfosTask });
+
+			string productName = productNameTask.Result;
+			var allInfos = allInfosTask.Result;
+
 			IEnumerable<OrganizationUser> userInfos = allInfos.Users.Where(u =>
 				AppService.GetProductRoleForUser("Expense Tracker", u.UserId, subInfo.OrganizationId) == "Manager"
 				|| AppService.GetProductRoleForUser("Expense Tracker", u.UserId, subInfo.OrganizationId) == "SuperUser");

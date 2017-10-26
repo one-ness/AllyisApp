@@ -4,13 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
-using AllyisApps.ViewModels.Auth;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-
+using AllyisApps.Services;
+using AllyisApps.ViewModels.Auth;
 namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
@@ -23,32 +21,32 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		public async Task<ActionResult> OrgMembers(int id)
 		{
-			var model = new OrganizationMembersViewModel2();
-			model.CanAddUser = this.AppService.CheckOrgAction(AppService.OrgAction.AddUserToOrganization, id, false);
-			model.CanDeleteUser = this.AppService.CheckOrgAction(AppService.OrgAction.DeleteUserFromOrganization, id, false);
-			model.CanEditUser = this.AppService.CheckOrgAction(AppService.OrgAction.EditUser, id, false);
-			model.CanManagePermissions = this.AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id, false);
+			var model = new OrganizationMembersViewModel();
+			model.CanAddUser = AppService.CheckOrgAction(AppService.OrgAction.AddUserToOrganization, id, false);
+			model.CanDeleteUser = AppService.CheckOrgAction(AppService.OrgAction.DeleteUserFromOrganization, id, false);
+			model.CanEditUser = AppService.CheckOrgAction(AppService.OrgAction.EditUser, id, false);
+			model.CanManagePermissions = AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id, false);
 			model.OrganizationId = id;
-			var collection = await this.AppService.GetOrganizationUsersAsync(id);
+			model.TabInfo.OrganizationId = id;
+			var collection = await AppService.GetOrganizationUsersAsync(id);
 			foreach (var item in collection)
 			{
-				var data = new OrganizationMembersViewModel2.ViewModelItem();
-				data.Email = item.Email;
-				data.EmployeeId = item.EmployeeId;
-				data.JoinedDate = item.OrganizationUserCreatedUtc;
-				var roles = await this.AppService.GetProductRolesAsync(id, Services.Billing.ProductIdEnum.AllyisApps);
+				var roles = await AppService.GetProductRolesAsync(id, Services.Billing.ProductIdEnum.AllyisApps);
 				var role = roles.Where(x => x.ProductRoleId == item.OrganizationRoleId).FirstOrDefault();
-				data.RoleName = role != null ? role.ProductRoleName : string.Empty;
-				data.UserId = item.UserId;
-				StringBuilder sb = new StringBuilder();
-				sb.Append(item.FirstName);
-				sb.Append(" ");
-				sb.Append(item.LastName);
-				data.Username = sb.ToString();
+				var data = new OrganizationMembersViewModel.ViewModelItem
+				{
+					Email = item.Email,
+					EmployeeId = item.EmployeeId,
+					JoinedDate = item.OrganizationUserCreatedUtc,
+					RoleName = role?.ProductRoleName ?? string.Empty,
+					UserId = item.UserId,
+					Username = $"{item.FirstName} {item.LastName}"
+				};
+
 				model.Users.Add(data);
 			}
 
-			var org = this.AppService.GetOrganization(id);
+			var org = await AppService.GetOrganization(id);
 			model.OrganizationName = org.OrganizationName;
 
 			return View(model);

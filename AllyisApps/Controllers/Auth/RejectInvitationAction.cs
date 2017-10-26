@@ -1,5 +1,5 @@
-﻿using System.Web.Mvc;
-using AllyisApps.Services;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -14,9 +14,9 @@ namespace AllyisApps.Controllers.Auth
 		/// <param name="id">The id of the accepted invitation.</param>
 		/// <returns>The Action result.</returns>
 		[HttpPost]
-		public ActionResult RejectInvitation(int id)
+		public async Task<ActionResult> RejectInvitation(int id)
 		{
-			bool result = AppService.RejectInvitation(id);
+			bool result = await AppService.RejectInvitation(id);
 			if (result)
 			{
 				// Validate that the user does have the requested pending invitation

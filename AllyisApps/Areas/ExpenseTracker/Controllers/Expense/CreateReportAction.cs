@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
@@ -19,7 +20,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="model">The model object.</param>
 		/// <returns>An action result.</returns>
 		[HttpPost]
-		public ActionResult CreateReport(ExpenseCreateModel model)
+		public async Task<ActionResult> CreateReport(ExpenseCreateModel model)
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, model.SubscriptionId);
 
@@ -28,10 +29,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				return RedirectToAction("Create", new { subscriptionId = model.SubscriptionId, reportId = model.Report.ExpenseReportId });
 			}
 
-			var userInfo = GetCookieData();
-			if (userInfo.UserId != model.CurrentUser)
+			if (AppService.UserContext.UserId != model.CurrentUser)
 			{
-				string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.CreateReport.ToString());
+				string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.CreateReport);
 				throw new AccessViolationException(message);
 			}
 
@@ -40,7 +40,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				model.Items = new List<ExpenseItemCreateViewModel>();
 			}
 
-			var subscription = AppService.GetSubscription(model.SubscriptionId);
+			var subscription = await AppService.GetSubscription(model.SubscriptionId);
 			var organizationId = subscription.OrganizationId;
 			ExpenseStatusEnum reportStatus;
 			DateTime? submittedUtc = null;
@@ -68,7 +68,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			};
 
 			report.ExpenseReportId = AppService.CreateExpenseReport(report);
-			UploadItems(model, report);
+			await UploadItems(model, report);
 			UploadAttachments(model, report);
 
 			return RedirectToAction("Index");

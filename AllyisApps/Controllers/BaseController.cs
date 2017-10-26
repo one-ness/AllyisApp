@@ -4,20 +4,19 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
-using System.Threading;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Security;
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Filters;
 using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.Services.Lookup;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Threading;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Security;
 
 namespace AllyisApps.Controllers
 {
@@ -39,7 +38,7 @@ namespace AllyisApps.Controllers
 		{
 			// init the service
 			ServiceSettings settings = new ServiceSettings(GlobalSettings.SqlConnectionString, GlobalSettings.SupportEmail, GlobalSettings.SendGridApiKey);
-			this.AppService = new AppService(settings);
+			AppService = new AppService(settings);
 		}
 
 		/// <summary>
@@ -50,30 +49,8 @@ namespace AllyisApps.Controllers
 			get
 			{
 				const string TempDataKey = "Alerts";
-				this.TempData[TempDataKey] = this.TempData[TempDataKey] ?? new List<BootstrapAlert>();
-				return (ICollection<BootstrapAlert>)this.TempData[TempDataKey];
-			}
-		}
-
-		/// <summary>
-		/// Gets the application root url.
-		/// </summary>
-		public string ApplicationRootUrl
-		{
-			get
-			{
-				var request = HttpContext.Request;
-				StringBuilder sb = new StringBuilder();
-				if (request.Url.IsDefaultPort)
-				{
-					sb.AppendFormat("{0}://{1}", request.Url.Scheme, request.Url.Host);
-				}
-				else
-				{
-					sb.AppendFormat("{0}://{1}:{2}", request.Url.Scheme, request.Url.Host, request.Url.Port);
-				}
-
-				return sb.ToString();
+				TempData[TempDataKey] = TempData[TempDataKey] ?? new List<BootstrapAlert>();
+				return (ICollection<BootstrapAlert>)TempData[TempDataKey];
 			}
 		}
 
@@ -83,73 +60,12 @@ namespace AllyisApps.Controllers
 		protected AppService AppService { get; set; }
 
 		/// <summary>
-		/// Serializes a CookieData.
-		/// </summary>
-		/// <param name="cookie">The CookieData.</param>
-		/// <returns>The serialized string.</returns>
-		public string SerializeCookie(CookieData cookie)
-		{
-			return Serializer.SerilalizeToJson(cookie);
-		}
-
-		/// <summary>
-		/// Deserializes a CookieData.
-		/// </summary>
-		/// <param name="serializedCookie">The serialized CookieData string.</param>
-		/// <returns>The CookieData.</returns>
-		public CookieData DeserializeCookie(string serializedCookie)
-		{
-			return Serializer.DeserializeFromJson<CookieData>(serializedCookie);
-		}
-
-		/// <summary>
 		/// Redirect to user home page or the return url.
 		/// </summary>
 		/// <returns>Redirection to the user home page.</returns>
 		public ActionResult RouteUserHome()
 		{
-			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
-		}
-
-		/// <summary>
-		/// Get user context from cookie.
-		/// </summary>
-		/// <returns>The user cookie data.</returns>
-		public CookieData GetCookieData()
-		{
-			CookieData result = null;
-			HttpCookie cookie = this.Request.Cookies[FormsAuthentication.FormsCookieName];
-			if (cookie != null)
-			{
-				try
-				{
-					if (!string.IsNullOrWhiteSpace(cookie.Value))
-					{
-						//// decrypt and deserialize the UserContext from the cookie data
-						FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
-						result = this.DeserializeCookie(ticket.UserData);
-					}
-				}
-				catch
-				{
-				}
-			}
-
-			return result;
-		}
-
-		/// <summary>
-		/// Sign out.
-		/// </summary>
-		public void SignOut()
-		{
-			FormsAuthentication.SignOut();
-
-			// TODO: check if this action is really required. Sometimes the SignOut call above is not deleting the cookie
-			//// get the cookie, set expire time in the past, and set it in response to delete it
-			HttpCookie cookie = FormsAuthentication.GetAuthCookie(FormsAuthentication.FormsCookieName, false);
-			cookie.Expires = DateTime.UtcNow.AddDays(-5);
-			this.Response.Cookies.Add(cookie);
+			return RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
 		}
 
 		/// <summary>
@@ -161,11 +77,11 @@ namespace AllyisApps.Controllers
 		{
 			if (Url.IsLocalUrl(returnUrl))
 			{
-				return this.Redirect(returnUrl);
+				return Redirect(returnUrl);
 			}
 			else
 			{
-				return this.RouteUserHome();
+				return RouteUserHome();
 			}
 		}
 
@@ -187,25 +103,25 @@ namespace AllyisApps.Controllers
 			if (Request.IsAuthenticated)
 			{
 				// an authenticated request MUST have user id in the cookie.
-				CookieData cookie = this.GetCookieData();
+				CookieData cookie = GetCookieData();
 				if (cookie != null && cookie.UserId > 0)
 				{
-					this.AppService.PopulateUserContext(cookie.UserId);
+					AppService.PopulateUserContext(cookie.UserId);
 				}
 
-				if (this.AppService.UserContext != null)
+				if (AppService.UserContext != null)
 				{
 					// user context obtained. set user's language on the thread.
-					if (string.Compare(cultureName, this.AppService.UserContext.PreferedLanguageId, true) != 0)
+					if (string.Compare(cultureName, AppService.UserContext.PreferedLanguageId, true) != 0)
 					{
 						// change it
-						cultureName = ChangeLanguage(this.AppService.UserContext.PreferedLanguageId);
+						cultureName = ChangeLanguage(AppService.UserContext.PreferedLanguageId);
 					}
 				}
 				else
 				{
 					// User context not found
-					this.SignOut();
+					SignOut();
 					Response.Redirect(FormsAuthentication.LoginUrl);
 					return;
 				}
@@ -233,7 +149,7 @@ namespace AllyisApps.Controllers
 				return string.Empty;
 			}
 
-			Language language = this.AppService.GetLanguage(cultureName);
+			Language language = AppService.GetLanguage(cultureName);
 			if (language != null)
 			{
 				CultureInfo cInfo = CultureInfo.CreateSpecificCulture(language.CultureName);
@@ -243,6 +159,67 @@ namespace AllyisApps.Controllers
 			}
 
 			return cultureName;
+		}
+
+		/// <summary>
+		/// Get user context from cookie.
+		/// </summary>
+		/// <returns>The user cookie data.</returns>
+		private CookieData GetCookieData()
+		{
+			CookieData result = null;
+			HttpCookie cookie = Request.Cookies[FormsAuthentication.FormsCookieName];
+			if (cookie != null)
+			{
+				try
+				{
+					if (!string.IsNullOrWhiteSpace(cookie.Value))
+					{
+						//// decrypt and deserialize the UserContext from the cookie data
+						FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
+						result = DeserializeCookie(ticket.UserData);
+					}
+				}
+				catch
+				{
+				}
+			}
+
+			return result;
+		}
+
+		/// <summary>
+		/// Serializes a CookieData.
+		/// </summary>
+		/// <param name="cookie">The CookieData.</param>
+		/// <returns>The serialized string.</returns>
+		protected string SerializeCookie(CookieData cookie)
+		{
+			return Serializer.SerilalizeToJson(cookie);
+		}
+
+		/// <summary>
+		/// Deserializes a CookieData.
+		/// </summary>
+		/// <param name="serializedCookie">The serialized CookieData string.</param>
+		/// <returns>The CookieData.</returns>
+		private CookieData DeserializeCookie(string serializedCookie)
+		{
+			return Serializer.DeserializeFromJson<CookieData>(serializedCookie);
+		}
+
+		/// <summary>
+		/// Sign out.
+		/// </summary>
+		protected void SignOut()
+		{
+			FormsAuthentication.SignOut();
+
+			// TODO: check if this action is really required. Sometimes the SignOut call above is not deleting the cookie
+			//// get the cookie, set expire time in the past, and set it in response to delete it
+			HttpCookie cookie = FormsAuthentication.GetAuthCookie(FormsAuthentication.FormsCookieName, false);
+			cookie.Expires = DateTime.UtcNow.AddDays(-5);
+			Response.Cookies.Add(cookie);
 		}
 	}
 }

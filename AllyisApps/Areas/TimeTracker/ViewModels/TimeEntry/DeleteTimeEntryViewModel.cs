@@ -4,8 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
 	/// <summary>
@@ -18,7 +16,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// </summary>
 		public DeleteTimeEntryViewModel()
 		{
-			this.ApprovalState = -1;
+			ApprovalState = -1;
 		}
 
 		/// <summary>
@@ -27,19 +25,9 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <param name="timeEntryId">The Time entry to be deleted.</param>
 		public DeleteTimeEntryViewModel(int timeEntryId)
 		{
-			this.TimeEntryId = timeEntryId;
-			this.ApprovalState = -1;
+			TimeEntryId = timeEntryId;
+			ApprovalState = -1;
 		}
-
-		/// <summary>
-		/// Gets or sets the starting date of the date range.
-		/// </summary>
-		public DateTime StartingDate { get; set; }
-
-		/// <summary>
-		/// Gets or sets the ending date of the date range.
-		/// </summary>
-		public DateTime EndingDate { get; set; }
 
 		/// <summary>
 		/// Gets or sets the id of the time entry.

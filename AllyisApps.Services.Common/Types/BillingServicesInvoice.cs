@@ -53,7 +53,7 @@ namespace AllyisApps.Services.Common.Types
 		{
 			get
 			{
-				return this.amountDue;
+				return amountDue;
 			}
 		}
 
@@ -64,7 +64,7 @@ namespace AllyisApps.Services.Common.Types
 		{
 			get
 			{
-				return this.date;
+				return date;
 			}
 		}
 
@@ -75,7 +75,7 @@ namespace AllyisApps.Services.Common.Types
 		{
 			get
 			{
-				return this.id;
+				return id;
 			}
 		}
 
@@ -86,7 +86,7 @@ namespace AllyisApps.Services.Common.Types
 		{
 			get
 			{
-				return this.productName;
+				return productName;
 			}
 		}
 
@@ -97,7 +97,7 @@ namespace AllyisApps.Services.Common.Types
 		{
 			get
 			{
-				return this.service;
+				return service;
 			}
 		}
 

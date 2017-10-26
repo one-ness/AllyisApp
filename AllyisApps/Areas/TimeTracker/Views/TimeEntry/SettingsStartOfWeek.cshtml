@@ -1,6 +1,4 @@
 ﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-@using AllyisApps.Core;
-@using AllyisApps.Services;
 @using AllyisApps.Services.TimeTracker;
 @model SettingsWeekStartViewModel
 
@@ -17,16 +15,16 @@
 @section css {
 	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
 }
-<div class="container row">
-	<div class="col-sm-2 width-control">
+<div class="slim ovrd-row row">
+	<div class="ovrd-col-sm-2 col-sm-2 col width-control">
 		@Html.Partial("_ManageSettingSideBar")
 	</div>
-	<div class="col-md-10">
-		<div class="panel panel-info" style="position: relative;">
-			<div class="panel-heading">
-				<h1 class="panel-title">@Strings.OrgSOW</h1>
+	<div class="ovrd-col-md-10 col-md-10 col">
+		<div class="ovrd-panel panel ovrd-panel-info panel-info" style="position: relative;">
+			<div class="ovrd-panel-heading panel-heading">
+				<h1 class="ovrd-panel-title panel-title">@Strings.OrgSOW</h1>
 			</div>
-			<div class="panel-body" id="SOWSetting">
+			<div class="ovrd-panel-body panel-body" id="SOWSetting">
 				@using (Html.BeginForm(ActionConstants.UpdateStartOfWeek, ControllerConstants.TimeEntry, FormMethod.Post, new { enctype = "multipart/form-data" }))
 			{
 					@Html.AntiForgeryToken();
@@ -40,7 +38,7 @@
 					<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="6" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Saturday ? " checked " : string.Empty)><text>@Strings.Saturday</text><br />
 					<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="0" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Sunday ? " checked " : string.Empty)><text>@Strings.Sunday</text><br />
 					<br />
-					<input type="submit" value=@Strings.Save class="btn btn-primary tt-bottom-right" />
+					<input type="submit" value=@Strings.Save class="ovrd-btn btn ovrd-btn-primary btn-primary tt-bottom-right" />
 			}
 			</div>
 		</div>

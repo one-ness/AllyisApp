@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels;
@@ -26,14 +26,20 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="subscriptionId">The subscription.</param>
 		/// <returns>Presents a page for the creation of a new Customer.</returns>
 		[HttpGet]
-		public ActionResult Create(int subscriptionId)
+		public async Task<ActionResult> Create(int subscriptionId)
 		{
-			var nextCustomerId = AppService.GetNextCustId(subscriptionId);
-			string subscriptionNameToDisplay = AppService.GetSubscriptionName(subscriptionId);
+			var nextCustomerIdTask = AppService.GetNextCustId(subscriptionId);
+			var subscriptionNameToDisplayTask = AppService.GetSubscriptionName(subscriptionId);
+
+			await Task.WhenAll(new Task[] { nextCustomerIdTask, subscriptionNameToDisplayTask });
+
+			var nextCustomerId = nextCustomerIdTask.Result;
+			string subscriptionNameToDisplay = subscriptionNameToDisplayTask.Result;
+
 			int orgID = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-			return this.View(new EditCustomerInfoViewModel
+			return View(new EditCustomerInfoViewModel
 			{
-				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
 				IsCreating = true,
 				CustomerOrgId = nextCustomerId,
 				SubscriptionId = subscriptionId,
@@ -50,11 +56,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Create(EditCustomerInfoViewModel model)
+		public async Task<ActionResult> Create(EditCustomerInfoViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
-				int? customerId = AppService.CreateCustomer(
+				int? customerId = await AppService.CreateCustomer(
 					new Customer()
 					{
 						ContactEmail = model.ContactEmail,
@@ -84,23 +90,23 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					if (customerId == -1)
 					{
 						Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerOrgIdNotUnique, Variety.Danger));
-						return this.View(model);
+						return View(model);
 					}
 
 					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerCreatedNotification, Variety.Success));
 
 					// Redirect to the user details page
-					return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = model.SubscriptionId });
+					return RedirectToAction(ActionConstants.Index, new { subscriptionId = model.SubscriptionId });
 				}
 
 				// No customer value, should only happen because of a permission failure
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 
-				return this.RedirectToAction(ActionConstants.Index);
+				return RedirectToAction(ActionConstants.Index);
 			}
 
 			// Invalid model
-			return this.View(model);
+			return View(model);
 		}
 	}
 }
