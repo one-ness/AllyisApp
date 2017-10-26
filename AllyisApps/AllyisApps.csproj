@@ -429,6 +429,7 @@
     </Compile>
     <Compile Include="Utilities\Helpers.cs" />
     <Compile Include="Utilities\ImportMessageFormatter.cs" />
+    <Compile Include="ViewModels\Auth\ManagePermissionsViewModel.cs" />
     <Compile Include="ViewModels\Auth\OrganizationInvitationsViewModel.cs" />
     <Compile Include="ViewModels\Auth\AddMemberViewModel.cs" />
     <Compile Include="ViewModels\Auth\EditMemberViewModel.cs" />
@@ -439,7 +440,6 @@
     <Compile Include="ViewModels\Auth\ChangePasswordViewModel.cs" />
     <Compile Include="ViewModels\Billing\EditSubscriptionViewModel.cs" />
     <Compile Include="ViewModels\Auth\AccountIndexViewModel.cs" />
-    <Compile Include="ViewModels\Auth\ManagePermissionsViewModel.cs" />
     <Compile Include="ViewModels\Auth\RegisterViewModel.cs" />
     <Compile Include="ViewModels\Auth\EditProfileViewModel.cs" />
     <Compile Include="ViewModels\Auth\ForgotPasswordViewModel.cs" />
@@ -448,8 +448,6 @@
     <Compile Include="ViewModels\Auth\PermissionsManagementViewModel.cs" />
     <Compile Include="ViewModels\Auth\ResetPasswordViewModel.cs" />
     <Compile Include="ViewModels\Auth\EditOrganizationViewModel.cs" />
-    <Compile Include="ViewModels\Billing\SubscriptionDisplayViewModel.cs" />
-    <Compile Include="ViewModels\Billing\SubscriptionRoleSelectionModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\Billing\SkusViewModel.cs" />
     <Compile Include="ViewModels\Billing\SubscribeViewModel.cs" />
@@ -669,7 +667,6 @@
     <Content Include="Views\Account\CreateOrg.cshtml" />
     <Content Include="Views\Account\ConfirmRemoveBillingInformation.cshtml" />
     <Content Include="Views\Account\EditOrg.cshtml" />
-    <Content Include="Views\Account\Permission2.cshtml" />
     <Content Include="Views\Account\EditSubscription.cshtml" />
     <Content Include="Views\Account\Skus.cshtml" />
     <Content Include="Views\Account\EditMember.cshtml" />
