@@ -1,4 +1,5 @@
-﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+﻿@using AllyisApps.Services.TimeTracker
+@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 @model ReviewViewModel
 
 @{
@@ -11,28 +12,47 @@
 }
 
 
-<div class="row" style="padding-bottom: 20px">
-	<div class="col-xs-12">
-		@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "form-inline pull-right", role = "form" }))
-		{
-			<label>Set status for selected entries as: </label>
-			<div class="input-group">
-				@Html.DropDownList("timeEntryStatusId",
-				new SelectList(Model.TimeEntryStatusOptions, "Key", "Value"),
+<div class="row" style="padding-right: 15px; padding-left: 15px;">
+	<div class="panel panel-default pull-left">
+		<div class="panel-body" style="padding:5px;">
+			<div class="pull-left" style="padding-right: 15px;">Legend: </div>
+			<div style="float:left; margin-right:15px;">
+				<i class="fa fa-square color-code-Pending" aria-hidden="true"></i>
+				- Pending
+			</div>
+			<div style="float:left; margin-right:15px;">
+				<i class="fa fa-square color-code-Rejected" aria-hidden="true"></i>
+				- Rejected
+			</div>
+			<div style="float:left; margin-right:15px;">
+				<i class="fa fa-square color-code-Approved" aria-hidden="true"></i>
+				- Approved
+			</div>
+			<div style="padding-right: 10px; float:left; margin-right:15px;">
+				<i class="fa fa-square color-code-PayrollProcessed" aria-hidden="true"></i>
+				- PayrollProcessed
+			</div>
+		</div>
+	</div>
+	@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new {@class = "form-inline pull-right", role = "form"}))
+	{
+		<label>Set status for selected entries as: </label>
+		<div class="input-group">
+			@Html.DropDownList("timeEntryStatusId",
+				new SelectList(Model.TimeEntryStatusOptions.Where(keyVal => keyVal.Key != (int)TimeEntryStatus.PayrollProcessed), "Key", "Value"),
 				new
 				{
 					@class = "form-control selectpicker set-status-select",
-					@data_width = "fit"
+					data_width = "fit"
 				})
-				<span class="input-group-btn">
-					<button id="submit-status" class="btn btn-primary" type="submit" tabindex="-1">Save</button>
-				</span>
-			</div>
-			<input type="hidden" name="timeEntryIdsJSON" class="time-entries-input" value="[]" />
-			@Html.HiddenFor(m => m.StartDate)
-			@Html.HiddenFor(m => m.EndDate)
-		}
-	</div>
+			<span class="input-group-btn">
+				<button id="submit-status" class="btn btn-primary" type="submit" tabindex="-1">Save</button>
+			</span>
+		</div>
+		<input type="hidden" name="timeEntryIdsJSON" class="time-entries-input" value="[]"/>
+		@Html.HiddenFor(m => m.StartDate)
+		@Html.HiddenFor(m => m.EndDate)
+	}
 </div>
 
 <div class="panel panel-default">
@@ -50,10 +70,10 @@
 				new
 				{
 					@class = "selectpicker pull-right filter-status-select",
-					@title = "Filter by status",
-					@multiple = "multiple",
-					@data_selected_text_format = "count > 2",
-					@data_width = "fit"
+					title = "Filter by status",
+					multiple = "multiple",
+					data_selected_text_format = "count > 2",
+					data_width = "fit"
 				})
 			<div class="pull-right dropdown" style="padding-right:15px;">
 				<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -100,7 +120,8 @@
 						},
 						new
 						{
-							@class = "dropdown-item"
+							@class = "dropdown-item",
+							onclick = "return confirm('"+ string.Format(Strings.PayrollProcessConfirm, Model.EndDate.ToShortDateString()) + "');"
 						})
 				</div>
 			</div>
@@ -145,7 +166,7 @@
 				</tr>
 				foreach (var timeEntry in group)
 				{
-					<tr class="child-row hidden color-code-@(timeEntry.TimeEntryStatusName) @(timeEntry.IsLocked ? "greyed-out" : "")" rowId=@group.Key data-time-entry-status-id="@timeEntry.TimeEntryStatusId">
+					<tr class="child-row hidden @(timeEntry.IsLocked ? "greyed-out" : "")" rowId=@group.Key data-time-entry-status-id="@timeEntry.TimeEntryStatusId">
 						<td></td>
 						<td><input type="checkbox" class="check time-entry-check" check-id="@group.Key" data-time-entry-id="@timeEntry.TimeEntryId" @(timeEntry.IsLocked ? "disabled" : "")></td>
 						<td>
@@ -164,7 +185,17 @@
 								<td>-</td>
 							}
 						}
-						<td>@timeEntry.Duration</td>
+						<td>
+							<div class="pull-left">@timeEntry.Duration</div>
+							<div class="pull-right">
+								<div class="status-dots">
+									<i class="fa fa-circle status-dot color-code-Pending  @(timeEntry.TimeEntryStatusId != 0 ? "hidden" : "")" aria-hidden="true"></i>
+									<i class="fa fa-circle status-dot color-code-Rejected @(timeEntry.TimeEntryStatusId != 1 ? "hidden" : "")" aria-hidden="true"></i>
+									<i class="fa fa-circle status-dot color-code-Approved @(timeEntry.TimeEntryStatusId != 2 ? "hidden" : "")" aria-hidden="true"></i>
+									<i class="fa fa-circle status-dot color-code-PayrollProcessed @(timeEntry.TimeEntryStatusId != 3 ? "hidden" : "")" aria-hidden="true"></i>
+								</div>
+							</div>
+						</td>
 					</tr>
 				}
 			}
@@ -179,8 +210,8 @@
 
 <div class="row" style="padding-right: 15px; padding-left: 15px;">
 	<div class="panel panel-default pull-left">
-		<div class="panel-heading" style="background-color:transparent !important; padding:5px 10px;">Legend</div>
 		<div class="panel-body" style="padding:5px;">
+			<div class="pull-left" style="padding-right: 15px;">Legend: </div>
 			<div style="float:left; margin-right:15px;">
 				<i class="fa fa-square color-code-Pending" aria-hidden="true"></i>
 				- Pending
@@ -204,17 +235,17 @@
 		<label>Set status for selected entries as: </label>
 		<div class="input-group">
 			@Html.DropDownList("timeEntryStatusId",
-			new SelectList(Model.TimeEntryStatusOptions, "Key", "Value"),
+				new SelectList(Model.TimeEntryStatusOptions.Where(keyVal => keyVal.Key != (int)TimeEntryStatus.PayrollProcessed), "Key", "Value"),
 			new
 			{
 				@class = "form-control selectpicker set-status-select",
-				@data_width = "fit"
+				data_width = "fit"
 			})
 			<span class="input-group-btn">
 				<button id="submit-status" class="btn btn-primary" type="submit" tabindex="-1">Save</button>
 			</span>
 		</div>
-		<input type="hidden" name="timeEntryIdsJSON" class="time-entries-input" value="[]" />
+		<input type="hidden" name="timeEntryIdsJson" class="time-entries-input" value="[]" />
 		@Html.HiddenFor(m => m.StartDate)
 		@Html.HiddenFor(m => m.EndDate)
 	}
@@ -441,11 +472,11 @@
 				'method': 'get'
 			}).append(jQuery('<input>', {
 				'name': 'startDate',
-				'value': picker.startDate.toISOString().slice(0, 10),
+				'value': picker.startDate.format().slice(0, 10),
 				'type': 'hidden'
 			})).append(jQuery('<input>', {
 				'name': 'endDate',
-				'value': picker.endDate.toISOString().slice(0, 10),
+				'value': picker.endDate.format().slice(0, 10),
 				'type': 'hidden'
 			}));
 			newForm.appendTo(document.body).submit();
