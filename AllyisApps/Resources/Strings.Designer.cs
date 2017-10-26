@@ -511,6 +511,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You cannot update your organization role yourself..
+        /// </summary>
+        public static string CannotSelfUpdateOrgRole {
+            get {
+                return ResourceManager.GetString("CannotSelfUpdateOrgRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You are unable to view this organization..
         /// </summary>
         public static string CannotViewProfileMessage {

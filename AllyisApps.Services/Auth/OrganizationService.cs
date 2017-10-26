@@ -244,9 +244,31 @@ namespace AllyisApps.Services
 		{
 			if (invitationId <= 0) throw new ArgumentException("invitationId");
 
-			var invite = await this.GetInvitationById(invitationId);
+			var invite = await GetInvitationById(invitationId);
 			CheckOrgAction(OrgAction.DeleteInvitation, invite.OrganizationId);
 			return DBHelper.DeleteInvitation(invitationId);
+		}
+
+		/// <summary>
+		/// Removes an invitation.
+		/// </summary>
+		/// <param name="InvitationIds">Invitation Id.</param>
+		/// <param name="orgId">organizaitons Id. </param>>
+		/// <returns>Returns false if permissions fail.</returns>
+		public async Task<bool> RemoveInvitations(int[] InvitationIds, int orgId)
+		{
+			if (InvitationIds[0] <= 0) throw new ArgumentException("invitationId");
+
+			bool worked = true;
+			CheckOrgAction(OrgAction.DeleteInvitation, orgId);
+
+			foreach (var invitationId in InvitationIds)
+			{
+				var invite = await GetInvitationById(invitationId);
+				if (!DBHelper.DeleteInvitation(invitationId)) worked = false;
+			}
+
+			return worked;
 		}
 
 		/// <summary>

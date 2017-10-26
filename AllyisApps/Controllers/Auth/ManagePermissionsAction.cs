@@ -9,13 +9,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using AllyisApps.Core.Alert;
 using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.Auth;
-using Newtonsoft.Json;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -27,20 +25,20 @@ namespace AllyisApps.Controllers.Auth
 		/// <summary>
 		/// Dictionaries of Strings resource used for view Maybe: Move to view Model
 		/// </summary>
-		private Dictionary<int, string> organizationRoles = new Dictionary<int, string>
+		private readonly Dictionary<int, string> organizationRoles = new Dictionary<int, string>
 		{
 		{ (int)OrganizationRoleEnum.Member, Strings.Member },
 		{ (int)OrganizationRoleEnum.Owner, Strings.Owner }
 		};
 
-		private Dictionary<int, string> ttRoles = new Dictionary<int, string>
+		private readonly Dictionary<int, string> ttRoles = new Dictionary<int, string>
 		{
 			{ (int)TimeTrackerRole.User, Strings.User },
 			{ (int)TimeTrackerRole.Manager, Strings.Manager },
 			{ (int)TimeTrackerRole.NotInProduct, Strings.Unassigned }
 		};
 
-		private Dictionary<int, string> etRoles = new Dictionary<int, string>
+		private readonly Dictionary<int, string> etRoles = new Dictionary<int, string>
 	{
 		{ (int)ExpenseTrackerRole.User, Strings.User },
 		{ (int)ExpenseTrackerRole.Manager, Strings.Manager },
@@ -48,21 +46,21 @@ namespace AllyisApps.Controllers.Auth
 		{ (int)ExpenseTrackerRole.NotInProduct, Strings.Unassigned }
 	};
 
-		private Dictionary<string, int> setOrganizationRoles = new Dictionary<string, int>
+		private readonly Dictionary<string, int> setOrganizationRoles = new Dictionary<string, int>
 	{
 		{ Strings.RemoveOrg, -1 },
 		{ Strings.SetMember, (int)OrganizationRoleEnum.Member },
 		{ Strings.SetOwner, (int)OrganizationRoleEnum.Owner }
 	};
 
-		private Dictionary<string, int> setTTRoles = new Dictionary<string, int>
+		private readonly Dictionary<string, int> setTTRoles = new Dictionary<string, int>
 	{
 		{ Strings.RemoveFromSubscription, -1 },
 		{ Strings.SetUser, (int)TimeTrackerRole.User },
 		{ Strings.SetManager, (int)TimeTrackerRole.Manager }
 	};
 
-		private Dictionary<string, int> setETRoles = new Dictionary<string, int>
+		private readonly Dictionary<string, int> setETRoles = new Dictionary<string, int>
 	{
 		{ Strings.RemoveFromSubscription, -1},
 		{ Strings.SetUser, (int)ExpenseTrackerRole.User },
@@ -155,7 +153,7 @@ namespace AllyisApps.Controllers.Auth
 					throw new NotImplementedException("StaffingManager permissions not implmented");
 			}
 
-			List<UserPermssionViewModel> OrgUsers = organizationMembers.Select(orgU => new UserPermssionViewModel
+			List<UserPermssionViewModel> orgUsers = organizationMembers.Select(orgU => new UserPermssionViewModel
 			{
 				CurrentRole = ProductRole.NotInProduct,
 				CurrentRoleName = Strings.Unassigned,
@@ -167,7 +165,7 @@ namespace AllyisApps.Controllers.Auth
 
 			foreach (var subU in subUsers)
 			{
-				var orgUserWithSub = OrgUsers.First(orgU => orgU.UserId == subU.UserId);
+				var orgUserWithSub = orgUsers.First(orgU => orgU.UserId == subU.UserId);
 				orgUserWithSub.CurrentRole = subU.ProductRoleId;
 				orgUserWithSub.CurrentRoleName = roles[subU.ProductRoleId];
 			}
@@ -189,146 +187,11 @@ namespace AllyisApps.Controllers.Auth
 				SubscriptionId = id,
 				RoleHeader = roleHeader,
 				RemoveUserMessage = "Are you sure you want to remove selcted Users from Subscription",
-				Users = OrgUsers
+				Users = orgUsers
 			};
 
 			await Task.Delay(1);
 			return View("PermissionsOrg", model);
-		}
-
-		/// <summary>
-		/// Makes changes to users' permissions in the organization.
-		/// Called from Account/Permission do_it_submit().
-		/// </summary>
-		/// <param name="data">The JSON string of the model of actions and users.</param>
-		/// <returns>A Json object representing the results of the actions.</returns>
-		[HttpPost]
-		public async Task<ActionResult> ManagePermissions(string data)
-		{
-			UserPermissionsAction model = JsonConvert.DeserializeObject<UserPermissionsAction>(data);
-			var modelSelectedUsers = model.SelectedUsers as IList<TargetUser> ?? model.SelectedUsers?.ToList();
-
-			AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, model.OrganizationId);
-
-			if (modelSelectedUsers == null || !modelSelectedUsers.Any())
-			{
-				Notifications.Add(new BootstrapAlert(Strings.NoUsersSelected, Variety.Danger));
-				return Redirect(model.FromUrl);
-			}
-
-			if (model.SelectedAction == null)
-			{
-				Notifications.Add(new BootstrapAlert(Strings.NoActionsSelected, Variety.Danger));
-				return Redirect(model.FromUrl);
-			}
-
-			//If is from ManageOrganizationPage
-			if (model.SubscriptionId == null && model.OrganizationId != 0)
-			{
-				// Changing organization roles
-				if (!Enum.IsDefined(typeof(OrganizationRoleEnum), model.SelectedAction) && model.SelectedAction != -1)
-				{
-					Notifications.Add(new BootstrapAlert(Strings.YouDidNotDefineATargetRole, Variety.Danger));
-					return Redirect(model.FromUrl);
-				}
-
-				if (model.SelectedUsers.Any(tu => tu.UserId == AppService.UserContext.UserId))
-				{
-					Notifications.Add(model.SelectedAction == -1
-						? new BootstrapAlert(Strings.YouAreUnableToRemoveYourself, Variety.Danger)
-						: new BootstrapAlert(Strings.YouAreUnableToChangeYourOwnRole, Variety.Danger));
-
-					model.SelectedUsers = model.SelectedUsers.Where(tu => tu.UserId != AppService.UserContext.UserId);
-					if (!modelSelectedUsers.Any())
-					{
-						return Redirect(model.FromUrl);
-					}
-				}
-
-				if (model.SelectedAction == -1 && model.SubscriptionId == null)
-				{
-					int numberChanged = AppService.DeleteOrganizationUsers(modelSelectedUsers.Select(tu => tu.UserId).ToList(), model.OrganizationId);
-					Notifications.Add(new BootstrapAlert(string.Format(Strings.UsersRemovedFromOrg, numberChanged), Variety.Success));
-				}
-				else
-				{
-					int numberChanged = AppService.UpdateOrganizationUsersRole(modelSelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedAction.Value, model.OrganizationId);
-					Notifications.Add(new BootstrapAlert(string.Format(Strings.UsersChangedRolesInOrg, numberChanged), Variety.Success));
-				}
-			}
-			else if (model.SelectedAction != 0 && model.SubscriptionId != null && model.ProductId != null)
-			{
-				string usersModifiedMessage;
-				string usersAddedMessage;
-				//Varify that roleId is correct
-				switch ((ProductIdEnum)model.ProductId)
-				{
-					case ProductIdEnum.TimeTracker:
-						// Changing time tracker roles
-						usersModifiedMessage = Strings.UsersChangedRolesInTimeTracker;
-						usersAddedMessage = Strings.UsersAddedToTimeTracker;
-
-						if (!Enum.IsDefined(typeof(TimeTrackerRole), model.SelectedAction) && model.SelectedAction.Value != -1)
-						{
-							Notifications.Add(new BootstrapAlert(Strings.YouDidNotDefineATargetRole, Variety.Danger));
-							return Redirect(model.FromUrl);
-						}
-
-						break;
-
-					case ProductIdEnum.ExpenseTracker:
-
-						// Changing expense tracker roles
-						usersModifiedMessage = Strings.UserChangedRolesInExpenseTracker;
-						usersAddedMessage = Strings.UserAddedToExpenseTracker;
-						if (!Enum.IsDefined(typeof(ExpenseTrackerRole), model.SelectedAction.Value) && model.SelectedAction != -1)
-						{
-							Notifications.Add(new BootstrapAlert(Strings.YouDidNotDefineATargetRole, Variety.Danger));
-							return Redirect(model.FromUrl);
-						}
-
-						break;
-					/*
-					case ProductIdEnum.StaffingManager:
-						/*Staffing Manager needs Roles
-						if (!Enum.IsDefined(typeof(StaffingMan), model.SelectedAction.Value) && model.SelectedAction != -1)
-						{
-							Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDidNotDefineATargetRole, Variety.Danger));
-							return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
-						}
-
-						break;
-					*/
-					default:
-						//Should not happen
-						throw new ArgumentOutOfRangeException("Failed to Find product for produtID: " + model.ProductId.Value);
-				}
-
-				if (model.SelectedAction.Value != -1)
-				{
-					// TODO: instead of providing product id, provide subscription id of the subscription to be modified
-					// TODO: split updating user roles and creating new sub users
-					var updatedAndAdded = await AppService.UpdateSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedAction.Value, model.OrganizationId, model.ProductId.Value);
-					if (updatedAndAdded.UsersChanged > 0)
-					{
-						Notifications.Add(new BootstrapAlert(string.Format(usersModifiedMessage, updatedAndAdded.UsersChanged), Variety.Success));
-					}
-
-					if (updatedAndAdded.UsersAddedToSubscription > 0)
-					{
-						Notifications.Add(new BootstrapAlert(string.Format(usersAddedMessage, updatedAndAdded.UsersAddedToSubscription), Variety.Success));
-					}
-				}
-				else
-				{
-					// TODO: instead of providing product id, provide subscription id of the subscription to be modified
-					AppService.DeleteSubscriptionUsers(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.OrganizationId, model.ProductId.Value);
-					Notifications.Add(new BootstrapAlert(Strings.UserDeletedSuccessfully, Variety.Success));
-				}
-			}
-
-			await Task.Delay(1);
-			return Redirect(model.FromUrl);
 		}
 	}
 }

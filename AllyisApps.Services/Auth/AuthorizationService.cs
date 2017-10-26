@@ -36,6 +36,7 @@ namespace AllyisApps.Services
 			EditUserPermission,
 			EditOrganization,
 			EditSubscription,
+			EditSubscriptionUser,
 			EditBilling,
 			AddUserToOrganization, // same as create invitation
 			AddUserToSubscription,

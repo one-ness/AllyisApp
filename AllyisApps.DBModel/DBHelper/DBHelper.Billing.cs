@@ -58,7 +58,7 @@ namespace AllyisApps.DBModel
 		/// <param name="productRoleId">The id of the product role the user will get.</param>
 		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <param name="userId">The User's Id.</param>
-		public void UpdateSubscriptionUserProductRole(int productRoleId, int subscriptionId, int userId)
+		public async Task UpdateSubscriptionUserProductRole(int productRoleId, int subscriptionId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@productRoleId", productRoleId);
@@ -66,7 +66,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@userId", userId);
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				connection.Query("[Billing].[UpdateSubscriptionUserProductRole]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.QueryAsync("[Billing].[UpdateSubscriptionUserProductRole]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 

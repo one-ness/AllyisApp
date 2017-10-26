@@ -61,12 +61,12 @@ namespace AllyisApps.Services
 
 			if (token == null)
 			{
-				throw new ArgumentNullException("token", "billingServicesToken must have a value.");
+				throw new ArgumentNullException(nameof(token), "billingServicesToken must have a value.");
 			}
 
 			if (string.IsNullOrEmpty(billingServicesEmail))
 			{
-				throw new ArgumentNullException("billingServicesEmail", "Email address must have a value.");
+				throw new ArgumentNullException(nameof(billingServicesEmail), "Email address must have a value.");
 			}
 			else if (!Utility.IsValidEmail(billingServicesEmail))
 			{
@@ -109,12 +109,12 @@ namespace AllyisApps.Services
 
 			if (string.IsNullOrEmpty(stripeCustomerId))
 			{
-				throw new ArgumentNullException("stripeCustomerId", "Stripe customer id must have a value.");
+				throw new ArgumentNullException(nameof(stripeCustomerId), "Stripe customer id must have a value.");
 			}
 
 			if (skuId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("skuId", "Sku id cannot be zero or negative");
+				throw new ArgumentOutOfRangeException(nameof(skuId), "Sku id cannot be zero or negative");
 			}
 
 			#endregion Validation
@@ -135,12 +135,12 @@ namespace AllyisApps.Services
 
 			if (token == null)
 			{
-				throw new ArgumentNullException("token", "Billing Services token must not be null.");
+				throw new ArgumentNullException(nameof(token), "Billing Services token must not be null.");
 			}
 
 			if (string.IsNullOrEmpty(billingServicesEmail))
 			{
-				throw new ArgumentNullException("billingServicesEmail", "Email address must have a value.");
+				throw new ArgumentNullException(nameof(billingServicesEmail), "Email address must have a value.");
 			}
 			else if (!Utility.IsValidEmail(billingServicesEmail))
 			{
@@ -164,7 +164,7 @@ namespace AllyisApps.Services
 		{
 			if (skuId.HasValue && skuId.Value <= 0)
 			{
-				throw new ArgumentOutOfRangeException("skuId", "Sku Id cannot be 0 or negative. Use null instead of 0.");
+				throw new ArgumentOutOfRangeException(nameof(skuId), "Sku Id cannot be 0 or negative. Use null instead of 0.");
 			}
 
 			await DBHelper.AddBillingHistory(description, orgId, UserContext.UserId, skuId);
@@ -203,7 +203,7 @@ namespace AllyisApps.Services
 		{
 			if (customerId == null)
 			{
-				throw new ArgumentNullException("customerId", "Billing Services customer id must have a value.");
+				throw new ArgumentNullException(nameof(customerId), "Billing Services customer id must have a value.");
 			}
 
 			await DBHelper.CreateStripeOrganizationCustomer(orgId, UserContext.UserId, customerId.Id, selectedSku, "Adding stripe customer data.");
@@ -225,17 +225,17 @@ namespace AllyisApps.Services
 
 			if (amount < 0)
 			{
-				throw new ArgumentOutOfRangeException("amount", "Price cannot be negative.");
+				throw new ArgumentOutOfRangeException(nameof(amount), "Price cannot be negative.");
 			}
 
 			if (customerId == null)
 			{
-				throw new ArgumentNullException("customerId", "customerId cannot be null.");
+				throw new ArgumentNullException(nameof(customerId), "customerId cannot be null.");
 			}
 
 			if (productId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(productId), "Product Id cannot be 0 or negative.");
 			}
 
 			#endregion Validation
@@ -262,17 +262,17 @@ namespace AllyisApps.Services
 
 			if (string.IsNullOrEmpty(subscriptionId))
 			{
-				throw new ArgumentNullException("subscriptionId", "Subscription id must have a value.");
+				throw new ArgumentNullException(nameof(subscriptionId), "Subscription id must have a value.");
 			}
 
 			if (amount < 0)
 			{
-				throw new ArgumentOutOfRangeException("amount", "Price cannot be negative.");
+				throw new ArgumentOutOfRangeException(nameof(amount), "Price cannot be negative.");
 			}
 
 			if (customerId == null)
 			{
-				throw new ArgumentNullException("customerId", "customerId cannot be null.");
+				throw new ArgumentNullException(nameof(customerId), "customerId cannot be null.");
 			}
 
 			#endregion Validation
@@ -293,53 +293,33 @@ namespace AllyisApps.Services
 		{
 			if (subscriptionId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("subscriptionId", "Subscription Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(subscriptionId), "Subscription Id cannot be 0 or negative.");
 			}
 
 			if (userId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(userId), "User Id cannot be 0 or negative.");
 			}
 
 			DBHelper.DeleteSubscriptionUser(subscriptionId, userId);
 		}
 
 		/// <summary>
-		/// Assigns a new TimeTracker role to the given users for the current organization.
+		/// assigns role in the given subscription, for the given user
 		/// </summary>
-		/// <param name="userIds">List of user Ids.</param>
-		/// <param name="newProductRole">Product role to assign.</param>
-		/// <param name="orgId">The Organization Id.</param>
-		/// <param name="productId">The subscribed Product Id.</param>
-		/// <returns>A tuple containing the number of updated users and the number of added users.</returns>
-		public async Task<UpdateSubscriptionUserRolesResuts> UpdateSubscriptionUserRoles(List<int> userIds, int newProductRole, int orgId, int productId)
+		public async Task UpdateSubscriptionUserRoles(int userId, Dictionary<int, int> roles)
 		{
-			#region Validation
+			// TODO: do this in a transaction
+			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId));
+			if (roles == null || roles.Count <= 0) throw new ArgumentOutOfRangeException(nameof(roles));
 
-			if (!Enum.IsDefined(typeof(TimeTrackerRole), newProductRole) && !Enum.IsDefined(typeof(ExpenseTrackerRole), newProductRole))
+			foreach (var item in roles)
 			{
-				throw new ArgumentOutOfRangeException("newProductRole", "Product role must match a value of the ProductRoleIdEnum enum.");
+				var subId = item.Key;
+				var roleId = item.Value;
+				CheckSubscriptionAction(OrgAction.EditSubscriptionUser, subId, out int orgId);
+				await DBHelper.UpdateSubscriptionUserProductRole(roleId, subId, userId);
 			}
-
-			if (!Enum.IsDefined(typeof(ProductIdEnum), productId))
-			{
-				throw new ArgumentOutOfRangeException("newProductRole", "Product role must match a value of the ProductRoleIdEnum enum.");
-			}
-
-			if (userIds == null || userIds.Count == 0)
-			{
-				throw new ArgumentException("userIds", "No user ids provided.");
-			}
-
-			#endregion Validation
-
-			// TODO: split updating user roles and creating new sub users
-			var UpdatedRows = await DBHelper.UpdateSubscriptionUserRoles(userIds, orgId, newProductRole, productId);
-			return new UpdateSubscriptionUserRolesResuts
-			{
-				UsersChanged = UpdatedRows.Item1,
-				UsersAddedToSubscription = UpdatedRows.Item2
-			};
 		}
 
 		/// <summary>Deletes the given users in the given organization's subscription</summary>
@@ -370,7 +350,7 @@ namespace AllyisApps.Services
 		{
 			if (productId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(productId), "Product Id cannot be 0 or negative.");
 			}
 
 			ProductDBEntity product = DBHelper.GetProductById(productId);
@@ -390,32 +370,33 @@ namespace AllyisApps.Services
 		/// <returns>A SubscriptionDBEntity.</returns>
 		public async Task<Subscription> GetSubscription(int subscriptionId)
 		{
-			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException("subscriptionId");
+			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException(nameof(subscriptionId));
 
-			int orgId = 0;
-			CheckSubscriptionAction(OrgAction.ReadSubscription, subscriptionId, out orgId);
+			CheckSubscriptionAction(OrgAction.ReadSubscription, subscriptionId, out int orgId);
 
 			// get from db
 			var sub = await DBHelper.GetSubscriptionDetailsById(subscriptionId);
 			if (sub == null) throw new InvalidOperationException("subscriptionId");
 
 			// copy to subscription
-			var result = new Subscription();
-			result.ProductAreaUrl = sub.ArealUrl;
-			result.SkuIconUrl = sub.IconUrl;
-			result.IsActive = sub.IsActive;
-			result.NumberOfUsers = sub.NumberOfUsers;
-			result.OrganizationId = sub.OrganizationId;
-			result.ProductDescription = sub.ProductDescription;
-			result.ProductId = (ProductIdEnum)sub.ProductId;
-			result.ProductName = sub.ProductName;
-			result.PromoExpirationDateUtc = sub.PromoExpirationDateUtc;
-			result.SkuDescription = sub.SkuDescription;
-			result.SkuId = (SkuIdEnum)sub.SkuId;
-			result.SkuName = sub.SkuName;
-			result.CreatedUtc = sub.SubscriptionCreatedUtc;
-			result.SubscriptionId = subscriptionId;
-			result.SubscriptionName = sub.SubscriptionName;
+			var result = new Subscription
+			{
+				ProductAreaUrl = sub.ArealUrl,
+				SkuIconUrl = sub.IconUrl,
+				IsActive = sub.IsActive,
+				NumberOfUsers = sub.NumberOfUsers,
+				OrganizationId = sub.OrganizationId,
+				ProductDescription = sub.ProductDescription,
+				ProductId = (ProductIdEnum)sub.ProductId,
+				ProductName = sub.ProductName,
+				PromoExpirationDateUtc = sub.PromoExpirationDateUtc,
+				SkuDescription = sub.SkuDescription,
+				SkuId = (SkuIdEnum)sub.SkuId,
+				SkuName = sub.SkuName,
+				CreatedUtc = sub.SubscriptionCreatedUtc,
+				SubscriptionId = subscriptionId,
+				SubscriptionName = sub.SubscriptionName
+			};
 
 			// return sub
 			return result;
@@ -424,7 +405,7 @@ namespace AllyisApps.Services
 		public List<SubscriptionUser> GetSubscriptionUsers(int subscriptionId)
 		{
 			var subUsers = DBHelper.GetSubscriptionUsersBySubscriptionId(subscriptionId);
-			return subUsers.Select(su => InitializeSubscriptionUser(su)).ToList();
+			return subUsers.Select(InitializeSubscriptionUser).ToList();
 		}
 
 		/// <summary>
@@ -448,7 +429,7 @@ namespace AllyisApps.Services
 		{
 			if (customerId == null)
 			{
-				throw new ArgumentNullException("customerId", "Customer id must have a value.");
+				throw new ArgumentNullException(nameof(customerId), "Customer id must have a value.");
 			}
 
 			return DBHelper.GetSubscriptionPlan(orgId, customerId.Id);
@@ -477,12 +458,12 @@ namespace AllyisApps.Services
 
 			if (string.IsNullOrEmpty(subscriptionId))
 			{
-				throw new ArgumentNullException("subscriptionId", "Subscriptoin id must have a value.");
+				throw new ArgumentNullException(nameof(subscriptionId), "Subscriptoin id must have a value.");
 			}
 
 			if (customerId == null)
 			{
-				throw new ArgumentNullException("customerId", "customerId cannot be null.");
+				throw new ArgumentNullException(nameof(customerId), "customerId cannot be null.");
 			}
 
 			#endregion Validation
@@ -499,14 +480,14 @@ namespace AllyisApps.Services
 		/// </summary>
 		public async Task<int> DeleteSubscription(int subscriptionId)
 		{
-			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException("subscriptionId");
+			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException(nameof(subscriptionId));
 
 			// TODO: after deleting (setting isactive = 0) subscription:
 			/*
 			 * - bill for the last partial month
 			 * - stop future billing
 			 */
-			var sub = await GetSubscription(subscriptionId);
+			Subscription sub = await GetSubscription(subscriptionId);
 			CheckOrgAction(OrgAction.DeleteSubscritpion, sub.OrganizationId);
 			DBHelper.DeleteSubscription(subscriptionId);
 			return sub.OrganizationId;
@@ -522,12 +503,12 @@ namespace AllyisApps.Services
 		{
 			if (orgId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(orgId), "Organization Id cannot be 0 or negative.");
 			}
 
 			if (productId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(productId), "Product Id cannot be 0 or negative.");
 			}
 
 			var results = await DBHelper.GetUsersWithSubscriptionToProductInOrganization(orgId, productId);
@@ -540,7 +521,7 @@ namespace AllyisApps.Services
 		/// <returns>List of SubscriptionDisplayInfos.</returns>
 		public IEnumerable<Subscription> GetSubscriptionsByOrg(int organizationId)
 		{
-			return DBHelper.GetSubscriptionsDisplayByOrg(organizationId).Select(s => InitializeSubscription(s)).ToList();
+			return DBHelper.GetSubscriptionsDisplayByOrg(organizationId).Select(InitializeSubscription).ToList();
 		}
 
 		/// <summary>
@@ -552,7 +533,7 @@ namespace AllyisApps.Services
 		{
 			if (subscriptionId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("subscriptionId", "Subscription Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(subscriptionId), "Subscription Id cannot be 0 or negative.");
 			}
 
 			return DBHelper.GetProductRolesFromSubscription(subscriptionId).Select(s =>
@@ -579,7 +560,7 @@ namespace AllyisApps.Services
 		{
 			if (skuId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("skuId", "Sku Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(skuId), "Sku Id cannot be 0 or negative.");
 			}
 
 			SkuDBEntity sku = DBHelper.GetSkuDetails((int)skuId);
@@ -652,34 +633,30 @@ namespace AllyisApps.Services
 					// yes, already subscribed
 					return;
 				}
-				else
-				{
-					// no, get the product of this subscription
-					var pid = item.ProductId;
-					Product product = null;
-					if (!CacheContainer.ProductsCache.TryGetValue(pid, out product) || !product.IsActive)
-					{
-						// inactive or invalid product
-						throw new InvalidOperationException("You selected an invalid product to subscribe to.");
-					}
 
-					// is it a sku of this product?
-					List<Sku> skus = null;
-					if (CacheContainer.SkusCache.TryGetValue(pid, out skus))
+				// no, get the product of this subscription
+				var pid = item.ProductId;
+				if (!CacheContainer.ProductsCache.TryGetValue(pid, out Product product) || !product.IsActive)
+				{
+					// inactive or invalid product
+					throw new InvalidOperationException("You selected an invalid product to subscribe to.");
+				}
+
+				// is it a sku of this product?
+				if (CacheContainer.SkusCache.TryGetValue(pid, out List<Sku> skus))
+				{
+					var sku = skus.FirstOrDefault(x => x.IsActive && x.SkuId == skuId);
+					if (sku != null)
 					{
-						var sku = skus.Where(x => x.IsActive && x.SkuId == skuId).FirstOrDefault();
-						if (sku != null)
-						{
-							// yes, user is subscribing to another sku of an existing subscription (i.e., product)
-							UpdateSubscriptionSkuAndName(organizationId, item.SubscriptionId, subscriptionName, skuId);
-							return;
-						}
+						// yes, user is subscribing to another sku of an existing subscription (i.e., product)
+						UpdateSubscriptionSkuAndName(organizationId, item.SubscriptionId, subscriptionName, skuId);
+						return;
 					}
 				}
 			}
 
 			// reached here indicates user is subscribing to a new product with a new sku
-			var selectedSku = CacheContainer.AllSkusCache.Where(x => x.IsActive && x.SkuId == skuId).FirstOrDefault();
+			var selectedSku = CacheContainer.AllSkusCache.FirstOrDefault(x => x.IsActive && x.SkuId == skuId);
 			if (selectedSku == null)
 			{
 				// inactive or invalid sku id
@@ -687,8 +664,7 @@ namespace AllyisApps.Services
 			}
 
 			// get product for the sku
-			Product selectedProduct = null;
-			if (!CacheContainer.ProductsCache.TryGetValue(selectedSku.ProductId, out selectedProduct) || !selectedProduct.IsActive)
+			if (!CacheContainer.ProductsCache.TryGetValue(selectedSku.ProductId, out Product selectedProduct) || !selectedProduct.IsActive)
 			{
 				// inactive or invalid product
 				throw new InvalidOperationException("You selected an invalid product to subscribe to.");
@@ -715,7 +691,7 @@ namespace AllyisApps.Services
 					throw new InvalidOperationException("You selected an invalid product to subscribe to.");
 			}
 
-			InitializeSettingsForProduct(selectedSku.ProductId, organizationId);
+			await InitializeSettingsForProduct(selectedSku.ProductId, organizationId);
 
 			// create new subscription
 			await DBHelper.CreateSubscription(organizationId, (int)skuId, subscriptionName, UserContext.UserId, productRoleId);
@@ -723,10 +699,10 @@ namespace AllyisApps.Services
 
 		public async Task UpdateSubscriptionName(int subscriptionId, string subscriptionName)
 		{
-			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException("subscriptionId");
-			if (string.IsNullOrWhiteSpace(subscriptionName)) throw new ArgumentNullException("subscriptionName");
+			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException(nameof(subscriptionId));
+			if (string.IsNullOrWhiteSpace(subscriptionName)) throw new ArgumentNullException(nameof(subscriptionName));
 
-			var sub = await GetSubscription(subscriptionId);
+			Subscription sub = await GetSubscription(subscriptionId);
 			CheckOrgAction(OrgAction.EditSubscription, sub.OrganizationId);
 			DBHelper.UpdateSubscriptionName(subscriptionId, subscriptionName);
 		}
@@ -805,7 +781,7 @@ namespace AllyisApps.Services
 		{
 			if (subscriptionId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("subscriptionId", "Subscription Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(subscriptionId), "Subscription Id cannot be 0 or negative.");
 			}
 
 			return await DBHelper.Unsubscribe(subscriptionId);
@@ -817,16 +793,16 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="productId">Product Id.</param>
 		/// <param name="orgId">.</param>
-		public void InitializeSettingsForProduct(ProductIdEnum productId, int orgId)
+		public async Task InitializeSettingsForProduct(ProductIdEnum productId, int orgId)
 		{
 			if (productId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(productId), "Product Id cannot be 0 or negative.");
 			}
 
 			if (productId == ProductIdEnum.TimeTracker)
 			{
-				DBHelper.InitializeTimeTrackerSettings(orgId);
+				await DBHelper.InitializeTimeTrackerSettings(orgId);
 			}
 
 			if (productId == ProductIdEnum.StaffingManager)
@@ -844,7 +820,7 @@ namespace AllyisApps.Services
 		{
 			if (subscriptionId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("subscriptionId", "Subscription Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(subscriptionId), "Subscription Id cannot be 0 or negative.");
 			}
 
 			return await DBHelper.GetProductAreaBySubscription(subscriptionId);
@@ -856,21 +832,17 @@ namespace AllyisApps.Services
 		/// <returns>List of billing history items.</returns>
 		public async Task<IEnumerable<BillingHistoryItemInfo>> GetBillingHistory(int orgId)
 		{
-			var results = await DBHelper.GetBillingHistoryByOrg(orgId);
-			return results.Select(i =>
+			return (await DBHelper.GetBillingHistoryByOrg(orgId)).Select(i => new BillingHistoryItemInfo
 			{
-				return new BillingHistoryItemInfo
-				{
-					Date = i.Date,
-					Description = i.Description,
-					OrganizationId = i.OrganizationId,
-					ProductId = i.ProductId,
-					ProductName = i.ProductName,
-					SkuId = i.SkuId,
-					SkuName = i.SkuName,
-					UserId = i.UserId,
-					UserName = i.UserName
-				};
+				Date = i.Date,
+				Description = i.Description,
+				OrganizationId = i.OrganizationId,
+				ProductId = i.ProductId,
+				ProductName = i.ProductName,
+				SkuId = i.SkuId,
+				SkuName = i.SkuName,
+				UserId = i.UserId,
+				UserName = i.UserName
 			});
 		}
 
@@ -906,7 +878,7 @@ namespace AllyisApps.Services
 		{
 			if (skuId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("skuId", "SKU Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(skuId), "SKU Id cannot be 0 or negative.");
 			}
 			var spResults = DBHelper.GetProductSubscriptionInfo(orgId, (int)skuId);
 			var product = InitializeProduct(spResults.Item1);
@@ -920,7 +892,7 @@ namespace AllyisApps.Services
 			return new ProductSubscription(
 				product,
 				InitializeSubscription(spResults.Item2),
-				spResults.Item3.Select(sdb => InitializeSkuInfo(sdb)).ToList(),
+				spResults.Item3.Select(InitializeSkuInfo).ToList(),
 				spResults.Item4,
 				spResults.Item5
 			);
