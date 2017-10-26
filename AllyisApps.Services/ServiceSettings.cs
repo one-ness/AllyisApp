@@ -25,7 +25,7 @@ namespace AllyisApps.Services
 
 		public ServiceSettings(string sqlConnectionString, string supportEmail, string sendGridApiKey)
 		{
-			if (string.IsNullOrWhiteSpace(sqlConnectionString)) throw new ArgumentNullException("sqlConnectionString");
+			if (string.IsNullOrWhiteSpace(sqlConnectionString)) throw new ArgumentNullException(nameof(sqlConnectionString));
 			SqlConnectionString = sqlConnectionString;
 			SupportEmail = supportEmail;
 			SendGridApiKey = sendGridApiKey;

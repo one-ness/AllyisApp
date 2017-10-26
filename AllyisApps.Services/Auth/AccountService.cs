@@ -80,7 +80,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		public async Task<bool> AcceptUserInvitation(int invitationId)
 		{
-			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId");
+			if (invitationId <= 0) throw new ArgumentOutOfRangeException(nameof(invitationId));
 
 			Invitation inviteInfo = InitializeInvitationInfo(await DBHelper.GetInvitation(invitationId));
 			var result = DBHelper.AcceptInvitation(invitationId, UserContext.UserId) == 1;
@@ -154,7 +154,7 @@ namespace AllyisApps.Services
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
 			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException("firstName:");
-			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException("lastName");
+			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException(nameof(lastName));
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
 			if (emailConfirmationCode == null) throw new ArgumentException("emailConfirmationCode");
 			var result = 0;
@@ -285,7 +285,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		public async Task<User> GetUserAsync(int userId, int organizationId = 0)
 		{
-			if (userId <= 0) throw new ArgumentOutOfRangeException("userId");
+			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId));
 
 			dynamic sets = await DBHelper.GetUser(userId);
 			User user = this.InitializeUser(sets.User);
@@ -443,9 +443,9 @@ namespace AllyisApps.Services
 		/// </summary>
 		public async Task<UpdateEmployeeIdAndOrgRoleResult> UpdateEmployeeIdAndOrgRole(int orgId, int userId, string employeeId, OrganizationRoleEnum orgRoleId)
 		{
-			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
-			if (userId <= 0) throw new ArgumentOutOfRangeException("userId");
-			if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException("employeeId");
+			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
+			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId));
+			if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException(nameof(employeeId));
 
 			CheckOrgAction(OrgAction.EditUser, orgId);
 
@@ -505,10 +505,10 @@ namespace AllyisApps.Services
 		/// </summary>
 		public async Task<bool> UpdateMember(int userId, int orgId, string employeeId, int roleId, string firstName, string lastName, bool isInvited)
 		{
-			if (userId <= 0) throw new ArgumentOutOfRangeException("userId");
-			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
-			if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException("employeeId");
-			if (roleId <= 0) throw new ArgumentOutOfRangeException("roleId");
+			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId));
+			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
+			if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException(nameof(employeeId));
+			if (roleId <= 0) throw new ArgumentOutOfRangeException(nameof(roleId));
 
 			return await DBHelper.UpdateMember(userId, orgId, employeeId, roleId, firstName, lastName, isInvited) == 1 ? true : false;
 		}
@@ -518,7 +518,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		public void SetLanguage(string cultureName)
 		{
-			if (string.IsNullOrWhiteSpace(cultureName)) throw new ArgumentNullException("cultureName");
+			if (string.IsNullOrWhiteSpace(cultureName)) throw new ArgumentNullException(nameof(cultureName));
 
 			DBHelper.UpdateUserLanguagePreference(UserContext.UserId, cultureName);
 		}
@@ -551,8 +551,8 @@ namespace AllyisApps.Services
 		public async Task<bool> SendPasswordResetMessage(string email, string code, string callbackUrl)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
-			if (string.IsNullOrWhiteSpace(code)) throw new ArgumentNullException("code");
-			if (string.IsNullOrWhiteSpace(callbackUrl)) throw new ArgumentNullException("callbackUrl");
+			if (string.IsNullOrWhiteSpace(code)) throw new ArgumentNullException(nameof(code));
+			if (string.IsNullOrWhiteSpace(callbackUrl)) throw new ArgumentNullException(nameof(callbackUrl));
 
 			bool result = false;
 			int rowsUpdated = DBHelper.UpdateUserPasswordResetCode(email, code);
@@ -573,8 +573,8 @@ namespace AllyisApps.Services
 		/// </summary>
 		public async Task<int> ResetPassword(Guid code, string password)
 		{
-			if (code == null) throw new ArgumentNullException("code");
-			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentNullException("password");
+			if (code == null) throw new ArgumentNullException(nameof(code));
+			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentNullException(nameof(password));
 
 			int result = 0;
 			await Task.Run(() =>
@@ -594,8 +594,8 @@ namespace AllyisApps.Services
 		/// <returns>True for a successful change, false if anything fails.</returns>
 		public async Task<bool> ChangePassword(string oldPassword, string newPassword)
 		{
-			if (string.IsNullOrWhiteSpace(oldPassword)) throw new ArgumentNullException("oldPassword");
-			if (string.IsNullOrWhiteSpace(newPassword)) throw new ArgumentNullException("newPassword");
+			if (string.IsNullOrWhiteSpace(oldPassword)) throw new ArgumentNullException(nameof(oldPassword));
+			if (string.IsNullOrWhiteSpace(newPassword)) throw new ArgumentNullException(nameof(newPassword));
 
 			bool result = false;
 			string passwordHash = DBHelper.GetPasswordHashById(UserContext.UserId);
@@ -618,7 +618,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		public bool ConfirmUserEmail(Guid code)
 		{
-			if (code == null) throw new ArgumentNullException("code");
+			if (code == null) throw new ArgumentNullException(nameof(code));
 			return DBHelper.UpdateEmailConfirmed(code) == 1 ? true : false;
 		}
 
@@ -760,7 +760,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		public async Task<string> GetNextEmployeeId(int organizationId)
 		{
-			if (organizationId <= 0) throw new ArgumentOutOfRangeException("organizationId");
+			if (organizationId <= 0) throw new ArgumentOutOfRangeException(nameof(organizationId));
 
 			string maxId = await DBHelper.GetMaxEmployeeId(organizationId);
 			char[] idchars = maxId.ToCharArray();
@@ -796,7 +796,7 @@ namespace AllyisApps.Services
 		public async Task<List<ProductRole>> GetProductRolesAsync(int orgId, ProductIdEnum pid)
 		{
 			// NOTE: orgid is ignored for now
-			if ((int)pid < 0) throw new ArgumentOutOfRangeException("pid");
+			if ((int)pid < 0) throw new ArgumentOutOfRangeException(nameof(pid));
 
 			var collection = await DBHelper.GetProductRolesAsync(orgId, (int)pid);
 			var result = new List<ProductRole>();
