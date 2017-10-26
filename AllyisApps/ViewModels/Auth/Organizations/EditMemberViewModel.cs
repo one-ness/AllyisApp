@@ -5,7 +5,7 @@ namespace AllyisApps.ViewModels.Auth
 	/// <summary>
 	/// edit member view model
 	/// </summary>
-	public class EditMemberViewModel2 : BaseViewModel
+	public class EditMemberViewModel : BaseViewModel
 	{
 		/// <summary>
 		/// org id
@@ -129,7 +129,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// constructor
 		/// </summary>
-		public EditMemberViewModel2()
+		public EditMemberViewModel()
 		{
 			Roles = new List<RoleItem>();
 		}

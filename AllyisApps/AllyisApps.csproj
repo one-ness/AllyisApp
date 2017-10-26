@@ -358,7 +358,6 @@
     <Compile Include="Controllers\Auth\ConfirmEmailAction.cs" />
     <Compile Include="Controllers\Auth\CreateOrgAction.cs" />
     <Compile Include="Controllers\Auth\EditMemberAction.cs" />
-    <Compile Include="Controllers\Auth\EditMemberAction2.cs" />
     <Compile Include="Controllers\Auth\EditProfileAction.cs" />
     <Compile Include="Controllers\Billing\EditSubscriptionAction.cs" />
     <Compile Include="Controllers\Auth\ForgotPasswordAction.cs" />
@@ -432,13 +431,12 @@
     <Compile Include="Utilities\ImportMessageFormatter.cs" />
     <Compile Include="ViewModels\Auth\Organizations\OrganizationInvitationsViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\AddMemberViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\EditMemberViewModel2.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\EditMemberViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\MembersAndInvitationsTabViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\OrganizationDetailsViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\OrganizationMembersViewModel2.cs" />
+    <Compile Include="ViewModels\Auth\Organizations\OrganizationMembersViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\OrganizationSubscriptionsViewModel.cs" />
     <Compile Include="ViewModels\Auth\User\ChangePasswordViewModel.cs" />
-    <Compile Include="ViewModels\Auth\Organizations\EditMemberViewModel.cs" />
     <Compile Include="ViewModels\Billing\EditSubscriptionViewModel.cs" />
     <Compile Include="ViewModels\Auth\User\AccountIndexViewModel.cs" />
     <Compile Include="ViewModels\Auth\Invitation\InvitationInfoViewModel.cs" />
@@ -450,7 +448,6 @@
     <Compile Include="ViewModels\Billing\ProductRoleViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\PermissionsManagementViewModel.cs" />
     <Compile Include="ViewModels\Auth\User\ResetPasswordViewModel.cs" />
-    <Compile Include="ViewModels\Auth\User\UserInfoViewModel.cs" />
     <Compile Include="ViewModels\Auth\Organizations\EditOrganizationViewModel.cs" />
     <Compile Include="ViewModels\Billing\SubscriptionDisplayViewModel.cs" />
     <Compile Include="ViewModels\Billing\SubscriptionRoleSelectionModel.cs" />

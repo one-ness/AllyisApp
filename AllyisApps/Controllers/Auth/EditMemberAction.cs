@@ -22,11 +22,11 @@ namespace AllyisApps.Controllers.Auth
 		/// <summary>
 		/// GET: /Account/EditMember.
 		/// </summary>
-		public async Task<ActionResult> EditMember2(int id, int userId)
+		public async Task<ActionResult> EditMember(int id, int userId)
 		{
 			User user = await AppService.GetUserAsync(userId); // this call makes sure that both logged in user and userId have at least one common org
 			var org = user.Organizations.Where(x => x.OrganizationId == id).FirstOrDefault();
-			var model = new EditMemberViewModel2();
+			var model = new EditMemberViewModel();
 			model.CanEditMember = this.AppService.CheckOrgAction(AppService.OrgAction.EditUser, id, false);
 			model.Address = user.Address?.Address1;
 			model.City = user.Address?.City;
