@@ -71,5 +71,15 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Gets or sets the dictionary of all time entry statuses, to be used for the view select
 		/// </summary>
 		public Dictionary<int, string> TimeEntryStatusOptions { get; set; }
+
+		/// <summary>
+		/// Gets or sets the nullable lock date for the time entries.  Null means that no time entries are payroll processed.
+		/// </summary>
+		public DateTime? LockDate { get; set; }
+
+		/// <summary>
+		/// Gets or sets the nullable payroll process date for the time entries.  Null means that no time entries are payroll processed.
+		/// </summary>
+		public DateTime? PayrollProcessedDate { get; set; }
 	}
 }
