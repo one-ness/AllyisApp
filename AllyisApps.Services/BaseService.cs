@@ -31,7 +31,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		public BaseService(ServiceSettings settings)
 		{
-			ServiceSettings = settings ?? throw new ArgumentNullException("settings");
+			ServiceSettings = settings ?? throw new ArgumentNullException(nameof(settings));
 			DBHelper = new DBHelper(ServiceSettings.SqlConnectionString);
 		}
 
@@ -40,7 +40,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		public BaseService(ServiceSettings settings, UserContext userContext) : this(settings)
 		{
-			UserContext = userContext ?? throw new ArgumentNullException("userContext");
+			UserContext = userContext ?? throw new ArgumentNullException(nameof(userContext));
 		}
 
 		/// <summary>

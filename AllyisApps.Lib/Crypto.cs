@@ -74,8 +74,8 @@ namespace AllyisApps.Lib
 		/// If Item1 indicates a match, then Item2 may contain the updated hash of the password, which the caller can update in database.</returns>
 		public static PassWordValidationResult ValidateAndUpdate(string password, string correctHash)
 		{
-			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentNullException("password");
-			if (string.IsNullOrWhiteSpace(correctHash)) throw new ArgumentNullException("correctHash");
+			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentNullException(nameof(password));
+			if (string.IsNullOrWhiteSpace(correctHash)) throw new ArgumentNullException(nameof(correctHash));
 
 			bool updateRequired = false;
 			bool result = false;
