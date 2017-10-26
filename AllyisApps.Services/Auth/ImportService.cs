@@ -771,7 +771,7 @@ namespace AllyisApps.Services
 								if (!userSubs.Where(u => u.UserId == userInOrg.UserId).Any())
 								{
 									// No existing subscription for this user, so we create one.
-									DBHelper.UpdateSubscriptionUserProductRole((int)(TimeTrackerRole.User), ttSub.SubscriptionId, userInOrg.UserId);
+									await DBHelper.UpdateSubscriptionUserProductRole((int)(TimeTrackerRole.User), ttSub.SubscriptionId, userInOrg.UserId);
 									userSubs.Add(userInOrg);
 									result.UsersAddedToSubscription += 1;
 									canImportThisEntry = true; // Successfully created.

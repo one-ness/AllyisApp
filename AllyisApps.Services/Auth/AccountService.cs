@@ -439,6 +439,56 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// update the employee id and role of the user in the given organization
+		/// </summary>
+		public async Task<UpdateEmployeeIdAndOrgRoleResult> UpdateEmployeeIdAndOrgRole(int orgId, int userId, string employeeId, OrganizationRoleEnum orgRoleId)
+		{
+			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
+			if (userId <= 0) throw new ArgumentOutOfRangeException("userId");
+			if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException("employeeId");
+
+			this.CheckOrgAction(OrgAction.EditUser, orgId);
+
+			var result = UpdateEmployeeIdAndOrgRoleResult.Success;
+			this.CheckOrgAction(OrgAction.EditUser, orgId);
+			if (userId == this.UserContext.UserId)
+			{
+				// employee is trying to update oneself
+				var org = this.UserContext.OrganizationsAndRoles.Where(x => x.Value.OrganizationId == orgId).FirstOrDefault();
+				if (org.Value.OrganizationRole != orgRoleId)
+				{
+					// employee is trying to change the oneself's role, not allowed
+					result = UpdateEmployeeIdAndOrgRoleResult.CannotSelfUpdateOrgRole;
+				}
+			}
+
+			if (result == UpdateEmployeeIdAndOrgRoleResult.Success)
+			{
+				try
+				{
+					if (await this.DBHelper.UpdateEmployeeIdAndOrgRole(orgId, userId, employeeId, (int)orgRoleId) != 1)
+					{
+						// TODO: how to revert this catastrophic change?
+						throw new InvalidOperationException(string.Format("Error: either organization {0} or user {1} is corrupted.", orgId, userId));
+					}
+				}
+				catch (Exception ex)
+				{
+					if (ex.Message.ToLower().Contains("unique"))
+					{
+						result = UpdateEmployeeIdAndOrgRoleResult.EmployeeIdNotUnique;
+					}
+					else
+					{
+						throw;
+					}
+				}
+			}
+
+			return result;
+		}
+
+		/// <summary>
 		/// Gets the user info from an email address.
 		/// </summary>
 		/// <param name="email">Email address.</param>
