@@ -8,13 +8,13 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Threading.Tasks;
 using AllyisApps.DBModel.Lookup;
 using AllyisApps.DBModel.StaffingManager;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
 using Microsoft.CSharp.RuntimeBinder;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Services
 {
@@ -34,28 +34,28 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="applicant">The applicant object to be added to the db.</param>
 		/// <returns>The id of the created address and applicant</returns>
-		async public Task<int> CreateApplicant(Applicant applicant) => await DBHelper.CreateApplicant(ServiceObjectToDBEntity(applicant));
+		public async Task<int> CreateApplicant(Applicant applicant) => await DBHelper.CreateApplicant(ServiceObjectToDBEntity(applicant));
 
 		/// <summary>
 		/// Adds an application to the DB.
 		/// </summary>
 		/// <param name="application">The application object to be added to the db.</param>
 		/// <returns>The id of the created application</returns>
-		async public Task<int> CreateApplication(Application application) => await DBHelper.CreateApplication(ServiceObjectToDBEntity(application));
+		public async Task<int> CreateApplication(Application application) => await DBHelper.CreateApplication(ServiceObjectToDBEntity(application));
 
 		/// <summary>
 		/// Adds an application document to the DB, which joins to an application.
 		/// </summary>
 		/// <param name="applicationDocument">The application document object to be added to the db.</param>
 		/// <returns>The id of the created application document</returns>
-		async public Task<int> CreateApplicationDocument(ApplicationDocument applicationDocument) => await DBHelper.CreateApplicationDocument(ServiceObjectToDBEntity(applicationDocument));
+		public async Task<int> CreateApplicationDocument(ApplicationDocument applicationDocument) => await DBHelper.CreateApplicationDocument(ServiceObjectToDBEntity(applicationDocument));
 
 		/// <summary>
 		/// Creates a new position.
 		/// </summary>
 		/// <param name="position">The account object to be created. </param>
 		/// <returns>The id of the created position. </returns>
-		async public Task<int> CreatePosition(Position position) => await DBHelper.SetupPosition(ServiceObjectToDBEntity(position));
+		public async Task<int> CreatePosition(Position position) => await DBHelper.SetupPosition(ServiceObjectToDBEntity(position));
 
 		/// <summary>
 		/// Adds an Tag to the DB if there is not already another tag with the same name.
@@ -63,7 +63,7 @@ namespace AllyisApps.Services
 		/// <param name="name">The name of the tag to be added to the db. </param>
 		/// <param name="positionId">The name of the tag to be added to the db. </param>
 		/// <returns>The id of the created Tag or -1 if the tag name is already in use. </returns>
-		async public Task<int> CreateTag(string name, int positionId) => await DBHelper.CreateTag(name, positionId);
+		public async Task<int> CreateTag(string name, int positionId) => await DBHelper.CreateTag(name, positionId);
 
 		/// <summary>
 		/// Adds a PositionTag to the DB when there is already another tag with the same name.
@@ -121,7 +121,7 @@ namespace AllyisApps.Services
 		/// <param name="customer">Customer.</param>
 		/// <param name="subscriptionId">.</param>
 		/// <returns>Customer id.</returns>
-		async public Task<int?> CreateStaffingCustomer(Customer customer, int subscriptionId)
+		public async Task<int?> CreateStaffingCustomer(Customer customer, int subscriptionId)
 		{
 			return await DBHelper.CreateCustomerInfo(GetDBEntitiesFromCustomerInfo(customer));
 		}
@@ -135,7 +135,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId"></param>
 		/// <returns>The list of applicants in organization.</returns>
-		async public Task<List<Applicant>> GetApplicantAddressesByOrgId(int orgId)
+		public async Task<List<Applicant>> GetApplicantAddressesByOrgId(int orgId)
 		{
 			var result = await DBHelper.GetApplicantAddressesBySubscriptionId(orgId);
 			return result.Select(DBApplicantToServiceObject).ToList();
@@ -146,7 +146,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId"></param>
 		/// <returns>The list of applicants in organization.</returns>
-		async public Task<List<Applicant>> GetApplicantsByOrgId(int orgId)
+		public async Task<List<Applicant>> GetApplicantsByOrgId(int orgId)
 		{
 			var result = await DBHelper.GetApplicantsBySubscriptionId(orgId);
 			return result.Select(DBApplicantToServiceObject).ToList();
@@ -157,35 +157,35 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="applicantId">The id of the applicant.</param>
 		/// <returns>One applicant, if present.</returns>
-		async public Task<Applicant> GetApplicantAddressById(int applicantId) => DBApplicantToServiceObject(await DBHelper.GetApplicantAddressById(applicantId));
+		public async Task<Applicant> GetApplicantAddressById(int applicantId) => DBApplicantToServiceObject(await DBHelper.GetApplicantAddressById(applicantId));
 
 		/// <summary>
 		/// Retrieves the applicant with a given id.
 		/// </summary>
 		/// <param name="applicantId">The id of the applicant.</param>
 		/// <returns>One applicant, if present.</returns>
-		async public Task<Applicant> GetApplicantById(int applicantId) => DBApplicantToServiceObject(await DBHelper.GetApplicantById(applicantId));
+		public async Task<Applicant> GetApplicantById(int applicantId) => DBApplicantToServiceObject(await DBHelper.GetApplicantById(applicantId));
 
 		/// <summary>
 		/// Retrieves the application with a given id.
 		/// </summary>
 		/// <param name="applicationId">The id of the application.</param>
 		/// <returns>One application, if present.</returns>
-		async public Task<Application> GetApplicationById(int applicationId) => DBEntityToServiceObject(await DBHelper.GetApplicationById(applicationId));
+		public async Task<Application> GetApplicationById(int applicationId) => DBEntityToServiceObject(await DBHelper.GetApplicationById(applicationId));
 
 		/// <summary>
 		/// Retrieves the application document with a given id.
 		/// </summary>
 		/// <param name="applicationDocumentId">The id of the application document.</param>
 		/// <returns>One application document, if present.</returns>
-		async public Task<ApplicationDocument> GetApplicationDocumentById(int applicationDocumentId) => DBApplicationDocumentsToServiceObject(await DBHelper.GetApplicationDocumentById(applicationDocumentId));
+		public async Task<ApplicationDocument> GetApplicationDocumentById(int applicationDocumentId) => DBApplicationDocumentsToServiceObject(await DBHelper.GetApplicationDocumentById(applicationDocumentId));
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="applicationId"></param>
 		/// <returns></returns>
-		async public Task<Applicant> GetApplicantAddressByApplicationId(int applicationId)
+		public async Task<Applicant> GetApplicantAddressByApplicationId(int applicationId)
 		{
 			var applicantGet = await DBHelper.GetApplicantByApplicationId(applicationId);
 			return DBApplicantToServiceObject(await DBHelper.GetApplicantAddressById(applicantGet.ApplicantId));
@@ -196,7 +196,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="applicationId">The id of the application.</param>
 		/// <returns>The applicant that submitted the given application.</returns>
-		async public Task<Applicant> GetApplicantByApplicationId(int applicationId) => DBApplicantToServiceObject(await DBHelper.GetApplicantByApplicationId(applicationId));
+		public async Task<Applicant> GetApplicantByApplicationId(int applicationId) => DBApplicantToServiceObject(await DBHelper.GetApplicantByApplicationId(applicationId));
 
 		/// <summary>
 		/// Retrieves all applications **and associated application information** for a given position.
@@ -208,7 +208,7 @@ namespace AllyisApps.Services
 		///  - Applicant info
 		///  - Application document info
 		/// </returns>
-		async public Task<List<Application>> GetApplicationsByPositionId(int positionId)
+		public async Task<List<Application>> GetApplicationsByPositionId(int positionId)
 		{
 			var result = await DBHelper.GetApplicationsByPositionId(positionId);
 			return result.Select(DBApplicationToServiceObject).ToList();
@@ -219,7 +219,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="applicantId">The id of the applicant.</param>
 		/// <returns>All applications that have been submitted by the given applicant.</returns>
-		async public Task<List<Application>> GetApplicationsByApplicantId(int applicantId)
+		public async Task<List<Application>> GetApplicationsByApplicantId(int applicantId)
 		{
 			var result = await DBHelper.GetApplicationsByApplicantId(applicantId);
 			return result.Select(DBApplicationToServiceObject).ToList();
@@ -230,7 +230,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="applicationId">The id of the application, containing multiple application documents.</param>
 		/// <returns>All application documents attached to the given application.</returns>
-		async public Task<List<ApplicationDocument>> GetApplicationDocumentsByApplicationId(int applicationId)
+		public async Task<List<ApplicationDocument>> GetApplicationDocumentsByApplicationId(int applicationId)
 		{
 			var result = await DBHelper.GetApplicationDocumentsByApplicationId(applicationId);
 			return result.Select(DBApplicationDocumentsToServiceObject).ToList();
@@ -241,28 +241,28 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="position"></param>
 		/// <returns></returns>
-		async public Task<List<Application>> GetFullApplicationInfoByPositionId(int position) => SetupFullApplicationInfo(await DBHelper.GetFullApplicationInfoByPositionId(position));
+		public async Task<List<Application>> GetFullApplicationInfoByPositionId(int position) => SetupFullApplicationInfo(await DBHelper.GetFullApplicationInfoByPositionId(position));
 
 		/// <summary>
 		/// Get Position method that pulls a position from the DB.
 		/// </summary>
 		/// <param name="positionId">ID of position to be pulled.</param>
 		/// <returns>returns the service layer position object.</returns>
-		async public Task<Position> GetPosition(int positionId) => GetPositionToPositionServiceObject(await DBHelper.GetPositionById(positionId));
+		public async Task<Position> GetPosition(int positionId) => GetPositionToPositionServiceObject(await DBHelper.GetPositionById(positionId));
 
 		/// <summary>
 		/// Get Positions by Org ID method to pull a list of Service Layer positions objects based on their org ID.
 		/// </summary>
 		/// <param name="organizationId">the tagert organizations ID number. </param>
 		/// <returns>A list of service layer Position Objects. </returns>
-		async public Task<List<Position>> GetPositionsByOrganizationId(int organizationId) => DBPositionsAndTagsToList(await DBHelper.GetPositionsByOrganizationId(organizationId));
+		public async Task<List<Position>> GetPositionsByOrganizationId(int organizationId) => DBPositionsAndTagsToList(await DBHelper.GetPositionsByOrganizationId(organizationId));
 
 		/// <summary>
 		/// Get Tags by a position Id method; pulls a list of all of the positions tags as service layer Tag Objects.
 		/// </summary>
 		/// <param name="positionId"> the position whose tags are to be pulled. </param>
 		/// <returns>A list of the positions tags as service layer Tag objects</returns>
-		async public Task<List<Tag>> GetTagsByPositionId(int positionId)
+		public async Task<List<Tag>> GetTagsByPositionId(int positionId)
 		{
 			var result = await DBHelper.GetTagsByPositionId(positionId);
 			return result.Select(DBEntityToServiceObject).ToList();
@@ -272,7 +272,7 @@ namespace AllyisApps.Services
 		/// Gets a list of ALL current tags.
 		/// </summary>
 		/// <returns>returns a list of all current tags. </returns>
-		async public Task<List<Tag>> GetTags()
+		public async Task<List<Tag>> GetTags()
 		{
 			var result = await DBHelper.GetTags();
 			return result.Select(DBEntityToServiceObject).ToList();
@@ -283,7 +283,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId"></param>
 		/// <returns></returns>
-		async public Task<List<int>> GetStaffingDefaultStatus(int orgId) => await DBHelper.GetStaffingDefaultStatus(orgId);
+		public async Task<List<int>> GetStaffingDefaultStatus(int orgId) => await DBHelper.GetStaffingDefaultStatus(orgId);
 
 		#endregion GetMethods
 
@@ -294,28 +294,28 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="applicant">The applicant object to be updated.</param>
 		/// <returns>The number of rows updated.</returns>
-		async public Task<int> UpdateApplicant(Applicant applicant) => await DBHelper.UpdateApplicant(ServiceObjectToDBEntity(applicant));
+		public async Task<int> UpdateApplicant(Applicant applicant) => await DBHelper.UpdateApplicant(ServiceObjectToDBEntity(applicant));
 
 		/// <summary>
 		/// Updates the given application.
 		/// </summary>
 		/// <param name="application">The application object to be updated.</param>
 		/// <returns>The number of rows updated.</returns>
-		async public Task<int> UpdateApplication(Application application) => await DBHelper.UpdateApplication(ServiceObjectToDBEntity(application));
+		public async Task<int> UpdateApplication(Application application) => await DBHelper.UpdateApplication(ServiceObjectToDBEntity(application));
 
 		/// <summary>
 		/// Updates the given application document.
 		/// </summary>
 		/// <param name="applicationDocument">The application document object to be updated.</param>
 		/// <returns>The number of rows updated.</returns>
-		async public Task<int> UpdateApplicationDocument(ApplicationDocument applicationDocument) => await DBHelper.UpdateApplicationDocument(ServiceObjectToDBEntity(applicationDocument));
+		public async Task<int> UpdateApplicationDocument(ApplicationDocument applicationDocument) => await DBHelper.UpdateApplicationDocument(ServiceObjectToDBEntity(applicationDocument));
 
 		/// <summary>
 		/// Updates the position with the given id.
 		/// </summary>
 		/// <param name="position">The service layer Position object to be passed to the DB and updated. </param>
 		/// <returns>Returns the number of rows updated.</returns>
-		async public Task<int> UpdatePosition(Position position) => await DBHelper.UpdatePosition(ServiceObjectToDBEntity(position));
+		public async Task<int> UpdatePosition(Position position) => await DBHelper.UpdatePosition(ServiceObjectToDBEntity(position));
 
 		/// <summary>
 		/// update default status
@@ -332,7 +332,7 @@ namespace AllyisApps.Services
 		/// Deletes an applicant from the database
 		/// </summary>
 		/// <param name="applicantId">The applicant to be deleted</param>
-		async public void DeleteApplicant(int applicantId)
+		public async void DeleteApplicant(int applicantId)
 		{
 			DBHelper.DeleteApplicant(applicantId);
 			await Task.Yield();
@@ -342,7 +342,7 @@ namespace AllyisApps.Services
 		/// Deletes an application from the database
 		/// </summary>
 		/// <param name="applicationId">The applicant to be deleted</param>
-		async public void DeleteApplication(int applicationId)
+		public async void DeleteApplication(int applicationId)
 		{
 			DBHelper.DeleteApplication(applicationId);
 			await Task.Yield();
@@ -352,7 +352,7 @@ namespace AllyisApps.Services
 		/// Deletes an application document from the database
 		/// </summary>
 		/// <param name="applicationDocumentId">The applicant to be deleted</param>
-		async public void DeleteApplicationDocument(int applicationDocumentId)
+		public async void DeleteApplicationDocument(int applicationDocumentId)
 		{
 			DBHelper.DeleteApplicationDocument(applicationDocumentId);
 			await Task.Yield();
@@ -362,7 +362,7 @@ namespace AllyisApps.Services
 		/// Deletes a tag from the database.
 		/// </summary>
 		/// <param name="tagId">the id of the Tag to be removed from the db. </param>
-		async public void DeleteTag(int tagId)
+		public async void DeleteTag(int tagId)
 		{
 			DBHelper.DeleteTag(tagId);
 			await Task.Yield();
@@ -373,7 +373,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="tagId">tag id of the tag to be removed. </param>
 		/// <param name="positionId">the position id that no longer has the tag. </param>
-		async public void DeletePositionTag(int tagId, int positionId)
+		public async void DeletePositionTag(int tagId, int positionId)
 		{
 			DBHelper.DeletePositionTag(tagId, positionId);
 			await Task.Yield();
@@ -383,8 +383,8 @@ namespace AllyisApps.Services
 		/// Removes a Position from the Database.
 		/// </summary>
 		/// <param name="positionId">ID of the Position to be removed from the DB. </param>
-		async public void DeletePosition(int positionId)
-		{  
+		public async void DeletePosition(int positionId)
+		{
 			DBHelper.DeletePosition(positionId);
 			await Task.Yield();
 		}
@@ -393,7 +393,7 @@ namespace AllyisApps.Services
 		/// delete a specific employment type
 		/// </summary>
 		/// <param name="employmentTypeId"></param>
-		async public void DeleteEmploymentType(int employmentTypeId)
+		public async void DeleteEmploymentType(int employmentTypeId)
 		{
 			DBHelper.DeleteEmploymentType(employmentTypeId);
 			await Task.Yield();
@@ -403,7 +403,7 @@ namespace AllyisApps.Services
 		/// delete a specific position level
 		/// </summary>
 		/// <param name="positionLevelId"></param>
-		async public void DeletePositionLevel(int positionLevelId)
+		public async void DeletePositionLevel(int positionLevelId)
 		{
 			DBHelper.DeletePositionLevel(positionLevelId);
 			await Task.Yield();
@@ -413,7 +413,7 @@ namespace AllyisApps.Services
 		/// delete a specific position status
 		/// </summary>
 		/// <param name="positionStatusId"></param>
-		async public void DeletePositionStatus(int positionStatusId)
+		public async void DeletePositionStatus(int positionStatusId)
 		{
 			DBHelper.DeletePositionStatus(positionStatusId);
 			await Task.Yield();

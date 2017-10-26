@@ -7,13 +7,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -29,9 +29,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="userId"> The payclass Id.</param>
 		/// <returns>The merge pay class view.</returns>
 		[HttpGet]
-		async public Task<ActionResult> MergePayClass(int subscriptionId, int userId)
+		public async Task<ActionResult> MergePayClass(int subscriptionId, int userId)
 		{
-			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
+			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			var allPayClasses = await AppService.GetPayClassesBySubscriptionId(subscriptionId);
 			var destPayClasses = allPayClasses.Where(pc => pc.PayClassId != userId);
 			string sourcePayClassName = allPayClasses.Where(pc => pc.PayClassId == userId).ElementAt(0).PayClassName;
@@ -40,11 +40,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			if (sourcePayClassName == "Regular" || sourcePayClassName == "Overtime" || sourcePayClassName == "Holiday" || sourcePayClassName == "Paid Time Off" || sourcePayClassName == "Unpaid Time Off")
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.CannotMergePayClass, Variety.Warning));
-				return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId });
+				return RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId });
 			}
 
 			MergePayClassViewModel model = ConstructMergePayClassViewModel(userId, sourcePayClassName, subscriptionId, destPayClasses);
-			return this.View(ViewConstants.MergePayClass, model);
+			return View(ViewConstants.MergePayClass, model);
 		}
 
 		/// <summary>
@@ -76,7 +76,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[CLSCompliant(false)]
-		async public Task<ActionResult> MergePayClass(MergePayClassViewModel model, int destPayClass)
+		public async Task<ActionResult> MergePayClass(MergePayClassViewModel model, int destPayClass)
 		{
 			// change all of the entries with old payclass to destPayClass and delete the old payclass
 			if (await AppService.DeletePayClass(model.SourcePayClassId, AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId, model.SubscriptionId, destPayClass))
@@ -89,7 +89,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
 
-			return this.RedirectToAction(ActionConstants.SettingsPayClass, new { subscriptionId = model.SubscriptionId });
+			return RedirectToAction(ActionConstants.SettingsPayClass, new { subscriptionId = model.SubscriptionId });
 		}
 	}
 }

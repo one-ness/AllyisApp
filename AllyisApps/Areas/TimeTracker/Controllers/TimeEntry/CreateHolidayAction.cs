@@ -6,6 +6,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -14,7 +15,6 @@ using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -28,20 +28,20 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId"></param>
 		/// <returns></returns>
-		async public Task<ActionResult> SettingsHoliday(int subscriptionId)
+		public async Task<ActionResult> SettingsHoliday(int subscriptionId)
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
-			int organizaionID = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			int organizaionID = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			var infos = AppService.GetAllSettings(organizaionID);
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			string subName = await AppService.GetSubscriptionName(subscriptionId);
 			var infoOrg = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infoOrg.Item1.StartOfWeek));
 			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
 			Setting settings = infos.Item1;
 			DateTime formatDateTime = DateTime.Now;
-			return this.View(new SettingsViewModel()
+			return View(new SettingsViewModel()
 			{
 				Settings = new SettingsViewModel.SettingsInfoViewModel()
 				{
@@ -68,7 +68,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}),
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subName,
-				UserId = this.AppService.UserContext.UserId
+				UserId = AppService.UserContext.UserId
 			});
 		}
 
@@ -79,7 +79,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="newHolidayDate">The date of the holiday.</param>
 		/// <param name="subscriptionId">The Id of the subscription.</param>
 		/// <returns>Redirects to the settings view.</returns>
-		async public Task<ActionResult> CreateHoliday(string newHolidayName, string newHolidayDate, int subscriptionId)
+		public async Task<ActionResult> CreateHoliday(string newHolidayName, string newHolidayDate, int subscriptionId)
 		{
 			bool isValid = true;
 			if (string.IsNullOrWhiteSpace(newHolidayName))
@@ -109,7 +109,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			return this.RedirectToAction(ActionConstants.SettingsHoliday, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId }); // Same destination regardless of creation success
+			return RedirectToAction(ActionConstants.SettingsHoliday, new { subscriptionId = subscriptionId, id = AppService.UserContext.UserId }); // Same destination regardless of creation success
 		}
 	}
 }

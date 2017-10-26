@@ -17,7 +17,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="reportId">The report id.</param>
 		/// <param name="fileName">The file name.</param>
 		/// <returns>Returns the selected file.</returns>
-		async public Task<ActionResult> Download(int reportId, string fileName)
+		public async Task<ActionResult> Download(int reportId, string fileName)
 		{
 			MemoryStream stream = new MemoryStream();
 			string contentType = await AzureFiles.DownloadReportAttachment(reportId, fileName, stream);

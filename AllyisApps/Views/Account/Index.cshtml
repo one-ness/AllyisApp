@@ -1,4 +1,4 @@
-﻿@model AllyisApps.ViewModels.Auth.AccountIndexViewModel
+﻿@model AccountIndexViewModel
 @{
 	DisplayHints.ShowBreadcrumbs = false;
 	DisplayHints.PageBodyId = "paneled-index";
@@ -8,7 +8,6 @@
 
 <div class="row">
 	<div class="col-md-8 col-md-push-2">
-
 		<div class="row">
 			<div class="col-xs-12">
 				<h1 class="pull-left" style="margin-bottom:5px; margin-top:0px;">@Strings.MyAccount</h1>
@@ -191,7 +190,7 @@
 									}
 									else
 									{
-										foreach (var sub in org.Subscriptions)
+										foreach (AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel sub in org.Subscriptions)
 										{
 											<div class="square-box">
 												<a href="@sub.ProductGoToUrl" style="text-decoration: none">

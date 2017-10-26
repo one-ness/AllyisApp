@@ -19,14 +19,14 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <returns>Returns an action result.</returns>
-		async public Task<ActionResult> Pending(int subscriptionId)
+		public async Task<ActionResult> Pending(int subscriptionId)
 		{
 			await SetNavData(subscriptionId);
 
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Pending, subscriptionId);
 			var results = await AppService.GetSubscription(subscriptionId);
 			var orgId = results.OrganizationId;
-			int userId = this.AppService.UserContext.UserId;
+			int userId = AppService.UserContext.UserId;
 			IEnumerable<ExpenseReport> reports = await AppService.GetExpenseReportByOrgId(orgId);
 			IEnumerable<ExpenseReport> pending = reports.ToList().Where(r => r.ReportStatus == (int)ExpenseStatusEnum.Pending);
 			ExpensePendingModel model = await InitializeViewModel(subscriptionId, userId, pending);
@@ -42,13 +42,13 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="userId">The user id.</param>
 		/// <param name="reports">A list of expense reports.</param>
 		/// <returns>A Expense Pending model.</returns>
-		async public Task<ExpensePendingModel> InitializeViewModel(int subId, int userId, IEnumerable<ExpenseReport> reports)
+		public async Task<ExpensePendingModel> InitializeViewModel(int subId, int userId, IEnumerable<ExpenseReport> reports)
 		{
 			List<ExpenseItemViewModel> reportModels = new List<ExpenseItemViewModel>();
 			foreach (ExpenseReport report in reports)
 			{
 				var expItemsTask = AppService.GetExpenseItemsByReportId(report.ExpenseReportId);
-				var userTask = AppService.GetUser(report.SubmittedById);
+				var userTask = AppService.GetUserAsync(report.SubmittedById);
 
 				await Task.WhenAll(new Task[] { expItemsTask, userTask });
 

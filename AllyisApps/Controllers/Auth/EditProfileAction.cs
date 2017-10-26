@@ -22,11 +22,11 @@ namespace AllyisApps.Controllers.Auth
 		/// GET: /Account/EditProfile.
 		/// </summary>
 		/// <returns>Edit profile view.</returns>
-		async public Task<ActionResult> EditProfile()
+		public async Task<ActionResult> EditProfile()
 		{
 			var model = new EditProfileViewModel();
-			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
-			var user = await this.AppService.GetCurrentUser();
+			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService);
+			var user = await AppService.GetCurrentUserAsync();
 			model.Address = user.Address?.Address1;
 			model.AddressId = user.Address?.AddressId;
 			model.City = user.Address?.City;
@@ -38,9 +38,9 @@ namespace AllyisApps.Controllers.Auth
 			model.PostalCode = user.Address?.PostalCode;
 			model.SelectedCountryCode = user.Address?.CountryCode;
 			model.SelectedStateId = user.Address?.StateId;
-			model.LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService, model.SelectedCountryCode);
+			model.LocalizedStates = ModelHelper.GetLocalizedStates(AppService, model.SelectedCountryCode);
 
-			return this.View(model);
+			return View(model);
 		}
 
 		/// <summary>
@@ -50,18 +50,18 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>Tje Edit profile view.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> EditProfile(EditProfileViewModel model)
+		public async Task<ActionResult> EditProfile(EditProfileViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
-				await this.AppService.UpdateCurrentUserProfile(model.DateOfBirth, model.FirstName, model.LastName, model.PhoneNumber, model.AddressId, model.Address, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode);
+				await AppService.UpdateCurrentUserProfile(model.DateOfBirth, model.FirstName, model.LastName, model.PhoneNumber, model.AddressId, model.Address, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode);
 				Notifications.Add(new BootstrapAlert(Resources.Strings.UpdateProfileSuccessMessage, Variety.Success));
-				return this.RouteUserHome();
+				return RouteUserHome();
 			}
 
 			// model error
-			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
-			model.LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService, model.SelectedCountryCode);
+			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService);
+			model.LocalizedStates = ModelHelper.GetLocalizedStates(AppService, model.SelectedCountryCode);
 
 			return View(model);
 		}

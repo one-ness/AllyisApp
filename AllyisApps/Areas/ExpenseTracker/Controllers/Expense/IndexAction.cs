@@ -21,15 +21,15 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <returns>The action result.</returns>
-		async public Task<ActionResult> Index(int subscriptionId)
+		public async Task<ActionResult> Index(int subscriptionId)
 		{
 			await SetNavData(subscriptionId);
 
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, subscriptionId);
 
-			int userId = this.AppService.UserContext.UserId;
+			int userId = AppService.UserContext.UserId;
 
-			UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+			UserContext.SubscriptionAndRole subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			var results = await AppService.GetExpenseReportBySubmittedId(userId);
 			var items = results.Select(x => x).Where(y => y.OrganizationId == subInfo.OrganizationId);
 
@@ -45,14 +45,14 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="endDate">The end date.</param>
 		/// <param name="expenses">The expenses.</param>
 		/// <returns>Returns the view model.</returns>
-		async public Task<ExpenseIndexViewModel> InitializeViewModel(int subId, int userId, DateTime startDate, DateTime endDate, IEnumerable<ExpenseReport> expenses)
+		public async Task<ExpenseIndexViewModel> InitializeViewModel(int subId, int userId, DateTime startDate, DateTime endDate, IEnumerable<ExpenseReport> expenses)
 		{
 			List<ExpenseItemViewModel> items = new List<ExpenseItemViewModel>();
 
 			foreach (var item in expenses)
 			{
 				var expItemsTask = AppService.GetExpenseItemsByReportId(item.ExpenseReportId);
-				var userTask = AppService.GetUser(item.SubmittedById);
+				var userTask = AppService.GetUserAsync(item.SubmittedById);
 
 				await Task.WhenAll(new Task[] { expItemsTask, userTask });
 

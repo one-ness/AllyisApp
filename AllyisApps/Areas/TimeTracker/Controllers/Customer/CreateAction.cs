@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -13,7 +14,6 @@ using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.TimeTracker.Customer;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -28,19 +28,19 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subscriptionId">The subscription.</param>
 		/// <returns>Presents a page for the creation of a new Customer.</returns>
 		[HttpGet]
-		async public Task<ActionResult> Create(int subscriptionId)
+		public async Task<ActionResult> Create(int subscriptionId)
 		{
 			if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
 			{
-				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
+				AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
 			}
-			int orgId = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			int orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 
 			var NextCustomerId = await AppService.GetNextCustId(subscriptionId);
 			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
-			return this.View(new EditCustomerInfoViewModel
+			return View(new EditCustomerInfoViewModel
 			{
-				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
 				IsCreating = true,
 				CustomerOrgId = NextCustomerId,
 				SubscriptionId = subscriptionId,
@@ -57,7 +57,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> Create(EditCustomerInfoViewModel model)
+		public async Task<ActionResult> Create(EditCustomerInfoViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
@@ -91,23 +91,23 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					if (customerId == -1)
 					{
 						Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerOrgIdNotUnique, Variety.Danger));
-						return this.View(model);
+						return View(model);
 					}
 
 					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerCreatedNotification, Variety.Success));
 
 					// Redirect to the user details page
-					return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = model.SubscriptionId });
+					return RedirectToAction(ActionConstants.Index, new { subscriptionId = model.SubscriptionId });
 				}
 
 				// No customer value, should only happen because of a permission failure
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 
-				return this.RedirectToAction(ActionConstants.Index);
+				return RedirectToAction(ActionConstants.Index);
 			}
 
 			// Invalid model
-			return this.View(model);
+			return View(model);
 		}
 	}
 }

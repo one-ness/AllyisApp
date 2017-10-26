@@ -20,7 +20,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="model">The model.</param>
 		/// <returns> A redirect to index view.</returns>
 		[HttpPost]
-		async public Task<ActionResult> UpdateReport(ExpenseCreateModel model)
+		public async Task<ActionResult> UpdateReport(ExpenseCreateModel model)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -30,11 +30,11 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			var oldReport = await AppService.GetExpenseReport(model.Report.ExpenseReportId);
 			if (model.Report.ExpenseReportId != -1)
 			{
-				if (oldReport.SubmittedById != this.AppService.UserContext.UserId
+				if (oldReport.SubmittedById != AppService.UserContext.UserId
 					|| ((ExpenseStatusEnum)oldReport.ReportStatus != ExpenseStatusEnum.Draft
 					&& (ExpenseStatusEnum)oldReport.ReportStatus != ExpenseStatusEnum.Rejected))
 				{
-					string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.UpdateReport.ToString());
+					string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.UpdateReport);
 					throw new AccessViolationException(message);
 				}
 

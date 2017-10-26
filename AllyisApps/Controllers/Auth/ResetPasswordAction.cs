@@ -28,7 +28,7 @@ namespace AllyisApps.Controllers.Auth
 		{
 			var model = new ResetPasswordViewModel();
 			model.Code = id;
-			return this.View(model);
+			return View(model);
 		}
 
 		/// <summary>
@@ -46,17 +46,17 @@ namespace AllyisApps.Controllers.Auth
 				if (await AppService.ResetPassword(model.Code, model.Password) > 0)
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.ResetPasswordSuccessDialogue, Variety.Success));
-					return this.RedirectToAction(ActionConstants.LogOn, ControllerConstants.Account);
+					return RedirectToAction(ActionConstants.LogOn, ControllerConstants.Account);
 				}
 				else
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.PasswordResetError, Variety.Danger));
-					return this.RedirectToAction(ActionConstants.ForgotPassword, ControllerConstants.Account);
+					return RedirectToAction(ActionConstants.ForgotPassword, ControllerConstants.Account);
 				}
 			}
 
 			Notifications.Add(new BootstrapAlert(Resources.Strings.IncorrectPassword, Variety.Danger));
-			return this.View(model);
+			return View(model);
 		}
 
 		/// <summary>
@@ -66,7 +66,7 @@ namespace AllyisApps.Controllers.Auth
 		[AllowAnonymous]
 		public ActionResult ResetPasswordConfirmation()
 		{
-			return this.View();
+			return View();
 		}
 	}
 }

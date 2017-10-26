@@ -7,13 +7,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Crm;
-using AllyisApps.Services.TimeTracker;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -34,30 +33,30 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="startDate">The start of the date range of the TimeEntry index page.</param>
 		/// <param name="endDate">The end of the date range of the TimeEntry index page.</param>
 		/// <returns>The action result.</returns>
-		async public Task<ActionResult> CopyEntries(DateTime startDateTarget, DateTime startDateCopy, DateTime endDateCopy, int userId, int subscriptionId, int startDate, int endDate)
+		public async Task<ActionResult> CopyEntries(DateTime startDateTarget, DateTime startDateCopy, DateTime endDateCopy, int userId, int subscriptionId, int startDate, int endDate)
 		{
 			#region Validation
 
 			// TODO flesh these out
 			if (startDateCopy > endDateCopy)
 			{
-				return this.View(ViewConstants.Error);
+				return View(ViewConstants.Error);
 			}
 			else if (startDateCopy > startDateTarget)
 			{
-				return this.View(ViewConstants.Error);
+				return View(ViewConstants.Error);
 			}
 
 			#endregion Validation
 
-			if (userId != this.AppService.UserContext.UserId)
+			if (userId != AppService.UserContext.UserId)
 			{
 				// editing the entries of another user
-				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
+				AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			}
 
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			int organizationId = subInfo.OrganizationId;
 
 			// Reference for checking status of entries
@@ -121,7 +120,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			return this.RedirectToAction(
+			return RedirectToAction(
 				ActionConstants.Index,
 				new
 				{

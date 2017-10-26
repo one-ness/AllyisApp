@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
-using AllyisApps.Services;
 using AllyisApps.Services.Expense;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
@@ -24,7 +23,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="startDate">The start date.</param>
 		/// <param name="endDate">The end date.</param>
 		/// <returns>A FileStreamResult.</returns>
-		async public Task<ActionResult> ExportExpenseReport(int subscriptionId, int organizationId, AdminReportModel model, DateTime? startDate = null, DateTime? endDate = null)
+		public async Task<ActionResult> ExportExpenseReport(int subscriptionId, int organizationId, AdminReportModel model, DateTime? startDate = null, DateTime? endDate = null)
 		{
 			List<ExpenseReport> expenses = new List<ExpenseReport>();
 

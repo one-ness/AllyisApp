@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -15,7 +16,6 @@ using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.TimeTracker.Project;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -33,8 +33,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The ActionResult for the Edit view.</returns>
 		public ActionResult Edit(int subscriptionId, int userId)
 		{
-			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
-			return this.View(this.ConstructEditProjectViewModel(userId, subscriptionId));
+			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
+			return View(ConstructEditProjectViewModel(userId, subscriptionId));
 		}
 
 		/// <summary>
@@ -44,7 +44,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="model">The model of changes to the project.</param>
 		/// <returns>Redirection to customer index page on success, or project index on failure.</returns>
 		[HttpPost]
-		async public Task<ActionResult> Edit(EditProjectViewModel model)
+		public async Task<ActionResult> Edit(EditProjectViewModel model)
 		{
 			var listGet = await AppService.GetNextProjectIdAndSubUsers(model.ParentCustomerId, model.SubscriptionId);
 			var list = listGet.Item2;
@@ -58,14 +58,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			int orgId = AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId;
 			if (ModelState.IsValid)
 			{
-				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
+				AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
 
 				var projIdMatchGet = await AppService.GetAllProjectsForOrganization(orgId);
 				Services.Project.Project projIdMatch = projIdMatchGet.Where(project => project.ProjectOrgId == model.ProjectOrgId && project.owningCustomer?.CustomerId == model.ParentCustomerId).SingleOrDefault();
 				if (projIdMatch != null && projIdMatch.ProjectId != model.ProjectId)
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
-					return this.View(model);
+					return View(model);
 				}
 
 				try
@@ -82,16 +82,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 					// Update failure
 					Notifications.Add(new BootstrapAlert(message, Variety.Danger));
-					return this.View(model);
+					return View(model);
 				}
 
 				Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessProjectEdited, Variety.Success));
 
-				return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = model.SubscriptionId }), model.ParentCustomerId));
+				return Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = model.SubscriptionId }), model.ParentCustomerId));
 			}
 			else
 			{
-				return this.View(model);
+				return View(model);
 			}
 		}
 
@@ -101,7 +101,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="projectId">Project Id.</param>
 		/// <param name="subscriptionId">Subscription id.</param>
 		/// <returns>The EditProjectViewModel.</returns>
-		async public Task<EditProjectViewModel> ConstructEditProjectViewModel(int projectId, int subscriptionId)
+		public async Task<EditProjectViewModel> ConstructEditProjectViewModel(int projectId, int subscriptionId)
 		{
 			var infos = AppService.GetProjectEditInfo(projectId, subscriptionId);
 

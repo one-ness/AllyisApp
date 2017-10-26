@@ -34,8 +34,8 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public EditProfileViewModel()
 		{
-			this.LocalizedCountries = new Dictionary<string, string>();
-			this.LocalizedStates = new Dictionary<string, string>();
+			LocalizedCountries = new Dictionary<string, string>();
+			LocalizedStates = new Dictionary<string, string>();
 		}
 
 		/// <summary>

@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace AllyisApps.ViewModels.Auth
 {
 	/// <summary>
 	/// organization members page
 	/// </summary>
-	public class OrganizationMembersViewModel2 : BaseViewModel
+	public class OrganizationMembersViewModel : BaseViewModel
 	{
 		/// <summary>
 		/// organization id
@@ -62,7 +60,7 @@ namespace AllyisApps.ViewModels.Auth
 		{
 			get
 			{
-				return (this.Users.Count / this.PageSize) + 1;
+				return (Users.Count / PageSize) + 1;
 			}
 		}
 
@@ -74,13 +72,13 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// constructor
 		/// </summary>
-		public OrganizationMembersViewModel2()
+		public OrganizationMembersViewModel()
 		{
-			this.PageSize = 25; // default page number
-			this.CurrentPageNumber = 1; // default page
-			this.TabInfo = new MembersAndInvitationsTabViewModel();
-			this.TabInfo.MembersTabActive = "active";
-			this.Users = new List<ViewModelItem>();
+			PageSize = 25; // default page number
+			CurrentPageNumber = 1; // default page
+			TabInfo = new MembersAndInvitationsTabViewModel();
+			TabInfo.MembersTabActive = "active";
+			Users = new List<ViewModelItem>();
 		}
 
 		/// <summary>
@@ -119,7 +117,7 @@ namespace AllyisApps.ViewModels.Auth
 			{
 				get
 				{
-					return this.JoinedDate.ToString("d");
+					return JoinedDate.ToString("d");
 				}
 			}
 

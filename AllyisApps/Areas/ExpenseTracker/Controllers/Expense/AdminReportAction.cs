@@ -19,7 +19,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <returns>A admin report view model.</returns>
-		async public Task<ActionResult> AdminReport(int subscriptionId)
+		public async Task<ActionResult> AdminReport(int subscriptionId)
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.AdminReport, subscriptionId);
 
@@ -29,7 +29,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			string tempDataKey = "ARVM";
 
-			if (this.TempData[tempDataKey] != null)
+			if (TempData[tempDataKey] != null)
 			{
 				adminReportVM = (AdminReportModel)TempData[tempDataKey];
 			}
@@ -46,7 +46,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="subId">The subscription id.</param>
 		/// <returns>An admin report model.</returns>
-		async public Task<AdminReportModel> CreateAdminReportModel(int subId)
+		public async Task<AdminReportModel> CreateAdminReportModel(int subId)
 		{
 			var subInfoTask = AppService.GetSubscription(subId);
 			var reportInfoTask = AppService.GetReportInfo(subId);
@@ -126,7 +126,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				Statuses = enumList,
 				SubscriptionId = subInfo.SubscriptionId,
 				SubscriptionName = subInfo.SubscriptionName,
-				UserId = this.AppService.UserContext.UserId,
+				UserId = AppService.UserContext.UserId,
 				Users = userList,
 				Selection = new AdminReportSelectionModel
 				{

@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace AllyisApps.ViewModels.Auth
 {
 	/// <summary>
 	/// edit member view model
 	/// </summary>
-	public class EditMemberViewModel2 : BaseViewModel
+	public class EditMemberViewModel : BaseViewModel
 	{
+		/// <summary>
+		/// user id
+		/// </summary>
+		public int UserId { get; set; }
+
 		/// <summary>
 		/// org id
 		/// </summary>
@@ -58,12 +61,12 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the state
 		/// </summary>
-		public string State { get; set; }
+		public string StateName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the country
 		/// </summary>
-		public string Country { get; set; }
+		public string CountryName { get; set; }
 
 		/// <summary>
 		/// Gets or sets Date of birth.
@@ -73,7 +76,14 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// employee id
 		/// </summary>
+		[Display(Name = "Employee ID")]
+		[Required]
 		public string EmployeeId { get; set; }
+
+		/// <summary>
+		/// can edit member?
+		/// </summary>
+		public bool CanEditMember { get; set; }
 
 		/// <summary>
 		/// organization role id
@@ -83,12 +93,14 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// list of org roles
 		/// </summary>
+		[Display(Name ="Organization Role")]
+		[Required]
 		public Dictionary<int, string> OrgRolesList { get; set; }
 
 		/// <summary>
-		/// roles of this user
+		/// subscription roles of this user
 		/// </summary>
-		public List<RoleItem> Roles { get; set; }
+		public List<RoleItem> SubscriptionRoles { get; set; }
 
 		/// <summary>
 		/// role of a user
@@ -113,6 +125,7 @@ namespace AllyisApps.ViewModels.Auth
 			/// <summary>
 			/// list of role ids and names for the dropdown
 			/// </summary>
+			[Required]
 			public Dictionary<int, string> RoleList { get; set; }
 
 			/// <summary>
@@ -120,16 +133,16 @@ namespace AllyisApps.ViewModels.Auth
 			/// </summary>
 			public RoleItem()
 			{
-				this.RoleList = new Dictionary<int, string>();
+				RoleList = new Dictionary<int, string>();
 			}
 		}
 
 		/// <summary>
 		/// constructor
 		/// </summary>
-		public EditMemberViewModel2()
+		public EditMemberViewModel()
 		{
-			this.Roles = new List<RoleItem>();
+			SubscriptionRoles = new List<RoleItem>();
 		}
 	}
 }

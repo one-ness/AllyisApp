@@ -17,9 +17,9 @@ using AllyisApps.DBModel.Lookup;
 using AllyisApps.Lib;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
+using AllyisApps.Services.Cache;
 using AllyisApps.Services.Lookup;
 using Newtonsoft.Json.Linq;
-using AllyisApps.Services.Cache;
 
 namespace AllyisApps.Services
 {
@@ -54,7 +54,7 @@ namespace AllyisApps.Services
 		/// Gets the list of valid languages selections.
 		/// </summary>
 		/// <returns>A list of languages.</returns>
-		async public Task<IEnumerable<Language>> ValidLanguages()
+		public async Task<IEnumerable<Language>> ValidLanguages()
 		{
 			var results = await DBHelper.ValidLanguages();
 			return results.Select(s => new Language
@@ -69,7 +69,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="invitationId">Id of invite.</param>
 		/// <returns>Inviation info </returns>
-		async public Task<Invitation> GetInvitationByID(int invitationId)
+		public async Task<Invitation> GetInvitationById(int invitationId)
 		{
 			var results = InitializeInvitationInfo(await DBHelper.GetInvitation(invitationId));
 			return results;
@@ -78,7 +78,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Accepts an invitation, adding the user to the invitation's organization, subscriptions, and projects, then deletes the invitations.
 		/// </summary>
-		async public Task<bool> AcceptUserInvitation(int invitationId)
+		public async Task<bool> AcceptUserInvitation(int invitationId)
 		{
 			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId");
 
@@ -121,7 +121,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="invitationId">The id of the invitation to reject.</param>
 		/// <returns>The resulting message.</returns>
-		async public Task<bool> RejectInvitation(int invitationId)
+		public async Task<bool> RejectInvitation(int invitationId)
 		{
 			bool rejected = (await DBHelper.RejectInvitation(invitationId) == 1);
 			if (rejected)
@@ -187,7 +187,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="email">The login email.</param>
 		/// <param name="password">The login password.</param>
-		async public Task<User> ValidateLogin(string email, string password)
+		public async Task<User> ValidateLogin(string email, string password)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
@@ -274,15 +274,16 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// get the current logged in user
 		/// </summary>
-		async public Task<User> GetCurrentUser()
+		public async Task<User> GetCurrentUserAsync()
 		{
-			return await this.GetUser(this.UserContext.UserId);
+			return await this.GetUserAsync(this.UserContext.UserId);
 		}
 
 		/// <summary>
-		/// Get User Address, Organizaiontins, and Inviations for account page
+		/// get user
+		/// - address, organizations, subscriptions and invitations
 		/// </summary>
-		public async Task<User> GetUser(int userId)
+		public async Task<User> GetUserAsync(int userId, int organizationId = 0)
 		{
 			if (userId <= 0) throw new ArgumentOutOfRangeException("userId");
 
@@ -291,25 +292,27 @@ namespace AllyisApps.Services
 			dynamic subs = sets.Subscriptions;
 			foreach (var item in subs)
 			{
-				UserSubscription sub = new UserSubscription();
-				sub.IsActive = item.IsActive;
-				sub.NumberOfUsers = item.NumberOfUsers;
-				sub.OrganizationId = item.OrganizationId;
-				sub.ProductAreaUrl = item.ProductAreaUrl;
-				sub.ProductDescription = item.ProductDescription;
-				sub.ProductId = (ProductIdEnum)item.ProductId;
-				sub.ProductName = item.ProductName;
-				sub.ProductRoleId = item.ProductRole;
-				sub.PromoExpirationDateUtc = item.PromotionExpirationDateUtc;
-				sub.SkuDescription = item.SkuDescription;
-				sub.SkuIconUrl = item.SkuIconUrl;
-				sub.SkuId = (SkuIdEnum)item.SkuId;
-				sub.SkuName = item.SkuName;
-				sub.CreatedUtc = item.SubscriptionCreatedUtc;
-				sub.SubscriptionId = item.SubscriptionId;
-				sub.SubscriptionName = item.SubscriptionName;
-				sub.JoinedDateUtc = item.SubscriptionUserCreatedUtc;
-				sub.UserId = item.UserId;
+				UserSubscription sub = new UserSubscription
+				{
+					IsActive = item.IsActive,
+					NumberOfUsers = item.NumberOfUsers,
+					OrganizationId = item.OrganizationId,
+					ProductAreaUrl = item.ProductAreaUrl,
+					ProductDescription = item.ProductDescription,
+					ProductId = (ProductIdEnum)item.ProductId,
+					ProductName = item.ProductName,
+					ProductRoleId = item.ProductRoleId,
+					PromoExpirationDateUtc = item.PromotionExpirationDateUtc,
+					SkuDescription = item.SkuDescription,
+					SkuIconUrl = item.IconUrl,
+					SkuId = (SkuIdEnum)item.SkuId,
+					SkuName = item.SkuName,
+					CreatedUtc = item.SubscriptionCreatedUtc,
+					SubscriptionId = item.SubscriptionId,
+					SubscriptionName = item.SubscriptionName,
+					JoinedDateUtc = item.SubscriptionUserCreatedUtc,
+					UserId = item.UserId
+				};
 				user.Subscriptions.Add(sub);
 			}
 
@@ -362,7 +365,58 @@ namespace AllyisApps.Services
 			if (this.UserContext.UserId != user.UserId)
 			{
 				// logged in user is trying to read a different user's information
+				// was an org id provided?
+				if (organizationId <= 0)
+				{
+					// no, get the list of organizations that both of them are member of
+					List<int> orgIds = new List<int>();
+					foreach (var item in this.UserContext.OrganizationsAndRoles)
+					{
+						var orgId = item.Value.OrganizationId;
+						var org = user.Organizations.Where(x => x.OrganizationId == orgId).FirstOrDefault();
+						if (org != null)
+						{
+							orgIds.Add(orgId);
+						}
+					}
 
+					// is there any?
+					bool permFound = false;
+					if (orgIds.Count <= 0)
+					{
+						// no
+						throw new AccessViolationException(string.Format("User {0} not found in any of the organizations.", user.UserId));
+					}
+					else
+					{
+						// yes, does the logged in user have readuser permission in at least one of them?
+						foreach (var item in orgIds)
+						{
+							permFound = this.CheckOrgAction(OrgAction.ReadUser, item, false);
+						}
+					}
+
+					if (!permFound)
+					{
+						// no
+						throw new AccessViolationException(string.Format("User {0} does not have permission to read user {1}.", this.UserContext.UserId, user.UserId));
+					}
+				}
+				else
+				{
+					// does the user belong to that organization?
+					var org = user.Organizations.Where(x => x.OrganizationId == organizationId).FirstOrDefault();
+					if (org == null)
+					{
+						// no
+						throw new AccessViolationException(string.Format("User {0} not found in the organization {1}.", user.UserId, organizationId));
+					}
+					else
+					{
+						// yes, check the logged in user's permission
+						this.CheckOrgAction(OrgAction.ReadUser, organizationId);
+					}
+				}
 			}
 
 			return user;
@@ -371,7 +425,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// update the current user profile
 		/// </summary>
-		async public Task UpdateCurrentUserProfile(int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
+		public async Task UpdateCurrentUserProfile(int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
 		{
 			await this.DBHelper.UpdateUserProfile(this.UserContext.UserId, firstName, lastName, Utility.GetDateTimeFromDays((int)dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
 		}
@@ -379,7 +433,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// update the current user profile
 		/// </summary>
-		async public Task UpdateUserProfile(int userId, int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
+		public async Task UpdateUserProfile(int userId, int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
 		{
 			await this.DBHelper.UpdateUserProfile(userId, firstName, lastName, Utility.GetDateTimeFromDays((int)dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
 		}
@@ -389,7 +443,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="email">Email address.</param>
 		/// <returns>A UserInfo instance with the user's info.</returns>
-		async public Task<User> GetUserByEmail(string email)
+		public async Task<User> GetUserByEmail(string email)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
 
@@ -399,7 +453,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Updates an organization member's info.
 		/// </summary>
-		async public Task<bool> UpdateMember(int userId, int orgId, string employeeId, int roleId, string firstName, string lastName, bool isInvited)
+		public async Task<bool> UpdateMember(int userId, int orgId, string employeeId, int roleId, string firstName, string lastName, bool isInvited)
 		{
 			if (userId <= 0) throw new ArgumentOutOfRangeException("userId");
 			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
@@ -488,7 +542,7 @@ namespace AllyisApps.Services
 		/// <param name="oldPassword">Old password, for verification.</param>
 		/// <param name="newPassword">New password to change it to.</param>
 		/// <returns>True for a successful change, false if anything fails.</returns>
-		async public Task<bool> ChangePassword(string oldPassword, string newPassword)
+		public async Task<bool> ChangePassword(string oldPassword, string newPassword)
 		{
 			if (string.IsNullOrWhiteSpace(oldPassword)) throw new ArgumentNullException("oldPassword");
 			if (string.IsNullOrWhiteSpace(newPassword)) throw new ArgumentNullException("newPassword");
@@ -636,7 +690,7 @@ namespace AllyisApps.Services
 			};
 		}
 
-		async public Task UpdateUserOrgMaxAmount(OrganizationUser userInfo)
+		public async Task UpdateUserOrgMaxAmount(OrganizationUser userInfo)
 		{
 			OrganizationUserDBEntity entity = new OrganizationUserDBEntity()
 			{
@@ -646,7 +700,7 @@ namespace AllyisApps.Services
 			await DBHelper.UpdateUserMaxAmount(entity);
 		}
 
-		async public Task<decimal> GetOrganizationUserMaxAmount(int userId, int orgId)
+		public async Task<decimal> GetOrganizationUserMaxAmount(int userId, int orgId)
 		{
 			return await DBHelper.GetUserOrgMaxAmount(userId, orgId);
 		}
@@ -698,12 +752,13 @@ namespace AllyisApps.Services
 			var result = new List<ProductRole>();
 			foreach (var item in collection)
 			{
-				var role = new ProductRole();
-				role.OrganizationId = orgId;
-				role.ProductId = (ProductIdEnum)item.ProductId;
-				role.ProductRoleId = item.ProductRoleId;
-				role.ProductRoleName = item.ProductRoleName;
-				result.Add(role);
+				result.Add(new ProductRole()
+				{
+					OrganizationId = orgId,
+					ProductId = (ProductIdEnum)item.ProductId,
+					ProductRoleId = item.ProductRoleId,
+					ProductRoleName = item.ProductRoleName
+				});
 			}
 
 			return result;

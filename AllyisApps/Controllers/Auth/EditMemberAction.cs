@@ -4,14 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Web.Mvc;
-using AllyisApps.Core.Alert;
-using AllyisApps.Resources;
-using AllyisApps.Services;
+using System.Linq;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.Auth;
+using System.Threading.Tasks;
+using AllyisApps.Services;
+using AllyisApps.ViewModels;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -23,104 +23,92 @@ namespace AllyisApps.Controllers.Auth
 		/// <summary>
 		/// GET: /Account/EditMember.
 		/// </summary>
-		/// <param name="userId">Org member to edit.</param>
-		/// <param name="orgId">Id of the org the member is in.</param>
-		/// <param name="invited">Is the user invited or a already a member?.</param>
-		/// <returns>Returns info for a view about the member to be edited.</returns>
-		async public Task<ActionResult> EditMember(int userId, int orgId, int invited)
+		public async Task<ActionResult> EditMember(int id, int userId)
 		{
-			bool isInvited = invited == 0 ? false : true;
-			EditMemberViewModel model;
-			ViewBag.SignedInUserId = this.AppService.UserContext.UserId;
+			User user = await AppService.GetUserAsync(userId); // this call makes sure that both logged in user and userId have at least one common org
+			var org = user.Organizations.Where(x => x.OrganizationId == id).FirstOrDefault();
+			var model = new EditMemberViewModel();
+			model.CanEditMember = this.AppService.CheckOrgAction(AppService.OrgAction.EditUser, id, false);
+			model.Address = user.Address?.Address1;
+			model.City = user.Address?.City;
+			model.CountryName = user.Address?.CountryName;
+			model.DateOfBirth = user.DateOfBirth == null ? string.Empty : user.DateOfBirth.Value.ToString("d");
+			model.Email = user.Email;
+			model.EmployeeId = org.EmployeeId;
+			model.FirstName = user.FirstName;
+			model.LastName = user.LastName;
+			model.OrganizationId = id;
+			model.OrganizationName = org.OrganizationName;
+			model.OrgRolesList = ModelHelper.GetOrgRolesList();
+			model.PhoneNumber = user.PhoneNumber;
+			model.PostalCode = user.Address?.PostalCode;
+			await this.PopulateRoles(model, user);
+			model.SelectedOrganizationRoleId = (int)org.OrganizationRole;
+			model.StateName = user.Address?.StateName;
+			model.UserId = userId;
+			return View("editmember", model);
+		}
 
-			if (!isInvited)
+		private async Task PopulateRoles(EditMemberViewModel model, User user)
+		{
+			// get all subscriptions of this organization, get a list of roles for each subscription and user's role in each subscription
+			var subs = await this.AppService.GetSubscriptionsAsync(model.OrganizationId);
+			foreach (var item in subs)
 			{
-				var orgResult = await AppService.GetOrganizationManagementInfo(orgId);
-				OrganizationUser userOrgInfo = orgResult.Users.Find(m => m.UserId == userId);
-				User userBasicInfo = await AppService.GetUser(userId);
-
-				model = new EditMemberViewModel
+				if (item.ProductId == ProductIdEnum.TimeTracker)
 				{
-					UserInfo = new UserInfoViewModel()
+					model.SubscriptionRoles.Add(new EditMemberViewModel.RoleItem()
 					{
-						UserId = userBasicInfo.UserId,
-						DateOfBirth = userBasicInfo.DateOfBirth,
-						PhoneNumber = userBasicInfo.PhoneNumber,
-						PhoneExtension = userBasicInfo.PhoneExtension,
-						Email = userBasicInfo.Email,
-						FirstName = userBasicInfo.FirstName,
-						LastName = userBasicInfo.LastName,
-
-						Address = userBasicInfo.Address?.Address1,
-						City = userBasicInfo.Address?.City,
-						CountryName = userBasicInfo.Address?.CountryName,
-						PostalCode = userBasicInfo.Address?.PostalCode,
-						StateName = userBasicInfo.Address?.StateName,
-					},
-					CurrentUserId = this.AppService.UserContext.UserId,
-					FirstName = userBasicInfo.FirstName,
-					LastName = userBasicInfo.LastName,
-					OrganizationId = orgId,
-					EmployeeId = userOrgInfo.EmployeeId,
-					EmployeeRoleId = userOrgInfo.OrganizationRoleId,
-					IsInvited = isInvited,
-					EmployeeRole = new SelectList(new List<SelectListItem>
-					{
-						new SelectListItem { Text = Strings.Member, Value="1" },
-						new SelectListItem { Text = Strings.Owner,  Value="2" }
-					}, "Value", "Text", userOrgInfo.OrganizationRoleId.ToString())
-				};
-			}
-			else
-			{
-				var orgResult = await AppService.GetOrganizationManagementInfo(orgId);
-				Invitation userOrgInfo = orgResult.Invitations.Find(m => m.InvitationId == userId);
-
-				model = new EditMemberViewModel
+						RoleList = ModelHelper.GetTimeTrackerRolesList(),
+						SelectedRoleId = user.Subscriptions.Where(x => x.SubscriptionId == item.SubscriptionId).FirstOrDefault().ProductRoleId,
+						SubscriptionId = item.SubscriptionId,
+						SubscriptionName = item.SubscriptionName
+					});
+				}
+				else if (item.ProductId == ProductIdEnum.ExpenseTracker)
 				{
-					UserInfo = new UserInfoViewModel
+					model.SubscriptionRoles.Add(new EditMemberViewModel.RoleItem()
 					{
-						UserId = userOrgInfo.InvitationId,
-						Email = userOrgInfo.Email
-					},
-					FirstName = userOrgInfo.FirstName,
-					LastName = userOrgInfo.LastName,
-					OrganizationId = orgId,
-					EmployeeId = userOrgInfo.EmployeeId,
-					IsInvited = isInvited,
-					EmployeeRole = new SelectList(new List<SelectListItem>
+						RoleList = ModelHelper.GetExpenseTrackerRolesList(),
+						SelectedRoleId = user.Subscriptions.Where(x => x.SubscriptionId == item.SubscriptionId).FirstOrDefault().ProductRoleId,
+						SubscriptionId = item.SubscriptionId,
+						SubscriptionName = item.SubscriptionName
+					});
+				}
+				else if (item.ProductId == ProductIdEnum.StaffingManager)
+				{
+					model.SubscriptionRoles.Add(new EditMemberViewModel.RoleItem()
 					{
-						new SelectListItem { Text = Strings.Member, Value="1" },
-						new SelectListItem { Text = Strings.Owner,  Value="2" }
-					}, "Value", "Text", "1")
-				};
+						RoleList = ModelHelper.GetStaffingManagerRolesList(),
+						SelectedRoleId = user.Subscriptions.Where(x => x.SubscriptionId == item.SubscriptionId).FirstOrDefault().ProductRoleId,
+						SubscriptionId = item.SubscriptionId,
+						SubscriptionName = item.SubscriptionName
+					});
+				}
 			}
-
-			return View(model);
 		}
 
 		/// <summary>
-		/// POST: /Account/EditMember.
+		/// edit member
 		/// </summary>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> EditMember(EditMemberViewModel model)
+		public async Task<ActionResult> EditMember(EditMemberViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
-				if (await this.AppService.UpdateMember(model.UserInfo.UserId, model.OrganizationId, model.EmployeeId, model.EmployeeRoleId, model.FirstName, model.LastName, model.IsInvited))
+				foreach (var item in model.SubscriptionRoles)
 				{
-					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UpdateMemberSuccessMessage, model.UserInfo.FirstName, model.UserInfo.LastName), Variety.Success));
-				}
-				else
-				{
-					Notifications.Add(new BootstrapAlert(Resources.Strings.CannotEditEmployeeId, Variety.Danger));
-				}
+					if (item.SelectedRoleId > 0)
+					{
 
-				await Task.Delay(1);
-				return this.RedirectToAction(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { id = model.OrganizationId });
+					}
+				}
 			}
 
+			// error
+			User user = await AppService.GetUserAsync(model.UserId); // this call makes sure that both logged in user and userId have at least one common org
+			await this.PopulateRoles(model, user);
 			return View(model);
 		}
 	}

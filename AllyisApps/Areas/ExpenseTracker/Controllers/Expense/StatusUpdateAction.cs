@@ -20,7 +20,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="btnAction">The button action.</param>
 		/// <param name="reasonText">The reason text.</param>
 		/// <returns>A redirect to the home page.</returns>
-		async public Task<RedirectToRouteResult> StatusUpdate(int subscriptionId, int reportId, string btnAction, string reasonText)
+		public async Task<RedirectToRouteResult> StatusUpdate(int subscriptionId, int reportId, string btnAction, string reasonText)
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.StatusUpdate, subscriptionId);
 
@@ -47,7 +47,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="reportId">The report id.</param>
 		/// <param name="status">The new report status.</param>
 		/// <param name="text">The reason text.</param>
-		async private Task UpdateReport(int reportId, string status, string text)
+		private async Task UpdateReport(int reportId, string status, string text)
 		{
 			ExpenseReport report = await AppService.GetExpenseReport(reportId);
 			ExpenseHistory history = new ExpenseHistory()
@@ -57,7 +57,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				HistoryId = GetHashCode(),
 				ReportId = reportId,
 				Text = text,
-				UserId = this.AppService.UserContext.UserId
+				UserId = AppService.UserContext.UserId
 			};
 
 			if (string.Equals(status, "Approve"))

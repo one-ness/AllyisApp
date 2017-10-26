@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using AllyisApps.Services.Auth;
 using AllyisApps.Services.Expense;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
@@ -24,7 +22,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="model">The account model.</param>
 		/// <returns>The account page.</returns>
-		async public Task<ActionResult> SaveAccount(int subscriptionId, CreateAccountViewModel model)
+		public async Task<ActionResult> SaveAccount(int subscriptionId, CreateAccountViewModel model)
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Accounts, subscriptionId);
 			var subInfoTask = AppService.GetSubscription(subscriptionId);
@@ -94,7 +92,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="childAcc">The child account</param>
 		/// <returns></returns>
-		async public Task<bool> CheckAccountParent(int subscriptionId, Account childAcc)
+		public async Task<bool> CheckAccountParent(int subscriptionId, Account childAcc)
 		{
 			bool results = true;
 			var subInfo = await AppService.GetSubscription(subscriptionId);
@@ -125,7 +123,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="accId">The acccount id.</param>
 		/// <param name="selectedStatus">The new selcted status.</param>
 		/// <returns></returns>
-		async public Task<bool> CanDisableAccount(int subId, int accId, string selectedStatus)
+		public async Task<bool> CanDisableAccount(int subId, int accId, string selectedStatus)
 		{
 			var results = true;
 			var subInfo = await AppService.GetSubscription(subId);

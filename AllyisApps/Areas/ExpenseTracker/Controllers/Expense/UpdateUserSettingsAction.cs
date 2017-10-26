@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
-using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
@@ -18,9 +17,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="model">User settings information.</param>
 		/// <returns>The action result.</returns>
 		[HttpPost]
-		async public Task<ActionResult> UpdateUserSettings(UserSettingsViewModel model)
+		public async Task<ActionResult> UpdateUserSettings(UserSettingsViewModel model)
 		{
-			UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId];
+			UserContext.SubscriptionAndRole subInfo = AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId];
 			if (!ModelState.IsValid)
 			{
 				return RedirectToAction("UserSettings", new { subscriptionId = model.SubscriptionId });

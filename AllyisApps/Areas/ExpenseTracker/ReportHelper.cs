@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
-using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Expense;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
@@ -15,7 +14,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 	/// </summary>
 	public partial class ExpenseController : BaseController
 	{
-		async private Task SetNavData(int subscriptionId)
+		private async Task SetNavData(int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			var subNameTask = AppService.GetSubscriptionName(subscriptionId);
@@ -29,7 +28,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			ViewData["MaxAmount"] = orgMaxUserTask.Result;
 		}
 
-		async private Task UploadItems(ExpenseCreateModel model, ExpenseReport report)
+		private async Task UploadItems(ExpenseCreateModel model, ExpenseReport report)
 		{
 			IList<ExpenseItem> oldItems = await AppService.GetExpenseItemsByReportId(report.ExpenseReportId);
 			List<int> itemIds = new List<int>();

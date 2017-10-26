@@ -20,7 +20,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="model">The model object.</param>
 		/// <returns>An action result.</returns>
 		[HttpPost]
-		async public Task<ActionResult> CreateReport(ExpenseCreateModel model)
+		public async Task<ActionResult> CreateReport(ExpenseCreateModel model)
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, model.SubscriptionId);
 
@@ -29,9 +29,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				return RedirectToAction("Create", new { subscriptionId = model.SubscriptionId, reportId = model.Report.ExpenseReportId });
 			}
 
-			if (this.AppService.UserContext.UserId != model.CurrentUser)
+			if (AppService.UserContext.UserId != model.CurrentUser)
 			{
-				string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.CreateReport.ToString());
+				string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.CreateReport);
 				throw new AccessViolationException(message);
 			}
 

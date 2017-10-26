@@ -9,7 +9,7 @@ namespace AllyisApps.Services.Billing
 	/// <summary>
 	/// SKUs offered by us. Must match the Ids inserted in to db.
 	/// </summary>
-	public enum SkuIdEnum : int
+	public enum SkuIdEnum
 	{
 		/// <summary>
 		/// Id for no sku

@@ -41,7 +41,7 @@ namespace AllyisApps.Services.Billing
 				{
 					case BillingServicesEnum.Stripe:
 						{
-							this.service = new BillingServices.StripeService.StripeWrapper();
+							service = new BillingServices.StripeService.StripeWrapper();
 							break;
 						}
 
@@ -72,7 +72,7 @@ namespace AllyisApps.Services.Billing
 		/// <returns>A bool representing the success or failure state of the action.</returns>
 		public bool CreatePlan(int amount, string interval, string planName)
 		{
-			return this.service.CreatePlan(amount, interval, planName);
+			return service.CreatePlan(amount, interval, planName);
 		}
 
 		/// <summary>
@@ -83,7 +83,7 @@ namespace AllyisApps.Services.Billing
 		[CLSCompliant(false)]
 		public BillingServicesPlan RetrievePlan()
 		{
-			return this.service.RetrievePlan();
+			return service.RetrievePlan();
 		}
 
 		/// <summary>
@@ -93,7 +93,7 @@ namespace AllyisApps.Services.Billing
 		/// <returns>A bool representing the success or failure state of the action.</returns>
 		public bool UpdatePlan()
 		{
-			return this.service.UpdatePlan();
+			return service.UpdatePlan();
 		}
 
 		/// <summary>
@@ -103,7 +103,7 @@ namespace AllyisApps.Services.Billing
 		/// <returns>A bool representing the success or failure state of the action.</returns>
 		public bool DeletePlan()
 		{
-			return this.service.DeletePlan();
+			return service.DeletePlan();
 		}
 
 		#endregion plans
@@ -119,7 +119,7 @@ namespace AllyisApps.Services.Billing
 		[CLSCompliant(false)]
 		public BillingServicesCustomerId CreateCustomer(string email, BillingServicesToken token)
 		{
-			return this.service.CreateCustomer(email, token);
+			return service.CreateCustomer(email, token);
 		}
 
 		/// <summary>
@@ -130,7 +130,7 @@ namespace AllyisApps.Services.Billing
 		[CLSCompliant(false)]
 		public BillingServicesCustomer RetrieveCustomer(BillingServicesCustomerId customerId)
 		{
-			return this.service.RetrieveCustomer(customerId);
+			return service.RetrieveCustomer(customerId);
 		}
 
 		/// <summary>
@@ -140,7 +140,7 @@ namespace AllyisApps.Services.Billing
 		[CLSCompliant(false)]
 		public List<BillingServicesCustomer> ListCustomers()
 		{
-			return this.service.ListCustomers();
+			return service.ListCustomers();
 		}
 
 		/// <summary>
@@ -152,7 +152,7 @@ namespace AllyisApps.Services.Billing
 		[CLSCompliant(false)]
 		public bool UpdateCustomer(BillingServicesCustomerId customerId, BillingServicesToken token)
 		{
-			return this.service.UpdateCustomer(customerId, token);
+			return service.UpdateCustomer(customerId, token);
 		}
 
 		/// <summary>
@@ -161,7 +161,7 @@ namespace AllyisApps.Services.Billing
 		/// <returns>A bool representing the success or failure state of the action.</returns>
 		public bool DeleteCustomer()
 		{
-			return this.service.DeleteCustomer();
+			return service.DeleteCustomer();
 		}
 
 		#endregion customers
@@ -179,7 +179,7 @@ namespace AllyisApps.Services.Billing
 		[CLSCompliant(false)]
 		public BillingServicesSubscriptionId CreateSubscription(int amount, string interval, string planName, BillingServicesCustomerId customerId)
 		{
-			return this.service.CreateSubscription(amount, interval, planName, customerId);
+			return service.CreateSubscription(amount, interval, planName, customerId);
 		}
 
 		/// <summary>
@@ -189,7 +189,7 @@ namespace AllyisApps.Services.Billing
 		[CLSCompliant(false)]
 		public BillingServicesSubscription RetrieveSubscription()
 		{
-			return this.service.RetrieveSubscription();
+			return service.RetrieveSubscription();
 		}
 
 		/// <summary>
@@ -199,7 +199,7 @@ namespace AllyisApps.Services.Billing
 		[CLSCompliant(false)]
 		public List<BillingServicesSubscription> ListSubscriptions()
 		{
-			return this.service.ListSubscriptions();
+			return service.ListSubscriptions();
 		}
 
 		/// <summary>
@@ -214,7 +214,7 @@ namespace AllyisApps.Services.Billing
 		[CLSCompliant(false)]
 		public bool UpdateSubscription(int amount, string interval, string planName, string subscriptionId, BillingServicesCustomerId customerId)
 		{
-			return this.service.UpdateSubscription(amount, interval, planName, subscriptionId, customerId);
+			return service.UpdateSubscription(amount, interval, planName, subscriptionId, customerId);
 		}
 
 		/// <summary>
@@ -225,7 +225,7 @@ namespace AllyisApps.Services.Billing
 		[CLSCompliant(false)]
 		public void DeleteSubscription(BillingServicesCustomerId customerId, string subscriptionId)
 		{
-			this.service.DeleteSubscription(customerId, subscriptionId);
+			service.DeleteSubscription(customerId, subscriptionId);
 		}
 
 		#endregion subscriptions
@@ -238,7 +238,7 @@ namespace AllyisApps.Services.Billing
 		/// <returns>A bool representing the success or failure state of the action.</returns>
 		public bool CreateCharge()
 		{
-			return this.service.CreateCharge();
+			return service.CreateCharge();
 		}
 
 		/// <summary>
@@ -248,7 +248,7 @@ namespace AllyisApps.Services.Billing
 		[CLSCompliant(false)]
 		public BillingServicesCharge RetrieveCharge()
 		{
-			return this.RetrieveCharge();
+			return RetrieveCharge();
 		}
 
 		/// <summary>
@@ -259,7 +259,7 @@ namespace AllyisApps.Services.Billing
 		[CLSCompliant(false)]
 		public List<BillingServicesCharge> ListCharges(BillingServicesCustomerId customerId)
 		{
-			return this.service.ListCharges(customerId);
+			return service.ListCharges(customerId);
 		}
 
 		#endregion charges
@@ -274,7 +274,7 @@ namespace AllyisApps.Services.Billing
 		[CLSCompliant(false)]
 		public List<BillingServicesInvoice> ListInvoices(BillingServicesCustomerId customerId)
 		{
-			return this.service.ListInvoices(customerId);
+			return service.ListInvoices(customerId);
 		}
 
 		#endregion invoices

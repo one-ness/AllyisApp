@@ -12,7 +12,6 @@ using System.Web.Mvc;
 using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.StaffingManager;
@@ -30,12 +29,12 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// </summary>
 		/// <param name="subscriptionId"></param>
 		/// <returns></returns>
-		async public Task<ActionResult> Settings(int subscriptionId)
+		public async Task<ActionResult> Settings(int subscriptionId)
 		{
 			SetNavData(subscriptionId);
 
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			var subscriptionNameToDisplayTask = AppService.GetSubscriptionName(subscriptionId);
 			var defaultStatusTask = AppService.GetStaffingDefaultStatus(subInfo.OrganizationId); //[0] is default position status, [1] is default application status
 
@@ -54,7 +53,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			//ViewBag.SignedInUserID = GetCookieData().UserId;
 			//ViewBag.SelectedUserId = userId;
 
-			StaffingSettingsViewModel model = this.ConstructStaffingSettingsViewModel(
+			StaffingSettingsViewModel model = ConstructStaffingSettingsViewModel(
 				subInfo.OrganizationId,
 				subscriptionId,
 				subscriptionNameToDisplay,
@@ -68,7 +67,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				defaultAppStat  //applicationStatusdefault
 				);
 
-			return this.View(model);
+			return View(model);
 		}
 
 		/// <summary>
@@ -92,7 +91,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		{
 			StaffingSettingsViewModel result = new StaffingSettingsViewModel()
 			{
-				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
 				organizationId = orgId,
 				subscriptionId = subId,
 				subscriptionName = subName,
@@ -138,7 +137,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				}
 			}
 
-			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId });
+			return RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = AppService.UserContext.UserId });
 		}
 
 		/// <summary>
@@ -170,7 +169,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				}
 			}
 
-			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId });
+			return RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = AppService.UserContext.UserId });
 		}
 
 		/// <summary>
@@ -202,7 +201,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				}
 			}
 
-			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId });
+			return RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = AppService.UserContext.UserId });
 		}
 
 		/// <summary>
@@ -225,7 +224,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				Notifications.Add(new BootstrapAlert("Position Status already exists", Variety.Danger));
 			}
 
-			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId });
+			return RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = AppService.UserContext.UserId });
 		}
 
 		///// <summary>

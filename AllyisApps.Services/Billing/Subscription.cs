@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using AllyisApps.Services.Auth;
 
 namespace AllyisApps.Services.Billing
 {
@@ -38,11 +36,6 @@ namespace AllyisApps.Services.Billing
 		/// Gets or sets CreatedDate.
 		/// </summary>
 		public DateTime CreatedUtc { get; set; }
-
-		/// <summary>
-		/// subscription created
-		/// </summary>
-		public DateTime SubscriptionCreatedUtc { get; set; }
 
 		/// <summary>
 		/// gets or set promotion expiration date.

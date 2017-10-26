@@ -57,13 +57,13 @@ namespace AllyisApps.DBModel.TimeTracker
 		/// Gets or sets the payroll processed date.
 		/// All time entries before this date are completely processed
 		/// </summary>
-		public DateTime PayrollProcessedDate { get; set; }
+		public DateTime? PayrollProcessedDate { get; set; }
 
 		/// <summary>
 		/// Gets or sets the lock date.
 		/// All time entries inbetween the payroll processed date and the lock date are locked (can't be edited)
 		/// </summary>
-		public DateTime LockDate { get; set; }
+		public DateTime? LockDate { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Pay period.

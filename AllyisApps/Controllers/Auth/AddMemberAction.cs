@@ -5,15 +5,15 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
+using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
-using AllyisApps.ViewModels.Auth;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using AllyisApps.Services.Billing;
-using AllyisApps.Resources;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -28,10 +28,10 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		public async Task<ActionResult> AddMember(int id)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.AddUserToOrganization, id);
+			AppService.CheckOrgAction(AppService.OrgAction.AddUserToOrganization, id);
 			var model = new AddMemberViewModel();
 			model.OrganizationId = id;
-			model.EmployeeId = await this.AppService.GetNextEmployeeId(id);
+			model.EmployeeId = await AppService.GetNextEmployeeId(id);
 
 			var etSubInfo = AppService.GetProductSubscriptionInfo(id, SkuIdEnum.ExpenseTrackerBasic).SubscriptionInfo;
 			var ttSubInfo = AppService.GetProductSubscriptionInfo(id, SkuIdEnum.TimeTrackerBasic).SubscriptionInfo;
@@ -64,7 +64,7 @@ namespace AllyisApps.Controllers.Auth
 			model.TTRoles = new SelectList(ttRoles, "Value", "Text", "0");
 			model.ETRoles = new SelectList(etRoles, "Value", "Text", "0");
 
-			return this.View(model);
+			return View(model);
 		}
 
 		/// <summary>
@@ -75,7 +75,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>The result of this action.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> AddMember(AddMemberViewModel model)
+		public async Task<ActionResult> AddMember(AddMemberViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
@@ -90,23 +90,23 @@ namespace AllyisApps.Controllers.Auth
 
 					int invitationId = await AppService.InviteUser(url, model.Email.Trim(), model.FirstName, model.LastName, model.OrganizationId, model.OrgRoleSelection == 2 ? OrganizationRoleEnum.Owner : OrganizationRoleEnum.Member, model.EmployeeId, prodJson);
 
-					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserEmailed, model.FirstName, model.LastName), Variety.Success));
-					return this.RedirectToAction(ActionConstants.OrganizationMembers, new { id = model.OrganizationId });
+					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Strings.UserEmailed, model.FirstName, model.LastName), Variety.Success));
+					return RedirectToAction(ActionConstants.OrganizationMembers, new { id = model.OrganizationId });
 				}
 				catch (InvalidOperationException)
 				{
-					Notifications.Add(new BootstrapAlert(Resources.Strings.EmployeeIdNotUniqueError, Variety.Danger));
-					return this.View(model);
+					Notifications.Add(new BootstrapAlert(Strings.EmployeeIdNotUniqueError, Variety.Danger));
+					return View(model);
 				}
 				catch (System.Data.DuplicateNameException)
 				{
-					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserAlreadyExists, model.FirstName, model.LastName), Variety.Warning));
-					return this.View(model);
+					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Strings.UserAlreadyExists, model.FirstName, model.LastName), Variety.Warning));
+					return View(model);
 				}
 			}
 
 			// Invalid model; try again
-			return this.View(model);
+			return View(model);
 		}
 	}
 }

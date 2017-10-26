@@ -65,7 +65,7 @@ namespace AllyisApps.Services.StaffingManager
 			get => positionTitle;
 			set
 			{
-				if (value.Length > titleLengthMax || value.Length <= 0) throw new ArgumentOutOfRangeException(nameof(positionTitle), value, "The position title cannot be blank or over " + titleLengthMax.ToString() + " characters");
+				if (value.Length > titleLengthMax || value.Length <= 0) throw new ArgumentOutOfRangeException(nameof(positionTitle), value, "The position title cannot be blank or over " + titleLengthMax + " characters");
 				positionTitle = value;
 			}
 		}
@@ -173,7 +173,7 @@ namespace AllyisApps.Services.StaffingManager
 			set
 			{
 				if (value == null || value.Count == 0) tags = null;
-				else if (value.Count > maxTags) throw new ArgumentOutOfRangeException(nameof(tags), value, "A position can only have a maximum of " + maxTags.ToString() + " tags");
+				else if (value.Count > maxTags) throw new ArgumentOutOfRangeException(nameof(tags), value, "A position can only have a maximum of " + maxTags + " tags");
 				tags = value;
 			}
 		}

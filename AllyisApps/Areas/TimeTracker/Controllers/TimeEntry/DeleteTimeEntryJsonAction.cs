@@ -5,13 +5,12 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Areas.TimeTracker.Core;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
-using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -27,15 +26,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="model">The model representing the time entry to be deleted.</param>
 		/// <returns>JSON Status. {status: 'success|error', message: 'a string'}.</returns>
 		[HttpPost]
-		async public Task<ActionResult> DeleteTimeEntryJson(DeleteTimeEntryViewModel model)
+		public async Task<ActionResult> DeleteTimeEntryJson(DeleteTimeEntryViewModel model)
 		{
 			// Check for permissions
 			Services.TimeTracker.TimeEntry entry = await AppService.GetTimeEntry(model.TimeEntryId);
-			if (entry.UserId != this.AppService.UserContext.UserId)
+			if (entry.UserId != AppService.UserContext.UserId)
 			{
-				if (!this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId))
+				if (!AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId))
 				{
-					return this.Json(new
+					return Json(new
 					{
 						status = "error",
 						message = Resources.Strings.NotAuthZTimeEntryOtherUserDelete,
@@ -47,7 +46,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			// Authorized to delete the time entry
 			if (entry.ApprovalState == (int)ApprovalState.Approved)
 			{
-				return this.Json(new
+				return Json(new
 				{
 					status = "error",
 					message = Resources.Strings.AlreadyApprovedCannotEdit,
@@ -58,10 +57,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			// Time entry is locked
 			DateTime? lockDate = await AppService.GetLockDate(AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId);
-			if ((!this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, model.SubscriptionId)) && entry.Date <= (lockDate == null ? DateTime.MinValue : lockDate.Value))
+			if ((!AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, model.SubscriptionId)) && entry.Date <= (lockDate == null ? DateTime.MinValue : lockDate.Value))
 			{
 				string errorMessage = Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture);
-				return this.Json(new
+				return Json(new
 				{
 					status = "error",
 					message = errorMessage,
@@ -71,7 +70,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			AppService.DeleteTimeEntry(model.TimeEntryId);
-			return this.Json(new { status = "success", values = new { duration = this.GetDurationDisplay(model.Duration).Insert(0, "-"), projectId = entry.ProjectId } });
+			return Json(new { status = "success", values = new { duration = GetDurationDisplay(model.Duration).Insert(0, "-"), projectId = entry.ProjectId } });
 		}
 
 		/// <summary>
@@ -79,7 +78,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="model"></param>
 		/// <returns></returns>
-		async protected Task<ActionResult> DeleteTimeEntryJson(EditTimeEntryViewModel model)
+		protected async Task<ActionResult> DeleteTimeEntryJson(EditTimeEntryViewModel model)
 		{
 			if (!model.IsDeleted)
 			{

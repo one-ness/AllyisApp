@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Mvc;
-using AllyisApps.Services;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -13,9 +12,9 @@ namespace AllyisApps.Controllers.Auth
 		/// Action that accepts an invitation to an organization.
 		/// </summary>
 		[HttpPost]
-		async public Task<ActionResult> AcceptInvitation(int id)
+		public async Task<ActionResult> AcceptInvitation(int id)
 		{
-			bool result = await this.AppService.AcceptUserInvitation(id);
+			bool result = await AppService.AcceptUserInvitation(id);
 
 			if (!result)
 			{
@@ -23,13 +22,13 @@ namespace AllyisApps.Controllers.Auth
 			}
 			else
 			{
-				var invitation = AppService.GetInvitationByID(id);
+				var invitation = AppService.GetInvitationById(id);
 
 				string res = string.Format("You have successfully joined {0} in the role of {1}.");
 				Notifications.Add(new Core.Alert.BootstrapAlert(res, Core.Alert.Variety.Success));
 			}
 
-			return this.RouteUserHome();
+			return RouteUserHome();
 		}
 	}
 }
