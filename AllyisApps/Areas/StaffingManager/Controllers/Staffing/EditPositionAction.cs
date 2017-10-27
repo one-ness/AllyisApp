@@ -89,22 +89,22 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				SubscriptionId = subInfo.SubscriptionId,
 				StartDate = pos.StartDate,
 				Tags = tags,
-				EmploymentTypes = infos.Item3.AsParallel().Select(et => new EmploymentTypeSelectViewModel()
+				EmploymentTypes = infos.Item3.AsParallel().Select(et => new EmploymentTypeSelectViewModel
 				{
 					EmploymentTypeId = et.EmploymentTypeId,
 					EmploymentTypeName = et.EmploymentTypeName
 				}).ToList(),
-				PositionLevels = infos.Item4.AsParallel().Select(pl => new PositionLevelSelectViewModel()
+				PositionLevels = infos.Item4.AsParallel().Select(pl => new PositionLevelSelectViewModel
 				{
 					PositionLevelId = pl.PositionLevelId,
 					PositionLevelName = pl.PositionLevelName
 				}).ToList(),
-				PositionStatuses = infos.Item5.AsParallel().Select(ps => new PositionStatusSelectViewModel()
+				PositionStatuses = infos.Item5.AsParallel().Select(ps => new PositionStatusSelectViewModel
 				{
 					PositionStatusId = ps.PositionStatusId,
 					PositionStatusName = ps.PositionStatusName
 				}).ToList(),
-				Customers = infos.Item7.AsParallel().Select(cus => new CustomerSelectViewModel()
+				Customers = infos.Item7.AsParallel().Select(cus => new CustomerSelectViewModel
 				{
 					CustomerId = cus.CustomerId,
 					CustomerName = cus.CustomerName
@@ -170,7 +170,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					}
 				}
 				int? positionId = await AppService.UpdatePosition(
-					new Position()
+					new Position
 					{
 						OrganizationId = model.OrganizationId,
 						CustomerId = model.CustomerId,

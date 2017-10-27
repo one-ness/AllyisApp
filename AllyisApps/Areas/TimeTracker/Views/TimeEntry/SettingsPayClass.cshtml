@@ -43,7 +43,7 @@
 				{
 						<tr>
 							@{
-							string _payClassName = Strings.ResourceManager.GetString((PayClass.PayClassName).Replace(" ", string.Empty)) ?? PayClass.PayClassName;
+							string _payClassName = Strings.ResourceManager.GetString(PayClass.PayClassName.Replace(" ", string.Empty)) ?? PayClass.PayClassName;
 							}
 							<td>@_payClassName</td>
 							@if (_payClassName != Strings.Regular && _payClassName != Strings.Overtime && _payClassName != Strings.Holiday && _payClassName != Strings.PaidTimeOff && _payClassName != Strings.UnpaidTimeOff)

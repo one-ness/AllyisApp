@@ -48,7 +48,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
 			return View(
-				new EditProjectViewModel()
+				new EditProjectViewModel
 				{
 					IsCreating = true,
 					ParentCustomerId = userId,
@@ -89,7 +89,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
 				if (model == null)
 				{
-					throw new ArgumentNullException("model");
+					throw new ArgumentNullException(nameof(model));
 				}
 
 				try
@@ -138,9 +138,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			IEnumerable<int> userIds = model.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString));
 
 			return await AppService.CreateProjectAndUpdateItsUserList(
-				new Services.Project.Project()
+				new Services.Project.Project
 				{
-					owningCustomer = new Customer()
+					owningCustomer = new Customer
 					{
 						CustomerId = model.ParentCustomerId,
 					},
@@ -160,9 +160,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The Project Id.</returns>
 		public async Task<int> CreateProject(EditProjectViewModel model)
 		{
-			return await AppService.CreateProject(new Services.Project.Project()
+			return await AppService.CreateProject(new Services.Project.Project
 			{
-				owningCustomer = new Customer()
+				owningCustomer = new Customer
 				{
 					CustomerId = model.ParentCustomerId,
 				},

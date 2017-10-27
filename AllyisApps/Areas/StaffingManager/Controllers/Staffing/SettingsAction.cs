@@ -89,17 +89,17 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 						List<Services.Lookup.Tag> tags, List<EmploymentType> employmentTypes, List<PositionLevel> positionLevelsList,
 						List<PositionStatus> positionStatuses, List<ApplicationStatus> applicationStatuses, List<Customer> customers, int? defaultStatusId, int? defaultAppStatusId)
 		{
-			StaffingSettingsViewModel result = new StaffingSettingsViewModel()
+			StaffingSettingsViewModel result = new StaffingSettingsViewModel
 			{
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
 				organizationId = orgId,
 				subscriptionId = subId,
 				subscriptionName = subName,
-				tags = tags.AsParallel().Select(t => new TagViewModel() { TagId = t.TagId, TagName = t.TagName, PositionId = t.PositionId }).ToList(),
-				employmentTypes = employmentTypes.AsParallel().Select(empt => new EmploymentTypeSelectViewModel() { EmploymentTypeId = empt.EmploymentTypeId, EmploymentTypeName = empt.EmploymentTypeName }).ToList(),
-				positionLevels = positionLevelsList.AsParallel().Select(pos => new PositionLevelSelectViewModel() { PositionLevelId = pos.PositionLevelId, PositionLevelName = pos.PositionLevelName }).ToList(),
-				positionStatuses = positionStatuses.AsParallel().Select(pos => new PositionStatusSelectViewModel() { PositionStatusId = pos.PositionStatusId, PositionStatusName = pos.PositionStatusName }).ToList(),
-				applicationStatuses = applicationStatuses.AsParallel().Select(pos => new ApplicationStatusSelectViewModel() { ApplicationStatusId = pos.ApplicationStatusId, ApplicationStatusName = pos.ApplicationStatusName }).ToList(),
+				tags = tags.AsParallel().Select(t => new TagViewModel { TagId = t.TagId, TagName = t.TagName, PositionId = t.PositionId }).ToList(),
+				employmentTypes = employmentTypes.AsParallel().Select(empt => new EmploymentTypeSelectViewModel { EmploymentTypeId = empt.EmploymentTypeId, EmploymentTypeName = empt.EmploymentTypeName }).ToList(),
+				positionLevels = positionLevelsList.AsParallel().Select(pos => new PositionLevelSelectViewModel { PositionLevelId = pos.PositionLevelId, PositionLevelName = pos.PositionLevelName }).ToList(),
+				positionStatuses = positionStatuses.AsParallel().Select(pos => new PositionStatusSelectViewModel { PositionStatusId = pos.PositionStatusId, PositionStatusName = pos.PositionStatusName }).ToList(),
+				applicationStatuses = applicationStatuses.AsParallel().Select(pos => new ApplicationStatusSelectViewModel { ApplicationStatusId = pos.ApplicationStatusId, ApplicationStatusName = pos.ApplicationStatusName }).ToList(),
 				customers = customers,
 				defaultPositionStatus = defaultStatusId,
 				defaultApplicationStatus = defaultAppStatusId

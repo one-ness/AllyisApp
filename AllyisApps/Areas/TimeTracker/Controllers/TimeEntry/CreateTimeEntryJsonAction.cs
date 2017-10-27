@@ -83,7 +83,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				if (model.Date != 0) dateGet = Utility.GetDateTimeFromDays(model.Date);
 				else dateGet = DateTime.Now;
 
-				int id = await AppService.CreateTimeEntry(new Services.TimeTracker.TimeEntry()
+				int id = await AppService.CreateTimeEntry(new Services.TimeTracker.TimeEntry
 				{
 					UserId = model.UserId,
 					ProjectId = model.ProjectId,
@@ -121,7 +121,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (model.IsCreated && (!model.TimeEntryId.HasValue || model.TimeEntryId.Value == 0))
 			{
-				return await CreateTimeEntryJson(new CreateTimeEntryViewModel()
+				return await CreateTimeEntryJson(new CreateTimeEntryViewModel
 				{
 					Date = model.Date,
 					Description = model.Description,

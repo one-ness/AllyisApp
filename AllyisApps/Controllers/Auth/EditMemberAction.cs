@@ -4,16 +4,16 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
-using System.Linq;
-using AllyisApps.Services.Auth;
-using AllyisApps.ViewModels.Auth;
-using System.Threading.Tasks;
-using AllyisApps.Services;
-using AllyisApps.ViewModels;
-using AllyisApps.Services.Billing;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 using AllyisApps.Resources;
+using AllyisApps.Services;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Billing;
+using AllyisApps.ViewModels;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -27,7 +27,7 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		public async Task<ActionResult> EditMember(int id, int userId)
 		{
-			var model = await this.ConstructViewModel(id, userId);
+			var model = await ConstructViewModel(id, userId);
 			return View("editmember", model);
 		}
 
@@ -36,7 +36,7 @@ namespace AllyisApps.Controllers.Auth
 			User user = await AppService.GetUserAsync(userId); // this call makes sure that both logged in user and userId have at least one common org
 			var org = user.Organizations.Where(x => x.OrganizationId == orgId).FirstOrDefault();
 			var model = new EditMemberViewModel();
-			model.CanEditMember = this.AppService.CheckOrgAction(AppService.OrgAction.EditUser, orgId, false);
+			model.CanEditMember = AppService.CheckOrgAction(AppService.OrgAction.EditUser, orgId, false);
 			model.Address = user.Address?.Address1;
 			model.City = user.Address?.City;
 			model.CountryName = user.Address?.CountryName;
@@ -52,7 +52,7 @@ namespace AllyisApps.Controllers.Auth
 			model.PostalCode = user.Address?.PostalCode;
 
 			// get all subscriptions of this organization, get a list of roles for each subscription and user's role in each subscription
-			var subs = await this.AppService.GetSubscriptionsAsync(model.OrganizationId);
+			var subs = await AppService.GetSubscriptionsAsync(model.OrganizationId);
 			foreach (var item in subs)
 			{
 				int selectedRoleId = 0;
@@ -65,7 +65,7 @@ namespace AllyisApps.Controllers.Auth
 
 				if (item.ProductId == ProductIdEnum.TimeTracker)
 				{
-					model.SubscriptionRoles.Add(new EditMemberViewModel.RoleItem()
+					model.SubscriptionRoles.Add(new EditMemberViewModel.RoleItem
 					{
 						RoleList = ModelHelper.GetTimeTrackerRolesList(),
 						SelectedRoleId = selectedRoleId,
@@ -75,7 +75,7 @@ namespace AllyisApps.Controllers.Auth
 				}
 				else if (item.ProductId == ProductIdEnum.ExpenseTracker)
 				{
-					model.SubscriptionRoles.Add(new EditMemberViewModel.RoleItem()
+					model.SubscriptionRoles.Add(new EditMemberViewModel.RoleItem
 					{
 						RoleList = ModelHelper.GetExpenseTrackerRolesList(),
 						SelectedRoleId = selectedRoleId,
@@ -85,7 +85,7 @@ namespace AllyisApps.Controllers.Auth
 				}
 				else if (item.ProductId == ProductIdEnum.StaffingManager)
 				{
-					model.SubscriptionRoles.Add(new EditMemberViewModel.RoleItem()
+					model.SubscriptionRoles.Add(new EditMemberViewModel.RoleItem
 					{
 						RoleList = ModelHelper.GetStaffingManagerRolesList(),
 						SelectedRoleId = selectedRoleId,
@@ -113,14 +113,14 @@ namespace AllyisApps.Controllers.Auth
 				// TODO: do this in a transaction
 
 				// update employee id 
-				var result = await this.AppService.UpdateEmployeeIdAndOrgRole(model.OrganizationId, model.UserId, model.EmployeeId, (OrganizationRoleEnum)model.SelectedOrganizationRoleId);
+				var result = await AppService.UpdateEmployeeIdAndOrgRole(model.OrganizationId, model.UserId, model.EmployeeId, (OrganizationRoleEnum)model.SelectedOrganizationRoleId);
 				if (result == UpdateEmployeeIdAndOrgRoleResult.CannotSelfUpdateOrgRole)
 				{
-					this.Notifications.Add(new Core.Alert.BootstrapAlert(Strings.CannotSelfUpdateOrgRole, Core.Alert.Variety.Danger));
+					Notifications.Add(new Core.Alert.BootstrapAlert(Strings.CannotSelfUpdateOrgRole, Core.Alert.Variety.Danger));
 				}
 				else if (result == UpdateEmployeeIdAndOrgRoleResult.EmployeeIdNotUnique)
 				{
-					this.Notifications.Add(new Core.Alert.BootstrapAlert(Strings.EmployeeIdNotUniqueError, Core.Alert.Variety.Danger));
+					Notifications.Add(new Core.Alert.BootstrapAlert(Strings.EmployeeIdNotUniqueError, Core.Alert.Variety.Danger));
 				}
 				else
 				{
@@ -135,13 +135,13 @@ namespace AllyisApps.Controllers.Auth
 					}
 
 					// update the subscription roles
-					await this.AppService.UpdateSubscriptionUserRoles(model.UserId, subRoles);
+					await AppService.UpdateSubscriptionUserRoles(model.UserId, subRoles);
 					return RedirectToAction(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { @id = model.OrganizationId });
 				}
 			}
 
 			// error, copy values from existing model
-			var newModel = await this.ConstructViewModel(model.OrganizationId, model.UserId);
+			var newModel = await ConstructViewModel(model.OrganizationId, model.UserId);
 			newModel.SelectedOrganizationRoleId = model.SelectedOrganizationRoleId;
 			foreach (var item in model.SubscriptionRoles)
 			{

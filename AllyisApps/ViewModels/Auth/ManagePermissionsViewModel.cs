@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -103,7 +102,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Current product Role
 		/// </summary>
-		public int currentRole { get; set; }
+		public int CurrentRole { get; set; }
 
 		/// <summary>
 		///
@@ -118,6 +117,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Is selected for the action
 		/// </summary>
-		public bool isChecked { get; set; }
+		public bool IsChecked { get; set; }
 	}
 }

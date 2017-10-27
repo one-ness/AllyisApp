@@ -47,7 +47,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				userViewModels.Add(InitializeUserMaxAmount(user));
 			}
 
-			UserSettingsViewModel model = new UserSettingsViewModel()
+			UserSettingsViewModel model = new UserSettingsViewModel
 			{
 				SubscriptionId = subscriptionId,
 				Users = userViewModels
@@ -58,7 +58,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 		private UserMaxAmountViewModel InitializeUserMaxAmount(OrganizationUser user)
 		{
-			return new UserMaxAmountViewModel()
+			return new UserMaxAmountViewModel
 			{
 				MaxAmount = user.MaxApprovalAmount,
 				FirstName = user.FirstName,

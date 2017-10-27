@@ -29,19 +29,19 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The settings page.</returns>
 		public async Task<ActionResult> SettingsPayClass(int subscriptionId)
 		{
-			AppService.CheckTimeTrackerAction((AppService.TimeTrackerAction.EditOthers), subscriptionId);
+			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			int organizaionID = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			var infos = AppService.GetAllSettings(organizaionID);
-			UserContext.SubscriptionAndRole subInfo = null;
+			UserContext.SubscriptionAndRole subInfo;
 			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			string subName = await AppService.GetSubscriptionName(subscriptionId);
 			var infoOrg = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infoOrg.Item1.StartOfWeek));
 			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
 			Services.TimeTracker.Setting settings = infos.Item1;
-			return View(new SettingsPayClassesViewModel()
+			return View(new SettingsPayClassesViewModel
 			{
-				Settings = new SettingsViewModel.SettingsInfoViewModel()
+				Settings = new SettingsViewModel.SettingsInfoViewModel
 				{
 					IsLockDateUsed = settings.IsLockDateUsed,
 					LockDatePeriod = settings.LockDatePeriod,
@@ -53,12 +53,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					StartOfWeek = settings.StartOfWeek,
 					Today = DateTime.UtcNow.Date
 				},
-				PayClasses = infos.Item2.AsParallel().Select(payClass => new SettingsViewModel.PayClassViewModel()
+				PayClasses = infos.Item2.AsParallel().Select(payClass => new SettingsViewModel.PayClassViewModel
 				{
 					PayClassId = payClass.PayClassId,
 					PayClassName = payClass.PayClassName
 				}),
-				Holidays = infos.Item3.AsParallel().Select(holiday => new SettingsViewModel.HolidayViewModel()
+				Holidays = infos.Item3.AsParallel().Select(holiday => new SettingsViewModel.HolidayViewModel
 				{
 					Date = holiday.Date,
 					HolidayId = holiday.HolidayId,

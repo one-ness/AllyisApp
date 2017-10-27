@@ -32,7 +32,7 @@ namespace AllyisApps.ViewModels
 				string countryName = Utility.AggregateSpaces(item.Value.CountryName);
 
 				// use the country name in the resource file to get it's localized name
-				string localized = Resources.Countries.ResourceManager.GetString(countryName) ?? item.Value.CountryName;
+				string localized = Countries.ResourceManager.GetString(countryName) ?? item.Value.CountryName;
 
 				result.Add(item.Key, localized);
 			}
@@ -56,7 +56,7 @@ namespace AllyisApps.ViewModels
 			foreach (State item in states)
 			{
 				string stateName = Utility.AggregateSpaces(item.StateName);
-				string localized = Resources.States.ResourceManager.GetString(stateName) ?? item.StateName;
+				string localized = States.ResourceManager.GetString(stateName) ?? item.StateName;
 				result.Add(item.StateId.ToString(), localized);
 			}
 
