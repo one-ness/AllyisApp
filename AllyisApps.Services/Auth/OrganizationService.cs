@@ -115,9 +115,9 @@ namespace AllyisApps.Services
 		{
 			var spResults = await DBHelper.GetOrganizationManagementInfo(orgId);
 			Organization org = InitializeOrganization(spResults.Item1);
-			org.Users = spResults.Item2.Select(oudb => InitializeOrganizationUser(oudb)).ToList();
-			org.Subscriptions = spResults.Item3.Select(sddb => InitializeSubscription(sddb)).ToList();
-			org.Invitations = spResults.Item4.Select(idb => InitializeInvitationInfo(idb)).ToList();
+			org.Users = spResults.Item2.Select(InitializeOrganizationUser).ToList();
+			org.Subscriptions = spResults.Item3.Select(InitializeSubscription).ToList();
+			org.Invitations = spResults.Item4.Select(InitializeInvitationInfo).ToList();
 			org.StripeToken = spResults.Item5;
 			return org;
 		}
@@ -161,16 +161,14 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(prodJson)) throw new ArgumentNullException(nameof(employeedId));
 
 			// Creation of invitation
-			var result = await DBHelper.CreateInvitation(email, firstName, lastName, organizationId, (int)organizationRoleId, employeedId, prodJson);
+			int result = await DBHelper.CreateInvitation(email, firstName, lastName, organizationId, (int)organizationRoleId, employeedId, prodJson);
 
-			if (result == -1)
+			switch (result)
 			{
-				throw new DuplicateNameException("User is already a member of the organization.");
-			}
-
-			if (result == -2)
-			{
-				throw new InvalidOperationException("Employee Id is already taken.");
+				case -1:
+					throw new DuplicateNameException("User is already a member of the organization.");
+				case -2:
+					throw new InvalidOperationException("Employee Id is already taken.");
 			}
 
 			SendInviteEmail(url, email);
@@ -264,7 +262,7 @@ namespace AllyisApps.Services
 
 			foreach (var invitationId in InvitationIds)
 			{
-				var invite = await GetInvitationById(invitationId);
+				Invitation invite = await GetInvitationById(invitationId);
 				if (!DBHelper.DeleteInvitation(invitationId)) worked = false;
 			}
 
@@ -283,7 +281,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException(nameof(orgId), "Organization Id cannot be negative.");
 			}
 
-			return DBHelper.GetOrganizationMemberList(orgId).Select(o => InitializeOrganizationUser(o));
+			return DBHelper.GetOrganizationMemberList(orgId).Select(InitializeOrganizationUser);
 		}
 
 		/// <summary>
@@ -294,15 +292,9 @@ namespace AllyisApps.Services
 			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
 
 			CheckOrgAction(OrgAction.ReadUsersList, orgId);
-			var result = new List<OrganizationUser>();
 			var collection = await DBHelper.GetOrganizationUsersAsync(orgId);
-			foreach (var item in collection)
-			{
-				var data = this.InitializeOrganizationUser(item);
-				result.Add(data);
-			}
 
-			return result;
+			return collection.Select(item => this.InitializeOrganizationUser(item)).Cast<OrganizationUser>().ToList();
 		}
 
 		/// <summary>
@@ -338,7 +330,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException(nameof(orgId), "Organization Id cannot be negative.");
 			}
 
-			return DBHelper.GetProjectsByOrgId(orgId, onlyActive ? 1 : 0).Select(c => InitializeCompleteProjectInfo(c));
+			return DBHelper.GetProjectsByOrgId(orgId, onlyActive ? 1 : 0).Select(InitializeCompleteProjectInfo);
 		}
 
 		/// <summary>
