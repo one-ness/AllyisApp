@@ -3706,6 +3706,24 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Staffing Manager.
+        /// </summary>
+        public static string StaffingManager {
+            get {
+                return ResourceManager.GetString("StaffingManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Staffing Manager Roles.
+        /// </summary>
+        public static string StaffingManagerRole {
+            get {
+                return ResourceManager.GetString("StaffingManagerRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start Date.
         /// </summary>
         public static string StartDate {
