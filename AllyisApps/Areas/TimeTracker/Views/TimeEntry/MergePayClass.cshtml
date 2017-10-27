@@ -13,15 +13,15 @@
 }
 
 <p id="notice" style="color:red"></p>
-<div class="ovrd-row row">
-	<div class="ovrd-col-md-4 col-md-4 ovrd-col-md-offset-4 col-md-offset-4 col">
-		<div class="ovrd-panel panel ovrd-panel-info panel-info" style="min-width:350px;">
-			<div class="ovrd-panel-heading panel-heading">
+<div class="row">
+	<div class="col-md-4 col-md-offset-4">
+		<div class="panel panel-info" style="min-width:350px;">
+			<div class="panel-heading">
 				<h3 style="margin-top: 0; margin-bottom: 0;">
 					@String.Format(Strings.ChoosePayClassToMerge, "\"" + Model.SourcePayClassName + "\"")
 				</h3>
 			</div>
-			<div class="ovrd-panel-body panel-body">
+			<div class="panel-body">
 				@using (Html.BeginForm(ActionConstants.MergePayClass, ControllerConstants.TimeEntry, FormMethod.Post, new { enctype = "multipart/form-data" }))
 				{
 					@Html.AntiForgeryToken();
@@ -34,8 +34,8 @@
 					}
 					<br />
 					<div class="pull-right">
-						<a href="@Url.Action(ActionConstants.Settings, ControllerConstants.TimeEntry, routeValues: null)" class="ovrd-btn btn ovrd-btn-default btn-default">@Strings.Cancel</a>
-						<input type="submit" class="ovrd-btn btn ovrd-btn-primary btn-primary" value=@Strings.Save onClick="this.form.submit(); this.disabled=true; this.value='Saving...';" />
+						<a href="@Url.Action(ActionConstants.Settings, ControllerConstants.TimeEntry, routeValues: null)" class="btn btn-default">@Strings.Cancel</a>
+						<input type="submit" class="btn btn-primary" value=@Strings.Save onClick="this.form.submit(); this.disabled=true; this.value='Saving...';" />
 					</div>
 				}
 			</div>
