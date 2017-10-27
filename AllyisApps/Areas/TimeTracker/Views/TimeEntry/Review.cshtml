@@ -65,7 +65,7 @@
 				<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
 				<span></span> <b class="caret"></b>
 			</div>
-			@Html.DropDownList("statusFilter",
+						@Html.DropDownList("statusFilter",
 				new SelectList(Model.TimeEntryStatusOptions, "Key", "Value"),
 				new
 				{
@@ -80,49 +80,66 @@
 					Actions
 				</button>
 				<div class="dropdown-menu">
-					@Html.ActionLink(
-						Strings.LockEntries,
-						ActionConstants.LockTimeEntries,
-						ControllerConstants.TimeEntry,
-						new
-						{
-							subscriptionId = Model.SubscriptionId,
-							startDate = Model.StartDate,
-							lockDate = Model.EndDate
-						},
-						new
-						{
-							@class = "dropdown-item"
-						})
-					@Html.ActionLink(
-						Strings.UnlockEntries,
-						ActionConstants.UnlockTimeEntries,
-						ControllerConstants.TimeEntry,
-						new
-						{
-							subscriptionId = Model.SubscriptionId,
-							startDate = Model.StartDate,
-							endDate = Model.EndDate
-						},
-						new
-						{
-							@class = "dropdown-item"
-						})
-					@Html.ActionLink(
-						Strings.PayrollProcess,
-						ActionConstants.PayrollProcessTimeEntries,
-						ControllerConstants.TimeEntry,
-						new
-						{
-							subscriptionId = Model.SubscriptionId,
-							startDate = Model.StartDate,
-							endDate = Model.EndDate
-						},
-						new
-						{
-							@class = "dropdown-item",
-							onclick = "return confirm('"+ string.Format(Strings.PayrollProcessConfirm, Model.EndDate.ToShortDateString()) + "');"
-						})
+					<ul style="list-style: none; padding: 0; margin: 0;">
+						<li style="height: 26px;">
+							<span class="text" style="margin: 5px 20px;">
+								@Html.ActionLink(
+									Strings.LockEntries,
+									ActionConstants.LockTimeEntries,
+									ControllerConstants.TimeEntry,
+									new
+									{
+										subscriptionId = Model.SubscriptionId,
+										startDate = Model.StartDate,
+										lockDate = Model.EndDate
+									},
+									new
+									{
+										@class = "dropdown-item",
+										style = "color: #333"
+									})
+							</span>
+						</li>
+						<li style="height: 26px;">
+							<span class="text" style="margin: 5px 20px;">
+								@Html.ActionLink(
+									Strings.UnlockEntries,
+									ActionConstants.UnlockTimeEntries,
+									ControllerConstants.TimeEntry,
+									new
+									{
+										subscriptionId = Model.SubscriptionId,
+										startDate = Model.StartDate,
+										endDate = Model.EndDate
+									},
+									new
+									{
+										@class = "dropdown-item",
+										style = "color: #333"
+									})
+							</span>
+						</li>
+						<li style="height: 26px;">
+							<span class="text" style="margin: 5px 20px;">
+								@Html.ActionLink(
+									Strings.PayrollProcess,
+									ActionConstants.PayrollProcessTimeEntries,
+									ControllerConstants.TimeEntry,
+									new
+									{
+										subscriptionId = Model.SubscriptionId,
+										startDate = Model.StartDate,
+										endDate = Model.EndDate
+									},
+									new
+									{
+										@class = "dropdown-item",
+										style = "color: #333",
+										onclick = "return confirm('" + string.Format(Strings.PayrollProcessConfirm, Model.EndDate.ToShortDateString()) + "');"
+									})
+							</span>
+						</li>
+					</ul>
 				</div>
 			</div>
 			<div class="clearfix"></div>
