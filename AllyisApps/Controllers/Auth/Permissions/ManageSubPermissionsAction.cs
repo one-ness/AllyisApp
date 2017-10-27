@@ -68,7 +68,8 @@ namespace AllyisApps.Controllers.Auth
 		public async Task<ActionResult> ManageTimeTrackerPermissions(int id)
 		{
 			var sub = await AppService.GetSubscription(id);
-			var orgSubs = AppService.GetSubscriptionsByOrg(sub.OrganizationId);
+			var orgSubs = await AppService.GetSubscriptionsByOrg(sub.OrganizationId);
+			
 
 			var subUsers = AppService.GetSubscriptionUsers(id);
 			var organizationMembers = AppService.GetOrganizationMemberList(sub.OrganizationId);
@@ -81,18 +82,18 @@ namespace AllyisApps.Controllers.Auth
 
 			List<UserPermssionViewModel> OrgUsers = organizationMembers.Select(orgU => new UserPermssionViewModel()
 			{
-				currentRole = (int)ProductRole.NotInProduct,
+				CurrentRole = (int)ProductRole.NotInProduct,
 				CurrentRoleName = Strings.Unassigned,
 				FullName = orgU.FirstName + " " + orgU.LastName,
 				Email = orgU.Email,
-				isChecked = false,
+				IsChecked = false,
 				UserId = orgU.UserId
 			}).OrderBy(orgU => orgU.FullName).ToList();
 
 			foreach (var subU in subUsers)
 			{
 				var OrgUserWithSub = OrgUsers.First(orgU => orgU.UserId == subU.UserId);
-				OrgUserWithSub.currentRole = subU.ProductRoleId;
+				OrgUserWithSub.CurrentRole = subU.ProductRoleId;
 				OrgUserWithSub.CurrentRoleName = roles[subU.ProductRoleId];
 			}
 
@@ -129,7 +130,7 @@ namespace AllyisApps.Controllers.Auth
 		public async Task<ActionResult> ManageExpensetrackerPermissions(int id)
 		{
 			var sub = await AppService.GetSubscription(id);
-			var orgSubs = AppService.GetSubscriptionsByOrg(sub.OrganizationId);
+			var orgSubs = await AppService.GetSubscriptionsByOrg(sub.OrganizationId);
 
 			var subUsers = AppService.GetSubscriptionUsers(id);
 			var organizationMembers = AppService.GetOrganizationMemberList(sub.OrganizationId);
@@ -142,18 +143,18 @@ namespace AllyisApps.Controllers.Auth
 
 			List<UserPermssionViewModel> OrgUsers = organizationMembers.Select(orgU => new UserPermssionViewModel()
 			{
-				currentRole = (int)ProductRole.NotInProduct,
+				CurrentRole = (int)ProductRole.NotInProduct,
 				CurrentRoleName = Strings.Unassigned,
 				FullName = orgU.FirstName + " " + orgU.LastName,
 				Email = orgU.Email,
-				isChecked = false,
+				IsChecked = false,
 				UserId = orgU.UserId
 			}).OrderBy(orgU => orgU.FullName).ToList();
 
 			foreach (var subU in subUsers)
 			{
 				var OrgUserWithSub = OrgUsers.First(orgU => orgU.UserId == subU.UserId);
-				OrgUserWithSub.currentRole = subU.ProductRoleId;
+				OrgUserWithSub.CurrentRole = subU.ProductRoleId;
 				OrgUserWithSub.CurrentRoleName = roles[subU.ProductRoleId];
 			}
 
@@ -188,7 +189,7 @@ namespace AllyisApps.Controllers.Auth
 		public async Task<ActionResult> ManageStaffingManagerPermissions(int id)
 		{
 			var sub = await AppService.GetSubscription(id);
-			var orgSubs = AppService.GetSubscriptionsByOrg(sub.OrganizationId);
+			var orgSubs = await AppService.GetSubscriptionsByOrg(sub.OrganizationId);
 
 			var subUsers = AppService.GetSubscriptionUsers(id);
 			var organizationMembers = AppService.GetOrganizationMemberList(sub.OrganizationId);
@@ -201,18 +202,18 @@ namespace AllyisApps.Controllers.Auth
 
 			List<UserPermssionViewModel> OrgUsers = organizationMembers.Select(orgU => new UserPermssionViewModel()
 			{
-				currentRole = (int)ProductRole.NotInProduct,
+				CurrentRole = (int)ProductRole.NotInProduct,
 				CurrentRoleName = Strings.Unassigned,
 				FullName = orgU.FirstName + " " + orgU.LastName,
 				Email = orgU.Email,
-				isChecked = false,
+				IsChecked = false,
 				UserId = orgU.UserId
 			}).OrderBy(orgU => orgU.FullName).ToList();
 
 			foreach (var subU in subUsers)
 			{
 				var OrgUserWithSub = OrgUsers.First(orgU => orgU.UserId == subU.UserId);
-				OrgUserWithSub.currentRole = subU.ProductRoleId;
+				OrgUserWithSub.CurrentRole = subU.ProductRoleId;
 				OrgUserWithSub.CurrentRoleName = roles[subU.ProductRoleId];
 			}
 
@@ -240,7 +241,7 @@ namespace AllyisApps.Controllers.Auth
 
 		private async Task UpdateSubRoles(UserPermissionsAction model, string UsersModifiedMessage, string UsersAddedMessage)
 		{
-			var updatedAndAdded = await AppService.UpdateSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(),
+			var updatedAndAdded = await AppService.UpdateSubscriptionUsersRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(),
 								model.SelectedAction.Value, model.OrganizationId, model.ProductId.Value);
 			if (updatedAndAdded.UsersChanged > 0)
 			{
