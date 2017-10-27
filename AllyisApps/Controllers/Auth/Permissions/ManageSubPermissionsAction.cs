@@ -68,8 +68,8 @@ namespace AllyisApps.Controllers.Auth
 		public async Task<ActionResult> ManageTimeTrackerPermissions(int id)
 		{
 			var sub = await AppService.GetSubscription(id);
-			var orgSubs = await AppService.GetSubscriptionsByOrg(sub.OrganizationId);
-			
+			var orgSubs = await AppService.GetSubscriptionsAsync(sub.OrganizationId);
+
 
 			var subUsers = AppService.GetSubscriptionUsers(id);
 			var organizationMembers = AppService.GetOrganizationMemberList(sub.OrganizationId);
@@ -109,6 +109,7 @@ namespace AllyisApps.Controllers.Auth
 					ProductId = (int)cursub.ProductId,
 					ProductName = cursub.ProductName,
 					SubscriptionId = cursub.SubscriptionId,
+					ManagePermissionsUrl = getPermissionsUrl(cursub.ProductId, cursub.SubscriptionId),
 					SubscriptionName = cursub.SubscriptionName
 				}).OrderBy(cursub => cursub.ProductId).ToList(),
 				SubscriptionId = id,
@@ -116,8 +117,6 @@ namespace AllyisApps.Controllers.Auth
 				RemoveUserMessage = "Are you sure you want to remove selcted Users from Subscription",
 				Users = OrgUsers
 			};
-
-			await Task.Delay(1);
 			return View("PermissionsOrg", model);
 		}
 
@@ -130,7 +129,7 @@ namespace AllyisApps.Controllers.Auth
 		public async Task<ActionResult> ManageExpensetrackerPermissions(int id)
 		{
 			var sub = await AppService.GetSubscription(id);
-			var orgSubs = await AppService.GetSubscriptionsByOrg(sub.OrganizationId);
+			var orgSubs = await AppService.GetSubscriptionsAsync(sub.OrganizationId);
 
 			var subUsers = AppService.GetSubscriptionUsers(id);
 			var organizationMembers = AppService.GetOrganizationMemberList(sub.OrganizationId);
@@ -189,7 +188,7 @@ namespace AllyisApps.Controllers.Auth
 		public async Task<ActionResult> ManageStaffingManagerPermissions(int id)
 		{
 			var sub = await AppService.GetSubscription(id);
-			var orgSubs = await AppService.GetSubscriptionsByOrg(sub.OrganizationId);
+			var orgSubs = await AppService.GetSubscriptionsAsync(sub.OrganizationId);
 
 			var subUsers = AppService.GetSubscriptionUsers(id);
 			var organizationMembers = AppService.GetOrganizationMemberList(sub.OrganizationId);
@@ -197,7 +196,7 @@ namespace AllyisApps.Controllers.Auth
 			//Get Strings speffic to Product for page
 			Dictionary<int, string> roles = smRoles;
 			Dictionary<string, int> actions = setSMRoles;
-			String roleHeader = Strings.StaffingManagerRole; 
+			String roleHeader = Strings.StaffingManagerRole;
 			String ActionGroup = Strings.StaffingManager;
 
 			List<UserPermssionViewModel> OrgUsers = organizationMembers.Select(orgU => new UserPermssionViewModel()
