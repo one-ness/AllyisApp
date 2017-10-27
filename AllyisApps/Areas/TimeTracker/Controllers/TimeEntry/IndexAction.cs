@@ -13,10 +13,12 @@ using AllyisApps.Controllers;
 using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
+using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.Project;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+using static AllyisApps.Services.Auth.UserContext;
 using static AllyisApps.ViewModels.TimeTracker.TimeEntry.TimeEntryOverDateRangeViewModel;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -38,9 +40,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
 
-			UserContext.SubscriptionAndRole subInfo = null;
-			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			var getSub = await AppService.GetSubscription(subscriptionId);
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out SubscriptionAndRole subInfo);
+			Subscription getSub = await AppService.GetSubscription(subscriptionId);
 			string subName = getSub.SubscriptionName;
 
 			ViewBag.GetDateTimeFromDays = new Func<int?, DateTime?>(Utility.GetNullableDateTimeFromDays);
@@ -78,7 +79,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
 
-			UserContext.SubscriptionAndRole subInfo = null;
+			SubscriptionAndRole subInfo = null;
 			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			var getSub = await AppService.GetSubscription(subscriptionId);
 			string subName = getSub.SubscriptionName;

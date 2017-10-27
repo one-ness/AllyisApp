@@ -315,8 +315,8 @@ namespace AllyisApps.Services
 
 			foreach (var item in roles)
 			{
-				var subId = item.Key;
-				var roleId = item.Value;
+				int subId = item.Key;
+				int roleId = item.Value;
 				CheckSubscriptionAction(OrgAction.EditSubscriptionUser, subId, out int orgId);
 				await DBHelper.UpdateSubscriptionUserProductRole(roleId, subId, userId);
 			}
