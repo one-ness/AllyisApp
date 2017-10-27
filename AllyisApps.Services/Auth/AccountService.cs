@@ -693,31 +693,6 @@ namespace AllyisApps.Services
         }
 
         /// <summary>
-        /// Translates a <see cref="UserRolesDBEntity"/> into a <see cref="UserRole"/>.
-        /// </summary>
-        /// <param name="userRoles">UserRolesDBEntity instance.</param>
-        /// <returns>UserRole instance.</returns>
-        private UserRole InitializeUserRole(UserRolesDBEntity userRoles)
-        {
-            if (userRoles == null)
-            {
-                return null;
-            }
-
-            return new UserRole
-            {
-                Email = userRoles.Email,
-                FirstName = userRoles.FirstName,
-                LastName = userRoles.LastName,
-                Name = userRoles.Name,
-                OrganizationRoleId = userRoles.OrganizationRoleId,
-                ProductRoleId = userRoles.ProductRoleId == null ? -1 : userRoles.ProductRoleId.Value,
-                SubscriptionId = userRoles.SubscriptionId == null ? -1 : userRoles.SubscriptionId.Value,
-                UserId = userRoles.UserId
-            };
-        }
-
-        /// <summary>
         /// Translates a <see cref="SubscriptionUserDBEntity"/> into a <see cref="SubscriptionUser"/>"/>.
         /// </summary>
         /// <param name="subUser">SubscriptionUserDBEntity instance.</param>

@@ -79,7 +79,7 @@ namespace AllyisApps.Controllers.Auth
 			//Get OrganizaionUser Rows
 			AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id);
 			var orgUsers = AppService.GetOrganizationMemberList(id);
-			var orgSubs = AppService.GetSubscriptionsByOrg(id);
+			var orgSubs = await AppService.GetSubscriptionsAsync(id);
 
 			PermissionsViewModel perModel = new PermissionsViewModel
 			{
@@ -123,7 +123,7 @@ namespace AllyisApps.Controllers.Auth
 		public async Task<ActionResult> ManageSubPermissions(int id)
 		{
 			var sub = await AppService.GetSubscription(id);
-			var orgSubs = AppService.GetSubscriptionsByOrg(sub.OrganizationId);
+			var orgSubs = await AppService.GetSubscriptionsAsync(sub.OrganizationId);
 
 			var subUsers = AppService.GetSubscriptionUsers(id);
 			var organizationMembers = AppService.GetOrganizationMemberList(sub.OrganizationId);
