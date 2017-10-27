@@ -91,7 +91,6 @@
     <Compile Include="Billing\BillingServicesHandler.cs" />
     <Compile Include="Billing\BillingHistoryItemInfo.cs" />
     <Compile Include="Billing\BillingService.cs" />
-    <Compile Include="Billing\BlockBasedOnEnum.cs" />
     <Compile Include="Billing\Sku.cs" />
     <Compile Include="Billing\Subscription.cs" />
     <Compile Include="Billing\UnitTypeEnum.cs" />
@@ -141,13 +140,10 @@
     <Compile Include="Billing\SkuIdEnum.cs" />
     <Compile Include="Billing\SkuInfo.cs" />
     <Compile Include="TimeTracker\StartOfWeekEnum.cs" />
-    <Compile Include="Billing\SubscriptionDisplay.cs" />
-    <Compile Include="Billing\SubscriptionInfo.cs" />
     <Compile Include="Auth\ProductRole.cs" />
     <Compile Include="Billing\SubscriptionUser.cs" />
     <Compile Include="TimeTracker\TimeEntry.cs" />
     <Compile Include="Auth\User.cs" />
-    <Compile Include="Auth\UserRole.cs" />
     <Compile Include="Crm\CrmService.cs" />
     <Compile Include="Billing\Product.cs" />
     <Compile Include="Billing\ProductIdEnum.cs" />

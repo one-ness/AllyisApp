@@ -161,7 +161,7 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(prodJson)) throw new ArgumentNullException(nameof(employeedId));
 
 			// Creation of invitation
-			int result = await DBHelper.CreateInvitation(email, firstName, lastName, organizationId, (int)organizationRoleId, employeedId, prodJson);
+			var result = await DBHelper.CreateInvitation(email, firstName, lastName, organizationId, (int)organizationRoleId, employeedId, prodJson);
 
 			switch (result)
 			{
@@ -242,7 +242,7 @@ namespace AllyisApps.Services
 		{
 			if (invitationId <= 0) throw new ArgumentException("invitationId");
 
-			var invite = await GetInvitationById(invitationId);
+			var invite = await GetInvitationByID(invitationId);
 			CheckOrgAction(OrgAction.DeleteInvitation, invite.OrganizationId);
 			return DBHelper.DeleteInvitation(invitationId);
 		}
@@ -262,7 +262,7 @@ namespace AllyisApps.Services
 
 			foreach (var invitationId in InvitationIds)
 			{
-				Invitation invite = await GetInvitationById(invitationId);
+				var invite = await GetInvitationByID(invitationId);
 				if (!DBHelper.DeleteInvitation(invitationId)) worked = false;
 			}
 

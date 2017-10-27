@@ -359,6 +359,8 @@
     <Compile Include="Controllers\Auth\CreateOrgAction.cs" />
     <Compile Include="Controllers\Auth\EditMemberAction.cs" />
     <Compile Include="Controllers\Auth\EditProfileAction.cs" />
+    <Compile Include="Controllers\Auth\Permissions\ManageOrgPermissionsAction.cs" />
+    <Compile Include="Controllers\Auth\Permissions\ManageSubPermissionsAction.cs" />
     <Compile Include="Controllers\Billing\EditSubscriptionAction.cs" />
     <Compile Include="Controllers\Auth\ForgotPasswordAction.cs" />
     <Compile Include="Controllers\Auth\ImportAction.cs" />
@@ -454,7 +456,6 @@
     <Compile Include="ViewModels\ModelHelper.cs" />
     <Compile Include="ViewModels\Shared\LanguageViewModel.cs" />
     <Compile Include="ViewModels\Shared\LogOnPartialViewModel.cs" />
-    <Compile Include="ViewModels\Shared\SubscriptionsViewModel.cs" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-drp-init.js" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-index2.js" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-settings.js" />

@@ -315,8 +315,8 @@ namespace AllyisApps.Services
 
 			foreach (var item in roles)
 			{
-				var subId = item.Key;
-				var roleId = item.Value;
+				int subId = item.Key;
+				int roleId = item.Value;
 				CheckSubscriptionAction(OrgAction.EditSubscriptionUser, subId, out int orgId);
 				await DBHelper.UpdateSubscriptionUserProductRole(roleId, subId, userId);
 			}
@@ -513,106 +513,6 @@ namespace AllyisApps.Services
 
 			var results = await DBHelper.GetUsersWithSubscriptionToProductInOrganization(orgId, productId);
 			return results.Select(u => InitializeUser(u, false));
-		}
-
-		/// <summary>
-		/// Gets a list of <see cref="SubscriptionDisplay"/>s for all subscriptions in the chosen organization.
-		/// </summary>
-		/// <returns>List of SubscriptionDisplayInfos.</returns>
-		public IEnumerable<Subscription> GetSubscriptionsByOrg(int organizationId)
-		{
-			return DBHelper.GetSubscriptionsDisplayByOrg(organizationId).Select(InitializeSubscription).ToList();
-		}
-
-		/// <summary>
-		/// Gets a list of available <see cref="ProductRole"/>s for a subscription.
-		/// </summary>
-		/// <param name="subscriptionId">Subscription Id.</param>
-		/// <returns>List of SubscriptionRoleInfos.</returns>
-		public IEnumerable<ProductRole> GetProductRolesFromSubscription(int subscriptionId)
-		{
-			if (subscriptionId <= 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(subscriptionId), "Subscription Id cannot be 0 or negative.");
-			}
-
-			return DBHelper.GetProductRolesFromSubscription(subscriptionId).Select(s =>
-			{
-				if (s == null)
-				{
-					return null;
-				}
-
-				return new ProductRole
-				{
-					ProductRoleName = s.ProductRoleName,
-					ProductRoleId = s.ProductRoleId
-				};
-			});
-		}
-
-		/// <summary>
-		/// Gets a <see cref="SkuInfo"/>.
-		/// </summary>
-		/// <param name="skuId">Sku Id.</param>
-		/// <returns>The SKU details.</returns>
-		public SkuInfo GetSkuDetails(SkuIdEnum skuId)
-		{
-			if (skuId <= 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(skuId), "Sku Id cannot be 0 or negative.");
-			}
-
-			SkuDBEntity sku = DBHelper.GetSkuDetails((int)skuId);
-			if (sku == null)
-			{
-				return null;
-			}
-
-			return new SkuInfo
-			{
-				SkuId = (SkuIdEnum)sku.SkuId,
-				ProductId = (ProductIdEnum)sku.ProductId,
-				SkuName = sku.SkuName,
-				Price = sku.CostPerBlock,
-				UserLimit = sku.UserLimit,
-				BillingFrequency = (BillingFrequencyEnum)sku.BillingFrequency,
-				Description = sku.Description,
-				IconUrl = sku.IconUrl,
-			};
-		}
-
-		/// <summary>
-		/// Removes the billing subscription plan for the current organization and adds a billing history
-		/// item. If the supllied subscription id has a value, also removes that subscription and returns
-		/// a message to place in a notification.
-		/// </summary>
-		/// <param name="SelectedSku">Sku id, for the billing history item.</param>
-		/// <param name="subscriptionId">Subscription id to unsubscribe from.</param>
-		/// <returns>A notification string, or null.</returns>
-		public async Task<string> UnsubscribeAndRemoveBillingSubscription(SkuIdEnum SelectedSku, int? subscriptionId)
-		{
-			var subscripiton = await GetSubscription(subscriptionId.Value);
-			var orgId = subscripiton.OrganizationId;
-
-			BillingServicesCustomer custId = RetrieveCustomer(await GetOrgBillingServicesCustomerId(orgId));
-			if (custId != null)
-			{
-				await DeleteSubscriptionPlanAndAddHistory(custId.Id.Id, SelectedSku, "Unsubscribing from product.", orgId);
-				// string subscriptionPlanId = this.DeleteSubscriptionPlanAndAddHistory(custId.Id.Id, SelectedSku, "Unsubscribing from product.");
-				// if (subscriptionPlanId != null)
-				//{
-				//	this.DeleteSubscription(custId.Id, subscriptionPlanId);
-				//}
-			}
-
-			if (subscriptionId != null)
-			{
-				string skuName = await Unsubscribe(subscriptionId.Value);
-				//return string.Format("{0} has been unsubscribed from {1}.", UserContext.UserSubscriptions[subscriptionId.Value].OrganizationName, skuName);
-			}
-
-			return null;
 		}
 
 		/// <summary>
@@ -919,7 +819,7 @@ namespace AllyisApps.Services
 		#region Info-DBEntity Conversions
 
 		/// <summary>
-		/// Translates a <see cref="SubscriptionDisplayDBEntity"/> into a <see cref="SubscriptionDisplay"/>.
+		/// Translates a subscription
 		/// </summary>
 		/// <param name="subscriptionDisplay">SubscriptionDisplayDBEntity instance.</param>
 		/// <returns>SubscriptionDisplay instance.</returns>

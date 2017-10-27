@@ -1642,13 +1642,19 @@
   <data name="CannotSelfUpdateOrgRole" xml:space="preserve">
     <value>You cannot update your organization role yourself.</value>
   </data>
-	<data name="UpdateTimeEntryStatusNoStatusSelected" xml:space="preserve">
+  <data name="UpdateTimeEntryStatusNoStatusSelected" xml:space="preserve">
     <value>Cannot update time entries status, there are no statuses selected.</value>
   </data>
-	<data name="LockTimeEntriesInvalidLockDate" xml:space="preserve">
+  <data name="LockTimeEntriesInvalidLockDate" xml:space="preserve">
     <value>Cannot set new lock date {0} because the date is on or before the previous lock or payroll processed date</value>
   </data>
-	<data name="PayrollProcessConfirm" xml:space="preserve">
+  <data name="PayrollProcessConfirm" xml:space="preserve">
     <value>Are you sure you want to payroll process all approved time entries at and before {0}?</value>
+  </data>
+  <data name="StaffingManager" xml:space="preserve">
+    <value>Staffing Manager</value>
+  </data>
+  <data name="StaffingManagerRole" xml:space="preserve">
+    <value>Staffing Manager Roles</value>
   </data>
 </root>
