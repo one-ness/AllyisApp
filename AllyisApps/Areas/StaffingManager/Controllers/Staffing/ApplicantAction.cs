@@ -41,7 +41,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 
 		private static StaffingApplicationViewModel InitializeStaffingApplicationViewModel(Application application)
 		{
-			return new StaffingApplicationViewModel()
+			return new StaffingApplicationViewModel
 			{
 				//Applicant = application.Applicant,
 				ApplicantId = application.ApplicantId,
@@ -57,7 +57,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 
 		private static ApplicationDocumentViewModel InitializeApplicationDocumentViewModel(ApplicationDocument document)
 		{
-			return new ApplicationDocumentViewModel()
+			return new ApplicationDocumentViewModel
 			{
 				ApplicationDocumentId = document.ApplicationDocumentId,
 				ApplicationId = document.ApplicationId,
@@ -68,7 +68,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 
 		private static StaffingApplicantViewModel InitializeStaffingApplicantViewModel(Applicant applicant)
 		{
-			return new StaffingApplicantViewModel()
+			return new StaffingApplicantViewModel
 			{
 				Address = applicant.Address,
 				AddressId = applicant.AddressId,

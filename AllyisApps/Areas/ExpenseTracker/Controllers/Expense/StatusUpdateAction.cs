@@ -50,7 +50,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		private async Task UpdateReport(int reportId, string status, string text)
 		{
 			ExpenseReport report = await AppService.GetExpenseReport(reportId);
-			ExpenseHistory history = new ExpenseHistory()
+			ExpenseHistory history = new ExpenseHistory
 			{
 				CreatedUtc = DateTime.UtcNow,
 				ModifiedUtc = DateTime.UtcNow,

@@ -9,13 +9,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using AllyisApps.Core.Alert;
 using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.Auth;
-using Newtonsoft.Json;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -27,20 +25,20 @@ namespace AllyisApps.Controllers.Auth
 		/// <summary>
 		/// Dictionaries of Strings resource used for view Maybe: Move to view Model
 		/// </summary>
-		private Dictionary<int, string> organizationRoles = new Dictionary<int, string>
+		private readonly Dictionary<int, string> organizationRoles = new Dictionary<int, string>
 		{
 		{ (int)OrganizationRoleEnum.Member, Strings.Member },
 		{ (int)OrganizationRoleEnum.Owner, Strings.Owner }
 		};
 
-		private Dictionary<int, string> ttRoles = new Dictionary<int, string>
+		private readonly Dictionary<int, string> ttRoles = new Dictionary<int, string>
 		{
 			{ (int)TimeTrackerRole.User, Strings.User },
 			{ (int)TimeTrackerRole.Manager, Strings.Manager },
 			{ (int)TimeTrackerRole.NotInProduct, Strings.Unassigned }
 		};
 
-		private Dictionary<int, string> etRoles = new Dictionary<int, string>
+		private readonly Dictionary<int, string> etRoles = new Dictionary<int, string>
 	{
 		{ (int)ExpenseTrackerRole.User, Strings.User },
 		{ (int)ExpenseTrackerRole.Manager, Strings.Manager },
@@ -48,21 +46,21 @@ namespace AllyisApps.Controllers.Auth
 		{ (int)ExpenseTrackerRole.NotInProduct, Strings.Unassigned }
 	};
 
-		private Dictionary<string, int> setOrganizationRoles = new Dictionary<string, int>
+		private readonly Dictionary<string, int> setOrganizationRoles = new Dictionary<string, int>
 	{
 		{ Strings.RemoveOrg, -1 },
 		{ Strings.SetMember, (int)OrganizationRoleEnum.Member },
 		{ Strings.SetOwner, (int)OrganizationRoleEnum.Owner }
 	};
 
-		private Dictionary<string, int> setTTRoles = new Dictionary<string, int>
+		private readonly Dictionary<string, int> setTTRoles = new Dictionary<string, int>
 	{
 		{ Strings.RemoveFromSubscription, -1 },
 		{ Strings.SetUser, (int)TimeTrackerRole.User },
 		{ Strings.SetManager, (int)TimeTrackerRole.Manager }
 	};
 
-		private Dictionary<string, int> setETRoles = new Dictionary<string, int>
+		private readonly Dictionary<string, int> setETRoles = new Dictionary<string, int>
 	{
 		{ Strings.RemoveFromSubscription, -1},
 		{ Strings.SetUser, (int)ExpenseTrackerRole.User },
@@ -83,14 +81,14 @@ namespace AllyisApps.Controllers.Auth
 			var orgUsers = AppService.GetOrganizationMemberList(id);
 			var orgSubs = AppService.GetSubscriptionsByOrg(id);
 
-			PermissionsViewModel perModel = new PermissionsViewModel()
+			PermissionsViewModel perModel = new PermissionsViewModel
 			{
 				Actions = setOrganizationRoles,
 				ActionGroup = Strings.Organization,
 				PossibleRoles = organizationRoles,
 				RemoveUserMessage = Strings.RemoveFromOrgNoName,
 				RoleHeader = Strings.OrganizationRole,
-				CurrentSubscriptions = orgSubs.Select(sub => new PermissionsViewModel.OrganizaionSubscriptionsViewModel()
+				CurrentSubscriptions = orgSubs.Select(sub => new PermissionsViewModel.OrganizaionSubscriptionsViewModel
 				{
 					ProductId = (int)sub.ProductId,
 					ProductName = sub.ProductName,
@@ -101,14 +99,14 @@ namespace AllyisApps.Controllers.Auth
 				OrganizationId = id,
 				ProductId = null,
 				SubscriptionId = null,
-				Users = orgUsers.Select(orgU => new UserPermssionViewModel()
+				Users = orgUsers.Select(orgU => new UserPermssionViewModel
 				{
-					currentRole = orgU.OrganizationRoleId,
+					CurrentRole = orgU.OrganizationRoleId,
 					CurrentRoleName = organizationRoles[orgU.OrganizationRoleId],
 					Email = orgU.Email,
 					FullName = orgU.FirstName + " " + orgU.LastName,
 					UserId = orgU.UserId,
-					isChecked = false
+					IsChecked = false
 				}).OrderBy(orgU => orgU.FullName).ToList()
 			};
 
@@ -133,53 +131,53 @@ namespace AllyisApps.Controllers.Auth
 			//Get Strings speffic to Product for page
 			Dictionary<int, string> roles = null;
 			Dictionary<string, int> actions = null;
-			String roleHeader = null;
-			String ActionGroup = null;
+			string roleHeader = null;
+			string actionGroup = null;
 			switch (sub.ProductId)
 			{
 				case ProductIdEnum.TimeTracker:
 					roles = ttRoles;
 					actions = setTTRoles;
 					roleHeader = Strings.TimeTrackerRole;
-					ActionGroup = Strings.TimeTracker;
+					actionGroup = Strings.TimeTracker;
 					break;
 
 				case ProductIdEnum.ExpenseTracker:
 					roles = etRoles;
 					actions = setETRoles;
 					roleHeader = Strings.ExpenseTrackerRole;
-					ActionGroup = Strings.ExpenseTracker;
+					actionGroup = Strings.ExpenseTracker;
 					break;
 
 				case ProductIdEnum.StaffingManager:
 					throw new NotImplementedException("StaffingManager permissions not implmented");
 			}
 
-			List<UserPermssionViewModel> OrgUsers = organizationMembers.Select(orgU => new UserPermssionViewModel()
+			List<UserPermssionViewModel> orgUsers = organizationMembers.Select(orgU => new UserPermssionViewModel
 			{
-				currentRole = (int)ProductRole.NotInProduct,
+				CurrentRole = ProductRole.NotInProduct,
 				CurrentRoleName = Strings.Unassigned,
-				FullName = orgU.FirstName + " " + orgU.LastName,
+				FullName = $"{orgU.FirstName} {orgU.LastName}",
 				Email = orgU.Email,
-				isChecked = false,
+				IsChecked = false,
 				UserId = orgU.UserId
 			}).OrderBy(orgU => orgU.FullName).ToList();
 
 			foreach (var subU in subUsers)
 			{
-				var OrgUserWithSub = OrgUsers.First(orgU => orgU.UserId == subU.UserId);
-				OrgUserWithSub.currentRole = subU.ProductRoleId;
-				OrgUserWithSub.CurrentRoleName = roles[subU.ProductRoleId];
+				var orgUserWithSub = orgUsers.First(orgU => orgU.UserId == subU.UserId);
+				orgUserWithSub.CurrentRole = subU.ProductRoleId;
+				orgUserWithSub.CurrentRoleName = roles[subU.ProductRoleId];
 			}
 
-			PermissionsViewModel model = new PermissionsViewModel()
+			PermissionsViewModel model = new PermissionsViewModel
 			{
 				Actions = actions,
 				OrganizationId = sub.OrganizationId,
-				ActionGroup = ActionGroup,
+				ActionGroup = actionGroup,
 				PossibleRoles = roles,
 				ProductId = (int)sub.ProductId,
-				CurrentSubscriptions = orgSubs.Select(cursub => new PermissionsViewModel.OrganizaionSubscriptionsViewModel()
+				CurrentSubscriptions = orgSubs.Select(cursub => new PermissionsViewModel.OrganizaionSubscriptionsViewModel
 				{
 					ProductId = (int)cursub.ProductId,
 					ProductName = cursub.ProductName,
@@ -189,7 +187,7 @@ namespace AllyisApps.Controllers.Auth
 				SubscriptionId = id,
 				RoleHeader = roleHeader,
 				RemoveUserMessage = "Are you sure you want to remove selcted Users from Subscription",
-				Users = OrgUsers
+				Users = orgUsers
 			};
 
 			await Task.Delay(1);

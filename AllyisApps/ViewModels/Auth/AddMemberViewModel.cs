@@ -16,21 +16,21 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets user first name.
 		/// </summary>
-		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "FirstNameValidationAddMember")]
+		[Required(ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "FirstNameValidationAddMember")]
 		[Display(Name = "First Name")]
 		public string FirstName { get; set; }
 
 		/// <summary>
 		/// Gets or sets user last name.
 		/// </summary>
-		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "LastNameValidationAddMember")]
+		[Required(ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "LastNameValidationAddMember")]
 		[Display(Name = "Last Name")]
 		public string LastName { get; set; }
 
 		/// <summary>
 		/// Gets or sets UserInput.
 		/// </summary>
-		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "EmailValidation")]
+		[Required(ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "EmailValidation")]
 		[EmailAddress]
 		public string Email { get; set; }
 

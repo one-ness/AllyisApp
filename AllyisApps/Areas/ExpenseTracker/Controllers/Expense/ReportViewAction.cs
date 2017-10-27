@@ -63,7 +63,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			foreach (var item in history)
 			{
 				var reviewer = await AppService.GetUserAsync(item.UserId);
-				reportHistory.Add(new ExpenseHistoryViewModel()
+				reportHistory.Add(new ExpenseHistoryViewModel
 				{
 					Reviewer = string.Format("{0} {1}", reviewer.FirstName, reviewer.LastName),
 					Status = (ExpenseStatusEnum)item.Status,
@@ -72,7 +72,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				});
 			}
 
-			return new ReportViewModel()
+			return new ReportViewModel
 			{
 				ReprortTitle = report.ReportTitle,
 				SubmittedBy = string.Format("{0} {1}", user.FirstName, user.LastName),
@@ -92,7 +92,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 		private ExpenseItemCreateViewModel InitializeExpenseItemViewModel(ExpenseItem item)
 		{
-			return new ExpenseItemCreateViewModel()
+			return new ExpenseItemCreateViewModel
 			{
 				AccountId = item.AccountId,
 				Amount = item.Amount,

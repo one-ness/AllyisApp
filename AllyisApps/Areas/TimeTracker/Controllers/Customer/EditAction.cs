@@ -80,12 +80,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			if (ModelState.IsValid)
 			{
 				var result = await AppService.UpdateCustomer(
-					new Customer()
+					new Customer
 					{
 						CustomerId = model.CustomerId,
 						ContactEmail = model.ContactEmail,
 						CustomerName = model.CustomerName,
-						Address = new Address()
+						Address = new Address
 						{
 							Address1 = model.Address,
 							AddressId = model.AddressId,

@@ -46,7 +46,7 @@ namespace AllyisApps.Services
 
 			if (timeEntryId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("timeEntryId", "Time entry id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(timeEntryId), "Time entry id cannot be 0 or negative.");
 			}
 
 			#endregion Validation
@@ -65,7 +65,7 @@ namespace AllyisApps.Services
 
 			if (entry == null)
 			{
-				throw new ArgumentNullException("entry", "Time entry must not be null.");
+				throw new ArgumentNullException(nameof(entry), "Time entry must not be null.");
 			}
 
 			#endregion Validation
@@ -83,7 +83,7 @@ namespace AllyisApps.Services
 
 			if (entry == null)
 			{
-				throw new ArgumentNullException("entry", "Time entry must not be null.");
+				throw new ArgumentNullException(nameof(entry), "Time entry must not be null.");
 			}
 
 			#endregion Validation
@@ -121,7 +121,7 @@ namespace AllyisApps.Services
 
 			if (timeEntryId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("timeEntryId", "Time entry id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(timeEntryId), "Time entry id cannot be 0 or negative.");
 			}
 
 			#endregion Validation
@@ -322,7 +322,7 @@ namespace AllyisApps.Services
 
 			if (payClassId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("payClassId", "Pay class id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(payClassId), "Pay class id cannot be 0 or negative.");
 			}
 
 			#endregion Validation
@@ -387,7 +387,7 @@ namespace AllyisApps.Services
 
 			if (overtimeHours < -1)
 			{
-				throw new ArgumentOutOfRangeException("overtimeHours", "Overtime hours cannot be negative, unless it is -1 to indicate overtime unavailable.");
+				throw new ArgumentOutOfRangeException(nameof(overtimeHours), "Overtime hours cannot be negative, unless it is -1 to indicate overtime unavailable.");
 			}
 
 			if (!new[] { "Day", "Week", "Month" }.Contains(overtimePeriod))
@@ -397,7 +397,7 @@ namespace AllyisApps.Services
 
 			if (overtimeMultiplier < 1.0)
 			{
-				throw new ArgumentOutOfRangeException("overtimeMultiplier", "Overtime rate cannot be less than regular rate (i.e. overtimeMultiplier less than one).");
+				throw new ArgumentOutOfRangeException(nameof(overtimeMultiplier), "Overtime rate cannot be less than regular rate (i.e. overtimeMultiplier less than one).");
 			}
 
 			#endregion Validation
@@ -470,7 +470,7 @@ namespace AllyisApps.Services
 				{
 					var project = projects.Where(x => x.ProjectId == entry.ProjectId).FirstOrDefault();
 					if (project.ProjectId == 0) project = null;
-					output.WriteLine("\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\",\"{10}\",\"{11}\"", entry.LastName, entry.FirstName, entry.EmployeeId, entry.Email, entry.Date.ToShortDateString(), entry.Duration, entry.PayClassName, project != null ? (project.ProjectName ?? string.Empty) : string.Empty, project != null ? (project.ProjectOrgId ?? string.Empty) : string.Empty, project != null ? (project.owningCustomer.CustomerName ?? string.Empty) : string.Empty, project != null ? (project.owningCustomer.CustomerOrgId ?? string.Empty) : string.Empty, entry.Description, ((TimeEntryStatus)entry.TimeEntryStatusId));
+					output.WriteLine("\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\",\"{10}\",\"{11}\"", entry.LastName, entry.FirstName, entry.EmployeeId, entry.Email, entry.Date.ToShortDateString(), entry.Duration, entry.PayClassName, project != null ? (project.ProjectName ?? string.Empty) : string.Empty, project != null ? (project.ProjectOrgId ?? string.Empty) : string.Empty, project != null ? (project.owningCustomer.CustomerName ?? string.Empty) : string.Empty, project != null ? (project.owningCustomer.CustomerOrgId ?? string.Empty) : string.Empty, entry.Description, (TimeEntryStatus)entry.TimeEntryStatusId);
 				}
 				catch (Exception ex)
 				{

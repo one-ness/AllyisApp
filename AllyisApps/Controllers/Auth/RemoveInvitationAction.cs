@@ -4,12 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using System;
-using System.Collections.Generic;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -52,29 +51,29 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>Redirects to the manage org action.</returns>
 		[HttpPost]
 		public async Task<ActionResult> RemoveInvitation(string checkedIds, int orgId)
-		{	
+		{
 			if (checkedIds != "")
 			{
 				//concat stuff here
 				int[] concat = StringToIntList(checkedIds);
-				this.AppService.CheckOrgAction(AppService.OrgAction.DeleteInvitation, orgId);
+				AppService.CheckOrgAction(AppService.OrgAction.DeleteInvitation, orgId);
 				var results = await AppService.RemoveInvitations(concat, orgId);
 
 				if (results)
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.InvitationDeleteNotification, Variety.Success));
-					return this.RedirectToAction(ActionConstants.OrganizationInvitations, new { id = orgId });
+					return RedirectToAction(ActionConstants.OrganizationInvitations, new { id = orgId });
 				}
 				else
 				{
 					Notifications.Add(new BootstrapAlert("Deleting Invitation Failed.", Variety.Warning));
-					return this.RedirectToAction(ActionConstants.OrganizationInvitations, new { id = orgId });
+					return RedirectToAction(ActionConstants.OrganizationInvitations, new { id = orgId });
 				}
 			}
 			else
 			{
 				Notifications.Add(new BootstrapAlert("Can't delete 0 invitations", Variety.Warning));
-				return this.RedirectToAction(ActionConstants.OrganizationInvitations, new { id = orgId });
+				return RedirectToAction(ActionConstants.OrganizationInvitations, new { id = orgId });
 			}
 		}
 

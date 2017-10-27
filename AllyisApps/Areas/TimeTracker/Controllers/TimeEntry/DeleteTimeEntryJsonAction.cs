@@ -57,7 +57,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			// Time entry is locked
 			DateTime? lockDate = await AppService.GetLockDate(AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId);
-			if ((!AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, model.SubscriptionId)) && entry.Date <= (lockDate == null ? DateTime.MinValue : lockDate.Value))
+			if (!AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, model.SubscriptionId) && entry.Date <= (lockDate == null ? DateTime.MinValue : lockDate.Value))
 			{
 				string errorMessage = Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture);
 				return Json(new
@@ -85,7 +85,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new Exception("Attempt to delete edited view that was not marked for deletion");
 			}
 
-			return await DeleteTimeEntryJson(new DeleteTimeEntryViewModel()
+			return await DeleteTimeEntryJson(new DeleteTimeEntryViewModel
 			{
 				ApprovalState = model.ApprovalState,
 				Duration = model.Duration,

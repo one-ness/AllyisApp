@@ -20,7 +20,7 @@
 	bool disabledString = locked ? true : false;
 	var canManage = ViewBag.canManage;
 	List<SelectListItem> blankList = new List<SelectListItem>();
-	blankList.Add(new SelectListItem() { Selected = true, Text = string.Empty, Value = string.Empty });
+	blankList.Add(new SelectListItem { Selected = true, Text = string.Empty, Value = string.Empty });
 
 	// do not render the date add form if they can't use it
 	@*if (create && locked)
@@ -57,29 +57,29 @@
 			{
 				if (canManage)
 				{
-					@Html.DropDownListDisabled("ProjectIdDdl", Model.ProjectId == 0 ? blankList : from c in Model.ProjectsWithInactive.Where(p => (p.StartDate.HasValue && DateTime.Compare(p.StartDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) <= 0 || p.StartDate == null) && ((p.EndDate.HasValue && DateTime.Compare(p.EndDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) >= 0) || p.EndDate == null)) //Ddl name must be different than model property name or the selected value cannot be adjusted
-																								  select new SelectListItem
-																								  {
-																									  Selected = (Model.ProjectsWithInactive.Count() == 2) ? (!(c.ProjectId < 0)) : (Model.ProjectId == c.ProjectId), //Automatically selects project if it is the only one - Select Project is a project with Id of 0
-																																																					  //Selected = (Model.ProjectId == c.ProjectId),
-																									  Text = (c.ProjectId != 0) ? (string.Format("{0} - {1}", c.CustomerName, c.ProjectName)) : c.ProjectName,    //Only need customer - project text for project ids !=0
-																																																				  //Text = ((Model.Projects.Count() == 2) ? (!(c.ProjectId == 0)) : (Model.ProjectId == c.ProjectId)).ToString(),
-																									  Value = c.ProjectId.ToString(),
-																									  //Disabled = !c.IsUserActive
-																								  }, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" }).RemoveIdAttribute()
+					@Html.DropDownListDisabled("ProjectIdDdl", Model.ProjectId == 0 ? blankList : from c in Model.ProjectsWithInactive.Where(p => (p.StartDate.HasValue && DateTime.Compare(p.StartDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) <= 0 || p.StartDate == null) && (p.EndDate.HasValue && DateTime.Compare(p.EndDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) >= 0 || p.EndDate == null)) //Ddl name must be different than model property name or the selected value cannot be adjusted
+						select new SelectListItem
+						{
+							Selected = Model.ProjectsWithInactive.Count() == 2 ? !(c.ProjectId < 0) : Model.ProjectId == c.ProjectId, //Automatically selects project if it is the only one - Select Project is a project with Id of 0
+							//Selected = (Model.ProjectId == c.ProjectId),
+							Text = c.ProjectId != 0 ? string.Format("{0} - {1}", c.CustomerName, c.ProjectName) : c.ProjectName,    //Only need customer - project text for project ids !=0
+							//Text = ((Model.Projects.Count() == 2) ? (!(c.ProjectId == 0)) : (Model.ProjectId == c.ProjectId)).ToString(),
+							Value = c.ProjectId.ToString(),
+							//Disabled = !c.IsUserActive
+						}, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" }).RemoveIdAttribute()
 				}
 				else
 				{
-					@Html.DropDownListDisabled("ProjectIdDdl", Model.ProjectId == 0 ? blankList : from c in Model.Projects.Where(p => (p.StartDate.HasValue && DateTime.Compare(p.StartDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) <= 0 || p.StartDate == null) && ((p.EndDate.HasValue && DateTime.Compare(p.EndDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) >= 0) || p.EndDate == null))  //Ddl name must be different than model property name or the selected value cannot be adjusted
-																								  select new SelectListItem
-																								  {
-																									  Selected = (Model.Projects.Count() == 2) ? (!(c.ProjectId < 0)) : (Model.ProjectId == c.ProjectId), //Automatically selects project if it is the only one - Select Project is a project with Id of 0
-																																																		  //Selected = (Model.ProjectId == c.ProjectId),
-																									  Text = (c.ProjectId != 0) ? (string.Format("{0} - {1}", c.CustomerName, c.ProjectName)) : c.ProjectName,    //Only need customer - project text for project ids !=0
-																																																				  //Text = ((Model.Projects.Count() == 2) ? (!(c.ProjectId == 0)) : (Model.ProjectId == c.ProjectId)).ToString(),
-																									  Value = c.ProjectId.ToString(),
-																									  //Disabled = !c.IsUserActive
-																								  }, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" }).RemoveIdAttribute()
+					@Html.DropDownListDisabled("ProjectIdDdl", Model.ProjectId == 0 ? blankList : from c in Model.Projects.Where(p => (p.StartDate.HasValue && DateTime.Compare(p.StartDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) <= 0 || p.StartDate == null) && (p.EndDate.HasValue && DateTime.Compare(p.EndDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) >= 0 || p.EndDate == null))  //Ddl name must be different than model property name or the selected value cannot be adjusted
+						select new SelectListItem
+						{
+							Selected = Model.Projects.Count() == 2 ? !(c.ProjectId < 0) : Model.ProjectId == c.ProjectId, //Automatically selects project if it is the only one - Select Project is a project with Id of 0
+							//Selected = (Model.ProjectId == c.ProjectId),
+							Text = c.ProjectId != 0 ? string.Format("{0} - {1}", c.CustomerName, c.ProjectName) : c.ProjectName,    //Only need customer - project text for project ids !=0
+							//Text = ((Model.Projects.Count() == 2) ? (!(c.ProjectId == 0)) : (Model.ProjectId == c.ProjectId)).ToString(),
+							Value = c.ProjectId.ToString(),
+							//Disabled = !c.IsUserActive
+						}, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" }).RemoveIdAttribute()
 				}
 				<input type="hidden" name="ProjectId" value="" />   //Needed for proper model binding, value changes on submit (see form above)
 			}
@@ -100,14 +100,14 @@
 			else
 			{
 				@Html.DropDownListDisabled("PayClassNameDdl", from c in Model.PayClasses  //Ddl name must be different than model property name or the selected value cannot be adjusted
-															  select new SelectListItem
-															  {
-																  Selected = (Model.PayClasses.Count() == 1) || (Model.PayClassId == c.PayClassId),
+					select new SelectListItem
+					{
+						Selected = Model.PayClasses.Count() == 1 || Model.PayClassId == c.PayClassId,
 
-																  Text = Strings.ResourceManager.GetString((c.PayClassName).Replace(" ", "")) ?? c.PayClassName,
+						Text = Strings.ResourceManager.GetString(c.PayClassName.Replace(" ", "")) ?? c.PayClassName,
 
-																  Value = c.PayClassId.ToString()
-															  }, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" }).RemoveIdAttribute()
+						Value = c.PayClassId.ToString()
+					}, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" }).RemoveIdAttribute()
 
 				<input type="hidden" name="PayClassId" value="" />   @*Needed for proper model binding, value changes on submit (see form above)*@
 			}

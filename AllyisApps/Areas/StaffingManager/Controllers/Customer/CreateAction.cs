@@ -61,11 +61,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			if (ModelState.IsValid)
 			{
 				int? customerId = await AppService.CreateCustomer(
-					new Customer()
+					new Customer
 					{
 						ContactEmail = model.ContactEmail,
 						CustomerName = model.CustomerName,
-						Address = new Address()
+						Address = new Address
 						{
 							Address1 = model.Address,
 							City = model.City,

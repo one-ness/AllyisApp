@@ -44,7 +44,7 @@
 						{
 							<tr class="@Holiday.Date.Year">
 								@{
-									string _holidayName = Strings.ResourceManager.GetString(((Holiday.HolidayName).Replace(" ", string.Empty)).Replace("'", string.Empty)) ?? Holiday.HolidayName;
+									string _holidayName = Strings.ResourceManager.GetString(Holiday.HolidayName.Replace(" ", string.Empty).Replace("'", string.Empty)) ?? Holiday.HolidayName;
 								}
 								<td>@_holidayName</td>
 								<td>@Holiday.Date.ToShortDateString()</td>

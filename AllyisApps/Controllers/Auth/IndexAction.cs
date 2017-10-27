@@ -41,7 +41,7 @@ namespace AllyisApps.Controllers.Auth
 		{
 			User accountInfo = await AppService.GetCurrentUserAsync();
 
-			AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel()
+			AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel
 			{
 				FirstName = accountInfo.FirstName,
 				LastName = accountInfo.LastName,
@@ -56,7 +56,7 @@ namespace AllyisApps.Controllers.Auth
 				Country = accountInfo.Address?.CountryName,
 			};
 
-			AccountIndexViewModel indexViewModel = new AccountIndexViewModel()
+			AccountIndexViewModel indexViewModel = new AccountIndexViewModel
 			{
 				UserInfo = userViewModel
 			};
@@ -65,7 +65,7 @@ namespace AllyisApps.Controllers.Auth
 			var invitationsList = accountInfo.Invitations;
 			foreach (var item in invitationsList)
 			{
-				indexViewModel.Invitations.Add(new AccountIndexViewModel.InvitationViewModel()
+				indexViewModel.Invitations.Add(new AccountIndexViewModel.InvitationViewModel
 				{
 					InvitationId = item.InvitationId,
 				});
@@ -76,7 +76,7 @@ namespace AllyisApps.Controllers.Auth
 			foreach (var item in orgsList)
 			{
 				AccountIndexViewModel.OrganizationViewModel orgViewModel =
-				new AccountIndexViewModel.OrganizationViewModel()
+				new AccountIndexViewModel.OrganizationViewModel
 				{
 					OrganizationId = item.OrganizationId,
 					OrganizationName = item.OrganizationName,

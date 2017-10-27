@@ -199,7 +199,7 @@ namespace AllyisApps.Services
 		{
 			if (customerId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(customerId), "Customer Id cannot be 0 or negative.");
 			}
 
 			IEnumerable<ProjectDBEntity> dbeList = await DBHelper.GetProjectsByCustomer(customerId);
@@ -224,7 +224,7 @@ namespace AllyisApps.Services
 		{
 			if (customerId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(customerId), "Customer Id cannot be 0 or negative.");
 			}
 
 			IEnumerable<ProjectDBEntity> dbeList = await DBHelper.GetInactiveProjectsByCustomer(customerId);
@@ -358,17 +358,17 @@ namespace AllyisApps.Services
 
 			if (projectId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(projectId), "Project Id cannot be 0 or negative.");
 			}
 
 			if (string.IsNullOrWhiteSpace(name))
 			{
-				throw new ArgumentNullException("name", "Project name must have a value and cannot be whitespace.");
+				throw new ArgumentNullException(nameof(name), "Project name must have a value and cannot be whitespace.");
 			}
 
 			if (string.IsNullOrWhiteSpace(orgId))
 			{
-				throw new ArgumentNullException("orgId", "Project Org Id must have a value and cannot be whitespace.");
+				throw new ArgumentNullException(nameof(orgId), "Project Org Id must have a value and cannot be whitespace.");
 			}
 
 			if (start.HasValue && end.HasValue && DateTime.Compare(start.Value, end.Value) > 0)
@@ -400,7 +400,7 @@ namespace AllyisApps.Services
 		{
 			if (projectId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(projectId), "Project Id cannot be 0 or negative.");
 			}
 
 			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
@@ -418,7 +418,7 @@ namespace AllyisApps.Services
 		{
 			if (projectId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(projectId), "Project Id cannot be 0 or negative.");
 			}
 
 			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
@@ -434,12 +434,12 @@ namespace AllyisApps.Services
 		{
 			if (projectId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(projectId), "Project Id cannot be 0 or negative.");
 			}
 
 			if (userId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(userId), "User Id cannot be 0 or negative.");
 			}
 
 			DBHelper.CreateProjectUser(projectId, userId);
@@ -456,12 +456,12 @@ namespace AllyisApps.Services
 		{
 			if (projectId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(projectId), "Project Id cannot be 0 or negative.");
 			}
 
 			if (userId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(userId), "User Id cannot be 0 or negative.");
 			}
 
 			return await DBHelper.UpdateProjectUser(projectId, userId, isActive ? 1 : 0);
@@ -477,12 +477,12 @@ namespace AllyisApps.Services
 		{
 			if (projectId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(projectId), "Project Id cannot be 0 or negative.");
 			}
 
 			if (userId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(userId), "User Id cannot be 0 or negative.");
 			}
 
 			return DBHelper.DeleteProjectUser(projectId, userId) == 1;
@@ -499,7 +499,7 @@ namespace AllyisApps.Services
 		{
 			if (userId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(userId), "User Id cannot be 0 or negative.");
 			}
 
 			var results = await DBHelper.GetProjectsByUserAndOrganization(userId, orgId, onlyActive ? 1 : 0);
@@ -515,7 +515,7 @@ namespace AllyisApps.Services
 		{
 			if (projectId < 0)
 			{
-				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be negative.");
+				throw new ArgumentOutOfRangeException(nameof(projectId), "Project Id cannot be negative.");
 			}
 
 			return InitializeCompleteProjectInfo(DBHelper.GetProjectById(projectId));
@@ -531,7 +531,7 @@ namespace AllyisApps.Services
 		{
 			if (projectId < 0)
 			{
-				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be negative.");
+				throw new ArgumentOutOfRangeException(nameof(projectId), "Project Id cannot be negative.");
 			}
 
 			return InitializeCompleteProjectInfo(await DBHelper.GetProjectByIdAndUser(projectId, UserContext.UserId));
@@ -548,7 +548,7 @@ namespace AllyisApps.Services
 		{
 			if (projectId < 0)
 			{
-				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be negative.");
+				throw new ArgumentOutOfRangeException(nameof(projectId), "Project Id cannot be negative.");
 			}
 
 			var spResults = DBHelper.GetProjectEditInfo(projectId, subscriptionId);
@@ -569,7 +569,7 @@ namespace AllyisApps.Services
 		{
 			if (customerId < 0)
 			{
-				throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be negative.");
+				throw new ArgumentOutOfRangeException(nameof(customerId), "Customer Id cannot be negative.");
 			}
 
 			var spResults = await DBHelper.GetNextProjectIdAndSubUsers(customerId, subscriptionId);
@@ -607,7 +607,7 @@ namespace AllyisApps.Services
 				return null;
 			}
 
-			return new Address()
+			return new Address
 			{
 				AddressId = address.AddressId,
 				Address1 = address.Address1,
@@ -633,7 +633,7 @@ namespace AllyisApps.Services
 				return null;
 			}
 
-			return new Address()
+			return new Address
 			{
 				AddressId = address.AddressId,
 				Address1 = address.Address1 ?? address.Address,
@@ -649,7 +649,7 @@ namespace AllyisApps.Services
 
 		public static AddressDBEntity GetDBEntityFromAddress(Address address)
 		{
-			return new AddressDBEntity()
+			return new AddressDBEntity
 			{
 				AddressId = address?.AddressId,
 				Address1 = address?.Address1,
@@ -670,7 +670,7 @@ namespace AllyisApps.Services
 			{
 				return null;
 			}
-			return new Customer()
+			return new Customer
 			{
 				Address = loadAddress ? getAddress(customer.AddressId) : null,
 				ContactEmail = customer.ContactEmail,
@@ -701,7 +701,7 @@ namespace AllyisApps.Services
 			Address address = null;
 			if (customer.AddressId != null)
 			{
-				address = new Address()
+				address = new Address
 				{
 					Address1 = customer.Address,
 					Address2 = null,
@@ -714,7 +714,7 @@ namespace AllyisApps.Services
 					CountryName = customer.CountryName
 				};
 			}
-			return new Customer()
+			return new Customer
 			{
 				Address = address,
 				ContactEmail = customer.ContactEmail,
@@ -773,7 +773,7 @@ namespace AllyisApps.Services
 		public Tuple<CustomerDBEntity, AddressDBEntity> GetDBEntitiesFromCustomerInfo(Customer customer)
 		{
 			return new Tuple<CustomerDBEntity, AddressDBEntity>(
-				new CustomerDBEntity()
+				new CustomerDBEntity
 				{
 					AddressId = customer.Address?.AddressId,
 					ContactEmail = customer.ContactEmail,
@@ -788,7 +788,7 @@ namespace AllyisApps.Services
 					Website = customer.Website,
 					IsActive = customer.IsActive
 				},
-				new AddressDBEntity()
+				new AddressDBEntity
 				{
 					AddressId = customer.Address?.AddressId,
 					Address1 = customer.Address?.Address1,
@@ -815,7 +815,7 @@ namespace AllyisApps.Services
 
 			return new Project.Project
 			{
-				owningCustomer = new Customer()
+				owningCustomer = new Customer
 				{
 					CustomerId = project.CustomerId,
 					CustomerName = project.CustomerName,
@@ -870,7 +870,7 @@ namespace AllyisApps.Services
 			return new CompleteProject
 			{
 				CreatedUtc = completeProject.CreatedUtc,
-				owningCustomer = new Customer()
+				owningCustomer = new Customer
 				{
 					CustomerId = completeProject.CustomerId,
 					CustomerName = completeProject.CustomerName,

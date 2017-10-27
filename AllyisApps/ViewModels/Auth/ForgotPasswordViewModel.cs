@@ -16,8 +16,8 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the account e-mail.
 		/// </summary>
-		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "EmailValidation")]
-		[EmailAddress(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "EmailFormatValidation")]
+		[Required(ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "EmailValidation")]
+		[EmailAddress(ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "EmailFormatValidation")]
 		[Display(Name = "Email")]
 		public string Email { get; set; }
 	}
