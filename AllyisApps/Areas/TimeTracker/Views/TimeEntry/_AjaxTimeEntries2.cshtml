@@ -11,7 +11,6 @@
 			Utility.GetDateTimeFromDays(d).Date,
 			CalendarWeekRule.FirstFourDayWeek,
 			startOfWeek);
-	var query2 = from entry in Model.Entries orderby entry.Date group entry by entry.Date;
 	var weekQuery = from entry in Model.Entries orderby entry.Date group entry by weekProjector(entry.Date);
 }
 
@@ -21,27 +20,23 @@
 	<div class="ovrd-panel panel ovrd-panel-default panel-default timesheet-grouping">
 		@foreach (var dateGroup in dateQuery)
 		{
-			var theEntries = from entry in dateGroup where !entry.Sample select entry;
+			var theEntries = (from entry in dateGroup where !entry.Sample select entry).ToList();
 			var theSample = (from entry in dateGroup where entry.Sample select entry).FirstOrDefault();
-			int totalCount = theEntries.Count();
+			int totalCount = theEntries.Count;
 			int allVotedCount = (from e in theEntries where e.ApprovalState != (int)ApprovalState.NoApprovalState select e).Count();
 			int allApprovedCount = (from e in theEntries where e.ApprovalState == (int)ApprovalState.Approved select e).Count();
 			int allRejectedCount = (from e in theEntries where e.ApprovalState == (int)ApprovalState.NotApproved select e).Count();
 			bool noneExist = totalCount == 0;
 			bool noneWereVoted = allVotedCount == 0;
-			bool allVotedWereApproved = allVotedCount > 0 && allVotedCount == allApprovedCount;
-			bool allVotedWereRejected = allVotedCount > 0 && allVotedCount == allRejectedCount;
 			bool allWereApproved = allVotedCount > 0 && totalCount == allApprovedCount;
 			bool allWereRejected = allVotedCount > 0 && totalCount == allRejectedCount;
-			bool anyWereChanged = (from e in theEntries where e.ModSinceApproval == true select e).Any();
+			bool anyWereChanged = (from e in theEntries where e.ModSinceApproval select e).Any();
 			string containerClass = noneExist ? "" :
 								noneWereVoted ? "" :
 								anyWereChanged ? "pending" :
 								allWereApproved ? "approved" :
 								allWereRejected ? "rejected" : "pending";
 			string headerClass = containerClass;
-			string selectorClass = allVotedWereApproved ? "approved" :
-								allVotedWereRejected ? "rejected" : "";
 
 			var currentDate = Utility.GetDateTimeFromDays(dateGroup.First().Date).Date;
 			string dateStringNums = currentDate.ToShortDateString();
@@ -113,7 +108,7 @@
 						<div class="ovrd-panel-right panel-right ovrd-table-col table-col @offDayClass @holidayClass" style="display: block; background-color:transparent;">
 							<table align="center">
 								<tr>
-									<!--
+									<!--@*
 									@if (currentDate.DayOfWeek == startOfWeek)
 									{
 										<td style="padding-right:5px; padding-bottom:5px;">
@@ -153,36 +148,37 @@
 											<i class="fa fa-files-o"></i> @Strings.DayInitial
 										</a>
 									</td>
-									-->
+									*@-->
 								</tr>
 							</table>
 						</div>
 					</div>
 					<div class="ovrd-panel-right panel-right ovrd-table-col table-col @offDayClass @holidayClass">
 						@{
-							foreach (var entry in theEntries)
+							foreach (EditTimeEntryViewModel entry in theEntries)
 							{
-								@Html.Partial("_AjaxTimeEntryBody2", entry);
+								@Html.Partial("_AjaxTimeEntryBody2", entry)
 							}
-							@Html.Partial("_AjaxTimeEntryBody2", theSample);
-							if (theSample.Date > theSample.LockDate || theSample.IsManager) //if the date is not locked because of lock date or logged in user is manager
+							@Html.Partial("_AjaxTimeEntryBody2", theSample)
+							if (theSample.Date > theSample.LockDateOld || theSample.IsManager || !theSample.IsLocked) //if the date is not locked because of lock date or logged in user is manager
 							{
 								theSample.Hidden = true;
-								@Html.Partial("_AjaxTimeEntryBody2", theSample);
+								@Html.Partial("_AjaxTimeEntryBody2", theSample)
 							}
-							else if (theEntries.Count() <= 0)//date is locked for regular user, there is no existing entry so we need 2 sample entries for styling purpose
+							else if (!theEntries.Any())//date is locked for regular user, there is no existing entry so we need 2 sample entries for styling purpose
 							{
-								@Html.Partial("_AjaxTimeEntryBody2", theSample);
+								@Html.Partial("_AjaxTimeEntryBody2", theSample)
 							}
 						}
 					</div>
 				</div>
 			</div>
-							}
+		}
 	</div>
-							}
+}
+
 <div class="pull-right">
-	<a href=@Context.Request.RawUrl
-	<span class="ovrd-btn btn ovrd-btn-danger btn-danger" >@Strings.Cancel</span></a>
+	<a href=@Context.Request.RawUrl>
+		<span class="ovrd-btn btn ovrd-btn-danger btn-danger" >@Strings.Cancel</span></a>
 	<span class="ovrd-btn btn ovrd-btn-primary btn-primary" onclick="saveForm()" style="margin-right: 15px;">@Strings.Save</span>
 </div>

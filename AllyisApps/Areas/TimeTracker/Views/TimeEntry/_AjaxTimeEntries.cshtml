@@ -66,7 +66,7 @@
 					@if (currentDate.DayOfWeek == startOfWeek)
 					{
 						<span style="padding-right:5px; padding-bottom:5px;">
-							<a class="ovrd-btn btn ovrd-btn-primary btn-primary weekcopier" name='@(theSample.Date <= theSample.LockDate && !theSample.IsManager ? "disabledButton" : "")'
+							<a class="ovrd-btn btn ovrd-btn-primary btn-primary weekcopier" name='@(theSample.Date <= theSample.LockDateOld && !theSample.IsManager ? "disabledButton" : "")'
 							   href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
 									{
 										startDateTarget=currentDate,
@@ -84,7 +84,7 @@
 						</span>
 					}
 					<span style="padding-bottom:5px;">
-						<a class="ovrd-btn btn ovrd-btn-primary btn-primary daycopier" name='@(theSample.Date <= theSample.LockDate && !theSample.IsManager ? "disabledButton" : "")'
+						<a class="ovrd-btn btn ovrd-btn-primary btn-primary daycopier" name='@(theSample.Date <= theSample.LockDateOld && !theSample.IsManager ? "disabledButton" : "")'
 						   href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
 								{
 									startDateTarget=currentDate,
@@ -113,7 +113,7 @@
 									@if (currentDate.DayOfWeek == startOfWeek)
 									{
 										<td style="padding-right:5px; padding-bottom:5px;">
-											<a class="ovrd-btn btn ovrd-btn-primary btn-primary weekcopier" name='@(theSample.Date <= theSample.LockDate && !theSample.IsManager ? "disabledButton" : "")'
+											<a class="ovrd-btn btn ovrd-btn-primary btn-primary weekcopier" name='@(theSample.Date <= theSample.LockDateOld && !theSample.IsManager ? "disabledButton" : "")'
 											   href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
 														{
 															startDateTarget=currentDate,
@@ -132,7 +132,7 @@
 										</td>
 									}
 									<td style="padding-bottom:5px;">
-										<a class="ovrd-btn btn ovrd-btn-primary btn-primary daycopier" name='@(theSample.Date <= theSample.LockDate && !theSample.IsManager ? "disabledButton" : "")'
+										<a class="ovrd-btn btn ovrd-btn-primary btn-primary daycopier" name='@(theSample.Date <= theSample.LockDateOld && !theSample.IsManager ? "disabledButton" : "")'
 										   href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
 													{
 														startDateTarget=currentDate,
@@ -160,7 +160,7 @@
 								@Html.Partial("_AjaxTimeEntryBody", entry);
 							}
 							@Html.Partial("_AjaxTimeEntryBody", theSample);
-							if (theSample.Date > theSample.LockDate || theSample.IsManager) //if the date is not locked because of lock date or logged in user is manager
+							if (theSample.Date > theSample.LockDateOld || theSample.IsManager) //if the date is not locked because of lock date or logged in user is manager
 							{
 								theSample.Hidden = true;
 								@Html.Partial("_AjaxTimeEntryBody", theSample);

@@ -15,6 +15,13 @@ namespace AllyisApps.DBModel
 	/// </summary>
 	public partial class DBHelper : IDisposable
 	{
+		private string SqlConnectionString { get; }
+		private bool inTransaction;
+		private SqlConnection globalSqlConnection;
+		private SqlTransaction globalSqlTransaction;
+		private readonly object lockObject;
+		private string transactionName;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DBHelper"/> class.
 		/// </summary>
@@ -25,31 +32,23 @@ namespace AllyisApps.DBModel
 			lockObject = new object();
 		}
 
-		private string SqlConnectionString { get; set; }
-		private bool inTransaction;
-		private SqlConnection connection;
-		private SqlTransaction transaction;
-		private object lockObject;
-		private string transactionName;
-
 		/// <summary>
 		/// begin transaction
 		/// </summary>
-		public void BeginTransaction(string transactionName)
+		public void BeginTransaction(string name)
 		{
-			if (string.IsNullOrWhiteSpace(transactionName)) throw new ArgumentNullException(nameof(transactionName));
+			if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
 
 			lock (lockObject)
 			{
-				if (!inTransaction)
-				{
-					this.transactionName = transactionName;
-					inTransaction = true;
-					connection = new SqlConnection(SqlConnectionString);
-					connection.Open();
-					// NOTE: default transaction level is read-committed. TODO: should we change it?
-					transaction = connection.BeginTransaction(transactionName);
-				}
+				if (inTransaction) return;
+
+				transactionName = name;
+				inTransaction = true;
+				globalSqlConnection = new SqlConnection(SqlConnectionString);
+				globalSqlConnection.Open();
+				// NOTE: default transaction level is read-committed. TODO: should we change it?
+				globalSqlTransaction = globalSqlConnection.BeginTransaction(name);
 			}
 		}
 
@@ -60,15 +59,14 @@ namespace AllyisApps.DBModel
 		{
 			lock (lockObject)
 			{
-				if (inTransaction)
-				{
-					inTransaction = false;
-					transaction.Commit();
-					transaction.Dispose();
-					transactionName = string.Empty;
-					connection.Close();
-					connection.Dispose();
-				}
+				if (!inTransaction) return;
+
+				inTransaction = false;
+				globalSqlTransaction.Commit();
+				globalSqlTransaction.Dispose();
+				transactionName = string.Empty;
+				globalSqlConnection.Close();
+				globalSqlConnection.Dispose();
 			}
 		}
 
@@ -79,15 +77,14 @@ namespace AllyisApps.DBModel
 		{
 			lock (lockObject)
 			{
-				if (inTransaction)
-				{
-					inTransaction = false;
-					transaction.Rollback(transactionName);
-					transaction.Dispose();
-					transactionName = string.Empty;
-					connection.Close();
-					connection.Dispose();
-				}
+				if (!inTransaction) return;
+
+				inTransaction = false;
+				globalSqlTransaction.Rollback(transactionName);
+				globalSqlTransaction.Dispose();
+				transactionName = string.Empty;
+				globalSqlConnection.Close();
+				globalSqlConnection.Dispose();
 			}
 		}
 
@@ -109,16 +106,16 @@ namespace AllyisApps.DBModel
 				// Free managed resources here
 				if (itIsSafeToAlsoFreeManagedObjects)
 				{
-					if (transaction != null)
+					if (globalSqlTransaction != null)
 					{
-						transaction.Dispose();
-						transaction = null;
+						globalSqlTransaction.Dispose();
+						globalSqlTransaction = null;
 					}
 
-					if (connection != null)
+					if (globalSqlConnection != null)
 					{
-						connection.Dispose();
-						connection = null;
+						globalSqlConnection.Dispose();
+						globalSqlConnection = null;
 					}
 				}
 

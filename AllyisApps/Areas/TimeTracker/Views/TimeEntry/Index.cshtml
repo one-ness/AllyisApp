@@ -8,7 +8,7 @@
 	Layout = "~/Areas/TimeTracker/Views/Shared/_TimeTrackerSidebar.cshtml";
 	ViewData["IsManager"] = Model.CanManage;
 	ViewData["UserId"] = Model.EntryRange.UserId;
-	ViewData["SubscriptionId"] = Model.Subscriptionid;
+	ViewData["SubscriptionId"] = Model.SubscriptionId;
 	ViewData["SubscriptionName"] = Model.SubscriptionName;
 }
 
@@ -21,7 +21,7 @@
 		<div class="form-group pull-left">
 			<a href="@Url.Action(ActionConstants.Export, ControllerConstants.TimeEntry, routeValues: new
 				{
-					subscriptionId = Model.Subscriptionid,
+					subscriptionId = Model.SubscriptionId,
 					userId = Model.EntryRange.UserId,
 					startingDate = Model.EntryRange.StartDate,
 					endingDate = Model.EntryRange.EndDate
@@ -45,31 +45,31 @@
 					@if (ViewBag.SelectedUserId == ViewBag.SignedInUserID)
 					{
 						<a class="btn btn-primary" title="@Strings.Previous"
-						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.Subscriptionid, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
+						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.SubscriptionId, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
 							<i class="ovrd-fa fa ovrd-fa-chevron-left fa-chevron-left"></i>
 						</a>
 						<a class="btn btn-primary" title="@Strings.Current"
-						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.Subscriptionid, startDate = ViewBag.WeekStart, endDate = ViewBag.WeekEnd })">
+						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.SubscriptionId, startDate = ViewBag.WeekStart, endDate = ViewBag.WeekEnd })">
 							<i class="glyphicon glyphicon-flash"></i>
 						</a>
 						<a class="btn btn-primary" title="@Strings.Next"
-						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.Subscriptionid, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
+						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.SubscriptionId, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
 							<i class="ovrd-fa fa ovrd-fa-chevron-right fa-chevron-right"></i>
 						</a>
 					}
 					else
 					{
 						<a class="btn btn-primary" title="@Strings.Previous"
-						   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.Subscriptionid, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
+						   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.SubscriptionId, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
 							<i class="ovrd-fa fa ovrd-fa-chevron-left fa-chevron-left"></i>
 						</a>
 						<a class="btn btn-primary" title="@Strings.Current"
-						   href="@Url.Action(ActionConstants.Index, routeValues: new {  subscriptionId = Model.Subscriptionid, userId = ViewBag.SelectedUserId,  startDate = ViewBag.WeekStart, endDate = ViewBag.WeekEnd })">
+						   href="@Url.Action(ActionConstants.Index, routeValues: new {  subscriptionId = Model.SubscriptionId, userId = ViewBag.SelectedUserId,  startDate = ViewBag.WeekStart, endDate = ViewBag.WeekEnd })">
 							<i class="glyphicon glyphicon-flash"></i>
 						</a>
 
 						<a class="btn btn-primary" title="@Strings.Next"
-						   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.Subscriptionid, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
+						   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.SubscriptionId, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
 							<i class="ovrd-fa fa ovrd-fa-chevron-right fa-chevron-right"></i>
 						</a>
 					}
@@ -189,7 +189,7 @@
 								</a>
 							}
 							<a href="@Url.Action(ActionConstants.UserEdit, routeValues: new {
-								subscriptionId = Model.Subscriptionid,
+								subscriptionId = Model.SubscriptionId,
 								userId = user.UserId })"
 							   style="text-decoration: none; color: #0066AA; padding-right:5%" title="Assign Projects to User"><i class="ovrd-fa fa ovrd-fa-cog fa-cog"></i></a>
 						</div>count++;
@@ -213,7 +213,7 @@
 	{
 		<div class="panel panel-info" style="background-color: #f5f5f5;">
 			<div class="panel-heading"><span class="panel-title">@Strings.Upload</span></div>
-			@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.TimeEntry, new { subscriptionid = Model.Subscriptionid }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+			@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.TimeEntry, new { subscriptionid = Model.SubscriptionId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
 			{
 				@Html.AntiForgeryToken();
 				<div>
@@ -253,7 +253,7 @@
 	<script type="text/javascript">
 		var model_startdate = @Model.EntryRange.StartDate;
 		var model_enddate = @Model.EntryRange.EndDate;
-		var model_lockdate = @Model.LockDate;
+		var model_lockdate = @Model.LockDateOld;
 		var pageSize = @Model.PageUserSize;
 		var page_container_id = "viewasuser-list";
 		var page_item_tag = "div";

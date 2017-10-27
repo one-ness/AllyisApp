@@ -7,29 +7,22 @@ CREATE PROCEDURE [TimeTracker].[GetTimeEntryIndexInfo]
 AS
 	SET NOCOUNT ON;
 
-	-- Settings is declared as a table here so that the StartOfWeek field can be used in other Select
+	-- Settings is tmp table here so that the StartOfWeek field can be used in other Select
 	-- blocks lower in this same stored procedure, while also letting the settings table itself be returned
-	DECLARE @settings TABLE (
-		StartOfWeek INT,
-		IsLockDateUsed INT,
-		LockDatePeriod VARCHAR(10),
-		LockDateQuantity INT
-	);
-	INSERT INTO @settings (StartOfWeek, IsLockDateUsed, LockDatePeriod, LockDateQuantity)
-	SELECT [StartOfWeek], [IsLockDateUsed], [LockDatePeriod], [LockDateQuantity]
-	FROM [TimeTracker].[Setting] 
-	WITH (NOLOCK) 
+	SELECT
+		[StartOfWeek],
+		[IsLockDateUsed],
+		[LockDatePeriod],
+		[LockDateQuantity],
+		[LockDate],
+		[PayrollProcessedDate]
+	INTO #settings
+	FROM [TimeTracker].[Setting] WITH (NOLOCK) 
 	WHERE [OrganizationId] = @organizationId
 
 	-- Starting and Ending date parameters are adjusted if the input is null, using the StartOfWeek from above
-	DECLARE @startOfWeek INT;
-	SET @startOfWeek = (
-		SELECT TOP 1
-			[StartOfWeek]
-		FROM @settings
-	)
-	DECLARE @todayDayOfWeek INT;
-	SET @todayDayOfWeek = ((6 + DATEPART(dw, GETDATE()) + @@dATEFIRST) % 7);
+	DECLARE @startOfWeek INT = (SELECT TOP 1 [StartOfWeek] FROM #settings)
+	DECLARE @todayDayOfWeek INT = ((6 + DATEPART(dw, GETDATE()) + @@dATEFIRST) % 7);
 
 	IF(@startingDate IS NULL)
 	BEGIN
@@ -53,7 +46,7 @@ AS
 
 	-- Begin select statements
 
-	SELECT * FROM @settings
+	SELECT * FROM #settings
 
 	
 	SELECT [PayClassId], [PayClassName], [OrganizationId] FROM [Hrm].[PayClass] WITH (NOLOCK) WHERE [OrganizationId] = @organizationId;
