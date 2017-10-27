@@ -135,7 +135,7 @@ namespace AllyisApps.Controllers.Auth
 					}
 
 					// update the subscription roles
-					await this.AppService.UpdateSubscriptionUserRoles(model.UserId, subRoles);
+					if(subRoles.Count <= 0) await this.AppService.UpdateSubscriptionUserRoles(model.UserId, subRoles);
 					return RedirectToAction(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { @id = model.OrganizationId });
 				}
 			}

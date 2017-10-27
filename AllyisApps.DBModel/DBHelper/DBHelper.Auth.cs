@@ -146,7 +146,7 @@ namespace AllyisApps.DBModel
 		{
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				return (await con.QueryAsync<int>("Auth.UpdateEmployeeIdAndOrgRole @a, @b, @c, @d", new { a = orgId, b = userId, c = employeeId, d = orgRoleId })).FirstOrDefault();
+				return (await con.QueryAsync<int>("[Auth].[UpdateEmployeeIdAndOrgRole] @a, @b, @c, @d", new { a = orgId, b = userId, c = employeeId, d = orgRoleId })).FirstOrDefault();
 			}
 		}
 

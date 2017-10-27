@@ -798,7 +798,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="productId">Product Id.</param>
 		/// <param name="orgId">.</param>
-		public void InitializeSettingsForProduct(ProductIdEnum productId, int orgId)
+		async public void InitializeSettingsForProduct(ProductIdEnum productId, int orgId)
 		{
 			if (productId <= 0)
 			{
@@ -807,7 +807,7 @@ namespace AllyisApps.Services
 
 			if (productId == ProductIdEnum.TimeTracker)
 			{
-				DBHelper.InitializeTimeTrackerSettings(orgId);
+				await DBHelper.InitializeTimeTrackerSettings(orgId);
 			}
 
 			if (productId == ProductIdEnum.StaffingManager)
