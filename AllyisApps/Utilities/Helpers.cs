@@ -4,9 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace AllyisApps.Utilities
@@ -72,6 +74,21 @@ namespace AllyisApps.Utilities
 		{
 			string res = string.Format("%{0}%", variable);
 			return resourceString.Replace(res, value);
+		}
+
+		/// <summary>
+		/// Extension method for exception-safe async list iteration
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="list">List to iterate</param>
+		/// <param name="func">Function to execute</param>
+		/// <returns></returns>
+		public static async Task ForEachAsync<T>(this List<T> list, Func<T, Task> func)
+		{
+			foreach (T value in list)
+			{
+				await func(value);
+			}
 		}
 	}
 

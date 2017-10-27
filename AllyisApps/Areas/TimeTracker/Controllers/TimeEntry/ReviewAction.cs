@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="ReviewEntries.cs" company="Allyis, Inc.">
+// <copyright file="ReviewAction.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -15,6 +15,7 @@ using AllyisApps.Resources;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.TimeTracker;
+using AllyisApps.Utilities;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using Newtonsoft.Json;
@@ -99,11 +100,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return RedirectToAction(ActionConstants.Review, new { subscriptionId, startDate, endDate });
 			}
 
-			foreach (int i in timeEntryIds)
-			{
-				await AppService.UpdateTimeEntryStatusById(i, timeEntryStatusId);
-			}
+			await timeEntryIds.ForEachAsync(async id => await AppService.UpdateTimeEntryStatusById(id, timeEntryStatusId));
+
 			Notifications.Add(new BootstrapAlert(Strings.UpdateTimeEntryStatusSuccess, Variety.Success));
+
 			return RedirectToAction(ActionConstants.Review, new { subscriptionId, startDate, endDate });
 		}
 
