@@ -66,7 +66,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@userId", userId);
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				await connection.QueryAsync("[Billing].[UpdateSubscriptionUserProductRole]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[Billing].[UpdateSubscriptionUserProductRole]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 

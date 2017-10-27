@@ -5,6 +5,7 @@ BEGIN
     SET NOCOUNT ON
     SELECT [s].*,
            [sk].[SkuName],
+		   [sk].[IconUrl],
            [p].[ProductId],
            [p].[ProductName],
            [p].[AreaUrl],

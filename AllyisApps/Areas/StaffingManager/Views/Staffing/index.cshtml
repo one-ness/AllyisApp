@@ -153,7 +153,7 @@
 		<br>
 		<div id="FilterArea" class="collapse panel panel-default filter">
 			<div class="column-left">
-				<label>Filter by Position Status</label>
+				<label>@Strings.FilterByPositionStatus</label>
 				<select multiple id="statusFilter" class="statusFilter form-control">
 					@foreach (var status in Model.PositionStatuses)
 					{
@@ -162,7 +162,7 @@
 				</select>
 			</div>
 			<div class="column-center">
-				<label>Filter by Employment Type</label>
+				<label>@Strings.FilterByEmploymentType</label>
 				<select multiple id="typesFilter" class="typesFilter form-control">
 					@foreach (var type in Model.EmploymentTypes)
 					{
@@ -171,7 +171,7 @@
 				</select>
 			</div>
 			<div class="column-right">
-				<label>Filter By Tags</label>
+				<label>@Strings.FilterByTags</label>
 				<select multiple id="tagsFilter" class="tagsFilter form-control">
 					@foreach (var tag in Model.Tags)
 					{
@@ -185,7 +185,7 @@
 		</div>
 		<br>
 		<button type="button" data-toggle="collapse" data-target="#FilterArea"><i class="glyphicon glyphicon-filter"></i></button>
-		<span>Positions: @Model.Positions.Count</span>
+		<span>@Strings.Positions @Model.Positions.Count</span>
 		<button class="btn btn-default pull-right" onclick="location.href='@Url.Action(ActionConstants.CreatePosition, ControllerConstants.Staffing, new { subscriptionId = Model.SubscriptionId } )'"><i class="glyphicon glyphicon-plus"></i></button>
 		<br>
 	</div>
@@ -194,12 +194,12 @@
 			<table class="table-responsive" id="PositionsTable">
 				<thead>
 					<tr class="panel panel-default">
-						<th width="24%" style="padding:0 5px 0 5px;" onclick="sortTable(0)">Position Title </th>
-						<th width="10%" style="padding:0 5px 0 5px;" onclick="sortTable(1)">Position Status </th>
-						<th width="8%" style="padding:0 5px 0 5px;" onclick="sortTable(2)">Positions Available </th>
-						<th width="12%" style="padding:0 5px 0 5px;" onclick="sortTable(3)">@Strings.Customer </th>
-						<th width="12%" style="padding:0 5px 0 5px;" onclick="sortTable(4)">Hiring Manager </th>
-						<th width="12%" style="padding:0 5px 0 5px;" onclick="sortTable(5)">Start Date </th>
+						<th width="24%" style="padding:0 15px 0 5px;" onclick="sortTable(0)">@Strings.PositionTitle </th>
+						<th width="10%" style="padding:0 15px 0 5px;" onclick="sortTable(1)">@Strings.PositionStatus </th>
+						<th width="8%" style="padding:0 15px 0 5px;" onclick="sortTable(2)">@Strings.PositionsAvailable </th>
+						<th width="12%" style="padding:0 15px 0 5px;" onclick="sortTable(3)">@Strings.Customer </th>
+						<th width="12%" style="padding:0 15px 0 5px;" onclick="sortTable(4)">@Strings.HiringManager </th>
+						<th width="12%" style="padding:0 15px 0 5px;" onclick="sortTable(5)">@Strings.StartDate </th>
 					</tr>
 				</thead>
 				@foreach (var pos in Model.Positions)
@@ -209,7 +209,7 @@
 							<a href="@Url.Action(ActionConstants.ViewPosition, ControllerConstants.Staffing, new { positionId = pos.PositionId, subscriptionId = Model.SubscriptionId })">@pos.PositionTitle</a>
 							@if(pos.PositionModifiedUtc > DateTime.UtcNow.AddDays(-10))
 							{
-								<span class="newIndicator pull-right">NEW</span>
+								<span class="newIndicator pull-right">@Strings.NEW</span>
 							}
 							<p style="font-size: 10px">
 								@foreach (var tag in pos.Tags)
@@ -219,11 +219,11 @@
 							</p>
 						</td>
 
-						<td>@pos.PositionStatusName</td>
+						<td style="padding:0 5px 0 15px;">@pos.PositionStatusName</td>
 						<td style="padding:0 5px 0 15px;">@pos.PositionCount</td>
-						<td>@pos.CustomerName</td>
-						<td>@pos.HiringManager</td>
-						<td>@pos.StartDate.ToShortDateString()</td>
+						<td style="padding:0 5px 0 15px;">@pos.CustomerName</td>
+						<td style="padding:0 5px 0 15px;">@pos.HiringManager</td>
+						<td style="padding:0 5px 0 15px;">@pos.StartDate.ToShortDateString()</td>
 					</tr>
 				}
 			</table>
@@ -232,7 +232,7 @@
 	@if (Model.Positions.Count == 0)
 	{
 		<div class="col-xs-12">
-			<h1 style="float: left">No Active Positions</h1>
+			<h1 style="float: left">@Strings.NoActivePositions</h1>
 		</div>
 	}
 </div>

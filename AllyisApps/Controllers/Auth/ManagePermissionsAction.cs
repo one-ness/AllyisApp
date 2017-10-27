@@ -43,8 +43,8 @@ namespace AllyisApps.Controllers.Auth
 
 
 
-
-
+		
+		/*
 		/// <summary>
 		/// Get page to edit SubscriptionPermissions
 		/// </summary>
@@ -113,7 +113,8 @@ namespace AllyisApps.Controllers.Auth
 					ProductId = (int)cursub.ProductId,
 					ProductName = cursub.ProductName,
 					SubscriptionId = cursub.SubscriptionId,
-					SubscriptionName = cursub.SubscriptionName
+					SubscriptionName = cursub.SubscriptionName,
+					ManagePermissionsUrl = getPermissionsUrl(cursub.ProductId,cursub.SubscriptionId)
 				}).OrderBy(cursub => cursub.ProductId).ToList(),
 				SubscriptionId = id,
 				RoleHeader = roleHeader,
@@ -123,6 +124,24 @@ namespace AllyisApps.Controllers.Auth
 
 			await Task.Delay(1);
 			return View("PermissionsOrg", model);
+		}
+		*/
+
+
+		internal string getPermissionsUrl(ProductIdEnum productId, int subscripitonId)
+		{
+			switch (productId)
+			{
+				case ProductIdEnum.TimeTracker:
+					return Url.Action("ManageTimeTrackerPermissions", new { id = subscripitonId });
+				case ProductIdEnum.ExpenseTracker:
+					return Url.Action("ManageExpensetrackerPermissions", new { id = subscripitonId });
+					
+				case ProductIdEnum.StaffingManager:
+					return Url.Action("ManageStaffingManagerPermissions", new { id = subscripitonId });
+				default:
+					throw new ArgumentOutOfRangeException("Product id is not in system");
+			}
 		}
 
 
@@ -239,7 +258,7 @@ namespace AllyisApps.Controllers.Auth
 				{
 					// TODO: instead of providing product id, provide subscription id of the subscription to be modified
 					// TODO: split updating user roles and creating new sub users
-					UpdateSubscriptionUserRolesResuts updatedAndAdded = await AppService.UpdateSubscriptionUsersRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedAction.Value, model.OrganizationId, model.ProductId.Value);
+					var updatedAndAdded = await AppService.UpdateSubscriptionUsersRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.OrganizationId, model.SelectedAction.Value , model.ProductId.Value);
 					if (updatedAndAdded.UsersChanged > 0)
 					{
 						Notifications.Add(new BootstrapAlert(string.Format(usersModifiedMessage, updatedAndAdded.UsersChanged), Variety.Success));
@@ -258,7 +277,6 @@ namespace AllyisApps.Controllers.Auth
 				}
 			}
 
-			await Task.Delay(1);
 			return Redirect(model.FromUrl);
 		}
 	}
