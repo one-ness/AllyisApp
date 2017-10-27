@@ -32,7 +32,7 @@
 				}
 				for (int i = 0; i < Model.Files.Count; i++)
 				{
-					var file = new ExpenseFileModel()
+					var file = new ExpenseFileModel
 					{
 						FileName = Model.Files[i].FileName,
 						ContentType = Model.Files[i].ContentType,
@@ -46,7 +46,7 @@
 				if (Model.Files.Count < 1)
 				{
 					var file = new ExpenseFile(null, "", "");
-					var model = new ExpenseFileModel()
+					var model = new ExpenseFileModel
 					{
 						FileName = file.FileName,
 						ContentType = file.ContentType,
@@ -120,7 +120,7 @@
 							<th style="width: 10%;"></th>
 						</tr>
 					</thead>
-					<tbody class="item-container">
+					<tbody @*class="item-container"*@>
 						@foreach (ExpenseItemCreateViewModel item in Model.Items)
 						{
 							item.Index = itemIndex;
@@ -179,7 +179,7 @@
 		var item_index = @itemIndex;
 
 		function addFile() {
-			var data = @Html.Raw(Json.Encode(new ExpenseFileModel() { Index = -1 }));
+			var data = @Html.Raw(Json.Encode(new ExpenseFileModel { Index = -1 }));
 			data.Index = file_index;
 			$.ajax({
 				url: '@Url.Action("DisplayFile")',

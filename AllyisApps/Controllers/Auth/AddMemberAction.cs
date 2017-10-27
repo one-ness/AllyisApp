@@ -39,25 +39,25 @@ namespace AllyisApps.Controllers.Auth
 			model.hasET = etSubInfo != null ? true : false;
 			model.hasTT = ttSubInfo != null ? true : false;
 
-			List<SelectListItem> orgRoles = new List<SelectListItem>()
+			List<SelectListItem> orgRoles = new List<SelectListItem>
 			{
-				new SelectListItem() { Text = OrganizationRoleEnum.Member.ToString(), Value = "1"},
-				new SelectListItem() { Text = OrganizationRoleEnum.Owner.ToString(), Value = "2" }
+				new SelectListItem { Text = OrganizationRoleEnum.Member.ToString(), Value = "1"},
+				new SelectListItem { Text = OrganizationRoleEnum.Owner.ToString(), Value = "2" }
 			};
 
-			List<SelectListItem> etRoles = new List<SelectListItem>()
+			List<SelectListItem> etRoles = new List<SelectListItem>
 			{
-				new SelectListItem() { Text = Strings.Unassigned, Value = "0"},
-				new SelectListItem() { Text = Strings.User, Value = "1"},
-				new SelectListItem() { Text = Strings.Manager, Value = "2"},
-				new SelectListItem() { Text = Strings.SuperUser, Value = "4"},
+				new SelectListItem { Text = Strings.Unassigned, Value = "0"},
+				new SelectListItem { Text = Strings.User, Value = "1"},
+				new SelectListItem { Text = Strings.Manager, Value = "2"},
+				new SelectListItem { Text = Strings.SuperUser, Value = "4"},
 			};
 
-			List<SelectListItem> ttRoles = new List<SelectListItem>()
+			List<SelectListItem> ttRoles = new List<SelectListItem>
 			{
-				new SelectListItem() { Text = Strings.Unassigned, Value = "0"},
-				new SelectListItem() { Text = Strings.User, Value = "1"},
-				new SelectListItem() { Text = Strings.Manager, Value = "2"}
+				new SelectListItem { Text = Strings.Unassigned, Value = "0"},
+				new SelectListItem { Text = Strings.User, Value = "1"},
+				new SelectListItem { Text = Strings.Manager, Value = "2"}
 			};
 
 			model.OrgRole = new SelectList(orgRoles, "Value", "Text", "1");

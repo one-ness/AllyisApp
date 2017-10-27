@@ -24,8 +24,8 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the user's new password.
 		/// </summary>
-		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "CreatePasswordValidation")]
-		[StringLength(100, ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PasswordLengthValidation", MinimumLength = Services.Auth.User.PasswordMinLength)]  // If you change this minimum length value, please update the string resource.
+		[Required(ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "CreatePasswordValidation")]
+		[StringLength(100, ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "PasswordLengthValidation", MinimumLength = Services.Auth.User.PasswordMinLength)]  // If you change this minimum length value, please update the string resource.
 		[DataType(DataType.Password)]
 		[Display(Name = "New Password")]
 		public string NewPassword { get; set; }
@@ -33,10 +33,10 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the user's confirmed password.
 		/// </summary>
-		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "ConfirmPasswordValidation")]
+		[Required(ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "ConfirmPasswordValidation")]
 		[DataType(DataType.Password)]
 		[Display(Name = "Confirm New Password")]
-		[Compare("NewPassword", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PasswordCompareValidation")]
+		[Compare("NewPassword", ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "PasswordCompareValidation")]
 		public string ConfirmPassword { get; set; }
 	}
 }

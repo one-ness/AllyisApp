@@ -41,9 +41,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
 			Setting settings = infos.Item1;
 			DateTime formatDateTime = DateTime.Now;
-			return View(new SettingsViewModel()
+			return View(new SettingsViewModel
 			{
-				Settings = new SettingsViewModel.SettingsInfoViewModel()
+				Settings = new SettingsViewModel.SettingsInfoViewModel
 				{
 					IsLockDateUsed = settings.IsLockDateUsed,
 					LockDatePeriod = settings.LockDatePeriod,
@@ -55,12 +55,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					StartOfWeek = settings.StartOfWeek,
 					Today = formatDateTime
 				},
-				PayClasses = infos.Item2.AsParallel().Select(payClass => new SettingsViewModel.PayClassViewModel()
+				PayClasses = infos.Item2.AsParallel().Select(payClass => new SettingsViewModel.PayClassViewModel
 				{
 					PayClassId = payClass.PayClassId,
 					PayClassName = payClass.PayClassName
 				}),
-				Holidays = infos.Item3.AsParallel().Select(holiday => new SettingsViewModel.HolidayViewModel()
+				Holidays = infos.Item3.AsParallel().Select(holiday => new SettingsViewModel.HolidayViewModel
 				{
 					Date = holiday.Date,
 					HolidayId = holiday.HolidayId,
@@ -98,7 +98,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			if (isValid)
 			{
-				if (await AppService.CreateHoliday(new Holiday() { OrganizationId = orgId, HolidayName = newHolidayName, Date = holidayDate }, subscriptionId))
+				if (await AppService.CreateHoliday(new Holiday { OrganizationId = orgId, HolidayName = newHolidayName, Date = holidayDate }, subscriptionId))
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulCreateHoliday, Variety.Success));
 				}

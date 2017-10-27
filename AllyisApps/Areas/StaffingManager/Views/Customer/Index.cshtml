@@ -8,7 +8,7 @@
 	ViewData["IsManager"] = Model.CanEdit;
 	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/StaffingManager/Views/Shared/_BreadcrumbNavPartial.cshtml";
 	DisplayHints.LayoutThemeBundle = "~/Content/StaffingManager";
-	var empty = new EditCustomerInfoViewModel() { OrganizationId = Model.OrganizationId };
+	var empty = new EditCustomerInfoViewModel { OrganizationId = Model.OrganizationId };
 	var createButtonClass = !Model.CanEdit ? "invisible" : "";
 	ViewData["UserId"] = Model.UserId;
 	ViewData["SubscriptionId"] = Model.SubscriptionId;

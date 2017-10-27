@@ -30,7 +30,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			List<SelectListItem> positionList = new List<SelectListItem>();
 			foreach (Position pos in positions)
 			{
-				positionList.Add(new SelectListItem()
+				positionList.Add(new SelectListItem
 				{
 					Text = pos.PositionTitle,
 					Value = pos.PositionId.ToString()

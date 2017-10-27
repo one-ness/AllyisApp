@@ -560,7 +560,7 @@ namespace AllyisApps.Services
 				{
 					if (document.ApplicationId == application.ApplicationId)
 					{
-						ApplicationDocuments.Add(new ApplicationDocument()
+						ApplicationDocuments.Add(new ApplicationDocument
 						{
 							ApplicationId = document.ApplicationId,
 							ApplicationDocumentId = document.ApplicationDocumentId,
@@ -569,7 +569,7 @@ namespace AllyisApps.Services
 						});
 					}
 				}
-				results.Add(new Application()
+				results.Add(new Application
 				{
 					ApplicantId = application.ApplicantId,
 					ApplicationId = application.ApplicationId,
@@ -756,7 +756,7 @@ namespace AllyisApps.Services
 			return new ApplicationDBEntity
 			{
 				ApplicationId = application.ApplicationId,
-				ApplicationStatusId = (int)application.ApplicationStatus,
+				ApplicationStatusId = application.ApplicationStatus,
 				Notes = application.Notes,
 				PositionId = application.PositionId,
 				ApplicantId = application.ApplicantId
@@ -882,7 +882,7 @@ namespace AllyisApps.Services
 		{
 			if (tag == null) throw new ArgumentNullException(nameof(tag), "Cannot accept a null tag to be converted.");
 
-			return new TagDBEntity { TagId = (int)tag.TagId, TagName = tag.TagName };
+			return new TagDBEntity { TagId = tag.TagId, TagName = tag.TagName };
 		}
 
 		#endregion Service to DB Conversions

@@ -40,13 +40,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				UserId = AppService.UserContext.UserId,
 				SubscriptionId = subscriptionId,
-				UserProjects = infos.Item1.AsParallel().Select(proj => new UserEditViewModel.ProjectInfoViewModel()
+				UserProjects = infos.Item1.AsParallel().Select(proj => new UserEditViewModel.ProjectInfoViewModel
 				{
 					ProjectId = proj.ProjectId,
 					ProjectName = proj.ProjectName,
 					CustomerName = proj.owningCustomer.CustomerName
 				}),
-				AllProjects = infos.Item2.AsParallel().Select(proj => new UserEditViewModel.ProjectInfoViewModel()
+				AllProjects = infos.Item2.AsParallel().Select(proj => new UserEditViewModel.ProjectInfoViewModel
 				{
 					ProjectName = proj.ProjectName,
 					ProjectId = proj.ProjectId,

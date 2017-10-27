@@ -48,18 +48,17 @@ namespace AllyisApps.Services
 
 			// For some reason, linq won't work directly with DataSets, so we start by just moving the tables over to a linq-able List
 			// The tables are ranked and sorted in order to get customers to import first, before projects, avoiding some very complicated look-up logic.
-			List<DataTable> tables = new List<DataTable>();
-			List<Tuple<DataTable, int>> sortableTables = new List<Tuple<DataTable, int>>();
+			var sortableTables = new List<Tuple<DataTable, int>>();
 			foreach (DataTable table in importData.Tables)
 			{
-				int rank = (table.Columns.Contains(ColumnHeaders.CustomerName) || table.Columns.Contains(ColumnHeaders.CustomerId) ? 3 : 0);
+				int rank = table.Columns.Contains(ColumnHeaders.CustomerName) || table.Columns.Contains(ColumnHeaders.CustomerId) ? 3 : 0;
 				rank = table.Columns.Contains(ColumnHeaders.ProjectName) || table.Columns.Contains(ColumnHeaders.ProjectId) ? rank == 3 ? 2 : 1 : rank;
 				sortableTables.Add(new Tuple<DataTable, int>(table, rank));
 			}
-			tables = sortableTables.OrderBy(tup => tup.Item2 * -1).Select(tup => tup.Item1).ToList();
+			var tables = sortableTables.OrderBy(tup => tup.Item2 * -1).Select(tup => tup.Item1).ToList();
 
 			// Retrieval of existing customer and project data
-			List<Tuple<Customer, List<Project.Project>>> customersProjects = new List<Tuple<Customer, List<Project.Project>>>();
+			var customersProjects = new List<Tuple<Customer, List<Project.Project>>>();
 			foreach (Customer customer in GetCustomerList(orgId))
 			{
 				customersProjects.Add(new Tuple<Customer, List<Project.Project>>(
@@ -69,17 +68,17 @@ namespace AllyisApps.Services
 			}
 
 			// Retrieval of existing user data
-			var userGet = await GetUserAsync(UserContext.UserId);
-			List<Tuple<string, User>> users = GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, userGet)).ToList();
+			User userGet = await GetUserAsync(UserContext.UserId);
+			var users = GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, userGet)).ToList();
 
 			// Retrieval of existing user product subscription data
-			int ttProductId = (int)ProductIdEnum.TimeTracker;
-			SubscriptionDisplayDBEntity ttSub = DBHelper.GetSubscriptionsDisplayByOrg(orgId).Where(s => s.ProductId == ttProductId).SingleOrDefault();
-			List<User> userSubs = (await GetUsersWithSubscriptionToProductInOrganization(orgId, ttProductId)).ToList();
+			const int ttProductId = (int)ProductIdEnum.TimeTracker;
+			SubscriptionDisplayDBEntity ttSub = (await DBHelper.GetSubscriptionsDisplayByOrg(orgId)).SingleOrDefault(s => s.ProductId == ttProductId);
+			var userSubs = (await GetUsersWithSubscriptionToProductInOrganization(orgId, ttProductId)).ToList();
 
 			// Retrieval of existing pay class data
 			var classGet = await DBHelper.GetPayClasses(orgId);
-			List<PayClass> payClasses = classGet.Select(pc => InitializePayClassInfo(pc)).ToList();
+			var payClasses = classGet.Select(InitializePayClassInfo).ToList();
 
 			// Result object
 			ImportActionResult result = new ImportActionResult();
@@ -404,7 +403,7 @@ namespace AllyisApps.Services
 								// All required information is known: time to create the project
 								project = new Project.Project
 								{
-									owningCustomer = new Customer()
+									owningCustomer = new Customer
 									{
 										CustomerId = customer.CustomerId,
 										OrganizationId = orgId,
@@ -513,7 +512,7 @@ namespace AllyisApps.Services
 									// All required information is known: time to create the project
 									project = new Project.Project
 									{
-										owningCustomer = new Customer()
+										owningCustomer = new Customer
 										{
 											CustomerId = customer.CustomerId
 										},
@@ -673,8 +672,8 @@ namespace AllyisApps.Services
 								{
 									// Couldn't get all the information
 									bool[] fieldStatuses = fields.Select(f => string.IsNullOrEmpty(f)).ToArray();
-									result.UserFailures.Add(string.Format("Could not create user {0}: missing {1}{2}.", (fieldStatuses[0] ? fieldStatuses[1] ?
-										fields[2] != null ? string.Join(" ", fields[2].Split(new string[] { "__IMPORT__" }, StringSplitOptions.None)) : null : fields[1] : fields[0]),
+									result.UserFailures.Add(string.Format("Could not create user {0}: missing {1}{2}.", fieldStatuses[0] ? fieldStatuses[1] ?
+											fields[2] != null ? string.Join(" ", fields[2].Split(new string[] { "__IMPORT__" }, StringSplitOptions.None)) : null : fields[1] : fields[0],
 										fieldStatuses[0] ? ColumnHeaders.UserEmail : fieldStatuses[1] ? ColumnHeaders.EmployeeId : string.Format("{0}/{1}", ColumnHeaders.UserFirstName, ColumnHeaders.UserLastName),
 										fieldStatuses.Where(s => s).Count() == 2 ? string.Format(" and {0}", !fieldStatuses[2] ? ColumnHeaders.EmployeeId : string.Format("{0}/{1}", ColumnHeaders.UserFirstName, ColumnHeaders.UserLastName)) : ""));
 									continue;
@@ -750,126 +749,123 @@ namespace AllyisApps.Services
 
 					#region Project-user and Time Entry Import
 
-					if (canImportProjectUser)
+					if (!canImportProjectUser) continue;
+
+					// Double-check that previous adding/finding of project and user didn't fail
+					if (project == null || userInOrg == null) continue;
+
+					// Find existing project user
+					var proj = await GetProjectsByUserAndOrganization(userInOrg.UserId);
+					if (proj.All(p => p.ProjectId != project.ProjectId))
 					{
-						// Double-check that previous adding/finding of project and user didn't fail
-						if (project != null && userInOrg != null)
-						{
-							// Find existing project user
-							var proj = await GetProjectsByUserAndOrganization(userInOrg.UserId);
-							if (!proj.Where(p => p.ProjectId == project.ProjectId).Any())
-							{
-								// If no project user entry exists for this user and project, we create one.
-								CreateProjectUser(project.ProjectId, userInOrg.UserId);
-							}
+						// If no project user entry exists for this user and project, we create one.
+						CreateProjectUser(project.ProjectId, userInOrg.UserId);
+					}
 
-							// Time Entry Import
-							if (canImportTimeEntry)
-							{
-								// Check for subscription role
-								bool canImportThisEntry = false;
-								if (!userSubs.Where(u => u.UserId == userInOrg.UserId).Any())
-								{
-									// No existing subscription for this user, so we create one.
-									await DBHelper.UpdateSubscriptionUserProductRole((int)(TimeTrackerRole.User), ttSub.SubscriptionId, userInOrg.UserId);
-									userSubs.Add(userInOrg);
-									result.UsersAddedToSubscription += 1;
-									canImportThisEntry = true; // Successfully created.
-								}
-								else
-								{
-									// Found existing subscription user.
-									canImportThisEntry = true;
-								}
+					// Time Entry Import
+					if (!canImportTimeEntry) continue;
 
-								// Import entry
-								if (canImportThisEntry)
-								{
-									string date = null;
-									string duration = null;
-									string description = "";
-									string payclass = "Regular";
-									string timeEntryStatusString = null;
+					// Check for subscription role
+					bool canImportThisEntry;
+					if (userSubs.All(u => u.UserId != userInOrg.UserId))
+					{
+						// No existing subscription for this user, so we create one.
+						await DBHelper.UpdateSubscriptionUserProductRole((int)TimeTrackerRole.User, ttSub.SubscriptionId, userInOrg.UserId);
+						userSubs.Add(userInOrg);
+						result.UsersAddedToSubscription += 1;
+						canImportThisEntry = true; // Successfully created.
+					}
+					else
+					{
+						// Found existing subscription user.
+						canImportThisEntry = true;
+					}
 
-									readColumn(row, ColumnHeaders.Date, val => date = val);
-									readColumn(row, ColumnHeaders.Duration, val => duration = val);
-									if (hasTTDescription) readColumn(row, ColumnHeaders.Description, val => description = val);
-									readColumn(row, ColumnHeaders.PayClass, val => payclass = val);
-									readColumn(row, ColumnHeaders.Status, val => timeEntryStatusString = val);
+					// Import entry
+					if (!canImportThisEntry) continue;
 
-									PayClass payClass = payClasses.Where(p => p.PayClassName.ToUpper().Equals(payclass.ToUpper())).SingleOrDefault();
-									DateTime theDate;
-									float? theDuration;
+					string date = null;
+					string duration = null;
+					string description = "";
+					string payclass = "Regular";
+					string timeEntryStatusString = null;
 
-									if (payClass == null)
-									{
-										result.TimeEntryFailures.Add(string.Format("Error importing time entry on sheet {0}, row {1}: unknown {2} ({3}).", table.TableName, table.Rows.IndexOf(row) + 2, ColumnHeaders.PayClass, payclass));
-										continue;
-									}
+					readColumn(row, ColumnHeaders.Date, val => date = val);
+					readColumn(row, ColumnHeaders.Duration, val => duration = val);
+					if (hasTTDescription) readColumn(row, ColumnHeaders.Description, val => description = val);
+					readColumn(row, ColumnHeaders.PayClass, val => payclass = val);
+					readColumn(row, ColumnHeaders.Status, val => timeEntryStatusString = val);
 
-									if (!Enum.TryParse(timeEntryStatusString, out TimeEntryStatus timeEntryStatus))
-									{
-										result.TimeEntryFailures.Add(string.Format("Error importing time entry on sheet {0}, row {1}: unknown {2} ({3}).", table.TableName, table.Rows.IndexOf(row) + 2, ColumnHeaders.Status, timeEntryStatusString));
-										continue;
-									}
+					PayClass payClass = payClasses.SingleOrDefault(p => string.Equals(p.PayClassName, payclass, StringComparison.OrdinalIgnoreCase));
+					DateTime theDate;
+					float? theDuration;
 
-									try
-									{
-										theDate = DateTime.Parse(date);
-										if (theDate.Year < 1753) throw new FormatException();
-									}
-									catch (Exception)
-									{
-										result.TimeEntryFailures.Add(string.Format("Error importing time entry on sheet {0}, row {1}: bad date format ({2}).", table.TableName, table.Rows.IndexOf(row) + 2, date));
-										continue;
-									}
+					if (payClass == null)
+					{
+						result.TimeEntryFailures.Add(string.Format("Error importing time entry on sheet {0}, row {1}: unknown {2} ({3}).", table.TableName, table.Rows.IndexOf(row) + 2, ColumnHeaders.PayClass, payclass));
+						continue;
+					}
 
-									if (!(theDuration = ParseDuration(duration)).HasValue)
-									{
-										result.TimeEntryFailures.Add(string.Format("You must enter the duration as HH:MM or H.HH format for the date {0}", theDate));
-										continue;
-									}
-									if (ParseDuration(duration) == 0)
-									{
-										result.TimeEntryFailures.Add(string.Format("You must enter a time larger than 00:00 for the date {0}", theDate));
-										continue;
-									}
+					if (!Enum.TryParse(timeEntryStatusString, out TimeEntryStatus timeEntryStatus))
+					{
+						result.TimeEntryFailures.Add(string.Format("Error importing time entry on sheet {0}, row {1}: unknown {2} ({3}).", table.TableName, table.Rows.IndexOf(row) + 2, ColumnHeaders.Status, timeEntryStatusString));
+						continue;
+					}
 
-									// Find existing entry. If none, create new one     TODO: See if there's a good way to populate this by sheet rather than by row, or once at the top
-									var entryGet = await DBHelper.GetTimeEntriesByUserOverDateRange(new List<int> { userInOrg.UserId }, orgId, theDate, theDate);
-									List<TimeEntryDBEntity> entries = entryGet.ToList();
-									if (!entries.Where(e => ((e.Description == null && description.Equals("")) || description.Equals(e.Description)) && e.Duration == theDuration && e.PayClassId == payClass.PayClassId && e.ProjectId == project.ProjectId).Any())
-									{
-										if (entries.Select(e => e.Duration).Sum() + theDuration > 24)
-										{
-											result.TimeEntryFailures.Add(string.Format("Error importing time entry on sheet {0}, row {1}: cannot have more than 24 hours of work in one day.", table.TableName, table.Rows.IndexOf(row) + 2));
-											continue;
-										}
+					try
+					{
+						theDate = DateTime.Parse(date);
+						if (theDate.Year < 1753) throw new FormatException();
+					}
+					catch (Exception)
+					{
+						result.TimeEntryFailures.Add(string.Format("Error importing time entry on sheet {0}, row {1}: bad date format ({2}).", table.TableName, table.Rows.IndexOf(row) + 2, date));
+						continue;
+					}
 
-										// All required information is present and valid
-										if (await DBHelper.CreateTimeEntry(new TimeEntryDBEntity
-										{
-											Date = theDate,
-											Description = description,
-											Duration = theDuration.Value, // value is verified earlier
-											FirstName = userInOrg.FirstName,
-											LastName = userInOrg.LastName,
-											PayClassId = payClass.PayClassId,
-											ProjectId = project.ProjectId,
-											UserId = userInOrg.UserId,
-											TimeEntryStatusId = (int)timeEntryStatus
-										}) == -1)
-										{
-											result.TimeEntryFailures.Add(string.Format("Database error importing time entry on sheet {0}, row {1}.", table.TableName, table.Rows.IndexOf(row) + 2));
-										}
-										else
-										{
-											result.TimeEntriesImported += 1;
-										}
-									}
-								}
-							}
-						}
+					if (!(theDuration = ParseDuration(duration)).HasValue)
+					{
+						result.TimeEntryFailures.Add(string.Format("You must enter the duration as HH:MM or H.HH format for the date {0}", theDate));
+						continue;
+					}
+					if (ParseDuration(duration) == 0)
+					{
+						result.TimeEntryFailures.Add(string.Format("You must enter a time larger than 00:00 for the date {0}", theDate));
+						continue;
+					}
+
+					// Find existing entry. If none, create new one     TODO: See if there's a good way to populate this by sheet rather than by row, or once at the top
+					var entryGet = await DBHelper.GetTimeEntriesByUserOverDateRange(new List<int> { userInOrg.UserId }, orgId, theDate, theDate);
+					var entries = entryGet.ToList();
+					if (entries.Any(e => (e.Description == null && description.Equals("") || description.Equals(e.Description)) &&
+											e.Duration == theDuration && e.PayClassId == payClass.PayClassId &&
+											e.ProjectId == project.ProjectId)) continue;
+
+					if (entries.Select(e => e.Duration).Sum() + theDuration > 24)
+					{
+						result.TimeEntryFailures.Add(string.Format("Error importing time entry on sheet {0}, row {1}: cannot have more than 24 hours of work in one day.", table.TableName, table.Rows.IndexOf(row) + 2));
+						continue;
+					}
+
+					// All required information is present and valid
+					if (await DBHelper.CreateTimeEntry(new TimeEntryDBEntity
+					{
+						Date = theDate,
+						Description = description,
+						Duration = theDuration.Value, // value is verified earlier
+						FirstName = userInOrg.FirstName,
+						LastName = userInOrg.LastName,
+						PayClassId = payClass.PayClassId,
+						ProjectId = project.ProjectId,
+						UserId = userInOrg.UserId,
+						TimeEntryStatusId = (int)timeEntryStatus
+					}) == -1)
+					{
+						result.TimeEntryFailures.Add(string.Format("Database error importing time entry on sheet {0}, row {1}.", table.TableName, table.Rows.IndexOf(row) + 2));
+					}
+					else
+					{
+						result.TimeEntriesImported += 1;
 					}
 
 					#endregion Project-user and Time Entry Import
@@ -920,23 +916,26 @@ namespace AllyisApps.Services
 				string selectText;
 				if (fieldIdFrom == 2)
 				{
-					string[] names = fromValue.Split(new string[] { "__IMPORT__" }, StringSplitOptions.None);
+					string[] names = fromValue.Split(new[] { "__IMPORT__" }, StringSplitOptions.None);
 					selectText = string.Format("[{0}] = '{1}' AND [{2}] = '{3}'", ColumnHeaders.UserFirstName, names[0], ColumnHeaders.UserLastName, names[1]);
 				}
 				else
 				{
 					selectText = string.Format("[{0}] = '{1}'", fieldIdFrom == 0 ? ColumnHeaders.UserEmail : ColumnHeaders.EmployeeId, fromValue);
 				}
+
 				DataRow row = link.Select(selectText)[0];
-				if (fieldIdTo == 2)
-				{
-					if (row[ColumnHeaders.UserFirstName].ToString() == "" || row[ColumnHeaders.UserLastName].ToString() == "") return null;
-					else return row[ColumnHeaders.UserFirstName] + "__IMPORT__" + row[ColumnHeaders.UserLastName];
-				}
-				else
+				if (fieldIdTo != 2)
 				{
 					return row[fieldIdTo == 0 ? ColumnHeaders.UserEmail : ColumnHeaders.EmployeeId].ToString();
 				}
+
+				if (row[ColumnHeaders.UserFirstName].ToString() == "" || row[ColumnHeaders.UserLastName].ToString() == "")
+				{
+					return null;
+				}
+
+				return row[ColumnHeaders.UserFirstName] + "__IMPORT__" + row[ColumnHeaders.UserLastName];
 			}
 			catch (IndexOutOfRangeException)
 			{
@@ -952,18 +951,17 @@ namespace AllyisApps.Services
 		public float? ParseDuration(string duration)
 		{
 			float? durationOut = null;
+			if (string.IsNullOrWhiteSpace(duration)) return null;
+
 			Match theMatch;
-			if (!string.IsNullOrWhiteSpace(duration))
+			if ((theMatch = Regex.Match(duration, HourMinutePattern)).Success)
 			{
-				if ((theMatch = Regex.Match(duration, HourMinutePattern)).Success)
-				{
-					float minutes = int.Parse(theMatch.Groups[2].Value) / MinutesInHour;
-					durationOut = float.Parse(theMatch.Groups[1].Value) + minutes;
-				}
-				else if ((theMatch = Regex.Match(duration, DecimalPattern)).Success)
-				{
-					durationOut = float.Parse(duration);
-				}
+				float minutes = int.Parse(theMatch.Groups[2].Value) / MinutesInHour;
+				durationOut = float.Parse(theMatch.Groups[1].Value) + minutes;
+			}
+			else if (Regex.Match(duration, DecimalPattern).Success)
+			{
+				durationOut = float.Parse(duration);
 			}
 
 			return durationOut;

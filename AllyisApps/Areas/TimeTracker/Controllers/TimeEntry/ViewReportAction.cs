@@ -125,7 +125,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					reportVM.PreviewPageTotal = dataVM.PageTotal;
 					reportVM.PreviewPageNum = dataCount <= reportVM.PreviewPageSize
 										? 1
-										: 1 + ((dataCount - 1) / reportVM.PreviewPageSize);
+										: 1 + (dataCount - 1) / reportVM.PreviewPageSize;
 				}
 				else
 				{
@@ -182,7 +182,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			else
 			{
 				// Count equals pageSize --> fits on 1 page
-				pageTotal = 1 + ((data.Count() - 1) / pageSize);
+				pageTotal = 1 + (data.Count() - 1) / pageSize;
 			}
 
 			return pageTotal;

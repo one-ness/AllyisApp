@@ -13,10 +13,12 @@ using AllyisApps.Controllers;
 using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
+using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.Project;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+using static AllyisApps.Services.Auth.UserContext;
 using static AllyisApps.ViewModels.TimeTracker.TimeEntry.TimeEntryOverDateRangeViewModel;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -38,9 +40,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
 
-			UserContext.SubscriptionAndRole subInfo = null;
-			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			var getSub = await AppService.GetSubscription(subscriptionId);
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out SubscriptionAndRole subInfo);
+			Subscription getSub = await AppService.GetSubscription(subscriptionId);
 			string subName = getSub.SubscriptionName;
 
 			ViewBag.GetDateTimeFromDays = new Func<int?, DateTime?>(Utility.GetNullableDateTimeFromDays);
@@ -78,7 +79,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
 
-			UserContext.SubscriptionAndRole subInfo = null;
+			SubscriptionAndRole subInfo = null;
 			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			var getSub = await AppService.GetSubscription(subscriptionId);
 			string subName = getSub.SubscriptionName;
@@ -149,7 +150,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			// Get all of the projects and initialize their total hours to 0.
 			IList<CompleteProject> allProjects = infos.Item4; // Must also grab inactive projects, or the app will crash if a user has an entry on a project he is no longer a part of
 			IDictionary<int, ProjectHours> hours = new Dictionary<int, ProjectHours>();
-			IEnumerable<Holiday> holidays = infos.Item3.Where(x => (startDate <= x.Date.Date && x.Date.Date <= endDate)); // We only care about holidays within the date range
+			IEnumerable<Holiday> holidays = infos.Item3.Where(x => startDate <= x.Date.Date && x.Date.Date <= endDate); // We only care about holidays within the date range
 
 			foreach (CompleteProject proj in allProjects.Where(p => p.ProjectId > 0))
 			{
@@ -237,7 +238,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						Description = iter.Current.Description,
 						StartingDate = Utility.GetDaysFromDateTime(startDate),
 						EndingDate = Utility.GetDaysFromDateTime(endDate),
-						IsOffDay = (weekend % 7 == (int)iter.Current.Date.DayOfWeek || (weekend + 1) % 7 == (int)iter.Current.Date.DayOfWeek) ? true : false,
+						IsOffDay = weekend % 7 == (int)iter.Current.Date.DayOfWeek || (weekend + 1) % 7 == (int)iter.Current.Date.DayOfWeek ? true : false,
 						IsHoliday = holidays.Any(x => x.Date.Date == date.Date),
 						Projects = result.Projects,
 						ProjectsWithInactive = result.ProjectsWithInactive,
@@ -247,7 +248,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						ModSinceApproval = iter.Current.ModSinceApproval,
 						PayClasses = result.PayClasses,
 						LockDate = result.LockDate,
-						IsLocked = iter.Current.ApprovalState == (int)Core.ApprovalState.Approved || ((isProjectDeleted && !AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subId, false)) || (!result.CanManage && beforeLockDate))
+						IsLocked = iter.Current.ApprovalState == (int)Core.ApprovalState.Approved || isProjectDeleted && !AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subId, false) || !result.CanManage && beforeLockDate
 					});
 
 					if (holidays.Where(x => x.Date == iter.Current.Date).FirstOrDefault() != null)
@@ -268,7 +269,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						SubscriptionId = subId,
 						StartingDate = Utility.GetDaysFromDateTime(startDate),
 						EndingDate = Utility.GetDaysFromDateTime(endDate),
-						IsOffDay = (weekend % 7 == (int)date.DayOfWeek || (weekend + 1) % 7 == (int)date.DayOfWeek) ? true : false,
+						IsOffDay = weekend % 7 == (int)date.DayOfWeek || (weekend + 1) % 7 == (int)date.DayOfWeek ? true : false,
 						IsHoliday = holidays.Any(x => x.Date.Date == date.Date),
 						ProjectId = -1,
 						Projects = result.Projects,
@@ -342,7 +343,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>User View Model.</returns>
 		public UserViewModel ConstuctUserViewModel(User user)
 		{
-			return new UserViewModel()
+			return new UserViewModel
 			{
 				Email = user.Email,
 				FirstName = user.FirstName,
@@ -359,7 +360,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				int daysLeftInWeek = (int)today.DayOfWeek < startOfWeek
 					? startOfWeek - (int)today.DayOfWeek - 1
-					: (6 - (int)today.DayOfWeek) + startOfWeek;
+					: 6 - (int)today.DayOfWeek + startOfWeek;
 
 				date = today.AddDays(daysLeftInWeek);
 			}

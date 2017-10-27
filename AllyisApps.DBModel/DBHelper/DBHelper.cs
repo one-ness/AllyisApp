@@ -21,7 +21,7 @@ namespace AllyisApps.DBModel
 		/// <param name="connectionString">The Connection string.</param>
 		public DBHelper(string connectionString)
 		{
-			SqlConnectionString = connectionString ?? throw new ArgumentNullException("connectionString");
+			SqlConnectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
 			lockObject = new object();
 		}
 
@@ -37,7 +37,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		public void BeginTransaction(string transactionName)
 		{
-			if (string.IsNullOrWhiteSpace(transactionName)) throw new ArgumentNullException("transactionName");
+			if (string.IsNullOrWhiteSpace(transactionName)) throw new ArgumentNullException(nameof(transactionName));
 
 			lock (lockObject)
 			{

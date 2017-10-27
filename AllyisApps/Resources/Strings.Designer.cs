@@ -3950,6 +3950,7 @@ namespace AllyisApps.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to Staffing Manager Role.
+        ///   Looks up a localized string similar to Staffing Manager Roles.
         /// </summary>
         public static string StaffingManagerRole {
             get {

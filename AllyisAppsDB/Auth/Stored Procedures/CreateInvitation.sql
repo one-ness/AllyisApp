@@ -37,7 +37,8 @@ BEGIN
 				([Email], 
 				[FirstName], 
 				[LastName], 
-				[OrganizationId],  
+				[OrganizationId],
+				[OrganizationRoleId],
 				[EmployeeId],
 				[ProductRolesJson]
 				)
@@ -45,7 +46,8 @@ BEGIN
 				(@email, 
 				@firstName, 
 				@lastName, 
-				@organizationId,  
+				@organizationId,
+				@organizationRole,
 				@employeeId,
 				@prodJson
 				);

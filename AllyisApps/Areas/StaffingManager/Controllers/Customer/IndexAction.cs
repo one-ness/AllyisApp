@@ -80,9 +80,9 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			IList<CustomerProjectViewModel> customersList = new List<CustomerProjectViewModel>();
 			foreach (Customer currentCustomer in customers)
 			{
-				CustomerProjectViewModel customerResult = new CustomerProjectViewModel()
+				CustomerProjectViewModel customerResult = new CustomerProjectViewModel
 				{
-					CustomerInfo = new CustomerProjectViewModel.CustomerViewModel()
+					CustomerInfo = new CustomerProjectViewModel.CustomerViewModel
 					{
 						CustomerName = currentCustomer.CustomerName,
 						CustomerId = currentCustomer.CustomerId,

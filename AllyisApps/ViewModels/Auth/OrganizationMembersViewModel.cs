@@ -60,7 +60,7 @@ namespace AllyisApps.ViewModels.Auth
 		{
 			get
 			{
-				return (Users.Count / PageSize) + 1;
+				return Users.Count / PageSize + 1;
 			}
 		}
 
@@ -104,7 +104,7 @@ namespace AllyisApps.ViewModels.Auth
 			/// employee id
 			/// </summary>
 			public string EmployeeId { get; set; }
-			
+
 			/// <summary>
 			/// joined date
 			/// </summary>

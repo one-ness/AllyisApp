@@ -567,14 +567,14 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">Sets OrganizationId.</param>
 		/// <returns>List of SubscriptionDisplay's.</returns>
-		public IEnumerable<SubscriptionDisplayDBEntity> GetSubscriptionsDisplayByOrg(int organizationId)
+		public async Task<IEnumerable<SubscriptionDisplayDBEntity>> GetSubscriptionsDisplayByOrg(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default empty list
-				return connection.Query<SubscriptionDisplayDBEntity>("[Billing].[GetSubscriptionsDisplayByOrg]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.QueryAsync<SubscriptionDisplayDBEntity>("[Billing].[GetSubscriptionsDisplayByOrg]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 

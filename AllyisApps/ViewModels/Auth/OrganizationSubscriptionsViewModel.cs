@@ -21,7 +21,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// list of subscriptions
 		/// </summary>
-		public List<ViewModelItem> Subscriptions { get; set; }
+		public List<SubscriptionViewModel> Subscriptions { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization's id.
@@ -33,18 +33,20 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public string OrganizationName { get; set; }
 
+		
+
 		/// <summary>
 		/// constructor
 		/// </summary>
 		public OrganizationSubscriptionsViewModel()
 		{
-			Subscriptions = new List<ViewModelItem>();
+			Subscriptions = new List<SubscriptionViewModel>();
 		}
 
 		/// <summary>
 		/// subscription
 		/// </summary>
-		public class ViewModelItem
+		public class SubscriptionViewModel
 		{
 			/// <summary>
 			/// Gets or sets the name of the product this subscription is for.
@@ -80,6 +82,11 @@ namespace AllyisApps.ViewModels.Auth
 			/// date subscription was created
 			/// </summary>
 			public DateTime SubscriptionCreatedUtc { get; set; }
+
+			/// <summary>
+			/// Manage Permissions Url 
+			/// </summary>
+			public string PermissionsUrl { get; set; }
 
 			/// <summary>
 			/// formatted as long date
