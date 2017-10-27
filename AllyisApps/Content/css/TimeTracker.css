@@ -312,3 +312,7 @@ a:hover, a:focus {
 	opacity: 0.5;
 	background-color: transparent;
 }
+
+.nohover {
+	display: none;
+}
