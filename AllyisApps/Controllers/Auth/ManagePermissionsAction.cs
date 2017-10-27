@@ -34,7 +34,7 @@ namespace AllyisApps.Controllers.Auth
 		};
 
 
-		private Dictionary<string, int> setOrganizationRoles = new Dictionary<string, int>
+		private readonly Dictionary<string, int> setOrganizationRoles = new Dictionary<string, int>
 	{
 		{ Strings.RemoveOrg, -1 },
 		{ Strings.SetMember, (int)OrganizationRoleEnum.Member },
@@ -43,51 +43,7 @@ namespace AllyisApps.Controllers.Auth
 
 
 
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="id">Organizaion Id.</param>
-		/// <returns></returns>
-		[HttpGet]
-		public async Task<ActionResult> ManageOrgPermissions(int id)
-		{
-			//Get OrganizaionUser Rows
-			AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id);
-			var orgUsers = AppService.GetOrganizationMemberList(id);
-			var orgSubs = await AppService.GetSubscriptionsAsync(id);
 
-			PermissionsViewModel perModel = new PermissionsViewModel
-			{
-				Actions = setOrganizationRoles,
-				ActionGroup = Strings.Organization,
-				PossibleRoles = organizationRoles,
-				RemoveUserMessage = Strings.RemoveFromOrgNoName,
-				RoleHeader = Strings.OrganizationRole,
-				CurrentSubscriptions = orgSubs.Select(sub => new PermissionsViewModel.OrganizaionSubscriptionsViewModel
-				{
-					ProductId = (int)sub.ProductId,
-					ProductName = sub.ProductName,
-					SubscriptionId = sub.SubscriptionId,
-					SubscriptionName = sub.SubscriptionName
-				}).OrderBy(sub => sub.ProductId).ToList(),
-
-				OrganizationId = id,
-				ProductId = null,
-				SubscriptionId = null,
-				Users = orgUsers.Select(orgU => new UserPermssionViewModel
-				{
-					CurrentRole = orgU.OrganizationRoleId,
-					CurrentRoleName = organizationRoles[orgU.OrganizationRoleId],
-					Email = orgU.Email,
-					FullName = orgU.FirstName + " " + orgU.LastName,
-					UserId = orgU.UserId,
-					IsChecked = false
-				}).OrderBy(orgU => orgU.FullName).ToList()
-			};
-
-			await Task.Delay(1);
-			return View("PermissionsOrg", perModel);
-		}
 
 		/// <summary>
 		/// Get page to edit SubscriptionPermissions
@@ -276,14 +232,14 @@ namespace AllyisApps.Controllers.Auth
 					*/
 					default:
 						//Should not happen
-						throw new ArgumentOutOfRangeException("Failed to Find product for produtID: " + model.ProductId.Value);
+						throw new ArgumentOutOfRangeException($"Failed to Find product for produtID: {model.ProductId.Value}");
 				}
 
 				if (model.SelectedAction.Value != -1)
 				{
 					// TODO: instead of providing product id, provide subscription id of the subscription to be modified
 					// TODO: split updating user roles and creating new sub users
-					var updatedAndAdded = await AppService.UpdateSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedAction.Value, model.OrganizationId, model.ProductId.Value);
+					UpdateSubscriptionUserRolesResuts updatedAndAdded = await AppService.UpdateSubscriptionUsersRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedAction.Value, model.OrganizationId, model.ProductId.Value);
 					if (updatedAndAdded.UsersChanged > 0)
 					{
 						Notifications.Add(new BootstrapAlert(string.Format(usersModifiedMessage, updatedAndAdded.UsersChanged), Variety.Success));

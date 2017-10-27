@@ -73,7 +73,7 @@ namespace AllyisApps.Services
 
 			// Retrieval of existing user product subscription data
 			const int ttProductId = (int)ProductIdEnum.TimeTracker;
-			SubscriptionDisplayDBEntity ttSub = DBHelper.GetSubscriptionsDisplayByOrg(orgId).SingleOrDefault(s => s.ProductId == ttProductId);
+			SubscriptionDisplayDBEntity ttSub = (await DBHelper.GetSubscriptionsDisplayByOrg(orgId)).SingleOrDefault(s => s.ProductId == ttProductId);
 			var userSubs = (await GetUsersWithSubscriptionToProductInOrganization(orgId, ttProductId)).ToList();
 
 			// Retrieval of existing pay class data

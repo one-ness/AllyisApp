@@ -322,6 +322,18 @@ namespace AllyisApps.Services
 			}
 		}
 
+
+
+		public async Task<UpdateSubscriptionUserRolesResuts> UpdateSubscriptionUsersRoles(List<int> userIds, int organizationId, int productRoleId, int productId)
+		{
+			var result = await DBHelper.UpdateSubscriptionUserRoles(userIds, organizationId, productRoleId, productId);
+			return new UpdateSubscriptionUserRolesResuts()
+			{
+				UsersChanged = result.Item1,
+				UsersAddedToSubscription = result.Item2
+			};
+		}
+
 		/// <summary>Deletes the given users in the given organization's subscription</summary>
 		/// <param name="userIds">List of user Ids.</param>
 		/// <param name="orgId">The Organization Id.</param>
@@ -514,6 +526,12 @@ namespace AllyisApps.Services
 			var results = await DBHelper.GetUsersWithSubscriptionToProductInOrganization(orgId, productId);
 			return results.Select(u => InitializeUser(u, false));
 		}
+
+		public async Task<IEnumerable<Subscription>> GetSubscriptionsByOrg(int organizationId)
+		{
+			return (await DBHelper.GetSubscriptionsDisplayByOrg(organizationId)).Select(InitializeSubscription).ToList();
+		}
+
 
 		/// <summary>
 		/// Subscribes the current organization to a product or updates the organization's subscription to the product.
