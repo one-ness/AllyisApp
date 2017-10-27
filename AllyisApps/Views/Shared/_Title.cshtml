@@ -1,0 +1,14 @@
+﻿<div class="container" id="title">
+	<div class="row">
+		<div class="col-xs-12">
+			@if (!string.IsNullOrWhiteSpace(ViewBag.TitleBar))
+			{<h1 class="text-center">@ViewBag.TitleBar</h1>}
+			else if (!string.IsNullOrWhiteSpace(ViewBag.Title))
+			{<h1 class="text-center">@ViewBag.Title</h1>}
+			@if (!string.IsNullOrWhiteSpace(ViewBag.Subtitle))
+			{<h4 class="text-center">@ViewBag.Subtitle</h4>}
+			@if (!string.IsNullOrWhiteSpace(ViewBag.Description))
+			{<p class="text-center">@ViewBag.Description</p>}
+		</div>
+	</div>
+</div>
