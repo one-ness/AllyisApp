@@ -52,25 +52,50 @@
 			{
 				if (canManage)
 				{
-					@Html.DropDownListDisabled("ProjectIdDdl", Model.ProjectId == 0 ? blankList : from c in Model.ProjectsWithInactive.Where(p => (p.StartDate.HasValue && DateTime.Compare(p.StartDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) <= 0 || p.StartDate == null) && (p.EndDate.HasValue && DateTime.Compare(p.EndDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) >= 0 || p.EndDate == null)) //Ddl name must be different than model property name or the selected value cannot be adjusted
-						select new SelectListItem
+					@Html.DropDownListDisabled(
+						"ProjectIdDdl",
+						Model.ProjectsWithInactive
+							.Where(p =>
+								(p.StartDate == null || DateTime.Compare(p.StartDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) <= 0) &&
+								(p.EndDate == null || DateTime.Compare(p.EndDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) >= 0))
+							.Select(c => new SelectListItem
+							{
+								Selected = Model.ProjectId == c.ProjectId,
+								Text = c.ProjectId != -1 ? string.Format("{0} - {1}", c.CustomerName, c.ProjectName) : c.ProjectName, //Only need customer - project text for project ids !=0
+								Value = c.ProjectId.ToString(),
+								//Disabled = !c.IsUserActive
+							}),
+						Model.IsLocked,
+						new
 						{
-							Selected = Model.ProjectsWithInactive.Count() == 2 ? !(c.ProjectId < 0) : Model.ProjectId == c.ProjectId, //Automatically selects project if it is the only one - Select Project is a project with Id of 0
-							Text = c.ProjectId != -1 ? string.Format("{0} - {1}", c.CustomerName, c.ProjectName) : c.ProjectName,    //Only need customer - project text for project ids !=0
-							Value = c.ProjectId.ToString(),
-							//Disabled = !c.IsUserActive
-						}, Model.IsLocked, new {  @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" }).RemoveIdAttribute()
+							@class = "form-control",
+							style = "width: 100%",
+							onchange = "changeOccur(this)"
+						}).RemoveIdAttribute()
 				}
 				else
 				{
-					@Html.DropDownListDisabled("ProjectIdDdl", Model.ProjectId == 0 ? blankList : from c in Model.Projects.Where(p => (p.StartDate.HasValue && DateTime.Compare(p.StartDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) <= 0 || p.StartDate == null) && (p.EndDate.HasValue && DateTime.Compare(p.EndDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) >= 0 || p.EndDate == null))  //Ddl name must be different than model property name or the selected value cannot be adjusted
-						select new SelectListItem
+					//Ddl name must be different than model property name or the selected value cannot be adjusted
+					@Html.DropDownListDisabled(
+						"ProjectIdDdl",
+						Model.Projects
+							.Where(p =>
+								(p.StartDate == null || DateTime.Compare(p.StartDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) <= 0) &&
+								(p.EndDate == null || DateTime.Compare(p.EndDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) >= 0))
+							.Select(c => new SelectListItem
+							{
+								Selected = Model.ProjectId == c.ProjectId,
+								Text = c.ProjectId != -1 ? string.Format("{0} - {1}", c.CustomerName, c.ProjectName) : c.ProjectName, //Only need customer - project text for project ids !=0
+								Value = c.ProjectId.ToString(),
+								//Disabled = !c.IsUserActive
+							}),
+						Model.IsLocked,
+						new
 						{
-							Selected = Model.Projects.Count() == 2 ? !(c.ProjectId < 0) : Model.ProjectId == c.ProjectId, //Automatically selects project if it is the only one - Select Project is a project with Id of 0
-							Text = c.ProjectId != -1 ? string.Format("{0} - {1}", c.CustomerName, c.ProjectName) : c.ProjectName,    //Only need customer - project text for project ids !=0
-							Value = c.ProjectId.ToString(),
-							//Disabled = !c.IsUserActive
-						}, Model.IsLocked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" }).RemoveIdAttribute()
+							@class = "form-control",
+							style = "width: 100%",
+							onchange = "changeOccur(this)"
+						}).RemoveIdAttribute()
 				}
 				<input type="hidden" name="ProjectId" value="" />   //Needed for proper model binding, value changes on submit (see form above)
 			}
@@ -118,19 +143,19 @@
 		</div>
 		if (!lockedOld && !Model.IsLocked)
 		{
-			<div class="button-anim-wrap ovrd-btn-group btn-group group right">
+			<div class="button-anim-wrap btn-group group right">
 				<div>
 					<button 
 							type="button"
 							value="Save"
-							class="ovrd-btn btn ovrd-btn-fa btn-fa ovrd-btn-primary btn-primary"
+							class="btn btn-fa btn-primary btn-sharp"
 							title="@Strings.Add"
 							onclick= '@("addRow(this)")'
 						>
 						@*Formerally "Submit"; changed to match value and because "Save" was in resources already*@
 						<i class="allyisicon-submit"></i>
 					</button>
-					<a class="ovrd-btn btn ovrd-btn-danger btn-danger ovrd-btn-fa btn-fa hidden-create"
+					<a class="btn btn-danger btn-fa hidden-create btn-sharp"
 					   href="javascript:void(0)"
 					   onclick="nonajaxDelete(this, '@(Url.Action(ActionConstants.DeleteTimeEntryJson))')">
 						<i class="allyisicon-delete"></i>

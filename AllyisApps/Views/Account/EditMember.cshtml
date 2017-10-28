@@ -61,7 +61,7 @@
 					</td>
 					<td>
 						<div>
-							@Html.TextBoxFor(m => m.EmployeeId, new { @class = "form-control ovrd-form-control" })
+							@Html.TextBoxFor(m => m.EmployeeId, new { @class = "form-control" })
 							@Html.ValidationMessageFor(m => m.EmployeeId)
 						</div>
 					</td>
@@ -75,7 +75,7 @@
 					<td>
 						<div class="role-drop-down">
 							@Html.HiddenFor(m => m.OrgRolesList)
-							@Html.DropDownListFor(m => m.SelectedOrganizationRoleId, new SelectList(Model.OrgRolesList, "Key", "Value"), new { @class = "form-control ovrd-form-control" })
+							@Html.DropDownListFor(m => m.SelectedOrganizationRoleId, new SelectList(Model.OrgRolesList, "Key", "Value"), new { @class = "form-control" })
 						</div>
 					</td>
 				</tr>
@@ -93,7 +93,7 @@
 						</td>
 						<td>
 							<div class="role-drop-down">
-								@Html.DropDownListFor(x => x.SubscriptionRoles[count].SelectedRoleId, new SelectList(item.RoleList, "Key", "Value"), new { @class = "form-control ovrd-form-control" })
+								@Html.DropDownListFor(x => x.SubscriptionRoles[count].SelectedRoleId, new SelectList(item.RoleList, "Key", "Value"), new { @class = "form-control" })
 							</div>
 						</td>
 					</tr>
@@ -114,7 +114,7 @@
 	<div class="col-xs-12">
 		<a href = "@Url.Action(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { @id = Model.OrganizationId })"
 		   class="btn btn-default pull-left" title="@Strings.Back"><i class="fa fa-caret-left"></i>&nbsp;@Strings.Back</a>
-		@if(Model.CanEditMember)
+		@if (Model.CanEditMember)
 		{
 			<button type="submit" value="@Strings.Save" class="btn btn-default pull-right" id="saveMemeber">@Strings.Save</button>
 		}

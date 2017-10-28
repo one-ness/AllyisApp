@@ -1,6 +1,7 @@
 ﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 @model SettingsViewModel
 @{
+	ViewBag.TitleBar = Strings.Settings;
 	ViewBag.Title = Strings.Holidays;
 	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
 	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
@@ -15,24 +16,24 @@
 }
 
 <div class="slim">
-	<div class="ovrd-row row">
-		<div class="ovrd-col-sm-2 col-sm-2 col">
+	<div class="row">
+		<div class="col-sm-2">
 			@Html.Partial("_ManageSettingSideBar")
 		</div>
-		<div class="ovrd-col-sm-10 col-sm-10 col">
-			<div class="ovrd-panel panel ovrd-panel-info panel-info">
-				<div class="ovrd-panel-heading panel-heading">
-					<h1 class="ovrd-panel-title panel-title">@Strings.Holidays</h1>
+		<div class="col-sm-10">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h1 class="panel-title">@Strings.Holidays</h1>
 				</div>
 				<div id="Holidays">
-					<ul class="ovrd-nav nav ovrd-nav-tabs nav-tabs" style="border-bottom:none;">
+					<ul class="nav nav-tabs" style="border-bottom:none;">
 						@foreach (var year in Model.Holidays.Select(m => m.Date.Year).Distinct())
 						{
 							<li id=@year><a onclick="populateHolidayForSelectedYear(@year)">@year</a></li>
 						}
 					</ul>
 
-					<table class="ovrd-table table ovrd-table-condensed table-condensed">
+					<table class="table table-condensed">
 						<thead>
 							<tr>
 								<th>@Strings.Holiday</th>
@@ -50,7 +51,7 @@
 								<td>@Holiday.Date.ToShortDateString()</td>
 								<td>
 									<a href="javascript: void(0);" class="text-muted" title="@Strings.DeleteHoliday" onclick='deleteHoliday("@Holiday.HolidayId", "\"@_holidayName\"")'>
-										<span class="ovrd-fa fa ovrd-fa-fw fa-fw ovrd-fa-remove fa-remove text-danger pull-right"></span>
+										<span class="fa fa-fw fa-remove text-danger pull-right"></span>
 									</a>
 								</td>
 							</tr>
@@ -60,13 +61,13 @@
 							{
 								@Html.AntiForgeryToken();
 								@Html.HiddenFor(m => m.SubscriptionId)
-								<td><input type="text" class="ovrd-form-control form-control" name="NewHolidayName" required /></td>
+								<td><input type="text" class="form-control" name="NewHolidayName" required /></td>
 								<td>
 									<input type="hidden" id="DateRangeStart" name="NewHolidayDate" value="" />
-									<input onchange="$('#DateRangeStart').val($(this).val());" type="text" class="ovrd-form-control form-control" style="width: 50%; display: inline-block;" id="datePickerHoliday" />@*Needs to be <input /> tag, not Html.EditorFor or a NULL holiday will show up as -1*@
-									<span class="ovrd-fa fa ovrd-fa-fw fa-fw ovrd-fa-calendar fa-calendar" id="datePickerHolidayButton"></span>
+									<input onchange="$('#DateRangeStart').val($(this).val());" type="text" class="form-control" style="width: 50%; display: inline-block;" id="datePickerHoliday" />@*Needs to be <input /> tag, not Html.EditorFor or a NULL holiday will show up as -1*@
+									<span class="fa fa-fw fa-calendar" id="datePickerHolidayButton"></span>
 								</td>
-								<td><input class="pull-right ovrd-btn btn ovrd-btn-primary btn-primary" type="submit" value=@Strings.Add /></td>
+								<td><input class="pull-right btn btn-primary" type="submit" value=@Strings.Add /></td>
 							}
 						</tr>
 					</table>

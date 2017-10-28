@@ -81,6 +81,11 @@ namespace AllyisApps.ViewModels.Auth
 			/// Product Name
 			/// </summary>
 			public string ProductName { get; set; }
+
+			/// <summary>
+			/// Contains the URL of the ManagePermisions page  
+			/// </summary>
+			public string ManagePermissionsUrl { get; set; }
 		}
 	}
 

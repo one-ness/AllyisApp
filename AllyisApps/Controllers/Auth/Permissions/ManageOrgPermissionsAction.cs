@@ -40,7 +40,8 @@ namespace AllyisApps.Controllers.Auth
 					ProductId = (int)sub.ProductId,
 					ProductName = sub.ProductName,
 					SubscriptionId = sub.SubscriptionId,
-					SubscriptionName = sub.SubscriptionName
+					SubscriptionName = sub.SubscriptionName,
+					ManagePermissionsUrl = getPermissionsUrl(sub.ProductId, sub.SubscriptionId),
 				}).OrderBy(sub => sub.ProductId).ToList(),
 
 				OrganizationId = id,

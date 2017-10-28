@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using AllyisApps.Services;
+using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.Auth;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -26,9 +27,9 @@ namespace AllyisApps.Controllers.Auth
 			model.CanManagePermissions = AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id, false);
 			model.OrganizationId = id;
 			var collection = await AppService.GetSubscriptionsAsync(id);
-			foreach (var item in collection)
+			foreach (Subscription item in collection)
 			{
-				var data = new OrganizationSubscriptionsViewModel.ViewModelItem();
+				var data = new OrganizationSubscriptionsViewModel.SubscriptionViewModel();
 				data.AreaUrl = item.ProductAreaUrl;
 				data.NumberofUsers = item.NumberOfUsers;
 				data.ProductDescription = item.ProductDescription;
@@ -36,6 +37,7 @@ namespace AllyisApps.Controllers.Auth
 				data.SubscriptionCreatedUtc = item.CreatedUtc;
 				data.SubscriptionId = item.SubscriptionId;
 				data.SubscriptionName = item.SubscriptionName;
+				data.PermissionsUrl = getPermissionsUrl(item.ProductId, item.SubscriptionId);
 				model.Subscriptions.Add(data);
 			}
 

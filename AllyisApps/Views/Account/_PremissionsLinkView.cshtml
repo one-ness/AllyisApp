@@ -1,6 +1,6 @@
 ﻿@model PermissionsViewModel
 
-<ul class="ovrd-nav nav allyis-tabs">
+<ul class="nav allyis-tabs">
 
 	<li @(Model.SubscriptionId == null ? "class = selected" : "") id="OrganizationTab">
 		<a style="display: inline" href="@Url.Action(ActionConstants.ManageOrgPermissions, new { id = Model.OrganizationId })">
@@ -10,7 +10,7 @@
 	@foreach (var sub in Model.CurrentSubscriptions)
 	{
 		<li class="@(Model.SubscriptionId != null && sub.SubscriptionId == Model.SubscriptionId ?  "selected" : "") SubscriptionTab">
-			<a style="display: inline" href="@Url.Action(ActionConstants.ManageSubPermissions, new { id = sub.SubscriptionId })">
+			<a style="display: inline" href="@sub.ManagePermissionsUrl">
 				@sub.ProductName
 			</a>
 		</li>

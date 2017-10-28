@@ -6,23 +6,7 @@
 }
 
 @Html.Partial("_MembersAndInvitationsTab", Model.TabInfo)
-
-<div class="row" style="margin-bottom:10px; margin-top:10px;">
-	<div class="col-xs-12">
-		<h1 style="margin-top:0px; margin-bottom:0px; display:inline;">@ViewBag.TitleBar</h1>
-	</div>
-</div>
-<style>
-	.members-top-row div {
-		display: inline;
-		margin-right: 10px;
-		margin-bottom: 10px;
-	}
-
-	input.members-checkbox {
-		margin-left: 15px;
-	}
-</style>
+<div style="margin-bottom: 25px;"></div>
 @if (Model.Invitations.Count <= 0)
 {
 	<div class="row" style="margin-bottom: 20px;">

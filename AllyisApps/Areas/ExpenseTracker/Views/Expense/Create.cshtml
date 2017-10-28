@@ -120,7 +120,7 @@
 							<th style="width: 10%;"></th>
 						</tr>
 					</thead>
-					<tbody class="item-container">
+					<tbody @*class="item-container"*@>
 						@foreach (ExpenseItemCreateViewModel item in Model.Items)
 						{
 							item.Index = itemIndex;

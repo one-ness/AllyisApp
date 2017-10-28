@@ -9,7 +9,6 @@
 
 <div class="row" style="margin-bottom:5px;">
 	<div class="col-xs-12">
-		<h1 style="margin-top:0px; margin-bottom:0px; display:inline;">@ViewBag.TitleBar</h1>
 		<span class="pull-right">
 			<a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default" title="Add/Upgrade Subscriptions">Add Subscriptions</a>
 		</span>
@@ -39,7 +38,7 @@
 						<td class="col-md-2">
 							@if (Model.CanManagePermissions)
 							{
-								<a href="@Url.Action(ActionConstants.ManageSubPermissions, ControllerConstants.Account, new { @id = item.SubscriptionId })" title="@Strings.ManagePermissions" style="color:inherit"><i class="fa fa-fw fa-lock"></i></a>
+								<a href="@item.PermissionsUrl" title="@Strings.ManagePermissions" style="color:inherit"><i class="fa fa-fw fa-lock"></i></a>
 							}
 							@if (Model.CanEditSubscriptions)
 							{

@@ -125,7 +125,7 @@
 				<br>
 			</div>
 			<div class="col-md-6 fa-pull-right">
-				<Label>Status: &nbsp;</Label>
+				<Label>@Strings.Status &nbsp;</Label>
 				@foreach (var sta in Model.PositionStatuses)
 				{
 					if (sta.PositionStatusId == Model.PositionStatusId)
@@ -136,16 +136,16 @@
 				<div class="form-group fa-pull-right">
 					@if (Model.StartDate != null)
 					{
-						<label>Start date: &nbsp;</label>
+						<label>@Strings.StartDate: &nbsp;</label>
 						@Model.StartDateFormat.ToShortDateString()
 						<span class="fa fa-fw fa-calendar"></span>
 					}
 					<br>
 					<div class="pull-left">
 						<label>
-							Expected Duration:&nbsp;
+							@Strings.ExpectedDuration:&nbsp;
 						</label>
-						@Model.DurationMonths&nbsp;months
+						@Model.DurationMonths&nbsp;@Strings.Months
 					</div>
 				</div>
 			</div>
@@ -154,12 +154,12 @@
 			<br>
 			<br>
 			<br>
-			<span class="fa-pull-right">Edit: &nbsp;<a href="@Url.Action(ActionConstants.EditPosition, ControllerConstants.Staffing, new { positionId = Model.PositionId, subscriptionId = Model.SubscriptionId })"><i class="glyphicon glyphicon-edit fa-pull-right"></i></a></span>
+			<span class="fa-pull-right">@Strings.Edit: &nbsp;<a href="@Url.Action(ActionConstants.EditPosition, ControllerConstants.Staffing, new { positionId = Model.PositionId, subscriptionId = Model.SubscriptionId })"><i class="glyphicon glyphicon-edit fa-pull-right"></i></a></span>
 		</div>
 		<div class="panel panel-default col-md-12 main-body">
 			<div class="col-md-4 fa-pull-left row pad-left">
 				<div class="form-group row">
-					<label>Position Level: &nbsp;</label>
+					<label>@Strings.PositionLevel: &nbsp;</label>
 					@foreach (var lev in Model.PositionLevels)
 					{
 						if (lev.PositionLevelId == Model.PositionLevelId)
@@ -169,7 +169,7 @@
 					}
 				</div>
 				<div class="form-group  row">
-					<label>Employment Type: &nbsp;</label>
+					<label>@Strings.EmploymentType: &nbsp;</label>
 					@foreach (var typ in Model.EmploymentTypes)
 					{
 						if (typ.EmploymentTypeId == Model.EmploymentTypeId)
@@ -179,7 +179,7 @@
 					}
 				</div>
 				<div class="form-group row">
-					<label>Billing Rate: &nbsp;</label>
+					<label>@Strings.BillingRate: &nbsp;</label>
 					<span class="pull-right">
 						@Model.BillingRateAmount &nbsp;
 						@Model.BillingRateFrequency
@@ -188,11 +188,11 @@
 			</div>
 			<div class="col-md-4 row pad-mid">
 				<div class="form-group row">
-					<label>Positions Available: &nbsp;</label>
+					<label>@Strings.PositionsAvailable: &nbsp;</label>
 					<span class="pull-right">@Model.PositionCount</span>
 				</div>
 				<div class="form-group row">
-					<label>Location:&nbsp;&nbsp;</label>
+					<label>@Strings.Location:&nbsp;&nbsp;</label>
 					<span class="pull-right">
 						@if (Model.PositionAddress.City != "" && Model.PositionAddress.City != null)
 						{
@@ -213,13 +213,13 @@
 					</span>
 				</div>
 				<div class="form-group row">
-					<label>details:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+					<label>@Strings.Details:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
 					<button type="button" data-toggle="collapse" data-target="#details">&nbsp;&nbsp;&nbsp;<i class="glyphicon glyphicon-chevron-down"></i>&nbsp;&nbsp;&nbsp;</button>
 				</div>
 			</div>
 			<div class="col-md-4 fa-pull-right row pad-right">
 				<div class="form-group row">
-					<label>Customer:&nbsp;&nbsp;</label>
+					<label>@Strings.Customer:&nbsp;&nbsp;</label>
 					@foreach(var cust in Model.Customers)
 					{
 						if (cust.CustomerId == Model.CustomerId)
@@ -229,11 +229,11 @@
 					}
 				</div>
 				<div class="form-group row">
-					<label>Hiring Manager:&nbsp;&nbsp;</label>
+					<label>@Strings.HiringManager:&nbsp;&nbsp;</label>
 					<span class="pull-right">@Model.HiringManager</span>
 				</div>
 				<div class="form-group  row">
-					<label>Team:&nbsp;&nbsp;</label>
+					<label>@Strings.Team:&nbsp;&nbsp;</label>
 					<span class="pull-right">@Model.TeamName</span>
 				</div>
 			</div>
@@ -242,7 +242,7 @@
 			@if (Model.RequiredSkills != "" && Model.RequiredSkills != null)
 			{
 				<div class="form-group">
-					<label>Required Skills: </label>
+					<label>@Strings.RequiredSkills: </label>
 					<br>
 					<p class="panel-default panel paragraph" width="100%">@Model.RequiredSkills</p>
 				</div>
@@ -250,7 +250,7 @@
 			@if (Model.JobResponsibilities != "" && Model.JobResponsibilities != null)
 			{
 				<div class="form-group">
-					<label>Job Responsibilities: </label>
+					<label>@Strings.JobResponsibilities: </label>
 					<br>
 					<p class="panel-default panel paragraph" width="100%">@Model.JobResponsibilities</p>
 				</div>
@@ -258,7 +258,7 @@
 			@if (Model.DesiredSkills != "" && Model.DesiredSkills != null)
 			{
 				<div class="form-group">
-					<label>Desired Skills: </label>
+					<label>@Strings.DesiredSkills: </label>
 					<br>
 					<p class="panel-default panel paragraph" width="100%">@Model.DesiredSkills</p>
 				</div>
@@ -268,11 +268,15 @@
 </div>
 
 <div>
-	<h3 class="panel-heading panel-title">Applications: </h3>
+	<h3 class="panel-heading panel-title">@Strings.Applications: </h3>
 	<div class="panel panel-default col-md-12">
 		@foreach(var application in Model.Applications)
 		{
 			@Html.Partial("_ApplicationInfoPartial", application);
+		}
+		@if(Model.Applications.Count == 0)
+		{
+			<h3>@Strings.NoActiveApplications</h3>
 		}
 	</div>
 </div>
