@@ -289,7 +289,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <param name="userId">User Id.</param>
-		public void DeleteSubscriptionUser(int subscriptionId, int userId)
+		public async Task DeleteSubscriptionUser(int subscriptionId, int userId)
 		{
 			if (subscriptionId <= 0)
 			{
@@ -301,7 +301,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException(nameof(userId), "User Id cannot be 0 or negative.");
 			}
 
-			DBHelper.DeleteSubscriptionUser(subscriptionId, userId);
+			await DBHelper.DeleteSubscriptionUser(subscriptionId, userId);
 		}
 
 		/// <summary>

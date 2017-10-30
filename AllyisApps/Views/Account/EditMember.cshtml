@@ -5,11 +5,13 @@
 
 @if (Model.CanEditMember)
 {
+    //@Html.BeginForm(ActionConstants.EditMember, ControllerConstants.Account)
 	@:<form action="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account)" method="post">
 	@Html.AntiForgeryToken()
 	@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
 	@Html.HiddenFor(m => m.OrganizationId)
 	@Html.HiddenFor(m => m.UserId)
+    @Html.HiddenFor(m => m.CanEditMember)
 }
 
 <div class="row" id="edit-member">
@@ -102,7 +104,7 @@
 						</td>
 						<td>
 							<div class="role-drop-down">
-								@Html.DropDownListFor(x => x.SubscriptionRoles[count].SelectedRoleId, new SelectList(item.RoleList, "Key", "Value"), new { @class = "form-control" })
+								@Html.DropDownListFor(x => x.SubscriptionRoles[count].SelectedRoleId, new SelectList(item.RoleList, "Key", "Value", Model.SubscriptionRoles[count].SelectedRoleId), new { @class = "form-control" })
 							</div>
 						</td>
 					</tr>

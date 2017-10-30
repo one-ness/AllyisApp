@@ -125,25 +125,39 @@ namespace AllyisApps.Controllers.Auth
 				else
 				{
 					// get the subscription roles in to a dictionary
-					Dictionary<int, int> subRoles = new Dictionary<int, int>();
+					Dictionary<int, int> changedsubRoles = new Dictionary<int, int>();
+					List<int> removedSubRole = new List<int>();
 					foreach (var item in model.SubscriptionRoles)
 					{
 						if (item.SelectedRoleId > 0)
 						{
-							subRoles.Add(item.SubscriptionId, item.SelectedRoleId);
+							//role changed
+							changedsubRoles.Add(item.SubscriptionId, item.SelectedRoleId);
+						}
+						else
+						{
+							//removed from subscription 
+							removedSubRole.Add(item.SubscriptionId);
 						}
 					}
 
 					// update the subscription roles
-					if (subRoles.Count <= 0) await this.AppService.UpdateSubscriptionUserRoles(model.UserId, subRoles);
+					if (changedsubRoles.Count > 0)
+					{
+						await this.AppService.UpdateSubscriptionUserRoles(model.UserId, changedsubRoles);
+					}
+					foreach (var subtoRemove in removedSubRole)
+					{
+						await this.AppService.DeleteSubscriptionUser(subtoRemove, model.UserId);
+					}
 					return RedirectToAction(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { @id = model.OrganizationId });
 				}
 			}
 
-			// error, copy values from existing model
+			// TODO: copy values from existing model
+			return View(model);
+			//return RedirectToAction("EditMember", new { id = model.OrganizationId, userid = model.UserId });
 
-
-			return RedirectToAction("EditMember", new { id = model.OrganizationId, userid = model.UserId });
 		}
 	}
 }

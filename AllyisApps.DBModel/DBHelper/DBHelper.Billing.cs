@@ -75,14 +75,14 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <param name="userId">The user's Id.</param>
-		public void DeleteSubscriptionUser(int subscriptionId, int userId)
+		public async Task DeleteSubscriptionUser(int subscriptionId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@subscriptionId", subscriptionId);
 			parameters.Add("@userId", userId);
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				connection.Query("[Billing].[DeleteSubscriptionUser]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[Billing].[DeleteSubscriptionUser]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
