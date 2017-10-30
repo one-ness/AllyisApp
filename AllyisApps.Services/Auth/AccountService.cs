@@ -90,9 +90,9 @@ namespace AllyisApps.Services
 			{
 				JObject roleString = JObject.Parse(inviteInfo.ProductRolesJson);
 
-				var ttRole = roleString[((int)SkuIdEnum.TimeTrackerBasic).ToString()].Value<int>();
-				var etRole = roleString[((int)SkuIdEnum.ExpenseTrackerBasic).ToString()].Value<int>();
-				var smRole = roleString[((int)SkuIdEnum.StaffingManagerBasic).ToString()].Value<int>();
+				var ttRole = roleString[((int)ProductIdEnum.TimeTracker).ToString()].Value<int>();
+				var etRole = roleString[((int)ProductIdEnum.ExpenseTracker).ToString()].Value<int>();
+				var smRole = roleString[((int)ProductIdEnum.StaffingManager).ToString()].Value<int>();
 
 				if (ttRole > 0)
 				{
