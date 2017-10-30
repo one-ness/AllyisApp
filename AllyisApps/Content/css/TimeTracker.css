@@ -367,3 +367,62 @@ a:hover, a:focus {
 .sm-control-width {
 	width: 420px;
 }
+
+.very-inline-form.edit .allyisicon-delete {
+	display: inline-block;
+	font: normal normal normal 14px/1 FontAwesome;
+	font-size: inherit;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.very-inline-form.edit .allyisicon-delete:before {
+	content: "\f00d";
+}
+
+.very-inline-form.create {
+	opacity: 0.5;
+	background-color: transparent;
+}
+
+.very-inline-form.create .button-anim-wrap {
+	width: 40px;
+}
+
+.very-inline-form.create .allyisicon-submit {
+	display: inline-block;
+	font: normal normal normal 14px/1 FontAwesome;
+	font-size: inherit;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.very-inline-form.create .allyisicon-submit:before {
+	content: "\f067";
+}
+
+.very-inline-form.create .allyisicon-delete {
+	display: inline-block;
+	font: normal normal normal 14px/1 FontAwesome;
+	font-size: inherit;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.inline-form-anim-wrap {
+	-webkit-transition: all 1s ease;
+	-o-transition: all 1s ease;
+	transition: all 1s ease;
+	left: 0;
+	max-height: 68px;
+	overflow: hidden;
+}
+
+.inline-form-anim-wrap.hidden-sample {
+	max-height: 0px;
+	overflow: hidden;
+	display: none;
+}
