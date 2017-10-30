@@ -89,10 +89,9 @@ namespace AllyisApps.Services
 			if (inviteInfo.ProductRolesJson != null)
 			{
 				JObject roleString = JObject.Parse(inviteInfo.ProductRolesJson);
-
-				var ttRole = roleString[((int)ProductIdEnum.TimeTracker).ToString()].Value<int>();
-				var etRole = roleString[((int)ProductIdEnum.ExpenseTracker).ToString()].Value<int>();
-				var smRole = roleString[((int)ProductIdEnum.StaffingManager).ToString()].Value<int>();
+				int ttRole = extractRole(roleString, ProductIdEnum.TimeTracker, SkuIdEnum.TimeTrackerBasic);
+				var etRole = extractRole(roleString, ProductIdEnum.ExpenseTracker, SkuIdEnum.ExpenseTrackerBasic);
+				var smRole = extractRole(roleString, ProductIdEnum.StaffingManager, SkuIdEnum.StaffingManagerBasic);
 
 				if (ttRole > 0)
 				{
@@ -115,6 +114,28 @@ namespace AllyisApps.Services
 			NotifyInviteAcceptAsync(invitationId);
 
 			return true;
+		}
+
+		private int extractRole(JObject roleString, ProductIdEnum productId, SkuIdEnum skuId)
+		{
+			JToken test;
+			bool exists = roleString.TryGetValue((((int)productId)).ToString(), out test);
+			if (exists)
+			{
+				return test.Value<int>();
+			}
+			else
+			{
+				exists = roleString.TryGetValue((((int)skuId)).ToString(), out test);
+				if (exists)
+				{
+					return test.Value<int>();
+				}
+				else
+				{
+					throw new Exception("Failed to extract role from JSON: " + roleString.ToString());
+				}
+			}
 		}
 
 		/// <summary>
