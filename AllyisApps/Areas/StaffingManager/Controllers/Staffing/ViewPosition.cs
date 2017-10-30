@@ -4,21 +4,17 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using System.Dynamic;
 using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
-using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
-using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.ViewModels;
-using System.Web.Script.Serialization;
-using System;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -33,23 +29,23 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="positionId">The position id.</param>
 		/// <param name="subscriptionId">the subscription</param>
 		/// <returns>Presents a page for the creation of a new position.</returns>
-		async public Task<ActionResult> ViewPosition(int positionId, int subscriptionId)
+		public async Task<ActionResult> ViewPosition(int positionId, int subscriptionId)
 		{
 			SetNavData(subscriptionId);
 
 			var viewModel = await setupViewPositionViewModel(positionId, subscriptionId);
 
-			return this.View(viewModel);
+			return View(viewModel);
 		}
 
 		/// <summary>
 		/// setup position setup viewmodel
 		/// </summary>
 		/// <returns></returns>
-		async public Task<ViewPositionViewModel> setupViewPositionViewModel(int positionId, int subscriptionId)
+		public async Task<ViewPositionViewModel> setupViewPositionViewModel(int positionId, int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			Position pos = await AppService.GetPosition(positionId);
 			List<Application> applicationsSerive = await AppService.GetFullApplicationInfoByPositionId(positionId);
 			List<ApplicationInfoViewModel> applications = new List<ApplicationInfoViewModel>();
@@ -66,7 +62,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			foreach (Application app in applicationsSerive)
 			{
 				var viewApp = BuildApplications(app);
-				viewApp.ApplicationStatuses = infos.Item6.AsParallel().Select(appStat => new ApplicationStatusSelectViewModel()
+				viewApp.ApplicationStatuses = infos.Item6.AsParallel().Select(appStat => new ApplicationStatusSelectViewModel
 				{
 					ApplicationStatusId = appStat.ApplicationStatusId,
 					ApplicationStatusName = appStat.ApplicationStatusName
@@ -98,7 +94,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			return new ViewPositionViewModel
 			{
 				PositionId = pos.PositionId,
-				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
 				LocalizedStates = new Dictionary<string, string>(),
 				IsCreating = false,
 				OrganizationId = subInfo.OrganizationId,
@@ -107,27 +103,27 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				StartDate = pos.StartDate,
 				StartDateFormat = formatingStartDate,
 				Tags = tags,
-				EmploymentTypes = infos.Item3.AsParallel().Select(et => new EmploymentTypeSelectViewModel()
+				EmploymentTypes = infos.Item3.AsParallel().Select(et => new EmploymentTypeSelectViewModel
 				{
 					EmploymentTypeId = et.EmploymentTypeId,
 					EmploymentTypeName = et.EmploymentTypeName
 				}).ToList(),
-				PositionLevels = infos.Item4.AsParallel().Select(pl => new PositionLevelSelectViewModel()
+				PositionLevels = infos.Item4.AsParallel().Select(pl => new PositionLevelSelectViewModel
 				{
 					PositionLevelId = pl.PositionLevelId,
 					PositionLevelName = pl.PositionLevelName
 				}).ToList(),
-				PositionStatuses = infos.Item5.AsParallel().Select(ps => new PositionStatusSelectViewModel()
+				PositionStatuses = infos.Item5.AsParallel().Select(ps => new PositionStatusSelectViewModel
 				{
 					PositionStatusId = ps.PositionStatusId,
 					PositionStatusName = ps.PositionStatusName
 				}).ToList(),
-				ApplicationStatuses = infos.Item6.AsParallel().Select(appStat => new ApplicationStatusSelectViewModel()
+				ApplicationStatuses = infos.Item6.AsParallel().Select(appStat => new ApplicationStatusSelectViewModel
 				{
 					ApplicationStatusId = appStat.ApplicationStatusId,
 					ApplicationStatusName = appStat.ApplicationStatusName
 				}).ToList(),
-				Customers = infos.Item7.AsParallel().Select(cus => new CustomerSelectViewModel()
+				Customers = infos.Item7.AsParallel().Select(cus => new CustomerSelectViewModel
 				{
 					CustomerId = cus.CustomerId,
 					CustomerName = cus.CustomerName
@@ -168,7 +164,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			List<ApplicationDocumentViewModel> docs = new List<ApplicationDocumentViewModel>();
 			foreach (ApplicationDocument doc in app.ApplicationDocuments)
 			{
-				docs.Add(new ApplicationDocumentViewModel()
+				docs.Add(new ApplicationDocumentViewModel
 				{
 					ApplicationDocumentId = doc.ApplicationDocumentId,
 					ApplicationId = doc.ApplicationId,
@@ -177,13 +173,13 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				});
 			}
 
-			return new ApplicationInfoViewModel()
+			return new ApplicationInfoViewModel
 			{
 				ApplicationId = app.ApplicationId,
 				ApplicantName = app.Applicant.LastName + ", " + app.Applicant.FirstName,
 				ApplicantAddress = app.Applicant.City + ", " + app.Applicant.State + " " + app.Applicant.Country,
 				ApplicantEmail = app.Applicant.Email,
-				AppliationStatusId = (int)app.ApplicationStatus,
+				AppliationStatusId = app.ApplicationStatus,
 				ApplicationModifiedUTC = app.ApplicationModifiedUtc,
 				Notes = app.Notes,
 				ApplicationDocuments = docs

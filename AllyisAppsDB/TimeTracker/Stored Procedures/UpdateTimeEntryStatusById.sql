@@ -1,5 +1,8 @@
 CREATE PROCEDURE [TimeTracker].[UpdateTimeEntryStatusById]
-	@timeEntryId INT,
-	@timeEntryStatusId INT
+    @timeEntryId INT,
+    @timeEntryStatusId INT
 AS
-UPDATE [TimeTracker].[TimeEntry] SET [TimeEntryStatusId] = @timeEntryStatusId WHERE [TimeEntryId] = @timeEntryId
+    UPDATE [t]
+       SET [t].[TimeEntryStatusId] = @timeEntryStatusId
+      FROM [TimeTracker].[TimeEntry] [t]
+     WHERE [t].[TimeEntryId] = @timeEntryId

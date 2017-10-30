@@ -32,14 +32,14 @@
 	<div class="row">
 		<div class="col-md-2 sm-control-width">
 			<div class="panel-heading">
-				<h1 class="panel-title">Employment Types</h1>
+				<h1 class="panel-title">@Strings.EmploymentTypes</h1>
 			</div>
 			<div class="panel panel-info">
 				<div id="Types">
 					<table class="table table-condensed">
 						<thead>
 							<tr>
-								<th>Type Name</th>
+								<th>@Strings.TypeName</th>
 								<th><span class="pull-right">@Strings.Delete</span></th>
 							</tr>
 						</thead>
@@ -47,7 +47,7 @@
 						{
 							<tr>
 								@{
-									string _typeName = Strings.ResourceManager.GetString((type.EmploymentTypeName).Replace(" ", string.Empty)) ?? type.EmploymentTypeName;
+									string _typeName = Strings.ResourceManager.GetString(type.EmploymentTypeName.Replace(" ", string.Empty)) ?? type.EmploymentTypeName;
 								}
 								<td>@_typeName</td>
 								<td>
@@ -73,23 +73,23 @@
 
 			<div class="col-md-3">
 				<div class="panel-heading">
-					<h1 class="panel-title">Position Statuses</h1>
+					<h1 class="panel-title">@Strings.PositionStatuses</h1>
 				</div>
 				<div class="panel panel-info">
 					<div id="Statuses">
 						<table class="table table-condensed">
 							<thead>
 								<tr>
-									<th>Status Name</th>
+									<th>@Strings.StatusName</th>
 									<th><span class="pull-right">@Strings.Delete</span></th>
-									<th><span class="pull-right">Default</span></th>
+									<th><span class="pull-right">@Strings.Default</span></th>
 								</tr>
 							</thead>
 							@foreach (dynamic status in Model.positionStatuses)
 							{
 								<tr>
 									@{
-										string _statusName = Strings.ResourceManager.GetString((status.PositionStatusName).Replace(" ", string.Empty)) ?? status.PositionStatusName;
+										string _statusName = Strings.ResourceManager.GetString(status.PositionStatusName.Replace(" ", string.Empty)) ?? status.PositionStatusName;
 									}
 									<td>@_statusName</td>
 									<td>
@@ -123,23 +123,23 @@
 			</div>
 
 			<div class="panel-heading">
-				<h1 class="panel-title">Application Statuses</h1>
+				<h1 class="panel-title">@Strings.ApplicationStatuses</h1>
 			</div>
 			<div class="panel panel-info">
 				<div id="AppStatuses">
 					<table class="table table-condensed">
 						<thead>
 							<tr>
-								<th>Status Name</th>
+								<th>@Strings.StatusName</th>
 								<th><span class="pull-right">@Strings.Delete</span></th>
-								<th><span class="pull-right">Default</span></th>
+								<th><span class="pull-right">@Strings.Default</span></th>
 							</tr>
 						</thead>
 						@foreach (dynamic status in Model.applicationStatuses)
 						{
 							<tr>
 								@{
-									string _statusName = Strings.ResourceManager.GetString((status.ApplicationStatusName).Replace(" ", string.Empty)) ?? status.ApplicationStatusName;
+									string _statusName = Strings.ResourceManager.GetString(status.ApplicationStatusName.Replace(" ", string.Empty)) ?? status.ApplicationStatusName;
 								}
 								<td>@_statusName</td>
 								<td>
@@ -169,30 +169,20 @@
 							}
 						</tr>
 					</table>
-								@using (Html.BeginForm(ActionConstants.CreatePositionStatus, ControllerConstants.Staffing, new { subscriptionId = Model.subscriptionId, orgId = Model.organizationId }, FormMethod.Post))
-								{
-									@Html.AntiForgeryToken();
-									@Html.HiddenFor(m => m.subscriptionId)
-									<td><input type="text" name="positionStatus" class="form-control" required /></td>
-									<td><span class="pull-right"></span></td>
-									<td><input class="btn btn-primary" type="submit" value="@Strings.Add" /></td>
-								}
-							</tr>
-						</table>
 					</div>
 				</div>
 			</div>
 
 		<div class="col-md-2 sm-control-width">
 			<div class="panel-heading">
-				<h1 class="panel-title">Position Levels</h1>
+				<h1 class="panel-title">@Strings.PositionLevels</h1>
 			</div>
 			<div class="panel panel-info">
 				<div id="Levels">
 					<table class="table table-condensed">
 						<thead>
 							<tr>
-								<th>Level Name</th>
+								<th>@Strings.LevelName</th>
 								<th><span class="pull-right">@Strings.Delete</span></th>
 							</tr>
 						</thead>
@@ -200,7 +190,7 @@
 						{
 							<tr>
 								@{
-									string _levelName = Strings.ResourceManager.GetString((level.PositionLevelName).Replace(" ", string.Empty)) ?? level.PositionLevelName;
+									string _levelName = Strings.ResourceManager.GetString(level.PositionLevelName.Replace(" ", string.Empty)) ?? level.PositionLevelName;
 								}
 								<td>@_levelName</td>
 								<td>

@@ -4,15 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using System.Linq;
 using AllyisApps.Lib;
+using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -26,21 +26,21 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <returns>The settings page.</returns>
-		async public Task<ActionResult> SettingsStartOfWeek(int subscriptionId)
+		public async Task<ActionResult> SettingsStartOfWeek(int subscriptionId)
 		{
-			this.AppService.CheckTimeTrackerAction((AppService.TimeTrackerAction.EditOthers), subscriptionId);
-			int organizaionID = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
+			int organizaionID = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			var infos = AppService.GetAllSettings(organizaionID);
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			string subName = await AppService.GetSubscriptionName(subscriptionId);
 			var infoOrg = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infoOrg.Item1.StartOfWeek));
-			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
+			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(infoOrg.Item1.StartOfWeek));
 			Services.TimeTracker.Setting settings = infos.Item1;
-			return this.View(new SettingsWeekStartViewModel()
+			return View(new SettingsWeekStartViewModel
 			{
-				Settings = new SettingsWeekStartViewModel.SettingsInfoViewModel()
+				Settings = new SettingsWeekStartViewModel.SettingsInfoViewModel
 				{
 					IsLockDateUsed = settings.IsLockDateUsed,
 					LockDatePeriod = settings.LockDatePeriod,
@@ -52,12 +52,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					StartOfWeek = settings.StartOfWeek,
 					Today = System.DateTime.UtcNow.Date
 				},
-				PayClasses = infos.Item2.AsParallel().Select(payClass => new SettingsWeekStartViewModel.PayClassViewModel()
+				PayClasses = infos.Item2.AsParallel().Select(payClass => new SettingsWeekStartViewModel.PayClassViewModel
 				{
 					PayClassId = payClass.PayClassId,
 					PayClassName = payClass.PayClassName
 				}),
-				Holidays = infos.Item3.AsParallel().Select(holiday => new SettingsWeekStartViewModel.HolidayViewModel()
+				Holidays = infos.Item3.AsParallel().Select(holiday => new SettingsWeekStartViewModel.HolidayViewModel
 				{
 					Date = holiday.Date,
 					HolidayId = holiday.HolidayId,
@@ -65,7 +65,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}),
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subName,
-				UserId = this.AppService.UserContext.UserId
+				UserId = AppService.UserContext.UserId
 			});
 		}
 
@@ -75,7 +75,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subscriptionId">The subscription's id.</param>
 		/// <param name="startOfWeek">Start of week selected by Organization admin.</param>
 		/// <returns>Action result.</returns>
-		async public Task<ActionResult> UpdateStartOfWeek(int subscriptionId, int startOfWeek)
+		public async Task<ActionResult> UpdateStartOfWeek(int subscriptionId, int startOfWeek)
 		{
 			System.Diagnostics.Debug.WriteLine("New Start Date: " + startOfWeek);
 			var upWeek = await AppService.UpdateStartOfWeek(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId, subscriptionId, startOfWeek);
@@ -92,7 +92,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulSOW, Variety.Success));
 			}
 
-			return this.RedirectToAction(ActionConstants.SettingsStartOfWeek, new { subscriptionid = subscriptionId, id = this.AppService.UserContext.UserId });
+			return RedirectToAction(ActionConstants.SettingsStartOfWeek, new { subscriptionid = subscriptionId, id = AppService.UserContext.UserId });
 		}
 	}
 }

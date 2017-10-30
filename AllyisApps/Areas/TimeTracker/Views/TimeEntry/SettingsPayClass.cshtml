@@ -1,10 +1,8 @@
 ﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-@using AllyisApps.Core;
-@using AllyisApps.Services;
-@using AllyisApps.Services.TimeTracker;
 @model SettingsPayClassesViewModel
 
 @{
+	ViewBag.TitleBar = Strings.Settings;
 	ViewBag.Title = Strings.PClasses;
 	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
 	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
@@ -19,22 +17,18 @@
 }
 
 
-<div class="ovrd-row row container">
-	@*<div class="col-md-12">
-		@Html.Partial("_ManageSettingSideBar2")
-	</div>*@
-	
-	<div class="ovrd-col-sm-2 col-sm-2 col">
+<div class="row slim">
+	<div class="col-sm-2">
 		@Html.Partial("_ManageSettingSideBar")
 	</div>
 	
-	<div class="ovrd-col-md-10 col-md-10 col">
-		<div class="ovrd-panel panel ovrd-panel-info panel-info">
-			<div class="ovrd-panel-heading panel-heading">
-				<h1 class="ovrd-panel-title panel-title">@Strings.PClasses</h1>
+	<div class="col-md-10">
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<h1 class="panel-title">@Strings.PClasses</h1>
 			</div>
 			<div id="PayClasses">
-				<table class="ovrd-table table ovrd-table-condensed table-condensed">
+				<table class="table table-condensed">
 					<thead>
 						<tr>
 							<th>@Strings.PClass</th>
@@ -42,22 +36,22 @@
 							<th><span class="pull-right">@Strings.Delete</span></th>
 						</tr>
 					</thead>
-					@foreach (SettingsPayClassesViewModel.PayClassViewModel PayClass in Model.PayClasses)
+					@foreach (SettingsViewModel.PayClassViewModel PayClass in Model.PayClasses)
 				{
 						<tr>
 							@{
-							string _payClassName = Strings.ResourceManager.GetString((PayClass.PayClassName).Replace(" ", string.Empty)) ?? PayClass.PayClassName;
+							string _payClassName = Strings.ResourceManager.GetString(PayClass.PayClassName.Replace(" ", string.Empty)) ?? PayClass.PayClassName;
 							}
 							<td>@_payClassName</td>
 							@if (_payClassName != Strings.Regular && _payClassName != Strings.Overtime && _payClassName != Strings.Holiday && _payClassName != Strings.PaidTimeOff && _payClassName != Strings.UnpaidTimeOff)
 						{
 								<td>
 									<a href="javascript: void(0);" class="text-muted" title="@Strings.MergePayClass"
-									   onclick='mergePayClass("@PayClass.PayClassId")'><span class="ovrd-fa fa ovrd-fa-fw fa-fw ovrd-fa-object-group fa-object-group pull-right"></span></a>
+									   onclick='mergePayClass("@PayClass.PayClassId")'><span class="fa fa-fw fa-object-group pull-right"></span></a>
 								</td>
 								<td>
 									<a href="javascript: void(0);" class="text-muted" title="@Strings.DeletePayClass"
-									   onclick='deletePayClass("@PayClass.PayClassId", "\"@_payClassName\"")'><span class="ovrd-fa fa ovrd-fa-fw fa-fw ovrd-fa-remove fa-remove text-danger pull-right"></span></a>
+									   onclick='deletePayClass("@PayClass.PayClassId", "\"@_payClassName\"")'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
 								</td>
 						}
 						else
@@ -72,9 +66,9 @@
 					{
 							@Html.AntiForgeryToken();
 							@Html.HiddenFor(m => m.SubscriptionId)
-							<td><input type="text" name="NewPayClass" class="ovrd-form-control form-control" required /></td>
+							<td><input type="text" name="NewPayClass" class="form-control" required /></td>
 							<td><span class="pull-right"></span></td>
-							<td><input class="ovrd-btn btn ovrd-btn-primary btn-primary pull-right" type="submit" value="@Strings.Add" /></td>
+							<td><input class="btn btn-primary pull-right" type="submit" value="@Strings.Add" /></td>
 					}
 					</tr>
 				</table>

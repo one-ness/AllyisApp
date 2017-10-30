@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AllyisApps.DBModel;
 using AllyisApps.DBModel.Finance;
 using AllyisApps.Services.Expense;
 
@@ -12,7 +11,7 @@ namespace AllyisApps.Services
 	/// </summary>
 	public partial class AppService : BaseService
 	{
-		async public Task<IList<Account>> GetAccounts(int orgId)
+		public async Task<IList<Account>> GetAccounts(int orgId)
 		{
 			var results = await DBHelper.GetAccounts(orgId);
 			return results.Select(x => InitializeAccountModel(x)).ToList();
@@ -32,7 +31,7 @@ namespace AllyisApps.Services
 			return result != -1 ? true : false;
 		}
 
-		async public Task DeleteAccount(int id)
+		public async Task DeleteAccount(int id)
 		{
 			await DBHelper.DeleteAccount(id);
 			return;
@@ -40,7 +39,7 @@ namespace AllyisApps.Services
 
 		public Account InitializeAccountModel(AccountDBEntity account)
 		{
-			return new Account()
+			return new Account
 			{
 				AccountId = account.AccountId,
 				AccountName = account.AccountName,
@@ -54,7 +53,7 @@ namespace AllyisApps.Services
 
 		public AccountDBEntity InitializeAccountDbModel(Account account)
 		{
-			return new AccountDBEntity()
+			return new AccountDBEntity
 			{
 				AccountId = account.AccountId,
 				AccountName = account.AccountName,

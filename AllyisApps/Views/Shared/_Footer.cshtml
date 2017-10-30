@@ -1,27 +1,7 @@
-﻿<style>
-	.footer-bar {
-		background-color: #efefef;
-		bottom: 0;
-		font-size: smaller;
-		height: 40px;
-		padding-bottom: 2px;
-		padding-top: 2px;
-		position: absolute;
-		width: 100%;
-	}
-
-		.footer-bar a {
-			margin-right: 10px;
-		}
-</style>
-<div class="footer-bar">
+﻿<footer id="footer-bar" class="navbar-fixed-bottom footer-bar">
 	<div class="container">
-		<div class="row">
-			<div class="col-xs-12">
-				<a class="pull-left" href="@Url.Action(ActionConstants.PrivacyPolicy, ControllerConstants.Home)">@Strings.PrivacyPolicy</a>
-				<a class="pull-left" href="@Url.Action(ActionConstants.Help, ControllerConstants.Home)">@Strings.Help</a>
-				<span class="pull-right">&copy; @DateTime.Now.Year - Allyis, Inc.</span>
-			</div>
-		</div>
+		<a class="pull-left" href="@Url.Action(ActionConstants.PrivacyPolicy, ControllerConstants.Home)">@Strings.PrivacyPolicy</a>
+		<a class="pull-left" href="@Url.Action(ActionConstants.Help, ControllerConstants.Home)">@Strings.Help</a>
+		<span class="pull-right">&copy; @DateTime.Now.Year - Allyis, Inc.</span>
 	</div>
-</div>
+</footer>

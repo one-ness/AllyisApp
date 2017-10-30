@@ -1,73 +1,73 @@
-﻿@model AllyisApps.ViewModels.Auth.EditProfileViewModel
+﻿@model EditProfileViewModel
 @{
 	ViewBag.Title = Strings.EditProfile;
 }
 
 <div class="shrink-wrap-center">
 	<div class="min300">
-		@using (Html.BeginForm(ActionConstants.EditProfile, ControllerConstants.Account, new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "ovrd-form form", role = "form" }))
+		@using (Html.BeginForm(ActionConstants.EditProfile, ControllerConstants.Account, new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form", role = "form" }))
 		{
 			@Html.HiddenFor(m => m.AddressId)
 			@Html.AntiForgeryToken()
 			@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" });
-			<div class="ovrd-row row">
-				<div class="ovrd-col-md-6 col-md-6 col min300">
-					<div class="ovrd-form-group form-group">
+			<div class="row">
+				<div class="col-md-6 min300">
+					<div class="form-group">
 						@Html.ReqLabelFor(m => m.Email, Strings.Email)
 						@Html.ValidationMessageFor(m => m.Email)
-						@Html.TextBoxFor(m => m.Email, new { @readonly = "readonly", @class = "ovrd-form-control form-control" })
+						@Html.TextBoxFor(m => m.Email, new { @readonly = "readonly", @class = "form-control" })
 					</div>
-					<div class="ovrd-form-group form-group">
+					<div class="form-group">
 						@Html.ReqLabelFor(m => m.FirstName, Strings.FirstName)
-						@Html.TextBoxFor(m => m.FirstName, new { @class = "ovrd-form-control form-control" })
+						@Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
 					</div>
-					<div class="ovrd-form-group form-group">
+					<div class="form-group">
 						@Html.ReqLabelFor(m => m.LastName, Strings.LastName)
-						@Html.TextBoxFor(m => m.LastName, new { @class = "ovrd-form-control form-control" })
+						@Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
 					</div>
-					<div class="ovrd-form-group form-group">
+					<div class="form-group">
 						<label>@Strings.DateOfBirth</label>
 						@Html.HiddenFor(m => m.DateOfBirth)
 						<input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerBirth" />@*Needs to be <input /> tag, not Html.EditorFor or a NULL birthday will show up as -1*@
-						<span class="ovrd-fa fa ovrd-fa-fw fa-fw ovrd-fa-calendar fa-calendar" id="datePickerBirthButton"></span>
+						<span class="fa fa-fw fa-calendar" id="datePickerBirthButton"></span>
 						@Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @class = "text-danger" })
 					</div>
-					<div class="ovrd-form-group form-group">
+					<div class="form-group">
 						@Html.ReqLabelFor(m => m.PhoneNumber, Strings.PhoneNumber)
-						@Html.TextBoxFor(m => m.PhoneNumber, new { @class = "ovrd-form-control form-control" })
+						@Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
 					</div>
 				</div>
-				<div class="ovrd-col-md-6 col-md-6 col min300">
-					<div class="ovrd-form-group form-group">
+				<div class="col-md-6 min300">
+					<div class="form-group">
 						@Html.LabelFor(m => m.Address, Strings.Address)
-						@Html.TextBoxFor(m => m.Address, new { @class = "ovrd-form-control form-control" })
+						@Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
 					</div>
-					<div class="ovrd-form-group form-group">
+					<div class="form-group">
 						@Html.LabelFor(m => m.LocalizedCountries, Strings.Country)
 						@Html.DropDownListFor(m => m.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new { @id = @ViewConstants.DdlCountriesId, @class = "form-control" })
 					</div>
-					<div class="ovrd-form-group form-group">
+					<div class="form-group">
 						@Html.LabelFor(m => m.LocalizedStates, Strings.State)
 						@Html.DropDownListFor(m => m.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @id = ViewConstants.DdlStatesId, @class = "form-control" })
 					</div>
-					<div class="ovrd-form-group form-group">
+					<div class="form-group">
 						@Html.LabelFor(m => m.City, Strings.City)
-						@Html.TextBoxFor(m => m.City, new { @class = "ovrd-form-control form-control" })
+						@Html.TextBoxFor(m => m.City, new { @class = "form-control" })
 					</div>
-					<div class="ovrd-form-group form-group">
+					<div class="form-group">
 						@Html.LabelFor(m => m.PostalCode, Strings.PostalCode)
-						@Html.TextBoxFor(m => m.PostalCode, new { @class = "ovrd-form-control form-control" })
+						@Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control" })
 					</div>
 				</div>
 			</div>
 
-			<div class="ovrd-form-group form-group allyis-action-buttons">
-				<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)" class="ovrd-btn btn ovrd-btn-default btn-default"> @Strings.Cancel </a>
-				<button class="ovrd-btn btn ovrd-btn-primary btn-primary" type="submit" value=@Strings.Save>@Strings.Save</button>
+			<div class="form-group allyis-action-buttons">
+				<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)" class="btn btn-default"> @Strings.Cancel </a>
+				<button class="btn btn-primary btn-gray" type="submit" value=@Strings.Save>@Strings.Save</button>
 			</div>
 		}
 	</div>

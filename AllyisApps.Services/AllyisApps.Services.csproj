@@ -72,17 +72,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auth\InvitationStatusEnum.cs" />
-    <Compile Include="Auth\OrganizaionPermissions.cs" />
     <Compile Include="Auth\Organization.cs" />
     <Compile Include="Auth\AccountService.cs" />
     <Compile Include="Auth\AuthorizationService.cs" />
     <Compile Include="Auth\ImportService.cs" />
-    <Compile Include="Auth\OrganizationRoleEnum.cs" />
     <Compile Include="Auth\Account.cs" />
     <Compile Include="Auth\OrganizationUser.cs" />
     <Compile Include="Auth\ProductRoleEnums.cs" />
     <Compile Include="Auth\ProductSubscription.cs" />
     <Compile Include="Auth\ReportInfo.cs" />
+    <Compile Include="Auth\ServiceActionEnums.cs" />
     <Compile Include="Auth\UserContext.cs" />
     <Compile Include="Auth\UserOrganization.cs" />
     <Compile Include="Auth\UserSubscription.cs" />
@@ -92,7 +91,6 @@
     <Compile Include="Billing\BillingServicesHandler.cs" />
     <Compile Include="Billing\BillingHistoryItemInfo.cs" />
     <Compile Include="Billing\BillingService.cs" />
-    <Compile Include="Billing\BlockBasedOnEnum.cs" />
     <Compile Include="Billing\Sku.cs" />
     <Compile Include="Billing\Subscription.cs" />
     <Compile Include="Billing\UnitTypeEnum.cs" />
@@ -142,13 +140,10 @@
     <Compile Include="Billing\SkuIdEnum.cs" />
     <Compile Include="Billing\SkuInfo.cs" />
     <Compile Include="TimeTracker\StartOfWeekEnum.cs" />
-    <Compile Include="Billing\SubscriptionDisplay.cs" />
-    <Compile Include="Billing\SubscriptionInfo.cs" />
     <Compile Include="Auth\ProductRole.cs" />
     <Compile Include="Billing\SubscriptionUser.cs" />
     <Compile Include="TimeTracker\TimeEntry.cs" />
     <Compile Include="Auth\User.cs" />
-    <Compile Include="Auth\UserRole.cs" />
     <Compile Include="Crm\CrmService.cs" />
     <Compile Include="Billing\Product.cs" />
     <Compile Include="Billing\ProductIdEnum.cs" />

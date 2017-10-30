@@ -4,17 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services;
 using AllyisApps.Services.Billing;
-using AllyisApps.Services.Common.Types;
-using AllyisApps.ViewModels.Auth;
-using System.Threading.Tasks;
 using AllyisApps.Services.Cache;
-using System.Collections.Generic;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -33,7 +30,7 @@ namespace AllyisApps.Controllers.Auth
 		public async Task<ActionResult> Subscribe(int id, SkuIdEnum skuId)
 		{
 			// get all subscriptions of the given organization
-			var collection = await this.AppService.GetSubscriptionsAsync(id);
+			var collection = await AppService.GetSubscriptionsAsync(id);
 			var model = new SubscribeViewModel();
 			foreach (var item in collection)
 			{
@@ -41,26 +38,26 @@ namespace AllyisApps.Controllers.Auth
 				if (item.SkuId == skuId)
 				{
 					// yes, already subscribed
-					this.Notifications.Add(new BootstrapAlert(string.Format("You are already subscribed to {0}.", item.SkuName), Variety.Warning));
-					return this.RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id = id });
+					Notifications.Add(new BootstrapAlert(string.Format("You are already subscribed to {0}.", item.SkuName), Variety.Warning));
+					return RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id = id });
 				}
 				else
 				{
 					// no, get the product of this subscription
 					var pid = item.ProductId;
-					Product product = null;
+					Product product;
 					if (!CacheContainer.ProductsCache.TryGetValue(pid, out product) || !product.IsActive)
 					{
 						// inactive or invalid product
-						this.Notifications.Add(new BootstrapAlert("You selected an invalid product to subscribe to.", Variety.Danger));
-						return this.RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id = id });
+						Notifications.Add(new BootstrapAlert("You selected an invalid product to subscribe to.", Variety.Danger));
+						return RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id = id });
 					}
 
 					// is it a sku of this product?
-					List<Sku> skus = null;
+					List<Sku> skus;
 					if (CacheContainer.SkusCache.TryGetValue(pid, out skus))
 					{
-						var sku = skus.Where(x => x.IsActive && x.SkuId == skuId).FirstOrDefault();
+						var sku = skus.FirstOrDefault(x => x.IsActive && x.SkuId == skuId);
 						if (sku != null)
 						{
 							// yes, user is subscribing to another sku of an existing subscription (i.e., product)
@@ -84,17 +81,17 @@ namespace AllyisApps.Controllers.Auth
 			if (selectedSku == null)
 			{
 				// inactive or invalid sku
-				this.Notifications.Add(new BootstrapAlert("You selected an invalid sku to subscribe to.", Variety.Danger));
-				return this.RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id = id });
+				Notifications.Add(new BootstrapAlert("You selected an invalid sku to subscribe to.", Variety.Danger));
+				return RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id = id });
 			}
 
 			// get product for the sku
-			Product selectedProduct = null;
+			Product selectedProduct;
 			if (!CacheContainer.ProductsCache.TryGetValue(selectedSku.ProductId, out selectedProduct) || !selectedProduct.IsActive)
 			{
 				// inactive or invalid product
-				this.Notifications.Add(new BootstrapAlert("You selected an invalid product to subscribe to.", Variety.Danger));
-				return this.RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id = id });
+				Notifications.Add(new BootstrapAlert("You selected an invalid product to subscribe to.", Variety.Danger));
+				return RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id = id });
 			}
 
 			// fill model
@@ -113,9 +110,9 @@ namespace AllyisApps.Controllers.Auth
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Subscribe(SubscribeViewModel model)
 		{
-			await this.AppService.Subscribe(model.OrganizationId, (SkuIdEnum)model.SkuId, model.SubscriptionName);
+			await AppService.Subscribe(model.OrganizationId, (SkuIdEnum)model.SkuId, model.SubscriptionName);
 			Notifications.Add(new BootstrapAlert(string.Format("Your subscription: {0} was created successfully!", model.SubscriptionName), Variety.Success));
-			return this.RedirectToAction(ActionConstants.OrganizationSubscriptions, new { id = model.OrganizationId });
+			return RedirectToAction(ActionConstants.OrganizationSubscriptions, new { id = model.OrganizationId });
 		}
 	}
 }

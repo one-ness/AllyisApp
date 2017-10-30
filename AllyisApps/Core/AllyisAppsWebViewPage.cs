@@ -22,12 +22,12 @@ namespace AllyisApps.Core
 			get
 			{
 				const string ViewDataKey = "DisplayHints";
-				if (!this.ViewData.ContainsKey(ViewDataKey))
+				if (!ViewData.ContainsKey(ViewDataKey))
 				{
-					this.ViewData[ViewDataKey] = new DisplayHints();
+					ViewData[ViewDataKey] = new DisplayHints();
 				}
 
-				return (DisplayHints)this.ViewData[ViewDataKey];
+				return (DisplayHints)ViewData[ViewDataKey];
 			}
 		}
 
@@ -50,10 +50,10 @@ namespace AllyisApps.Core
 		/// </summary>
 		public DisplayHints()
 		{
-			this.LayoutThemeBundle = "~/Content/Site";
-			this.ShowBreadcrumbs = true;
-			this.PageBodyId = "none";
-			this.PageBodyClasses = "none";
+			LayoutThemeBundle = "~/Content/Site";
+			ShowBreadcrumbs = true;
+			PageBodyId = "none";
+			PageBodyClasses = "none";
 		}
 
 		/// <summary>

@@ -1,6 +1,4 @@
 ﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-@using AllyisApps.Core;
-@using AllyisApps.Services;
 @using AllyisApps.Services.TimeTracker;
 @model SettingsViewModel
 
@@ -18,11 +16,11 @@
 	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
 }
 <div class="flexbox-row flexbox-row-2-col-collapse">
-	<div class="ovrd-panel panel ovrd-panel-info panel-info" style="position: relative;">
-		<div class="ovrd-panel-heading panel-heading">
-			<h1 class="ovrd-panel-title panel-title">@Strings.OrgSOW</h1>
+	<div class="panel panel-info" style="position: relative;">
+		<div class="panel-heading">
+			<h1 class="panel-title">@Strings.OrgSOW</h1>
 		</div>
-		<div class="ovrd-panel-body panel-body" id="SOWSetting">
+		<div class="panel-body" id="SOWSetting">
 			@using (Html.BeginForm(ActionConstants.UpdateStartOfWeek, ControllerConstants.TimeEntry, FormMethod.Post, new { enctype = "multipart/form-data" }))
 			{
 				@Html.AntiForgeryToken();
@@ -36,13 +34,13 @@
 				<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="6" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Saturday ? " checked " : string.Empty)><text>@Strings.Saturday</text><br />
 				<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="0" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Sunday ? " checked " : string.Empty)><text>@Strings.Sunday</text><br />
 				<br />
-				<input type="submit" value=@Strings.Save class="ovrd-btn btn ovrd-btn-primary btn-primary tt-bottom-right" />
+				<input type="submit" value=@Strings.Save class="btn btn-primary tt-bottom-right" />
 			}
 		</div>
 	</div>
-	<div class="ovrd-panel panel ovrd-panel-info panel-info">
-		<div class="ovrd-panel-heading panel-heading">
-			<h1 class="ovrd-panel-title panel-title">@Strings.PClasses</h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			<h1 class="panel-title">@Strings.PClasses</h1>
 		</div>
 		<div id="PayClasses">
 			<table class="table table-condensed">
@@ -57,18 +55,18 @@
 				{
 					<tr>
 						@{
-							string _payClassName = Strings.ResourceManager.GetString((PayClass.PayClassName).Replace(" ", string.Empty)) ?? PayClass.PayClassName;
+							string _payClassName = Strings.ResourceManager.GetString(PayClass.PayClassName.Replace(" ", string.Empty)) ?? PayClass.PayClassName;
 						}
 						<td>@_payClassName</td>
 						@if (_payClassName != Strings.Regular && _payClassName != Strings.Overtime && _payClassName != Strings.Holiday && _payClassName != Strings.PaidTimeOff && _payClassName != Strings.UnpaidTimeOff)
 						{
 							<td>
 								<a href="javascript: void(0);" class="text-muted" title="@Strings.MergePayClass"
-								   onclick='mergePayClass("@PayClass.PayClassId")'><span class="ovrd-fa fa ovrd-fa-fw fa-fw ovrd-fa-object-group fa-object-group pull-right"></span></a>
+								   onclick='mergePayClass("@PayClass.PayClassId")'><span class="fa fa-fw fa-object-group pull-right"></span></a>
 							</td>
 							<td>
 								<a href="javascript: void(0);" class="text-muted" title="@Strings.DeletePayClass"
-								   onclick='deletePayClass("@PayClass.PayClassId", "\"@_payClassName\"")'><span class="ovrd-fa fa ovrd-fa-fw fa-fw ovrd-fa-remove fa-remove text-danger pull-right"></span></a>
+								   onclick='deletePayClass("@PayClass.PayClassId", "\"@_payClassName\"")'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
 							</td>
 						}
 						else
@@ -85,17 +83,17 @@
 						@Html.HiddenFor(m => m.SubscriptionId)
 						<td><input type="text" name="NewPayClass" class="form-control" required /></td>
 						<td><span class="pull-right"></span></td>
-						<td><input class="ovrd-btn btn ovrd-btn-primary btn-primary pull-right" type="submit" value="@Strings.Add" /></td>
+						<td><input class="btn btn-primary pull-right" type="submit" value="@Strings.Add" /></td>
 					}
 				</tr>
 			</table>
 		</div>
 	</div>
-	<div class="ovrd-panel panel ovrd-panel-info panel-info" style="position: relative; padding-bottom: 40px;" @*style="width: 400px; margin: 10px auto;"*@>
-		<div class="ovrd-panel-heading panel-heading">
-			<h1 class="ovrd-panel-title panel-title">@Strings.LockDate</h1>
+	<div class="panel panel-info" style="position: relative; padding-bottom: 40px;" @*style="width: 400px; margin: 10px auto;"*@>
+		<div class="panel-heading">
+			<h1 class="panel-title">@Strings.LockDate</h1>
 		</div>
-		<div class="ovrd-panel-body panel-body" id="LockDate">
+		<div class="panel-body" id="LockDate">
 			@using (Html.BeginForm(ActionConstants.SetLockDate, ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId, id = Model.UserId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
 			{
 				@Html.AntiForgeryToken();
@@ -112,16 +110,16 @@
 					</select>
 				</div>
 				<div>
-					<input class="tt-bottom-right ovrd-btn btn ovrd-btn-primary btn-primary" type="submit" value=@Strings.Save />
+					<input class="tt-bottom-right btn btn-primary" type="submit" value=@Strings.Save />
 				</div>
 			}
 		</div>
 	</div>
-	<div class="ovrd-panel panel ovrd-panel-info panel-info" style="position: relative;">
-		<div class="ovrd-panel-heading panel-heading">
-			<h1 class="ovrd-panel-title panel-title">@Strings.Overtime</h1>
+	<div class="panel panel-info" style="position: relative;">
+		<div class="panel-heading">
+			<h1 class="panel-title">@Strings.Overtime</h1>
 		</div>
-		<div id="Overtime" class="ovrd-panel-body panel-body">
+		<div id="Overtime" class="panel-body">
 			@using (Html.BeginForm(ActionConstants.UpdateOvertime, ControllerConstants.TimeEntry, FormMethod.Post, new { enctype = "multipart/form-data" }))
 			{
 				@Html.AntiForgeryToken();
@@ -147,14 +145,14 @@
 					</div>
 				</div>
 				<div>
-					<input class="ovrd-btn btn ovrd-btn-primary btn-primary tt-bottom-right" type="submit" value=@Strings.Save />
+					<input class="btn btn-primary tt-bottom-right" type="submit" value=@Strings.Save />
 				</div>
 			}
 		</div>
 	</div>
-	<div class="ovrd-panel panel ovrd-panel-info panel-info">
-		<div class="ovrd-panel-heading panel-heading">
-			<h1 class="ovrd-panel-title panel-title">@Strings.Holidays</h1>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			<h1 class="panel-title">@Strings.Holidays</h1>
 		</div>
 		<div id="Holidays">
 			<ul class="nav nav-tabs" style="border-bottom:none;">
@@ -176,13 +174,13 @@
 				{
 					<tr class="@Holiday.Date.Year">
 						@{
-							string _holidayName = Strings.ResourceManager.GetString(((Holiday.HolidayName).Replace(" ", string.Empty)).Replace("'", string.Empty)) ?? Holiday.HolidayName;
+							string _holidayName = Strings.ResourceManager.GetString(Holiday.HolidayName.Replace(" ", string.Empty).Replace("'", string.Empty)) ?? Holiday.HolidayName;
 						}
 						<td>@_holidayName</td>
 						<td>@Holiday.Date.ToShortDateString()</td>
 						<td>
 							<a href="javascript: void(0);" class="text-muted" title="@Strings.DeleteHoliday" onclick='deleteHoliday("@Holiday.HolidayId", "\"@_holidayName\"")'>
-								<span class="ovrd-fa fa ovrd-fa-fw fa-fw ovrd-fa-remove fa-remove text-danger pull-right"></span>
+								<span class="fa fa-fw fa-remove text-danger pull-right"></span>
 							</a>
 						</td>
 					</tr>
@@ -196,9 +194,9 @@
 						<td>
 							<input type="hidden" id="DateRangeStart" name="NewHolidayDate" value="" />
 							<input onchange="$('#DateRangeStart').val($(this).val());" value="@Model.Settings.Today" type="text" class="form-control" style="width: 50%; display: inline-block;" id="datePickerHoliday" />@*Needs to be <input /> tag, not Html.EditorFor or a NULL holiday will show up as -1*@
-							<span class="ovrd-fa fa ovrd-fa-fw fa-fw ovrd-fa-calendar fa-calendar" id="datePickerHolidayButton"></span>
+							<span class="fa fa-fw fa-calendar" id="datePickerHolidayButton"></span>
 						</td>
-						<td><input class="pull-right ovrd-btn btn ovrd-btn-primary btn-primary" type="submit" value=@Strings.Add /></td>
+						<td><input class="pull-right btn btn-primary" type="submit" value=@Strings.Add /></td>
 					}
 				</tr>
 			</table>

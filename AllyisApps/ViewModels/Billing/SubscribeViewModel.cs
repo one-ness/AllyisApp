@@ -4,10 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Web.Mvc;
-using AllyisApps.Services.Billing;
-
 namespace AllyisApps.ViewModels.Auth
 {
 	/// <summary>

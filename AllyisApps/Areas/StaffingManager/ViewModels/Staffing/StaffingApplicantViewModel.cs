@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using AllyisApps.Services.StaffingManager;
 using System.ComponentModel.DataAnnotations;
 
 namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing

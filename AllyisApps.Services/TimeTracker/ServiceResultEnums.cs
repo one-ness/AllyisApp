@@ -4,7 +4,8 @@
 	{
 		InvalidStatuses,
 		DBError,
-		Success
+		Success,
+		InvalidLockDate
 	}
 
 	public enum UnlockEntriesResult

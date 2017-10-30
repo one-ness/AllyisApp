@@ -12,6 +12,7 @@ BEGIN
 	DECLARE @employeeId NVARCHAR(16);
 	SELECT
 		@organizationId = [OrganizationId],
+		@organizationRole = [OrganizationRoleId],
 		@email = [Email],
 		@employeeId = [EmployeeId]
 	FROM [Auth].[Invitation] WITH (NOLOCK)
@@ -60,7 +61,7 @@ BEGIN
 				);
 			END
 
-			UPDAtE [Auth].[Invitation]
+			UPDATE [Auth].[Invitation]
 			SET InvitationStatus = 1, DecisionDateUtc = GETUTCDATE()
 			WHERE [InvitationId] = @invitationId;
 			

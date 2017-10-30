@@ -22,7 +22,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="reportId">The report id.</param>
 		/// <returns>Returns an action result.</returns>
-		async public Task<ActionResult> Create(int subscriptionId, int reportId = -1)
+		public async Task<ActionResult> Create(int subscriptionId, int reportId = -1)
 		{
 			await SetNavData(subscriptionId);
 			var organizationId = (await AppService.GetSubscription(subscriptionId)).OrganizationId;
@@ -47,11 +47,11 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			if (reportId != -1)
 			{
 				if (report != null
-					&& (report.SubmittedById != this.AppService.UserContext.UserId)
-					|| ((ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Draft
-					&& (ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Rejected))
+					&& report.SubmittedById != AppService.UserContext.UserId
+					|| (ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Draft
+					&& (ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Rejected)
 				{
-					string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.EditReport.ToString());
+					string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.EditReport);
 					throw new AccessViolationException(message);
 				}
 
@@ -72,9 +72,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				}
 			}
 
-			var model = new ExpenseCreateModel()
+			var model = new ExpenseCreateModel
 			{
-				CurrentUser = this.AppService.UserContext.UserId,
+				CurrentUser = AppService.UserContext.UserId,
 				Items = itemViewModels,
 				StartDate = DateTime.UtcNow,
 				SubscriptionId = subscriptionId,
@@ -88,7 +88,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 		private AccountViewModel InitializeAccountViewModel(Account entity)
 		{
-			return new AccountViewModel()
+			return new AccountViewModel
 			{
 				AccountId = entity.AccountId,
 				AccountName = entity.AccountName

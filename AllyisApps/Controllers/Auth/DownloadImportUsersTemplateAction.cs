@@ -20,7 +20,7 @@ namespace AllyisApps.Controllers.Auth
 		public ActionResult DownloadImportUsersTemplate()
 		{
 			string dir = (string)Resources.Files.Files.ResourceManager.GetObject("ImportUserTemplate");
-			var cd = new System.Net.Mime.ContentDisposition()
+			var cd = new System.Net.Mime.ContentDisposition
 			{
 				FileName = "ImportUsersTemplate.csv",
 				Inline = false
@@ -28,7 +28,7 @@ namespace AllyisApps.Controllers.Auth
 
 			Response.AppendHeader("Content-Disposition", cd.ToString());
 
-			return this.File(new System.Text.UTF8Encoding().GetBytes(dir), "text/csv");
+			return File(new System.Text.UTF8Encoding().GetBytes(dir), "text/csv");
 		}
 	}
 }

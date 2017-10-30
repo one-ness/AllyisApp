@@ -1,8 +1,4 @@
-﻿@using AllyisApps.Areas.TimeTracker.Core;
-@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-@using AllyisApps.Services.Auth;
-@using AllyisApps.Utilities;
-@using System.Configuration;
+﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 @model TimeEntryOverDateRangeViewModel
 @{
 	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
@@ -30,9 +26,7 @@
 					startingDate = Model.EntryRange.StartDate,
 					endingDate = Model.EntryRange.EndDate
 				})">
-				@*<input type="button" value="Export" class="btn btn-primary">*@
 				<span c>
-					@*<input type="button" value="Export" class="btn btn-primary">*@
 					<span class="btn btn-primary" style="margin-right: 15px;">@Strings.Export</span>
 			</a>
 		</div>
@@ -50,7 +44,7 @@
 					{
 						<a class="btn btn-primary" title="@Strings.Previous"
 						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.Subscriptionid, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
-							<i class="ovrd-fa fa ovrd-fa-chevron-left fa-chevron-left"></i>
+							<i class="fa fa-chevron-left"></i>
 						</a>
 						<a class="btn btn-primary" title="@Strings.Current"
 						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.Subscriptionid, startDate = ViewBag.WeekStart, endDate = ViewBag.WeekEnd })">
@@ -58,14 +52,14 @@
 						</a>
 						<a class="btn btn-primary" title="@Strings.Next"
 						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.Subscriptionid, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
-							<i class="ovrd-fa fa ovrd-fa-chevron-right fa-chevron-right"></i>
+							<i class="fa fa-chevron-right"></i>
 						</a>
 					}
 					else
 					{
 						<a class="btn btn-primary" title="@Strings.Previous"
 						   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.Subscriptionid, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
-							<i class="ovrd-fa fa ovrd-fa-chevron-left fa-chevron-left"></i>
+							<i class="fa fa-chevron-left"></i>
 						</a>
 						<a class="btn btn-primary" title="@Strings.Current"
 						   href="@Url.Action(ActionConstants.Index, routeValues: new {  subscriptionId = Model.Subscriptionid, userId = ViewBag.SelectedUserId,  startDate = ViewBag.WeekStart, endDate = ViewBag.WeekEnd })">
@@ -74,14 +68,11 @@
 
 						<a class="btn btn-primary" title="@Strings.Next"
 						   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.Subscriptionid, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
-							<i class="ovrd-fa fa ovrd-fa-chevron-right fa-chevron-right"></i>
+							<i class="fa fa-chevron-right"></i>
 						</a>
 					}
 				</div>
 				<input type="text" name="daterange" id="daterange" class="form-control" value="" />
-				@*<div class="input-group-btn">
-						<input type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.View class="btn btn-primary" style="width: 56px" />
-					</div>*@
 			</div>
 		</div>
 	}
@@ -124,22 +115,6 @@
 			</tr>
 		</table>
 	</div>
-	@*@if (Model.CanManage)
-		{
-			<div class="panel panel-info" id="TimeSheet-LockDate">
-				<div class="panel-heading">
-					<h1 class="panel-title">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.LockDate</h1>
-				</div>
-				@using (Html.BeginForm(ActionConstants.SetLockDate, ControllerConstants.TimeEntry, FormMethod.Post))
-				{
-					<input id="UserId" name="UserId" type="hidden" value="@Model.EntryRange.UserId" />
-					<input id="StartDate" name="StartDate" type="hidden" value="@Model.EntryRange.StartDate" />
-					<input id="EndDate" name="EndDate" type="hidden" value="@Model.EntryRange.EndDate" />
-					@Html.TextBoxFor(m => m.LockDate, new { name = "LockDate", id = "LockDate", @class = "form-control" })
-					//<input type="text" name="LockDate" id="LockDate" class="form-control" value="" onSubmit="alert(LockDate.value);" />
-				}
-			</div>
-		}*@
 
 	@if (Model.CanManage)
 	{
@@ -154,7 +129,7 @@
 					var hide = "";
 					foreach (var user in Model.Users)
 					{
-						pageCount = 1 + (count / Model.PageUserSize);
+						pageCount = 1 + count / Model.PageUserSize;
 						hide = "flex"; // All are originally shown so that the widths get calculated correctly (accounting for scroll bar). Pages after page 1 are then hidden when page loads.
 
 						string active = "";
@@ -195,7 +170,7 @@
 							<a href="@Url.Action(ActionConstants.UserEdit, routeValues: new {
 								subscriptionId = Model.Subscriptionid,
 								userId = user.UserId })"
-							   style="text-decoration: none; color: #0066AA; padding-right:5%" title="Assign Projects to User"><i class="ovrd-fa fa ovrd-fa-cog fa-cog"></i></a>
+							   style="text-decoration: none; color: #0066AA; padding-right:5%" title="Assign Projects to User"><i class="fa fa-cog"></i></a>
 						</div>count++;
 					}
 				}
@@ -226,7 +201,6 @@
 					<input id="upload-file-name-display" name="file" class="form-control"
 						   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
 				</div>
-				@*<div style="width:70%; margin:0 auto">*@
 				<div id="footUpload" style="background-color:#f5f5f5; display: flex; justify-content: space-around; flex-wrap: wrap; padding-bottom: 0px; float:right; margin-top: 10px;">
 					<a class="btn btn-primary" onclick="$('input[id=upload-box]').click();" title="Choose Excel file containing Time Tracker entries">@Strings.ChooseFile</a>
 					<input type="submit" style="margin-left: 3px; margin-right: 3px;" id="upload-button" value="@Strings.Upload" class="btn btn-primary" title="Upload Excel Time Tracker entries" />

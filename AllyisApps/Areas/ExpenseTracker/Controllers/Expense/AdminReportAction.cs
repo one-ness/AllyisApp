@@ -19,7 +19,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <returns>A admin report view model.</returns>
-		async public Task<ActionResult> AdminReport(int subscriptionId)
+		public async Task<ActionResult> AdminReport(int subscriptionId)
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.AdminReport, subscriptionId);
 
@@ -29,7 +29,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			string tempDataKey = "ARVM";
 
-			if (this.TempData[tempDataKey] != null)
+			if (TempData[tempDataKey] != null)
 			{
 				adminReportVM = (AdminReportModel)TempData[tempDataKey];
 			}
@@ -46,7 +46,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="subId">The subscription id.</param>
 		/// <returns>An admin report model.</returns>
-		async public Task<AdminReportModel> CreateAdminReportModel(int subId)
+		public async Task<AdminReportModel> CreateAdminReportModel(int subId)
 		{
 			var subInfoTask = AppService.GetSubscription(subId);
 			var reportInfoTask = AppService.GetReportInfo(subId);
@@ -95,7 +95,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 				if (value != 0)
 				{
-					enumList.Add(new SelectListItem()
+					enumList.Add(new SelectListItem
 					{
 						Disabled = false,
 						Text = item.ToString(),
@@ -107,7 +107,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			foreach (var user in users)
 			{
-				userList.Add(new SelectListItem()
+				userList.Add(new SelectListItem
 				{
 					Disabled = false,
 					Text = string.Format("{0} {1}", user.FirstName, user.LastName),
@@ -116,7 +116,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				});
 			}
 
-			AdminReportModel model = new AdminReportModel()
+			AdminReportModel model = new AdminReportModel
 			{
 				CanManage = true,
 				OrganizationId = subInfo.OrganizationId,
@@ -126,7 +126,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				Statuses = enumList,
 				SubscriptionId = subInfo.SubscriptionId,
 				SubscriptionName = subInfo.SubscriptionName,
-				UserId = this.AppService.UserContext.UserId,
+				UserId = AppService.UserContext.UserId,
 				Users = userList,
 				Selection = new AdminReportSelectionModel
 				{
@@ -142,7 +142,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 		private ExpenseReportViewModel InitializeExpenseReportViewModel(ExpenseReport report)
 		{
-			return report == null ? null : new ExpenseReportViewModel()
+			return report == null ? null : new ExpenseReportViewModel
 			{
 				BusinessJustification = report.BusinessJustification,
 				CreatedUtc = report.CreatedUtc,

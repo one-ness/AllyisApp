@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -22,7 +22,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="holidayId">The id of the holiday to remove.</param>
 		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <returns>Redirects to the settings view.</returns>
-		async public Task<ActionResult> DeleteHoliday(int holidayId, int subscriptionId)
+		public async Task<ActionResult> DeleteHoliday(int holidayId, int subscriptionId)
 		{
 			if (await AppService.DeleteHoliday(holidayId, AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId, subscriptionId))
 			{
@@ -35,7 +35,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
 
-			return this.RedirectToAction(ActionConstants.SettingsHoliday, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId });
+			return RedirectToAction(ActionConstants.SettingsHoliday, new { subscriptionId = subscriptionId, id = AppService.UserContext.UserId });
 		}
 	}
 }

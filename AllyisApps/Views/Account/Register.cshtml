@@ -1,4 +1,4 @@
-﻿@model AllyisApps.ViewModels.Auth.RegisterViewModel
+﻿@model RegisterViewModel
 @{
 	ViewBag.Title = Strings.Register;
 	ViewBag.Subtitle = Strings.RegisterNewAccountDialogue;
@@ -11,7 +11,7 @@
 			@Html.AntiForgeryToken()
 			@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
 			<div class="row">
-				<div class="col-md-6 col sm-control-width">
+				<div class="col-md-6 sm-control-width">
 					<div class="form-group">
 						@Html.ReqLabelFor(m => m.Email, Strings.Email)
 						@Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
@@ -46,7 +46,7 @@
 					</div>
 					<div class="field-validation-error" id="capsWarningDiv" style="visibility:hidden; height:0px"><span>@Strings.CapsLock</span></div>
 				</div>
-				<div class="col-md-6 col sm-control-width">
+				<div class="col-md-6 sm-control-width">
 					<div class="form-group">
 						@Html.LabelFor(m => m.PhoneNumber, Strings.PhoneNumber)
 						@Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })

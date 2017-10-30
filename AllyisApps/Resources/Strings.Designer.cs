@@ -19,7 +19,7 @@ namespace AllyisApps.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Strings {
@@ -133,6 +133,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Additional Information.
+        /// </summary>
+        public static string AdditionalInformation {
+            get {
+                return ResourceManager.GetString("AdditionalInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Member.
         /// </summary>
         public static string AddMember {
@@ -241,6 +250,24 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Applications.
+        /// </summary>
+        public static string Applications {
+            get {
+                return ResourceManager.GetString("Applications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application Statuses.
+        /// </summary>
+        public static string ApplicationStatuses {
+            get {
+                return ResourceManager.GetString("ApplicationStatuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allyis Apps.
         /// </summary>
         public static string ApplicationTitle {
@@ -322,6 +349,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Billing Amount.
+        /// </summary>
+        public static string BillingAmount {
+            get {
+                return ResourceManager.GetString("BillingAmount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Billing Email.
         /// </summary>
         public static string BillingEmail {
@@ -345,6 +381,15 @@ namespace AllyisApps.Resources {
         public static string BillingInformation {
             get {
                 return ResourceManager.GetString("BillingInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Billing Rate.
+        /// </summary>
+        public static string BillingRate {
+            get {
+                return ResourceManager.GetString("BillingRate", resourceCulture);
             }
         }
         
@@ -507,6 +552,15 @@ namespace AllyisApps.Resources {
         public static string CannotRemoveBilling {
             get {
                 return ResourceManager.GetString("CannotRemoveBilling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot update your organization role yourself..
+        /// </summary>
+        public static string CannotSelfUpdateOrgRole {
+            get {
+                return ResourceManager.GetString("CannotSelfUpdateOrgRole", resourceCulture);
             }
         }
         
@@ -1060,6 +1114,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Default.
+        /// </summary>
+        public static string Default {
+            get {
+                return ResourceManager.GetString("Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string Delete {
@@ -1402,6 +1465,24 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Employment Type.
+        /// </summary>
+        public static string EmploymentType {
+            get {
+                return ResourceManager.GetString("EmploymentType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Employment Types.
+        /// </summary>
+        public static string EmploymentTypes {
+            get {
+                return ResourceManager.GetString("EmploymentTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to End Date.
         /// </summary>
         public static string EndDate {
@@ -1443,6 +1524,15 @@ namespace AllyisApps.Resources {
         public static string ExampleFile {
             get {
                 return ResourceManager.GetString("ExampleFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expected Duration.
+        /// </summary>
+        public static string ExpectedDuration {
+            get {
+                return ResourceManager.GetString("ExpectedDuration", resourceCulture);
             }
         }
         
@@ -1551,6 +1641,33 @@ namespace AllyisApps.Resources {
         public static string FileFormatUnsupported {
             get {
                 return ResourceManager.GetString("FileFormatUnsupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter by Employment Type.
+        /// </summary>
+        public static string FilterByEmploymentType {
+            get {
+                return ResourceManager.GetString("FilterByEmploymentType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter by Position Status.
+        /// </summary>
+        public static string FilterByPositionStatus {
+            get {
+                return ResourceManager.GetString("FilterByPositionStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter by Tags.
+        /// </summary>
+        public static string FilterByTags {
+            get {
+                return ResourceManager.GetString("FilterByTags", resourceCulture);
             }
         }
         
@@ -2005,6 +2122,24 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Level Name.
+        /// </summary>
+        public static string LevelName {
+            get {
+                return ResourceManager.GetString("LevelName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location.
+        /// </summary>
+        public static string Location {
+            get {
+                return ResourceManager.GetString("Location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lock Date.
         /// </summary>
         public static string LockDate {
@@ -2077,6 +2212,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot set new lock date {0} because the date is on or before the previous lock or payroll processed date.
+        /// </summary>
+        public static string LockTimeEntriesInvalidLockDate {
+            get {
+                return ResourceManager.GetString("LockTimeEntriesInvalidLockDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot lock time entries &lt;= {0} because not all of them are status Approved or Rejected..
         /// </summary>
         public static string LockTimeEntriesInvalidStatuses {
@@ -2086,7 +2230,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Successfully locked all time entries &lt;= {0}..
+        ///   Looks up a localized string similar to Successfully locked all dates for time entries &lt;= {0}..
         /// </summary>
         public static string LockTimeEntriesSuccess {
             get {
@@ -2356,6 +2500,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to NEW.
+        /// </summary>
+        public static string NEW {
+            get {
+                return ResourceManager.GetString("NEW", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you would like to create a new Access Code? \n Note: Doing so will remove all current invitations..
         /// </summary>
         public static string NewAccessCode {
@@ -2433,6 +2586,24 @@ namespace AllyisApps.Resources {
         public static string NoActionsSelected {
             get {
                 return ResourceManager.GetString("NoActionsSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Active Applications.
+        /// </summary>
+        public static string NoActiveApplications {
+            get {
+                return ResourceManager.GetString("NoActiveApplications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Active Positions.
+        /// </summary>
+        public static string NoActivePositions {
+            get {
+                return ResourceManager.GetString("NoActivePositions", resourceCulture);
             }
         }
         
@@ -2941,6 +3112,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to payroll process all approved time entries at and before {0}?.
+        /// </summary>
+        public static string PayrollProcessConfirm {
+            get {
+                return ResourceManager.GetString("PayrollProcessConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot payroll process time entries because of a DB error..
         /// </summary>
         public static string PayrollProcessDBError {
@@ -3054,6 +3234,78 @@ namespace AllyisApps.Resources {
         public static string PleaseUploadFile {
             get {
                 return ResourceManager.GetString("PleaseUploadFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Position Count.
+        /// </summary>
+        public static string PositionCount {
+            get {
+                return ResourceManager.GetString("PositionCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Position Details.
+        /// </summary>
+        public static string PositionDetails {
+            get {
+                return ResourceManager.GetString("PositionDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Position Level.
+        /// </summary>
+        public static string PositionLevel {
+            get {
+                return ResourceManager.GetString("PositionLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Position Levels.
+        /// </summary>
+        public static string PositionLevels {
+            get {
+                return ResourceManager.GetString("PositionLevels", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Positions.
+        /// </summary>
+        public static string Positions {
+            get {
+                return ResourceManager.GetString("Positions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Positions Available.
+        /// </summary>
+        public static string PositionsAvailable {
+            get {
+                return ResourceManager.GetString("PositionsAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PositionStatus.
+        /// </summary>
+        public static string PositionStatus {
+            get {
+                return ResourceManager.GetString("PositionStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Position Statuses.
+        /// </summary>
+        public static string PositionStatuses {
+            get {
+                return ResourceManager.GetString("PositionStatuses", resourceCulture);
             }
         }
         
@@ -3427,6 +3679,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Required Skills.
+        /// </summary>
+        public static string RequiredSkills {
+            get {
+                return ResourceManager.GetString("RequiredSkills", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Resend Invite.
         /// </summary>
         public static string ResendInvite {
@@ -3679,6 +3940,25 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Staffing Manager.
+        /// </summary>
+        public static string StaffingManager {
+            get {
+                return ResourceManager.GetString("StaffingManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Staffing Manager Role.
+        ///   Looks up a localized string similar to Staffing Manager Roles.
+        /// </summary>
+        public static string StaffingManagerRole {
+            get {
+                return ResourceManager.GetString("StaffingManagerRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start Date.
         /// </summary>
         public static string StartDate {
@@ -3711,6 +3991,15 @@ namespace AllyisApps.Resources {
         public static string StatusErrorMessage {
             get {
                 return ResourceManager.GetString("StatusErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to StatusName.
+        /// </summary>
+        public static string StatusName {
+            get {
+                return ResourceManager.GetString("StatusName", resourceCulture);
             }
         }
         
@@ -3913,6 +4202,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tags.
+        /// </summary>
+        public static string Tags {
+            get {
+                return ResourceManager.GetString("Tags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tasks.
         /// </summary>
         public static string Tasks {
@@ -3927,6 +4225,15 @@ namespace AllyisApps.Resources {
         public static string TBD {
             get {
                 return ResourceManager.GetString("TBD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team.
+        /// </summary>
+        public static string Team {
+            get {
+                return ResourceManager.GetString("Team", resourceCulture);
             }
         }
         
@@ -4129,6 +4436,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Type Name.
+        /// </summary>
+        public static string TypeName {
+            get {
+                return ResourceManager.GetString("TypeName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to parse duration..
         /// </summary>
         public static string UnableParseDuration {
@@ -4237,6 +4553,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot update time entries status, there are no statuses selected..
+        /// </summary>
+        public static string UpdateTimeEntryStatusNoStatusSelected {
+            get {
+                return ResourceManager.GetString("UpdateTimeEntryStatusNoStatusSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Successfully updated selected time entry statuses..
         /// </summary>
         public static string UpdateTimeEntryStatusSuccess {
@@ -4309,6 +4634,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User Added To Staffing Manager.
+        /// </summary>
+        public static string UserAddedToStaffingManager {
+            get {
+                return ResourceManager.GetString("UserAddedToStaffingManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to already is a part of this organization!.
         /// </summary>
         public static string UserAlreadyExists {
@@ -4323,6 +4657,15 @@ namespace AllyisApps.Resources {
         public static string UserChangedRolesInExpenseTracker {
             get {
                 return ResourceManager.GetString("UserChangedRolesInExpenseTracker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Changed Roles In Staffing Manager.
+        /// </summary>
+        public static string UserChangedRolesInStaffingManager {
+            get {
+                return ResourceManager.GetString("UserChangedRolesInStaffingManager", resourceCulture);
             }
         }
         

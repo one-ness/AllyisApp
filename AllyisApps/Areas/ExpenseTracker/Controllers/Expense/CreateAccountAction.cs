@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
-using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using AllyisApps.Services.Auth;
-using AllyisApps.Services.Expense;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
@@ -23,15 +19,15 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="accountId">The Account Id.</param>
 		/// <returns>A Model to the Create Account Page.</returns>
-		async public Task<ActionResult> CreateAccount(int subscriptionId, int? accountId = null)
+		public async Task<ActionResult> CreateAccount(int subscriptionId, int? accountId = null)
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Accounts, subscriptionId);
 
 			await SetNavData(subscriptionId);
 			var subInfo = await AppService.GetSubscription(subscriptionId);
 			var accounts = await AppService.GetAccounts(subInfo.OrganizationId);
-			var account = (accounts != null) && (accountId != null) ? accounts.Where(x => x.AccountId == accountId.Value).FirstOrDefault() : null;
-			List<SelectListItem> parentList = new List<SelectListItem>() { new SelectListItem() { Text = "None", Value = "0" } };
+			var account = accounts != null && accountId != null ? accounts.Where(x => x.AccountId == accountId.Value).FirstOrDefault() : null;
+			List<SelectListItem> parentList = new List<SelectListItem> { new SelectListItem { Text = "None", Value = "0" } };
 
 			CreateAccountViewModel model = new CreateAccountViewModel();
 
@@ -51,7 +47,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				model.ParentAccountId = account.ParentAccountId;
 
 				parentList.AddRange(accounts.Where(x => x.IsActive)
-				.Select(x => new SelectListItem() { Text = x.AccountName, Value = x.AccountId.ToString(), Selected = x.AccountId == model.ParentAccountId })
+				.Select(x => new SelectListItem { Text = x.AccountName, Value = x.AccountId.ToString(), Selected = x.AccountId == model.ParentAccountId })
 				.Where(x => !string.Equals(x.Value, account.AccountId.ToString())).ToList());
 
 				var selected = parentList.Where(x => x.Selected).FirstOrDefault();
@@ -59,10 +55,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 				model.ParentAccounts = new SelectList(parentList.AsEnumerable(), "Value", "Text", selectedId);
 
-				List<SelectListItem> statuses = new List<SelectListItem>()
+				List<SelectListItem> statuses = new List<SelectListItem>
 				{
-					new SelectListItem() { Text = "Active", Value = "1", Selected = false },
-					new SelectListItem() { Text = "Disabled", Value= "0", Selected = false }
+					new SelectListItem { Text = "Active", Value = "1", Selected = false },
+					new SelectListItem { Text = "Disabled", Value= "0", Selected = false }
 				};
 
 				string selectedStatus = model.IsActive ? "1" : "0";
@@ -74,13 +70,13 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				var selected = parentList.Where(x => x.Selected).FirstOrDefault();
 				var selectedId = selected != null ? selected.Value : "0";
 
-				parentList.AddRange(accounts.Select(x => new SelectListItem() { Text = x.AccountName, Value = x.AccountId.ToString(), Selected = x.AccountId == model.ParentAccountId }).ToList());
+				parentList.AddRange(accounts.Select(x => new SelectListItem { Text = x.AccountName, Value = x.AccountId.ToString(), Selected = x.AccountId == model.ParentAccountId }).ToList());
 				model.ParentAccounts = new SelectList(parentList.AsEnumerable(), "Value", "Text", selectedId);
 
-				List<SelectListItem> statuses = new List<SelectListItem>()
+				List<SelectListItem> statuses = new List<SelectListItem>
 				{
-					new SelectListItem() { Text = "Active", Value = "1", Selected = false },
-					new SelectListItem() { Text = "Disabled", Value= "0", Selected = false }
+					new SelectListItem { Text = "Active", Value = "1", Selected = false },
+					new SelectListItem { Text = "Disabled", Value= "0", Selected = false }
 				};
 
 				string selectedStatus = "1";

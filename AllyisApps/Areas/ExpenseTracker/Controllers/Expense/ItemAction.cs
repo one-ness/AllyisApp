@@ -18,7 +18,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="index">The item index.</param>
 		/// <returns>A partial view.</returns>
-		async public Task<ActionResult> AddItem(int subscriptionId, int index)
+		public async Task<ActionResult> AddItem(int subscriptionId, int index)
 		{
 			IEnumerable<Account> accountEntities = await AppService.GetAccounts(subscriptionId);
 			List<AccountViewModel> accountViewModels = new List<AccountViewModel>();
@@ -29,7 +29,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			return PartialView(
 				"_AjaxExpenseReportItems",
-				new ExpenseItemCreateViewModel()
+				new ExpenseItemCreateViewModel
 				{
 					Index = index,
 					AccountList = accountViewModels

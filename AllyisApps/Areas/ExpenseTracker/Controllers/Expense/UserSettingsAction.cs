@@ -19,15 +19,15 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <returns>The action result.</returns>
-		async public Task<ActionResult> UserSettings(int subscriptionId)
+		public async Task<ActionResult> UserSettings(int subscriptionId)
 		{
 			await SetNavData(subscriptionId);
 
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.UserSettings, subscriptionId);
 
-			int userId = this.AppService.UserContext.UserId;
+			int userId = AppService.UserContext.UserId;
 
-			UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+			UserContext.SubscriptionAndRole subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 
 			var productNameTask = AppService.GetProductNameBySubscriptionId(subInfo.SubscriptionId);
 			var allInfosTask = AppService.GetOrganizationManagementInfo(subInfo.OrganizationId);
@@ -47,7 +47,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				userViewModels.Add(InitializeUserMaxAmount(user));
 			}
 
-			UserSettingsViewModel model = new UserSettingsViewModel()
+			UserSettingsViewModel model = new UserSettingsViewModel
 			{
 				SubscriptionId = subscriptionId,
 				Users = userViewModels
@@ -58,7 +58,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 		private UserMaxAmountViewModel InitializeUserMaxAmount(OrganizationUser user)
 		{
-			return new UserMaxAmountViewModel()
+			return new UserMaxAmountViewModel
 			{
 				MaxAmount = user.MaxApprovalAmount,
 				FirstName = user.FirstName,

@@ -5,13 +5,13 @@
 //------------------------------------------------------------------------------
 
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -25,22 +25,22 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <returns>The settings page.</returns>
-		async public Task<ActionResult> Settings(int subscriptionId)
+		public async Task<ActionResult> Settings(int subscriptionId)
 		{
-			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
-			int organizaionID = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
+			int organizaionID = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			var infos = AppService.GetAllSettings(organizaionID);
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			var subGet = await AppService.GetSubscription(subscriptionId);
 			string subName = subGet.SubscriptionName;
 			var infoOrg = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infoOrg.Item1.StartOfWeek));
-			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
+			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(infoOrg.Item1.StartOfWeek));
 			Services.TimeTracker.Setting settings = infos.Item1;
-			return this.View(new SettingsViewModel()
+			return View(new SettingsViewModel
 			{
-				Settings = new SettingsViewModel.SettingsInfoViewModel()
+				Settings = new SettingsViewModel.SettingsInfoViewModel
 				{
 					IsLockDateUsed = settings.IsLockDateUsed,
 					LockDatePeriod = settings.LockDatePeriod,
@@ -52,12 +52,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					StartOfWeek = settings.StartOfWeek,
 					Today = System.DateTime.UtcNow.Date
 				},
-				PayClasses = infos.Item2.AsParallel().Select(payClass => new SettingsViewModel.PayClassViewModel()
+				PayClasses = infos.Item2.AsParallel().Select(payClass => new SettingsViewModel.PayClassViewModel
 				{
 					PayClassId = payClass.PayClassId,
 					PayClassName = payClass.PayClassName
 				}),
-				Holidays = infos.Item3.AsParallel().Select(holiday => new SettingsViewModel.HolidayViewModel()
+				Holidays = infos.Item3.AsParallel().Select(holiday => new SettingsViewModel.HolidayViewModel
 				{
 					Date = holiday.Date,
 					HolidayId = holiday.HolidayId,
@@ -65,7 +65,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}),
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subName,
-				UserId = this.AppService.UserContext.UserId
+				UserId = AppService.UserContext.UserId
 			});
 		}
 	}

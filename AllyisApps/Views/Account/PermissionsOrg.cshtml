@@ -1,22 +1,18 @@
-﻿@using AllyisApps.ViewModels.Auth;
-@using AllyisApps.Services.Auth;
-
-@model PermissionsViewModel
+﻿@model PermissionsViewModel
 @Html.HiddenFor(m => m.OrganizationId)
 @Html.HiddenFor(m => m.SubscriptionId)
 @Html.HiddenFor(m => m.ProductId)
 @{
 	ViewBag.Title = Strings.Permissions;
-	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @Html.AntiForgeryToken()
 
 @Html.Partial("_PremissionsLinkView", Model)
-<div class="ovrd-panel panel ovrd-panel-default panel-default">
-	<div class="ovrd-panel-body panel-body" style="padding: 0px;">
-		<table class="ovrd-table table ovrd-table-hover table-hover ovrd-table-condensed table-condensed">
-			<thead class="ovrd-panel-heading panel-heading">
+<div class="panel panel-default">
+	<div class="panel-body" style="padding: 0px;">
+		<table class="table table-hover table-condensed">
+			<thead class="panel-heading">
 				<tr class="no-border">
 					<th style="width: 6%;"></th>
 					<th style="width: 47%;">@Strings.User</th>
@@ -27,10 +23,10 @@
 						<input type="checkbox" class="all-check" />
 					</td>
 					<td>
-						<input type="search" placeholder="@Strings.UserSearchPlaceholder" id="userSearch" class="ovrd-form-control form-control" />
+						<input type="search" placeholder="@Strings.UserSearchPlaceholder" id="userSearch" class="form-control" />
 					</td>
 					<td class="tab-OrganizationTab">
-						<select id="RoleFilter" class="ovrd-form-control form-control">
+						<select id="RoleFilter" class="form-control">
 							<option>@Strings.Any</option>
 							@foreach (var role in Model.PossibleRoles.Values)
 							{
@@ -64,12 +60,12 @@
 			@*This container is populated by javascript in allyis-account-permission2.js*@
 		</div>
 	</div>
-	<div class="ovrd-panel-footer panel-footer" style="height: 54px; position: relative;">
-		<div class="ovrd-col-xs-6 col-xs-6 ovrd-col-sm-6 col-sm-6 ovrd-col-md-5 col-md-5 col" style="text-align: right; vertical-align: middle; line-height: 33px; padding-right: 0px;">
+	<div class="panel-footer" style="height: 54px; position: relative;">
+		<div class="col-xs-6 col-sm-6 col-md-5" style="text-align: right; vertical-align: middle; line-height: 33px; padding-right: 0px;">
 			Please select user(s), choose an action, then click Save
 		</div>
-		<div class="ovrd-col-xs-6 col-xs-6 ovrd-col-sm-6 col-sm-6 ovrd-col-md-5 col-md-5 ovrd-col-lg-4 col-lg-4 col">
-			<select class="ovrd-form-control form-control tab-OrganizationTab" id="ActionSelect">
+		<div class="col-xs-6 col-sm-6 col-md-5 col-lg-4">
+			<select class="form-control tab-OrganizationTab" id="ActionSelect">
 				<optgroup label="@Model.ActionGroup">
 					@foreach (var setActions in Model.Actions)
 					{
@@ -79,8 +75,8 @@
 			</select>
 		</div>
 		<div class="bottom-right">
-			<a href="@Url.Action(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { id = Model.OrganizationId })" class="ovrd-btn btn ovrd-btn-default btn-default"> @Strings.Cancel </a>
-			<input type="submit" class="ovrd-btn btn ovrd-btn-primary btn-primary" id="do-it" value="@Strings.Save" />
+			<a href="@Url.Action(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default"> @Strings.Cancel </a>
+			<input type="submit" class="btn btn-primary btn-gray" id="do-it" value="@Strings.Save" />
 		</div>
 	</div>
 </div>

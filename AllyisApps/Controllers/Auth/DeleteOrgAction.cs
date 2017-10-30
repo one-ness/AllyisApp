@@ -22,14 +22,14 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>Redirection to account index, or an error page.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> DeleteOrg(int id)
+		public async Task<ActionResult> DeleteOrg(int id)
 		{
 			// Method includes permissions check
 			await AppService.DeleteOrganization(id);
 			string notification = string.Format("{0} {1}", Resources.Strings.YourOrg, Resources.Strings.OrganizationDeleteNotification);
 			Notifications.Add(new BootstrapAlert(notification, Variety.Success));
 			await Task.Delay(1);
-			return this.RouteUserHome();
+			return RouteUserHome();
 		}
 	}
 }

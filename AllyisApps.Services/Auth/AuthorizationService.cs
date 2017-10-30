@@ -7,6 +7,7 @@
 using System;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Services
 {
@@ -18,7 +19,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// organizational actions.
 		/// </summary>
-		public enum OrgAction : int
+		public enum OrgAction
 		{
 			CreateSubscription = 100000,
 			CreateBilling,
@@ -36,6 +37,7 @@ namespace AllyisApps.Services
 			EditUserPermission,
 			EditOrganization,
 			EditSubscription,
+			EditSubscriptionUser,
 			EditBilling,
 			AddUserToOrganization, // same as create invitation
 			AddUserToSubscription,
@@ -50,7 +52,7 @@ namespace AllyisApps.Services
 			DeleteBilling,
 		}
 
-		public enum StaffingManagerAction : int
+		public enum StaffingManagerAction
 		{
 			EditCustomer
 		}
@@ -58,7 +60,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// time tracker actions.
 		/// </summary>
-		public enum TimeTrackerAction : int
+		public enum TimeTrackerAction
 		{
 			TimeEntry = 1,
 			EditCustomer,
@@ -71,7 +73,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Expense Tracker Actions.
 		/// </summary>
-		public enum ExpenseTrackerAction : int
+		public enum ExpenseTrackerAction
 		{
 			Unmanaged = 0,
 			EditReport,
@@ -88,7 +90,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// staffing actions.
 		/// </summary>
-		public enum StaffingAction : int
+		public enum StaffingAction
 		{
 			Index = 1,
 			EditPosition,
@@ -104,11 +106,10 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// check permissions for the given action in the given org for the logged in user.
 		/// </summary>
-		 public bool CheckOrgAction(OrgAction action, int orgId, bool throwException = true)
+		public bool CheckOrgAction(OrgAction action, int orgId, bool throwException = true)
 		{
 			bool result = false;
-			UserContext.OrganizationAndRole orgInfo = null;
-			this.UserContext.OrganizationsAndRoles.TryGetValue(orgId, out orgInfo);
+			UserContext.OrganizationsAndRoles.TryGetValue(orgId, out UserContext.OrganizationAndRole orgInfo);
 
 			if (orgInfo != null)
 			{
@@ -130,9 +131,6 @@ namespace AllyisApps.Services
 								// all members can read other user list
 								result = true;
 								break;
-
-							default:
-								break;
 						}
 
 						break;
@@ -141,28 +139,35 @@ namespace AllyisApps.Services
 
 			if (!result && throwException)
 			{
-				string message = string.Format("action {0} denied for org {1}", action.ToString(), orgId);
+				string message = string.Format("action {0} denied for org {1}", action, orgId);
 				throw new AccessViolationException(message);
 			}
 
 			return result;
 		}
 
-		public bool CheckSubscriptionAction(OrgAction action, int subscriptionId, out int organizationId, bool throwException = true)
+		public async Task<bool> CheckSubscriptionAction(OrgAction action, int subscriptionId, bool throwException = true)
 		{
 			bool result = false;
-			organizationId = 0;
+			int organizationId = 0;
 
-			UserContext.SubscriptionAndRole sar = null;
-			if (this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out sar))
+
+			//Reduce database lookup 
+			if (UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out UserContext.SubscriptionAndRole sar))
 			{
 				organizationId = sar.OrganizationId;
-				result = this.CheckOrgAction(action, organizationId, throwException);
+				result = CheckOrgAction(action, organizationId, throwException);
+			}
+			else
+			{
+				var sub = await DBHelper.GetSubscriptionDetailsById(subscriptionId);
+				organizationId = sub.OrganizationId;
+				result = CheckOrgAction(action, organizationId, throwException);
 			}
 
 			if (!result && throwException)
 			{
-				string message = string.Format("action {0} denied for subscription {1}", action.ToString(), subscriptionId);
+				string message = string.Format("action {0} denied for subscription {1}", action, subscriptionId);
 				throw new AccessViolationException(message);
 			}
 
@@ -172,8 +177,7 @@ namespace AllyisApps.Services
 		public bool CheckStaffingManagerAction(StaffingManagerAction action, int subId, bool throwException = true)
 		{
 			bool result = false;
-			UserContext.SubscriptionAndRole subInfo = null;
-			this.UserContext.SubscriptionsAndRoles.TryGetValue(subId, out subInfo);
+			UserContext.SubscriptionsAndRoles.TryGetValue(subId, out UserContext.SubscriptionAndRole subInfo);
 
 			if (subInfo != null && subInfo.ProductId == ProductIdEnum.StaffingManager)
 			{
@@ -183,28 +187,25 @@ namespace AllyisApps.Services
 					case StaffingManagerAction.EditCustomer:
 						result = true;
 						break;
-					default:
-						break;
 				}
 			}
 
 			if (!result && throwException)
 			{
-				string message = string.Format("action {0} denied for subscription {1}", action.ToString(), subId);
+				string message = string.Format("action {0} denied for subscription {1}", action, subId);
 				throw new AccessViolationException(message);
 			}
 
 			return result;
 		}
-		
+
 		/// <summary>
 		/// check permissions for the given action in the given subscription for the logged in user.
 		/// </summary>
 		public bool CheckTimeTrackerAction(TimeTrackerAction action, int subId, bool throwException = true)
 		{
 			bool result = false;
-			UserContext.SubscriptionAndRole subInfo = null;
-			this.UserContext.SubscriptionsAndRoles.TryGetValue(subId, out subInfo);
+			UserContext.SubscriptionsAndRoles.TryGetValue(subId, out UserContext.SubscriptionAndRole subInfo);
 
 			if (subInfo != null && subInfo.ProductId == ProductIdEnum.TimeTracker)
 			{
@@ -218,9 +219,6 @@ namespace AllyisApps.Services
 							case TimeTrackerRole.User:
 								result = true;
 								break;
-
-							default:
-								break;
 						}
 						break;
 
@@ -230,9 +228,6 @@ namespace AllyisApps.Services
 							case TimeTrackerRole.Manager:
 								result = true;
 								break;
-
-							default:
-								break;
 						}
 						break;
 				}
@@ -240,7 +235,7 @@ namespace AllyisApps.Services
 
 			if (!result && throwException)
 			{
-				string message = string.Format("action {0} denied for subscription {1}", action.ToString(), subId);
+				string message = string.Format("action {0} denied for subscription {1}", action, subId);
 				throw new AccessViolationException(message);
 			}
 
@@ -258,8 +253,7 @@ namespace AllyisApps.Services
 		{
 			bool result = false;
 
-			UserContext.SubscriptionAndRole subInfo = null;
-			this.UserContext.SubscriptionsAndRoles.TryGetValue(subId, out subInfo);
+			UserContext.SubscriptionsAndRoles.TryGetValue(subId, out UserContext.SubscriptionAndRole subInfo);
 			if (subInfo != null)
 			{
 				ExpenseTrackerRole etRole = (ExpenseTrackerRole)subInfo.ProductRoleId;
@@ -276,9 +270,6 @@ namespace AllyisApps.Services
 							case ExpenseTrackerRole.Manager:
 								result = true;
 								break;
-
-							default:
-								break;
 						}
 					}
 					else if (action == ExpenseTrackerAction.Pending)
@@ -292,9 +283,6 @@ namespace AllyisApps.Services
 							case ExpenseTrackerRole.SuperUser:
 								result = true;
 								break;
-
-							default:
-								break;
 						}
 					}
 					else
@@ -304,13 +292,10 @@ namespace AllyisApps.Services
 				}
 			}
 
-			if (!result && throwException)
-			{
-				string message = string.Format("action {0} denied for subscription {1}", action.ToString(), subId);
-				throw new AccessViolationException(message);
-			}
+			if (result || !throwException) return result;
 
-			return result;
+			string message = string.Format("action {0} denied for subscription {1}", action, subId);
+			throw new AccessViolationException(message);
 		}
 	}
 }

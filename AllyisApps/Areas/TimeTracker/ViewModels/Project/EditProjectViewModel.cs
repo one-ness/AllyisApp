@@ -19,10 +19,10 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		/// </summary>
 		public EditProjectViewModel()
 		{
-			this.ProjectUsers = new List<BasicUserInfoViewModel>();
-			this.SubscriptionUsers = new List<BasicUserInfoViewModel>();
-			this.SelectedProjectUserIds = new string[] { };
-			this.IsCreating = false;
+			ProjectUsers = new List<BasicUserInfoViewModel>();
+			SubscriptionUsers = new List<BasicUserInfoViewModel>();
+			SelectedProjectUserIds = new string[] { };
+			IsCreating = false;
 		}
 
 		/// <summary>
@@ -129,8 +129,8 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		/// <param name="userId">User Id.</param>
 		public BasicUserInfoViewModel(string firstName, string lastName, int userId)
 		{
-			this.Name = string.Format("{0} {1}", firstName, lastName);
-			this.UserId = userId.ToString();
+			Name = $"{firstName} {lastName}";
+			UserId = userId.ToString();
 		}
 
 		/// <summary>

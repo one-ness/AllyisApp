@@ -6,7 +6,9 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -15,8 +17,6 @@ using AllyisApps.Services.Auth;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.ViewModels;
-using System.Web.Script.Serialization;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -31,23 +31,23 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="positionId">The position id.</param>
 		/// <param name="subscriptionId">the subscription</param>
 		/// <returns>Presents a page for the creation of a new position.</returns>
-		async public Task<ActionResult> EditPosition(int positionId, int subscriptionId)
+		public async Task<ActionResult> EditPosition(int positionId, int subscriptionId)
 		{
 			SetNavData(subscriptionId);
 
 			var editModel = await setupEditPositionViewModel(positionId, subscriptionId);
 
-			return this.View(editModel);
+			return View(editModel);
 		}
 
 		/// <summary>
 		/// setup position setup viewmodel
 		/// </summary>
 		/// <returns></returns>
-		async public Task<EditPositionViewModel> setupEditPositionViewModel(int positionId, int subscriptionId)
+		public async Task<EditPositionViewModel> setupEditPositionViewModel(int positionId, int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			Position pos = await AppService.GetPosition(positionId);
 
 			var subscriptionNameToDisplayTask = AppService.GetSubscriptionName(subscriptionId);
@@ -81,7 +81,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			return new EditPositionViewModel
 			{
 				PositionId = pos.PositionId,
-				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
 				LocalizedStates = ModelHelper.GetLocalizedStates(AppService, pos.Address.CountryCode),
 				IsCreating = false,
 				OrganizationId = subInfo.OrganizationId,
@@ -89,22 +89,22 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				SubscriptionId = subInfo.SubscriptionId,
 				StartDate = pos.StartDate,
 				Tags = tags,
-				EmploymentTypes = infos.Item3.AsParallel().Select(et => new EmploymentTypeSelectViewModel()
+				EmploymentTypes = infos.Item3.AsParallel().Select(et => new EmploymentTypeSelectViewModel
 				{
 					EmploymentTypeId = et.EmploymentTypeId,
 					EmploymentTypeName = et.EmploymentTypeName
 				}).ToList(),
-				PositionLevels = infos.Item4.AsParallel().Select(pl => new PositionLevelSelectViewModel()
+				PositionLevels = infos.Item4.AsParallel().Select(pl => new PositionLevelSelectViewModel
 				{
 					PositionLevelId = pl.PositionLevelId,
 					PositionLevelName = pl.PositionLevelName
 				}).ToList(),
-				PositionStatuses = infos.Item5.AsParallel().Select(ps => new PositionStatusSelectViewModel()
+				PositionStatuses = infos.Item5.AsParallel().Select(ps => new PositionStatusSelectViewModel
 				{
 					PositionStatusId = ps.PositionStatusId,
 					PositionStatusName = ps.PositionStatusName
 				}).ToList(),
-				Customers = infos.Item7.AsParallel().Select(cus => new CustomerSelectViewModel()
+				Customers = infos.Item7.AsParallel().Select(cus => new CustomerSelectViewModel
 				{
 					CustomerId = cus.CustomerId,
 					CustomerName = cus.CustomerName
@@ -142,7 +142,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="model">The Customer ViewModel.</param>
 		/// <param name="subscriptionId">The sub id from the ViewModel.</param>
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
-		async public Task<ActionResult> SubmitUpdatePosition(EditPositionViewModel model, int subscriptionId)
+		public async Task<ActionResult> SubmitUpdatePosition(EditPositionViewModel model, int subscriptionId)
 		{
 			if (ModelState.IsValid)
 			{
@@ -150,7 +150,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				if (model.OrganizationId == 0)
 				{
 					UserContext.SubscriptionAndRole subInfo = null;
-					this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+					AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 					model.OrganizationId = subInfo.OrganizationId;
 					if (model.TagsToSubmit != null)
 					{
@@ -170,7 +170,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					}
 				}
 				int? positionId = await AppService.UpdatePosition(
-					new Position()
+					new Position
 					{
 						OrganizationId = model.OrganizationId,
 						CustomerId = model.CustomerId,
@@ -210,17 +210,17 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					Notifications.Add(new BootstrapAlert("Successfully created a new Position", Variety.Success));
 
 					// Redirect to the user position page
-					return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
+					return RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
 				}
 
 				// No customer value, should only happen because of a permission failure
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 
-				return this.RedirectToAction(ActionConstants.Index);
+				return RedirectToAction(ActionConstants.Index);
 			}
 
 			// Invalid model TODO: redirect back to form page
-			return this.RedirectToAction(ActionConstants.CreatePosition, new { subscriptionId = subscriptionId });
+			return RedirectToAction(ActionConstants.CreatePosition, new { subscriptionId = subscriptionId });
 		}
 	}
 }

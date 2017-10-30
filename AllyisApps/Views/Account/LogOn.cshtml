@@ -1,4 +1,4 @@
-﻿@model AllyisApps.ViewModels.Auth.LogOnViewModel
+﻿@model LogOnViewModel
 @{
     ViewBag.Title = Strings.SignIn;
 }
@@ -10,18 +10,18 @@
             @Html.AntiForgeryToken()
 
             @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
-            <div class="ovrd-form-group form-group">
+            <div class="form-group">
                 @Html.ReqLabelFor(m => m.Email, Strings.Email)
                 @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.Email, string.Empty, new { @class = "text-danger" })
             </div>
-            <div class="ovrd-form-group form-group">
+            <div class="form-group">
                 @Html.ReqLabelFor(m =>m.Password, Strings.Password)
                 @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.Password, string.Empty, new { @class = "text-danger" })
                 <div class="field-validation-error" id="capsWarningDiv" style="visibility:hidden; height:0px"><span>@Strings.CapsLock</span></div>
             </div>
-            <div class="checkbox ovrd-form-group form-group pull-left">
+            <div class="checkbox form-group pull-left">
                 @Html.CheckBoxFor(m => m.RememberMe, new { id = Html.NameFor(m => m.RememberMe), style = "margin-left: 0px" })
                 <label for="@Html.NameFor(m=>m.RememberMe)"> @Strings.RememberMe </label>
             </div>

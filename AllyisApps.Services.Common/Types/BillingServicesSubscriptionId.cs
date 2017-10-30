@@ -29,7 +29,7 @@ namespace AllyisApps.Services.Common.Types
 		{
 			if (string.IsNullOrEmpty(id))
 			{
-				throw new ArgumentNullException("id", "id must have a value.");
+				throw new ArgumentNullException(nameof(id), "id must have a value.");
 			}
 
 			this.id = id;
@@ -46,7 +46,7 @@ namespace AllyisApps.Services.Common.Types
 		{
 			get
 			{
-				return this.id;
+				return id;
 			}
 		}
 

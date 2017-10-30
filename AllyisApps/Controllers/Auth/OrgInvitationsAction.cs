@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.ViewModels.Auth;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -19,11 +19,11 @@ namespace AllyisApps.Controllers.Auth
 		/// <summary>
 		/// Get: Account/OrgInvitations
 		/// </summary>
-		async public Task<ActionResult> OrgInvitations(int id)
+		public async Task<ActionResult> OrgInvitations(int id)
 		{
 			var model = await Task.Run(() => new OrganizationInvitationsViewModel());
 
-			var collection = await this.AppService.GetInvitationsAsync(id);
+			var collection = await AppService.GetInvitationsAsync(id);
 			foreach (var item in collection)
 			{
 				var data = new OrganizationInvitationsViewModel.ViewModelItem();
@@ -42,11 +42,12 @@ namespace AllyisApps.Controllers.Auth
 				model.Invitations.Add(data);
 			}
 
-			var org = await this.AppService.GetOrganization(id);
+			var org = await AppService.GetOrganization(id);
 			model.OrganizationName = org.OrganizationName;
+			model.OrganizationId = id;
 			model.TabInfo.OrganizationId = id;
-			model.CanDeleteInvitations = this.AppService.CheckOrgAction(Services.AppService.OrgAction.DeleteInvitation, id, false);
-			model.CanResendInvitations = this.AppService.CheckOrgAction(Services.AppService.OrgAction.AddUserToOrganization, id, false);
+			model.CanDeleteInvitations = AppService.CheckOrgAction(Services.AppService.OrgAction.DeleteInvitation, id, false);
+			model.CanResendInvitations = AppService.CheckOrgAction(Services.AppService.OrgAction.AddUserToOrganization, id, false);
 			return View(model);
 		}
 	}

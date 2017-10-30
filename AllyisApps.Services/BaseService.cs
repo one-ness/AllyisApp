@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using AllyisApps.DBModel;
 using AllyisApps.Services.Auth;
-using AllyisApps.Services.Cache;
 
 namespace AllyisApps.Services
 {
@@ -32,8 +31,8 @@ namespace AllyisApps.Services
 		/// </summary>
 		public BaseService(ServiceSettings settings)
 		{
-			this.ServiceSettings = settings ?? throw new ArgumentNullException("settings");
-			this.DBHelper = new DBHelper(this.ServiceSettings.SqlConnectionString);
+			ServiceSettings = settings ?? throw new ArgumentNullException(nameof(settings));
+			DBHelper = new DBHelper(ServiceSettings.SqlConnectionString);
 		}
 
 		/// <summary>
@@ -41,7 +40,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		public BaseService(ServiceSettings settings, UserContext userContext) : this(settings)
 		{
-			this.UserContext = userContext ?? throw new ArgumentNullException("userContext");
+			UserContext = userContext ?? throw new ArgumentNullException(nameof(userContext));
 		}
 
 		/// <summary>
@@ -60,7 +59,7 @@ namespace AllyisApps.Services
 		/// <param name="userContext">The UserContext.</param>
 		public void SetUserContext(UserContext userContext)
 		{
-			this.UserContext = userContext;
+			UserContext = userContext;
 		}
 
 		/// <summary>

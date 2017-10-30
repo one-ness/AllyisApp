@@ -22,7 +22,8 @@
 	@city NVARCHAR(32),
 	@stateId NVARCHAR(32),
 	@countryCode NVARCHAR(32),
-	@postalCode NVARCHAR(16)
+	@postalCode NVARCHAR(16),
+	@tags [Lookup].[TagTable] READONLY
 
 AS
 BEGIN
@@ -56,4 +57,5 @@ BEGIN
 		@stateId,
 		@postalCode,
 		@countryCode
+
 END

@@ -31,13 +31,13 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> Import(int id, HttpPostedFileBase upload)
+		public async Task<ActionResult> Import(int id, HttpPostedFileBase upload)
 		{
 			// TODO: Replace ModelState errors with exception catches and notifications
 			// TODO: Buff up the error handling (catch errors from import functions, etc.)
 			if (ModelState.IsValid)
 			{
-				this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
+				AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
 				if (upload != null && upload.ContentLength > 0)
 				{
 					// ExcelDataReader works with the binary Excel file, so it needs a FileStream
@@ -75,7 +75,7 @@ namespace AllyisApps.Controllers.Auth
 
 					if (!string.IsNullOrEmpty(formattedResult[1]))
 					{
-						Core.Alert.BootstrapAlert alert = new BootstrapAlert(formattedResult[1], Variety.Warning);
+						BootstrapAlert alert = new BootstrapAlert(formattedResult[1], Variety.Warning);
 						alert.IsHtmlString = true;
 						Notifications.Add(alert);
 					}

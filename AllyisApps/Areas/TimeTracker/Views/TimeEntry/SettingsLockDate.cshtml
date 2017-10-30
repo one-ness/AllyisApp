@@ -1,10 +1,9 @@
 ﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-@using AllyisApps.Core;
-@using AllyisApps.Services;
 @using AllyisApps.Services.TimeTracker;
 @model SettingsLockDateViewModel
 
 @{
+	ViewBag.TitleBar = Strings.Settings;
 	ViewBag.Title = Strings.LockDate;
 	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
 	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
@@ -17,17 +16,17 @@
 @section css {
 	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
 }
-<div class="ovrd-row row container">
+<div class="row slim">
 
-	<div class="ovrd-col-sm-2 col-sm-2 col">
+	<div class="col-sm-2">
 		@Html.Partial("_ManageSettingSideBar")
 	</div>
-	<div class="ovrd-col-md-10 col-md-10 col">
-		<div class="ovrd-panel panel ovrd-panel-info panel-info" style="position: relative; padding-bottom: 40px;" @*style="width: 400px; margin: 10px auto;"*@>
-			<div class="ovrd-panel-heading panel-heading">
-				<h1 class="ovrd-panel-title panel-title">@Strings.LockDate</h1>
+	<div class="col-md-10">
+		<div class="panel panel-info" style="position: relative; padding-bottom: 40px;" @*style="width: 400px; margin: 10px auto;"*@>
+			<div class="panel-heading">
+				<h1 class="panel-title">@Strings.LockDate</h1>
 			</div>
-			<div class="ovrd-panel-body panel-body" id="LockDate">
+			<div class="panel-body" id="LockDate">
 				@using (Html.BeginForm(ActionConstants.SetLockDate, ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId, id = Model.UserId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
 			{
 					@Html.AntiForgeryToken();
@@ -36,15 +35,15 @@
 					</div>
 					<div id="LockDate" style="margin: 10px">
 						<input type="radio" name="LDsetting" id="LDsetting" value="true" onclick="disableLD(false)" @(Model.Settings.IsLockDateUsed ? " checked" : string.Empty) /><text> @Strings.UseLockDate</text>
-						<input type="text" id="LDquantity" name="LDquantity" value="@Model.Settings.LockDateQuantity" class="ovrd-form-control form-control" style="width: 45px; text-align: center; display: inline-block;" />
-						<select id="LDperiod" name="LDperiod" class="ovrd-form-control form-control" value='@(Model.Settings.LockDatePeriod)' style="width: 100px; display: inline-block;">
+						<input type="text" id="LDquantity" name="LDquantity" value="@Model.Settings.LockDateQuantity" class="form-control" style="width: 45px; text-align: center; display: inline-block;" />
+						<select id="LDperiod" name="LDperiod" class="form-control" value='@(Model.Settings.LockDatePeriod)' style="width: 100px; display: inline-block;">
 							<option value="1" @(Model.Settings.LockDatePeriod == (int)LockDatePeriodEnum.days ? " selected=true" : string.Empty)>@Strings.Days</option>
 							<option value="2" @(Model.Settings.LockDatePeriod == (int)LockDatePeriodEnum.weeks ? " selected=true" : string.Empty)>@Strings.Weeks</option>
 							<option value="3" @(Model.Settings.LockDatePeriod == (int)LockDatePeriodEnum.months ? " selected=true" : string.Empty)>@Strings.Months</option>
 						</select>
 					</div>
 					<div>
-						<input class="tt-bottom-right ovrd-btn btn ovrd-btn-primary btn-primary" type="submit" value=@Strings.Save />
+						<input class="tt-bottom-right btn btn-primary" type="submit" value=@Strings.Save />
 					</div>
 			}
 			</div>

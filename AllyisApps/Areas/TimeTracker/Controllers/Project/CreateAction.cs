@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -14,7 +15,6 @@ using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.Services.Crm;
 using AllyisApps.ViewModels.TimeTracker.Project;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -31,9 +31,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="userId">Customer Id for the project.</param>
 		/// <returns>The ActionResult for the Create view.</returns>
 		[HttpGet]
-		async public Task<ActionResult> Create(int subscriptionId, int userId)
+		public async Task<ActionResult> Create(int subscriptionId, int userId)
 		{
-			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
+			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
 			DateTime? defaultStart = null;
 			DateTime? defaultEnd = null;
 			var idAndUsers = await AppService.GetNextProjectIdAndSubUsers(userId, subscriptionId);
@@ -47,8 +47,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
-			return this.View(
-				new EditProjectViewModel()
+			return View(
+				new EditProjectViewModel
 				{
 					IsCreating = true,
 					ParentCustomerId = userId,
@@ -73,7 +73,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>If successful, notifies and redirects to Project/Index. Else, returns to the create project form.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> Create(EditProjectViewModel model)
+		public async Task<ActionResult> Create(EditProjectViewModel model)
 		{
 			var listGet = await AppService.GetNextProjectIdAndSubUsers(model.ParentCustomerId, model.SubscriptionId);
 			var list = listGet.Item2;
@@ -86,10 +86,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			model.SubscriptionUsers = subList;
 			if (ModelState.IsValid)
 			{
-				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
+				AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
 				if (model == null)
 				{
-					throw new ArgumentNullException("model");
+					throw new ArgumentNullException(nameof(model));
 				}
 
 				try
@@ -116,7 +116,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 					// Create failure
 					Notifications.Add(new BootstrapAlert(message, Variety.Danger));
-					return this.View(model);
+					return View(model);
 				}
 
 				return RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = model.SubscriptionId });
@@ -124,7 +124,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			else
 			{
 				// Invalid Model
-				return this.View(model);
+				return View(model);
 			}
 		}
 
@@ -133,14 +133,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="model"><see cref="EditProjectViewModel"/> representing new project.</param>
 		/// <returns>The Project Id if succeed, -1 if the ProjectOrgId is taken by another project under the same customer.</returns>
-		async public Task<int> CreateProjectAndUpdateItsUserList(EditProjectViewModel model)
+		public async Task<int> CreateProjectAndUpdateItsUserList(EditProjectViewModel model)
 		{
 			IEnumerable<int> userIds = model.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString));
 
 			return await AppService.CreateProjectAndUpdateItsUserList(
-				new Services.Project.Project()
+				new Services.Project.Project
 				{
-					owningCustomer = new Customer()
+					owningCustomer = new Customer
 					{
 						CustomerId = model.ParentCustomerId,
 					},
@@ -158,11 +158,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="model"><see cref="EditProjectViewModel"/> representing new project.</param>
 		/// <returns>The Project Id.</returns>
-		async public Task<int> CreateProject(EditProjectViewModel model)
+		public async Task<int> CreateProject(EditProjectViewModel model)
 		{
-			return await AppService.CreateProject(new Services.Project.Project()
+			return await AppService.CreateProject(new Services.Project.Project
 			{
-				owningCustomer = new Customer()
+				owningCustomer = new Customer
 				{
 					CustomerId = model.ParentCustomerId,
 				},

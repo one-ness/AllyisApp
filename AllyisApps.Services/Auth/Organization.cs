@@ -100,9 +100,9 @@ namespace AllyisApps.Services.Auth
 		public Organization()
 		{
 			Address = new Address();
-			this.Users = new List<OrganizationUser>();
-			this.Subscriptions = new List<Subscription>();
-			this.Invitations = new List<Invitation>();
+			Users = new List<OrganizationUser>();
+			Subscriptions = new List<Subscription>();
+			Invitations = new List<Invitation>();
 		}
 	}
 }

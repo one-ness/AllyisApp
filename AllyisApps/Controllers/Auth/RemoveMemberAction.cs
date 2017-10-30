@@ -4,32 +4,51 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Controllers.Auth
 {
-	/// <summary>
-	/// Controller for account and organization related actions.
-	/// </summary>
-	public partial class AccountController : BaseController
-	{
-		/// <summary>
-		/// POST: Organization/RemoveUser.
-		/// </summary>
-		/// <param name="organizationId">Organization Id.</param>
-		/// <param name="userId">User id.</param>
-		/// <returns>Redirects to the manage org action.</returns>
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> RemoveMember(int organizationId, int userId)
-		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, organizationId);
-			await AppService.RemoveOrganizationUser(organizationId, userId);
-			Notifications.Add(new BootstrapAlert(Resources.Strings.UserDeletedSuccessfully, Variety.Success));
-			return this.RedirectToAction(ActionConstants.OrganizationMembers, new { id = organizationId });
-		}
-	}
+    /// <summary>
+    /// Controller for account and organization related actions.
+    /// </summary>
+    public partial class AccountController : BaseController
+    {
+        /// <summary>
+        /// POST: Organization/RemoveUser.
+        /// </summary>
+        /// <param name="id">Organization Id.</param>
+        /// <param name="csvUserIds">User ids.</param>
+        /// <returns>Redirects to the manage org action.</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RemoveMember(int id, string csvUserIds)
+        {
+            if (string.IsNullOrEmpty(csvUserIds))
+            {
+                Notifications.Add(new BootstrapAlert("Please select atleast one user to delete", Variety.Danger));
+            }
+
+            this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
+
+            string[] userIds = csvUserIds.Split(',');
+            List<Task> userRemoveTask = new List<Task>();
+
+            foreach (var userIdString in userIds)
+            {
+                int userId = Convert.ToInt32(userIdString);
+                userRemoveTask.Add(AppService.RemoveOrganizationUser(id, userId));
+            }
+
+            await Task.WhenAll(userRemoveTask);
+
+            Notifications.Add(new BootstrapAlert(Resources.Strings.UserDeletedSuccessfully, Variety.Success));
+
+            return this.RedirectToAction(ActionConstants.OrganizationMembers, new { id = id });
+        }
+    }
 }

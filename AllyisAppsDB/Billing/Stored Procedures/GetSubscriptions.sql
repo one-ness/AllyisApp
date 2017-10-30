@@ -1,10 +1,20 @@
-﻿create procedure Billing.GetSubscriptions
-	@orgId int
-as
-begin
-	set nocount on
-	select s.*, sk.SkuName, p.ProductId, p.ProductName, p.AreaUrl, p.Description as 'ProductDescription' from subscription s with (nolock)
-	inner join sku sk with (nolock) on sk.SkuId = s.SkuId
-	inner join product p with (nolock) on p.ProductId = sk.ProductId
-	where s.OrganizationId = @orgId and s.IsActive = 1 and sk.IsActive = 1 and p.IsActive = 1
-end
+﻿CREATE PROCEDURE [Billing].[GetSubscriptions]
+    @orgId INT
+AS
+BEGIN
+    SET NOCOUNT ON
+    SELECT [s].*,
+           [sk].[SkuName],
+		   [sk].[IconUrl],
+           [p].[ProductId],
+           [p].[ProductName],
+           [p].[AreaUrl],
+           [p].[Description] AS [ProductDescription]
+      FROM [Subscription] [s] WITH (NOLOCK)
+      JOIN [Sku]         [sk] WITH (NOLOCK) ON [sk].[SkuId] = [s].[SkuId]
+      JOIN [Product]      [p] WITH (NOLOCK) ON [p].[ProductId] = [sk].[ProductId]
+     WHERE [s].[OrganizationId] = @orgId
+       AND [s].[IsActive] = 1
+       AND [sk].[IsActive] = 1
+       AND [p].[IsActive] = 1
+END

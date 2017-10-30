@@ -22,7 +22,7 @@ namespace AllyisApps.Lib
 
 		public static void Init(string apiKey)
 		{
-			if (string.IsNullOrWhiteSpace(apiKey)) throw new ArgumentNullException("apiKey");
+			if (string.IsNullOrWhiteSpace(apiKey)) throw new ArgumentNullException(nameof(apiKey));
 			sender = new SendGridAPIClient(apiKey);
 		}
 

@@ -61,10 +61,9 @@
 			@*START REVIEW AREA*@
 			<div class="col-lg-6 col-md-6 col-xs-6">
 				@if (Model.Status != ExpenseStatusEnum.Approved
-					&& Model.Status != ExpenseStatusEnum.Paid
-					&& Model.Status != ExpenseStatusEnum.Draft
-					&& Model.Status != ExpenseStatusEnum.Rejected
-					&& (((int)ViewData["ProductRole"] == 2 || (int)ViewData["ProductRole"] == 3) && (decimal)ViewData["MaxAmount"] >= totalAmount))
+				     && Model.Status != ExpenseStatusEnum.Paid
+				     && Model.Status != ExpenseStatusEnum.Draft
+				     && Model.Status != ExpenseStatusEnum.Rejected && ((int)ViewData["ProductRole"] == 2 || (int)ViewData["ProductRole"] == 3) && (decimal)ViewData["MaxAmount"] >= totalAmount)
 				{
 					<div class="review-area col-lg-12 col-md-12 col-xs-12" height="290px">
 						<b>Accept/Reject Notes</b><br />

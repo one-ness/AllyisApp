@@ -30,8 +30,8 @@ namespace AllyisApps.Services.Lookup
 		/// </summary>
 		public Language()
 		{
-			this.LanguageName = DefaultLanguageName;
-			this.CultureName = DefaultLanguageCultureName;
+			LanguageName = DefaultLanguageName;
+			CultureName = DefaultLanguageCultureName;
 		}
 	}
 }

@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using AllyisApps.Services;
+using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.Auth;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -22,13 +23,13 @@ namespace AllyisApps.Controllers.Auth
 		public async Task<ActionResult> OrgSubscriptions(int id)
 		{
 			var model = new OrganizationSubscriptionsViewModel();
-			model.CanEditSubscriptions = this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, id, false);
-			model.CanManagePermissions = this.AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id, false);
+			model.CanEditSubscriptions = AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, id, false);
+			model.CanManagePermissions = AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id, false);
 			model.OrganizationId = id;
-			var collection = await this.AppService.GetSubscriptionsAsync(id);
-			foreach (var item in collection)
+			var collection = await AppService.GetSubscriptionsAsync(id);
+			foreach (Subscription item in collection)
 			{
-				var data = new OrganizationSubscriptionsViewModel.ViewModelItem();
+				var data = new OrganizationSubscriptionsViewModel.SubscriptionViewModel();
 				data.AreaUrl = item.ProductAreaUrl;
 				data.NumberofUsers = item.NumberOfUsers;
 				data.ProductDescription = item.ProductDescription;
@@ -36,10 +37,11 @@ namespace AllyisApps.Controllers.Auth
 				data.SubscriptionCreatedUtc = item.CreatedUtc;
 				data.SubscriptionId = item.SubscriptionId;
 				data.SubscriptionName = item.SubscriptionName;
+				data.PermissionsUrl = getPermissionsUrl(item.ProductId, item.SubscriptionId);
 				model.Subscriptions.Add(data);
 			}
 
-			var org = await this.AppService.GetOrganization(id);
+			var org = await AppService.GetOrganization(id);
 			model.OrganizationName = org.OrganizationName;
 
 			return View(model);

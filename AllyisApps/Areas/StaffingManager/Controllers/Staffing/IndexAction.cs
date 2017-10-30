@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
-using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
@@ -31,18 +30,18 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="Types"></param>
 		/// <param name="Tags"></param>
 		/// <returns>The index view.</returns>
-		async public Task<ActionResult> Index(int subscriptionId, string Statuses, string Types, string Tags)
+		public async Task<ActionResult> Index(int subscriptionId, string Statuses, string Types, string Tags)
 		{
 			SetNavData(subscriptionId);
 
 			UserContext.SubscriptionAndRole subInfo = null;
-			int userId = this.AppService.UserContext.UserId;
-			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			int userId = AppService.UserContext.UserId;
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			string subName = await AppService.GetSubscriptionName(subscriptionId);
 
 			System.Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<ApplicationStatus>, List<Customer>> infos;
 
-			if ((Statuses != null) || (Types != null) || (Tags != null))
+			if (Statuses != null || Types != null || Tags != null)
 			{
 				List<string> statuses = new List<string>();
 				if (Statuses != null) statuses = new List<string>(Statuses.Split(",".ToCharArray()));
@@ -61,7 +60,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			// ViewBag.SignedInUserID = GetCookieData().UserId;
 			// ViewBag.SelectedUserId = userId;
 
-			StaffingIndexViewModel model = this.ConstructStaffingIndexViewModel(
+			StaffingIndexViewModel model = ConstructStaffingIndexViewModel(
 				subInfo.OrganizationId,
 				subscriptionId,
 				subName,
@@ -80,7 +79,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				}
 			}
 
-			return this.View(model);
+			return View(model);
 		}
 
 		/// <summary>
@@ -113,12 +112,12 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				if (!skip) uniqueTags.Add(tag);
 			}
 
-			StaffingIndexViewModel result = new StaffingIndexViewModel()
+			StaffingIndexViewModel result = new StaffingIndexViewModel
 			{
 				OrganizationId = orgId,
 				SubscriptionId = subId,
 				SubscriptionName = subName,
-				Positions = positions.AsParallel().Select(pos => new PositionThumbnailInfoViewModel()
+				Positions = positions.AsParallel().Select(pos => new PositionThumbnailInfoViewModel
 				{
 					CustomerId = pos.CustomerId,
 					CustomerName = pos.CustomerName,
@@ -132,21 +131,21 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					PositionStatusName = pos.PositionStatusName,
 					PositionTitle = pos.PositionTitle,
 					StartDate = pos.StartDate,
-					Tags = pos.Tags.Select(tag => new TagViewModel() { TagId = tag.TagId, TagName = tag.TagName, PositionId = tag.PositionId }).ToList(),
+					Tags = pos.Tags.Select(tag => new TagViewModel { TagId = tag.TagId, TagName = tag.TagName, PositionId = tag.PositionId }).ToList(),
 					TeamName = pos.TeamName
 				}).ToList(),
-				Tags = uniqueTags.Select(tag => new TagViewModel() { TagId = tag.TagId, TagName = tag.TagName, PositionId = tag.PositionId }).ToList(),
-				EmploymentTypes = employmentTypes.AsParallel().Select(et => new EmploymentTypeSelectViewModel()
+				Tags = uniqueTags.Select(tag => new TagViewModel { TagId = tag.TagId, TagName = tag.TagName, PositionId = tag.PositionId }).ToList(),
+				EmploymentTypes = employmentTypes.AsParallel().Select(et => new EmploymentTypeSelectViewModel
 				{
 					EmploymentTypeId = et.EmploymentTypeId,
 					EmploymentTypeName = et.EmploymentTypeName
 				}).ToList(),
-				PositionLevels = positionLevels.AsParallel().Select(pl => new PositionLevelSelectViewModel()
+				PositionLevels = positionLevels.AsParallel().Select(pl => new PositionLevelSelectViewModel
 				{
 					PositionLevelId = pl.PositionLevelId,
 					PositionLevelName = pl.PositionLevelName
 				}).ToList(),
-				PositionStatuses = positionStatuses.AsParallel().Select(ps => new PositionStatusSelectViewModel()
+				PositionStatuses = positionStatuses.AsParallel().Select(ps => new PositionStatusSelectViewModel
 				{
 					PositionStatusId = ps.PositionStatusId,
 					PositionStatusName = ps.PositionStatusName

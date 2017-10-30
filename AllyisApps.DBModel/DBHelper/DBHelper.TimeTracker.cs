@@ -29,7 +29,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">The Organization Id.</param>
 		/// <returns>The lock date.</returns>
-		async public Task<LockDateDBEntity> GetLockDateByOrganizationId(int organizationId)
+		public async Task<LockDateDBEntity> GetLockDateByOrganizationId(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
@@ -63,7 +63,7 @@ namespace AllyisApps.DBModel
 		/// <param name="holidayName">The HolidayDBEntity to delete.</param>
 		/// <param name="date">The HolidayDBEntity to delete.</param>
 		/// <param name="organizationId">The HolidayDBEntity to delete.</param>
-		async public void DeleteHoliday(string holidayName, DateTime date, int organizationId)
+		public async void DeleteHoliday(string holidayName, DateTime date, int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@holidayName", holidayName);
@@ -111,7 +111,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="payClassId">The id of the pay class to remove.</param>
 		/// <param name="destPayClass">The id of the payclass to move all old entries to (nullable).</param>
-		async public void DeletePayClass(int payClassId, int? destPayClass)
+		public async void DeletePayClass(int payClassId, int? destPayClass)
 		{
 			// TODO: move this part in the DeletePayClass stored procedure
 			if (destPayClass != null)
@@ -156,7 +156,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">The organizationid to look for or null for defaults.</param>
 		/// <returns>The PayClassDBEntity.</returns>
-		async public Task<IEnumerable<PayClassDBEntity>> GetPayClasses(int organizationId)
+		public async Task<IEnumerable<PayClassDBEntity>> GetPayClasses(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
@@ -174,7 +174,7 @@ namespace AllyisApps.DBModel
 		/// <param name="startingDate">The beginning date of the date range.</param>
 		/// <param name="endingDate">The ending date of the date range.</param>
 		/// <returns>A collection of time entries.</returns>
-		async public Task<IEnumerable<TimeEntryDBEntity>> GetTimeEntriesByUserOverDateRange(List<int> userId, int orgId, DateTime startingDate, DateTime endingDate)
+		public async Task<IEnumerable<TimeEntryDBEntity>> GetTimeEntriesByUserOverDateRange(List<int> userId, int orgId, DateTime startingDate, DateTime endingDate)
 		{
 			DataTable users = new DataTable();
 			users.Columns.Add("userId", typeof(string));
@@ -207,7 +207,7 @@ namespace AllyisApps.DBModel
 		/// <param name="startingDate">The beginning date of the date range.</param>
 		/// <param name="endingDate">The ending date of the date range.</param>
 		/// <returns>A collection of time entries.</returns>
-		public IEnumerable<TimeEntryDBEntity> GetTimeEntriesOverDateRange(int orgId, DateTime startingDate, DateTime endingDate)
+		public async Task<List<TimeEntryDBEntity>> GetTimeEntriesOverDateRange(int orgId, DateTime startingDate, DateTime endingDate)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
@@ -216,12 +216,12 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				IEnumerable<TimeEntryDBEntity> result = connection.Query<TimeEntryDBEntity>(
+				IEnumerable<TimeEntryDBEntity> result = await connection.QueryAsync<TimeEntryDBEntity>(
 																	"[TimeTracker].[GetTimeEntriesOverDateRange]",
 																	parameters,
 																	commandType: CommandType.StoredProcedure);
 
-				return result ?? new List<TimeEntryDBEntity>();
+				return result?.ToList() ?? new List<TimeEntryDBEntity>();
 			}
 		}
 
@@ -230,7 +230,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="timeEntryId">The id of the time entry.</param>
 		/// <returns>The time entry.</returns>
-		async public Task<TimeEntryDBEntity> GetTimeEntryById(int timeEntryId)
+		public async Task<TimeEntryDBEntity> GetTimeEntryById(int timeEntryId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@timeEntryId", timeEntryId);
@@ -250,7 +250,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="entry">Object to be saved to the database.</param>
 		/// <returns>The id of the created timeEntry. If unsuccessful, returns -1.</returns>
-		async public Task<int> CreateTimeEntry(TimeEntryDBEntity entry)
+		public async Task<int> CreateTimeEntry(TimeEntryDBEntity entry)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", entry.UserId);
@@ -309,7 +309,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="timeEntryId">The Id of the time entry to be updated.</param>
 		/// <param name="timeEntryStatusId">The new status.</param>
-		async public Task<int> UpdateTimeEntryStatusById(int timeEntryId, int timeEntryStatusId)
+		public async Task<int> UpdateTimeEntryStatusById(int timeEntryId, int timeEntryStatusId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@timeEntryId", timeEntryId);
@@ -326,7 +326,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">The organization Id.</param>
 		/// <param name="startOfWeek">The value for which day should be the start of the week. 1-6 M-Sat, 0 Sun.</param>
-		async public void UpdateTimeTrackerStartOfWeek(int orgId, int startOfWeek)
+		public async void UpdateTimeTrackerStartOfWeek(int orgId, int startOfWeek)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
@@ -344,7 +344,7 @@ namespace AllyisApps.DBModel
 		/// <param name="overtimeHours">Hours until overtime.</param>
 		/// <param name="overtimePeriod">Time period for hours until overtime.</param>
 		/// <param name="overtimeMultiplier">Overtime pay multiplier.</param>
-		async public void UpdateOvertime(int orgId, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
+		public async void UpdateOvertime(int orgId, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
@@ -363,17 +363,18 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">The organization Id for which the settings are to be retrieved.</param>
 		/// <returns>Settings for an organization.</returns>
-		public SettingDBEntity GetSettingsByOrganizationId(int organizationId)
+		public async Task<SettingDBEntity> GetSettingsByOrganizationId(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<SettingDBEntity>(
+				var result = await connection.QueryAsync<SettingDBEntity>(
 					"[TimeTracker].[GetSettings]",
 					parameters,
-					commandType: CommandType.StoredProcedure).Single();
+					commandType: CommandType.StoredProcedure);
+				return result.Single();
 			}
 		}
 
@@ -381,11 +382,11 @@ namespace AllyisApps.DBModel
 		/// Initializes time tracker settings.
 		/// </summary>
 		/// <param name="orgId">The organization Id.</param>
-		public void InitializeTimeTrackerSettings(int orgId)
+		public async Task InitializeTimeTrackerSettings(int orgId)
 		{
 			try
 			{
-				GetSettingsByOrganizationId(orgId);
+				await GetSettingsByOrganizationId(orgId);
 			}
 			catch
 			{
@@ -399,7 +400,7 @@ namespace AllyisApps.DBModel
 				parameters.Add("@overTimeMultiplier", 1.5);
 				using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 				{
-					connection.Execute("[TimeTracker].[UpdateSettings]", parameters, commandType: CommandType.StoredProcedure);
+					await connection.ExecuteAsync("[TimeTracker].[UpdateSettings]", parameters, commandType: CommandType.StoredProcedure);
 				}
 			}
 		}
@@ -412,7 +413,7 @@ namespace AllyisApps.DBModel
 		/// <param name="lockDatePeriod">.</param>
 		/// <param name="lockDateQuantity">.</param>
 		/// <returns>.</returns>
-		async public Task<bool> UpdateOldLockDate(int organizationId, bool lockDateUsed, int lockDatePeriod, int lockDateQuantity)
+		public async Task<bool> UpdateOldLockDate(int organizationId, bool lockDateUsed, int lockDatePeriod, int lockDateQuantity)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
@@ -496,7 +497,7 @@ namespace AllyisApps.DBModel
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>.</returns>
-		async public Task<Tuple<List<dynamic>, List<ProjectDBEntity>, List<SubscriptionUserDBEntity>>> GetReportInfo(int orgId, int subscriptionId)
+		public async Task<Tuple<List<dynamic>, List<ProjectDBEntity>, List<SubscriptionUserDBEntity>>> GetReportInfo(int orgId, int subscriptionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@orgId", orgId);
@@ -529,7 +530,7 @@ namespace AllyisApps.DBModel
 		/// <param name="startingDate">Start of date range.</param>
 		/// <param name="endingDate">End of date range.</param>
 		/// <returns>.</returns>
-		async public Task<Tuple<SettingDBEntity, List<PayClassDBEntity>, List<HolidayDBEntity>, List<ProjectDBEntity>, List<UserDBEntity>, List<TimeEntryDBEntity>>>
+		public async Task<Tuple<SettingDBEntity, List<PayClassDBEntity>, List<HolidayDBEntity>, List<ProjectDBEntity>, List<UserDBEntity>, List<TimeEntryDBEntity>>>
 			GetTimeEntryIndexPageInfo(int orgId, int timeTrackerProductId, int userId, DateTime? startingDate, DateTime? endingDate)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -546,7 +547,8 @@ namespace AllyisApps.DBModel
 					parameters,
 					commandType: CommandType.StoredProcedure);
 
-				return Tuple.Create(results.Read<SettingDBEntity>().SingleOrDefault(),
+				return Tuple.Create(
+					results.Read<SettingDBEntity>().Single(),
 					results.Read<PayClassDBEntity>().ToList(),
 					results.Read<HolidayDBEntity>().ToList(),
 					results.Read<ProjectDBEntity>().ToList(),

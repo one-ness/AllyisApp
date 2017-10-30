@@ -40,13 +40,13 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="timeEntryId">Time entry Id.</param>
 		/// <returns>A TimeEntryDBEntity.</returns>
-		async public Task<TimeEntry> GetTimeEntry(int timeEntryId)
+		public async Task<TimeEntry> GetTimeEntry(int timeEntryId)
 		{
 			#region Validation
 
 			if (timeEntryId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("timeEntryId", "Time entry id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(timeEntryId), "Time entry id cannot be 0 or negative.");
 			}
 
 			#endregion Validation
@@ -59,13 +59,13 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="entry">Time entry info.</param>
 		/// <returns>Time entry id.</returns>
-		async public Task<int> CreateTimeEntry(TimeEntry entry)
+		public async Task<int> CreateTimeEntry(TimeEntry entry)
 		{
 			#region Validation
 
 			if (entry == null)
 			{
-				throw new ArgumentNullException("entry", "Time entry must not be null.");
+				throw new ArgumentNullException(nameof(entry), "Time entry must not be null.");
 			}
 
 			#endregion Validation
@@ -83,7 +83,7 @@ namespace AllyisApps.Services
 
 			if (entry == null)
 			{
-				throw new ArgumentNullException("entry", "Time entry must not be null.");
+				throw new ArgumentNullException(nameof(entry), "Time entry must not be null.");
 			}
 
 			#endregion Validation
@@ -96,7 +96,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="timeEntryId">The Id of the time entry to be updated.</param>
 		/// <param name="timeEntryStatusId">The new status.</param>
-		async public Task<int> UpdateTimeEntryStatusById(int timeEntryId, int timeEntryStatusId)
+		public async Task<int> UpdateTimeEntryStatusById(int timeEntryId, int timeEntryStatusId)
 		{
 			if (timeEntryId <= 0)
 			{
@@ -115,13 +115,13 @@ namespace AllyisApps.Services
 		/// Deletes a time entry.
 		/// </summary>
 		/// <param name="timeEntryId">Time entry Id.</param>
-		async public void DeleteTimeEntry(int timeEntryId)
+		public async void DeleteTimeEntry(int timeEntryId)
 		{
 			#region Validation
 
 			if (timeEntryId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("timeEntryId", "Time entry id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(timeEntryId), "Time entry id cannot be 0 or negative.");
 			}
 
 			#endregion Validation
@@ -137,17 +137,17 @@ namespace AllyisApps.Services
 		/// <param name="start">Starting. <see cref="DateTime"/>.</param>
 		/// <param name="end">Ending. <see cref="DateTime"/>.</param>
 		/// <returns>A list of TimeEntry's for a given organization and start/end times.</returns>
-		public IEnumerable<TimeEntry> GetTimeEntriesOverDateRange(int orgId, DateTime start, DateTime end)
+		public async Task<IEnumerable<TimeEntry>> GetTimeEntriesOverDateRange(int orgId, DateTime start, DateTime end)
 		{
 			#region Validation
 
 			if (start == null)
 			{
-				throw new ArgumentNullException("start", "Project must have a start time");
+				throw new ArgumentNullException(nameof(start), "Project must have a start time");
 			}
 			if (end == null)
 			{
-				throw new ArgumentNullException("end", "Project must have an end time");
+				throw new ArgumentNullException(nameof(end), "Project must have an end time");
 			}
 			if (DateTime.Compare(start, end) > 0)
 			{
@@ -156,7 +156,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return DBHelper.GetTimeEntriesOverDateRange(orgId, start, end).Select(te => InitializeTimeEntryInfo(te));
+			return (await DBHelper.GetTimeEntriesOverDateRange(orgId, start, end)).Select(InitializeTimeEntryInfo);
 		}
 
 		/// <summary>
@@ -167,57 +167,55 @@ namespace AllyisApps.Services
 		/// <param name="start">Starting. <see cref="DateTime"/>.</param>
 		/// <param name="end">Ending. <see cref="DateTime"/>.</param>
 		/// <returns><see cref="IEnumerable{TimeEntryInfo}"/>.</returns>
-		async public Task<IEnumerable<TimeEntry>> GetTimeEntriesByUserOverDateRange(List<int> userIds, DateTime? start, DateTime? end, int organizationId = -1)
+		public async Task<IEnumerable<TimeEntry>> GetTimeEntriesByUserOverDateRange(List<int> userIds, DateTime? start, DateTime? end, int organizationId = -1)
 		{
 			#region Validation
 
 			if (userIds == null || userIds.Count == 0)
 			{
-				throw new ArgumentNullException("userIds", "There must be at least one provided user id.");
+				throw new ArgumentNullException(nameof(userIds), "There must be at least one provided user id.");
 			}
-			if (userIds.Where(u => u <= 0).Count() > 0)
+			if (userIds.Any(u => u <= 0))
 			{
-				throw new ArgumentOutOfRangeException("userIds", "User ids cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(userIds), "User ids cannot be 0 or negative.");
 			}
 			if (start == null)
 			{
-				throw new ArgumentNullException("start", "Date range must have a start date.");
+				throw new ArgumentNullException(nameof(start), "Date range must have a start date.");
 			}
 			if (end == null)
 			{
-				throw new ArgumentNullException("end", "Date range must have an end date.");
+				throw new ArgumentNullException(nameof(end), "Date range must have an end date.");
 			}
-			if (DateTime.Compare(start ?? DateTime.Now, end ?? DateTime.Now) > 0)
+			if (DateTime.Compare(start.Value, end.Value) > 0)
 			{
 				throw new ArgumentException("Date range cannot end before it starts.");
 			}
 
 			#endregion Validation
 
-			var results = await DBHelper.GetTimeEntriesByUserOverDateRange(userIds, organizationId, start ?? DateTime.Now, end ?? DateTime.Now);
-			return results.Select(te => InitializeTimeEntryInfo(te));
+			return (await DBHelper.GetTimeEntriesByUserOverDateRange(userIds, organizationId, start.Value, end.Value)).Select(InitializeTimeEntryInfo);
 		}
 
 		/// <summary>
 		/// Gets a list of Customers for all customers in the organization, a list of CompleteProjectInfos for all
 		/// projects in the organization, and a list of SubscriptionUserInfos for all users in the current subscription.
 		/// </summary>
-		async public Task<ReportInfo> GetReportInfo(int subscriptionId)
+		public async Task<ReportInfo> GetReportInfo(int subscriptionId)
 		{
-			UserContext.SubscriptionAndRole subInfo = null;
-			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out UserContext.SubscriptionAndRole subInfo);
 			var spResults = await DBHelper.GetReportInfo(subInfo.OrganizationId, subscriptionId);
 			return new ReportInfo(
 				spResults.Item1.Select(cdb => (Customer)InitializeCustomer(cdb)).ToList(),
-				spResults.Item2.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
-				spResults.Item3.Select(sudb => InitializeSubscriptionUser(sudb)).ToList());
+				spResults.Item2.Select(InitializeCompleteProjectInfo).ToList(),
+				spResults.Item3.Select(InitializeSubscriptionUser).ToList());
 		}
 
 		/// <summary>
 		/// Gets the lock date for the current organization.
 		/// </summary>
 		/// <returns>Lock date.</returns>
-		async public Task<DateTime?> GetLockDate(int organizationId)
+		public async Task<DateTime?> GetLockDate(int organizationId)
 		{
 			LockDateDBEntity lockDate = await DBHelper.GetLockDateByOrganizationId(organizationId);
 			return GetLockDateFromParameters(lockDate.IsLockDateUsed, lockDate.LockDatePeriod, lockDate.LockDateQuantity);
@@ -237,8 +235,9 @@ namespace AllyisApps.Services
 				return null;
 			}
 
-			DateTime date = lockDatePeriod.Equals(3) ? DateTime.Now.AddMonths(-1 * lockDateQuantity) :
-				DateTime.Now.AddDays(-1 * lockDateQuantity * (lockDatePeriod.Equals(2) ? 7 : 1));
+			DateTime date = lockDatePeriod.Equals(3)
+				? DateTime.Now.AddMonths(-1 * lockDateQuantity)
+				: DateTime.Now.AddDays(-1 * lockDateQuantity * (lockDatePeriod.Equals(2) ? 7 : 1));
 			return date;
 		}
 
@@ -248,7 +247,7 @@ namespace AllyisApps.Services
 		/// <param name="holiday">Holiday.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		async public Task<bool> CreateHoliday(Holiday holiday, int subscriptionId)
+		public async Task<bool> CreateHoliday(Holiday holiday, int subscriptionId)
 		{
 			if (holiday == null) throw new ArgumentException("holiday");
 			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
@@ -264,7 +263,7 @@ namespace AllyisApps.Services
 		/// <param name="orgId">The organization's Id.</param>
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		async public Task<bool> DeleteHoliday(int holidayId, int orgId, int subscriptionId)
+		public async Task<bool> DeleteHoliday(int holidayId, int orgId, int subscriptionId)
 		{
 			if (holidayId <= 0) throw new ArgumentException("holidayId");
 			if (orgId <= 0) throw new ArgumentException("orgId");
@@ -288,7 +287,7 @@ namespace AllyisApps.Services
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		async public Task<bool> CreatePayClass(string payClassName, int orgId, int subscriptionId)
+		public async Task<bool> CreatePayClass(string payClassName, int orgId, int subscriptionId)
 		{
 			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 			DBHelper.CreatePayClass(payClassName, orgId);
@@ -304,7 +303,7 @@ namespace AllyisApps.Services
 		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <param name="destPayClass">The id of the destination payclass.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		async public Task<bool> DeletePayClass(int payClassId, int orgId, int subscriptionId, int? destPayClass)
+		public async Task<bool> DeletePayClass(int payClassId, int orgId, int subscriptionId, int? destPayClass)
 		{
 			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 			DBHelper.DeletePayClass(payClassId, destPayClass);
@@ -323,7 +322,7 @@ namespace AllyisApps.Services
 
 			if (payClassId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("payClassId", "Pay class id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException(nameof(payClassId), "Pay class id cannot be 0 or negative.");
 			}
 
 			#endregion Validation
@@ -334,7 +333,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets a list of <see cref="PayClass"/>'s for an organization.
 		/// </summary>
-		async public Task<IEnumerable<PayClass>> GetPayClassesBySubscriptionId(int subscriptionId)
+		public async Task<IEnumerable<PayClass>> GetPayClassesBySubscriptionId(int subscriptionId)
 		{
 			var getClass = await DBHelper.GetPayClasses(UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
 			return getClass.Select(pc => InitializePayClassInfo(pc));
@@ -343,7 +342,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets a list of <see cref="PayClass"/>'s for an organization.
 		/// </summary>
-		async public Task<IEnumerable<PayClass>> GetPayClassesByOrganizationId(int organizationId)
+		public async Task<IEnumerable<PayClass>> GetPayClassesByOrganizationId(int organizationId)
 		{
 			var getClass = await DBHelper.GetPayClasses(organizationId);
 			return getClass.Select(pc => InitializePayClassInfo(pc));
@@ -356,7 +355,7 @@ namespace AllyisApps.Services
 		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <param name="startOfWeek">Start of Week.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		async public Task<bool> UpdateStartOfWeek(int organizationId, int subscriptionId, int startOfWeek)
+		public async Task<bool> UpdateStartOfWeek(int organizationId, int subscriptionId, int startOfWeek)
 		{
 			#region Validation
 
@@ -382,13 +381,13 @@ namespace AllyisApps.Services
 		/// <param name="overtimePeriod">Time period for hours until overtime.</param>
 		/// <param name="overtimeMultiplier">Overtime pay multiplier.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		async public Task<bool> UpdateOvertime(int subscriptionId, int organizationId, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
+		public async Task<bool> UpdateOvertime(int subscriptionId, int organizationId, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
 		{
 			#region Validation
 
 			if (overtimeHours < -1)
 			{
-				throw new ArgumentOutOfRangeException("overtimeHours", "Overtime hours cannot be negative, unless it is -1 to indicate overtime unavailable.");
+				throw new ArgumentOutOfRangeException(nameof(overtimeHours), "Overtime hours cannot be negative, unless it is -1 to indicate overtime unavailable.");
 			}
 
 			if (!new[] { "Day", "Week", "Month" }.Contains(overtimePeriod))
@@ -398,7 +397,7 @@ namespace AllyisApps.Services
 
 			if (overtimeMultiplier < 1.0)
 			{
-				throw new ArgumentOutOfRangeException("overtimeMultiplier", "Overtime rate cannot be less than regular rate (i.e. overtimeMultiplier less than one).");
+				throw new ArgumentOutOfRangeException(nameof(overtimeMultiplier), "Overtime rate cannot be less than regular rate (i.e. overtimeMultiplier less than one).");
 			}
 
 			#endregion Validation
@@ -419,7 +418,7 @@ namespace AllyisApps.Services
 		/// <param name="projectId">Project id to filter by.</param>
 		/// <param name="customerId">Customer id to filter by.</param>
 		/// <returns>The stream writer.</returns>
-		async public Task<StreamWriter> PrepareCSVExport(int orgId, List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
+		public async Task<StreamWriter> PrepareCSVExport(int orgId, List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
 		{
 			// Preparing data
 			IEnumerable<TimeEntry> data = new List<TimeEntry>();
@@ -427,11 +426,11 @@ namespace AllyisApps.Services
 
 			if (userIds == null || userIds.Count == 0 || userIds[0] == -1)
 			{
-				data = GetTimeEntriesOverDateRange(orgId, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1));
+				data = await GetTimeEntriesOverDateRange(orgId, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1));
 			}
 			else
 			{
-				data = await this.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1), orgId);
+				data = await GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1), orgId);
 			}
 
 			if (projectId > 0)
@@ -471,7 +470,7 @@ namespace AllyisApps.Services
 				{
 					var project = projects.Where(x => x.ProjectId == entry.ProjectId).FirstOrDefault();
 					if (project.ProjectId == 0) project = null;
-					output.WriteLine("\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\",\"{10}\",\"{11}\"", entry.LastName, entry.FirstName, entry.EmployeeId, entry.Email, entry.Date.ToShortDateString(), entry.Duration, entry.PayClassName, project != null ? (project.ProjectName ?? string.Empty) : string.Empty, project != null ? (project.ProjectOrgId ?? string.Empty) : string.Empty, project != null ? (project.owningCustomer.CustomerName ?? string.Empty) : string.Empty, project != null ? (project.owningCustomer.CustomerOrgId ?? string.Empty) : string.Empty, entry.Description, ((TimeEntryStatus)entry.TimeEntryStatusId));
+					output.WriteLine("\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\",\"{10}\",\"{11}\"", entry.LastName, entry.FirstName, entry.EmployeeId, entry.Email, entry.Date.ToShortDateString(), entry.Duration, entry.PayClassName, project != null ? (project.ProjectName ?? string.Empty) : string.Empty, project != null ? (project.ProjectOrgId ?? string.Empty) : string.Empty, project != null ? (project.owningCustomer.CustomerName ?? string.Empty) : string.Empty, project != null ? (project.owningCustomer.CustomerOrgId ?? string.Empty) : string.Empty, entry.Description, (TimeEntryStatus)entry.TimeEntryStatusId);
 				}
 				catch (Exception ex)
 				{
@@ -510,7 +509,7 @@ namespace AllyisApps.Services
 		/// <param name="lockDateQuantity">The quantity of the selected period.</param>
 		/// <param name="orgId">.</param>
 		/// <returns>.</returns>
-		async public Task<bool> UpdateOldLockDate(bool lockDateUsed, int lockDatePeriod, int lockDateQuantity, int orgId)
+		public async Task<bool> UpdateOldLockDate(bool lockDateUsed, int lockDatePeriod, int lockDateQuantity, int orgId)
 		{
 			if (!new[] { 1, 2, 3 }.Contains(lockDatePeriod))
 			{
@@ -565,7 +564,7 @@ namespace AllyisApps.Services
 		/// <param name="startingDate">Start of date range.</param>
 		/// <param name="endingDate">End of date range.</param>
 		/// <returns>.</returns>
-		async public Task<Tuple<Setting, List<PayClass>, List<Holiday>, List<CompleteProject>, List<User>, List<TimeEntry>>>
+		public async Task<Tuple<Setting, List<PayClass>, List<Holiday>, List<CompleteProject>, List<User>, List<TimeEntry>>>
 			GetTimeEntryIndexInfo(int orgId, DateTime? startingDate, DateTime? endingDate, int? userId = null)
 		{
 			#region Validation
@@ -655,7 +654,9 @@ namespace AllyisApps.Services
 				StartOfWeek = settings.StartOfWeek,
 				LockDatePeriod = settings.LockDatePeriod,
 				LockDateQuantity = settings.LockDateQuantity,
-				IsLockDateUsed = settings.IsLockDateUsed
+				IsLockDateUsed = settings.IsLockDateUsed,
+				LockDate = settings.LockDate,
+				PayrollProcessedDate = settings.PayrollProcessedDate
 			};
 		}
 
@@ -737,7 +738,7 @@ namespace AllyisApps.Services
 		/// <param name="userId">User Id.</param>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		async public Task<Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<ApplicationStatus>, List<Customer>>>
+		public async Task<Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<ApplicationStatus>, List<Customer>>>
 			GetStaffingIndexInfo(int orgId, int? userId = null)
 		{
 			#region Validation
@@ -779,7 +780,7 @@ namespace AllyisApps.Services
 		/// <param name="tags">tags.</param>
 		/// <param name="userId">User Id.</param>
 		/// <returns>.</returns>
-		async public Task<Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<ApplicationStatus>, List<Customer>>>
+		public async Task<Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<ApplicationStatus>, List<Customer>>>
 			GetStaffingIndexInfoFiltered(int orgId, List<string> statusName, List<string> typeName, List<string> tags = null, int? userId = 0)
 		{
 			#region Validation

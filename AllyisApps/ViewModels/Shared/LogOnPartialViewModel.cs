@@ -21,7 +21,7 @@ namespace AllyisApps.ViewModels.Shared
 			get
 			{
 				StringBuilder sb = new StringBuilder();
-				sb.AppendFormat("{0} {1}", this.FirstName, this.LastName);
+				sb.AppendFormat("{0} {1}", FirstName, LastName);
 				return sb.ToString();
 			}
 		}

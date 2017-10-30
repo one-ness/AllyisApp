@@ -1,6 +1,6 @@
 ﻿@using AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 
-@model AllyisApps.Areas.StaffingManager.ViewModels.Staffing.StaffingApplicantViewModel
+@model StaffingApplicantViewModel
 
 @{
 	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/StaffingManager/Views/Shared/_BreadcrumbNavPartial.cshtml";
@@ -49,7 +49,7 @@
 		var file_index = @fileIndex;
 
 		function addFile() {
-			var data = @Html.Raw(Json.Encode(new ApplicationDocumentViewModel() { Index = -1 }));
+			var data = @Html.Raw(Json.Encode(new ApplicationDocumentViewModel { Index = -1 }));
 			data.Index = file_index;
 			$.ajax({
 				url: '@Url.Action("DisplayFile")',

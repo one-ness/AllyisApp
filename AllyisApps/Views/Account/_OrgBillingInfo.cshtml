@@ -1,5 +1,5 @@
 ﻿@using AllyisApps.Services.Billing
-@model AllyisApps.ViewModels.Auth.AccountIndexViewModel.OrganizationViewModel
+@model AccountIndexViewModel.OrganizationViewModel
 @{
 	ViewBag.Title = Strings.BillingInformation;
 }
@@ -8,7 +8,7 @@
 {
 	<input id="hdnCurrentOrg" type="hidden" />
 	<input id="hdnSelectedUser" type="hidden" />
-	<table class="ovrd-table table ovrd-table-striped table-striped ovrd-table-condensed table-condensed ovrd-table-bordered table-bordered">
+	<table class="tabletable-striped table-condensed table-bordered">
 		<tbody>
 
 			<tr>
@@ -40,7 +40,7 @@
 			<script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
 					data-key="pk_test_gCF350S6jE0k1BvPgdofdzvP"
 					data-name="Allyis Apps"
-					data-class="ovrd-btn btn ovrd-btn-primary btn-primary"
+					data-class="btn btn-primary"
 					data-description="Adding Billing Information"
 					@*data-image="/128x128.png"*@
 					data-locale="auto"
@@ -59,7 +59,7 @@
 			<script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
 					data-key="pk_test_gCF350S6jE0k1BvPgdofdzvP"
 					data-name="Allyis Apps"
-					data-class="ovrd-btn btn ovrd-btn-primary btn-primary"
+					data-class="btn btn-primary"
 					data-description="Adding Billing Information"
 					@*data-image="/128x128.png"*@
 					data-locale="auto"
@@ -74,12 +74,12 @@
 
 		using (Html.BeginForm(ActionConstants.RemoveBilling, ControllerConstants.Account, FormMethod.Get, new { @style = "display: inline-block; padding: 0 12px;" }))
 		{
-			<input type="submit" class="ovrd-btn btn ovrd-btn-danger btn-danger" value=@Strings.Delete>
+			<input type="submit" class="btn btn-danger" value=@Strings.Delete>
 
 		}
 		using (Html.BeginForm(ActionConstants.GetBillingSummary, ControllerConstants.Account, FormMethod.Get, new { @style = "display: inline-block; padding: 0 12px;" }))
 		{
-			<input type="submit" class="ovrd-btn btn ovrd-btn-primary btn-primary" value=@Strings.GetBillingHistory>
+			<input type="submit" class="btn btn-primary" value=@Strings.GetBillingHistory>
 		}
 	}
 </div>

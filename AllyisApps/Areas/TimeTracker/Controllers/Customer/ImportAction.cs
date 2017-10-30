@@ -32,7 +32,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> CustomerImport(int subscriptionId, ExpenseFile file)
+		public async Task<ActionResult> CustomerImport(int subscriptionId, ExpenseFile file)
 		{
 			// TODO: Replace ModelState errors with exception catches and notifications
 			// TODO: Buff up the error handling (catch errors from import functions, etc.)
@@ -40,7 +40,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			{
 				if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
 				{
-					this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
+					AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
 				}
 
 				if (file != null && file.ContentLength > 0)

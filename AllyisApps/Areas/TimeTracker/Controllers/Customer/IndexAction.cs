@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
@@ -15,7 +16,6 @@ using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
 using AllyisApps.ViewModels.TimeTracker.Customer;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -31,15 +31,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subscriptionId">The Subscription Id.</param>
 		/// <returns>Customer Index.</returns>
 		[HttpGet]
-		async public Task<ActionResult> Index(int subscriptionId)
+		public async Task<ActionResult> Index(int subscriptionId)
 		{
 			if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
 			{
-				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
+				AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
 			}
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			return this.View(await this.ConstructManageCustomerViewModel(subscriptionId));
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			return View(await ConstructManageCustomerViewModel(subscriptionId));
 		}
 
 		/// <summary>
@@ -47,20 +47,20 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">Subscription id.</param>
 		/// <returns>The index page.</returns>
-		async public Task<ActionResult> IndexNoUserId(int subscriptionId)
+		public async Task<ActionResult> IndexNoUserId(int subscriptionId)
 		{
 			if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
 			{
-				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
+				AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
 			}
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 
 			var infos = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 			ViewBag.WeekStart = Utility.GetDaysFromDateTime(SetStartingDate(null, infos.Item1.StartOfWeek));
 			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infos.Item1.StartOfWeek));
 
-			return this.View("Index", await this.ConstructManageCustomerViewModel(subscriptionId));
+			return View("Index", await ConstructManageCustomerViewModel(subscriptionId));
 		}
 
 		/// <summary>
@@ -69,14 +69,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="customerId">The customer id.</param>
 		/// <returns>ProjectByCustomer partial view.</returns>
 		[HttpPost]
-		async public Task<ActionResult> PopulateProjects(int customerId)
+		public async Task<ActionResult> PopulateProjects(int customerId)
 		{
 			var model = new CustomerProjectViewModel();
 			model.CustomerInfo = new CustomerProjectViewModel.CustomerViewModel { CustomerId = customerId };
 			var projGet = await AppService.GetProjectsByCustomer(customerId);
 			model.Projects = projGet.AsParallel()
 			.Select(proj => new
-			CustomerProjectViewModel.ProjectViewModel()
+			CustomerProjectViewModel.ProjectViewModel
 			{
 				CustomerId = proj.owningCustomer.CustomerId,
 				OrganizationId = proj.OrganizationId,
@@ -92,13 +92,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="customerId">The customer id.</param>
 		/// <returns>ProjectByCustomer partial view.</returns>
 		[HttpPost]
-		async public Task<ActionResult> PopulateInactiveProjects(int customerId)
+		public async Task<ActionResult> PopulateInactiveProjects(int customerId)
 		{
 			var model = new CustomerProjectViewModel();
 			model.CustomerInfo = new CustomerProjectViewModel.CustomerViewModel { CustomerId = customerId };
 			var projects = await AppService.GetInactiveProjectsByCustomer(customerId);
 			model.Projects = projects.AsParallel().Select(proj => new
-			CustomerProjectViewModel.ProjectViewModel()
+			CustomerProjectViewModel.ProjectViewModel
 			{
 				CustomerId = proj.owningCustomer.CustomerId,
 				OrganizationId = proj.OrganizationId,
@@ -113,10 +113,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The id of the current subscription.</param>
 		/// <returns>The ManageCustomerViewModel.</returns>
-		async public Task<ManageCustomerViewModel> ConstructManageCustomerViewModel(int subscriptionId)
+		public async Task<ManageCustomerViewModel> ConstructManageCustomerViewModel(int subscriptionId)
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
-			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			var infosTask = AppService.GetProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
 			var inactiveInfoTask = AppService.GetInactiveProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
 
@@ -132,9 +132,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			IList<CustomerProjectViewModel> customersList = new List<CustomerProjectViewModel>();
 			foreach (Customer currentCustomer in customers)
 			{
-				CustomerProjectViewModel customerResult = new CustomerProjectViewModel()
+				CustomerProjectViewModel customerResult = new CustomerProjectViewModel
 				{
-					CustomerInfo = new CustomerProjectViewModel.CustomerViewModel()
+					CustomerInfo = new CustomerProjectViewModel.CustomerViewModel
 					{
 						CustomerName = currentCustomer.CustomerName,
 						CustomerId = currentCustomer.CustomerId,
@@ -164,9 +164,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			IList<CustomerProjectViewModel> inactiveCustomersList = new List<CustomerProjectViewModel>();
 			foreach (Customer currentCustomer in inactiveCustomers)
 			{
-				CustomerProjectViewModel customerResult = new CustomerProjectViewModel()
+				CustomerProjectViewModel customerResult = new CustomerProjectViewModel
 				{
-					CustomerInfo = new CustomerProjectViewModel.CustomerViewModel()
+					CustomerInfo = new CustomerProjectViewModel.CustomerViewModel
 					{
 						CustomerId = currentCustomer.CustomerId,
 						CustomerName = currentCustomer.CustomerName,
@@ -198,7 +198,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				CanEdit = canEditProjects,
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subName,
-				UserId = this.AppService.UserContext.UserId
+				UserId = AppService.UserContext.UserId
 			};
 		}
 
@@ -225,7 +225,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				int daysLeftInWeek = (int)today.DayOfWeek < startOfWeek
 					? startOfWeek - (int)today.DayOfWeek - 1
-					: (6 - (int)today.DayOfWeek) + startOfWeek;
+					: 6 - (int)today.DayOfWeek + startOfWeek;
 
 				date = today.AddDays(daysLeftInWeek);
 			}

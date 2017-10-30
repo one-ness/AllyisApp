@@ -4,14 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using AllyisApps.Services.Auth;
-using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Auth;
 
@@ -29,17 +25,17 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>Manage Page.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		async public Task<ActionResult> EditOrg(EditOrganizationViewModel model)
+		public async Task<ActionResult> EditOrg(EditOrganizationViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
-				await this.AppService.UpdateOrganization(model.OrganizationId, model.OrganizationName, model.SiteUrl, model.AddressId, model.Address, model.City, model.SelectedStateId, model.SelectedCountryCode, model.PostalCode, model.PhoneNumber, model.FaxNumber, null);
+				await AppService.UpdateOrganization(model.OrganizationId, model.OrganizationName, model.SiteUrl, model.AddressId, model.Address, model.City, model.SelectedStateId, model.SelectedCountryCode, model.PostalCode, model.PhoneNumber, model.FaxNumber, null);
 				Notifications.Add(new BootstrapAlert(@Resources.Strings.OrganizationDetailsUpdated, Variety.Success));
-				return this.RedirectToAction(ActionConstants.OrganizationDetails, ControllerConstants.Account, new { id = model.OrganizationId });
+				return RedirectToAction(ActionConstants.OrganizationDetails, ControllerConstants.Account, new { id = model.OrganizationId });
 			}
 
 			// Model is invalid, try again
-			return this.View(model);
+			return View(model);
 		}
 
 		/// <summary>
@@ -48,12 +44,12 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		/// <param name="id">The organization id.</param>
 		[HttpGet]
-		async public Task<ActionResult> EditOrg(int id)
+		public async Task<ActionResult> EditOrg(int id)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
-			bool canDelete = this.AppService.CheckOrgAction(AppService.OrgAction.DeleteOrganization, id, false);
-			var organization = await this.AppService.GetOrganization(id);
-			var model = new EditOrganizationViewModel()
+			AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
+			bool canDelete = AppService.CheckOrgAction(AppService.OrgAction.DeleteOrganization, id, false);
+			var organization = await AppService.GetOrganization(id);
+			var model = new EditOrganizationViewModel
 			{
 				OrganizationId = organization.OrganizationId,
 				OrganizationName = organization.OrganizationName,
@@ -69,11 +65,11 @@ namespace AllyisApps.Controllers.Auth
 				FaxNumber = organization.FaxNumber,
 				CanDelete = canDelete,
 				EmployeeId = "value",//Value needed for model TODO: Seperate Edit and Create
-				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
-				LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService, organization.Address?.CountryCode ?? string.Empty)
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
+				LocalizedStates = ModelHelper.GetLocalizedStates(AppService, organization.Address?.CountryCode ?? string.Empty)
 			};
 
-			return this.View(model);
+			return View(model);
 		}
 	}
 }
