@@ -105,12 +105,12 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets or sets a value indicating whether or not the entry has been locked due to business rules (approval) or date locking.
 		/// </summary>
-		public bool IsLocked { get; set; }
+		public bool IsLockedOld { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating the lock date for this time entry's organization and user.
 		/// </summary>
-		public int LockDate { get; set; } // Note: this must be an int and not a DateTime for correct, culture-independant serialization/deserialization
+		public int LockDateOld { get; set; } // Note: this must be an int and not a DateTime for correct, culture-independant serialization/deserialization
 
 		/// <summary>
 		/// Gets or sets a value indicating whether or not the entry has ever been locked due to business rules (approval) or date locking.
@@ -166,6 +166,11 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// On Create of new record.
 		/// </summary>
 		public bool IsCreated { get; set; } = false;
+
+		/// <summary>
+		/// Gets or sets value for whether the time entry is locked or not
+		/// </summary>
+		public bool IsLocked { get; set; }
 	}
 
 	/// <summary>

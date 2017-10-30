@@ -158,7 +158,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Duration = durationResult.Value,
 				Description = model.Description,
 				ApprovalState = (int)ApprovalState.NoApprovalState,
-				IsLockSaved = (model.ApprovalState == (int)ApprovalState.Approved || model.Date <= model.LockDate || model.IsProjectDeleted || model.IsLockSaved) && !canManage
+				IsLockSaved = (model.ApprovalState == (int)ApprovalState.Approved || model.Date <= model.LockDateOld || model.IsProjectDeleted || model.IsLockSaved) && !canManage
 			});
 		}
 
@@ -183,7 +183,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Duration = string.Format("{0:D2}:{1:D2}", (int)entry.Duration, (int)Math.Round((entry.Duration - (int)entry.Duration) * MinutesInHour, 0)),
 				Description = entry.Description,
 				IsLockSaved = entry.IsLockSaved,
-				LockDate = lockDate == null ? -1 : Utility.GetDaysFromDateTime(lockDate.Value),
+				LockDateOld = lockDate == null ? -1 : Utility.GetDaysFromDateTime(lockDate.Value),
 				IsManager = AppService.GetProductRoleForUser(ProductNameConstants.TimeTracker, entry.UserId, AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId) == "Manager"
 			};
 		}

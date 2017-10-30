@@ -21,7 +21,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets or sets the lock date for the entry. Note: must be int and not DateTime for Json serialization to work correctly in different cultures.
 		/// </summary>
-		public int LockDate { get; set; }
+		public int LockDateOld { get; set; }
 
 		/// <summary>
 		/// Gets the list of entries, start and end dates, and user/org id's.
@@ -36,7 +36,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets or sets the subscription Id for the Organization.
 		/// </summary>
-		public int Subscriptionid { get; set; }
+		public int SubscriptionId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the subscription Name for the Organizations subscription.
@@ -81,24 +81,12 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets a value indicating the number of users per page to be displayed.
 		/// </summary>
-		public int PageUserSize
-		{
-			get
-			{
-				return PageUserLimit;
-			}
-		}
+		public int PageUserSize => PageUserLimit;
 
 		/// <summary>
 		/// Gets a value indicating the number of pages of users to be displayed.
 		/// </summary>
-		public int UserPageCount
-		{
-			get
-			{
-				return (int)Math.Ceiling(TotalUsers / (double)PageUserLimit);
-			}
-		}
+		public int UserPageCount => (int)Math.Ceiling(TotalUsers / (double)PageUserLimit);
 
 		/// <summary>
 		/// Gets start of week for an Organization.
@@ -114,6 +102,16 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Gets or sets the type of product.
 		/// </summary>
 		public int ProductRole { get; set; }
+
+		/// <summary>
+		/// Gets or sets the lock date for the time entries -- null lock date means no entries are locked
+		/// </summary>
+		public DateTime? LockDate { get; set; }
+
+		/// <summary>
+		/// Gets or sets the payroll process date for time entries -- null payroll process date means no entries are payroll processed
+		/// </summary>
+		public DateTime? PayrollProcessedDate { get; set; }
 
 		/// <summary>
 		/// Users for Time Entries.

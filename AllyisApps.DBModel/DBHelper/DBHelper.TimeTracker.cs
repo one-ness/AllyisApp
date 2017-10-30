@@ -547,7 +547,8 @@ namespace AllyisApps.DBModel
 					parameters,
 					commandType: CommandType.StoredProcedure);
 
-				return Tuple.Create(results.Read<SettingDBEntity>().SingleOrDefault(),
+				return Tuple.Create(
+					results.Read<SettingDBEntity>().Single(),
 					results.Read<PayClassDBEntity>().ToList(),
 					results.Read<HolidayDBEntity>().ToList(),
 					results.Read<ProjectDBEntity>().ToList(),

@@ -8,28 +8,28 @@
 	Layout = "~/Areas/TimeTracker/Views/Shared/_TimeTrackerSidebar.cshtml";
 	ViewData["IsManager"] = Model.CanManage;
 	ViewData["UserId"] = Model.EntryRange.UserId;
-	ViewData["SubscriptionId"] = Model.Subscriptionid;
+	ViewData["SubscriptionId"] = Model.SubscriptionId;
 	ViewData["SubscriptionName"] = Model.SubscriptionName;
 }
 
+
 <div class="row">
-	@using (Html.BeginForm("TimeTrackerDatePickerRedirect", ControllerConstants.TimeEntry, FormMethod.Get, htmlAttributes: new { @class = "form-inline col-xs-12", @style = "margin-bottom: 20px;" }))
+	@using (Html.BeginForm("TimeTrackerDatePickerRedirect", ControllerConstants.TimeEntry, FormMethod.Get, new { @class = "form-inline col-xs-12", @style = "margin-bottom: 20px;" }))
 	{
 		@*<input id="UserId" name="UserId" type="hidden" value="@Model.EntryRange.UserId" />*@
 		<input id="StartDate" name="startDate" type="hidden" value="@Model.EntryRange.StartDate" />
 		<input id="EndDate" name="endDate" type="hidden" value="@Model.EntryRange.EndDate" />
 		<div class="form-group pull-left">
-			<a href="@Url.Action(ActionConstants.Export, ControllerConstants.TimeEntry, routeValues: new
+			<a href="@Url.Action(ActionConstants.Export, ControllerConstants.TimeEntry, new
 				{
-					subscriptionId = Model.Subscriptionid,
+					subscriptionId = Model.SubscriptionId,
 					userId = Model.EntryRange.UserId,
 					startingDate = Model.EntryRange.StartDate,
 					endingDate = Model.EntryRange.EndDate
 				})">
-				@*<input type="button" value="Export" class="btn btn-primary">*@
-				<span c>
-					@*<input type="button" value="Export" class="btn btn-primary">*@
+				<span>
 					<span class="btn btn-primary" style="margin-right: 15px;">@Strings.Export</span>
+				</span>
 			</a>
 		</div>
 		<!-- Temp fix for Users button for smaller viewports -->
@@ -45,31 +45,31 @@
 					@if (ViewBag.SelectedUserId == ViewBag.SignedInUserID)
 					{
 						<a class="btn btn-primary" title="@Strings.Previous"
-						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.Subscriptionid, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
+						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.SubscriptionId, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
 							<i class="fa fa-chevron-left"></i>
 						</a>
 						<a class="btn btn-primary" title="@Strings.Current"
-						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.Subscriptionid, startDate = ViewBag.WeekStart, endDate = ViewBag.WeekEnd })">
+						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.SubscriptionId, startDate = (int) ViewBag.WeekStart, endDate = (int) ViewBag.WeekEnd })">
 							<i class="glyphicon glyphicon-flash"></i>
 						</a>
 						<a class="btn btn-primary" title="@Strings.Next"
-						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.Subscriptionid, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
+						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.SubscriptionId, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
 							<i class="fa fa-chevron-right"></i>
 						</a>
 					}
 					else
 					{
 						<a class="btn btn-primary" title="@Strings.Previous"
-						   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.Subscriptionid, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
+						   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.SubscriptionId, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
 							<i class="fa fa-chevron-left"></i>
 						</a>
 						<a class="btn btn-primary" title="@Strings.Current"
-						   href="@Url.Action(ActionConstants.Index, routeValues: new {  subscriptionId = Model.Subscriptionid, userId = ViewBag.SelectedUserId,  startDate = ViewBag.WeekStart, endDate = ViewBag.WeekEnd })">
+						   href="@Url.Action(ActionConstants.Index, new {  subscriptionId = Model.SubscriptionId, userId = ViewBag.SelectedUserId,  startDate = (int) ViewBag.WeekStart, endDate = (int) ViewBag.WeekEnd })">
 							<i class="glyphicon glyphicon-flash"></i>
 						</a>
 
 						<a class="btn btn-primary" title="@Strings.Next"
-						   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.Subscriptionid, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
+						   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.SubscriptionId, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
 							<i class="fa fa-chevron-right"></i>
 						</a>
 					}
@@ -146,12 +146,10 @@
 			</div>
 			<div id="viewasuser-list" class="list-group allyis-search" style="max-height: 50vh; overflow-y: auto;">
 				@{ var count = 0;
-					var pageCount = 1;
-					var hide = "";
 					foreach (var user in Model.Users)
 					{
-						pageCount = 1 + count / Model.PageUserSize;
-						hide = "flex"; // All are originally shown so that the widths get calculated correctly (accounting for scroll bar). Pages after page 1 are then hidden when page loads.
+						int pageCount = 1 + count / Model.PageUserSize;
+						const string hide = "flex";
 
 						string active = "";
 						var resetBackground = "this.style.backgroundColor=\"#FFFFFF\"";
@@ -160,13 +158,16 @@
 							active = "list-group-item-info";
 							resetBackground = "this.style.backgroundColor=\"#d9edf7\"";
 						}
-						<div data-page="@pageCount" class="@(active)"
-							 onmouseover='this.style.backgroundColor="#c4e3f3"' onmouseout="@resetBackground"
+						<div data-page="@pageCount"
+							 class="@(active)"
+							 onmouseover='this.style.backgroundColor="#c4e3f3"'
+							 onmouseout="@resetBackground"
 							 style="width: 100%; display: @hide; justify-content: flex-end;">
 							@if (user.UserId == ViewBag.SignedInUserID)
 							{
-								<a class="col-xs-11 text-left" data-search="@user.Email"
-								   href="@Url.Action(ActionConstants.IndexNoUserId, routeValues: new
+								<a class="col-xs-11 text-left"
+								   data-search="@user.Email"
+								   href="@Url.Action(ActionConstants.IndexNoUserId, new
 								{
 									startDate = Model.EntryRange.StartDate,
 									endDate = Model.EntryRange.EndDate
@@ -178,7 +179,7 @@
 							else
 							{
 								<a class="col-xs-11 text-left" data-search="@user.Email"
-								   href="@Url.Action(ActionConstants.Index, routeValues: new
+								   href="@Url.Action(ActionConstants.Index, new
 								{
 									userId = user.UserId,
 									startDate = Model.EntryRange.StartDate,
@@ -188,8 +189,8 @@
 									@user.FirstName @user.LastName
 								</a>
 							}
-							<a href="@Url.Action(ActionConstants.UserEdit, routeValues: new {
-								subscriptionId = Model.Subscriptionid,
+							<a href="@Url.Action(ActionConstants.UserEdit, new {
+								subscriptionId = Model.SubscriptionId,
 								userId = user.UserId })"
 							   style="text-decoration: none; color: #0066AA; padding-right:5%" title="Assign Projects to User"><i class="fa fa-cog"></i></a>
 						</div>count++;
@@ -213,7 +214,7 @@
 	{
 		<div class="panel panel-info" style="background-color: #f5f5f5;">
 			<div class="panel-heading"><span class="panel-title">@Strings.Upload</span></div>
-			@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.TimeEntry, new { subscriptionid = Model.Subscriptionid }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+			@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.TimeEntry, new { subscriptionid = Model.SubscriptionId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
 			{
 				@Html.AntiForgeryToken();
 				<div>
@@ -223,7 +224,7 @@
 						   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
 				</div>
 				@*<div style="width:70%; margin:0 auto">*@
-				<div id="footUpload" style="background-color:#f5f5f5; display: flex; justify-content: space-around; flex-wrap: wrap; padding-bottom: 0px; float:right; margin-top: 10px;">
+				<div id="footUpload" style="background-color:#f5f5f5; display: flex; justify-content: space-around; flex-wrap: wrap; padding-bottom: 0; float:right; margin-top: 10px;">
 					<a class="btn btn-primary" onclick="$('input[id=upload-box]').click();" title="Choose Excel file containing Time Tracker entries">@Strings.ChooseFile</a>
 					<input type="submit" style="margin-left: 3px; margin-right: 3px;" id="upload-button" value="@Strings.Upload" class="btn btn-primary" title="Upload Excel Time Tracker entries" />
 				</div>
@@ -253,7 +254,7 @@
 	<script type="text/javascript">
 		var model_startdate = @Model.EntryRange.StartDate;
 		var model_enddate = @Model.EntryRange.EndDate;
-		var model_lockdate = @Model.LockDate;
+		@* var model_lockdate = @Model.LockDateOld; //unused old lockdate *@
 		var pageSize = @Model.PageUserSize;
 		var page_container_id = "viewasuser-list";
 		var page_item_tag = "div";
@@ -304,7 +305,7 @@
 			result.StartingDate = @(Model.EntryRange.StartDate);
 			result.EndingDate = @(Model.EntryRange.EndDate);
 			result.Entries = data;
-			result.SubscriptionId = @(Model.Subscriptionid);
+			result.SubscriptionId = @(Model.SubscriptionId);
 			var datajson = JSON.stringify(result);
 
 			$(document.createElement("input")).attr({ "type": "hidden", "name": "data", "value": datajson }).appendTo(form);
