@@ -426,3 +426,11 @@ a:hover, a:focus {
 	overflow: hidden;
 	display: none;
 }
+
+.table-row .offDay {
+	background-color: #f2dede;
+}
+
+.offDay .form-control {
+	background-color: #f2dede;
+}
