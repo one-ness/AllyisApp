@@ -11,7 +11,7 @@
 	//string editUrl = Url.Action(ActionConstants.EditTimeEntryJson);
 	//string submitFunction = "ProjectId.value=ProjectIdDdl.value;PayClassId.value=PayClassNameDdl.value;return ajaxEditOrCreate(this, \"" + createUrl + "\", \"" + editUrl + "\")";
 	string extrastyle = create ? "create" : string.Empty;
-	string hiddensample = Model.Hidden || Model.IsLocked && Model.Sample ? "hidden-sample" : string.Empty;
+	string hiddensample = Model.Hidden ? "hidden-sample" : string.Empty;
 	string approvalClass = Model.ModSinceApproval ? "pending" :
 					  Model.ApprovalState == (int)ApprovalState.NotApproved ? "rejected" :
 					  Model.ApprovalState == (int)ApprovalState.Approved ? "approved" : string.Empty;

@@ -140,7 +140,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var infos = await AppService.GetTimeEntryIndexInfo(orgId, startingDateTime, endingDateTime, userId);
 			int startOfWeek = infos.Item1.StartOfWeek;
 			DateTime startDate = AppService.SetStartingDate(startingDateTime, startOfWeek);
-			DateTime endDate = SetEndingDate(startOfWeek);
+			DateTime endDate = endingDateTime ?? SetEndingDate(startOfWeek);
 
 			// Get all of the projects and initialize their total hours to 0.
 			IList<CompleteProject> allProjects = infos.Item4; // Must also grab inactive projects, or the app will crash if a user has an entry on a project he is no longer a part of
