@@ -135,24 +135,15 @@ namespace AllyisApps.Controllers.Auth
 					}
 
 					// update the subscription roles
-					if(subRoles.Count <= 0) await this.AppService.UpdateSubscriptionUserRoles(model.UserId, subRoles);
+					if (subRoles.Count <= 0) await this.AppService.UpdateSubscriptionUserRoles(model.UserId, subRoles);
 					return RedirectToAction(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { @id = model.OrganizationId });
 				}
 			}
 
 			// error, copy values from existing model
-			var newModel = await ConstructViewModel(model.OrganizationId, model.UserId);
-			newModel.SelectedOrganizationRoleId = model.SelectedOrganizationRoleId;
-			foreach (var item in model.SubscriptionRoles)
-			{
-				var sub = newModel.SubscriptionRoles.Where(x => x.SubscriptionId == item.SubscriptionId).FirstOrDefault();
-				if (sub != null)
-				{
-					sub.SelectedRoleId = item.SelectedRoleId;
-				}
-			}
 
-			return View(model);
+
+			return RedirectToAction("EditMember", new { id = model.OrganizationId, userid = model.UserId });
 		}
 	}
 }

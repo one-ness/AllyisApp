@@ -317,7 +317,9 @@ namespace AllyisApps.Services
 			{
 				int subId = item.Key;
 				int roleId = item.Value;
-				CheckSubscriptionAction(OrgAction.EditSubscriptionUser, subId, out int orgId);
+				
+				
+				await CheckSubscriptionAction(OrgAction.EditSubscriptionUser, subId);
 				await DBHelper.UpdateSubscriptionUserProductRole(roleId, subId, userId);
 			}
 		}
@@ -384,7 +386,7 @@ namespace AllyisApps.Services
 		{
 			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException(nameof(subscriptionId));
 
-			CheckSubscriptionAction(OrgAction.ReadSubscription, subscriptionId, out int orgId);
+			await CheckSubscriptionAction(OrgAction.ReadSubscription, subscriptionId);
 
 			// get from db
 			var sub = await DBHelper.GetSubscriptionDetailsById(subscriptionId);

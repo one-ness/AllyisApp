@@ -7,6 +7,7 @@
 using System;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Services
 {
@@ -145,14 +146,22 @@ namespace AllyisApps.Services
 			return result;
 		}
 
-		public bool CheckSubscriptionAction(OrgAction action, int subscriptionId, out int organizationId, bool throwException = true)
+		public async Task<bool> CheckSubscriptionAction(OrgAction action, int subscriptionId, bool throwException = true)
 		{
 			bool result = false;
-			organizationId = 0;
+			int organizationId = 0;
 
+
+			//Reduce database lookup 
 			if (UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out UserContext.SubscriptionAndRole sar))
 			{
 				organizationId = sar.OrganizationId;
+				result = CheckOrgAction(action, organizationId, throwException);
+			}
+			else
+			{
+				var sub = await DBHelper.GetSubscriptionDetailsById(subscriptionId);
+				organizationId = sub.OrganizationId;
 				result = CheckOrgAction(action, organizationId, throwException);
 			}
 

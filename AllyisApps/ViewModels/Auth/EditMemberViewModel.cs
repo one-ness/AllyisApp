@@ -94,7 +94,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// list of org roles
 		/// </summary>
 		[Display(Name ="Organization Role")]
-		[Required]
+		
 		public Dictionary<int, string> OrgRolesList { get; set; }
 
 		/// <summary>
@@ -125,7 +125,6 @@ namespace AllyisApps.ViewModels.Auth
 			/// <summary>
 			/// list of role ids and names for the dropdown
 			/// </summary>
-			[Required]
 			public Dictionary<int, string> RoleList { get; set; }
 
 			/// <summary>

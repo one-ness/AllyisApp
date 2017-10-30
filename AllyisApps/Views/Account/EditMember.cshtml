@@ -18,38 +18,47 @@
 			<tr>
 				<td><label>@Strings.Email</label></td>
 				<td>@Html.DisplayFor(m => m.Email)</td>
+                @Html.HiddenFor(m=> m.Email)
 			</tr>
 			<tr>
 				<td><label>@Strings.FirstName</label></td>
 				<td>@Html.DisplayFor(m => m.FirstName)</td>
+                @Html.HiddenFor(m => m.FirstName)
 			</tr>
 			<tr>
 				<td><label>@Strings.LastName</label></td>
 				<td>@Html.DisplayFor(m => m.LastName)</td>
+                @Html.HiddenFor(m => m.LastName)
 			</tr>
 			<tr>
 				<td><label>@Strings.DateOfBirth</label></td>
 				<td>@Html.DisplayFor(m => m.DateOfBirth)</td>
+                @Html.HiddenFor(m => m.DateOfBirth)
 			</tr>
 			<tr>
 				<td><label>@Strings.PhoneNumber</label></td>
 				<td>@Html.DisplayFor(m => m.PhoneNumber)</td>
+                @Html.HiddenFor(m => m.PhoneNumber)
 			</tr>
 			<tr>
 				<td><label>@Strings.Address</label></td>
 				<td>@Html.DisplayFor(m => m.Address)</td>
+                @Html.HiddenFor(m => m.Address)
 			</tr>
 			<tr>
 				<td><label>@Strings.City</label></td>
 				<td>@Html.DisplayFor(m => m.City)</td>
+                @Html.HiddenFor(m => m.City)
 			</tr>
 			<tr>
 				<td><label>@Strings.State</label></td>
 				<td>@Html.DisplayFor(m => m.StateName)</td>
+                @Html.HiddenFor(m => m.StateName)
 			</tr>
 			<tr>
 				<td><label>@Strings.Country</label></td>
 				<td>@Html.DisplayFor(m => m.CountryName)</td>
+                @Html.HiddenFor(m => m.CountryName)
 			</tr>
 			@if (Model.CanEditMember)
 			{
@@ -74,7 +83,7 @@
 					</td>
 					<td>
 						<div class="role-drop-down">
-							@Html.HiddenFor(m => m.OrgRolesList)
+							
 							@Html.DropDownListFor(m => m.SelectedOrganizationRoleId, new SelectList(Model.OrgRolesList, "Key", "Value"), new { @class = "form-control" })
 						</div>
 					</td>
