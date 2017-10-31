@@ -55,6 +55,7 @@ namespace AllyisApps.Controllers.Auth
 			var subs = await AppService.GetSubscriptionsAsync(model.OrganizationId);
 			foreach (var item in subs)
 			{
+				// note: selectedRoleId = 0 means Unassigned or NotInProduct
 				int selectedRoleId = 0;
 				var sub = user.Subscriptions.Where(x => x.SubscriptionId == item.SubscriptionId).FirstOrDefault();
 				if (sub != null)
@@ -129,6 +130,7 @@ namespace AllyisApps.Controllers.Auth
 					List<int> removedSubRole = new List<int>();
 					foreach (var item in model.SubscriptionRoles)
 					{
+						// note: selectedRoleId = 0 means Unassigned or NotInProduct
 						if (item.SelectedRoleId > 0)
 						{
 							//role changed
@@ -146,18 +148,18 @@ namespace AllyisApps.Controllers.Auth
 					{
 						await this.AppService.UpdateSubscriptionUserRoles(model.UserId, changedsubRoles);
 					}
+
 					foreach (var subtoRemove in removedSubRole)
 					{
 						await this.AppService.DeleteSubscriptionUser(subtoRemove, model.UserId);
 					}
+
 					return RedirectToAction(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { @id = model.OrganizationId });
 				}
 			}
 
 			// TODO: copy values from existing model
 			return View(model);
-			//return RedirectToAction("EditMember", new { id = model.OrganizationId, userid = model.UserId });
-
 		}
 	}
 }

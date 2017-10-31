@@ -5,7 +5,6 @@
 
 @if (Model.CanEditMember)
 {
-    //@Html.BeginForm(ActionConstants.EditMember, ControllerConstants.Account)
 	@:<form action="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account)" method="post">
 	@Html.AntiForgeryToken()
 	@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
