@@ -304,7 +304,7 @@ namespace AllyisApps.Services
 		/// get user
 		/// - address, organizations, subscriptions and invitations
 		/// </summary>
-		public async Task<User> GetUserAsync(int userId, int organizationId = 0)
+		public async Task<User> GetUserAsync(int userId, int organizationId = 0, OrgAction actionContext = OrgAction.ReadUser)
 		{
 			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId));
 
@@ -410,7 +410,7 @@ namespace AllyisApps.Services
 					// yes, does the logged in user have readuser permission in at least one of them?
 					foreach (int item in orgIds)
 					{
-						permFound = CheckOrgAction(OrgAction.ReadUser, item, false);
+						permFound = CheckOrgAction(actionContext, item, false);
 					}
 
 					if (!permFound)
@@ -430,7 +430,7 @@ namespace AllyisApps.Services
 					}
 
 					// yes, check the logged in user's permission
-					CheckOrgAction(OrgAction.ReadUser, organizationId);
+					CheckOrgAction(actionContext, organizationId);
 				}
 			}
 

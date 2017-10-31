@@ -14,6 +14,7 @@ using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Auth;
+using static AllyisApps.Services.AppService;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -33,10 +34,12 @@ namespace AllyisApps.Controllers.Auth
 
 		private async Task<EditMemberViewModel> ConstructViewModel(int orgId, int userId)
 		{
-			User user = await AppService.GetUserAsync(userId); // this call makes sure that both logged in user and userId have at least one common org
+			User user = await AppService.GetUserAsync(userId, orgId, OrgAction.ReadOrganization); // this call makes sure that both logged in user and userId have at least one common org
 			var org = user.Organizations.Where(x => x.OrganizationId == orgId).FirstOrDefault();
 			var model = new EditMemberViewModel();
+
 			model.CanEditMember = AppService.CheckOrgAction(AppService.OrgAction.EditUser, orgId, false);
+
 			model.Address = user.Address?.Address1;
 			model.City = user.Address?.City;
 			model.CountryName = user.Address?.CountryName;
@@ -52,7 +55,7 @@ namespace AllyisApps.Controllers.Auth
 			model.PostalCode = user.Address?.PostalCode;
 
 			// get all subscriptions of this organization, get a list of roles for each subscription and user's role in each subscription
-			var subs = await AppService.GetSubscriptionsAsync(model.OrganizationId);
+			var subs = await AppService.GetSubscriptionsAsync(model.OrganizationId, true);
 			foreach (var item in subs)
 			{
 				// note: selectedRoleId = 0 means Unassigned or NotInProduct

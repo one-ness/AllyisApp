@@ -41,11 +41,8 @@
                     <td class="col-md-2">@item.EmployeeId</td>
                     <td class="col-md-2">@item.FormattedJoinedDate</td>
                     <td class="col-md-1">@item.RoleName</td>
-                    <td class="col-md-1">
-                        @if (Model.CanEditUser)
-                        {
-                            <a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account, new { @id = Model.OrganizationId, @userId = item.UserId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a>
-                        }
+                    <td class="col-md-1"><a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account, new { @id = Model.OrganizationId, @userId = item.UserId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a>
+                        
                     </td>
                 </tr>}
         </table>
