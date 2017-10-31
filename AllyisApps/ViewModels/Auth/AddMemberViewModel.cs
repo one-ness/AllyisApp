@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
 namespace AllyisApps.ViewModels.Auth
@@ -52,46 +53,6 @@ namespace AllyisApps.ViewModels.Auth
 		public int OrgRoleSelection { get; set; }
 
 		/// <summary>
-		/// Flags if the organization has a subscription to expense tracker.
-		/// </summary>
-		public bool hasET { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Expense tracker role.
-		/// </summary>
-		public SelectList ETRoles { get; set; }
-
-		/// <summary>
-		/// Gets or sets the expense tracker selection value.
-		/// </summary>
-		public int etSelection { get; set; }
-
-		/// <summary>
-		/// Flags if the organization has a subscription to time tracker.
-		/// </summary>
-		public bool hasTT { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Time tracker roles
-		/// </summary>
-		public SelectList TTRoles { get; set; }
-
-		/// <summary>
-		/// Gets or sets the time tracker selection value.
-		/// </summary>
-		public int ttSelection { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Staffing manager roles.
-		/// </summary>
-		public SelectList SMRoles { get; set; }
-
-		/// <summary>
-		/// Gets or sets the staffing manager selection value.
-		/// </summary>
-		public int smSelection { get; set; }
-
-		/// <summary>
 		/// Gets or sets a value indicating whether to add as an owner.
 		/// </summary>
 		public bool AddAsOwner { get; set; }
@@ -102,13 +63,34 @@ namespace AllyisApps.ViewModels.Auth
 		public string orgName { get; internal set; }
 
 		/// <summary>
-		/// Gets or sets the name of the time tracker.
+		/// Gets or sets the subscription roles for the user.
 		/// </summary>
-		public string ttName { get; internal set; }
+		public List<RoleItem> SubscriptionRoles { get; set; }
+	}
+
+	/// <summary>
+	/// role of a user
+	/// </summary>
+	public class RoleItem
+	{
+		/// <summary>
+		/// Gets or sets the subscription name.
+		/// </summary>
+		public string SubscriptionName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the name of the expense tracker.
+		/// Gets or sets the selected role Id.
 		/// </summary>
-		public string etName { get; internal set; }
+		public int SelectedRoleId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the product Id.
+		/// </summary>
+		public int ProductId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the select list for dropdown menus.
+		/// </summary>
+		public List<SelectListItem> SelectList { get; set; }
 	}
 }

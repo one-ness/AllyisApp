@@ -32,43 +32,62 @@ namespace AllyisApps.Controllers.Auth
 			var model = new AddMemberViewModel();
 			model.OrganizationId = id;
 			model.EmployeeId = await AppService.GetNextEmployeeId(id);
-
-			var etSubInfo = AppService.GetProductSubscriptionInfo(id, SkuIdEnum.ExpenseTrackerBasic).SubscriptionInfo;
-			var ttSubInfo = AppService.GetProductSubscriptionInfo(id, SkuIdEnum.TimeTrackerBasic).SubscriptionInfo;
 			
-			model.hasET = etSubInfo != null ? true : false;
-			model.hasTT = ttSubInfo != null ? true : false;
-
 			List<SelectListItem> orgRoles = new List<SelectListItem>
 			{
 				new SelectListItem { Text = OrganizationRoleEnum.Member.ToString(), Value = "1"},
 				new SelectListItem { Text = OrganizationRoleEnum.Owner.ToString(), Value = "2" }
 			};
 
-			List<SelectListItem> etRoles = new List<SelectListItem>
-			{
-				new SelectListItem { Text = Strings.Unassigned, Value = "0"},
-				new SelectListItem { Text = Strings.User, Value = "1"},
-				new SelectListItem { Text = Strings.Manager, Value = "2"},
-				new SelectListItem { Text = Strings.SuperUser, Value = "4"},
-			};
-
-			List<SelectListItem> ttRoles = new List<SelectListItem>
-			{
-				new SelectListItem { Text = Strings.Unassigned, Value = "0"},
-				new SelectListItem { Text = Strings.User, Value = "1"},
-				new SelectListItem { Text = Strings.Manager, Value = "2"}
-			};
-
 			model.OrgRole = new SelectList(orgRoles, "Value", "Text", "1");
-			model.TTRoles = new SelectList(ttRoles, "Value", "Text", "0");
-			model.ETRoles = new SelectList(etRoles, "Value", "Text", "0");
+			model.SubscriptionRoles = new List<RoleItem>();
+			
+			var subs = await AppService.GetSubscriptionsAsync(model.OrganizationId);
+			foreach (var item in subs)
+			{
+				model.SubscriptionRoles.Add(new RoleItem()
+				{
+					ProductId = (int)item.ProductId,
+					SubscriptionName = item.SubscriptionName,
+					SelectList = GetSubRoles(item.SkuId)
+				});
+			}
 
 			model.orgName = "Organization"; //AppService.GetOrganization(id).Result.OrganizationName;
-			model.etName = etSubInfo == null ? null : etSubInfo.ProductName;
-			model.ttName = ttSubInfo == null ? null : ttSubInfo.ProductName;
 
 			return View(model);
+		}
+
+		private List<SelectListItem> GetSubRoles(SkuIdEnum skuId)
+		{
+			switch (skuId)
+			{
+				case SkuIdEnum.TimeTrackerBasic:
+					return new List<SelectListItem>
+					{
+						new SelectListItem { Text = Strings.Unassigned, Value = "0"},
+						new SelectListItem { Text = Strings.User, Value = "1"},
+						new SelectListItem { Text = Strings.Manager, Value = "2"}
+					};
+				case SkuIdEnum.ExpenseTrackerBasic:
+					return new List<SelectListItem>
+					{
+						new SelectListItem { Text = Strings.Unassigned, Value = "0"},
+						new SelectListItem { Text = Strings.User, Value = "1"},
+						new SelectListItem { Text = Strings.Manager, Value = "2"},
+						new SelectListItem { Text = Strings.SuperUser, Value = "4"},
+					};
+				case SkuIdEnum.StaffingManagerBasic:
+					return new List<SelectListItem>
+					{
+						new SelectListItem { Text = Strings.Unassigned, Value = "0"},
+						new SelectListItem { Text = Strings.User, Value = "1"},
+						new SelectListItem { Text = Strings.Manager, Value = "2"}
+					};
+				default:
+					break;
+			}
+			return null;
 		}
 
 		/// <summary>
@@ -90,9 +109,28 @@ namespace AllyisApps.Controllers.Auth
 						Url.Action(ActionConstants.Index, ControllerConstants.Account, null, protocol: Request.Url.Scheme) :
 						Url.Action(ActionConstants.Register, ControllerConstants.Account, null, protocol: Request.Url.Scheme);
 
-					string prodJson = string.Format("{{ \"" + (int)ProductIdEnum.TimeTracker + "\" : {0}, \"" + (int)ProductIdEnum.ExpenseTracker + "\" : {1}, \"" + (int)ProductIdEnum.StaffingManager + "\" : 0 }}", model.ttSelection, model.etSelection);
+					//string prodJson = "{{ "; //string.Format("{{ \"" + (int)ProductIdEnum.TimeTracker + "\" : {0}, \"" + (int)ProductIdEnum.ExpenseTracker + "\" : {1}, \"" + (int)ProductIdEnum.StaffingManager + "\" : 0 }}", model.ttSelection, model.etSelection);
 
-					int invitationId = await AppService.InviteUser(url, model.Email.Trim(), model.FirstName, model.LastName, model.OrganizationId, model.OrgRoleSelection == 2 ? OrganizationRoleEnum.Owner : OrganizationRoleEnum.Member, model.EmployeeId, prodJson);
+					//foreach (var role in model.SubscriptionRoles)
+					//{
+					//	prodJson += "\"" + role.ProductId + "\" : " + role.SelectedRoleId + ", ";
+					//}
+					//prodJson = prodJson.TrimEnd(new char[] { ' ', ',' });
+					//prodJson += " }}";
+
+					List<InvitationPermissionsJson> json = new List<InvitationPermissionsJson>();
+					foreach (var role in model.SubscriptionRoles)
+					{
+						json.Add(new InvitationPermissionsJson()
+						{
+							ProductId = role.ProductId,
+							ProductRoleId = role.SelectedRoleId
+						});
+					}
+
+					var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(json);
+
+					int invitationId = await AppService.InviteUser(url, model.Email.Trim(), model.FirstName, model.LastName, model.OrganizationId, model.OrgRoleSelection == 2 ? OrganizationRoleEnum.Owner : OrganizationRoleEnum.Member, model.EmployeeId, jsonString);
 
 					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Strings.UserEmailed, model.FirstName, model.LastName), Variety.Success));
 					return RedirectToAction(ActionConstants.OrganizationMembers, new { id = model.OrganizationId });

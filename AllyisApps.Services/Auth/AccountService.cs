@@ -88,26 +88,11 @@ namespace AllyisApps.Services
 
 			if (inviteInfo.ProductRolesJson != null)
 			{
-				JObject roleString = JObject.Parse(inviteInfo.ProductRolesJson);
-				int ttRole = extractRole(roleString, ProductIdEnum.TimeTracker, SkuIdEnum.TimeTrackerBasic);
-				var etRole = extractRole(roleString, ProductIdEnum.ExpenseTracker, SkuIdEnum.ExpenseTrackerBasic);
-				var smRole = extractRole(roleString, ProductIdEnum.StaffingManager, SkuIdEnum.StaffingManagerBasic);
+				List<InvitationPermissionsJson> roleString = Newtonsoft.Json.JsonConvert.DeserializeObject<List<InvitationPermissionsJson>>(inviteInfo.ProductRolesJson);
 
-				if (ttRole > 0)
+				foreach (var invite in roleString)
 				{
-					var result2 = await DBHelper.UpdateSubscriptionUserRoles(new List<int> { UserContext.UserId }, inviteInfo.OrganizationId, ttRole, (int)ProductIdEnum.TimeTracker);
-				}
-
-				if (etRole > 0)
-				{
-					var prodId = GetProductSubscriptionInfo(inviteInfo.OrganizationId, SkuIdEnum.ExpenseTrackerBasic).Product.ProductId;
-					var result3 = await DBHelper.UpdateSubscriptionUserRoles(new List<int> { UserContext.UserId }, inviteInfo.OrganizationId, etRole, (int)ProductIdEnum.ExpenseTracker);
-				}
-
-				if (smRole > 0)
-				{
-					var prodId = GetProductSubscriptionInfo(inviteInfo.OrganizationId, SkuIdEnum.StaffingManagerBasic).Product.ProductId;
-					var result4 = await DBHelper.UpdateSubscriptionUserRoles(new List<int> { UserContext.UserId }, inviteInfo.OrganizationId, smRole, (int)ProductIdEnum.StaffingManager);
+					await DBHelper.UpdateSubscriptionUserRoles(new List<int> { UserContext.UserId }, inviteInfo.OrganizationId, invite.ProductRoleId, invite.ProductId);
 				}
 			}
 
