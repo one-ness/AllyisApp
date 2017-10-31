@@ -35,7 +35,7 @@ namespace AllyisApps.Controllers.Auth
 
 			var etSubInfo = AppService.GetProductSubscriptionInfo(id, SkuIdEnum.ExpenseTrackerBasic).SubscriptionInfo;
 			var ttSubInfo = AppService.GetProductSubscriptionInfo(id, SkuIdEnum.TimeTrackerBasic).SubscriptionInfo;
-
+			
 			model.hasET = etSubInfo != null ? true : false;
 			model.hasTT = ttSubInfo != null ? true : false;
 
@@ -63,6 +63,10 @@ namespace AllyisApps.Controllers.Auth
 			model.OrgRole = new SelectList(orgRoles, "Value", "Text", "1");
 			model.TTRoles = new SelectList(ttRoles, "Value", "Text", "0");
 			model.ETRoles = new SelectList(etRoles, "Value", "Text", "0");
+
+			model.orgName = "Organization"; //AppService.GetOrganization(id).Result.OrganizationName;
+			model.etName = etSubInfo == null ? null : etSubInfo.ProductName;
+			model.ttName = ttSubInfo == null ? null : ttSubInfo.ProductName;
 
 			return View(model);
 		}
