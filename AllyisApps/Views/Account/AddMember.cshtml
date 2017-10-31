@@ -54,6 +54,8 @@
 								Text = role.Text
 							});
 						}
+						@Html.HiddenFor(x => x.SubscriptionRoles[i].ProductId);
+						@Html.HiddenFor(x => x.SubscriptionRoles[i].SubscriptionName);
 						<div class="form-group">
 							<div class="form-group col-md-6">
 								@Html.ReqLabelFor(x => Model.SubscriptionRoles[i], Model.SubscriptionRoles[i].SubscriptionName + " Role")

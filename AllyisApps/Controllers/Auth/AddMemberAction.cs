@@ -47,6 +47,7 @@ namespace AllyisApps.Controllers.Auth
 			{
 				model.SubscriptionRoles.Add(new RoleItem()
 				{
+					ProductId = (int)item.ProductId,
 					SubscriptionName = item.SubscriptionName,
 					SelectList = GetSubRoles(item.SkuId)
 				});
@@ -114,7 +115,7 @@ namespace AllyisApps.Controllers.Auth
 					{
 						prodJson += "\"" + role.ProductId + "\" : " + role.SelectedRoleId + ", ";
 					}
-					prodJson.TrimEnd(new char[] { ' ', ',' });
+					prodJson = prodJson.TrimEnd(new char[] { ' ', ',' });
 					prodJson += " }}";
 
 					int invitationId = await AppService.InviteUser(url, model.Email.Trim(), model.FirstName, model.LastName, model.OrganizationId, model.OrgRoleSelection == 2 ? OrganizationRoleEnum.Owner : OrganizationRoleEnum.Member, model.EmployeeId, prodJson);
