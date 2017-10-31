@@ -109,16 +109,28 @@ namespace AllyisApps.Controllers.Auth
 						Url.Action(ActionConstants.Index, ControllerConstants.Account, null, protocol: Request.Url.Scheme) :
 						Url.Action(ActionConstants.Register, ControllerConstants.Account, null, protocol: Request.Url.Scheme);
 
-					string prodJson = "{{ "; //string.Format("{{ \"" + (int)ProductIdEnum.TimeTracker + "\" : {0}, \"" + (int)ProductIdEnum.ExpenseTracker + "\" : {1}, \"" + (int)ProductIdEnum.StaffingManager + "\" : 0 }}", model.ttSelection, model.etSelection);
+					//string prodJson = "{{ "; //string.Format("{{ \"" + (int)ProductIdEnum.TimeTracker + "\" : {0}, \"" + (int)ProductIdEnum.ExpenseTracker + "\" : {1}, \"" + (int)ProductIdEnum.StaffingManager + "\" : 0 }}", model.ttSelection, model.etSelection);
 
+					//foreach (var role in model.SubscriptionRoles)
+					//{
+					//	prodJson += "\"" + role.ProductId + "\" : " + role.SelectedRoleId + ", ";
+					//}
+					//prodJson = prodJson.TrimEnd(new char[] { ' ', ',' });
+					//prodJson += " }}";
+
+					List<InvitationPermissionsJson> json = new List<InvitationPermissionsJson>();
 					foreach (var role in model.SubscriptionRoles)
 					{
-						prodJson += "\"" + role.ProductId + "\" : " + role.SelectedRoleId + ", ";
+						json.Add(new InvitationPermissionsJson()
+						{
+							ProductId = role.ProductId,
+							ProductRoleId = role.SelectedRoleId
+						});
 					}
-					prodJson = prodJson.TrimEnd(new char[] { ' ', ',' });
-					prodJson += " }}";
 
-					int invitationId = await AppService.InviteUser(url, model.Email.Trim(), model.FirstName, model.LastName, model.OrganizationId, model.OrgRoleSelection == 2 ? OrganizationRoleEnum.Owner : OrganizationRoleEnum.Member, model.EmployeeId, prodJson);
+					var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(json);
+
+					int invitationId = await AppService.InviteUser(url, model.Email.Trim(), model.FirstName, model.LastName, model.OrganizationId, model.OrgRoleSelection == 2 ? OrganizationRoleEnum.Owner : OrganizationRoleEnum.Member, model.EmployeeId, jsonString);
 
 					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Strings.UserEmailed, model.FirstName, model.LastName), Variety.Success));
 					return RedirectToAction(ActionConstants.OrganizationMembers, new { id = model.OrganizationId });

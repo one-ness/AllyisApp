@@ -75,4 +75,17 @@ namespace AllyisApps.Services.Auth
 		/// </summary>
 		public string OrganizationName { get; set; }
 	}
+
+	public class InvitationPermissionsJson
+	{
+		/// <summary>
+		/// Gets or sets the subscription Id.
+		/// </summary>
+		public int ProductId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the product role Id.
+		/// </summary>
+		public int ProductRoleId { get; set; }
+	}
 }
