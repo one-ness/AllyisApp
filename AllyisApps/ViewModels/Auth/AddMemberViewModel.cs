@@ -95,5 +95,20 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets a value indicating whether to add as an owner.
 		/// </summary>
 		public bool AddAsOwner { get; set; }
+
+		/// <summary>
+		/// Gets or sets the name of the organization.
+		/// </summary>
+		public string orgName { get; internal set; }
+
+		/// <summary>
+		/// Gets or sets the name of the time tracker.
+		/// </summary>
+		public string ttName { get; internal set; }
+
+		/// <summary>
+		/// Gets or sets the name of the expense tracker.
+		/// </summary>
+		public string etName { get; internal set; }
 	}
 }
