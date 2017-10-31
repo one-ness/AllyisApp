@@ -15,7 +15,7 @@
             <div><a href="@Url.Action(ActionConstants.ManageOrgPermissions, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default" title="@Strings.ManagePermissions">@Strings.ManagePermissions <i class="fa fa-fw fa-lock"></i></a></div>}
         @if (Model.CanAddUser)
         {
-            <div><a href="@Url.Action(ActionConstants.AddMember, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default" title="@Strings.AddMembers">@Strings.AddMembers <i class="fa fa-fw fa-user-plus"></i></a></div>}
+            <div><a href="@Url.Action(ActionConstants.AddMember, ControllerConstants.Account, new { organizationId = Model.OrganizationId })" class="btn btn-default" title="@Strings.AddMembers">@Strings.AddMembers <i class="fa fa-fw fa-user-plus"></i></a></div>}
     </div>
 </div>
 <div class="row">

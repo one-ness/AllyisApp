@@ -58,7 +58,7 @@ namespace AllyisApps.Controllers.Auth
 					else
 					{
 						Notifications.Add(new BootstrapAlert(Resources.Strings.FileFormatUnsupported, Variety.Danger));
-						return RedirectToAction(ActionConstants.AddMember, ControllerConstants.Account, new { id = id });
+						return RedirectToAction(ActionConstants.AddMember, ControllerConstants.Account, new { organizationId = id });
 					}
 
 					reader.IsFirstRowAsColumnNames = true;
@@ -67,7 +67,7 @@ namespace AllyisApps.Controllers.Auth
 					reader.Close();
 
 					string[] formattedResult = ImportMessageFormatter.FormatImportResult(await AppService.Import(result, organizationId: id,
-						inviteUrl: Url.Action(ActionConstants.Index, ControllerConstants.Account, null, protocol: Request.Url.Scheme)));
+						inviteUrl: Url.Action(ActionConstants.Index, ControllerConstants.Account, null, Request.Url.Scheme)));
 					if (!string.IsNullOrEmpty(formattedResult[0]))
 					{
 						Notifications.Add(new BootstrapAlert(formattedResult[0], Variety.Success));
@@ -81,7 +81,7 @@ namespace AllyisApps.Controllers.Auth
 					}
 
 					await Task.Delay(1);
-					return RedirectToAction(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { id = id });
+					return RedirectToAction(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { id });
 				}
 				else
 				{

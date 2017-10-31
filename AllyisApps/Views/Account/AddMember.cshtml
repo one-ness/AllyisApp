@@ -81,7 +81,7 @@
 				<label>@Strings.AddMultipleMembers</label>
 				@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Account, new { id = Model.OrganizationId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
 				{
-					@Html.AntiForgeryToken();
+					@Html.AntiForgeryToken()
 					<div>
 						<input type="file" id="upload-box" name="upload" style="display:none;"
 							   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
