@@ -118,6 +118,8 @@ namespace AllyisApps.DBModel
 			}
 		}
 
+		
+
 		/// <summary>Deletes the given users in the given organization's subscription</summary>
 		/// <param name="userIds">List of user Ids.</param>
 		/// <param name="organizationId">The Organization Id.</param>

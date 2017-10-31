@@ -158,8 +158,8 @@ namespace AllyisApps.Controllers.Auth
 				}
 			}
 
-			// TODO: copy values from existing model
-			return View(model);
+			return RedirectToAction("EditMember", new { id = model.OrganizationId, userid = model.UserId }); 
+			
 		}
 	}
 }
