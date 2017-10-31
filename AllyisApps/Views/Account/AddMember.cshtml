@@ -35,17 +35,6 @@
 					</div>
 				</div>
 				<div class="col-md-6 sm-control-width" style="margin-top: 30px;">
-					@foreach (var subscription in Model.Subscriptions)
-					{
-						<div class="form-group">
-							<div class="form-group col-md-6">
-								@Html.ReqLabelFor(x => subscription.Role, subscription.Name + " Role")
-							</div>
-							<div class="form-group col-md-6">
-								@Html.DropDownListFor(x => subscription.Selection, subscription.OrgRole, new { @class = "form-control" })
-							</div>
-						</div>
-					}
 					<div class="form-group">
 						<div class="form-group col-md-6">
 							@Html.ReqLabelFor(x => x.OrgRole, Model.orgName + " Role")
@@ -54,32 +43,52 @@
 							@Html.DropDownListFor(x => x.OrgRoleSelection, Model.OrgRole, new { @class = "form-control" })
 						</div>
 					</div>
-					<div class="form-group">
-						<div class="form-group col-md-6">
-							@if (Model.hasTT)
-							{ @Html.ReqLabelFor(x => x.TTRoles, Model.ttName + " Role") }
+					@for (int i = 0; i < Model.SubscriptionRoles.Count(); i++)
+					{
+						List<SelectListItem> roleList = new List<SelectListItem>();
+						foreach (var role in Model.SubscriptionRoles[i].SelectList)
+						{
+							roleList.Add(new SelectListItem()
+							{
+								Value = role.Value,
+								Text = role.Text
+							});
+						}
+						<div class="form-group">
+							<div class="form-group col-md-6">
+								@Html.ReqLabelFor(x => Model.SubscriptionRoles[i], Model.SubscriptionRoles[i].SubscriptionName + " Role")
+							</div>
+							<div class="form-group col-md-6">
+								@Html.DropDownListFor(x => Model.SubscriptionRoles[i].SelectedRoleId, roleList, new { @class = "form-control" })
+							</div>
 						</div>
-						<div class="form-group col-md-6">
-							@if (Model.hasTT)
-							{ @Html.DropDownListFor(x => x.ttSelection, Model.TTRoles, new { @class = "form-control" }) }
-						</div>
-					</div>
+						}
+						@*<div class="form-group">
+								<div class="form-group col-md-6">
+									@if (Model.hasTT)
+									{ @Html.ReqLabelFor(x => x.TTRoles, Model.ttName + " Role") }
+								</div>
+								<div class="form-group col-md-6">
+									@if (Model.hasTT)
+									{ @Html.DropDownListFor(x => x.ttSelection, Model.TTRoles, new { @class = "form-control" }) }
+								</div>
+							</div>
 
-					<div class="form-group">
-						<div class="form-group col-md-6">
-							@if (Model.hasET)
-							{ @Html.ReqLabelFor(x => x.ETRoles, Model.etName + " Role") }
+							<div class="form-group">
+								<div class="form-group col-md-6">
+									@if (Model.hasET)
+									{ @Html.ReqLabelFor(x => x.ETRoles, Model.etName + " Role") }
+								</div>
+								<div class="form-group col-md-6">
+									@if (Model.hasET)
+									{@Html.DropDownListFor(x => x.etSelection, Model.ETRoles, new { @class = "form-control" }) }
+								</div>
+							</div>*@
+						<div class="form-group allyis-action-buttons pull-right">
+							<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { @id = Model.OrganizationId })" class="btn btn-default">@Strings.Cancel</a>&nbsp;
+							<input type="submit" id="addMember" value="@Strings.Add" class="btn btn-primary" />
 						</div>
-						<div class="form-group col-md-6">
-							@if (Model.hasET)
-							{@Html.DropDownListFor(x => x.etSelection, Model.ETRoles, new { @class = "form-control" }) }
-						</div>
-					</div>
-					<div class="form-group allyis-action-buttons pull-right">
-						<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { @id = Model.OrganizationId })" class="btn btn-default">@Strings.Cancel</a>&nbsp;
-						<input type="submit" id="addMember" value="@Strings.Add" class="btn btn-primary" />
-					</div>
-				</div>
+</div>
 			</div>
 			<div class="row">
 				<div class="col-xs-12">

@@ -35,9 +35,7 @@ namespace AllyisApps.Controllers.Auth
 
 			var etSubInfo = AppService.GetProductSubscriptionInfo(id, SkuIdEnum.ExpenseTrackerBasic).SubscriptionInfo;
 			var ttSubInfo = AppService.GetProductSubscriptionInfo(id, SkuIdEnum.TimeTrackerBasic).SubscriptionInfo;
-			
-			model.hasET = etSubInfo != null ? true : false;
-			model.hasTT = ttSubInfo != null ? true : false;
+			var smSubInfo = AppService.GetProductSubscriptionInfo(id, SkuIdEnum.StaffingManagerBasic).SubscriptionInfo;
 
 			List<SelectListItem> orgRoles = new List<SelectListItem>
 			{
@@ -60,13 +58,32 @@ namespace AllyisApps.Controllers.Auth
 				new SelectListItem { Text = Strings.Manager, Value = "2"}
 			};
 
+			List<SelectListItem> smRoles = new List<SelectListItem>
+			{
+				new SelectListItem { Text = Strings.Unassigned, Value = "0"},
+				new SelectListItem { Text = Strings.User, Value = "1"},
+				new SelectListItem { Text = Strings.Manager, Value = "2"}
+			};
+
 			model.OrgRole = new SelectList(orgRoles, "Value", "Text", "1");
-			model.TTRoles = new SelectList(ttRoles, "Value", "Text", "0");
-			model.ETRoles = new SelectList(etRoles, "Value", "Text", "0");
+			model.SubscriptionRoles = new List<RoleItem>();
+			model.SubscriptionRoles.Add(new RoleItem()
+			{
+				SubscriptionName = etSubInfo.SubscriptionName,
+				SelectList = etRoles
+			});
+			model.SubscriptionRoles.Add(new RoleItem()
+			{
+				SubscriptionName = ttSubInfo.SubscriptionName,
+				SelectList = ttRoles
+			});
+			model.SubscriptionRoles.Add(new RoleItem()
+			{
+				SubscriptionName = smSubInfo.SubscriptionName,
+				SelectList = smRoles
+			});
 
 			model.orgName = "Organization"; //AppService.GetOrganization(id).Result.OrganizationName;
-			model.etName = etSubInfo == null ? null : etSubInfo.ProductName;
-			model.ttName = ttSubInfo == null ? null : ttSubInfo.ProductName;
 
 			return View(model);
 		}
@@ -90,7 +107,12 @@ namespace AllyisApps.Controllers.Auth
 						Url.Action(ActionConstants.Index, ControllerConstants.Account, null, protocol: Request.Url.Scheme) :
 						Url.Action(ActionConstants.Register, ControllerConstants.Account, null, protocol: Request.Url.Scheme);
 
-					string prodJson = string.Format("{{ \"" + (int)ProductIdEnum.TimeTracker + "\" : {0}, \"" + (int)ProductIdEnum.ExpenseTracker + "\" : {1}, \"" + (int)ProductIdEnum.StaffingManager + "\" : 0 }}", model.ttSelection, model.etSelection);
+					string prodJson = ""; //string.Format("{{ \"" + (int)ProductIdEnum.TimeTracker + "\" : {0}, \"" + (int)ProductIdEnum.ExpenseTracker + "\" : {1}, \"" + (int)ProductIdEnum.StaffingManager + "\" : 0 }}", model.ttSelection, model.etSelection);
+
+					foreach (var role in model.SubscriptionRoles)
+					{
+						prodJson += role.ProductId + "\" : " + role.;
+					}
 
 					int invitationId = await AppService.InviteUser(url, model.Email.Trim(), model.FirstName, model.LastName, model.OrganizationId, model.OrgRoleSelection == 2 ? OrganizationRoleEnum.Owner : OrganizationRoleEnum.Member, model.EmployeeId, prodJson);
 
