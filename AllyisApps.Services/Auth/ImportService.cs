@@ -866,13 +866,11 @@ namespace AllyisApps.Services
 					string duration = null;
 					string description = "";
 					string payclass = "Regular";
-					string timeEntryStatusString = null;
 
 					ReadColumn(row, ColumnHeaders.Date, val => date = val);
 					ReadColumn(row, ColumnHeaders.Duration, val => duration = val);
 					if (hasTTDescription) ReadColumn(row, ColumnHeaders.Description, val => description = val);
 					ReadColumn(row, ColumnHeaders.PayClass, val => payclass = val);
-					ReadColumn(row, ColumnHeaders.Status, val => timeEntryStatusString = val);
 
 					PayClass payClass = payClasses.SingleOrDefault(p => string.Equals(p.PayClassName, payclass, StringComparison.OrdinalIgnoreCase));
 					DateTime theDate;
@@ -880,13 +878,7 @@ namespace AllyisApps.Services
 
 					if (payClass == null)
 					{
-						result.TimeEntryFailures.Add(string.Format("Error importing time entry on sheet {0}, row {1}: unknown {2} ({3}).", table.TableName, table.Rows.IndexOf(row) + 2, ColumnHeaders.PayClass, payclass));
-						continue;
-					}
-
-					if (!Enum.TryParse(timeEntryStatusString, out TimeEntryStatus timeEntryStatus))
-					{
-						result.TimeEntryFailures.Add(string.Format("Error importing time entry on sheet {0}, row {1}: unknown {2} ({3}).", table.TableName, table.Rows.IndexOf(row) + 2, ColumnHeaders.Status, timeEntryStatusString));
+						result.TimeEntryFailures.Add($"Error importing time entry on sheet {table.TableName}, row {table.Rows.IndexOf(row) + 2}: unknown {ColumnHeaders.PayClass} ({payclass}).");
 						continue;
 					}
 
@@ -897,31 +889,32 @@ namespace AllyisApps.Services
 					}
 					catch (Exception)
 					{
-						result.TimeEntryFailures.Add(string.Format("Error importing time entry on sheet {0}, row {1}: bad date format ({2}).", table.TableName, table.Rows.IndexOf(row) + 2, date));
+						result.TimeEntryFailures.Add($"Error importing time entry on sheet {table.TableName}, row {table.Rows.IndexOf(row) + 2}: bad date format ({date}).");
 						continue;
 					}
 
 					if (!(theDuration = ParseDuration(duration)).HasValue)
 					{
-						result.TimeEntryFailures.Add(string.Format("You must enter the duration as HH:MM or H.HH format for the date {0}", theDate));
+						result.TimeEntryFailures.Add($"You must enter the duration as HH:MM or H.HH format for the date {theDate}");
 						continue;
 					}
 					if (ParseDuration(duration) == 0)
 					{
-						result.TimeEntryFailures.Add(string.Format("You must enter a time larger than 00:00 for the date {0}", theDate));
+						result.TimeEntryFailures.Add($"You must enter a time larger than 00:00 for the date {theDate}");
 						continue;
 					}
 
 					// Find existing entry. If none, create new one     TODO: See if there's a good way to populate this by sheet rather than by row, or once at the top
 					var entryGet = await DBHelper.GetTimeEntriesByUserOverDateRange(new List<int> { userInOrg.UserId }, orgId, theDate, theDate);
 					var entries = entryGet.ToList();
-					if (entries.Any(e => (e.Description == null && description.Equals("") || description.Equals(e.Description)) &&
-											e.Duration == theDuration && e.PayClassId == payClass.PayClassId &&
-											e.ProjectId == project.ProjectId)) continue;
+					if (entries.Any(e => (e.Description == null && description.Equals("") || description.Equals(e.Description))
+						&& e.Duration == theDuration
+						&& e.PayClassId == payClass.PayClassId
+						&& e.ProjectId == project.ProjectId)) continue;
 
 					if (entries.Select(e => e.Duration).Sum() + theDuration > 24)
 					{
-						result.TimeEntryFailures.Add(string.Format("Error importing time entry on sheet {0}, row {1}: cannot have more than 24 hours of work in one day.", table.TableName, table.Rows.IndexOf(row) + 2));
+						result.TimeEntryFailures.Add($"Error importing time entry on sheet {table.TableName}, row {table.Rows.IndexOf(row) + 2}: cannot have more than 24 hours of work in one day.");
 						continue;
 					}
 
@@ -936,10 +929,10 @@ namespace AllyisApps.Services
 						PayClassId = payClass.PayClassId,
 						ProjectId = project.ProjectId,
 						UserId = userInOrg.UserId,
-						TimeEntryStatusId = (int)timeEntryStatus
+						TimeEntryStatusId = (int)TimeEntryStatus.Pending //all time entries are submitted as pending and must go through the approval process
 					}) == -1)
 					{
-						result.TimeEntryFailures.Add(string.Format("Database error importing time entry on sheet {0}, row {1}.", table.TableName, table.Rows.IndexOf(row) + 2));
+						result.TimeEntryFailures.Add($"Database error importing time entry on sheet {table.TableName}, row {table.Rows.IndexOf(row) + 2}.");
 					}
 					else
 					{
@@ -1008,7 +1001,7 @@ namespace AllyisApps.Services
 					return row[fieldIdTo == 0 ? ColumnHeaders.UserEmail : ColumnHeaders.EmployeeId].ToString();
 				}
 
-				if (row[ColumnHeaders.UserFirstName].ToString() == "" || row[ColumnHeaders.UserLastName].ToString() == "")
+				if (row[ColumnHeaders.UserFirstName].ToString().Length == 0 || row[ColumnHeaders.UserLastName].ToString().Length == 0)
 				{
 					return null;
 				}

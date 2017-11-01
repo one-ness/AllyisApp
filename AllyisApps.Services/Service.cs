@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -418,19 +419,22 @@ namespace AllyisApps.Services
 		/// <param name="projectId">Project id to filter by.</param>
 		/// <param name="customerId">Customer id to filter by.</param>
 		/// <returns>The stream writer.</returns>
-		public async Task<StreamWriter> PrepareCSVExport(int orgId, List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
+		public async Task<StreamWriter> PrepareCSVExport(int orgId, List<int> userIds = null, DateTime? startingDate = null,
+			DateTime? endingDate = null, int projectId = 0, int customerId = 0)
 		{
 			// Preparing data
 			IEnumerable<TimeEntry> data = new List<TimeEntry>();
-			IEnumerable<CompleteProject> projects = new List<CompleteProject>();
+			List<CompleteProject> projects = new List<CompleteProject>();
 
 			if (userIds == null || userIds.Count == 0 || userIds[0] == -1)
 			{
-				data = await GetTimeEntriesOverDateRange(orgId, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1));
+				data = await GetTimeEntriesOverDateRange(orgId, startingDate ?? DateTime.MinValue.AddYears(1754),
+					endingDate ?? DateTime.MaxValue.AddYears(-1));
 			}
 			else
 			{
-				data = await GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1), orgId);
+				data = await GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754),
+					endingDate ?? DateTime.MaxValue.AddYears(-1), orgId);
 			}
 
 			if (projectId > 0)
@@ -442,35 +446,63 @@ namespace AllyisApps.Services
 				if (customerId > 0)
 				{
 					var proj = await GetProjectsByCustomer(customerId);
-					IEnumerable<int> customerProjects = proj.Select(p => p.ProjectId);
-					data = data.Where(t => customerProjects.Contains(t.ProjectId));
+					data = data.Where(t => proj.Select(p => p.ProjectId).Contains(t.ProjectId));
 				}
 			}
 
 			if (userIds != null && userIds.Count == 1 && userIds[0] > 0)
 			{
-				projects = await GetProjectsByUserAndOrganization(userIds[0], orgId, onlyActive: false);
+				projects = (await GetProjectsByUserAndOrganization(userIds[0], orgId, false)).ToList();
 			}
 			else
 			{
-				projects = GetProjectsByOrganization(orgId, false);
+				projects = GetProjectsByOrganization(orgId, false).ToList();
 			}
 
 			// Add default project in case there are holiday entries
-			List<CompleteProject> defaultProject = new List<CompleteProject>();
-			defaultProject.Add(GetProject(0));
-			projects = projects.Concat(defaultProject);
+			projects.Add(GetProject(0));
 
-			StreamWriter output = new StreamWriter(new MemoryStream());
-			output.WriteLine("\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\",\"{10}\",\"{11}\"", ColumnHeaders.UserLastName, ColumnHeaders.UserFirstName, ColumnHeaders.EmployeeId, ColumnHeaders.UserEmail, ColumnHeaders.Date, ColumnHeaders.Duration, ColumnHeaders.PayClass, ColumnHeaders.ProjectName, ColumnHeaders.ProjectId, ColumnHeaders.CustomerName, ColumnHeaders.CustomerId, ColumnHeaders.Description, ColumnHeaders.Status);
+			var output = new StreamWriter(new MemoryStream());
+			var columns = new[] {
+				ColumnHeaders.UserLastName,
+				ColumnHeaders.UserFirstName,
+				ColumnHeaders.EmployeeId,
+				ColumnHeaders.UserEmail,
+				ColumnHeaders.Date,
+				ColumnHeaders.Duration,
+				ColumnHeaders.PayClass,
+				ColumnHeaders.ProjectName,
+				ColumnHeaders.ProjectId,
+				ColumnHeaders.CustomerName,
+				ColumnHeaders.CustomerId,
+				ColumnHeaders.Description,
+				ColumnHeaders.Status
+			};
+			output.WriteLine("\"{0}\"", string.Join("\",\"", columns));
 
 			foreach (TimeEntry entry in data)
 			{
 				try
 				{
-					var project = projects.Where(x => x.ProjectId == entry.ProjectId).FirstOrDefault();
+					var project = projects.FirstOrDefault(x => x.ProjectId == entry.ProjectId);
 					if (project.ProjectId == 0) project = null;
-					output.WriteLine("\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\",\"{10}\",\"{11}\"", entry.LastName, entry.FirstName, entry.EmployeeId, entry.Email, entry.Date.ToShortDateString(), entry.Duration, entry.PayClassName, project != null ? (project.ProjectName ?? string.Empty) : string.Empty, project != null ? (project.ProjectOrgId ?? string.Empty) : string.Empty, project != null ? (project.owningCustomer.CustomerName ?? string.Empty) : string.Empty, project != null ? (project.owningCustomer.CustomerOrgId ?? string.Empty) : string.Empty, entry.Description, (TimeEntryStatus)entry.TimeEntryStatusId);
+					var rowData = new[]
+					{
+						entry.LastName,
+						entry.FirstName,
+						entry.EmployeeId,
+						entry.Email,
+						entry.Date.ToShortDateString(),
+						entry.Duration.ToString(CultureInfo.CurrentCulture),
+						entry.PayClassName,
+						project?.ProjectName ?? string.Empty,
+						project?.ProjectOrgId ?? string.Empty,
+						project?.owningCustomer?.CustomerName ?? string.Empty,
+						project?.owningCustomer?.CustomerOrgId ?? string.Empty,
+						entry.Description,
+						((TimeEntryStatus)entry.TimeEntryStatusId).ToString()
+					};
+					output.WriteLine("\"{0}\"", string.Join("\",\"", rowData));
 				}
 				catch (Exception ex)
 				{
@@ -487,12 +519,33 @@ namespace AllyisApps.Services
 		public StreamWriter PrepareExpenseCSVExport(int orgId, IEnumerable<ExpenseReport> reports, DateTime startDate, DateTime endDate)
 		{
 			StreamWriter output = new StreamWriter(new MemoryStream());
-
-			output.WriteLine("\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\"", "Expense Report Id", "Report Title", "Organization Id", "Submitted By", "Report Status", "Created On", "Modified On", "Submitted On");
+			var columns = new[]
+			{
+				"Expense Report Id",
+				"Report Title",
+				"Organization Id",
+				"Submitted By",
+				"Report Status",
+				"Created On",
+				"Modified On",
+				"Submitted On"
+			};
+			output.WriteLine("\"{0}\"", string.Join("\",\"", columns));
 
 			foreach (ExpenseReport report in reports)
 			{
-				output.WriteLine("\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\"", report.ExpenseReportId, report.ReportTitle, report.OrganizationId, report.SubmittedById, report.ReportStatus, report.CreatedUtc, report.ModifiedUtc, report.SubmittedUtc);
+				var rowData = new[]
+				{
+					report.ExpenseReportId.ToString(),
+					report.ReportTitle,
+					report.OrganizationId.ToString(),
+					report.SubmittedById.ToString(),
+					report.ReportStatus.ToString(),
+					report.CreatedUtc.ToString(CultureInfo.CurrentCulture),
+					report.ModifiedUtc.ToString(CultureInfo.CurrentCulture),
+					report.SubmittedUtc?.ToString() ?? string.Empty
+				};
+				output.WriteLine("\"{0}\"", string.Join("\",\"", rowData));
 			}
 
 			output.Flush();
@@ -542,8 +595,7 @@ namespace AllyisApps.Services
 		/// <returns>.</returns>
 		public Tuple<Setting, List<PayClass>, List<Holiday>> GetAllSettings(int organizaionId)
 		{
-			UserContext.OrganizationAndRole orgInfo = null;
-			UserContext.OrganizationsAndRoles.TryGetValue(organizaionId, out orgInfo);
+			UserContext.OrganizationsAndRoles.TryGetValue(organizaionId, out UserContext.OrganizationAndRole orgInfo);
 			var spResults = DBHelper.GetAllSettings(orgInfo.OrganizationId);
 			return Tuple.Create(
 				InitializeSettingsInfo(spResults.Item1),
@@ -822,25 +874,28 @@ namespace AllyisApps.Services
 		/// <returns>PositionThumbnailInfo.</returns>
 		public static PositionThumbnailInfo InitializePositionThumbnailInfo(PositionDBEntity pos, List<PositionTagDBEntity> tags, List<PositionStatusDBEntity> statuses)
 		{
-			List<Tag> tagsList = new List<Tag>();
-			foreach (PositionTagDBEntity tag in tags) if (tag.PositionId == pos.PositionId) tagsList.Add(new Tag { TagId = tag.TagId, TagName = tag.TagName, PositionId = tag.PositionId });
-
-			string status = "";
-			foreach (PositionStatusDBEntity stat in statuses) if (stat.PositionStatusId == pos.PositionStatusId) status = stat.PositionStatusName;
-
 			return new PositionThumbnailInfo
 			{
 				PositionId = pos.PositionId,
 				OrganizationId = pos.OrganizationId,
 				CustomerId = pos.CustomerId,
 				PositionModifiedUtc = pos.PositionModifiedUtc,
-				PositionStatusName = status,
+				PositionStatusName = statuses.FirstOrDefault(status => status.PositionStatusId == pos.PositionStatusId)?.PositionStatusName ?? string.Empty,
 				StartDate = pos.StartDate,
 				PositionTitle = pos.PositionTitle,
 				PositionCount = pos.PositionCount,
 				TeamName = pos.TeamName,
 				HiringManager = pos.HiringManager,
-				Tags = tagsList
+				Tags = tags
+					.Where(tag => tag.PositionId == pos.PositionId)
+					.Select(tag =>
+						new Tag
+						{
+							TagId = tag.TagId,
+							TagName = tag.TagName,
+							PositionId = tag.PositionId
+						})
+					.ToList()
 			};
 		}
 
