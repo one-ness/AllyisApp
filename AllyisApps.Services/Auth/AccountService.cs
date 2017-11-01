@@ -88,26 +88,11 @@ namespace AllyisApps.Services
 
 			if (inviteInfo.ProductRolesJson != null)
 			{
-				JObject roleString = JObject.Parse(inviteInfo.ProductRolesJson);
-				int ttRole = extractRole(roleString, ProductIdEnum.TimeTracker, SkuIdEnum.TimeTrackerBasic);
-				var etRole = extractRole(roleString, ProductIdEnum.ExpenseTracker, SkuIdEnum.ExpenseTrackerBasic);
-				var smRole = extractRole(roleString, ProductIdEnum.StaffingManager, SkuIdEnum.StaffingManagerBasic);
+				List<InvitationPermissionsJson> roleString = Newtonsoft.Json.JsonConvert.DeserializeObject<List<InvitationPermissionsJson>>(inviteInfo.ProductRolesJson);
 
-				if (ttRole > 0)
+				foreach (var invite in roleString)
 				{
-					var result2 = await DBHelper.UpdateSubscriptionUserRoles(new List<int> { UserContext.UserId }, inviteInfo.OrganizationId, ttRole, (int)ProductIdEnum.TimeTracker);
-				}
-
-				if (etRole > 0)
-				{
-					var prodId = GetProductSubscriptionInfo(inviteInfo.OrganizationId, SkuIdEnum.ExpenseTrackerBasic).Product.ProductId;
-					var result3 = await DBHelper.UpdateSubscriptionUserRoles(new List<int> { UserContext.UserId }, inviteInfo.OrganizationId, etRole, (int)ProductIdEnum.ExpenseTracker);
-				}
-
-				if (smRole > 0)
-				{
-					var prodId = GetProductSubscriptionInfo(inviteInfo.OrganizationId, SkuIdEnum.StaffingManagerBasic).Product.ProductId;
-					var result4 = await DBHelper.UpdateSubscriptionUserRoles(new List<int> { UserContext.UserId }, inviteInfo.OrganizationId, smRole, (int)ProductIdEnum.StaffingManager);
+					await DBHelper.UpdateSubscriptionUserRoles(new List<int> { UserContext.UserId }, inviteInfo.OrganizationId, invite.ProductRoleId, invite.ProductId);
 				}
 			}
 
@@ -304,7 +289,7 @@ namespace AllyisApps.Services
 		/// get user
 		/// - address, organizations, subscriptions and invitations
 		/// </summary>
-		public async Task<User> GetUserAsync(int userId, int organizationId = 0)
+		public async Task<User> GetUserAsync(int userId, int organizationId = 0, OrgAction actionContext = OrgAction.ReadUser)
 		{
 			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId));
 
@@ -410,7 +395,7 @@ namespace AllyisApps.Services
 					// yes, does the logged in user have readuser permission in at least one of them?
 					foreach (int item in orgIds)
 					{
-						permFound = CheckOrgAction(OrgAction.ReadUser, item, false);
+						permFound = CheckOrgAction(actionContext, item, false);
 					}
 
 					if (!permFound)
@@ -430,7 +415,7 @@ namespace AllyisApps.Services
 					}
 
 					// yes, check the logged in user's permission
-					CheckOrgAction(OrgAction.ReadUser, organizationId);
+					CheckOrgAction(actionContext, organizationId);
 				}
 			}
 

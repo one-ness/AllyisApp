@@ -5,7 +5,7 @@
 }
 
 <div class="shrink-wrap-center">
-	<div>
+	<div class="min300">
 		@using (Html.BeginForm(ActionConstants.AddMember, ControllerConstants.Account, FormMethod.Post, new { organizationId = "OrgAddForm" }))
 		{
 			@Html.AntiForgeryToken()
@@ -13,48 +13,6 @@
 			@Html.ValidationSummary(true)
 			<div class="row">
 				<div class="col-md-6 sm-control-width">
-					<div class="form-group">
-						@Html.ReqLabelFor(model => model.Email, Strings.Email)
-						@Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
-						@Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-					</div>
-					<div class="form-group">
-						@Html.ReqLabelFor(model => model.EmployeeId, Strings.EmployeeId)
-						@Html.TextBoxFor(model => model.EmployeeId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.EmployeeId })
-						@Html.ValidationMessageFor(model => model.EmployeeId, "", new { @class = "text-danger" })
-					</div>
-					<div class="form-group">
-						<div class="form-group col-md-6">
-							@Html.ReqLabelFor(x => x.OrgRole, "Org Role")
-						</div>
-						<div class="form-group col-md-6">
-							@Html.DropDownListFor(x => x.OrgRoleSelection, Model.OrgRole, new { @class = "form-control" })
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="form-group col-md-6">
-							@if (Model.hasTT)
-							{ @Html.ReqLabelFor(x => x.TTRoles, "TimeTracker Role") }
-						</div>
-						<div class="form-group col-md-6">
-							@if (Model.hasTT)
-							{ @Html.DropDownListFor(x => x.ttSelection, Model.TTRoles, new { @class = "form-control" }) }
-						</div>
-					</div>
-
-					<div class="form-group">
-						<div class="form-group col-md-6">
-							@if (Model.hasET)
-							{ @Html.ReqLabelFor(x => x.ETRoles, "ExpenseTracker Role") }
-						</div>
-						<div class="form-group col-md-6">
-							@if (Model.hasET)
-							{@Html.DropDownListFor(x => x.etSelection, Model.ETRoles, new { @class = "form-control" }) }
-						</div>
-					</div>
-				</div>
-				<div class=col-md-6 sm-control-width">
-
 					<div class="form-group">
 						@Html.ReqLabelFor(model => model.FirstName, Strings.FirstName)
 						@Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
@@ -65,18 +23,82 @@
 						@Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
 						@Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
 					</div>
+					<div class="form-group">
+						@Html.ReqLabelFor(model => model.Email, Strings.Email)
+						@Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+						@Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+					</div>
+					<div class="form-group">
+						@Html.ReqLabelFor(model => model.EmployeeId, Strings.EmployeeId)
+						@Html.TextBoxFor(model => model.EmployeeId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.EmployeeId })
+						@Html.ValidationMessageFor(model => model.EmployeeId, "", new { @class = "text-danger" })
+					</div>
 				</div>
+				<div class="col-md-6 sm-control-width" style="margin-top: 30px;">
+					<div class="form-group">
+						<div class="form-group col-md-6">
+							@Html.ReqLabelFor(x => x.OrgRole, Model.OrganizationName + " Role")
+						</div>
+						<div class="form-group col-md-6">
+							@Html.DropDownListFor(x => x.OrgRoleSelection, Model.OrgRole, new { @class = "form-control" })
+						</div>
+					</div>
+					@for (int i = 0; i < Model.SubscriptionRoles.Count(); i++)
+					{
+						List<SelectListItem> roleList = new List<SelectListItem>();
+						foreach (var role in Model.SubscriptionRoles[i].SelectList)
+						{
+							roleList.Add(new SelectListItem()
+							{
+								Value = role.Value,
+								Text = role.Text
+							});
+						}
+						@Html.HiddenFor(x => x.SubscriptionRoles[i].ProductId);
+						@Html.HiddenFor(x => x.SubscriptionRoles[i].SubscriptionName);
+						<div class="form-group">
+							<div class="form-group col-md-6">
+								@Html.ReqLabelFor(x => Model.SubscriptionRoles[i], Model.SubscriptionRoles[i].SubscriptionName + " Role")
+							</div>
+							<div class="form-group col-md-6">
+								@Html.DropDownListFor(x => Model.SubscriptionRoles[i].SelectedRoleId, roleList, new { @class = "form-control" })
+							</div>
+						</div>
+						}
+						@*<div class="form-group">
+								<div class="form-group col-md-6">
+									@if (Model.hasTT)
+									{ @Html.ReqLabelFor(x => x.TTRoles, Model.ttName + " Role") }
+								</div>
+								<div class="form-group col-md-6">
+									@if (Model.hasTT)
+									{ @Html.DropDownListFor(x => x.ttSelection, Model.TTRoles, new { @class = "form-control" }) }
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="form-group col-md-6">
+									@if (Model.hasET)
+									{ @Html.ReqLabelFor(x => x.ETRoles, Model.etName + " Role") }
+								</div>
+								<div class="form-group col-md-6">
+									@if (Model.hasET)
+									{@Html.DropDownListFor(x => x.etSelection, Model.ETRoles, new { @class = "form-control" }) }
+								</div>
+							</div>*@
+						<div class="form-group allyis-action-buttons pull-right">
+							<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { @id = Model.OrganizationId })" class="btn btn-default">@Strings.Cancel</a>&nbsp;
+							<input type="submit" id="addMember" value="@Strings.Add" class="btn btn-primary" />
+						</div>
+</div>
 			</div>
 			<div class="row">
 				<div class="col-xs-12">
-					<div class="form-group allyis-action-buttons pull-right">
-						<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { @id = Model.OrganizationId })" class="btn btn-default">@Strings.Cancel</a>&nbsp;
-						<input type="submit" id="addMember" value="@Strings.Add" class="btn btn-primary" />
-					</div>
 				</div>
 			</div>
 		}
 		<div class="row">
+			<div class="col-md-3"></div>
 			<div class="col-md-6 sm-control-width">
 				<label>@Strings.AddMultipleMembers</label>
 				@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Account, new { id = Model.OrganizationId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -101,6 +123,7 @@
 					</div>
 				}
 			</div>
+			<div class="col-md-3"></div>
 		</div>
 	</div>
 </div>

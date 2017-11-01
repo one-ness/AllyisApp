@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
@@ -29,42 +30,61 @@ namespace AllyisApps.Controllers.Auth
 		public async Task<ActionResult> AddMember(int organizationId)
 		{
 			AppService.CheckOrgAction(AppService.OrgAction.AddUserToOrganization, organizationId);
-			var model = new AddMemberViewModel();
-			model.OrganizationId = organizationId;
-			model.EmployeeId = await AppService.GetNextEmployeeId(organizationId);
+			var subs = await AppService.GetSubscriptionsAsync(organizationId);
 
-			var etSubInfo = AppService.GetProductSubscriptionInfo(organizationId, SkuIdEnum.ExpenseTrackerBasic).SubscriptionInfo;
-			var ttSubInfo = AppService.GetProductSubscriptionInfo(organizationId, SkuIdEnum.TimeTrackerBasic).SubscriptionInfo;
-
-			model.hasET = etSubInfo != null;
-			model.hasTT = ttSubInfo != null;
-
-			var orgRoles = new List<SelectListItem>
+			var model = new AddMemberViewModel
 			{
-				new SelectListItem { Text = OrganizationRoleEnum.Member.ToString(), Value = "1"},
-				new SelectListItem { Text = OrganizationRoleEnum.Owner.ToString(), Value = "2" }
+				OrganizationId = organizationId,
+				EmployeeId = await AppService.GetNextEmployeeId(organizationId),
+				OrganizationName = "Organization", //AppService.GetOrganization(id).Result.OrganizationName;
+				SubscriptionRoles = subs.Select(sub => new RoleItem
+				{
+					ProductId = (int)sub.ProductId,
+					SubscriptionName = sub.SubscriptionName,
+					SelectList = GetSubRoles(sub.SkuId)
+				}).ToList(),
+				OrgRole = new SelectList(
+					new List<SelectListItem>
+					{
+						new SelectListItem { Text = OrganizationRoleEnum.Member.ToString(), Value = "1"},
+						new SelectListItem { Text = OrganizationRoleEnum.Owner.ToString(), Value = "2" }
+					},
+					"Value",
+					"Text",
+					"1")
 			};
-
-			var etRoles = new List<SelectListItem>
-			{
-				new SelectListItem { Text = Strings.Unassigned, Value = "0"},
-				new SelectListItem { Text = Strings.User, Value = "1"},
-				new SelectListItem { Text = Strings.Manager, Value = "2"},
-				new SelectListItem { Text = Strings.SuperUser, Value = "4"},
-			};
-
-			var ttRoles = new List<SelectListItem>
-			{
-				new SelectListItem { Text = Strings.Unassigned, Value = "0"},
-				new SelectListItem { Text = Strings.User, Value = "1"},
-				new SelectListItem { Text = Strings.Manager, Value = "2"}
-			};
-
-			model.OrgRole = new SelectList(orgRoles, "Value", "Text", "1");
-			model.TTRoles = new SelectList(ttRoles, "Value", "Text", "0");
-			model.ETRoles = new SelectList(etRoles, "Value", "Text", "0");
 
 			return View(model);
+		}
+
+		private static List<SelectListItem> GetSubRoles(SkuIdEnum skuId)
+		{
+			switch (skuId)
+			{
+				case SkuIdEnum.TimeTrackerBasic:
+					return new List<SelectListItem>
+					{
+						new SelectListItem { Text = Strings.Unassigned, Value = "0"},
+						new SelectListItem { Text = Strings.User, Value = "1"},
+						new SelectListItem { Text = Strings.Manager, Value = "2"}
+					};
+				case SkuIdEnum.ExpenseTrackerBasic:
+					return new List<SelectListItem>
+					{
+						new SelectListItem { Text = Strings.Unassigned, Value = "0"},
+						new SelectListItem { Text = Strings.User, Value = "1"},
+						new SelectListItem { Text = Strings.Manager, Value = "2"},
+						new SelectListItem { Text = Strings.SuperUser, Value = "4"},
+					};
+				case SkuIdEnum.StaffingManagerBasic:
+					return new List<SelectListItem>
+					{
+						new SelectListItem { Text = Strings.Unassigned, Value = "0"},
+						new SelectListItem { Text = Strings.User, Value = "1"},
+						new SelectListItem { Text = Strings.Manager, Value = "2"}
+					};
+			}
+			return null;
 		}
 
 		/// <summary>
@@ -86,13 +106,23 @@ namespace AllyisApps.Controllers.Auth
 					Url.Action(ActionConstants.Index, ControllerConstants.Account, null, Request.Url.Scheme) :
 					Url.Action(ActionConstants.Register, ControllerConstants.Account, null, Request.Url.Scheme);
 
-				string prodJson = string.Format(
-					"{{ \"{0}\" : {1}, \"{2}\" : {3}, \"{4}\" : 0 }}",
-					(int)ProductIdEnum.TimeTracker,
-					model.ttSelection,
-					(int)ProductIdEnum.ExpenseTracker,
-					model.etSelection,
-					(int)ProductIdEnum.StaffingManager);
+				//string prodJson = "{{ "; //string.Format("{{ \"" + (int)ProductIdEnum.TimeTracker + "\" : {0}, \"" + (int)ProductIdEnum.ExpenseTracker + "\" : {1}, \"" + (int)ProductIdEnum.StaffingManager + "\" : 0 }}", model.ttSelection, model.etSelection);
+
+				//foreach (var role in model.SubscriptionRoles)
+				//{
+				//	prodJson += "\"" + role.ProductId + "\" : " + role.SelectedRoleId + ", ";
+				//}
+				//prodJson = prodJson.TrimEnd(new char[] { ' ', ',' });
+				//prodJson += " }}";
+
+				var json = model.SubscriptionRoles.Select(role => new InvitationPermissionsJson
+				{
+					ProductId = role.ProductId,
+					ProductRoleId = role.SelectedRoleId
+				})
+					.ToList();
+
+				string jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(json);
 
 				int invitationId = await AppService.InviteUser(
 					url,
@@ -102,9 +132,9 @@ namespace AllyisApps.Controllers.Auth
 					model.OrganizationId,
 					model.OrgRoleSelection == 2 ? OrganizationRoleEnum.Owner : OrganizationRoleEnum.Member,
 					model.EmployeeId,
-					prodJson);
+					jsonString);
 
-				Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Strings.UserEmailed, model.FirstName, model.LastName), Variety.Success));
+				Notifications.Add(new BootstrapAlert(string.Format(Strings.UserEmailed, model.FirstName, model.LastName), Variety.Success));
 				return RedirectToAction(ActionConstants.OrganizationMembers, new { id = model.OrganizationId });
 			}
 			catch (InvalidOperationException)
@@ -114,7 +144,7 @@ namespace AllyisApps.Controllers.Auth
 			}
 			catch (System.Data.DuplicateNameException)
 			{
-				Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Strings.UserAlreadyExists, model.FirstName, model.LastName), Variety.Warning));
+				Notifications.Add(new BootstrapAlert(string.Format(Strings.UserAlreadyExists, model.FirstName, model.LastName), Variety.Warning));
 				return View(model);
 			}
 		}

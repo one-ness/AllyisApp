@@ -9,7 +9,7 @@
 	<script type="text/javascript">
 		var currentDay = "";
 		var ddlCountriesId = "@ViewConstants.DdlCountriesId";
-        var preserveState = '@(Model.PositionAddress != null && Model.PositionAddress.State != null ? (States.ResourceManager.GetString(Model.PositionAddress.State) ?? Model.PositionAddress.State) : "")';
+		var preserveState = '@(Model.PositionAddress != null && Model.PositionAddress.State != null ? (States.ResourceManager.GetString(Model.PositionAddress.State) ?? Model.PositionAddress.State) : "")';
 		var dropdownempty = "@Strings.DropDownEmpty";
 		var ddlStatesId = "@ViewConstants.DdlStatesId";
 		var ddlStatesOptionsId = "@ViewConstants.DdlStatesOptionsId";

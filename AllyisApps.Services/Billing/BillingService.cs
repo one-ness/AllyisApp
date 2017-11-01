@@ -289,7 +289,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <param name="userId">User Id.</param>
-		public void DeleteSubscriptionUser(int subscriptionId, int userId)
+		public async Task DeleteSubscriptionUser(int subscriptionId, int userId)
 		{
 			if (subscriptionId <= 0)
 			{
@@ -301,7 +301,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException(nameof(userId), "User Id cannot be 0 or negative.");
 			}
 
-			DBHelper.DeleteSubscriptionUser(subscriptionId, userId);
+			await DBHelper.DeleteSubscriptionUser(subscriptionId, userId);
 		}
 
 		/// <summary>
@@ -317,7 +317,9 @@ namespace AllyisApps.Services
 			{
 				int subId = item.Key;
 				int roleId = item.Value;
-				CheckSubscriptionAction(OrgAction.EditSubscriptionUser, subId, out int orgId);
+				
+				
+				await CheckSubscriptionAction(OrgAction.EditSubscriptionUser, subId);
 				await DBHelper.UpdateSubscriptionUserProductRole(roleId, subId, userId);
 			}
 		}
@@ -384,7 +386,7 @@ namespace AllyisApps.Services
 		{
 			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException(nameof(subscriptionId));
 
-			CheckSubscriptionAction(OrgAction.ReadSubscription, subscriptionId, out int orgId);
+			await CheckSubscriptionAction(OrgAction.ReadSubscription, subscriptionId);
 
 			// get from db
 			var sub = await DBHelper.GetSubscriptionDetailsById(subscriptionId);
