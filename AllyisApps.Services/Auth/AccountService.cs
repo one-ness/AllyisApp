@@ -42,7 +42,14 @@ namespace AllyisApps.Services
 		/// </summary>
 		public List<State> GetStates(string countryCode)
 		{
-			return CacheContainer.StatesCache[countryCode];
+			try
+			{
+				return CacheContainer.StatesCache[countryCode].OrderBy(s => s.StateName).ToList();
+			}
+			catch (KeyNotFoundException)
+			{
+				return new List<State>();
+			}
 		}
 
 		public bool DeleteExpenseItem(int itemId)
