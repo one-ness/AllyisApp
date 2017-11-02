@@ -14,4 +14,4 @@
 	@if (ViewBag.Title == Strings.Holidays) { <li style="background-color: #d1d1d1">@Html.ActionLink("Holidays", "SettingsHoliday")</li> }
 	else { <li>@Html.ActionLink("Holidays", "SettingsHoliday")</li> }
 </ul><br />
-<a href="#" class="btn btn-default">Back</a>
+<input type="button" class="btn btn-default" value="Back" onclick='location.href=@Html.ActionLink(ActionConstants.IndexNoUserId, ControllerConstants.TimeEntry)'>

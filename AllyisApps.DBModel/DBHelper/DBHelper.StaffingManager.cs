@@ -268,12 +268,16 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Adds an organizations staffing settings.
 		/// </summary>
+		/// <param name="subId">sub ID thats getting a new settings object</param>
 		/// <param name="orgId">org ID thats getting a new settings object</param>
 		/// <returns>Creates an orgs staffing object</returns>
-		public void CreateStaffingSettings(int orgId)
+		public void CreateStaffingSettings(int subId, int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", orgId);
+			parameters.Add("@organizationId", subId);
+			parameters.Add("@subscriptionId", subId);
+			parameters.Add("@defaultPositionName", "Active");
+			parameters.Add("@defaultApplicationName", "Active");
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
@@ -730,12 +734,12 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updates an organizations staffing settings.
 		/// </summary>
-		/// <param name="orgId">org ID thats getting a new setting </param>
+		/// <param name="subId">org ID thats getting a new setting </param>
 		/// <returns>Creates an orgs staffing object</returns>
-		public async Task<List<int>> GetStaffingDefaultStatus(int orgId)
+		public async Task<List<int>> GetStaffingDefaultStatus(int subId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", orgId);
+			parameters.Add("@subscriptionId", subId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
@@ -878,13 +882,13 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updates an organizations staffing settings.
 		/// </summary>
-		/// <param name="orgId">org ID thats getting a new setting </param>
+		/// <param name="subId">org ID thats getting a new setting </param>
 		/// <param name="positionStatusId">position status to be set as default</param>
 		/// <returns>Creates an orgs staffing object</returns>
-		public void UpdateStaffingSettings(int orgId, int positionStatusId)
+		public void UpdateStaffingSettings(int subId, int positionStatusId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", orgId);
+			parameters.Add("@subscriptionId", subId);
 			parameters.Add("@positionStatusId", positionStatusId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
