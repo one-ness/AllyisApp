@@ -5,6 +5,7 @@ using AllyisApps.Lib;
 using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
+using AllyisApps.Services.Billing;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.TimeTracker;
 
@@ -61,6 +62,31 @@ namespace AllyisApps.ViewModels
 			}
 
 			return result;
+		}
+
+		/// <summary>
+		/// Returns a list of roles for the given product
+		/// </summary>
+		/// <param name="product">the enum of the product to get the roles from
+		/// e.g. time tracker, expense tracker, or staffing manager</param>
+		/// <returns></returns>
+		public static Dictionary<int, string> GetRolesList(ProductIdEnum product)
+		{
+			switch (product)
+			{
+				case ProductIdEnum.None:
+					return null;
+				case ProductIdEnum.AllyisApps:
+					return GetOrgRolesList();
+				case ProductIdEnum.TimeTracker:
+					return GetTimeTrackerRolesList();
+				case ProductIdEnum.ExpenseTracker:
+					return GetExpenseTrackerRolesList();
+				case ProductIdEnum.StaffingManager:
+					return GetStaffingManagerRolesList();
+				default:
+					throw new ArgumentOutOfRangeException(nameof(product), product, null);
+			}
 		}
 
 		/// <summary>

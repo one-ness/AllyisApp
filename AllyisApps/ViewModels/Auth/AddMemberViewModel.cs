@@ -60,7 +60,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the name of the organization.
 		/// </summary>
-		public string orgName { get; internal set; }
+		public string OrganizationName { get; internal set; }
 
 		/// <summary>
 		/// Gets or sets the subscription roles for the user.

@@ -239,7 +239,7 @@
 			</div>
 		</div>
 		<div class="pull-left col-md-12 collapse" id="details">
-			@if (Model.RequiredSkills != "" && Model.RequiredSkills != null)
+			@if (!string.IsNullOrEmpty(Model.RequiredSkills))
 			{
 				<div class="form-group">
 					<label>@Strings.RequiredSkills: </label>
@@ -247,7 +247,7 @@
 					<p class="panel-default panel paragraph" width="100%">@Model.RequiredSkills</p>
 				</div>
 			}
-			@if (Model.JobResponsibilities != "" && Model.JobResponsibilities != null)
+			@if (!string.IsNullOrEmpty(Model.JobResponsibilities))
 			{
 				<div class="form-group">
 					<label>@Strings.JobResponsibilities: </label>
@@ -255,7 +255,7 @@
 					<p class="panel-default panel paragraph" width="100%">@Model.JobResponsibilities</p>
 				</div>
 			}
-			@if (Model.DesiredSkills != "" && Model.DesiredSkills != null)
+			@if (!string.IsNullOrEmpty(Model.DesiredSkills))
 			{
 				<div class="form-group">
 					<label>@Strings.DesiredSkills: </label>

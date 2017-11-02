@@ -37,7 +37,7 @@
 				<div class="col-md-6 sm-control-width" style="margin-top: 30px;">
 					<div class="form-group">
 						<div class="form-group col-md-6">
-							@Html.ReqLabelFor(x => x.OrgRole, Model.orgName + " Role")
+							@Html.ReqLabelFor(x => x.OrgRole, Model.OrganizationName + " Role")
 						</div>
 						<div class="form-group col-md-6">
 							@Html.DropDownListFor(x => x.OrgRoleSelection, Model.OrgRole, new { @class = "form-control" })
@@ -103,7 +103,7 @@
 				<label>@Strings.AddMultipleMembers</label>
 				@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Account, new { id = Model.OrganizationId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
 				{
-					@Html.AntiForgeryToken();
+					@Html.AntiForgeryToken()
 					<div>
 						<input type="file" id="upload-box" name="upload" style="display:none;"
 							   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
