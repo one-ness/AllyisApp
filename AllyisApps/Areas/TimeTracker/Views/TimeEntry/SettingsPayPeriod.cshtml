@@ -1,0 +1,49 @@
+﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+@using AllyisApps.Services.TimeTracker;
+@model SettingsPayPeriodViewModel
+
+@{
+	ViewBag.TitleBar = Strings.Settings;
+	ViewBag.Title = Strings.PayPeriod;
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
+	Layout = "~/Areas/TimeTracker/Views/Shared/_TimeTrackerSidebar.cshtml";
+	ViewData["UserId"] = Model.UserId;
+	ViewData["SubscriptionId"] = Model.SubscriptionId;
+	ViewData["SubscriptionName"] = Model.SubscriptionName;
+}
+
+@section css {
+	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+}
+
+<div class="row slim">
+
+	<div class="col-sm-2">
+		@Html.Partial("_ManageSettingSideBar")
+	</div>
+	<div class="col-md-10">
+		<div class="panel panel-info" style="position: relative; padding-bottom: 40px;" @*style="width: 400px; margin: 10px auto;"*@>
+			<div class="panel-heading">
+				<h1 class="panel-title">@Strings.PayPeriod</h1>
+			</div>
+			<div class="panel-body" id="pay-period">
+				@using (Html.BeginForm(ActionConstants.SettingsPayPeriod, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "form-inline" }))
+				{
+					<div class="radio">
+						<label><input type="radio" name="PayPeriodTypeId" value="0" checked/>Duration:</label>
+						<span>Each pay period is </span>
+						@Html.TextBoxFor(m => m.Duration, new { @class="form-control" })
+						<span>days long.</span>
+					</div>
+					<div class="radio">
+						<label><input type="radio" name="PayPeriodTypeId" value="1" />Dates:</label>
+						<span>Each pay period starts on the </span>
+						@Html.TextBoxFor(m => m.Dates, new { @class = "form-control" })
+						<span>of every month.</span>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</div>

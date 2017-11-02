@@ -75,21 +75,6 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 			public decimal OvertimeMultiplier { get; set; }
 
 			/// <summary>
-			/// Gets or sets a value indicating whether to use a lock date.
-			/// </summary>
-			public bool IsLockDateUsed { get; set; }
-
-			/// <summary>
-			/// Gets or sets the lock date period (days/weeks/months).
-			/// </summary>
-			public int LockDatePeriod { get; set; }
-
-			/// <summary>
-			/// Gets or sets the lock date quantity.
-			/// </summary>
-			public int LockDateQuantity { get; set; }
-
-			/// <summary>
 			/// Get or sets todays date for holiday datepicker
 			/// </summary>
 			public DateTime Today { get; set; }

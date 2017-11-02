@@ -72,7 +72,7 @@
 
 		function populateHolidayForSelectedYear(year)
 		{
-			@foreach (var yearC in Model.Holidays.Select(m => m.Date.Year).Distinct())
+			@foreach (int yearC in Model.Holidays.Select(m => m.Date.Year).Distinct())
 			{
 				<text>
 					if (@yearC != year) {
@@ -89,7 +89,7 @@
 
 		$('document').ready(function () {
 			populateHolidayForSelectedYear(@DateTime.Now.Year);
-			document.getElementById("datePickerHoliday").val = @Model.Settings.Today.ToString("MM/dd/yyyy").;
+			document.getElementById("datePickerHoliday").val = @Model.Settings.Today.ToString("MM/dd/yyyy");
 		});
 	</script>
 	@Scripts.Render("~/bundles/jqueryui");

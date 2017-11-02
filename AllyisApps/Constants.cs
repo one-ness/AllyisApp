@@ -73,7 +73,6 @@ namespace AllyisApps
 		public const string RemoveMember = "removemember";
 		public const string RemoveUser = "removeuser";
 		public const string ResetPassword = "resetpassword";
-		public const string ResetPasswordConfirmation = "resetpasswordconfirmation";
 		public const string ResendInvite = "resendinvite";
 		public const string RouteHome = "routehome";
 		public const string Skus = "skus";
@@ -125,6 +124,8 @@ namespace AllyisApps
 		public const string LockTimeEntries = "locktimeentries";
 		public const string UnlockTimeEntries = "unlocktimeentries";
 		public const string PayrollProcessTimeEntries = "payrollprocesstimeentries";
+		public const string CustomerImport = "customerimport";
+		public const string SettingsPayPeriod = "settingspayperiod";
 	}
 
 	/// <summary>

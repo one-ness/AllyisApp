@@ -1,17 +1,19 @@
 ﻿<ul class="nav nav-pills nav-stacked panel-default" style="background-color: #fafafa;">
-	@if (ViewBag.Title == Strings.OrgSOW) { <li style="background-color: #d1d1d1">@Html.ActionLink("Week Start", "Settingsstartofweek")</li> }
-	else { <li>@Html.ActionLink("Week Start", "Settingsstartofweek")</li> }
-
-	@if (ViewBag.Title == Strings.PClasses) { <li style="background-color: #d1d1d1">@Html.ActionLink("Pay Class", "Settingspayclass")</li> }
-	else { <li>@Html.ActionLink("Pay Class", "Settingspayclass")</li> }
-
-	@if (ViewBag.Title == Strings.LockDate) { <li style="background-color: #d1d1d1">@Html.ActionLink("Lock date", "Settingslockdate")</li> }
-	else { <li>@Html.ActionLink("Lock date", "Settingslockdate")</li> }
-
-	@if (ViewBag.Title == Strings.Overtime) { <li style="background-color: #d1d1d1">@Html.ActionLink("Overtime", "SettingsOvertime")</li> }
-	else { <li>@Html.ActionLink("Overtime", "SettingsOvertime")</li> }
-
-	@if (ViewBag.Title == Strings.Holidays) { <li style="background-color: #d1d1d1">@Html.ActionLink("Holidays", "SettingsHoliday")</li> }
-	else { <li>@Html.ActionLink("Holidays", "SettingsHoliday")</li> }
-</ul><br />
+	<li style=@(ViewBag.Title == Strings.OrgSOW ? "background-color: #d1d1d1" : "")>
+		@Html.ActionLink(Strings.WeekStart, ActionConstants.SettingsStartOfWeek, ControllerConstants.TimeEntry)
+	</li>
+	<li style=@(ViewBag.Title == Strings.PClasses ? "background-color: #d1d1d1" : "")>
+		@Html.ActionLink(Strings.PClasses, ActionConstants.SettingsPayClass, ControllerConstants.TimeEntry)
+	</li>
+	<li style=@(ViewBag.Title == Strings.PayPeriod ? "background-color: #d1d1d1" : "")>
+		@Html.ActionLink(Strings.PayPeriod, ActionConstants.SettingsPayPeriod, ControllerConstants.TimeEntry)
+	</li>
+	<li style=@(ViewBag.Title == Strings.Overtime ? "background-color: #d1d1d1" : "")>
+		@Html.ActionLink(Strings.Overtime, ActionConstants.SettingsOvertime, ControllerConstants.TimeEntry)
+	</li>
+	<li style=@(ViewBag.Title == Strings.Holidays ? "background-color: #d1d1d1" : "")>
+		@Html.ActionLink(Strings.Holidays, ActionConstants.SettingsHoliday, ControllerConstants.TimeEntry)
+	</li>
+</ul>
+<br/>
 <a href="#" class="btn btn-default">Back</a>

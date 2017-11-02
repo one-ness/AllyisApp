@@ -4,11 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
+using System.Web.Mvc;
 using AllyisApps.Services;
 using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.Auth;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -37,7 +37,7 @@ namespace AllyisApps.Controllers.Auth
 				data.SubscriptionCreatedUtc = item.CreatedUtc;
 				data.SubscriptionId = item.SubscriptionId;
 				data.SubscriptionName = item.SubscriptionName;
-				data.PermissionsUrl = getPermissionsUrl(item.ProductId, item.SubscriptionId);
+				data.PermissionsUrl = GetPermissionsUrl(item.ProductId, item.SubscriptionId);
 				model.Subscriptions.Add(data);
 			}
 

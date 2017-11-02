@@ -123,7 +123,7 @@
 							if (theEntries.Count == 0 || !theSample.IsLocked) {
 								@Html.Partial("_AjaxTimeEntryBody2", theSample)
 							}
-							if (theSample.Date > theSample.LockDateOld || theSample.IsManager || !theSample.IsLocked) //if the date is not locked because of lock date or logged in user is manager
+							if (theSample.IsManager || !theSample.IsLocked) //if the date is not locked because of lock date or logged in user is manager
 							{
 								theSample.Hidden = true;
 								@Html.Partial("_AjaxTimeEntryBody2", theSample)

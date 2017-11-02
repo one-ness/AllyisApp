@@ -130,7 +130,6 @@
     <Compile Include="TimeTracker\Holiday.cs" />
     <Compile Include="Auth\Invitation.cs" />
     <Compile Include="Lookup\Language.cs" />
-    <Compile Include="TimeTracker\LockDatePeriodEnum.cs" />
     <Compile Include="TimeTracker\PayClass.cs" />
     <Compile Include="Crm\CompleteProject.cs" />
     <Compile Include="TimeTracker\ServiceResultEnums.cs" />

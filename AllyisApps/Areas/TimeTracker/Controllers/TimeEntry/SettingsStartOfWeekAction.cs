@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="UpdateOvertimeAction.cs" company="Allyis, Inc.">
+// <copyright file="UpdateStartOfWeekAction.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -22,10 +22,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	public partial class TimeEntryController : BaseController
 	{
 		/// <summary>
-		/// returns the view for overtime settings.
+		/// GET /TimeTracker/TimeEntry/subscriptionId/Settings.
 		/// </summary>
-		/// <returns></returns>
-		public async Task<ActionResult> SettingsOvertime(int subscriptionId)
+		/// <param name="subscriptionId">The subscription Id.</param>
+		/// <returns>The settings page.</returns>
+		public async Task<ActionResult> SettingsStartOfWeek(int subscriptionId)
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			int organizaionID = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
@@ -37,13 +38,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infoOrg.Item1.StartOfWeek));
 			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(infoOrg.Item1.StartOfWeek));
 			Services.TimeTracker.Setting settings = infos.Item1;
-			return View(new SettingsViewModel
+			return View(new SettingsWeekStartViewModel
 			{
-				Settings = new SettingsViewModel.SettingsInfoViewModel
+				Settings = new SettingsWeekStartViewModel.SettingsInfoViewModel
 				{
-					IsLockDateUsed = settings.IsLockDateUsed,
-					LockDatePeriod = settings.LockDatePeriod,
-					LockDateQuantity = settings.LockDateQuantity,
 					OrganizationId = settings.OrganizationId,
 					OvertimeHours = settings.OvertimeHours,
 					OvertimeMultiplier = settings.OvertimeMultiplier,
@@ -51,12 +49,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					StartOfWeek = settings.StartOfWeek,
 					Today = System.DateTime.UtcNow.Date
 				},
-				PayClasses = infos.Item2.AsParallel().Select(payClass => new SettingsViewModel.PayClassViewModel
+				PayClasses = infos.Item2.AsParallel().Select(payClass => new SettingsWeekStartViewModel.PayClassViewModel
 				{
 					PayClassId = payClass.PayClassId,
 					PayClassName = payClass.PayClassName
 				}),
-				Holidays = infos.Item3.AsParallel().Select(holiday => new SettingsViewModel.HolidayViewModel
+				Holidays = infos.Item3.AsParallel().Select(holiday => new SettingsWeekStartViewModel.HolidayViewModel
 				{
 					Date = holiday.Date,
 					HolidayId = holiday.HolidayId,
@@ -69,29 +67,29 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		}
 
 		/// <summary>
-		/// Updates the Overtime setting for an Organization.
+		/// Updates the start of week for an Organization.
 		/// </summary>
-		/// <param name="subscriptionId">The subscription Id.</param>
-		/// <param name="setting">Overtime available setting.</param>
-		/// <param name="hours">Hours until overtime.</param>
-		/// <param name="period">Time period for hours until overtime.</param>
-		/// <param name="mult">Overtime pay multiplier.</param>
-		/// <returns>Redirects to the settings view.</returns>
-		[HttpPost]
-		public async Task<ActionResult> UpdateOvertime(int subscriptionId, string setting, int hours = -1, string period = "", float mult = 1)
+		/// <param name="subscriptionId">The subscription's id.</param>
+		/// <param name="startOfWeek">Start of week selected by Organization admin.</param>
+		/// <returns>Action result.</returns>
+		public async Task<ActionResult> UpdateStartOfWeek(int subscriptionId, int startOfWeek)
 		{
-			int actualHours = string.Equals(setting, "No") ? -1 : hours;
-
-			if (await AppService.UpdateOvertime(subscriptionId, AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId, actualHours, period, mult))
+			System.Diagnostics.Debug.WriteLine("New Start Date: " + startOfWeek);
+			var upWeek = await AppService.UpdateStartOfWeek(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId, subscriptionId, startOfWeek);
+			if (startOfWeek < 0 || startOfWeek > 6)
 			{
-				Notifications.Add(new BootstrapAlert(Resources.Strings.OvertimeUpdate, Variety.Success));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.InvalidSOW, Variety.Warning));
 			}
-			else
+			else if (!upWeek)
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
+			else
+			{
+				Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulSOW, Variety.Success));
+			}
 
-			return RedirectToAction(ActionConstants.SettingsOvertime, new { subscriptionid = subscriptionId, id = AppService.UserContext.UserId });
+			return RedirectToAction(ActionConstants.SettingsStartOfWeek, new { subscriptionid = subscriptionId, id = AppService.UserContext.UserId });
 		}
 	}
 }

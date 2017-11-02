@@ -1747,4 +1747,10 @@
 	<data name="LevelName" xml:space="preserve">
     <value>Level Name</value>
   </data>
+	<data name="PayPeriod" xml:space="preserve">
+    <value>Pay Period</value>
+  </data>
+	<data name="WeekStart" xml:space="preserve">
+    <value>Week Start</value>
+  </data>
 </root>

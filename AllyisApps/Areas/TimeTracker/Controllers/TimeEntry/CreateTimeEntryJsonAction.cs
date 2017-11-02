@@ -61,7 +61,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				UserContext.SubscriptionAndRole subInfo = null;
 				AppService.UserContext.SubscriptionsAndRoles.TryGetValue(model.SubscriptionId, out subInfo);
 
-				DateTime? lockDate = await AppService.GetLockDate(AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId);
+				DateTime? lockDate = (await AppService.GetSettingsByOrganizationId(AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId)).LockDate;
 				if (durationResult + durationOther > 24.00)
 				{
 					throw new ArgumentException(Resources.Strings.CannotExceed24);

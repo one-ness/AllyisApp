@@ -25,23 +25,6 @@ namespace AllyisApps.DBModel
 	public partial class DBHelper
 	{
 		/// <summary>
-		/// Returns the lock date for a specific organization.
-		/// </summary>
-		/// <param name="organizationId">The Organization Id.</param>
-		/// <returns>The lock date.</returns>
-		public async Task<LockDateDBEntity> GetLockDateByOrganizationId(int organizationId)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", organizationId);
-
-			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
-			{
-				var result = await connection.QueryAsync<LockDateDBEntity>("[TimeTracker].[GetOldLockDate]", parameters, commandType: CommandType.StoredProcedure);
-				return result.Single();
-			}
-		}
-
-		/// <summary>
 		/// Creates a holiday and related TimeEntries for an organization.
 		/// </summary>
 		/// <param name="newHoliday">The HolidayDBEntity to create.</param>
