@@ -130,7 +130,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					}
 					if (model.PositionStatusId == 0)
 					{
-						var defaultGet = await AppService.GetStaffingDefaultStatus(subInfo.OrganizationId);
+						var defaultGet = await AppService.GetStaffingDefaultStatus(subInfo.SubscriptionId);
 						model.PositionStatusId = defaultGet[0];
 					}
 				}

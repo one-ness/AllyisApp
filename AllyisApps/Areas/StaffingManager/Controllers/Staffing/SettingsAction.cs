@@ -36,7 +36,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			UserContext.SubscriptionAndRole subInfo = null;
 			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			var subscriptionNameToDisplayTask = AppService.GetSubscriptionName(subscriptionId);
-			var defaultStatusTask = AppService.GetStaffingDefaultStatus(subInfo.OrganizationId); //[0] is default position status, [1] is default application status
+			var defaultStatusTask = AppService.GetStaffingDefaultStatus(subInfo.SubscriptionId); //[0] is default position status, [1] is default application status
 
 			await Task.WhenAll(new Task[] { subscriptionNameToDisplayTask, defaultStatusTask });
 
@@ -215,7 +215,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		{
 			try
 			{
-				AppService.UpdateDefaultPositionStatus(organizationId, positionStatusId);
+				AppService.UpdateDefaultPositionStatus(subscriptionId, positionStatusId);
 				Notifications.Add(new BootstrapAlert("update new Position Status", Variety.Success));
 			}
 			catch (ArgumentException)

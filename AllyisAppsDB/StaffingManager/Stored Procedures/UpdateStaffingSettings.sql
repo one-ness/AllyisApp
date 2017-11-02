@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [StaffingManager].[UpdateStaffingSettings]
-	@organizationId INT,
+	@subscriptionId INT,
 	@positionStatusId INT
 AS
 BEGIN
@@ -7,5 +7,5 @@ BEGIN
 	UPDATE [StaffingManager].[StaffingSettings] 
 	SET 
 		[DefaultPositionStatusId] = @positionStatusId
-	WHERE [StaffingSettings].[OrganizationId] = @organizationId
+	WHERE [StaffingSettings].[SubscriptionId] = @subscriptionId
 END
