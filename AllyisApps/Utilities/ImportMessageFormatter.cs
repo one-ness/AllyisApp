@@ -17,59 +17,35 @@ namespace AllyisApps.Utilities
 		/// <returns>A two-member string array with the success and failure formatted messages.</returns>
 		public static string[] FormatImportResult(ImportActionResult result)
 		{
-			string[] formattedResult = new string[2];
+			var formattedResult = new string[2];
 
 			// formattedResult[0]: Success notification
-			List<string> successfulImports = new List<string>();
+			var successfulImports = new List<string>();
 			if (result.CustomersImported > 0)
 			{
-				successfulImports.Add(string.Format("{0} customers", result.CustomersImported));
+				successfulImports.Add($"{result.CustomersImported} customers");
 			}
 
 			if (result.ProjectsImported > 0)
 			{
-				successfulImports.Add(string.Format("{0} projects", result.ProjectsImported));
+				successfulImports.Add($"{result.ProjectsImported} projects");
 			}
 
 			if (result.UsersImported > 0)
 			{
-				successfulImports.Add(string.Format("{0} users", result.UsersImported));
+				successfulImports.Add($"{result.UsersImported} users");
 			}
 
 			if (result.TimeEntriesImported > 0)
 			{
-				successfulImports.Add(string.Format("{0} time entries", result.TimeEntriesImported));
+				successfulImports.Add($"{result.TimeEntriesImported} time entries");
 			}
 
-			string successMessage = null;
-			int successes = successfulImports.Count;
-			switch (successes)
+			string successMessage = Helpers.ReplaceLastOccurrence(string.Join(", ", successfulImports), ",", " and");
+
+			if (!string.IsNullOrEmpty(successMessage))
 			{
-				case 0:
-					break;
-
-				case 1:
-					successMessage = successfulImports[0];
-					break;
-
-				case 2:
-					successMessage = successfulImports[0] + " and " + successfulImports[1]; // LANGUAGE Update to use resource file to change message language
-					break;
-
-				default:
-					successMessage = string.Empty;
-					for (int i = 0; i < successes - 1; i++)
-					{
-						successMessage = successMessage + successfulImports[i] + ", ";
-					}
-
-					successMessage = successMessage + " and " + successfulImports[successes - 1]; // LANGUAGE Update to use resource file to change message language
-					break;
-			}
-
-			if (successMessage != null)
-			{
-				formattedResult[0] = successMessage + " imported."; // LANGUAGE Update to use resource file to change message language
+				formattedResult[0] = successMessage + " imported.<br>"; // LANGUAGE Update to use resource file to change message language
 			}
 
 			if (result.UsersAddedToOrganization > 0)
@@ -77,20 +53,25 @@ namespace AllyisApps.Utilities
 				int difference = result.UsersAddedToOrganization - result.UsersImported;
 				if (difference > 0)
 				{
-					formattedResult[0] = formattedResult[0] + " " + difference + " existing users added to organization."; // LANGUAGE Update to use resource file to change message language
+					formattedResult[0] = $"{formattedResult[0]}{difference} existing users added to organization.<br>"; // LANGUAGE Update to use resource file to change message language
 				}
 			}
 
+			formattedResult[0] += $"Total Imports: {result.TotalImports()}";
+
 			// formattedResult[1]: Fail notification - simply joins all the fail messages into one, separated by newlines
-			List<string> failures = result.CustomerFailures.Union(
-				result.ProjectFailures).Union(
-				result.UserFailures).Union(
-				result.TimeEntryFailures).Union(
-				result.OrgUserFailures).Union(
-				result.UserSubscriptionFailures).ToList();
+			List<string> failures =
+				result.GeneralFailures
+				.Union(result.CustomerFailures)
+				.Union(result.ProjectFailures)
+				.Union(result.UserFailures)
+				.Union(result.TimeEntryFailures)
+				.Union(result.OrgUserFailures)
+				.Union(result.UserSubscriptionFailures)
+				.ToList();
 			if (failures.Count > 0)
 			{
-				formattedResult[1] = string.Join("<br>", failures.ToArray());
+				formattedResult[1] = $"Total Errors: {failures.Count}<br>{string.Join("<br>", failures)}";
 			}
 
 			return formattedResult;

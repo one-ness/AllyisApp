@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
+using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Expense;
@@ -36,61 +37,64 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		{
 			// TODO: Replace ModelState errors with exception catches and notifications
 			// TODO: Buff up the error handling (catch errors from import functions, etc.)
-			if (ModelState.IsValid)
+			if (!ModelState.IsValid)
 			{
-				if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
+				return RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId });
+			}
+
+			if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
+			{
+				AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
+			}
+
+			if (file != null && file.ContentLength > 0)
+			{
+				// ExcelDataReader works with the binary Excel file, so it needs a FileStream
+				// to get started. This is how we avoid dependencies on ACE or Interop:
+				Stream stream = file.InputStream;
+
+				// We return the interface, so that
+				IExcelDataReader reader;
+
+				if (file.FileName.EndsWith(".xls"))
 				{
-					AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
+					reader = ExcelReaderFactory.CreateBinaryReader(stream);
 				}
-
-				if (file != null && file.ContentLength > 0)
+				else if (file.FileName.EndsWith(".xlsx"))
 				{
-					// ExcelDataReader works with the binary Excel file, so it needs a FileStream
-					// to get started. This is how we avoid dependencies on ACE or Interop:
-					Stream stream = file.InputStream;
-
-					// We return the interface, so that
-					IExcelDataReader reader = null;
-
-					if (file.FileName.EndsWith(".xls"))
-					{
-						reader = ExcelReaderFactory.CreateBinaryReader(stream);
-					}
-					else if (file.FileName.EndsWith(".xlsx"))
-					{
-						reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
-					}
-					else
-					{
-						Notifications.Add(new BootstrapAlert(Resources.Strings.FileFormatUnsupported, Variety.Danger));
-						return RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = subscriptionId });
-					}
-
-					reader.IsFirstRowAsColumnNames = true;
-
-					DataSet result = reader.AsDataSet();
-					reader.Close();
-
-					string[] formattedResult = ImportMessageFormatter.FormatImportResult(await AppService.Import(result, subscriptionId: subscriptionId));
-					if (!string.IsNullOrEmpty(formattedResult[0]))
-					{
-						Notifications.Add(new BootstrapAlert(formattedResult[0], Variety.Success));
-					}
-
-					if (!string.IsNullOrEmpty(formattedResult[1]))
-					{
-						BootstrapAlert alert = new BootstrapAlert(formattedResult[1], Variety.Warning);
-						alert.IsHtmlString = true;
-						Notifications.Add(alert);
-					}
+					reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
 				}
 				else
 				{
-					Notifications.Add(new BootstrapAlert(Resources.Strings.PleaseUploadFile, Variety.Danger));
+					Notifications.Add(new BootstrapAlert(Strings.FileFormatUnsupported, Variety.Danger));
+					return RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId });
+				}
+
+				reader.IsFirstRowAsColumnNames = true;
+
+				DataSet result = reader.AsDataSet();
+				reader.Close();
+
+				string[] formattedResult = ImportMessageFormatter.FormatImportResult(await AppService.Import(
+					result,
+					subscriptionId,
+					inviteUrl: Url.Action(ActionConstants.Index, ControllerConstants.Account, null, Request.Url.Scheme)));
+				if (!string.IsNullOrEmpty(formattedResult[0]))
+				{
+					Notifications.Add(new BootstrapAlert(formattedResult[0], Variety.Success) { IsHtmlString = true });
+				}
+
+				if (!string.IsNullOrEmpty(formattedResult[1]))
+				{
+					Notifications.Add(new BootstrapAlert(formattedResult[1], Variety.Warning) { IsHtmlString = true });
 				}
 			}
+			else
+			{
+				Notifications.Add(new BootstrapAlert(Strings.PleaseUploadFile, Variety.Danger));
+			}
 
-			return RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = subscriptionId });
+			return RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId });
 		}
 	}
 }

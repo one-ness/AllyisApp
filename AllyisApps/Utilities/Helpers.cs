@@ -90,6 +90,24 @@ namespace AllyisApps.Utilities
 				await func(value);
 			}
 		}
+
+		/// <summary>
+		/// Replaces the last occurance of a string.
+		/// </summary>
+		/// <param name="source">The string to perform the operation on.</param>
+		/// <param name="find">The string to get replaced.</param>
+		/// <param name="replace">The string to replace the "find" string.</param>
+		/// <returns></returns>
+		public static string ReplaceLastOccurrence(string source, string find, string replace)
+		{
+			if (string.IsNullOrEmpty(find) || string.IsNullOrEmpty(source)) return source;
+
+			int place = source.LastIndexOf(find, StringComparison.CurrentCulture);
+
+			return place == -1
+				? source
+				: source.Remove(place, find.Length).Insert(place, replace);
+		}
 	}
 
 	/// <summary>

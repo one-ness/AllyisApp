@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
@@ -26,39 +27,37 @@ namespace AllyisApps.Controllers.Auth
 		/// GET: /Add.
 		/// The page for adding members to an organization.
 		/// </summary>
-		public async Task<ActionResult> AddMember(int id)
+		public async Task<ActionResult> AddMember(int organizationId)
 		{
-			AppService.CheckOrgAction(AppService.OrgAction.AddUserToOrganization, id);
-			var model = new AddMemberViewModel();
-			model.OrganizationId = id;
-			model.EmployeeId = await AppService.GetNextEmployeeId(id);
-			
-			List<SelectListItem> orgRoles = new List<SelectListItem>
-			{
-				new SelectListItem { Text = OrganizationRoleEnum.Member.ToString(), Value = "1"},
-				new SelectListItem { Text = OrganizationRoleEnum.Owner.ToString(), Value = "2" }
-			};
+			AppService.CheckOrgAction(AppService.OrgAction.AddUserToOrganization, organizationId);
+			var subs = await AppService.GetSubscriptionsAsync(organizationId);
 
-			model.OrgRole = new SelectList(orgRoles, "Value", "Text", "1");
-			model.SubscriptionRoles = new List<RoleItem>();
-			
-			var subs = await AppService.GetSubscriptionsAsync(model.OrganizationId);
-			foreach (var item in subs)
+			var model = new AddMemberViewModel
 			{
-				model.SubscriptionRoles.Add(new RoleItem()
+				OrganizationId = organizationId,
+				EmployeeId = await AppService.GetNextEmployeeId(organizationId),
+				OrganizationName = "Organization", //AppService.GetOrganization(id).Result.OrganizationName;
+				SubscriptionRoles = subs.Select(sub => new RoleItem
 				{
-					ProductId = (int)item.ProductId,
-					SubscriptionName = item.SubscriptionName,
-					SelectList = GetSubRoles(item.SkuId)
-				});
-			}
-
-			model.orgName = "Organization"; //AppService.GetOrganization(id).Result.OrganizationName;
+					ProductId = (int)sub.ProductId,
+					SubscriptionName = sub.SubscriptionName,
+					SelectList = GetSubRoles(sub.SkuId)
+				}).ToList(),
+				OrgRole = new SelectList(
+					new List<SelectListItem>
+					{
+						new SelectListItem { Text = OrganizationRoleEnum.Member.ToString(), Value = "1"},
+						new SelectListItem { Text = OrganizationRoleEnum.Owner.ToString(), Value = "2" }
+					},
+					"Value",
+					"Text",
+					"1")
+			};
 
 			return View(model);
 		}
 
-		private List<SelectListItem> GetSubRoles(SkuIdEnum skuId)
+		private static List<SelectListItem> GetSubRoles(SkuIdEnum skuId)
 		{
 			switch (skuId)
 			{
@@ -84,8 +83,6 @@ namespace AllyisApps.Controllers.Auth
 						new SelectListItem { Text = Strings.User, Value = "1"},
 						new SelectListItem { Text = Strings.Manager, Value = "2"}
 					};
-				default:
-					break;
 			}
 			return null;
 		}
@@ -100,55 +97,56 @@ namespace AllyisApps.Controllers.Auth
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> AddMember(AddMemberViewModel model)
 		{
-			if (ModelState.IsValid)
+			if (!ModelState.IsValid) return View(model); // Invalid model, try again
+
+			try
 			{
-				try
+				User usr = await AppService.GetUserByEmail(model.Email);
+				string url = usr != null ?
+					Url.Action(ActionConstants.Index, ControllerConstants.Account, null, Request.Url.Scheme) :
+					Url.Action(ActionConstants.Register, ControllerConstants.Account, null, Request.Url.Scheme);
+
+				//string prodJson = "{{ "; //string.Format("{{ \"" + (int)ProductIdEnum.TimeTracker + "\" : {0}, \"" + (int)ProductIdEnum.ExpenseTracker + "\" : {1}, \"" + (int)ProductIdEnum.StaffingManager + "\" : 0 }}", model.ttSelection, model.etSelection);
+
+				//foreach (var role in model.SubscriptionRoles)
+				//{
+				//	prodJson += "\"" + role.ProductId + "\" : " + role.SelectedRoleId + ", ";
+				//}
+				//prodJson = prodJson.TrimEnd(new char[] { ' ', ',' });
+				//prodJson += " }}";
+
+				var json = model.SubscriptionRoles.Select(role => new InvitationPermissionsJson
 				{
-					User usr = await AppService.GetUserByEmail(model.Email);
-					string url = usr != null ?
-						Url.Action(ActionConstants.Index, ControllerConstants.Account, null, protocol: Request.Url.Scheme) :
-						Url.Action(ActionConstants.Register, ControllerConstants.Account, null, protocol: Request.Url.Scheme);
+					ProductId = role.ProductId,
+					ProductRoleId = role.SelectedRoleId
+				})
+					.ToList();
 
-					//string prodJson = "{{ "; //string.Format("{{ \"" + (int)ProductIdEnum.TimeTracker + "\" : {0}, \"" + (int)ProductIdEnum.ExpenseTracker + "\" : {1}, \"" + (int)ProductIdEnum.StaffingManager + "\" : 0 }}", model.ttSelection, model.etSelection);
+				string jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(json);
 
-					//foreach (var role in model.SubscriptionRoles)
-					//{
-					//	prodJson += "\"" + role.ProductId + "\" : " + role.SelectedRoleId + ", ";
-					//}
-					//prodJson = prodJson.TrimEnd(new char[] { ' ', ',' });
-					//prodJson += " }}";
+				int invitationId = await AppService.InviteUser(
+					url,
+					model.Email.Trim(),
+					model.FirstName,
+					model.LastName,
+					model.OrganizationId,
+					model.OrgRoleSelection == 2 ? OrganizationRoleEnum.Owner : OrganizationRoleEnum.Member,
+					model.EmployeeId,
+					jsonString);
 
-					List<InvitationPermissionsJson> json = new List<InvitationPermissionsJson>();
-					foreach (var role in model.SubscriptionRoles)
-					{
-						json.Add(new InvitationPermissionsJson()
-						{
-							ProductId = role.ProductId,
-							ProductRoleId = role.SelectedRoleId
-						});
-					}
-
-					var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(json);
-
-					int invitationId = await AppService.InviteUser(url, model.Email.Trim(), model.FirstName, model.LastName, model.OrganizationId, model.OrgRoleSelection == 2 ? OrganizationRoleEnum.Owner : OrganizationRoleEnum.Member, model.EmployeeId, jsonString);
-
-					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Strings.UserEmailed, model.FirstName, model.LastName), Variety.Success));
-					return RedirectToAction(ActionConstants.OrganizationMembers, new { id = model.OrganizationId });
-				}
-				catch (InvalidOperationException)
-				{
-					Notifications.Add(new BootstrapAlert(Strings.EmployeeIdNotUniqueError, Variety.Danger));
-					return View(model);
-				}
-				catch (System.Data.DuplicateNameException)
-				{
-					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Strings.UserAlreadyExists, model.FirstName, model.LastName), Variety.Warning));
-					return View(model);
-				}
+				Notifications.Add(new BootstrapAlert(string.Format(Strings.UserEmailed, model.FirstName, model.LastName), Variety.Success));
+				return RedirectToAction(ActionConstants.OrganizationMembers, new { id = model.OrganizationId });
 			}
-
-			// Invalid model; try again
-			return View(model);
+			catch (InvalidOperationException)
+			{
+				Notifications.Add(new BootstrapAlert(Strings.EmployeeIdNotUniqueError, Variety.Danger));
+				return View(model);
+			}
+			catch (System.Data.DuplicateNameException)
+			{
+				Notifications.Add(new BootstrapAlert(string.Format(Strings.UserAlreadyExists, model.FirstName, model.LastName), Variety.Warning));
+				return View(model);
+			}
 		}
 	}
 }
