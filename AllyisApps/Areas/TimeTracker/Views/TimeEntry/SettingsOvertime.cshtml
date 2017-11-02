@@ -61,37 +61,6 @@
 </div>
 
 @section scripts{
-	<script type="text/javascript">
-		var model_holiday = "";
-		deletePayClassWarning = "@Html.Raw(Strings.ConfirmDeletePayClass)";
-		deleteHolidayWarning = "@Html.Raw(Strings.ConfirmDeleteHoliday)";
-
-		mergePayClassUrl = "@Url.Action(ActionConstants.MergePayClass , ControllerConstants.TimeEntry, new { subscriptionId = ViewData["SubscriptionId"], userId = -1 })";
-		deletePayClassUrl = "@Url.Action(ActionConstants.DeletePayClass, ControllerConstants.TimeEntry, new { subscriptionId = ViewData["SubscriptionId"], userId = -1 })";
-		deleteHolidayUrl = "@Url.Action(ActionConstants.DeleteHoliday , ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId, id = Model.UserId, HolidayId = -1 })";
-
-		function populateHolidayForSelectedYear(year)
-		{
-			@foreach (var yearC in Model.Holidays.Select(m => m.Date.Year).Distinct())
-			{
-				<text>
-					if (@yearC != year) {
-						$('.' + @yearC).hide();
-						$('#' + @yearC).css("font-weight", "Normal");
-					}
-					else {
-						$('.' + @yearC).show();
-						$('#' + @yearC).css("font-weight", "Bold");
-					}
-				</text>
-			}
-		};
-
-		$('document').ready(function () {
-			populateHolidayForSelectedYear(@DateTime.Now.Year);
-			document.getElementById("datePickerHoliday").val = @Model.Settings.Today.ToString("MM/dd/yyyy").;
-		});
-	</script>
 	@Scripts.Render("~/bundles/jqueryui");
 	@Scripts.Render("~/bundles/moment")
 	<script src="~/Scripts/allyis-holidayDatepicker.js"></script>
