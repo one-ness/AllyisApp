@@ -80,7 +80,7 @@ namespace AllyisApps.Services
 		public async Task<List<Subscription>> GetSubscriptionsAsync(int orgId, bool readingList = false)
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
-			if(!readingList) CheckOrgAction(OrgAction.ReadSubscriptionsList, orgId);
+			if(!readingList) CheckOrgAction(OrgAction.ReadSubscriptions, orgId);
 			var result = new List<Subscription>();
 			dynamic entities = await DBHelper.GetSubscriptionsAsync(orgId);
 			foreach (var item in entities)
@@ -302,7 +302,7 @@ namespace AllyisApps.Services
 		/// Removes an organization user.
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
-		/// <param name="userId">User Id.</param>
+		/// <param name="userId">User Id to be DELETED.</param>
 		public async Task RemoveOrganizationUser(int orgId, int userId)
 		{
 			if (orgId < 0)
@@ -313,6 +313,11 @@ namespace AllyisApps.Services
 			if (userId <= 0)
 			{
 				throw new ArgumentOutOfRangeException(nameof(userId), "User Id cannot be 0 or negative.");
+			}
+			
+			if (userId == UserContext.UserId)
+			{
+				throw new Exception("Cannot remove Self from the organization.");
 			}
 
 			await DBHelper.RemoveOrganizationUser(orgId, userId);

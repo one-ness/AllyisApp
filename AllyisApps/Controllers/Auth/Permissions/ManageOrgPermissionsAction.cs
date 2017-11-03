@@ -4,7 +4,6 @@ using System.Web.Mvc;
 using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
-
 namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
@@ -28,6 +27,7 @@ namespace AllyisApps.Controllers.Auth
 			PermissionsViewModel perModel = new PermissionsViewModel
 			{
 				Actions = setOrganizationRoles,
+				UserId = AppService.UserContext.UserId,
 				ActionGroup = Strings.Organization,
 				PossibleRoles = organizationRoles,
 				RemoveUserMessage = Strings.RemoveFromOrgNoName,

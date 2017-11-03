@@ -52,6 +52,10 @@ namespace AllyisApps.Controllers.Auth
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Register(RegisterViewModel model, string returnUrl)
 		{
+			if (model.DateOfBirth == -1)
+			{
+				ModelState.AddModelError("DateOfBirth", "Please enter your date of birth.");
+			}
 			if (ModelState.IsValid)
 			{
 				Guid code = Guid.NewGuid();

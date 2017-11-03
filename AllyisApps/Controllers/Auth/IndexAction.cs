@@ -13,6 +13,7 @@ using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.Auth;
+using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -75,6 +76,9 @@ namespace AllyisApps.Controllers.Auth
 			var orgsList = accountInfo.Organizations;
 			foreach (var item in orgsList)
 			{
+				State state = AppService.GetStates(item.Address.CountryCode).Where(s => s.StateId == item.Address.StateId).FirstOrDefault();
+				Country country = AppService.GetCountries().Where(c => c.Key == item.Address.CountryCode).FirstOrDefault().Value;
+
 				AccountIndexViewModel.OrganizationViewModel orgViewModel =
 				new AccountIndexViewModel.OrganizationViewModel
 				{
@@ -83,17 +87,17 @@ namespace AllyisApps.Controllers.Auth
 					PhoneNumber = item.PhoneNumber,
 					Address1 = item.Address?.Address1,
 					City = item.Address?.City,
-					State = item.Address?.StateName,
+					State = state?.StateName,
 					PostalCode = item.Address?.PostalCode,
-					Country = item.Address?.CountryName,
+					Country = country?.CountryName,
 					SiteUrl = item.SiteUrl,
 					FaxNumber = item.FaxNumber,
 					IsCreateSubscriptionAllowed = AppService.CheckOrgAction(AppService.OrgAction.CreateSubscription, item.OrganizationId, false),
 					IsReadBillingDetailsAllowed = AppService.CheckOrgAction(AppService.OrgAction.ReadBilling, item.OrganizationId, false),
 					IsReadMembersListAllowed = AppService.CheckOrgAction(AppService.OrgAction.ReadUsersList, item.OrganizationId, false),
 					IsReadOrgDetailsAllowed = AppService.CheckOrgAction(AppService.OrgAction.ReadOrganization, item.OrganizationId, false),
-					IsReadPermissionsListAllowed = AppService.CheckOrgAction(AppService.OrgAction.ReadPermissionsList, item.OrganizationId, false),
-					IsReadSubscriptionsListAllowed = AppService.CheckOrgAction(AppService.OrgAction.ReadSubscriptionsList, item.OrganizationId, false)
+					IsReadPermissionsListAllowed = AppService.CheckOrgAction(AppService.OrgAction.ReadPermissions, item.OrganizationId, false),
+					IsReadSubscriptionsListAllowed = AppService.CheckOrgAction(AppService.OrgAction.ReadSubscriptions, item.OrganizationId, false)
 				};
 
 				// Add subscription info

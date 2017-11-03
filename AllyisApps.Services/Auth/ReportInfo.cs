@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.Auth
 {
 	/// <summary>
 	/// Represents a report.

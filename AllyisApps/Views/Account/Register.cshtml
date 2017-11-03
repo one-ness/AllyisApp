@@ -15,34 +15,34 @@
 					<div class="form-group">
 						@Html.ReqLabelFor(m => m.Email, Strings.Email)
 						@Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.Email)
+						@Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
 						@Html.ReqLabelFor(m => m.FirstName, Strings.FirstName)
 						@Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.FirstName)
+						@Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
 						@Html.ReqLabelFor(m => m.LastName, Strings.LastName)
 						@Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.LastName)
+						@Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
 						@Html.ReqLabelFor(m => m.Password, Strings.Password)
 						@Html.PasswordFor(m => m.Password, new { @class = "form-control", @CssClass = "alert" })
-						@Html.ValidationMessageFor(m => m.Password)
+						@Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
 						@Html.ReqLabelFor(m => m.ConfirmPassword, Strings.ConfirmPassword)
 						@Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.ConfirmPassword)
+						@Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
-						<label>@Strings.DateOfBirth</label>
+						@Html.ReqLabelFor(m => m.DateOfBirth, Strings.DateOfBirth)
 						@Html.HiddenFor(m => m.DateOfBirth)
 						<input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerBirth" />
 						<span class="fa fa-fw fa-calendar pointer" id="datePickerBirthButton"></span>
-						@Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @style = "color:#a94442" })
+						@Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @class = "text-danger" })
 					</div>
 					<div class="field-validation-error" id="capsWarningDiv" style="visibility:hidden; height:0px"><span>@Strings.CapsLock</span></div>
 				</div>
@@ -50,7 +50,7 @@
 					<div class="form-group">
 						@Html.LabelFor(m => m.PhoneNumber, Strings.PhoneNumber)
 						@Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.PhoneNumber)
+						@Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
 						@Html.LabelFor(m => m.Address, Strings.Address)

@@ -12,6 +12,7 @@ using AllyisApps.Core.Alert;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Cache;
 using AllyisApps.ViewModels.Auth;
+using AllyisApps.ViewModels.Billing;
 
 namespace AllyisApps.Controllers.Auth
 {

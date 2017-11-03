@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
+using AllyisApps.Services.Auth;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {

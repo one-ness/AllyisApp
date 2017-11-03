@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.ViewModels.Auth;
+using AllyisApps.ViewModels.Billing;
 
 namespace AllyisApps.Controllers.Auth
 {

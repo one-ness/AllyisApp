@@ -52,6 +52,10 @@ namespace AllyisApps.Controllers.Auth
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> EditProfile(EditProfileViewModel model)
 		{
+			if (model.DateOfBirth == -1)
+			{
+				ModelState.AddModelError("DateOfBirth", "Please enter your date of birth.");
+			}
 			if (ModelState.IsValid)
 			{
 				await AppService.UpdateCurrentUserProfile(model.DateOfBirth, model.FirstName, model.LastName, model.PhoneNumber, model.AddressId, model.Address, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode);

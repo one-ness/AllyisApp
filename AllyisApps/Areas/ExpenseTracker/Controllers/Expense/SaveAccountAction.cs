@@ -8,6 +8,7 @@ using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.Services.Expense;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
+using AllyisApps.Services.Auth;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
