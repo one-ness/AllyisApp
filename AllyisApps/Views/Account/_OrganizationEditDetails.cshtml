@@ -56,12 +56,12 @@
 					</div>
 					<div class="form-group">
 						@Html.ReqLabelFor(m => m.Country, Strings.Country)
-						@Html.DropDownListFor(m => m.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new { @id = ViewConstants.DdlCountriesId, @class = "form-control" })
+						@Html.DropDownListFor(m => m.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value", Model.SelectedCountryCode), Strings.DropDownEmpty, new { @id = ViewConstants.DdlCountriesId, @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.Country, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
 						@Html.ReqLabelFor(m => m.State, Strings.State)
-						@Html.DropDownListFor(m => m.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @id = ViewConstants.DdlStatesId, @class = "form-control" })
+						@Html.DropDownListFor(m => m.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value", Model.SelectedStateId), Strings.DropDownEmpty, new { @id = ViewConstants.DdlStatesId, @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.State, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
