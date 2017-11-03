@@ -51,28 +51,14 @@ namespace AllyisApps.Services
 			var sortableTables = new List<Tuple<DataTable, int>>();
 			foreach (DataTable table in importData.Tables)
 			{
-				int rank;
+				int rank = 0;
 				if (table.Columns.Contains(ColumnHeaders.CustomerName) || table.Columns.Contains(ColumnHeaders.CustomerId))
 				{
-					if (table.Columns.Contains(ColumnHeaders.ProjectName) || table.Columns.Contains(ColumnHeaders.ProjectId))
-					{
-						rank = 2;
-					}
-					else
-					{
-						rank = 3;
-					}
+					rank += 2;
 				}
-				else
+				if (table.Columns.Contains(ColumnHeaders.ProjectName) || table.Columns.Contains(ColumnHeaders.ProjectId))
 				{
-					if (table.Columns.Contains(ColumnHeaders.ProjectName) || table.Columns.Contains(ColumnHeaders.ProjectId))
-					{
-						rank = 1;
-					}
-					else
-					{
-						rank = 0;
-					}
+					rank += 1;
 				}
 
 				sortableTables.Add(new Tuple<DataTable, int>(table, rank));
