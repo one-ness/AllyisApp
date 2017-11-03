@@ -13,6 +13,11 @@ namespace AllyisApps.ViewModels.Auth
 		public string ActionGroup { get; set; }
 
 		/// <summary>
+		/// logged in user Id
+		/// </summary>
+		public int UserId { get; set; }
+
+		/// <summary>
 		/// Actions Role Choices
 		/// </summary>
 		public Dictionary<string, int> Actions { get; set; }

@@ -1,4 +1,4 @@
-﻿namespace AllyisApps.ViewModels.Auth
+﻿namespace AllyisApps.ViewModels.Billing
 {
 	/// <summary>
 	/// View Model For Product Role.

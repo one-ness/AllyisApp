@@ -41,9 +41,17 @@
 			{
 
 				<tr class="userRow" data-id="@user.UserId" data-name="@user.Email">
-					<td class="checked">
-						<input type="checkbox" id="check" />
-					</td>
+					@if (user.UserId != Model.UserId)
+					{
+						<td class="checked">
+							<input type="checkbox" id="check" />
+						</td>
+					}
+					else
+					{
+						<td class="checked">
+						</td>
+					}
 					<td id="name">@user.FullName</td>
 					<td id="Role" class="tab-OrganizationTab">@user.CurrentRoleName</td>
 				</tr>

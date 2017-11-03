@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.ViewModels.Auth
+namespace AllyisApps.ViewModels.Billing
 {
 	/// <summary>
 	/// Represents an editable view of subcription.

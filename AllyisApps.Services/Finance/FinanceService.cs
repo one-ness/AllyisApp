@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AllyisApps.DBModel.Finance;
 using AllyisApps.Services.Expense;
+using AllyisApps.Services.Auth;
 
 namespace AllyisApps.Services
 {

@@ -18,13 +18,13 @@ namespace AllyisApps.Controllers.Auth
     /// </summary>
     public partial class AccountController : BaseController
     {
-        /// <summary>
-        /// POST: Organization/RemoveUser.
-        /// </summary>
-        /// <param name="id">Organization Id.</param>
-        /// <param name="csvUserIds">User ids.</param>
-        /// <returns>Redirects to the manage org action.</returns>
-        [HttpPost]
+		/// <summary>
+		/// POST: Organization/RemoveUser.
+		/// </summary>
+		/// <param name="id">Organization Id.</param>
+		/// <param name="csvUserIds">User ids.</param>
+		/// <returns>Redirects to the manage org action.</returns>
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> RemoveMember(int id, string csvUserIds)
         {
