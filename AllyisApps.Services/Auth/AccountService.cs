@@ -155,7 +155,7 @@ namespace AllyisApps.Services
 			string firstName,
 			string lastName,
 			Guid emailConfirmationCode,
-			DateTime? dateOfBirth,
+			DateTime dateOfBirth,
 			string phoneNumber,
 			string address1,
 			string address2,
