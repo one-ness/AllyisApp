@@ -1120,7 +1120,7 @@
   <data name="SetManager" xml:space="preserve">
     <value>Set Manager</value>
   </data>
-	<data name="SetSuperUser" xml:space="preserve">
+  <data name="SetSuperUser" xml:space="preserve">
     <value>Set Super User</value>
   </data>
   <data name="SetMember" xml:space="preserve">
@@ -1491,5 +1491,17 @@
   </data>
   <data name="Status" xml:space="preserve">
     <value>Status</value>
+  </data>
+  <data name="ApplicationStatuses" xml:space="preserve">
+    <value>Application Statuses</value>
+  </data>
+  <data name="EmploymentTypes" xml:space="preserve">
+    <value>Employment Types</value>
+  </data>
+  <data name="PositionLevels" xml:space="preserve">
+    <value>Position Levels</value>
+  </data>
+  <data name="PositionStatuses" xml:space="preserve">
+    <value>Position Statuses</value>
   </data>
 </root>

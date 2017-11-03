@@ -461,7 +461,6 @@
     <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-settings.js" />
     <Content Include="Content\bootstrap\css\bootstrap.min.css" />
     <Content Include="Content\css\bootstrap-select.min.css" />
-    <Content Include="Scripts\bootstrap\bootstrap.js" />
     <Content Include="Scripts\bootstrap\bootstrap.min.js" />
     <Content Include="Content\css\ExpenseTracker.css" />
     <Content Include="Content\css\ExpenseTracker.min.css">
@@ -583,7 +582,6 @@
     <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsOvertime.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsHoliday.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\_ManageSettingSideBar.cshtml" />
-    <Content Include="Areas\TimeTracker\Views\TimeEntry\_ManageSettingSideBar2.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\Review.cshtml" />
     <Content Include="Content\bootstrap\css\bootstrap.min.css.map" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.eot" />

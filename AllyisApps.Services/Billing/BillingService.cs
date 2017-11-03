@@ -611,10 +611,11 @@ namespace AllyisApps.Services
 					throw new InvalidOperationException("You selected an invalid product to subscribe to.");
 			}
 
-			await InitializeSettingsForProduct(selectedSku.ProductId, organizationId);
+			if(selectedSku.ProductId != ProductIdEnum.StaffingManager) await InitializeSettingsForProduct(selectedSku.ProductId, organizationId);
 
 			// create new subscription
-			await DBHelper.CreateSubscription(organizationId, (int)skuId, subscriptionName, UserContext.UserId, productRoleId);
+			int subId = await DBHelper.CreateSubscription(organizationId, (int)skuId, subscriptionName, UserContext.UserId, productRoleId);
+			if (selectedSku.ProductId == ProductIdEnum.StaffingManager) await InitializeSettingsForProduct(selectedSku.ProductId, organizationId, subId);
 		}
 
 		public async Task UpdateSubscriptionName(int subscriptionId, string subscriptionName)
@@ -713,7 +714,8 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="productId">Product Id.</param>
 		/// <param name="orgId">.</param>
-		public async Task InitializeSettingsForProduct(ProductIdEnum productId, int orgId)
+		/// <param name="subId">.</param>
+		public async Task InitializeSettingsForProduct(ProductIdEnum productId, int orgId, int subId = 0)
 		{
 			if (productId <= 0)
 			{
@@ -727,7 +729,7 @@ namespace AllyisApps.Services
 
 			if (productId == ProductIdEnum.StaffingManager)
 			{
-				DBHelper.CreateStaffingSettings(orgId);
+				DBHelper.CreateStaffingSettings(subId, orgId);
 			}
 		}
 

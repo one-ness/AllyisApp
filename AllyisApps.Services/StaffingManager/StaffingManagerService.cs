@@ -281,9 +281,9 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// get the default status ID from staffingsettings
 		/// </summary>
-		/// <param name="orgId"></param>
+		/// <param name="subId"></param>
 		/// <returns></returns>
-		public async Task<List<int>> GetStaffingDefaultStatus(int orgId) => await DBHelper.GetStaffingDefaultStatus(orgId);
+		public async Task<List<int>> GetStaffingDefaultStatus(int subId) => await DBHelper.GetStaffingDefaultStatus(subId);
 
 		#endregion GetMethods
 
@@ -320,9 +320,9 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// update default status
 		/// </summary>
-		/// <param name="organizationId"></param>
+		/// <param name="subscriptionId"></param>
 		/// <param name="positionStatusId"></param>
-		public void UpdateDefaultPositionStatus(int organizationId, int positionStatusId) => DBHelper.UpdateStaffingSettings(organizationId, positionStatusId);
+		public void UpdateDefaultPositionStatus(int subscriptionId, int positionStatusId) => DBHelper.UpdateStaffingSettings(subscriptionId, positionStatusId);
 
 		#endregion UpdateMethods
 
