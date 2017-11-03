@@ -67,7 +67,7 @@ namespace AllyisApps.Controllers.Auth
 				var birthdate = Utility.GetNullableDateTimeFromDays(model.DateOfBirth);
 
 				// create new user in the db and get back the userId and count of invitations
-				int userId = await AppService.SetupNewUser(model.Email, model.Password, model.FirstName, model.LastName, code, birthdate, model.PhoneNumber, model.Address, null, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode, confirmEmailSubject, confirmEmailBody);
+				int userId = await AppService.SetupNewUser(model.Email, model.Password, model.FirstName, model.LastName, code, birthdate.Value, model.PhoneNumber, model.Address, null, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode, confirmEmailSubject, confirmEmailBody);
 				if (userId > 0)
 				{
 					// sign in (and set cookie) do not set cookie need to confirm email
@@ -81,7 +81,7 @@ namespace AllyisApps.Controllers.Auth
 				}
 			}
 
-			// model error
+			// error
 			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService);
 			model.LocalizedStates = ModelHelper.GetLocalizedStates(AppService, model.SelectedCountryCode);
 			return View(model);
