@@ -38,11 +38,11 @@
 						@Html.ValidationMessageFor(m => m.ConfirmPassword)
 					</div>
 					<div class="form-group">
-						<label>@Strings.DateOfBirth</label>
+						@Html.ReqLabelFor(m => m.DateOfBirth, Strings.DateOfBirth)
 						@Html.HiddenFor(m => m.DateOfBirth)
 						<input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerBirth" />
 						<span class="fa fa-fw fa-calendar pointer" id="datePickerBirthButton"></span>
-						@Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @style = "color:#a94442" })
+						@Html.ValidationMessageFor(m => m.DateOfBirth)
 					</div>
 					<div class="field-validation-error" id="capsWarningDiv" style="visibility:hidden; height:0px"><span>@Strings.CapsLock</span></div>
 				</div>
