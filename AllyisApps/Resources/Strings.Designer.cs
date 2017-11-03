@@ -4552,6 +4552,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Successfully updated pay period..
+        /// </summary>
+        public static string UpdatePayPeriodSuccess {
+            get {
+                return ResourceManager.GetString("UpdatePayPeriodSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your profile has been updated..
         /// </summary>
         public static string UpdateProfileSuccessMessage {

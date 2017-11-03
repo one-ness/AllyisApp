@@ -1,4 +1,5 @@
-﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+﻿@using System.Globalization
+@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 @using AllyisApps.Services.TimeTracker;
 @model SettingsPayPeriodViewModel
 
@@ -15,6 +16,13 @@
 
 @section css {
 	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker3.min.css" />
+
+	<style>
+		.fix-input-width {
+			width: 50px !important;
+		}
+	</style>
 }
 
 <div class="row slim">
@@ -31,19 +39,75 @@
 				@using (Html.BeginForm(ActionConstants.SettingsPayPeriod, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "form-inline" }))
 				{
 					<div class="radio">
-						<label><input type="radio" name="PayPeriodTypeId" value="0" checked/>Duration:</label>
+						<label>
+							<input type="radio" id="PayPeriodTypeId" name="PayPeriodTypeId" value="0" style="margin-right: 15px;" @Html.Raw(Model.PayPeriodTypeId == 0 ? "checked" : "")/>
+							<strong>Duration:</strong>
+						</label>
 						<span>Each pay period is </span>
-						@Html.TextBoxFor(m => m.Duration, new { @class="form-control" })
-						<span>days long.</span>
+						@Html.TextBoxFor(m => m.Duration, new { @class= "form-control fix-input-width" })
+						<span>days long.  Starting on </span>
+						<div class="input-group date">
+							<input 
+								type="text"
+								class="form-control"
+								id="StartDate"
+								name="StartDate"
+								value="@(Model.StartDate != null
+									         ? Model.StartDate.Value.Date.ToString("d", CultureInfo.InvariantCulture)
+									         : DateTime.Now.Date.ToString("d", CultureInfo.InvariantCulture))"
+								style="width:100px">
+							<div class="input-group-addon">
+								<span class="glyphicon glyphicon-th"></span>
+							</div>
+						</div>
+						@Html.ValidationMessageFor(m => m.Duration, "", new { @class="text-danger" })
 					</div>
+					<br/>
 					<div class="radio">
-						<label><input type="radio" name="PayPeriodTypeId" value="1" />Dates:</label>
+						<label>
+							<input type="radio" id="PayPeriodTypeId" name="PayPeriodTypeId" value="1" style="margin-right: 15px;" @Html.Raw(Model.PayPeriodTypeId == 1 ? "checked" : "")/>
+							<strong>Dates:</strong>
+						</label>
 						<span>Each pay period starts on the </span>
-						@Html.TextBoxFor(m => m.Dates, new { @class = "form-control" })
+						@Html.TextBoxFor(m => m.Dates, new { @class = "form-control fix-input-width" })
 						<span>of every month.</span>
 					</div>
+					@Html.ValidationMessageFor(m => m.Dates, "", new { @class = "text-danger" })
+					<br/>
+					<input class="btn btn-primary" type="submit" value=@Strings.Save />
 				}
 			</div>
 		</div>
 	</div>
 </div>
+
+@section scripts {
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			$("#StartDate").datepicker();
+
+			if ($("input[name=PayPeriodTypeId]:checked").val() === "0") {
+				$("input[name=Dates]").prop("disabled", true);
+				$("input[name=Duration]").prop("disabled", false);
+				$("input[name=StartDate]").prop("disabled", false);
+			} else {
+				$("input[name=Dates]").prop("disabled", false);
+				$("input[name=Duration]").prop("disabled", true);
+				$("input[name=StartDate]").prop("disabled", true);
+			}
+
+			$("input[name=PayPeriodTypeId]").change(function() {
+				if (this.value === "0") {
+					$("input[name=Dates]").prop("disabled", true);
+					$("input[name=Duration]").prop("disabled", false);
+					$("input[name=StartDate]").prop("disabled", false);
+				} else {
+					$("input[name=Dates]").prop("disabled", false);
+					$("input[name=Duration]").prop("disabled", true);
+					$("input[name=StartDate]").prop("disabled", true);
+				}
+			});
+		});
+	</script>
+}

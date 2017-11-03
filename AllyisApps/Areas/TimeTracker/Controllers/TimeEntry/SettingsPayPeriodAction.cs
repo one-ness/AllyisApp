@@ -4,13 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
-using AllyisApps.Lib;
+using AllyisApps.Core.Alert;
+using AllyisApps.Resources;
 using AllyisApps.Services;
-using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+using Newtonsoft.Json;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -27,22 +29,39 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public async Task<ActionResult> SettingsPayPeriod(int subscriptionId)
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
-			int organizaionID = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-			var infos = AppService.GetAllSettings(organizaionID);
-			UserContext.SubscriptionAndRole subInfo = null;
-			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			int organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			var settings = await AppService.GetSettingsByOrganizationId(organizationId);
 			string subName = await AppService.GetSubscriptionName(subscriptionId);
-			var infoOrg = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
-			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infoOrg.Item1.StartOfWeek));
-			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(infoOrg.Item1.StartOfWeek));
-			Services.TimeTracker.Setting settings = infos.Item1;
+			dynamic payPeriodInfo = JsonConvert.DeserializeObject(settings.PayPeriod);
 
-			return View(new SettingsPayPeriodViewModel
+			var model = new SettingsPayPeriodViewModel
 			{
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subName,
-				UserId = AppService.UserContext.UserId
-			});
+				UserId = AppService.UserContext.UserId,
+				PayPeriodTypeId = payPeriodInfo.type == "duration" ? 0 : 1,
+				Duration = payPeriodInfo.duration ?? 0,
+				StartDate = (DateTime?)payPeriodInfo.startDate,
+				Dates = payPeriodInfo.dates
+			};
+			return View(model);
+		}
+
+		/// <summary>
+		/// POST for updating the time tracker pay period settings
+		/// </summary>
+		/// <param name="model">Model containing updated data</param>
+		/// <returns></returns>
+		[HttpPost]
+		public ActionResult SettingsPayPeriod(SettingsPayPeriodViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(model);
+			}
+
+			Notifications.Add(new BootstrapAlert(Strings.UpdatePayPeriodSuccess, Variety.Success));
+			return RedirectToAction(ActionConstants.SettingsPayPeriod, new { subscriptionId = model.SubscriptionId });
 		}
 	}
 }

@@ -1724,33 +1724,36 @@
 	<value>No Active Applications</value>
   </data>
 	<data name="EmploymentTypes" xml:space="preserve">
-    <value>Employment Types</value>
+	<value>Employment Types</value>
   </data>
 	<data name="TypeName" xml:space="preserve">
-    <value>Type Name</value>
+	<value>Type Name</value>
   </data>
 	<data name="PositionStatuses" xml:space="preserve">
-    <value>Position Statuses</value>
+	<value>Position Statuses</value>
   </data>
 	<data name="StatusName" xml:space="preserve">
-    <value>Status Name</value>
+	<value>Status Name</value>
   </data>
 	<data name="Default" xml:space="preserve">
-    <value>Default</value>
+	<value>Default</value>
   </data>
 	<data name="ApplicationStatuses" xml:space="preserve">
-    <value>Application Statuses</value>
+	<value>Application Statuses</value>
   </data>
 	<data name="PositionLevels" xml:space="preserve">
-    <value>Position Levels</value>
+	<value>Position Levels</value>
   </data>
 	<data name="LevelName" xml:space="preserve">
-    <value>Level Name</value>
+	<value>Level Name</value>
   </data>
 	<data name="PayPeriod" xml:space="preserve">
-    <value>Pay Period</value>
+	<value>Pay Period</value>
   </data>
 	<data name="WeekStart" xml:space="preserve">
-    <value>Week Start</value>
+	<value>Week Start</value>
+  </data>
+	<data name="UpdatePayPeriodSuccess" xml:space="preserve">
+    <value>Successfully updated pay period.</value>
   </data>
 </root>

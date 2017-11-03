@@ -126,6 +126,7 @@ namespace AllyisApps
 		public const string PayrollProcessTimeEntries = "payrollprocesstimeentries";
 		public const string CustomerImport = "customerimport";
 		public const string SettingsPayPeriod = "settingspayperiod";
+		public const string UpdatePayPeriod = "updatepayperiod";
 	}
 
 	/// <summary>

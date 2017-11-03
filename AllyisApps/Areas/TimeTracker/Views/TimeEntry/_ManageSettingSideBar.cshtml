@@ -1,19 +1,19 @@
 ﻿<ul class="nav nav-pills nav-stacked panel-default" style="background-color: #fafafa;">
-	<li style=@(ViewBag.Title == Strings.OrgSOW ? "background-color: #d1d1d1" : "")>
+	<li @Html.Raw(ViewBag.Title == Strings.OrgSOW ? "style=background-color: #d1d1d1" : "")>
 		@Html.ActionLink(Strings.WeekStart, ActionConstants.SettingsStartOfWeek, ControllerConstants.TimeEntry)
 	</li>
-	<li style=@(ViewBag.Title == Strings.PClasses ? "background-color: #d1d1d1" : "")>
+	<li @Html.Raw(ViewBag.Title == Strings.PClasses ? "style=background-color: #d1d1d1" : "")>
 		@Html.ActionLink(Strings.PClasses, ActionConstants.SettingsPayClass, ControllerConstants.TimeEntry)
 	</li>
-	<li style=@(ViewBag.Title == Strings.PayPeriod ? "background-color: #d1d1d1" : "")>
+	<li @Html.Raw(ViewBag.Title == Strings.PayPeriod ? "style=background-color: #d1d1d1" : "")>
 		@Html.ActionLink(Strings.PayPeriod, ActionConstants.SettingsPayPeriod, ControllerConstants.TimeEntry)
 	</li>
-	<li style=@(ViewBag.Title == Strings.Overtime ? "background-color: #d1d1d1" : "")>
+	<li @Html.Raw(ViewBag.Title == Strings.Overtime ? "style=background-color: #d1d1d1" : "")>
 		@Html.ActionLink(Strings.Overtime, ActionConstants.SettingsOvertime, ControllerConstants.TimeEntry)
 	</li>
-	<li style=@(ViewBag.Title == Strings.Holidays ? "background-color: #d1d1d1" : "")>
+	<li @Html.Raw(ViewBag.Title == Strings.Holidays ? "style=background-color: #d1d1d1" : "")>
 		@Html.ActionLink(Strings.Holidays, ActionConstants.SettingsHoliday, ControllerConstants.TimeEntry)
 	</li>
 </ul>
-<br/>
-<input type="button" class="btn btn-default" value="Back" onclick='location.href=@Html.ActionLink("", ActionConstants.IndexNoUserId, ControllerConstants.TimeEntry)'>
+<br />
+@Html.ActionLink(Strings.Back, ActionConstants.IndexNoUserId, ControllerConstants.TimeEntry, new { @class = "btn btn-default", type = "button" })
