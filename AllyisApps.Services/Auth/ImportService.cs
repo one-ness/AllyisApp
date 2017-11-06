@@ -30,7 +30,7 @@ namespace AllyisApps.Services
 		/// <param name="importData">Workbook with data to import.</param>
 		/// <param name="organizationId">The organization's Id.</param>
 		/// <param name="inviteUrl">Used for userImport when adding users via AddMemberPage</param>
-		public ImportActionResult Import(DataSet importData, int subscriptionId = 0, int organizationId = 0, string inviteUrl = null)
+		public async Task<ImportActionResult> Import(DataSet importData, int subscriptionId = 0, int organizationId = 0, string inviteUrl = null)
 		{
 			int orgId;
 			if (subscriptionId > 0 && UserContext.SubscriptionsAndRoles[subscriptionId] != null)
@@ -100,7 +100,7 @@ namespace AllyisApps.Services
 
 			if (timeEntryImports.Any())
 			{
-				result = ImportTimeEntry(timeEntryImports, orgId, subscriptionId, result).Result;
+				result = await ImportTimeEntry(timeEntryImports, orgId, subscriptionId, result);
 			}
 
 			return result;
