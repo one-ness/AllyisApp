@@ -5,11 +5,13 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Linq;
 using System.Threading.Tasks;
 using AllyisApps.DBModel.TimeTracker;
 using AllyisApps.Services.TimeTracker;
+using Newtonsoft.Json;
 
 namespace AllyisApps.Services
 {
@@ -131,7 +133,7 @@ namespace AllyisApps.Services
 			return PayrollProcessEntriesResult.Success;
 		}
 
-		public async Task UpdateDurationPayPeriod(int duration, DateTime startDate)
+		public async Task<int> UpdateDurationPayPeriod(int duration, DateTime startDate, int organizationId)
 		{
 			if (duration < 1 || duration > 365)
 			{
@@ -143,7 +145,49 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException(nameof(startDate), $"{nameof(startDate)} must be greater than {SqlDateTime.MinValue}.");
 			}
 
-			await DBHelper.UpdateDurationPayPeriod(duration, startDate);
+			if (organizationId <= 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(organizationId), $"{nameof(organizationId)} must be greater than 0.");
+			}
+
+			var jsonDic = new Dictionary<string, string>
+			{
+				{"type", "duration"},
+				{"duration", $"{duration}"},
+				{"startDate", startDate.ToString("d")}
+			};
+
+			string payPeriodJson = JsonConvert.SerializeObject(jsonDic);
+
+			return await DBHelper.UpdatePayPeriod(payPeriodJson, organizationId);
+		}
+
+		public async Task<int> UpdateDatesPayPeriod(List<int> dates, int organizationId)
+		{
+			if (dates == null)
+			{
+				throw new ArgumentNullException(nameof(dates));
+			}
+
+			if (dates.Any(date => date <= 0 || date > 28))
+			{
+				throw new ArgumentOutOfRangeException(nameof(dates), $"{dates} must be between 1 and 28.");
+			}
+
+			if (organizationId <= 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(organizationId), $"{nameof(organizationId)} must be greater than 0.");
+			}
+
+			var jsonDic = new Dictionary<string, dynamic>
+			{
+				{"type", "duration"},
+				{"dates", dates.ToArray()}
+			};
+
+			string payPeriodJson = JsonConvert.SerializeObject(jsonDic);
+
+			return await DBHelper.UpdatePayPeriod(payPeriodJson, organizationId);
 		}
 
 		#region public static

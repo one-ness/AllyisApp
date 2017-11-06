@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
@@ -35,13 +34,13 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// </summary>
 		[Range(1, 365, ErrorMessage = "Enter a number between 1 and 365")]
 		[RegularExpression("([1-9][0-9]{0,3})", ErrorMessage = "Enter a number between 1 and 365")]
-		public int Duration { get; set; }
+		public int? Duration { get; set; }
 
 		/// <summary>
-		/// Gets or sets the dates value for pay period
+		/// Gets or sets the dates value for pay period.  Comma deliniated list of dates
 		/// </summary>
-		[RegularExpression("([1-9][0-9]?)(,[1-9][0-9]?){0,15}", ErrorMessage = "Please enter a comma deliniated list of days, between 1-28")]
-		public List<int> Dates { get; set; }
+		[RegularExpression("([1-9][0-9]?)(, ?[1-9][0-9]?){0,15}", ErrorMessage = "Please enter a comma deliniated list of days, between 1-28")]
+		public string Dates { get; set; }
 
 		/// <summary>
 		/// Gets or sets the pay period type.  0 is duration, 1 is dates
@@ -53,5 +52,10 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Gets or sets the start date for the duration type pay period.
 		/// </summary>
 		public DateTime? StartDate { get; set; }
+
+		/// <summary>
+		/// Gets or sets the organization id that the view belongs to.
+		/// </summary>
+		public int OrganizationId { get; set; }
 	}
 }

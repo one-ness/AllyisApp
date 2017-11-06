@@ -5,6 +5,8 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
@@ -38,12 +40,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var model = new SettingsPayPeriodViewModel
 			{
 				SubscriptionId = subscriptionId,
+				OrganizationId = organizationId,
 				SubscriptionName = subName,
 				UserId = AppService.UserContext.UserId,
 				PayPeriodTypeId = payPeriodInfo.type == "duration" ? 0 : 1,
 				Duration = payPeriodInfo.duration ?? 0,
 				StartDate = (DateTime?)payPeriodInfo.startDate,
-				Dates = payPeriodInfo.dates
+				Dates = string.Join(",", payPeriodInfo.dates)
 			};
 			return View(model);
 		}
@@ -52,17 +55,26 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// POST for updating the time tracker pay period settings
 		/// </summary>
 		/// <param name="model">Model containing updated data</param>
-		/// <returns></returns>
+		/// <returns>Either return to same page if invalid data, or refresh the page with the updated data.</returns>
 		[HttpPost]
-		public ActionResult SettingsPayPeriod(SettingsPayPeriodViewModel model)
+		public async Task<ActionResult> SettingsPayPeriod(SettingsPayPeriodViewModel model)
 		{
 			if (!ModelState.IsValid)
 			{
 				return View(model);
 			}
 
-			//await AppService.UpdateDurationPayPeriod(model.Duration, model.StartDate.Value);
-			//AppService.UpdateDatesPayPeriod(model.Dates);
+			switch ((PayPeriodType)model.PayPeriodTypeId)
+			{
+				case PayPeriodType.Duration:
+					await AppService.UpdateDurationPayPeriod(model.Duration.Value, model.StartDate.Value, model.OrganizationId);
+					break;
+				case PayPeriodType.Dates:
+					await AppService.UpdateDatesPayPeriod(model.Dates.Trim(' ').Split(',').Select(int.Parse).ToList(), model.OrganizationId);
+					break;
+				default:
+					throw new InvalidEnumArgumentException(nameof(model.PayPeriodTypeId));
+			}
 
 			Notifications.Add(new BootstrapAlert(Strings.UpdatePayPeriodSuccess, Variety.Success));
 			return RedirectToAction(ActionConstants.SettingsPayPeriod, new { subscriptionId = model.SubscriptionId });

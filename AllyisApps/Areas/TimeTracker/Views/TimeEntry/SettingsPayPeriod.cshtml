@@ -36,8 +36,9 @@
 				<h1 class="panel-title">@Strings.PayPeriod</h1>
 			</div>
 			<div class="panel-body" id="pay-period">
-				@using (Html.BeginForm(ActionConstants.SettingsPayPeriod, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "form-inline" }))
+				@using (Html.BeginForm(ActionConstants.SettingsPayPeriod, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "form-inline", id = "pay-period-form" }))
 				{
+					@Html.HiddenFor(m => m.OrganizationId)
 					<div class="radio">
 						<label>
 							<input type="radio" id="PayPeriodTypeId" name="PayPeriodTypeId" value="@((int)PayPeriodType.Duration)" style="margin-right: 15px;" @Html.Raw(Model.PayPeriodTypeId == 0 ? "checked" : "")/>

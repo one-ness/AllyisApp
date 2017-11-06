@@ -545,19 +545,21 @@ namespace AllyisApps.DBModel
 		/// object containing duration type info.  Pay period can either be duration or
 		/// dates type.
 		/// </summary>
-		/// <param name="duration">The duration in days of each pay period.</param>
-		/// <param name="startDate">The start date from which to base the pay period off of.</param>
+		/// <param name="payPeriodJson">Json object conatining:
+		///  > the duration in days of each pay period.
+		///  > the start date from which to base the pay period off of.</param>
+		/// <param name="organizationId">The organization that this time tracker settings belongs to.</param>
 		/// <returns>The number of updated rows.</returns>
-		public async Task<int> UpdateDurationPayPeriod(int duration, DateTime startDate)
+		public async Task<int> UpdatePayPeriod(string payPeriodJson, int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@duration", duration);
-			parameters.Add("@startDate", startDate);
+			parameters.Add("@payPeriodJson", payPeriodJson);
+			parameters.Add("@organizationId", organizationId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return await connection.ExecuteAsync(
-					"[TimeTracker].[UpdateDurationPayPeriod]",
+					"[TimeTracker].[UpdatePayPeriod]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
 			}
