@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Threading.Tasks;
 using AllyisApps.DBModel.TimeTracker;
@@ -128,6 +129,21 @@ namespace AllyisApps.Services
 			}
 
 			return PayrollProcessEntriesResult.Success;
+		}
+
+		public async Task UpdateDurationPayPeriod(int duration, DateTime startDate)
+		{
+			if (duration < 1 || duration > 365)
+			{
+				throw new ArgumentOutOfRangeException(nameof(duration), $"{nameof(duration)} must be between 1 and 365.");
+			}
+
+			if (startDate < SqlDateTime.MinValue)
+			{
+				throw new ArgumentOutOfRangeException(nameof(startDate), $"{nameof(startDate)} must be greater than {SqlDateTime.MinValue}.");
+			}
+
+			await DBHelper.UpdateDurationPayPeriod(duration, startDate);
 		}
 
 		#region public static

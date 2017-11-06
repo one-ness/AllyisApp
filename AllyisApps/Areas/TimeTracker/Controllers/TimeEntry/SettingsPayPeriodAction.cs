@@ -11,6 +11,7 @@ using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Resources;
 using AllyisApps.Services;
+using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using Newtonsoft.Json;
 
@@ -30,7 +31,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			int organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-			var settings = await AppService.GetSettingsByOrganizationId(organizationId);
+			Setting settings = await AppService.GetSettingsByOrganizationId(organizationId);
 			string subName = await AppService.GetSubscriptionName(subscriptionId);
 			dynamic payPeriodInfo = JsonConvert.DeserializeObject(settings.PayPeriod);
 
@@ -59,6 +60,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				return View(model);
 			}
+
+			//await AppService.UpdateDurationPayPeriod(model.Duration, model.StartDate.Value);
+			//AppService.UpdateDatesPayPeriod(model.Dates);
 
 			Notifications.Add(new BootstrapAlert(Strings.UpdatePayPeriodSuccess, Variety.Success));
 			return RedirectToAction(ActionConstants.SettingsPayPeriod, new { subscriptionId = model.SubscriptionId });

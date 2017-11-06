@@ -539,5 +539,20 @@ namespace AllyisApps.DBModel
 					results.Read<TimeEntryDBEntity>().ToList());
 			}
 		}
+
+		public async Task<int> UpdateDurationPayPeriod(int duration, DateTime startDate)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@duration", duration);
+			parameters.Add("@startDate", startDate);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				return await connection.ExecuteAsync(
+					"[TimeTracker].[UpdateDurationPayPeriod]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+			}
+		}
 	}
 }

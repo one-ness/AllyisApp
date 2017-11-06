@@ -40,7 +40,7 @@
 				{
 					<div class="radio">
 						<label>
-							<input type="radio" id="PayPeriodTypeId" name="PayPeriodTypeId" value="0" style="margin-right: 15px;" @Html.Raw(Model.PayPeriodTypeId == 0 ? "checked" : "")/>
+							<input type="radio" id="PayPeriodTypeId" name="PayPeriodTypeId" value="@((int)PayPeriodType.Duration)" style="margin-right: 15px;" @Html.Raw(Model.PayPeriodTypeId == 0 ? "checked" : "")/>
 							<strong>Duration:</strong>
 						</label>
 						<span>Each pay period is </span>
@@ -65,7 +65,7 @@
 					<br/>
 					<div class="radio">
 						<label>
-							<input type="radio" id="PayPeriodTypeId" name="PayPeriodTypeId" value="1" style="margin-right: 15px;" @Html.Raw(Model.PayPeriodTypeId == 1 ? "checked" : "")/>
+							<input type="radio" id="PayPeriodTypeId" name="PayPeriodTypeId" value="@((int)PayPeriodType.Dates)" style="margin-right: 15px;" @Html.Raw(Model.PayPeriodTypeId == 1 ? "checked" : "")/>
 							<strong>Dates:</strong>
 						</label>
 						<span>Each pay period starts on the </span>
@@ -86,28 +86,17 @@
 	<script>
 		$(document).ready(function () {
 			$("#StartDate").datepicker();
-
-			if ($("input[name=PayPeriodTypeId]:checked").val() === "0") {
-				$("input[name=Dates]").prop("disabled", true);
-				$("input[name=Duration]").prop("disabled", false);
-				$("input[name=StartDate]").prop("disabled", false);
-			} else {
-				$("input[name=Dates]").prop("disabled", false);
-				$("input[name=Duration]").prop("disabled", true);
-				$("input[name=StartDate]").prop("disabled", true);
-			}
+			toggleDisable($("input[name=PayPeriodTypeId]:checked").val() === "@((int)PayPeriodType.Duration)");
 
 			$("input[name=PayPeriodTypeId]").change(function() {
-				if (this.value === "0") {
-					$("input[name=Dates]").prop("disabled", true);
-					$("input[name=Duration]").prop("disabled", false);
-					$("input[name=StartDate]").prop("disabled", false);
-				} else {
-					$("input[name=Dates]").prop("disabled", false);
-					$("input[name=Duration]").prop("disabled", true);
-					$("input[name=StartDate]").prop("disabled", true);
-				}
+				toggleDisable(this.value === "@((int)PayPeriodType.Duration)");
 			});
 		});
+
+		function toggleDisable(disableDates) {
+			$("input[name=Dates]").prop("disabled", disableDates);
+			$("input[name=Duration]").prop("disabled", !disableDates);
+			$("input[name=StartDate]").prop("disabled", !disableDates);
+		}
 	</script>
 }
