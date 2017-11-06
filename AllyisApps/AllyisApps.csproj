@@ -300,7 +300,7 @@
     <Compile Include="Areas\TimeTracker\ViewModels\Project\CompleteProjectViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\ReviewViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\MergePayClassViewModel.cs" />
-    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsLockDateViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsPayPeriodViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsPayClassesViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsWeekStartViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\TimeEntryRangeForUserViewModel.cs" />
@@ -323,8 +323,8 @@
     <Compile Include="Areas\TimeTracker\Controllers\Project\UpdateProjectAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\CopyEntries.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\UserEditAction.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\UpdateStartOfWeekAction.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\UpdateOvertimeAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\SettingsStartOfWeekAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\SettingsOvertimeAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ExportReportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ViewReportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\DeleteTimeEntryJsonAction.cs" />
@@ -338,7 +338,7 @@
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\DeleteHolidayAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ReportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\SettingAction.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\SetLockDateAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\SettingsPayPeriodAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\TimeEntryController.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\Customer\ManageCustomerViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\Customer\CustomerProjectViewModel.cs" />
@@ -579,11 +579,10 @@
     </None>
     <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsStartOfWeek.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsPayClass.cshtml" />
-    <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsLockDate.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsPayPeriod.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsOvertime.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsHoliday.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\_ManageSettingSideBar.cshtml" />
-    <Content Include="Areas\TimeTracker\Views\TimeEntry\_ManageSettingSideBar2.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\Review.cshtml" />
     <Content Include="Content\bootstrap\css\bootstrap.min.css.map" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.eot" />
@@ -693,12 +692,9 @@
     <Content Include="Areas\TimeTracker\Views\TimeEntry\Report.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Shared\_BreadcrumbNavPartial.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Shared\_Layout.cshtml" />
-    <Content Include="Areas\TimeTracker\Views\TimeEntry\Index.cshtml" />
-    <Content Include="Areas\TimeTracker\Views\TimeEntry\_AjaxTimeEntries.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Shared\EditorTemplates\DateTime.cshtml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Areas\TimeTracker\Views\TimeEntry\_AjaxTimeEntryBody.cshtml" />
     <Content Include="Scripts\bootstrap.min.js.map">
       <DependentUpon>bootstrap.min.js</DependentUpon>
     </Content>

@@ -14,9 +14,6 @@ function mergePayClass(payClassId) {
 	window.location = mergePayClassUrl.replace('-1', payClassId);
 }
 
-function hideOT(hideIt) {
-	$('#OTSettings').css('visibility', hideIt ? 'hidden' : 'visible');
-}
 function disableLD(isDisabling) {
 }
 

@@ -153,12 +153,10 @@ namespace AllyisApps.Services
 				OvertimeHours = settings.OvertimeHours,
 				OvertimePeriod = settings.OvertimePeriod,
 				OvertimeMultiplier = settings.OvertimeMultiplier,
-				IsLockDateUsed = settings.IsLockDateUsed,
-				LockDatePeriod = settings.LockDatePeriod,
-				LockDateQuantity = settings.LockDateQuantity,
 				PayrollProcessedDate = settings.PayrollProcessedDate,
 				LockDate = settings.LockDate,
-				PayPeriod = settings.PayPeriod
+				PayPeriod = settings.PayPeriod,
+
 			};
 		}
 

@@ -27,7 +27,7 @@
 			</div>
 			<div class="panel-body" id="SOWSetting">
 				@using (Html.BeginForm(ActionConstants.UpdateStartOfWeek, ControllerConstants.TimeEntry, FormMethod.Post, new { enctype = "multipart/form-data" }))
-			{
+				{
 					@Html.AntiForgeryToken();
 					@Html.HiddenFor(m => m.SubscriptionId)
 
@@ -40,16 +40,8 @@
 					<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="0" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Sunday ? " checked " : string.Empty)><text>@Strings.Sunday</text><br />
 					<br />
 					<input type="submit" value=@Strings.Save class="btn btn-primary tt-bottom-right" />
-			}
+				}
 			</div>
 		</div>
 	</div>
 </div>
-
-@section scripts{
-	@Scripts.Render("~/bundles/jqueryui");
-	@Scripts.Render("~/bundles/moment")
-	<script src="~/Scripts/allyis-holidayDatepicker.js"></script>
-
-	@Scripts.Render("~/bundles/TTTimeEntrySettings")
-}

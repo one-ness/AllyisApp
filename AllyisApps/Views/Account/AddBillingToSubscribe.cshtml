@@ -1,4 +1,5 @@
-﻿@model AllyisApps.ViewModels.Auth.ProductSubscriptionViewModel
+﻿@*
+@model AllyisApps.ViewModels.Auth.ProductSubscriptionViewModel
 
 @{
 	ViewBag.Title = Strings.AddBillingInformation;
@@ -21,10 +22,10 @@
 			@Html.HiddenFor(m => m.PreviousSku)
 
 			<script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-					data-key="pk_test_gCF350S6jE0k1BvPgdofdzvP"
-					data-name="Allyis Apps"
-					data-description="Adding Billing Information"
-					@*data-image="/128x128.png"*@
+			        data-key="pk_test_gCF350S6jE0k1BvPgdofdzvP"
+			        data-name="Allyis Apps"
+			        data-description="Adding Billing Information"
+			        <!--data-image="/128x128.png"-->
 					data-locale="auto"
 					data-label="Add Billing Information"
 					data-panel-label="Submit Billing Info"
@@ -35,3 +36,4 @@
 		}
 	</div>
 </div>
+*@

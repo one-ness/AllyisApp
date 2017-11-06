@@ -29,21 +29,17 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		private readonly Dictionary<int, string> organizationRoles = new Dictionary<int, string>
 		{
-		{ (int)OrganizationRoleEnum.Member, Strings.Member },
-		{ (int)OrganizationRoleEnum.Owner, Strings.Owner }
+			{ (int)OrganizationRoleEnum.Member, Strings.Member },
+			{ (int)OrganizationRoleEnum.Owner, Strings.Owner }
 		};
 
-
 		private readonly Dictionary<string, int> setOrganizationRoles = new Dictionary<string, int>
-	{
-		{ Strings.RemoveOrg, -1 },
-		{ Strings.SetMember, (int)OrganizationRoleEnum.Member },
-		{ Strings.SetOwner, (int)OrganizationRoleEnum.Owner }
-	};
+		{
+			{ Strings.RemoveOrg, -1 },
+			{ Strings.SetMember, (int)OrganizationRoleEnum.Member },
+			{ Strings.SetOwner, (int)OrganizationRoleEnum.Owner }
+		};
 
-
-
-		
 		/*
 		/// <summary>
 		/// Get page to edit SubscriptionPermissions
@@ -127,8 +123,7 @@ namespace AllyisApps.Controllers.Auth
 		}
 		*/
 
-
-		internal string getPermissionsUrl(ProductIdEnum productId, int subscripitonId)
+		private string GetPermissionsUrl(ProductIdEnum productId, int subscripitonId)
 		{
 			switch (productId)
 			{
@@ -136,15 +131,13 @@ namespace AllyisApps.Controllers.Auth
 					return Url.Action("ManageTimeTrackerPermissions", new { id = subscripitonId });
 				case ProductIdEnum.ExpenseTracker:
 					return Url.Action("ManageExpensetrackerPermissions", new { id = subscripitonId });
-					
+
 				case ProductIdEnum.StaffingManager:
 					return Url.Action("ManageStaffingManagerPermissions", new { id = subscripitonId });
 				default:
-					throw new ArgumentOutOfRangeException("Product id is not in system");
+					throw new ArgumentOutOfRangeException(nameof(productId), "Product id is not in system");
 			}
 		}
-
-
 
 		/// <summary>
 		/// Makes changes to users' permissions in the organization.
@@ -251,14 +244,14 @@ namespace AllyisApps.Controllers.Auth
 					*/
 					default:
 						//Should not happen
-						throw new ArgumentOutOfRangeException($"Failed to Find product for produtID: {model.ProductId.Value}");
+						throw new ArgumentOutOfRangeException(nameof(model.ProductId), $"Failed to find product for produtId: {model.ProductId.Value}");
 				}
 
 				if (model.SelectedAction.Value != -1)
 				{
 					// TODO: instead of providing product id, provide subscription id of the subscription to be modified
 					// TODO: split updating user roles and creating new sub users
-					var updatedAndAdded = await AppService.UpdateSubscriptionUsersRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.OrganizationId, model.SelectedAction.Value , model.ProductId.Value);
+					var updatedAndAdded = await AppService.UpdateSubscriptionUsersRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.OrganizationId, model.SelectedAction.Value, model.ProductId.Value);
 					if (updatedAndAdded.UsersChanged > 0)
 					{
 						Notifications.Add(new BootstrapAlert(string.Format(usersModifiedMessage, updatedAndAdded.UsersChanged), Variety.Success));

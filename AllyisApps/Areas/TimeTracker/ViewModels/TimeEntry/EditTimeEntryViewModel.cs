@@ -103,21 +103,6 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public bool ModSinceApproval { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether or not the entry has been locked due to business rules (approval) or date locking.
-		/// </summary>
-		public bool IsLockedOld { get; set; }
-
-		/// <summary>
-		/// Gets or sets a value indicating the lock date for this time entry's organization and user.
-		/// </summary>
-		public int LockDateOld { get; set; } // Note: this must be an int and not a DateTime for correct, culture-independant serialization/deserialization
-
-		/// <summary>
-		/// Gets or sets a value indicating whether or not the entry has ever been locked due to business rules (approval) or date locking.
-		/// </summary>
-		public bool IsLockSaved { get; set; }
-
-		/// <summary>
 		/// Gets or sets a value indicating whether or not this is a Sample entry (blank).
 		/// </summary>
 		public bool Sample { get; set; }
