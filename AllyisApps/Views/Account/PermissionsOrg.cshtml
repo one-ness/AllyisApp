@@ -6,6 +6,15 @@
 	ViewBag.Title = Strings.Permissions;
 }
 
+<style>
+	.no-match{
+		display:none;
+	}
+	.pageContainer{
+		width:20px;
+		margin:0 auto;
+	}
+</style>
 @Html.AntiForgeryToken()
 
 @Html.Partial("_PremissionsLinkView", Model)
@@ -50,6 +59,7 @@
 					else
 					{
 						<td class="checked">
+							<input type="checkbox" id="check" disabled />
 						</td>
 					}
 					<td id="name">@user.FullName</td>
@@ -64,9 +74,13 @@
 				<td class="tab-OrganizationTab"></td>
 			</tr>
 		</table>
-		<div class="pageContainer">
-			@*This container is populated by javascript in allyis-account-permission2.js*@
-		</div>
+		
+		
+			<div class="pageContainer">
+				@*This container is populated by javascript in allyis-account-permission2.js*@
+			</div>
+
+
 	</div>
 	<div class="panel-footer" style="height: 54px; position: relative;">
 		<div class="col-xs-6 col-sm-6 col-md-5" style="text-align: right; vertical-align: middle; line-height: 33px; padding-right: 0px;">
@@ -100,7 +114,7 @@
 	@*@Scripts.Render("~/bundles/AccountPermission2");*@
 	<script type="text/javascript">
         @*Filters can only be set up after the above script is loaded*@
-        pwf.setPageLimit(15);
+        pwf.setPageLimit(10);
         pwf.setRowClass("userRow");
         pwf.setCheckBoxSelector("#check");
         pwf.addFilter("#userSearch", "search", "#name");
