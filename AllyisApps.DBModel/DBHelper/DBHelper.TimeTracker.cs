@@ -540,6 +540,14 @@ namespace AllyisApps.DBModel
 			}
 		}
 
+		/// <summary>
+		/// Updates the pay period of the time tracker settings to store a json
+		/// object containing duration type info.  Pay period can either be duration or
+		/// dates type.
+		/// </summary>
+		/// <param name="duration">The duration in days of each pay period.</param>
+		/// <param name="startDate">The start date from which to base the pay period off of.</param>
+		/// <returns>The number of updated rows.</returns>
 		public async Task<int> UpdateDurationPayPeriod(int duration, DateTime startDate)
 		{
 			DynamicParameters parameters = new DynamicParameters();
