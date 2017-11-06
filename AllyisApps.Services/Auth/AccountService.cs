@@ -42,11 +42,16 @@ namespace AllyisApps.Services
 		/// </summary>
 		public List<State> GetStates(string countryCode)
 		{
+
 			try
 			{
 				return CacheContainer.StatesCache[countryCode].OrderBy(s => s.StateName).ToList();
 			}
 			catch (KeyNotFoundException)
+			{
+				return new List<State>();
+			}
+			catch (ArgumentNullException)
 			{
 				return new List<State>();
 			}
