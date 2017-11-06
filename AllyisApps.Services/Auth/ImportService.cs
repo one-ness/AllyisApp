@@ -30,7 +30,7 @@ namespace AllyisApps.Services
 		/// <param name="importData">Workbook with data to import.</param>
 		/// <param name="organizationId">The organization's Id.</param>
 		/// <param name="inviteUrl">Used for userImport when adding users via AddMemberPage</param>
-		public async Task<ImportActionResult> Import(DataSet importData, int subscriptionId = 0, int organizationId = 0, string inviteUrl = null)
+		public ImportActionResult Import(DataSet importData, int subscriptionId = 0, int organizationId = 0, string inviteUrl = null)
 		{
 			int orgId;
 			if (subscriptionId > 0 && UserContext.SubscriptionsAndRoles[subscriptionId] != null)
@@ -48,23 +48,70 @@ namespace AllyisApps.Services
 
 			// For some reason, linq won't work directly with DataSets, so we start by just moving the tables over to a linq-able List
 			// The tables are ranked and sorted in order to get customers to import first, before projects, avoiding some very complicated look-up logic.
-			var sortableTables = new List<Tuple<DataTable, int>>();
+			List<DataTable> customerImports = new List<DataTable>();
+			List<DataTable> projectImports = new List<DataTable>();
+			List<DataTable> userImports = new List<DataTable>();
+			List<DataTable> timeEntryImports = new List<DataTable>();
+
+			// Result object
+			var result = new ImportActionResult();
+
+			if (importData.Tables.Count == 0)
+			{
+				result.GeneralFailures.Add("No spreadsheets to import.");
+				return result;
+			}
+
 			foreach (DataTable table in importData.Tables)
 			{
-				int rank = 0;
-				if (table.Columns.Contains(ColumnHeaders.CustomerName) || table.Columns.Contains(ColumnHeaders.CustomerId))
+				switch (table.TableName)
 				{
-					rank += 2;
+					case "Customers":
+						customerImports.Add(table);
+						break;
+					case "Projects":
+						projectImports.Add(table);
+						break;
+					case "Users":
+						userImports.Add(table);
+						break;
+					case "Time Entries":
+						timeEntryImports.Add(table);
+						break;
+					default:
+						break;
 				}
-				if (table.Columns.Contains(ColumnHeaders.ProjectName) || table.Columns.Contains(ColumnHeaders.ProjectId))
-				{
-					rank += 1;
-				}
-
-				sortableTables.Add(new Tuple<DataTable, int>(table, rank));
 			}
-			var tables = sortableTables.OrderBy(tup => tup.Item2 * -1).Select(tup => tup.Item1).ToList();
 
+			if (customerImports.Any())
+			{
+				result = ImportCustomer(customerImports, orgId, subscriptionId, result).Result;
+			}
+
+			if (projectImports.Any())
+			{
+				result = ImportProject(projectImports, orgId, subscriptionId, result).Result;
+			}
+
+			if (userImports.Any())
+			{
+				result = ImportUser(userImports, orgId, subscriptionId, inviteUrl, result).Result;
+			}
+
+			if (timeEntryImports.Any())
+			{
+				result = ImportTimeEntry(timeEntryImports, orgId, subscriptionId, result).Result;
+			}
+
+			return result;
+		}
+
+		private async Task<ImportActionResult> ImportCustomer(List<DataTable> customerImports, int orgId, int subscriptionId, ImportActionResult result = null)
+		{
+			if (result == null)
+			{
+				result = new ImportActionResult();
+			}
 			// Retrieval of existing customer and project data
 			var customersProjects = new List<Tuple<Customer, List<Project.Project>>>();
 			foreach (Customer customer in GetCustomerList(orgId))
@@ -75,35 +122,8 @@ namespace AllyisApps.Services
 				));
 			}
 
-			// Retrieval of existing user data
-			User userGet = await GetUserAsync(UserContext.UserId);
-			var users = GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, userGet)).ToList();
-
-			// Retrieval of existing user product subscription data
-			const int ttProductId = (int)ProductIdEnum.TimeTracker;
-			SubscriptionDisplayDBEntity ttSub = (await DBHelper.GetSubscriptionsDisplayByOrg(orgId)).SingleOrDefault(s => s.ProductId == ttProductId);
-			var userSubs = (await GetUsersWithSubscriptionToProductInOrganization(orgId, ttProductId)).ToList();
-
-			// Retrieval of existing pay class data
-			var classGet = await DBHelper.GetPayClasses(orgId);
-			var payClasses = classGet.Select(InitializePayClassInfo).ToList();
-
-			// Result object
-			var result = new ImportActionResult();
-
-			// Do we even have tables to import?
-			if (tables.Count == 0)
+			foreach (DataTable table in customerImports)
 			{
-				result.GeneralFailures.Add("No spreadsheets to import.");
-				return result;
-			}
-
-			// Loop through and see what can be imported from each table in turn. Order doesn't matter, since missing information
-			// will be sought from other tables as needed.
-			foreach (DataTable table in tables)
-			{
-				#region Column Header Checks
-
 				// Customer importing: requires both customer name and customer id. Other information is optional, and can be filled in later.
 				bool hasCustomerName = table.Columns.Contains(ColumnHeaders.CustomerName);
 				bool hasCustomerId = table.Columns.Contains(ColumnHeaders.CustomerId);
@@ -112,7 +132,7 @@ namespace AllyisApps.Services
 				if (hasCustomerName ^ hasCustomerId)
 				{
 					// If only one thing is on this sheet, we see if both exist together on another sheet
-					customerImportLinks = tables.Where(t => t.Columns.Contains(ColumnHeaders.CustomerName) && t.Columns.Contains(ColumnHeaders.CustomerId)).ToList();
+					customerImportLinks = customerImports.Where(t => t.Columns.Contains(ColumnHeaders.CustomerName) && t.Columns.Contains(ColumnHeaders.CustomerId)).ToList();
 					if (customerImportLinks.Any())
 					{
 						canCreateCustomers = true;
@@ -132,93 +152,18 @@ namespace AllyisApps.Services
 				bool hasNonRequiredCustomerInfo = hasCustomerStreetAddress || hasCustomerCity || hasCustomerCountry || hasCustomerState ||
 						 hasCustomerPostalCode || hasCustomerEmail || hasCustomerPhoneNumber || hasCustomerFaxNumber || hasCustomerEin;
 
-				// Project importing: requires both project name and project id, as well as one identifying field for a customer (name or id)
-				bool hasProjectName = table.Columns.Contains(ColumnHeaders.ProjectName);
-				bool hasProjectId = table.Columns.Contains(ColumnHeaders.ProjectId);
-				List<DataTable>[,] projectLinks = new List<DataTable>[3, 3];
-				projectLinks[0, 1] = projectLinks[1, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.ProjectName) && t.Columns.Contains(ColumnHeaders.ProjectId)).ToList();
-				projectLinks[0, 2] = projectLinks[2, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.ProjectName) && (t.Columns.Contains(ColumnHeaders.CustomerName) || t.Columns.Contains(ColumnHeaders.CustomerId))).ToList();
-				projectLinks[1, 2] = projectLinks[2, 1] = tables.Where(t => t.Columns.Contains(ColumnHeaders.ProjectId) && (t.Columns.Contains(ColumnHeaders.CustomerName) || t.Columns.Contains(ColumnHeaders.CustomerId))).ToList();
-				bool canImportProjects = (hasProjectName || projectLinks[0, 1].Count > 0 || projectLinks[0, 2].Count > 0) &&
-					(hasProjectId || projectLinks[1, 0].Count > 0 || projectLinks[1, 2].Count > 0) &&
-					(hasCustomerName || hasCustomerId || projectLinks[2, 0].Count > 0 || projectLinks[2, 1].Count > 0);
-
-				// Non-required project columns
-
-				// TODO use this line once project isHourly property is supported.  Currently disabled
-				// bool hasProjectType = table.Columns.Contains(ColumnHeaders.ProjectType);
-				bool hasProjectStartDate = table.Columns.Contains(ColumnHeaders.ProjectStartDate);
-				bool hasProjectEndDate = table.Columns.Contains(ColumnHeaders.ProjectEndDate);
-				bool hasNonRequiredProjectInfo = /*hasProjectType ||*/ hasProjectStartDate || hasProjectEndDate;
-
-				// User importing: requires email, id, first and last name
-				bool hasUserEmail = table.Columns.Contains(ColumnHeaders.UserEmail);
-				bool hasEmployeeId = table.Columns.Contains(ColumnHeaders.EmployeeId);
-				bool hasUserName = table.Columns.Contains(ColumnHeaders.UserFirstName) && table.Columns.Contains(ColumnHeaders.UserLastName);
-				var userLinks = new List<DataTable>[3, 3];
-				userLinks[0, 1] = userLinks[1, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserEmail) && t.Columns.Contains(ColumnHeaders.EmployeeId)).ToList();
-				userLinks[0, 2] = userLinks[2, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserEmail) && t.Columns.Contains(ColumnHeaders.UserFirstName) && t.Columns.Contains(ColumnHeaders.UserLastName)).ToList();
-				userLinks[1, 2] = userLinks[2, 1] = tables.Where(t => t.Columns.Contains(ColumnHeaders.EmployeeId) && t.Columns.Contains(ColumnHeaders.UserFirstName) && t.Columns.Contains(ColumnHeaders.UserLastName)).ToList();
-				bool canImportUsers =
-					(hasUserEmail || userLinks[0, 1].Count > 0 || userLinks[0, 2].Count > 0) &&
-					(hasEmployeeId || userLinks[1, 0].Count > 0 || userLinks[1, 2].Count > 0) &&
-					(hasUserName || userLinks[2, 0].Count > 0 || userLinks[2, 1].Count > 0);
-
-				// Non-required user columns
-				bool hasUserAddress = table.Columns.Contains(ColumnHeaders.UserAddress);
-				bool hasUserCity = table.Columns.Contains(ColumnHeaders.UserCity);
-				bool hasUserCountry = table.Columns.Contains(ColumnHeaders.UserCountry);
-				bool hasUserDateOfBirth = table.Columns.Contains(ColumnHeaders.UserDateOfBirth);
-				bool hasUserUsername = table.Columns.Contains(ColumnHeaders.UserName);
-				bool hasUserPhoneExtension = table.Columns.Contains(ColumnHeaders.UserPhoneExtension);
-				bool hasUserPhoneNumber = table.Columns.Contains(ColumnHeaders.UserPhoneNumber);
-				bool hasUserPostalCode = table.Columns.Contains(ColumnHeaders.UserPostalCode);
-				bool hasUserState = table.Columns.Contains(ColumnHeaders.UserState);
-				bool hasNonRequiredUserInfo = hasUserAddress || hasUserCity || hasUserCountry || hasUserDateOfBirth || hasUserUsername ||
-					hasUserPhoneExtension || hasUserPhoneNumber || hasUserPostalCode || hasUserState;
-
-				// Project-user importing: perfomed when identifying information for both project and user are present
-				bool canImportProjectUser = (hasProjectName || hasProjectId) && (hasUserEmail || hasEmployeeId || hasUserName);
-
-				// Time Entry importing: unlike customers, projects, and users, time entry data must have all time entry information on the same sheet
-				// Requires indentifying data for user and project, as well as date, duration, and pay class
-				bool hasTTDate = table.Columns.Contains(ColumnHeaders.Date);
-				bool hasTTDuration = table.Columns.Contains(ColumnHeaders.Duration);
-				bool hasTTPayClass = table.Columns.Contains(ColumnHeaders.PayClass);
-				bool canImportTimeEntry = canImportProjectUser && hasTTDate && hasTTDuration && hasTTPayClass;
-				if (canImportTimeEntry && ttSub == null)
-				{
-					// No Time Tracker subscription
-					result.TimeEntryFailures.Add("Cannot import time entries: no subscription to Time Tracker.");
-					canImportTimeEntry = false;
-				}
-
-				// Non-required time entry column
-				bool hasTTDescription = table.Columns.Contains(ColumnHeaders.Description);
-
-				#endregion Column Header Checks
 
 				// Do we have rows/data to import?
 				if (table.Rows.Count == 0
 					|| !hasCustomerName
-					&& !hasCustomerId
-					&& !hasProjectName
-					&& !hasProjectId
-					&& !hasUserEmail
-					&& !hasEmployeeId
-					&& !hasUserName
-					&& !canImportProjectUser
-					&& !canImportTimeEntry)
+					&& !hasCustomerId)
 				{
 					result.GeneralFailures.Add($"There is no readable data to import from spreadsheet \"{table.TableName}\".");
 				}
 
-				// After all checks are complete, we go through row by row and import the information
 				foreach (DataRow row in table.Rows)
 				{
 					if (row.ItemArray.All(i => string.IsNullOrEmpty(i?.ToString()))) break; // Avoid iterating through empty rows
-
-					#region Customer Import
 
 					Customer customer = null;
 
@@ -347,19 +292,71 @@ namespace AllyisApps.Services
 							}
 						}
 					}
+				}
+			}
 
-					#endregion Customer Import
+			return result;
+		}
 
-					#region Project Import
+		private async Task<ImportActionResult> ImportProject(List<DataTable> projectImports, int orgId, int subscriptionId, ImportActionResult result = null)
+		{
+			// Retrieval of existing customer and project data
+			var customersProjects = new List<Tuple<Customer, List<Project.Project>>>();
+			foreach (Customer customer in GetCustomerList(orgId))
+			{
+				customersProjects.Add(new Tuple<Customer, List<Project.Project>>(
+					customer,
+					(await GetProjectsByCustomer(customer.CustomerId)).ToList()
+				));
+			}
+
+			foreach (DataTable table in projectImports)
+			{
+				bool hasCustomerName = table.Columns.Contains(ColumnHeaders.CustomerName);
+				bool hasCustomerId = table.Columns.Contains(ColumnHeaders.CustomerId);
+
+				// Project importing: requires both project name and project id, as well as one identifying field for a customer (name or id)
+				bool hasProjectName = table.Columns.Contains(ColumnHeaders.ProjectName);
+				bool hasProjectId = table.Columns.Contains(ColumnHeaders.ProjectId);
+				List<DataTable>[,] projectLinks = new List<DataTable>[3, 3];
+				projectLinks[0, 1] = projectLinks[1, 0] = projectImports.Where(t => t.Columns.Contains(ColumnHeaders.ProjectName) && t.Columns.Contains(ColumnHeaders.ProjectId)).ToList();
+				projectLinks[0, 2] = projectLinks[2, 0] = projectImports.Where(t => t.Columns.Contains(ColumnHeaders.ProjectName) && (t.Columns.Contains(ColumnHeaders.CustomerName) || t.Columns.Contains(ColumnHeaders.CustomerId))).ToList();
+				projectLinks[1, 2] = projectLinks[2, 1] = projectImports.Where(t => t.Columns.Contains(ColumnHeaders.ProjectId) && (t.Columns.Contains(ColumnHeaders.CustomerName) || t.Columns.Contains(ColumnHeaders.CustomerId))).ToList();
+				bool canImportProjects = (hasProjectName || projectLinks[0, 1].Count > 0 || projectLinks[0, 2].Count > 0) &&
+					(hasProjectId || projectLinks[1, 0].Count > 0 || projectLinks[1, 2].Count > 0) &&
+					(hasCustomerName || hasCustomerId || projectLinks[2, 0].Count > 0 || projectLinks[2, 1].Count > 0);
+
+				// Non-required project columns
+
+				// TODO use this line once project isHourly property is supported.  Currently disabled
+				// bool hasProjectType = table.Columns.Contains(ColumnHeaders.ProjectType);
+				bool hasProjectStartDate = table.Columns.Contains(ColumnHeaders.ProjectStartDate);
+				bool hasProjectEndDate = table.Columns.Contains(ColumnHeaders.ProjectEndDate);
+				bool hasNonRequiredProjectInfo = /*hasProjectType ||*/ hasProjectStartDate || hasProjectEndDate;
+				
+				// Do we have rows/data to import?
+				if (table.Rows.Count == 0
+					|| !hasProjectName
+					&& !hasProjectId)
+				{
+					result.GeneralFailures.Add($"There is no readable data to import from spreadsheet \"{table.TableName}\".");
+				}
+
+				foreach (DataRow row in table.Rows)
+				{
 
 					DateTime? defaultProjectStartDate = null;
 					DateTime? defaultProjectEndDate = null;
 
-					Project.Project project = null;
-
 					// If there is no identifying information for projects, all project related importing is skipped.
 					if (hasProjectName || hasProjectId)
 					{
+						Customer customer = null;
+						if (hasCustomerName || hasCustomerId)
+						{
+							customer = customersProjects.Select(tup => tup.Item1).FirstOrDefault(c => hasCustomerName ? c.CustomerName.Equals(row[ColumnHeaders.CustomerName].ToString()) : c.CustomerOrgId.Equals(row[ColumnHeaders.CustomerId].ToString()));
+						}
+
 						bool thisRowHasProjectName = hasProjectName;
 						bool thisRowHasProjectId = hasProjectId;
 
@@ -630,11 +627,56 @@ namespace AllyisApps.Services
 							}
 						}
 					}
+				}
+			}
 
-					#endregion Project Import
+			return result;
+		}
 
-					#region User Import
+		private async Task<ImportActionResult> ImportUser(List<DataTable> userImports, int orgId, int subscriptionId, string inviteUrl, ImportActionResult result = null)
+		{
+			// Retrieval of existing user data
+			User userGet = await GetUserAsync(UserContext.UserId);
+			var users = GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, userGet)).ToList();
+			
+			foreach (DataTable table in userImports)
+			{
+				// User importing: requires email, id, first and last name
+				bool hasUserEmail = table.Columns.Contains(ColumnHeaders.UserEmail);
+				bool hasEmployeeId = table.Columns.Contains(ColumnHeaders.EmployeeId);
+				bool hasUserName = table.Columns.Contains(ColumnHeaders.UserFirstName) && table.Columns.Contains(ColumnHeaders.UserLastName);
+				var userLinks = new List<DataTable>[3, 3];
+				userLinks[0, 1] = userLinks[1, 0] = userImports.Where(t => t.Columns.Contains(ColumnHeaders.UserEmail) && t.Columns.Contains(ColumnHeaders.EmployeeId)).ToList();
+				userLinks[0, 2] = userLinks[2, 0] = userImports.Where(t => t.Columns.Contains(ColumnHeaders.UserEmail) && t.Columns.Contains(ColumnHeaders.UserFirstName) && t.Columns.Contains(ColumnHeaders.UserLastName)).ToList();
+				userLinks[1, 2] = userLinks[2, 1] = userImports.Where(t => t.Columns.Contains(ColumnHeaders.EmployeeId) && t.Columns.Contains(ColumnHeaders.UserFirstName) && t.Columns.Contains(ColumnHeaders.UserLastName)).ToList();
+				bool canImportUsers =
+					(hasUserEmail || userLinks[0, 1].Count > 0 || userLinks[0, 2].Count > 0) &&
+					(hasEmployeeId || userLinks[1, 0].Count > 0 || userLinks[1, 2].Count > 0) &&
+					(hasUserName || userLinks[2, 0].Count > 0 || userLinks[2, 1].Count > 0);
 
+				// Non-required user columns
+				bool hasUserAddress = table.Columns.Contains(ColumnHeaders.UserAddress);
+				bool hasUserCity = table.Columns.Contains(ColumnHeaders.UserCity);
+				bool hasUserCountry = table.Columns.Contains(ColumnHeaders.UserCountry);
+				bool hasUserDateOfBirth = table.Columns.Contains(ColumnHeaders.UserDateOfBirth);
+				bool hasUserUsername = table.Columns.Contains(ColumnHeaders.UserName);
+				bool hasUserPhoneExtension = table.Columns.Contains(ColumnHeaders.UserPhoneExtension);
+				bool hasUserPhoneNumber = table.Columns.Contains(ColumnHeaders.UserPhoneNumber);
+				bool hasUserPostalCode = table.Columns.Contains(ColumnHeaders.UserPostalCode);
+				bool hasUserState = table.Columns.Contains(ColumnHeaders.UserState);
+				bool hasNonRequiredUserInfo = hasUserAddress || hasUserCity || hasUserCountry || hasUserDateOfBirth || hasUserUsername ||
+					hasUserPhoneExtension || hasUserPhoneNumber || hasUserPostalCode || hasUserState;
+
+				// Do we have rows/data to import?
+				if (table.Rows.Count == 0
+					|| !hasUserEmail
+					&& !hasEmployeeId
+					&& !hasUserName)
+				{
+					result.GeneralFailures.Add($"There is no readable data to import from spreadsheet \"{table.TableName}\".");
+				}
+				foreach (DataRow row in table.Rows)
+				{
 					User userInOrg = null;
 					if (hasUserEmail || hasEmployeeId || hasUserName)
 					{
@@ -810,11 +852,63 @@ namespace AllyisApps.Services
 							}
 						}
 					}
+				}
+			}
 
-					#endregion User Import
+			return result;
+		}
 
-					#region Project-user and Time Entry Import
+		private async Task<ImportActionResult> ImportTimeEntry(List<DataTable> timeEntryImports, int orgId, int subscriptionId, ImportActionResult result = null)
+		{
+			// Retrieval of existing pay class data
+			var classGet = await DBHelper.GetPayClasses(orgId);
+			var payClasses = classGet.Select(InitializePayClassInfo).ToList();
 
+			foreach (DataTable table in timeEntryImports)
+			{
+				bool hasProjectName = table.Columns.Contains(ColumnHeaders.ProjectName);
+				bool hasProjectId = table.Columns.Contains(ColumnHeaders.ProjectId);
+				bool hasUserEmail = table.Columns.Contains(ColumnHeaders.UserEmail);
+				bool hasEmployeeId = table.Columns.Contains(ColumnHeaders.EmployeeId);
+				bool hasUserName = table.Columns.Contains(ColumnHeaders.UserFirstName) && table.Columns.Contains(ColumnHeaders.UserLastName);
+
+				// Project-user importing: perfomed when identifying information for both project and user are present
+				bool canImportProjectUser = (hasProjectName || hasProjectId) && (hasUserEmail || hasEmployeeId || hasUserName);
+
+				// Time Entry importing: unlike customers, projects, and users, time entry data must have all time entry information on the same sheet
+				// Requires indentifying data for user and project, as well as date, duration, and pay class
+				bool hasTTDate = table.Columns.Contains(ColumnHeaders.Date);
+				bool hasTTDuration = table.Columns.Contains(ColumnHeaders.Duration);
+				bool hasTTPayClass = table.Columns.Contains(ColumnHeaders.PayClass);
+				bool canImportTimeEntry = canImportProjectUser && hasTTDate && hasTTDuration && hasTTPayClass;
+
+				const int ttProductId = (int)ProductIdEnum.TimeTracker;
+				SubscriptionDisplayDBEntity ttSub = (await DBHelper.GetSubscriptionsDisplayByOrg(orgId)).SingleOrDefault(s => s.ProductId == ttProductId);
+
+				if (canImportTimeEntry && ttSub == null)
+				{
+					// No Time Tracker subscription
+					result.TimeEntryFailures.Add("Cannot import time entries: no subscription to Time Tracker.");
+					canImportTimeEntry = false;
+				}
+
+				// Non-required time entry column
+				bool hasTTDescription = table.Columns.Contains(ColumnHeaders.Description);
+
+				// Do we have rows/data to import?
+				if (table.Rows.Count == 0
+					|| !hasProjectName
+					&& !hasProjectId
+					&& !hasUserEmail
+					&& !hasEmployeeId
+					&& !hasUserName
+					&& !canImportProjectUser
+					&& !canImportTimeEntry)
+				{
+					result.GeneralFailures.Add($"There is no readable data to import from spreadsheet \"{table.TableName}\".");
+				}
+				foreach (DataRow row in table.Rows)
+				{
 					// Double-check that previous adding/finding of project and user didn't fail
 					if (!canImportProjectUser || project == null || userInOrg == null) continue;
 
@@ -924,13 +1018,15 @@ namespace AllyisApps.Services
 					{
 						result.TimeEntriesImported += 1;
 					}
-
-					#endregion Project-user and Time Entry Import
 				}
 			}
 
 			return result;
 		}
+
+		public Project.Project project { get; set; }
+		public User userInOrg { get; set; }
+		public List<User> userSubs { get; set; }
 
 		/// <summary>
 		/// Helper method for reading column data from a spreadsheet. It will try to read data in the given column name from the given
