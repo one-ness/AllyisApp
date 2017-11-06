@@ -96,8 +96,8 @@ namespace AllyisApps.Controllers.Auth
 					IsReadBillingDetailsAllowed = AppService.CheckOrgAction(AppService.OrgAction.ReadBilling, item.OrganizationId, false),
 					IsReadMembersListAllowed = AppService.CheckOrgAction(AppService.OrgAction.ReadUsersList, item.OrganizationId, false),
 					IsReadOrgDetailsAllowed = AppService.CheckOrgAction(AppService.OrgAction.ReadOrganization, item.OrganizationId, false),
-					IsReadPermissionsListAllowed = AppService.CheckOrgAction(AppService.OrgAction.ReadPermissionsList, item.OrganizationId, false),
-					IsReadSubscriptionsListAllowed = AppService.CheckOrgAction(AppService.OrgAction.ReadSubscriptionsList, item.OrganizationId, false)
+					IsReadPermissionsListAllowed = AppService.CheckOrgAction(AppService.OrgAction.ReadPermissions, item.OrganizationId, false),
+					IsReadSubscriptionsListAllowed = AppService.CheckOrgAction(AppService.OrgAction.ReadSubscriptions, item.OrganizationId, false)
 				};
 
 				// Add subscription info

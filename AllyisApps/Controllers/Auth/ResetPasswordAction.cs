@@ -58,15 +58,5 @@ namespace AllyisApps.Controllers.Auth
 			Notifications.Add(new BootstrapAlert(Resources.Strings.IncorrectPassword, Variety.Danger));
 			return View(model);
 		}
-
-		/// <summary>
-		/// GET: /Account/ResetPasswordConfirmation.
-		/// </summary>
-		/// <returns>The result of this action.</returns>
-		[AllowAnonymous]
-		public ActionResult ResetPasswordConfirmation()
-		{
-			return View();
-		}
 	}
 }

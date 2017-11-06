@@ -25,23 +25,6 @@ namespace AllyisApps.DBModel
 	public partial class DBHelper
 	{
 		/// <summary>
-		/// Returns the lock date for a specific organization.
-		/// </summary>
-		/// <param name="organizationId">The Organization Id.</param>
-		/// <returns>The lock date.</returns>
-		public async Task<LockDateDBEntity> GetLockDateByOrganizationId(int organizationId)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", organizationId);
-
-			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
-			{
-				var result = await connection.QueryAsync<LockDateDBEntity>("[TimeTracker].[GetOldLockDate]", parameters, commandType: CommandType.StoredProcedure);
-				return result.Single();
-			}
-		}
-
-		/// <summary>
 		/// Creates a holiday and related TimeEntries for an organization.
 		/// </summary>
 		/// <param name="newHoliday">The HolidayDBEntity to create.</param>
@@ -554,6 +537,31 @@ namespace AllyisApps.DBModel
 					results.Read<ProjectDBEntity>().ToList(),
 					results.Read<UserDBEntity>().ToList(),
 					results.Read<TimeEntryDBEntity>().ToList());
+			}
+		}
+
+		/// <summary>
+		/// Updates the pay period of the time tracker settings to store a json
+		/// object containing duration type info.  Pay period can either be duration or
+		/// dates type.
+		/// </summary>
+		/// <param name="payPeriodJson">Json object conatining:
+		///  > the duration in days of each pay period.
+		///  > the start date from which to base the pay period off of.</param>
+		/// <param name="organizationId">The organization that this time tracker settings belongs to.</param>
+		/// <returns>The number of updated rows.</returns>
+		public async Task<int> UpdatePayPeriod(string payPeriodJson, int organizationId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@payPeriodJson", payPeriodJson);
+			parameters.Add("@organizationId", organizationId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				return await connection.ExecuteAsync(
+					"[TimeTracker].[UpdatePayPeriod]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
 			}
 		}
 	}

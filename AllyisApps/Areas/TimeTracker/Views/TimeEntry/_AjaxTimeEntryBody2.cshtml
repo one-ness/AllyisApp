@@ -15,13 +15,28 @@
 	string approvalClass = Model.ModSinceApproval ? "pending" :
 					  Model.ApprovalState == (int)ApprovalState.NotApproved ? "rejected" :
 					  Model.ApprovalState == (int)ApprovalState.Approved ? "approved" : string.Empty;
-	bool lockedOld = Model.IsLockedOld;
-	string lockedClass = lockedOld ? "locked" : string.Empty;
-	bool canManage = (bool)ViewBag.canManage;
-	var blankList = new List<SelectListItem> {new SelectListItem {Selected = true, Text = string.Empty, Value = string.Empty}};
+	var managableProjects = (bool) ViewBag.CanManage ? Model.ProjectsWithInactive : Model.Projects;
+	var managableProjectsDropdown = managableProjects
+		.Where(p =>
+			(p.StartDate == null || DateTime.Compare(p.StartDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) <= 0) &&
+			(p.EndDate == null || DateTime.Compare(p.EndDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) >= 0))
+		.Select(c => new SelectListItem
+		{
+			Selected = Model.ProjectId == c.ProjectId,
+			Text = c.ProjectId != -1 ? string.Format("{0} - {1}", c.CustomerName, c.ProjectName) : c.ProjectName, //Only need customer - project text for project ids !=0
+			Value = c.ProjectId.ToString()
+			//Disabled = !c.IsUserActive
+		});
+	var payClassesDropdown = Model.PayClasses.Select(c =>
+		new SelectListItem
+		{
+			Selected = Model.PayClasses.Count() == 1 || Model.PayClassId == c.PayClassId,
+			Text = Strings.ResourceManager.GetString(c.PayClassName.Replace(" ", "")) ?? c.PayClassName,
+			Value = c.PayClassId.ToString()
+		});
 }
-<div class="inline-form-anim-wrap @(hiddensample) @(lockedClass)">
-	@using (Html.BeginForm(form, ControllerConstants.TimeEntry, FormMethod.Get, new { @class = string.Format("very-inline-form TimeEntryForm edit {0} {1} {2}", extrastyle, approvalClass, lockedClass) }))
+<div class="inline-form-anim-wrap @(hiddensample)">
+	@using (Html.BeginForm(form, ControllerConstants.TimeEntry, FormMethod.Get, new { @class = string.Format("very-inline-form TimeEntryForm edit {0} {1}", extrastyle, approvalClass) }))
 	{
 		@Html.Hidden("CanManage", (bool)ViewBag.CanManage)
 		@Html.HiddenFor(m => m.IsCreated).RemoveIdAttribute()
@@ -41,109 +56,42 @@
 		</div>
 		<!--Project Selector-->
 		<div class="group left" style="width: 250px;">
-			@if (lockedOld)
-			{
-				CompleteProjectViewModel proj = Model.ProjectsWithInactive.FirstOrDefault(p => p.ProjectId == Model.ProjectId);
-				@(proj == null
-					? Html.TextBoxDisabledFor(m => Model.ProjectName, Model.IsLocked, new {@class = "form-control", @style = "width: 100%"})
-					: Html.TextBox("NonEditableProj", string.Format("{0} - {1}", proj.CustomerName, Model.ProjectName), new {@disabled = "disabled", @class = "form-control", @style = "width: 100%"}))
-			}
-			else
-			{
-				if (canManage)
+			@*Ddl name must be different than model property name or the selected value cannot be adjusted*@
+			@Html.DropDownListDisabled(
+				"ProjectIdDdl",
+				managableProjectsDropdown,
+				Model.IsLocked,
+				new
 				{
-					@Html.DropDownListDisabled(
-						"ProjectIdDdl",
-						Model.ProjectsWithInactive
-							.Where(p =>
-								(p.StartDate == null || DateTime.Compare(p.StartDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) <= 0) &&
-								(p.EndDate == null || DateTime.Compare(p.EndDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) >= 0))
-							.Select(c => new SelectListItem
-							{
-								Selected = Model.ProjectId == c.ProjectId,
-								Text = c.ProjectId != -1 ? string.Format("{0} - {1}", c.CustomerName, c.ProjectName) : c.ProjectName, //Only need customer - project text for project ids !=0
-								Value = c.ProjectId.ToString(),
-								//Disabled = !c.IsUserActive
-							}),
-						Model.IsLocked,
-						new
-						{
-							@class = "form-control",
-							style = "width: 100%",
-							onchange = "changeOccur(this)"
-						}).RemoveIdAttribute()
-				}
-				else
-				{
-					//Ddl name must be different than model property name or the selected value cannot be adjusted
-					@Html.DropDownListDisabled(
-						"ProjectIdDdl",
-						Model.Projects
-							.Where(p =>
-								(p.StartDate == null || DateTime.Compare(p.StartDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) <= 0) &&
-								(p.EndDate == null || DateTime.Compare(p.EndDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) >= 0))
-							.Select(c => new SelectListItem
-							{
-								Selected = Model.ProjectId == c.ProjectId,
-								Text = c.ProjectId != -1 ? string.Format("{0} - {1}", c.CustomerName, c.ProjectName) : c.ProjectName, //Only need customer - project text for project ids !=0
-								Value = c.ProjectId.ToString(),
-								//Disabled = !c.IsUserActive
-							}),
-						Model.IsLocked,
-						new
-						{
-							@class = "form-control",
-							style = "width: 100%",
-							onchange = "changeOccur(this)"
-						}).RemoveIdAttribute()
-				}
-				<input type="hidden" name="ProjectId" value="" />   //Needed for proper model binding, value changes on submit (see form above)
-			}
+					@class = "form-control",
+					style = "width: 100%",
+					onchange = "changeOccur(this)"
+				}).RemoveIdAttribute()
+			<input type="hidden" name="ProjectId" value="" />   @*Needed for proper model binding, value changes on submit (see form above)*@
 		</div>
 		<!--PayClass Selector-->
 		<div class="group left" style="width: 150px;">
-			@if (lockedOld)
-			{
-				@(Model.Sample
-					? Html.TextBox("BeforeLockDatePC", "-", new {@disabled = "disabled", @class = "form-control", @style = "width: 100%"})
-					: Html.TextBoxDisabledFor(m => Model.PayClasses.FirstOrDefault(c => c.PayClassId == Model.PayClassId).PayClassName, Model.IsLocked, new {@class = "form-control", @style = "width: 100%"}))
-			}
-			else
-			{
-				@Html.DropDownListDisabled(
-					"PayClassNameDdl",
-					Model.PayClasses.Select(c =>
-						new SelectListItem
-						{
-							Selected = Model.PayClasses.Count() == 1 || Model.PayClassId == c.PayClassId,
-							Text = Strings.ResourceManager.GetString(c.PayClassName.Replace(" ", "")) ?? c.PayClassName,
-							Value = c.PayClassId.ToString()
-						}),
-					Model.IsLocked,
-					new
-					{
-						@class = "form-control",
-						style = "width: 100%",
-						onchange = "changeOccur(this)"
-					}).RemoveIdAttribute()
+			@Html.DropDownListDisabled(
+				"PayClassNameDdl",
+				payClassesDropdown,
+				Model.IsLocked,
+				new
+				{
+					@class = "form-control",
+					style = "width: 100%",
+					onchange = "changeOccur(this)"
+				}).RemoveIdAttribute()
 
-				<input type="hidden" name="PayClassId" value="" />   @*Needed for proper model binding, value changes on submit (see form above)*@
-			}
+			<input type="hidden" name="PayClassId" value="" />   @*Needed for proper model binding, value changes on submit (see form above)*@
 		</div>
 		<!--Description-->
 		<div class="group left">
-			@if (lockedOld && Model.Sample)
-			{
-				@Html.TextBox("BeforeLockDateDesc", "-", new { @disabled = "disabled", @class = "ovrd-form-control form-control", @style = "width: 100%", @onchange = "changeOccur(this)" })
-			}
-			else
-			{
-				@Html.TextBoxDisabledFor(m => Model.Description, Model.IsLocked, new { @class = "ovrd-form-control form-control stretch", @onkeypress = "changeOccur(this)", @onchange = "changeOccur(this)", @placeholder = Strings.Description }).RemoveIdAttribute()
-
-			}
+			@(Model.Sample
+				? Html.TextBox("BeforeLockDateDesc", "-", new {@disabled = "disabled", @class = "ovrd-form-control form-control", @style = "width: 100%", @onchange = "changeOccur(this)"})
+				: Html.TextBoxDisabledFor(m => Model.Description, Model.IsLocked, new {@class = "ovrd-form-control form-control stretch", @onkeypress = "changeOccur(this)", @onchange = "changeOccur(this)", @placeholder = Strings.Description}).RemoveIdAttribute())
 		</div>				
 		if (Model.IsLocked) {<i class="glyphicon glyphicon-lock" style="padding-top: 9px; padding-left: 12px" title="This date is locked"></i>}
-		if (!lockedOld && !Model.IsLocked)
+		if (!Model.IsLocked)
 		{
 			<div class="button-anim-wrap btn-group group right">
 				<div>

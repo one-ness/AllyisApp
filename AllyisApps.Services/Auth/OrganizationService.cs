@@ -80,7 +80,7 @@ namespace AllyisApps.Services
 		public async Task<List<Subscription>> GetSubscriptionsAsync(int orgId, bool readingList = false)
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
-			if(!readingList) CheckOrgAction(OrgAction.ReadSubscriptionsList, orgId);
+			if(!readingList) CheckOrgAction(OrgAction.ReadSubscriptions, orgId);
 			var result = new List<Subscription>();
 			dynamic entities = await DBHelper.GetSubscriptionsAsync(orgId);
 			foreach (var item in entities)
@@ -354,7 +354,10 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentOutOfRangeException(nameof(newOrganizationRole), "Organization role must match a value of the OrganizationRole enum.");
 			}
-
+			foreach (int id in userIds)
+			{
+				if (id == UserContext.UserId) throw new ArgumentException("Can't change self role in the organization.", nameof(userIds));
+			}
 			if (userIds == null || userIds.Count == 0)
 			{
 				throw new ArgumentException("userIds", "No user ids provided.");
@@ -378,6 +381,10 @@ namespace AllyisApps.Services
 			if (userIds == null || userIds.Count == 0)
 			{
 				throw new ArgumentException("No user ids provided.", nameof(userIds));
+			}
+			foreach(int id in userIds)
+			{
+				if(id == UserContext.UserId) throw new ArgumentException("Can't delete self from the organization.", nameof(userIds));
 			}
 
 			#endregion Validation

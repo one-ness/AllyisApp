@@ -1,14 +1,9 @@
-﻿using AllyisApps.ViewModels.Auth;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using AllyisApps.Services;
 using AllyisApps.Resources;
-using AllyisApps.Services.Auth;
-
+using AllyisApps.Services;
+using AllyisApps.ViewModels.Auth;
 namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
@@ -43,7 +38,7 @@ namespace AllyisApps.Controllers.Auth
 					ProductName = sub.ProductName,
 					SubscriptionId = sub.SubscriptionId,
 					SubscriptionName = sub.SubscriptionName,
-					ManagePermissionsUrl = getPermissionsUrl(sub.ProductId, sub.SubscriptionId),
+					ManagePermissionsUrl = GetPermissionsUrl(sub.ProductId, sub.SubscriptionId),
 				}).OrderBy(sub => sub.ProductId).ToList(),
 
 				OrganizationId = id,

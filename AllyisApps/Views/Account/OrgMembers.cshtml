@@ -5,8 +5,8 @@
     ViewBag.TitleBar = sb.ToString();
 }
 
-@Html.Partial("_MembersAndInvitationsTab", Model.TabInfo)
-<div style="margin-bottom: 25px;"></div>
+@if (Model.CanEditUser) {@Html.Partial("_MembersAndInvitationsTab", Model.TabInfo)}
+<div style="margin-bottom: 10px;"></div>
 <div class="row members-top-row">
     <div class="col-xs-12">
         <div>@Strings.Members  : @Model.Users.Count</div>
@@ -29,21 +29,22 @@
                     <th>Employee ID</th>
                     <th>Joined Date</th>
                     <th>Role</th>
-                    <th><i class="fa fa-edit"> Edit</i></th>
+                     @if (Model.CanEditUser) {<th><i class="fa fa-edit"> Edit</i></th> }
+                     @if (!Model.CanEditUser) {<th><i class="fa fa-television"> View</i></th> }
                 </tr>
             </thead>
             @foreach (var item in Model.Users)
             {
                 <tr>
-                    <td class="col-md-1"><input class="checkbox-inline members-checkbox" type="checkbox" value="@item.UserId" /></td>
+                    @if (  Model.CanEditUser ) { <td class="col-md-1"><input class="checkbox-inline members-checkbox" type="checkbox" value="@item.UserId" /></td> }
+					@if ( !Model.CanEditUser ) { <td class="col-md-1"></td> }
                     <td class="col-md-2">@item.Username</td>
                     <td class="col-md-3">@item.Email</td>
                     <td class="col-md-2">@item.EmployeeId</td>
                     <td class="col-md-2">@item.FormattedJoinedDate</td>
                     <td class="col-md-1">@item.RoleName</td>
-                    <td class="col-md-1"><a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account, new { @id = Model.OrganizationId, @userId = item.UserId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a>
-                        
-                    </td>
+					@if (Model.CanEditUser) { <td class="col-md-1"><a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account, new { @id = Model.OrganizationId, @userId = item.UserId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a></td> }
+					@if (!Model.CanEditUser) { <td class="col-md-1"><a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account, new { @id = Model.OrganizationId, @userId = item.UserId })" title="@Strings.EditUser"><i class="fa fa-fw fa-television"></i></a></td> }
                 </tr>}
         </table>
     </div>

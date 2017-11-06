@@ -39,21 +39,6 @@ namespace AllyisApps.DBModel.TimeTracker
 		public decimal OvertimeMultiplier { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether to use a lock date.
-		/// </summary>
-		public bool IsLockDateUsed { get; set; }
-
-		/// <summary>
-		/// Gets or sets the LockDatePeriod.
-		/// </summary>
-		public int LockDatePeriod { get; set; }
-
-		/// <summary>
-		/// Gets or sets the LockDateQuantity.
-		/// </summary>
-		public int LockDateQuantity { get; set; }
-
-		/// <summary>
 		/// Gets or sets the payroll processed date.
 		/// All time entries before this date are completely processed
 		/// </summary>

@@ -42,9 +42,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				Settings = new SettingsViewModel.SettingsInfoViewModel
 				{
-					IsLockDateUsed = settings.IsLockDateUsed,
-					LockDatePeriod = settings.LockDatePeriod,
-					LockDateQuantity = settings.LockDateQuantity,
 					OrganizationId = settings.OrganizationId,
 					OvertimeHours = settings.OvertimeHours,
 					OvertimeMultiplier = settings.OvertimeMultiplier,

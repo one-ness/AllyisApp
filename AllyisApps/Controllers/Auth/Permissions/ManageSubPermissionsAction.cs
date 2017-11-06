@@ -1,16 +1,14 @@
-﻿using AllyisApps.ViewModels.Auth;
-using AllyisApps.Services;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using AllyisApps.Resources;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services.Billing;
+using AllyisApps.Resources;
+using AllyisApps.Services;
 using AllyisApps.Services.Auth;
+using AllyisApps.Services.Billing;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -109,7 +107,7 @@ namespace AllyisApps.Controllers.Auth
 					ProductId = (int)cursub.ProductId,
 					ProductName = cursub.ProductName,
 					SubscriptionId = cursub.SubscriptionId,
-					ManagePermissionsUrl = getPermissionsUrl(cursub.ProductId, cursub.SubscriptionId),
+					ManagePermissionsUrl = GetPermissionsUrl(cursub.ProductId, cursub.SubscriptionId),
 					SubscriptionName = cursub.SubscriptionName
 				}).OrderBy(cursub => cursub.ProductId).ToList(),
 				SubscriptionId = id,

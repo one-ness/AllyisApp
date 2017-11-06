@@ -61,9 +61,9 @@
 </div>
 
 @section scripts{
-	@Scripts.Render("~/bundles/jqueryui");
-	@Scripts.Render("~/bundles/moment")
-	<script src="~/Scripts/allyis-holidayDatepicker.js"></script>
-
-	@Scripts.Render("~/bundles/TTTimeEntrySettings")
+	<script>
+		function hideOT(hideIt) {
+			$('#OTSettings').css('visibility', hideIt ? 'hidden' : 'visible');
+		}
+	</script>
 }

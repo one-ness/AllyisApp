@@ -53,7 +53,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 
 			var infos = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 
-			return View("Index", ConstructManageCustomerViewModel(subscriptionId));
+			return View("Index", await ConstructManageCustomerViewModel(subscriptionId));
 		}
 
 		/// <summary>
