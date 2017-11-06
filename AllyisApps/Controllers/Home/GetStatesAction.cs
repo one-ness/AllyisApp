@@ -8,7 +8,7 @@ using AllyisApps.ViewModels;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace AllyisApps.Controllers
+namespace AllyisApps.Controllers.Home
 {
 	/// <summary>
 	/// Controller for home pages / site-wide functions.
