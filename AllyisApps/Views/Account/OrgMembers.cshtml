@@ -63,6 +63,11 @@
                     function getUserIdsAndSubmit() {
                         var csvIds = "";
 
+                        if (!confirm("Do you wish to delete the selected user(s)?"))
+                        {
+                            return false;
+                        }
+
                         // gather all the ids to delete as a csv
 
                         var checkboxes = $(".members-checkbox");
