@@ -350,15 +350,18 @@ namespace AllyisApps.Services
         {
             #region Validation
 
-            if (!Enum.IsDefined(typeof(OrganizationRoleEnum), newOrganizationRole))
-            {
-                throw new ArgumentOutOfRangeException(nameof(newOrganizationRole), "Organization role must match a value of the OrganizationRole enum.");
-            }
-
-            if (userIds == null || userIds.Count == 0)
-            {
-                throw new ArgumentException("userIds", "No user ids provided.");
-            }
+			if (!Enum.IsDefined(typeof(OrganizationRoleEnum), newOrganizationRole))
+			{
+				throw new ArgumentOutOfRangeException(nameof(newOrganizationRole), "Organization role must match a value of the OrganizationRole enum.");
+			}
+			foreach (int id in userIds)
+			{
+				if (id == UserContext.UserId) throw new ArgumentException("Can't change self role in the organization.", nameof(userIds));
+			}
+			if (userIds == null || userIds.Count == 0)
+			{
+				throw new ArgumentException("userIds", "No user ids provided.");
+			}
 
             #endregion Validation
 
@@ -375,10 +378,14 @@ namespace AllyisApps.Services
         {
             #region Validation
 
-            if (userIds == null || userIds.Count == 0)
-            {
-                throw new ArgumentException("No user ids provided.", nameof(userIds));
-            }
+			if (userIds == null || userIds.Count == 0)
+			{
+				throw new ArgumentException("No user ids provided.", nameof(userIds));
+			}
+			foreach(int id in userIds)
+			{
+				if(id == UserContext.UserId) throw new ArgumentException("Can't delete self from the organization.", nameof(userIds));
+			}
 
             #endregion Validation
 

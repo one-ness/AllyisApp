@@ -5,12 +5,15 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Resources;
 using AllyisApps.Services;
+using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using Newtonsoft.Json;
 
@@ -30,19 +33,20 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			int organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-			var settings = await AppService.GetSettingsByOrganizationId(organizationId);
+			Setting settings = await AppService.GetSettingsByOrganizationId(organizationId);
 			string subName = await AppService.GetSubscriptionName(subscriptionId);
 			dynamic payPeriodInfo = JsonConvert.DeserializeObject(settings.PayPeriod);
 
 			var model = new SettingsPayPeriodViewModel
 			{
 				SubscriptionId = subscriptionId,
+				OrganizationId = organizationId,
 				SubscriptionName = subName,
 				UserId = AppService.UserContext.UserId,
 				PayPeriodTypeId = payPeriodInfo.type == "duration" ? 0 : 1,
 				Duration = payPeriodInfo.duration ?? 0,
 				StartDate = (DateTime?)payPeriodInfo.startDate,
-				Dates = payPeriodInfo.dates
+				Dates = string.Join(",", payPeriodInfo.dates)
 			};
 			return View(model);
 		}
@@ -51,13 +55,25 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// POST for updating the time tracker pay period settings
 		/// </summary>
 		/// <param name="model">Model containing updated data</param>
-		/// <returns></returns>
+		/// <returns>Either return to same page if invalid data, or refresh the page with the updated data.</returns>
 		[HttpPost]
-		public ActionResult SettingsPayPeriod(SettingsPayPeriodViewModel model)
+		public async Task<ActionResult> SettingsPayPeriod(SettingsPayPeriodViewModel model)
 		{
 			if (!ModelState.IsValid)
 			{
 				return View(model);
+			}
+
+			switch ((PayPeriodType)model.PayPeriodTypeId)
+			{
+				case PayPeriodType.Duration:
+					await AppService.UpdateDurationPayPeriod(model.Duration.Value, model.StartDate.Value, model.OrganizationId);
+					break;
+				case PayPeriodType.Dates:
+					await AppService.UpdateDatesPayPeriod(model.Dates.Trim(' ').Split(',').Select(int.Parse).ToList(), model.OrganizationId);
+					break;
+				default:
+					throw new InvalidEnumArgumentException(nameof(model.PayPeriodTypeId));
 			}
 
 			Notifications.Add(new BootstrapAlert(Strings.UpdatePayPeriodSuccess, Variety.Success));

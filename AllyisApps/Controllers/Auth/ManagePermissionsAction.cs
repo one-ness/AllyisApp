@@ -177,10 +177,11 @@ namespace AllyisApps.Controllers.Auth
 
 				if (modelSelectedUsers.Any(tu => tu.UserId == AppService.UserContext.UserId))
 				{
+					/*
 					Notifications.Add(model.SelectedAction == -1
 						? new BootstrapAlert(Strings.YouAreUnableToRemoveYourself, Variety.Danger)
 						: new BootstrapAlert(Strings.YouAreUnableToChangeYourOwnRole, Variety.Danger));
-
+					*/
 					model.SelectedUsers = model.SelectedUsers.Where(tu => tu.UserId != AppService.UserContext.UserId);
 					if (!modelSelectedUsers.Any())
 					{
