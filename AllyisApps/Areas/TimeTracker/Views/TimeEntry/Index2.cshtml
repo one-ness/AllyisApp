@@ -311,20 +311,39 @@
 
         //submit date range form to update the view with new date range
 		$("#newdaterange").on("apply.daterangepicker", function (dre, picker) {
-			var newForm = jQuery('<form>', {
-				'action': '/@ProductNameConstants.TimeTracker/@Model.SubscriptionId/@ControllerConstants.TimeEntry/TimeTrackerDatePickerRedirect',
-				'target': '_top',
-				'method': 'get'
-			}).append(jQuery('<input>', {
-				'name': 'startDate',
-				'value': picker.startDate.format().slice(0, 10),
-				'type': 'hidden'
-			})).append(jQuery('<input>', {
-				'name': 'endDate',
-				'value': picker.endDate.format().slice(0, 10),
-				'type': 'hidden'
-			}));
-			newForm.appendTo(document.body).submit();
+            if ('@(ViewBag.SelectedUserId == ViewBag.SignedInUserID)' === 'True') {
+                var newForm = jQuery('<form>', {
+                    'action': '/@ProductNameConstants.TimeTracker/@Model.SubscriptionId/@ControllerConstants.TimeEntry/TimeTrackerDatePickerRedirect',
+                    'target': '_top',
+                    'method': 'get'
+                }).append(jQuery('<input>', {
+                    'name': 'startDate',
+                    'value': picker.startDate.format().slice(0, 10),
+                    'type': 'hidden'
+                })).append(jQuery('<input>', {
+                    'name': 'endDate',
+                    'value': picker.endDate.format().slice(0, 10),
+                    'type': 'hidden'
+                }));
+                newForm.appendTo(document.body).submit();
+            }
+            else
+            {
+                var newForm = jQuery('<form>', {
+                    'action': '/@ProductNameConstants.TimeTracker/@Model.SubscriptionId/@ControllerConstants.TimeEntry/Index/@ViewBag.SelectedUserId',
+                    'target': '_top',
+                    'method': 'get'
+                }).append(jQuery('<input>', {
+                    'name': 'startDate',
+                    'value': picker.startDate.format().slice(0, 10),
+                    'type': 'hidden'
+                })).append(jQuery('<input>', {
+                    'name': 'endDate',
+                    'value': picker.endDate.format().slice(0, 10),
+                    'type': 'hidden'
+                }));
+                newForm.appendTo(document.body).submit();
+            }
 		});
 
 		function gatherData() {

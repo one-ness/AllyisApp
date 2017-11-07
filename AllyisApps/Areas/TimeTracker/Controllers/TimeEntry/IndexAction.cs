@@ -36,7 +36,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// <param name="startDate">The beginning of the Date Range.</param>
         /// <param name="endDate">The ending of the Date Range.</param>
         /// <returns>Provides the view for the defined user over the date range defined.</returns>
-        public async Task<ActionResult> Index(int subscriptionId, int userId, int? startDate = null, int? endDate = null)
+        public async Task<ActionResult> Index(int subscriptionId, int userId, DateTime? startDate = null, DateTime? endDate = null)
         {
             AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
             var sub = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
@@ -58,8 +58,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
                 sub.SubscriptionName,
                 userId,
                 isManager,
-                startDate,
-                endDate);
+                Utility.GetDaysFromDateTime(startDate),
+                Utility.GetDaysFromDateTime(endDate));
 
             return View("Index2", model);
         }
