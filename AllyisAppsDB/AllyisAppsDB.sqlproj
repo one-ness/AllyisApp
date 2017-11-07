@@ -411,6 +411,7 @@
     <Build Include="TimeTracker\Stored Procedures\UpdateLockDate.sql" />
     <Build Include="TimeTracker\Stored Procedures\UpdatePayrollProcessedDate.sql" />
     <Build Include="Auth\Stored Procedures\UpdateEmployeeIdAndOrgRole.sql" />
+    <Build Include="Pjm\Stored Procedures\GetProjectByProjectOrgId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

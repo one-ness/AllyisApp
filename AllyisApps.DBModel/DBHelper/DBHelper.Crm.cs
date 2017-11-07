@@ -624,6 +624,25 @@ namespace AllyisApps.DBModel
 					commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
 		}
+		
+		/// <summary>
+		/// Gets a project from its id.
+		/// </summary>
+		/// <param name="projectOrgId">The project's Id.</param>
+		/// <returns>Info about the requested project.</returns>
+		public ProjectDBEntity GetProjectByProjectOrgId(string projectOrgId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@projectOrgId", projectOrgId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				return connection.Query<ProjectDBEntity>(
+					"[Pjm].[GetProjectByProjectOrgId]",
+					parameters,
+					commandType: CommandType.StoredProcedure).SingleOrDefault();
+			}
+		}
 
 		/// <summary>
 		/// Gets a project from its id and a user id, with the IsProjectUser field filled out

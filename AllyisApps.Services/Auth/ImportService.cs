@@ -344,6 +344,7 @@ namespace AllyisApps.Services
 
 				foreach (DataRow row in table.Rows)
 				{
+					Project.Project project = new Project.Project();
 
 					DateTime? defaultProjectStartDate = null;
 					DateTime? defaultProjectEndDate = null;
@@ -539,7 +540,7 @@ namespace AllyisApps.Services
 							if (!string.IsNullOrEmpty(fields[2]))
 							{
 								customer = customersProjects.Select(tup => tup.Item1).FirstOrDefault(c => customerFieldIsName ? c.CustomerName.Equals(fields[2]) : c.CustomerOrgId.Equals(fields[2]));
-
+								
 								if (customer == null)
 								{
 									result.ProjectFailures.Add(string.Format("Could not create project {0}: No customer to create it under.", knownValue));
@@ -907,8 +908,14 @@ namespace AllyisApps.Services
 				{
 					result.GeneralFailures.Add($"There is no readable data to import from spreadsheet \"{table.TableName}\".");
 				}
+
 				foreach (DataRow row in table.Rows)
 				{
+					string projectOrgId = row.Field<string>(ColumnHeaders.ProjectId);
+					Project.Project project = AppService.InitializeProject(DBHelper.GetProjectByProjectOrgId(projectOrgId));
+					User userInOrg = new User();
+					List<User> userSubs = new List<User>();
+
 					// Double-check that previous adding/finding of project and user didn't fail
 					if (!canImportProjectUser || project == null || userInOrg == null) continue;
 
@@ -1023,10 +1030,6 @@ namespace AllyisApps.Services
 
 			return result;
 		}
-
-		public Project.Project project { get; set; }
-		public User userInOrg { get; set; }
-		public List<User> userSubs { get; set; }
 
 		/// <summary>
 		/// Helper method for reading column data from a spreadsheet. It will try to read data in the given column name from the given
