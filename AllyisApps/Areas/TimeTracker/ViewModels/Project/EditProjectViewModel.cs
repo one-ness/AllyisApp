@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -54,12 +55,12 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		/// <summary>
 		/// Gets or sets Project Start Date. Note: must be int and not DateTime for Json serialization to work correctly in different cultures.
 		/// </summary>
-		public int StartDate { get; set; }
+		public DateTime? StartDate { get; set; }
 
 		/// <summary>
 		/// Gets or sets Project End Date. Note: must be int and not DateTime for Json serialization to work correctly in different cultures.
 		/// </summary>
-		public int EndDate { get; set; }
+		public DateTime? EndDate { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Customer's name.

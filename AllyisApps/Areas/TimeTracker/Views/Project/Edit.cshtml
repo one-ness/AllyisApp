@@ -4,8 +4,6 @@
 @{
 	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
 	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
-	string actionName = (string)ViewContext.Controller.ValueProvider.GetValue("action").RawValue;
-	string controllerName = (string)ViewContext.Controller.ValueProvider.GetValue("controller").RawValue;
 	ViewBag.Title = Strings.EditProject;
 	ViewBag.Subtitle = Model.CustomerName;
 	ViewBag.Action = "Edit";
@@ -19,21 +17,13 @@
 </div>
 
 @section css {
-	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
-	<link rel="stylesheet" type="text/css" href="~/Content/jquery.comiseo.daterangepicker.css" />
+	<link rel="stylesheet" type="text/css" href="~/Content/DateRangePicker" />
 }
 
 @section Scripts {
 	@*Date range picker dependencies*@
 	@Scripts.Render("~/bundles/jqueryui")
 	@Scripts.Render("~/bundles/moment")
-
-	<script type="text/javascript">
-        var mindate_shortstring = "@DateTime.MinValue.ToShortDateString()";
-        var maxdate_shortstring = "@DateTime.MaxValue.ToShortDateString()";
-        var model_startdate = @Model.StartDate;
-        var model_enddate = @Model.EndDate;
-	</script>
-	@Scripts.Render("~/bundles/daterangepickerold")
+	@Scripts.Render("~/bundles/daterangepicker")
 	@Scripts.Render("~/bundles/TTProjectEditCreate")
 }

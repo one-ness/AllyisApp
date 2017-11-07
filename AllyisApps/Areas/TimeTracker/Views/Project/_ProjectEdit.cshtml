@@ -1,4 +1,6 @@
-﻿@model AllyisApps.ViewModels.TimeTracker.Project.EditProjectViewModel
+﻿@using System.Globalization
+@using AllyisApps.ViewModels.TimeTracker.Project
+@model AllyisApps.ViewModels.TimeTracker.Project.EditProjectViewModel
 
 @{
 	AjaxOptions ao = new AjaxOptions
@@ -17,22 +19,22 @@
 				@Html.AntiForgeryToken()
 				@Html.ValidationSummary(true)
 				<div class="form-group">
-					@Html.ReqLabelFor(m => m.ProjectName, @Strings.Name)
+					@Html.ReqLabelFor(m => m.ProjectName, Strings.Name)
 					@Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control" })
 					@Html.ValidationMessageFor(x => x.ProjectName, "", new { @class = "text-danger" })
 				</div>
 				<div class="form-group">
 					@Html.ReqLabelFor(m => m.ProjectOrgId, Strings.ProjectOrgId)
-					@Html.TextBoxFor(m => m.ProjectOrgId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.ProjectOrgId })
+					@Html.TextBoxFor(m => m.ProjectOrgId, new { @class = "form-control", maxlength = "16", placeholder = Model.ProjectOrgId })
 					@Html.ValidationMessageFor(x => x.ProjectOrgId, "", new { @class = "text-danger" })
 				</div>
-				@if (Model.SelectedProjectUserIds.Count() > 0)
+				@if (Model.SelectedProjectUserIds.Any())
 				{
 					var _projectUsers = Model.ProjectUsers.ToList();
 					var _subscriptionUsers = Model.SubscriptionUsers.ToList();
-					foreach (var id in Model.SelectedProjectUserIds)
+					foreach (string id in Model.SelectedProjectUserIds)
 					{
-						var choice = Model.SubscriptionUsers.Where(m => m.UserId == id).FirstOrDefault();
+						BasicUserInfoViewModel choice = Model.SubscriptionUsers.FirstOrDefault(m => m.UserId == id);
 						_projectUsers.Add(choice);
 						_subscriptionUsers.Remove(choice);
 					}
@@ -47,7 +49,7 @@
 							Create a multi-select list that is populated from SubscriptionUsers
 							Uses Javascript and the add/remove buttons to add and remove items from this listbox
 						*@
-						@Html.ListBoxFor(m => m.SubscriptionUsers, new MultiSelectList(Model.SubscriptionUsers, "UserId", "Name"), new { @name = "Excluded", @id = "excluded-users", @class = "filter-list", @Multiple = "multiple" })
+						@Html.ListBoxFor(m => m.SubscriptionUsers, new MultiSelectList(Model.SubscriptionUsers, "UserId", "Name"), new { name = "Excluded", id = "excluded-users", @class = "filter-list", Multiple = "multiple" })
 					</div>
 					<div class="actions">
 						<a href="javascript: moveSelectedProjectEditModal('in')" class="btn btn-default move-in">
@@ -65,21 +67,41 @@
 							On Submit, all items in this list become selected, so the whole list is bound to the model
 							Items are added and removed from this list via Javascript and the add / remove buttons
 						*@
-						@Html.ListBoxFor(m => m.SelectedProjectUserIds, new MultiSelectList(Model.ProjectUsers, "UserId", "Name"), new { @name = "Included", @id = "included-users", @class = "filter-list", @Multiple = "multiple" })
+						@Html.ListBoxFor(m => m.SelectedProjectUserIds, new MultiSelectList(Model.ProjectUsers, "UserId", "Name"), new { name = "Included", id = "included-users", @class = "filter-list", Multiple = "multiple" })
 					</div>
 				</div>
-				<div class="form-group row" style="margin-bottom: 0px; margin-top: 15px;">
-					<div class="form-group projectDate">
+				<div class="form-group row" style="margin-bottom: 0; margin-top: 15px;">
+					<div class="form-group col-xs-12 col-sm-5">
 						<label>@Strings.StartDate</label>
-						@Html.HiddenFor(m => m.StartDate)
-						<input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerStart" />
-						<span class="fa fa-fw fa-calendar" id="datePickerStartButton"></span>
+						<div class="input-group">
+							<input 
+								type="text"
+								class="form-control"
+								id="StartDate"
+								name="StartDate"
+								value="@(Model.StartDate != null
+								        ? Model.StartDate.Value.Date.ToString("d", CultureInfo.InvariantCulture)
+								        : "")"
+							>
+							<div class="input-group-addon">
+								<span class="glyphicon glyphicon-calendar"></span>
+							</div>
+						</div>
 					</div>
-					<div class="form-group projectDate" style="float: right">
+					<div class="form-group col-xs-12 col-sm-offset-2 col-sm-5">
 						<label>@Strings.EndDate</label>
-						@Html.HiddenFor(m => m.EndDate)
-						<input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerEnd" />
-						<span class="fa fa-fw fa-calendar" id="datePickerEndButton"></span>
+						<div class="input-group">
+							<input type="text"
+								   class="form-control"
+								   id="EndDate"
+								   name="EndDate"
+								   value="@(Model.EndDate != null
+								        ? Model.EndDate.Value.Date.ToString("d", CultureInfo.InvariantCulture)
+								        : "")">
+							<div class="input-group-addon">
+								<span class="glyphicon glyphicon-calendar"></span>
+							</div>
+						</div>
 					</div>
 				</div>
 				@Html.HiddenFor(m => m.ParentCustomerId)

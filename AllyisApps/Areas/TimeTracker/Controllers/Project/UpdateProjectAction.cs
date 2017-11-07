@@ -7,7 +7,6 @@
 using System;
 using System.Linq;
 using AllyisApps.Controllers;
-using AllyisApps.Lib;
 using AllyisApps.ViewModels.TimeTracker.Project;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -42,9 +41,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				project.ProjectId,
 				project.ProjectName,
 				project.ProjectOrgId,
-				project.StartDate != -1 ? Utility.GetNullableDateTimeFromDays(project.StartDate) : null,
-				project.EndDate != -1 ? Utility.GetNullableDateTimeFromDays(project.EndDate) : null,
-				project.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString)),
+				project.StartDate,
+				project.EndDate,
+				project.SelectedProjectUserIds.Select(int.Parse),
 				project.SubscriptionId);
 
 			// project.IsHourly; // TODO: add an isHourly parameter to update the project's isHourly column.  Currently disabled feature
