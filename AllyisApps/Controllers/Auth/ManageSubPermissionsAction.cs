@@ -167,7 +167,9 @@ namespace AllyisApps.Controllers.Auth
 					ProductId = (int)cursub.ProductId,
 					ProductName = cursub.ProductName,
 					SubscriptionId = cursub.SubscriptionId,
-					SubscriptionName = cursub.SubscriptionName
+					SubscriptionName = cursub.SubscriptionName,
+					ManagePermissionsUrl = GetPermissionsUrl(cursub.ProductId, cursub.SubscriptionId)
+
 				}).OrderBy(cursub => cursub.ProductId).ToList(),
 				SubscriptionId = id,
 				RoleHeader = roleHeader,
@@ -226,7 +228,8 @@ namespace AllyisApps.Controllers.Auth
 					ProductId = (int)cursub.ProductId,
 					ProductName = cursub.ProductName,
 					SubscriptionId = cursub.SubscriptionId,
-					SubscriptionName = cursub.SubscriptionName
+					SubscriptionName = cursub.SubscriptionName,
+					ManagePermissionsUrl= GetPermissionsUrl(cursub.ProductId, cursub.SubscriptionId),
 				}).OrderBy(cursub => cursub.ProductId).ToList(),
 				SubscriptionId = id,
 				RoleHeader = roleHeader,
