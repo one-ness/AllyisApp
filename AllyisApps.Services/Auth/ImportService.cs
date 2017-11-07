@@ -917,6 +917,9 @@ namespace AllyisApps.Services
 				bool hasCustomerName = table.Columns.Contains(ColumnHeaders.CustomerName);
 				bool hasCustomerId = table.Columns.Contains(ColumnHeaders.CustomerId);
 
+				User userGet = await GetUserAsync(UserContext.UserId);
+				var users = GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, userGet)).ToList();
+
 				foreach (DataRow row in table.Rows)
 				{
 					bool thisRowHasProjectName = table.Columns.Contains(ColumnHeaders.ProjectName);
@@ -925,12 +928,12 @@ namespace AllyisApps.Services
 
 					var project = customersProjects
 						.FirstOrDefault(p => thisRowHasProjectName ? p.ProjectName.Equals(knownValue) : p.ProjectOrgId.Equals(knownValue));
-
-					//string projectOrgId = row.Field<string>(ColumnHeaders.ProjectId);
-					//var pro = DBHelper.GetProjectByProjectOrgId(projectOrgId);
-					//Project.Project project = AppService.InitializeProject(pro);
-					User userInOrg = new User();
+					
 					List<User> userSubs = new List<User>();
+					string readValue = null;
+					ReadColumn(row, ColumnHeaders.EmployeeId, e => readValue = e);
+					var userTuple = users.FirstOrDefault(tup => tup.Item1.Equals(readValue));
+					User userInOrg = userTuple.Item2;
 
 					// Double-check that previous adding/finding of project and user didn't fail
 					if (!canImportProjectUser || project == null || userInOrg == null) continue;
