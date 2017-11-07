@@ -1022,7 +1022,7 @@
     <value>Projects</value>
   </data>
   <data name="ProjectSearchPlaceholder" xml:space="preserve">
-    <value>Project Search 🔎</value>
+    <value>Project Search</value>
   </data>
   <data name="ProjectsFile" xml:space="preserve">
     <value>Projects File</value>
@@ -1103,13 +1103,13 @@
     <value>Save</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>Search 🔎</value>
+    <value>Search</value>
   </data>
   <data name="SearchPlaceholder1" xml:space="preserve">
-    <value>User Search 🔎</value>
+    <value>User Search</value>
   </data>
   <data name="SearchPlaceholder2" xml:space="preserve">
-    <value>Find Member 🔎</value>
+    <value>Find Member</value>
   </data>
   <data name="SelectProject" xml:space="preserve">
     <value>Select Project</value>
@@ -1346,7 +1346,7 @@
     <value>{0} users changed roles in Time Tracker.</value>
   </data>
   <data name="UserSearchPlaceholder" xml:space="preserve">
-    <value>User Search 🔎</value>
+    <value>User Search</value>
   </data>
   <data name="UsersRemovedFromOrg" xml:space="preserve">
     <value>{0} users were removed from the organization.</value>

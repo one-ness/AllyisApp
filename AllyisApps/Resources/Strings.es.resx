@@ -682,7 +682,7 @@
     <value>Proyectos</value>
   </data>
   <data name="ProjectSearchPlaceholder" xml:space="preserve">
-    <value>Búsqueda de proyectos 🔎</value>
+    <value>Búsqueda de proyectos</value>
   </data>
   <data name="ProjectsFile" xml:space="preserve">
     <value>Archivo de Proyectos</value>
@@ -709,13 +709,13 @@
     <value>Salvar</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-    <value>Buscar 🔎</value>
+    <value>Buscar</value>
   </data>
   <data name="SearchPlaceholder1" xml:space="preserve">
-    <value>Búsqueda de usuario 🔎</value>
+    <value>Búsqueda de usuario</value>
   </data>
   <data name="SearchPlaceholder2" xml:space="preserve">
-    <value>Encuentra miembro 🔎</value>
+    <value>Encuentra miembro</value>
   </data>
   <data name="SelectProject" xml:space="preserve">
     <value>Seleccione su proyecto</value>
@@ -1342,7 +1342,7 @@
     <value>Subir</value>
   </data>
   <data name="UserSearchPlaceholder" xml:space="preserve">
-    <value>Usuario Buscar 🔎</value>
+    <value>Usuario Buscar</value>
   </data>
   <data name="ViewErrorMessage" xml:space="preserve">
     <value>Ver mensaje de error</value>
