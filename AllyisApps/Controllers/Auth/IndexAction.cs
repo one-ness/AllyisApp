@@ -112,17 +112,18 @@ namespace AllyisApps.Controllers.Auth
                     {
                         case ProductIdEnum.TimeTracker:
                             description = Resources.Strings.TimeTrackerDescription;
-                            int? sDate = null;
-                            int? eDate = null;
-                            int startOfWeek = AppService.GetAllSettings(subItem.OrganizationId).Item1.StartOfWeek;
-                            sDate = Utility.GetDaysFromDateTime(SetStartingDate(startOfWeek));
-                            eDate = Utility.GetDaysFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
+                            var payPeriod = await AppService.GetPayPeriodRanges(subItem.OrganizationId);
+
+                            DateTime? dateStart = payPeriod.Current.StartDate;
+                            DateTime? dateEnd = payPeriod.Current.EndDate;
+
+                            int? sDate = Utility.GetDaysFromDateTime(dateStart);
+                            int? eDate = Utility.GetDaysFromDateTime(dateEnd);
                             subViewModel.ProductGoToUrl = Url.RouteUrl(
                                 "TimeTracker_NoUserId",
                                 new
                                 {
-                                    subscriptionId =
-                                    subItem.SubscriptionId,
+                                    subscriptionId = subItem.SubscriptionId,
                                     controller = ControllerConstants.TimeEntry,
                                     startDate = sDate,
                                     endDate = eDate
