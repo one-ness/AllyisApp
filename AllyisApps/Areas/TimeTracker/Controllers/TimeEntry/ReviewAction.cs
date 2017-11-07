@@ -65,6 +65,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
+			PayPeriodRanges payperiodRanges = await AppService.GetPayPeriodRanges(organizationId);
+
 			var model = new ReviewViewModel
 			{
 				UserId = AppService.UserContext.UserId,
@@ -78,7 +80,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				StartDate = calculatedStartDate,
 				EndDate = calculatedEndDate,
 				TimeEntryStatusOptions = ModelHelper.GetLocalizedTimeEntryStatuses(AppService),
+				PayPeriodRanges = payperiodRanges
 			};
+
 			return View(model);
 		}
 
