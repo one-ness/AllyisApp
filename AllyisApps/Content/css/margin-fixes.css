@@ -1,0 +1,28 @@
+﻿/*
+	Headers 
+*/
+
+#title .title-headers h1{
+	margin-bottom:10px;
+	margin-top:0px;
+}
+
+/*
+	Forms
+*/
+.form-grouping .form-group{
+	margin-bottom:10px;
+}
+
+.pannel-heading{
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+/*
+	Index Page
+*/
+.panel-body .index-details p label{
+	margin-top:0px;
+	margin-bottom:0px;
+}
