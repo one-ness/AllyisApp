@@ -9,6 +9,8 @@ namespace AllyisApps.Services.Expense
 		private string contentType;
 		private string fileName;
 
+		public ExpenseFile() { }
+
 		public ExpenseFile(Stream stream, string contentType, string fileName)
 		{
 			this.stream = stream;

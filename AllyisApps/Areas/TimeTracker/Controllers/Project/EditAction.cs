@@ -31,10 +31,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subscriptionId">Subscription id.</param>
 		/// <param name="userId">The project's Id.</param>
 		/// <returns>The ActionResult for the Edit view.</returns>
-		public async Task<ActionResult> Edit(int subscriptionId, int userId)
+		public  ActionResult Edit(int subscriptionId, int userId)
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
-			return View(await ConstructEditProjectViewModel(userId, subscriptionId));
+			return View(ConstructEditProjectViewModel(userId, subscriptionId));
 		}
 
 		/// <summary>
@@ -101,7 +101,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="projectId">Project Id.</param>
 		/// <param name="subscriptionId">Subscription id.</param>
 		/// <returns>The EditProjectViewModel.</returns>
-		public async Task<EditProjectViewModel> ConstructEditProjectViewModel(int projectId, int subscriptionId)
+		public  EditProjectViewModel ConstructEditProjectViewModel(int projectId, int subscriptionId)
 		{
 			var infos = AppService.GetProjectEditInfo(projectId, subscriptionId);
 
@@ -120,8 +120,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				subscriptionUsers.Add(new BasicUserInfoViewModel(su.FirstName, su.LastName, su.UserId));
 			}
 
-			var subscriptionNameToDisplayGet = await AppService.GetSubscription(subscriptionId);
-			string subscriptionNameToDisplay = subscriptionNameToDisplayGet.SubscriptionName;
+			var subscriptionNameToDisplay = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName;
+			
 
 			return new EditProjectViewModel
 			{

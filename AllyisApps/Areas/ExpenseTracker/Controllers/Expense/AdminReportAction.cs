@@ -48,12 +48,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>An admin report model.</returns>
 		public async Task<AdminReportModel> CreateAdminReportModel(int subId)
 		{
-			var subInfoTask = AppService.GetSubscription(subId);
+			
 			var reportInfoTask = AppService.GetReportInfo(subId);
 
-			await Task.WhenAll(new Task[] { subInfoTask, reportInfoTask });
+			await Task.WhenAll(new Task[] {reportInfoTask });
 
-			var subInfo = subInfoTask.Result;
+			var subInfo = AppService.UserContext.SubscriptionsAndRoles[subId];
 			var reportInfo = reportInfoTask.Result;
 
 			var reports = await AppService.GetExpenseReportByOrgId(subInfo.OrganizationId);

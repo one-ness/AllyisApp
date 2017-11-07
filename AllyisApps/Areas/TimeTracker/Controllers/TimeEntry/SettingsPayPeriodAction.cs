@@ -37,17 +37,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			string subName = await AppService.GetSubscriptionName(subscriptionId);
 			dynamic payPeriodInfo = JsonConvert.DeserializeObject(settings.PayPeriod);
 
-			var model = new SettingsPayPeriodViewModel
-			{
-				SubscriptionId = subscriptionId,
-				OrganizationId = organizationId,
-				SubscriptionName = subName,
-				UserId = AppService.UserContext.UserId,
-				PayPeriodTypeId = payPeriodInfo.type == "duration" ? 0 : 1,
-				Duration = payPeriodInfo.duration ?? 0,
-				StartDate = (DateTime?)payPeriodInfo.startDate,
-				Dates = string.Join(",", payPeriodInfo.dates)
-			};
+			var model = new SettingsPayPeriodViewModel();
+			model.SubscriptionId = subscriptionId;
+			model.OrganizationId = organizationId;
+			model.SubscriptionName = subName;
+			model.UserId = AppService.UserContext.UserId;
+			model.PayPeriodTypeId = payPeriodInfo.type == PayPeriodType.Duration.ToString() ? (int)PayPeriodType.Duration : (int)PayPeriodType.Dates;
+			model.Duration = payPeriodInfo.duration ?? 14;
+			model.StartDate = (DateTime?)payPeriodInfo.startDate;
+			model.Dates = payPeriodInfo.dates == null ? "" : string.Join(",", payPeriodInfo.dates);
 			return View(model);
 		}
 

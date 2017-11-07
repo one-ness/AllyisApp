@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
@@ -81,5 +82,10 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Gets or sets the nullable payroll process date for the time entries.  Null means that no time entries are payroll processed.
 		/// </summary>
 		public DateTime? PayrollProcessedDate { get; set; }
+
+		/// <summary>
+		/// Gets or sets the pay period ranges for the time tracker subscription.  Includes current, previous, and next pay periods.
+		/// </summary>
+		public PayPeriodRanges PayPeriodRanges { get; set; }
 	}
 }

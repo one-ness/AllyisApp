@@ -83,7 +83,7 @@ else
 					@Html.Hidden("orgId", Model.OrganizationId)
 					@Html.AntiForgeryToken();
 					<input type="hidden" id="csvDeleteInvitationIds" />
-					<button type="submit" class="btn btn-danger pull-right" title="@Strings.Back" onclick="getInvitationIdsAndSubmit()">@Strings.Delete</button>
+					<button type="submit" class="btn btn-danger pull-right" title="@Strings.Back" onclick="return getInvitationIdsAndSubmit()">@Strings.Delete</button>
 				}
 			}
 		</div>
@@ -128,7 +128,13 @@ else
 
 	function getInvitationIdsAndSubmit() {
 		var ids = [];
-		var checkboxes = [];
+        var checkboxes = [];
+
+        if (!confirm("Delete invitation for user(s)?"))
+        {
+            return false;
+        }
+
 		checkboxes = document.getElementsByName("checkbox");
 		var k = 0;
 		for (var i = 0, n = checkboxes.length; i < n; i++) {

@@ -17,7 +17,7 @@ using AllyisApps.Services.Expense;
 using AllyisApps.Utilities;
 using Excel;
 
-namespace AllyisApps.Areas.StaffingManager.Controllers
+namespace AllyisApps.Areas.TimeTracker.Controllers
 {
 	/// <summary>
 	/// Represents pages for the management of a Customer.
