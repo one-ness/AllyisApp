@@ -41,7 +41,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			DateTime calculatedEndDate = endDate ?? DateTime.Now;
 
 			var payClasses = (await AppService.GetPayClassesByOrganizationId(organizationId)).Select(x => new PayClassInfoViewModel(x)).ToList();
-			Subscription subscription = await AppService.GetSubscription(subscriptionId);
+			var subscription = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			var allTimeEntries = (await AppService.GetTimeEntriesOverDateRange(organizationId, calculatedStartDate, calculatedEndDate))
 				.Select(entry =>
 				{

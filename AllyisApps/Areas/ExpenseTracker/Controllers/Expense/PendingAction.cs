@@ -24,7 +24,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			await SetNavData(subscriptionId);
 
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Pending, subscriptionId);
-			var results = await AppService.GetSubscription(subscriptionId);
+			var results = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			var orgId = results.OrganizationId;
 			int userId = AppService.UserContext.UserId;
 			IEnumerable<ExpenseReport> reports = await AppService.GetExpenseReportByOrgId(orgId);

@@ -99,6 +99,7 @@ namespace AllyisApps.Services.Auth
             public ProductIdEnum ProductId { get; set; }
             public int ProductRoleId { get; set; }
             public string AreaUrl { get; set; }
-        }
+			public string SubscriptionName { get; internal set; }
+		}
     }
 }

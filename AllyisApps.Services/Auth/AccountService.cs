@@ -278,10 +278,10 @@ namespace AllyisApps.Services
                             ProductRoleId = item.ProductRoleId,
                             SkuId = (SkuIdEnum)item.SkuId,
                             SubscriptionId = item.SubscriptionId,
-                            OrganizationId = item.OrganizationId
-                        });
+                            OrganizationId = item.OrganizationId,
+							SubscriptionName = item.SubscriptionName
+						});
                 }
-
                 // set result to self
                 SetUserContext(result);
             }
