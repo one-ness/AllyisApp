@@ -909,10 +909,26 @@ namespace AllyisApps.Services
 					result.GeneralFailures.Add($"There is no readable data to import from spreadsheet \"{table.TableName}\".");
 				}
 
+				var customersProjects = new List<Project.Project>();
+				foreach (Customer customer in GetCustomerList(orgId))
+				{
+					customersProjects.AddRange(await GetProjectsByCustomer(customer.CustomerId));
+				}
+				bool hasCustomerName = table.Columns.Contains(ColumnHeaders.CustomerName);
+				bool hasCustomerId = table.Columns.Contains(ColumnHeaders.CustomerId);
+
 				foreach (DataRow row in table.Rows)
 				{
-					string projectOrgId = row.Field<string>(ColumnHeaders.ProjectId);
-					Project.Project project = AppService.InitializeProject(DBHelper.GetProjectByProjectOrgId(projectOrgId));
+					bool thisRowHasProjectName = table.Columns.Contains(ColumnHeaders.ProjectName);
+					String knownValue = null;
+					ReadColumn(row, hasProjectName ? ColumnHeaders.ProjectName : ColumnHeaders.ProjectId, p => knownValue = p);
+
+					var project = customersProjects
+						.FirstOrDefault(p => thisRowHasProjectName ? p.ProjectName.Equals(knownValue) : p.ProjectOrgId.Equals(knownValue));
+
+					//string projectOrgId = row.Field<string>(ColumnHeaders.ProjectId);
+					//var pro = DBHelper.GetProjectByProjectOrgId(projectOrgId);
+					//Project.Project project = AppService.InitializeProject(pro);
 					User userInOrg = new User();
 					List<User> userSubs = new List<User>();
 

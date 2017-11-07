@@ -637,10 +637,11 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<ProjectDBEntity>(
+				var entity = connection.Query<ProjectDBEntity>(
 					"[Pjm].[GetProjectByProjectOrgId]",
 					parameters,
 					commandType: CommandType.StoredProcedure).SingleOrDefault();
+				return entity;
 			}
 		}
 
