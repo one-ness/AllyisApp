@@ -86,9 +86,9 @@
 		</div>
 		<!--Description-->
 		<div class="group left">
-			@(Model.Sample
-				? Html.TextBox("BeforeLockDateDesc", "-", new {@disabled = "disabled", @class = "ovrd-form-control form-control", @style = "width: 100%", @onchange = "changeOccur(this)"})
-				: Html.TextBoxDisabledFor(m => Model.Description, Model.IsLocked, new {@class = "ovrd-form-control form-control stretch", @onkeypress = "changeOccur(this)", @onchange = "changeOccur(this)", @placeholder = Strings.Description}).RemoveIdAttribute())
+			@(
+				//? Html.TextBox("BeforeLockDateDesc", "Description", new {@class = "ovrd-form-control form-control", @style = "width: 100%", @onkeypress = "changeOccur(this)", @onchange = "changeOccur(this)", @placeholder = Strings.Description }).RemoveIdAttribute()
+				 Html.TextBoxDisabledFor(m => Model.Description, Model.IsLocked, new {@class = "ovrd-form-control form-control stretch", @onkeypress = "changeOccur(this)", @onchange = "changeOccur(this)", @placeholder = Strings.Description}).RemoveIdAttribute())
 		</div>				
 		if (Model.IsLocked) {<i class="glyphicon glyphicon-lock" style="padding-top: 9px; padding-left: 12px" title="This date is locked"></i>}
 		if (!Model.IsLocked)
