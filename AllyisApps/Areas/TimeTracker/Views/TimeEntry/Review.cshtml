@@ -320,7 +320,7 @@
 </div>
 
 @section css {
-	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+	<link rel="stylesheet" type="text/css" href="~/Content/DateRangePicker" />
 	<link rel="stylesheet" type="text/css" href="~/Content/BootstrapSelect" />
 
 	<style>
@@ -414,7 +414,7 @@
 @Scripts.Render("~/bundles/jqueryui")
 @Scripts.Render("~/bundles/moment")
 @Scripts.Render("~/bundles/BootstrapSelect")
-<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+@Scripts.Render("~/bundles/DateRangePicker")
 
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -473,6 +473,8 @@
 
 			$('#review-range').daterangepicker({
 				locale: "us",
+				showDropdowns: true,
+				linkedCalendars: false,
 				startDate: start,
 				endDate: end,
 				ranges: {
