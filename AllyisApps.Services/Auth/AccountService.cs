@@ -103,7 +103,8 @@ namespace AllyisApps.Services
 
                 foreach (var invite in roleString)
                 {
-                    await DBHelper.UpdateSubscriptionUserRoles(new List<int> { UserContext.UserId }, inviteInfo.OrganizationId, invite.ProductRoleId, invite.ProductId);
+					await DBHelper.UpdateSubscriptionUserProductRole(invite.ProductRoleId, invite.SubscriptionId, UserContext.UserId);
+                    //await DBHelper.UpdateSubscriptionUserRoles(new List<int> { UserContext.UserId }, inviteInfo.OrganizationId, invite.ProductRoleId, invite.ProductId);
                 }
             }
 
