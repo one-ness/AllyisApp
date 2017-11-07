@@ -259,7 +259,7 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
 		console.log(fillerRowHeight);
 		if (!scrollBufferCreated) {
 			for (var j = 0; j < pageLimit; j++) {
-				$('#tableEnd').after(generateFillerRow(fillerRowHeight, 1000000, true));
+				//$('#tableEnd').after(generateFillerRow(fillerRowHeight, 1000000, true));
 			}
 			scrollBufferCreated = true;
 		}

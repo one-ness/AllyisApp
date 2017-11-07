@@ -24,7 +24,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Accounts, subscriptionId);
 
 			await SetNavData(subscriptionId);
-			var subInfo = await AppService.GetSubscription(subscriptionId);
+			var subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			var accounts = await AppService.GetAccounts(subInfo.OrganizationId);
 			var account = accounts != null && accountId != null ? accounts.Where(x => x.AccountId == accountId.Value).FirstOrDefault() : null;
 			List<SelectListItem> parentList = new List<SelectListItem> { new SelectListItem { Text = "None", Value = "0" } };

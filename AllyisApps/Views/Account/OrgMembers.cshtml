@@ -6,7 +6,7 @@
 }
 
 @if (Model.CanEditUser) {@Html.Partial("_MembersAndInvitationsTab", Model.TabInfo)}
-<div style="margin-bottom: 25px;"></div>
+<div style="margin-bottom: 10px;"></div>
 <div class="row members-top-row">
     <div class="col-xs-12">
         <div>@Strings.Members  : @Model.Users.Count</div>
@@ -63,6 +63,11 @@
                 <script type="text/javascript">
                     function getUserIdsAndSubmit() {
                         var csvIds = "";
+
+                        if (!confirm("Do you wish to delete the selected user(s)?"))
+                        {
+                            return false;
+                        }
 
                         // gather all the ids to delete as a csv
 

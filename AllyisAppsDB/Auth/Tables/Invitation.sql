@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [Auth].[Invitation] (
     [InvitationId]         INT            IDENTITY (113969, 7) NOT NULL,
     [OrganizationId]       INT            NOT NULL,
+	[OrganizationName]	   NVARCHAR(64)	  NULL,
 	[OrganizationRoleId]   INT			  NOT NULL,
     [Email]                NVARCHAR (384) NOT NULL,
     [FirstName]            NVARCHAR (32)  NOT NULL,

@@ -6,7 +6,7 @@
 
 using System.Web.Mvc;
 
-namespace AllyisApps.Controllers
+namespace AllyisApps.Controllers.Shared
 {
 	/// <summary>
 	/// Controller for actions relating to shared components of the page.

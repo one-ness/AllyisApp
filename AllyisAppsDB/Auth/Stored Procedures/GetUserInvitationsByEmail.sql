@@ -8,7 +8,8 @@ SELECT
 	[Email], 
 	[FirstName], 
 	[LastName], 
-	[OrganizationId],  
+	[OrganizationId],
+	[OrganizationName]
 	[EmployeeId],
 	[ProductRolesJson]
 FROM [Auth].[Invitation]
