@@ -89,6 +89,11 @@ namespace AllyisApps.ViewModels.Auth
 		public int ProductId { get; set; }
 
 		/// <summary>
+		/// 
+		/// </summary>
+		public int SubscriptionId { get; set; }
+
+		/// <summary>
 		/// Gets or sets the select list for dropdown menus.
 		/// </summary>
 		public List<SelectListItem> SelectList { get; set; }

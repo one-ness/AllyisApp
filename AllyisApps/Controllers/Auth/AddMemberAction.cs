@@ -41,7 +41,9 @@ namespace AllyisApps.Controllers.Auth
                 {
                     ProductId = (int)sub.ProductId,
                     SubscriptionName = sub.SubscriptionName,
-                    SelectList = GetSubRoles(sub.SkuId)
+                    SelectList = GetSubRoles(sub.SkuId),
+					SubscriptionId = sub.SubscriptionId,
+					
                 }).ToList(),
                 OrgRole = new SelectList(
                     new List<SelectListItem>
@@ -119,7 +121,7 @@ namespace AllyisApps.Controllers.Auth
 
                 var json = model.SubscriptionRoles.Select(role => new InvitationPermissionsJson
                 {
-                    ProductId = role.ProductId,
+                    SubscriptionId = role.SubscriptionId,
                     ProductRoleId = role.SelectedRoleId
                 })
                     .ToList();

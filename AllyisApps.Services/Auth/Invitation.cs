@@ -81,7 +81,7 @@ namespace AllyisApps.Services.Auth
         /// <summary>
         /// Gets or sets the subscription Id.
         /// </summary>
-        public int ProductId { get; set; }
+        public int SubscriptionId { get; set; }
 
         /// <summary>
         /// Gets or sets the product role Id.

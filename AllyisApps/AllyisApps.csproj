@@ -462,6 +462,7 @@
     <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-settings.js" />
     <Content Include="Content\bootstrap\css\bootstrap.min.css" />
     <Content Include="Content\css\bootstrap-select.min.css" />
+    <Content Include="Content\css\daterangepicker.css" />
     <Content Include="Scripts\bootstrap\bootstrap.min.js" />
     <Content Include="Content\css\ExpenseTracker.css" />
     <Content Include="Content\css\ExpenseTracker.min.css">
@@ -612,6 +613,7 @@
     <None Include="Resources\Files\TimeEntryImportTemplate.xlsx" />
     <None Include="Resources\Files\UserImportTemplate.xlsx" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
+    <Content Include="Scripts\daterangepicker.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.js" />
