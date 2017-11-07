@@ -15,14 +15,7 @@
 }
 
 @section css {
-	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
 	<link rel="stylesheet" type="text/css" href="~/Content/DateRangePicker" />
-
-	<style>
-		.fix-input-width {
-			width: 50px !important;
-		}
-	</style>
 }
 
 <div class="row slim">
@@ -45,7 +38,7 @@
 							<strong>Duration:</strong>
 						</label>
 						<span>Each pay period is </span>
-						@Html.TextBoxFor(m => m.Duration, new { @class= "form-control fix-input-width" })
+						@Html.TextBoxFor(m => m.Duration, new { @class= "form-control", style = "width:50px" })
 						<span>days long.  Starting on </span>
 						<div class="input-group">
 							<input 
@@ -70,7 +63,7 @@
 							<strong>Dates:</strong>
 						</label>
 						<span>Each pay period starts on the </span>
-						@Html.TextBoxFor(m => m.Dates, new { @class = "form-control fix-input-width", style = "width:100px" })
+						@Html.TextBoxFor(m => m.Dates, new { @class = "form-control", style = "width:100px" })
 						<span>of every month.</span>
 					</div>
 					@Html.ValidationMessageFor(m => m.Dates, "", new { @class = "text-danger" })

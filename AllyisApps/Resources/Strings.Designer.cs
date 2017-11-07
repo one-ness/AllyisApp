@@ -19,7 +19,7 @@ namespace AllyisApps.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Strings {
@@ -3490,7 +3490,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Project Search 🔎.
+        ///   Looks up a localized string similar to Project Search.
         /// </summary>
         public static string ProjectSearchPlaceholder {
             get {
@@ -3796,7 +3796,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Search 🔎.
+        ///   Looks up a localized string similar to Search.
         /// </summary>
         public static string SearchPlaceholder {
             get {
@@ -3805,7 +3805,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User Search 🔎.
+        ///   Looks up a localized string similar to User Search.
         /// </summary>
         public static string SearchPlaceholder1 {
             get {
@@ -3814,7 +3814,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Find Member 🔎.
+        ///   Looks up a localized string similar to Find Member.
         /// </summary>
         public static string SearchPlaceholder2 {
             get {
@@ -4732,7 +4732,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User Search 🔎.
+        ///   Looks up a localized string similar to User Search.
         /// </summary>
         public static string UserSearchPlaceholder {
             get {
