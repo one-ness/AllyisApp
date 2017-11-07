@@ -312,6 +312,10 @@ namespace AllyisApps.Services
                                 if (newCustomer != null)
                                 {
                                     int? newCustomerId = await CreateCustomer(newCustomer, subscriptionId);
+									//if (newCustomerId == -1) // Customer exists, but has been deleted
+									//{
+									//	newCustomerId = await UpdateCustomer(newCustomer, subscriptionId);
+									//}
                                     if (newCustomerId == null)
                                     {
                                         result.CustomerFailures.Add(string.Format("Could not create customer {0}: permission failure.", newCustomer.CustomerName));
@@ -345,6 +349,7 @@ namespace AllyisApps.Services
                         {
                             bool updated = false;
 
+							if (customer.Address == null) customer.Address = new Services.Lookup.Address();
                             if (hasCustomerStreetAddress) updated = ReadColumn(row, ColumnHeaders.CustomerStreetAddress, val => customer.Address.Address1 = val) || updated;
                             if (hasCustomerCity) updated = ReadColumn(row, ColumnHeaders.CustomerCity, val => customer.Address.City = val) || updated;
                             if (hasCustomerCountry) updated = ReadColumn(row, ColumnHeaders.CustomerCountry, val => customer.Address.CountryName = val) || updated;
