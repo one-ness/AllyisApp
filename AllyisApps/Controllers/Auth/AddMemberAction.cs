@@ -27,15 +27,15 @@ namespace AllyisApps.Controllers.Auth
         /// GET: /Add.
         /// The page for adding members to an organization.
         /// </summary>
-        public async Task<ActionResult> AddMember(int organizationId)
+        public async Task<ActionResult> AddMember(int id)
         {
-            AppService.CheckOrgAction(AppService.OrgAction.AddUserToOrganization, organizationId);
-            var subs = await AppService.GetSubscriptionsAsync(organizationId);
+            AppService.CheckOrgAction(AppService.OrgAction.AddUserToOrganization, id);
+            var subs = await AppService.GetSubscriptionsAsync(id);
 
             var model = new AddMemberViewModel
             {
-                OrganizationId = organizationId,
-                EmployeeId = await AppService.GetNextEmployeeId(organizationId),
+                OrganizationId = id,
+                EmployeeId = await AppService.GetNextEmployeeId(id),
                 OrganizationName = "Organization", //AppService.GetOrganization(id).Result.OrganizationName;
                 SubscriptionRoles = subs.Select(sub => new RoleItem
                 {
