@@ -1,4 +1,5 @@
 ﻿@using AllyisApps.Services.TimeTracker
+@using AllyisApps.Utilities
 @using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 @model ReviewViewModel
 
@@ -457,8 +458,14 @@
 
 		//initialize date range picker
 		$(function () {
-			var start = moment(@(Model.StartDate.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds));
-			var end = moment(@(Model.EndDate.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds));
+			var start = moment(@(Model.StartDate.ToJavaScriptMilliseconds()));
+			var end = moment(@(Model.EndDate.ToJavaScriptMilliseconds()));
+			var prevStart = moment(@(Model.PayPeriodRanges.Previous.StartDate.ToJavaScriptMilliseconds()));
+			var prevEnd = moment(@(Model.PayPeriodRanges.Previous.EndDate.ToJavaScriptMilliseconds()));
+			var curStart = moment(@(Model.PayPeriodRanges.Current.StartDate.ToJavaScriptMilliseconds()));
+			var curEnd = moment(@(Model.PayPeriodRanges.Current.EndDate.ToJavaScriptMilliseconds()));
+			var nextStart = moment(@(Model.PayPeriodRanges.Next.StartDate.ToJavaScriptMilliseconds()));
+			var nextEnd = moment(@(Model.PayPeriodRanges.Next.EndDate.ToJavaScriptMilliseconds()));
 
 			function cb(start, end) {
 				$('#review-range span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
@@ -466,12 +473,14 @@
 
 			$('#review-range').daterangepicker({
 				locale: "us",
+				showDropdowns: true,
+				linkedCalendars: false,
 				startDate: start,
 				endDate: end,
 				ranges: {
-					'Today': [moment(), moment()],
-					'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-					'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+					'Previous Pay Period': [prevStart, prevEnd],
+					'Current Pay Period': [curStart, curEnd],
+					'Next Pay Period': [nextStart, nextEnd],
 					'Last 30 Days': [moment().subtract(29, 'days'), moment()],
 					'This Month': [moment().startOf('month'), moment().endOf('month')],
 					'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]

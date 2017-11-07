@@ -72,7 +72,7 @@ namespace AllyisApps.Services
 		/// <returns></returns>
 		public bool CanDelete(int subId, int accId, out List<Account> associatedAccounts)
 		{
-			var subInfo = GetSubscription(subId).Result;
+			var subInfo = UserContext.SubscriptionsAndRoles[subId];
 			List<Account> accounts = GetAccounts(subInfo.OrganizationId).Result.ToList();
 
 			List<ExpenseReport> reports = GetExpenseReportByOrgId(subInfo.OrganizationId).Result.ToList();

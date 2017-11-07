@@ -50,7 +50,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				model.Items = new List<ExpenseItemCreateViewModel>();
 			}
 
-			var subscription = await AppService.GetSubscription(model.SubscriptionId);
+			var subscription = AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId];
 			var organizationId = subscription.OrganizationId;
 			ExpenseStatusEnum reportStatus;
 			DateTime? submittedUtc = null;
