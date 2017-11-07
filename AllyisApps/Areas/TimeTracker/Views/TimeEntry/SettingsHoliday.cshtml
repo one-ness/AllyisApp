@@ -80,41 +80,39 @@
 @section scripts{
 @Scripts.Render("~/bundles/jqueryui");
 @Scripts.Render("~/bundles/moment")
+
 <script src="~/Scripts/allyis-holidayDatepicker.js"></script>
-
-
-
-	<script type="text/javascript">
-		var model_holiday = "";
+<script type="text/javascript">
+	var model_holiday = "";
 		
-		deleteHolidayWarning = "@Html.Raw(Strings.ConfirmDeleteHoliday)";
+	deleteHolidayWarning = "@Html.Raw(Strings.ConfirmDeleteHoliday)";
 		
-		deleteHolidayUrl = "@Url.Action(ActionConstants.DeleteHoliday , ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId, id = Model.UserId, HolidayId = -1 })";
+	deleteHolidayUrl = "@Url.Action(ActionConstants.DeleteHoliday , ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId, id = Model.UserId, HolidayId = -1 })";
 
-		function populateHolidayForSelectedYear(year)
+	function populateHolidayForSelectedYear(year)
+	{
+		@foreach (var yearC in Model.Holidays.Select(m => m.Date.Year).Distinct())
 		{
-			@foreach (var yearC in Model.Holidays.Select(m => m.Date.Year).Distinct())
-			{
-				<text>
-					if (@yearC != year) {
-						$('.' + @yearC).hide();
-						$('#' + @yearC).css("font-weight", "Normal");
-					}
-					else {
-						$('.' + @yearC).show();
-						$('#' + @yearC).css("font-weight", "Bold");
-					}
-				</text>
-			}
-		};
+			<text>
+				if (@yearC != year) {
+					$('.' + @yearC).hide();
+					$('#' + @yearC).css("font-weight", "Normal");
+				}
+				else {
+					$('.' + @yearC).show();
+					$('#' + @yearC).css("font-weight", "Bold");
+				}
+			</text>
+		}
+	};
 
-		$('document').ready(function () {
-			populateHolidayForSelectedYear(@DateTime.Now.Year);
-			var momentValue = moment().format('L');
-			$('#datePickerHoliday').datepicker('setDate', momentValue);
-			$('#DateRangeStart').val(momentValue);
-		});
-	</script>
+	$('document').ready(function () {
+		populateHolidayForSelectedYear(@DateTime.Now.Year);
+		var momentValue = moment().format('L');
+		$('#datePickerHoliday').datepicker('setDate', momentValue);
+		$('#DateRangeStart').val(momentValue);
+	});
+</script>
 @Scripts.Render("~/bundles/TTTimeEntrySettings")
 
 }

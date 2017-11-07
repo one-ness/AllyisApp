@@ -39,10 +39,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public async Task<ActionResult> Index(int subscriptionId, int userId, int? startDate = null, int? endDate = null)
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
-
+			var sub = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			int productRoleId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductRoleId;
-			Subscription getSub = await AppService.GetSubscription(subscriptionId);
-			int startOfWeek = (await AppService.GetTimeEntryIndexInfo(getSub.OrganizationId, null, null, userId)).Item1.StartOfWeek;
+			
+		
+			int startOfWeek = (await AppService.GetTimeEntryIndexInfo(sub.OrganizationId, null, null, userId)).Item1.StartOfWeek;
 			bool isManager = productRoleId == (int)TimeTrackerRole.Manager;
 
 			ViewBag.GetDateTimeFromDays = new Func<int?, DateTime?>(Utility.GetNullableDateTimeFromDays);
@@ -50,12 +51,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			ViewBag.SelectedUserId = userId;
 			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, startOfWeek));
 			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(startOfWeek));
-			ViewBag.canManage = isManager;
+			ViewBag.CanManage = isManager;
 
 			TimeEntryOverDateRangeViewModel model = await ConstructTimeEntryOverDataRangeViewModel(
-				getSub.OrganizationId,
+				sub.OrganizationId,
 				subscriptionId,
-				getSub.SubscriptionName,
+				sub.SubscriptionName,
 				userId,
 				isManager,
 				startDate,
@@ -76,9 +77,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
 
 			int userId = AppService.UserContext.UserId;
-			int productRoleId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductRoleId;
-			Subscription getSub = await AppService.GetSubscription(subscriptionId);
-			int startOfWeek = (await AppService.GetTimeEntryIndexInfo(getSub.OrganizationId, null, null, userId)).Item1.StartOfWeek;
+			var sub = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+			int productRoleId = sub.ProductRoleId;
+			
+			int startOfWeek = (await AppService.GetTimeEntryIndexInfo(sub.OrganizationId, null, null, userId)).Item1.StartOfWeek;
 			bool isManager = productRoleId == (int)TimeTrackerRole.Manager;
 
 			ViewBag.GetDateTimeFromDays = new Func<int?, DateTime?>(Utility.GetNullableDateTimeFromDays);
@@ -86,12 +88,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			ViewBag.SelectedUserId = userId;
 			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, startOfWeek));
 			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(startOfWeek));
-			ViewBag.canManage = isManager;
+			ViewBag.CanManage = isManager;
 
 			TimeEntryOverDateRangeViewModel model = await ConstructTimeEntryOverDataRangeViewModel(
-				getSub.OrganizationId,
+				sub.OrganizationId,
 				subscriptionId,
-				getSub.SubscriptionName,
+				sub.SubscriptionName,
 				userId,
 				isManager,
 				startDate,
@@ -195,7 +197,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Users = users.AsParallel().Select(ConstuctUserViewModel),
 				TotalUsers = users.Count(),
 				CurrentUser = ConstuctUserViewModel(users.Single(x => x.UserId == userId)),
-				LockDateOld = Utility.GetDaysFromDateTime(AppService.GetLockDateFromParameters(infos.Item1.IsLockDateUsed, infos.Item1.LockDatePeriod, infos.Item1.LockDateQuantity)),
 				LockDate = infos.Item1.LockDate,
 				PayrollProcessedDate = infos.Item1.PayrollProcessedDate,
 				SubscriptionId = subId,
@@ -204,7 +205,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			};
 
 			// Initialize the starting dates and get all of the time entries within that date range.
-			IEnumerable<TimeEntry> timeEntries = infos.Item6; // Service.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDate, endDate);
+			IEnumerable<Services.TimeTracker.TimeEntry> timeEntries = infos.Item6; // Service.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDate, endDate);
 			using (var iter = timeEntries.GetEnumerator())
 			{
 				iter.MoveNext();
@@ -220,8 +221,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				// For each date in the date range
 				for (DateTime date = startDate; date <= endDate;)
 				{
-					bool beforeLockDate = result.LockDateOld > 0 && Utility.GetDaysFromDateTime(date) <= result.LockDateOld;
-
 					// If has time entry data for this date,
 					if (iter.Current != null && iter.Current.Date == date.Date)
 					{
@@ -259,8 +258,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 							ApprovalState = iter.Current.ApprovalState,
 							ModSinceApproval = iter.Current.ModSinceApproval,
 							PayClasses = result.PayClasses,
-							LockDateOld = result.LockDateOld,
-							IsLockedOld = iter.Current.ApprovalState == (int)Core.ApprovalState.Approved || isProjectDeleted && !AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subId, false) || !result.CanManage && beforeLockDate,
 							IsLocked = iter.Current.TimeEntryStatusId != (int)TimeEntryStatus.Pending //can't edit
 						});
 
@@ -289,8 +286,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 							ProjectsWithInactive = result.ProjectsWithInactive,
 							PayClassId = infos.Item2.FirstOrDefault(p => p.PayClassName.Equals(Strings.Regular, StringComparison.OrdinalIgnoreCase))?.PayClassId ?? 0,
 							PayClasses = result.PayClasses,
-							IsLockedOld = !result.CanManage && beforeLockDate,  // manager can still edit entries before lockdate
-							LockDateOld = result.LockDateOld,
 							IsManager = result.CanManage,
 							IsLocked = date <= (result.LockDate ?? result.PayrollProcessedDate ?? DateTime.MinValue) //can't add
 						});

@@ -28,8 +28,8 @@ namespace AllyisApps.Services
 			ReadInvitationsList,
 			ReadOrganization,
 			ReadSubscription,
-			ReadPermissionsList, // view list of users and their permissions
-			ReadSubscriptionsList, // view list of subscriptions
+			ReadPermissions, // view list of users and their permissions
+			ReadSubscriptions, // view list of subscriptions
 			ReadUser, // view other users (view self must always be allowed)
 			ReadUsersList, // view list of users
 
@@ -151,8 +151,7 @@ namespace AllyisApps.Services
 			bool result = false;
 			int organizationId = 0;
 
-
-			//Reduce database lookup 
+			// reduce database lookup 
 			if (UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out UserContext.SubscriptionAndRole sar))
 			{
 				organizationId = sar.OrganizationId;
@@ -177,9 +176,7 @@ namespace AllyisApps.Services
 		public bool CheckStaffingManagerAction(StaffingManagerAction action, int subId, bool throwException = true)
 		{
 			bool result = false;
-			UserContext.SubscriptionsAndRoles.TryGetValue(subId, out UserContext.SubscriptionAndRole subInfo);
-
-			if (subInfo != null && subInfo.ProductId == ProductIdEnum.StaffingManager)
+			if (UserContext.SubscriptionsAndRoles.TryGetValue(subId, out UserContext.SubscriptionAndRole subInfo) && subInfo.ProductId == ProductIdEnum.StaffingManager)
 			{
 				StaffingManagerRole smRole = (StaffingManagerRole)subInfo.ProductRoleId;
 				switch (action)
@@ -205,9 +202,7 @@ namespace AllyisApps.Services
 		public bool CheckTimeTrackerAction(TimeTrackerAction action, int subId, bool throwException = true)
 		{
 			bool result = false;
-			UserContext.SubscriptionsAndRoles.TryGetValue(subId, out UserContext.SubscriptionAndRole subInfo);
-
-			if (subInfo != null && subInfo.ProductId == ProductIdEnum.TimeTracker)
+			if (UserContext.SubscriptionsAndRoles.TryGetValue(subId, out UserContext.SubscriptionAndRole subInfo) && subInfo.ProductId == ProductIdEnum.TimeTracker)
 			{
 				TimeTrackerRole ttRole = (TimeTrackerRole)subInfo.ProductRoleId;
 				switch (action)
@@ -253,8 +248,7 @@ namespace AllyisApps.Services
 		{
 			bool result = false;
 
-			UserContext.SubscriptionsAndRoles.TryGetValue(subId, out UserContext.SubscriptionAndRole subInfo);
-			if (subInfo != null)
+			if (UserContext.SubscriptionsAndRoles.TryGetValue(subId, out UserContext.SubscriptionAndRole subInfo) && subInfo.ProductId == ProductIdEnum.ExpenseTracker)
 			{
 				ExpenseTrackerRole etRole = (ExpenseTrackerRole)subInfo.ProductRoleId;
 				if (subInfo.ProductId == ProductIdEnum.ExpenseTracker && etRole != ExpenseTrackerRole.NotInProduct)

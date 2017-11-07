@@ -1,67 +1,68 @@
-﻿@using AllyisApps.Services.Billing
-@model AccountIndexViewModel.OrganizationViewModel
-@{
-	ViewBag.Title = Strings.BillingInformation;
-}
-
-@if (Model.BillingCustomer != null)
-{
-	<input id="hdnCurrentOrg" type="hidden" />
-	<input id="hdnSelectedUser" type="hidden" />
-	<table class="tabletable-striped table-condensed table-bordered">
-		<tbody>
-
-			<tr>
-				<th>
-					@Strings.Card
-				</th>
-				<td>
-					*@Model.LastFour
-				</td>
-			</tr>
-			<tr>
-				<th>
-					@Strings.BillingEmail
-				</th>
-				<td>
-					@Model.BillingCustomer.Email
-				</td>
-			</tr>
-		</tbody>
-	</table>
-}
-
-<div class="modal-body">
-	@if (Model.BillingCustomer == null)
-	{
-		using (Html.BeginForm(ActionConstants.Charge, ControllerConstants.Account, FormMethod.Post, new { @style = "display: inline-block" }))
-		{
-			@Html.Hidden("billingType", BillingServicesEnum.Stripe)
-			<script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-					data-key="pk_test_gCF350S6jE0k1BvPgdofdzvP"
-					data-name="Allyis Apps"
-					data-class="btn btn-primary"
-					data-description="Adding Billing Information"
-					@*data-image="/128x128.png"*@
-					data-locale="auto"
-					data-label="@Strings.AddBillingInformation"
-					data-panel-label="@Strings.SubmitBillingInfo"
-					data-allow-remember-me="false"
-					data-billing-address="true"
-					data-zip-code="true">
-			</script>
-		}
+﻿@*
+	@using AllyisApps.Services.Billing
+	@model AccountIndexViewModel.OrganizationViewModel
+	@{
+		ViewBag.Title = Strings.BillingInformation;
 	}
-	else
+
+	@if (Model.BillingCustomer != null)
 	{
-		using (Html.BeginForm(ActionConstants.Charge, ControllerConstants.Account, FormMethod.Post, new { @style = "display: inline-block" }))
+		<input id="hdnCurrentOrg" type="hidden" />
+		<input id="hdnSelectedUser" type="hidden" />
+		<table class="tabletable-striped table-condensed table-bordered">
+			<tbody>
+
+				<tr>
+					<th>
+						@Strings.Card
+					</th>
+					<td>
+						@Model.LastFour
+					</td>
+				</tr>
+				<tr>
+					<th>
+						@Strings.BillingEmail
+					</th>
+					<td>
+						@Model.BillingCustomer.Email
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	}
+
+	<div class="modal-body">
+		@if (Model.BillingCustomer == null)
 		{
-			<script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+			using (Html.BeginForm(ActionConstants.Charge, ControllerConstants.Account, FormMethod.Post, new { @style = "display: inline-block" }))
+			{
+				@Html.Hidden("billingType", BillingServicesEnum.Stripe)
+				<script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+						data-key="pk_test_gCF350S6jE0k1BvPgdofdzvP"
+						data-name="Allyis Apps"
+						data-class="btn btn-primary"
+						data-description="Adding Billing Information"
+						<!--data-image="/128x128.png"-->
+						data-locale="auto"
+						data-label="@Strings.AddBillingInformation"
+						data-panel-label="@Strings.SubmitBillingInfo"
+						data-allow-remember-me="false"
+						data-billing-address="true"
+						data-zip-code="true">
+				</script>
+			}
+		}
+		else
+		{
+			using (Html.BeginForm(ActionConstants.Charge, ControllerConstants.Account, FormMethod.Post, new { @style = "display: inline-block" }))
+			{
+				<script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
 					data-key="pk_test_gCF350S6jE0k1BvPgdofdzvP"
 					data-name="Allyis Apps"
 					data-class="btn btn-primary"
 					data-description="Adding Billing Information"
-					@*data-image="/128x128.png"*@
+					<!--data-image="/128x128.png"-->
 					data-locale="auto"
 					data-label="Update"
 					data-panel-label="Submit Billing Information"
@@ -83,3 +84,4 @@
 		}
 	}
 </div>
+*@

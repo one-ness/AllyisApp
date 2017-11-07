@@ -31,7 +31,7 @@ namespace AllyisApps.Controllers.Auth
 			await AppService.UpdateBillingInfo(billingServicesEmail, token, id);
 			Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Strings.Billing, Core.Alert.Variety.Success));
 			await Task.Yield();
-			return RedirectToAction(ActionConstants.ManageOrg);
+			return RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
 		}
 	}
 }

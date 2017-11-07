@@ -32,8 +32,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var infos = AppService.GetAllSettings(organizaionID);
 			UserContext.SubscriptionAndRole subInfo = null;
 			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			var subGet = await AppService.GetSubscription(subscriptionId);
-			string subName = subGet.SubscriptionName;
+			
+			string subName = subInfo.SubscriptionName;
 			var infoOrg = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infoOrg.Item1.StartOfWeek));
 			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(infoOrg.Item1.StartOfWeek));
@@ -42,9 +42,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				Settings = new SettingsViewModel.SettingsInfoViewModel
 				{
-					IsLockDateUsed = settings.IsLockDateUsed,
-					LockDatePeriod = settings.LockDatePeriod,
-					LockDateQuantity = settings.LockDateQuantity,
 					OrganizationId = settings.OrganizationId,
 					OvertimeHours = settings.OvertimeHours,
 					OvertimeMultiplier = settings.OvertimeMultiplier,

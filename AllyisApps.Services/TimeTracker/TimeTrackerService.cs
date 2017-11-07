@@ -5,10 +5,14 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Threading.Tasks;
 using AllyisApps.DBModel.TimeTracker;
 using AllyisApps.Services.TimeTracker;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace AllyisApps.Services
 {
@@ -130,6 +134,101 @@ namespace AllyisApps.Services
 			return PayrollProcessEntriesResult.Success;
 		}
 
+		public async Task<int> UpdateDurationPayPeriod(int duration, DateTime startDate, int organizationId)
+		{
+			if (duration < 1 || duration > 365)
+			{
+				throw new ArgumentOutOfRangeException(nameof(duration), $"{nameof(duration)} must be between 1 and 365.");
+			}
+
+			if (startDate < SqlDateTime.MinValue)
+			{
+				throw new ArgumentOutOfRangeException(nameof(startDate), $"{nameof(startDate)} must be greater than {SqlDateTime.MinValue}.");
+			}
+
+			if (organizationId <= 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(organizationId), $"{nameof(organizationId)} must be greater than 0.");
+			}
+
+			var jsonDic = new Dictionary<string, string>
+			{
+				{"type", PayPeriodType.Duration.ToString()},
+				{"duration", duration.ToString()},
+				{"startDate", startDate.ToString("d")}
+			};
+
+			string payPeriodJson = JsonConvert.SerializeObject(jsonDic);
+
+			return await DBHelper.UpdatePayPeriod(payPeriodJson, organizationId);
+		}
+
+		public async Task<int> UpdateDatesPayPeriod(List<int> dates, int organizationId)
+		{
+			if (dates == null)
+			{
+				throw new ArgumentNullException(nameof(dates));
+			}
+
+			if (dates.Any(date => date <= 0 || date > 28))
+			{
+				throw new ArgumentOutOfRangeException(nameof(dates), $"{dates} must be between 1 and 28.");
+			}
+
+			if (organizationId <= 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(organizationId), $"{nameof(organizationId)} must be greater than 0.");
+			}
+
+			var jsonDic = new Dictionary<string, dynamic>
+			{
+				{"type", PayPeriodType.Dates.ToString()},
+				{"dates", dates.ToArray()}
+			};
+
+			string payPeriodJson = JsonConvert.SerializeObject(jsonDic);
+
+			return await DBHelper.UpdatePayPeriod(payPeriodJson, organizationId);
+		}
+
+		public async Task<PayPeriodRanges> GetPayPeriodRanges(int organizationId)
+		{
+			if (organizationId <= 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(organizationId), $"{nameof(organizationId)} must be greater than 0.");
+			}
+
+			var settings = await GetSettingsByOrganizationId(organizationId);
+			dynamic payPeriodObj = JsonConvert.DeserializeObject(settings.PayPeriod);
+			var payPeriodEnum = (PayPeriodType)Enum.Parse(typeof(PayPeriodType), (string)payPeriodObj.type);
+
+			switch (payPeriodEnum)
+			{
+				case PayPeriodType.Duration:
+					var startDate = (DateTime)payPeriodObj.startDate;
+					var duration = (int)payPeriodObj.duration;
+					var currentPayPeriod = GetCurrentPayPeriodByDuration(duration, startDate);
+
+					return new PayPeriodRanges
+					{
+						Previous = GetNthPayPeriodByDuration(currentPayPeriod, -1),
+						Current = currentPayPeriod,
+						Next = GetNthPayPeriodByDuration(currentPayPeriod, 1)
+					};
+				case PayPeriodType.Dates:
+					var dates = ((JArray)payPeriodObj.dates).Select(date => (int)date).ToList();
+
+					return new PayPeriodRanges
+					{
+						Previous = GetNthPayPeriodByDates(dates, -1),
+						Current = GetNthPayPeriodByDates(dates, 0),
+						Next = GetNthPayPeriodByDates(dates, 1)
+					};
+				default:
+					throw new ArgumentOutOfRangeException(nameof(payPeriodObj), "The pay period object just be of type 'duration' or 'dates'.");
+			}
+		}
+
 		#region public static
 
 		public static DateTime SetStartingDate(DateTime? date, int startOfWeek)
@@ -144,6 +243,139 @@ namespace AllyisApps.Services
 			return today.AddDays(-daysIntoTheWeek).Date;
 		}
 
+		/// <summary>
+		/// Gets the pay period that is n pay periods away from the current pay period.
+		/// </summary>
+		/// <param name="dates">List of month days. Each represent the startDate of a pay period.</param>
+		/// <param name="n">The number of pay periods away from the current pay period, e.g.
+		/// 1 is 1 pay period after the current
+		/// 0 is the current pay period
+		/// -1 is 1 pay period before the current.
+		/// </param>
+		/// <returns></returns>
+		public static PayPeriodRanges.PayPeriodRange GetNthPayPeriodByDates(List<int> dates, int n)
+		{
+			dates.Sort();
+			int startIndex = 0;
+
+			// find the start index of the current pay period (where today is inbetween dates[startIndex] and dates[startIndex+1]
+			for (int i = 0; i < dates.Count; i++)
+			{
+				if (DateTime.Now.Day < dates[i])
+				{
+					startIndex = Mod(i - 1, dates.Count);
+					break;
+				}
+
+				if (i == dates.Count - 1)
+				{
+					startIndex = i;
+				}
+			}
+
+			// navigate to correct startIndex of nth pay period, and calculate any overflow
+			int monthOverflow = 0;
+			if (n >= 0)
+			{
+				for (int i = 0; i < n; i++)
+				{
+					int nextIndex = Mod(startIndex + 1, dates.Count);
+
+					if (nextIndex <= startIndex)
+					{
+						monthOverflow++;
+					}
+
+					startIndex = nextIndex;
+				}
+			}
+			else
+			{
+				for (int i = n; i < 0; i++)
+				{
+					int nextIndex = Mod(startIndex - 1, dates.Count);
+
+					if (nextIndex >= startIndex)
+					{
+						monthOverflow--;
+					}
+
+					startIndex = nextIndex;
+				}
+			}
+
+			//calculate year, month including overflows for startDate
+			int month = monthOverflow + DateTime.Now.Month - 1; // subtract 1 to be compatible with 0 based index modulus
+			int year = DateTime.Now.Year + month / 11;
+			month = Mod(month, 12) + 1; //add 1 to convert to 1 base index
+
+			// calculate endDate with conditionals to handle month and year overflow
+			DateTime endDate = startIndex == dates.Count - 1
+				? (month == 12
+					? new DateTime(year + 1, 0, dates[0])
+					: new DateTime(year, month + 1, dates[0]))
+				: new DateTime(year, month, dates[startIndex + 1]);
+
+			var range = new PayPeriodRanges.PayPeriodRange();
+			range.StartDate = new DateTime(year, month, dates[startIndex]);
+			range.EndDate = endDate.AddDays(-1);
+			return range;
+		}
+
+		/// <summary>
+		/// Calculates the pay period that contains today.  Calculated with start date and duration.
+		/// </summary>
+		/// <param name="duration">The duration of the pay period.</param>
+		/// <param name="startDate">The start date from which to base the pay period dates on.</param>
+		/// <returns>The current pay period range.</returns>
+		public static PayPeriodRanges.PayPeriodRange GetCurrentPayPeriodByDuration(int duration, DateTime startDate)
+		{
+			DateTime endDate = startDate;
+
+			if (startDate < DateTime.Now)
+			{
+				while (endDate < DateTime.Now)
+				{
+					startDate = endDate;
+					endDate = endDate.AddDays(duration);
+				}
+			}
+			else if (startDate > DateTime.Now)
+			{
+				while (startDate > DateTime.Now)
+				{
+					endDate = startDate;
+					startDate = startDate.AddDays(-duration);
+				}
+			}
+
+			return new PayPeriodRanges.PayPeriodRange
+			{
+				StartDate = startDate,
+				EndDate = startDate == DateTime.Now ? startDate.AddDays(duration - 1) : endDate.AddDays(-1) //end date is one day before the next start date
+			};
+		}
+
+		/// <summary>
+		/// Calculates the pay period that is n number of pay periods away from the current pay period, by duration.
+		/// </summary>
+		/// <param name="currentPayPeriod">The current pay period range (that contains today).</param>
+		/// <param name="numberOfPayPeriodsAway">
+		/// The number of pay periods displaced from the current pay period. e.g.:
+		/// 1 is 1 pay period after the current
+		/// 0 is the current pay period
+		/// -1 is 1 pay period before the current.
+		/// </param>
+		/// <returns>The nth pay period away from the current one.</returns>
+		public static PayPeriodRanges.PayPeriodRange GetNthPayPeriodByDuration(PayPeriodRanges.PayPeriodRange currentPayPeriod, int numberOfPayPeriodsAway)
+		{
+			return new PayPeriodRanges.PayPeriodRange
+			{
+				StartDate = currentPayPeriod.StartDate.AddDays(numberOfPayPeriodsAway * ((currentPayPeriod.EndDate - currentPayPeriod.StartDate).TotalDays + 1)),
+				EndDate = currentPayPeriod.EndDate.AddDays(numberOfPayPeriodsAway * ((currentPayPeriod.EndDate - currentPayPeriod.StartDate).TotalDays + 1))
+			};
+		}
+
 		public static Setting DBEntityToServiceObject(SettingDBEntity settings)
 		{
 			return new Setting
@@ -153,13 +385,22 @@ namespace AllyisApps.Services
 				OvertimeHours = settings.OvertimeHours,
 				OvertimePeriod = settings.OvertimePeriod,
 				OvertimeMultiplier = settings.OvertimeMultiplier,
-				IsLockDateUsed = settings.IsLockDateUsed,
-				LockDatePeriod = settings.LockDatePeriod,
-				LockDateQuantity = settings.LockDateQuantity,
 				PayrollProcessedDate = settings.PayrollProcessedDate,
 				LockDate = settings.LockDate,
-				PayPeriod = settings.PayPeriod
+				PayPeriod = settings.PayPeriod,
+
 			};
+		}
+
+		/// <summary>
+		/// Does a real modulo operation.  Unlike c#'s % operator.
+		/// </summary>
+		/// <param name="x">Left side.</param>
+		/// <param name="m">Right side.</param>
+		/// <returns></returns>
+		public static int Mod(int x, int m)
+		{
+			return (x % m + m) % m;
 		}
 
 		#endregion public static

@@ -159,13 +159,15 @@
 							</tr>
 									}
 						<tr>
-							@using (Html.BeginForm(ActionConstants.CreateApplicationStatus, ControllerConstants.Staffing, new { subscriptionId = Model.subscriptionId, orgId = Model.organizationId }, FormMethod.Post))
+							@* TODO: Implement CreateApplicationStatus *@
+							@using (Html.BeginForm(ActionConstants.CreateApplicationStatus, ControllerConstants.Staffing, new {subscriptionId = Model.subscriptionId, orgId = Model.organizationId}, FormMethod.Post))
 							{
-								@Html.AntiForgeryToken();
+								@Html.AntiForgeryToken()
+								;
 								@Html.HiddenFor(m => m.subscriptionId)
-								<td><input type="text" name="positionStatus" class="form-control" required /></td>
+								<td><input type="text" name="positionStatus" class="form-control" required/></td>
 								<td><span class="pull-right"></span></td>
-								<td><input class="btn btn-primary" type="submit" value="@Strings.Add" /></td>
+								<td><input class="btn btn-primary" type="submit" value="@Strings.Add"/></td>
 							}
 						</tr>
 					</table>

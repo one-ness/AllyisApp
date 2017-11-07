@@ -9,7 +9,7 @@
     [LockDateQuantity]   INT            CONSTRAINT [DF_Setting_LockDateQuantity] DEFAULT ((14)) NOT NULL,
     [PayrollProcessedDate] DATE NULL,
     [LockDate] DATE NULL,
-    [PayPeriod] VARCHAR(MAX) NOT NULL DEFAULT '{"type":"duration","duration":"14","startDate":"2017-10-16"}',
+    [PayPeriod] VARCHAR(MAX) NULL DEFAULT '{"type":"Duration","duration":"14","startDate":"2017/10/16"}',
     CONSTRAINT [PK_Setting] PRIMARY KEY CLUSTERED ([OrganizationId] ASC),
     CONSTRAINT [FK_Settings_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId])
 );

@@ -27,7 +27,7 @@ namespace AllyisApps
 			// SCRIPT BUNDLES
 
 			// Time Tracker
-			bundles.Add(new ScriptBundle("~/bundles/daterangepicker").Include(
+			bundles.Add(new ScriptBundle("~/bundles/daterangepickerold").Include(
 				"~/Scripts/jquery.comiseo.daterangepicker-0.5.0.js",
 				"~/Areas/TimeTracker/Scripts/allyis-drp-init.js"));
 
@@ -118,7 +118,7 @@ namespace AllyisApps
 			underscore.CdnFallbackExpression = "window._";
 			bundles.Add(underscore);
 
-			Bundle tetherBundle = new ScriptBundle("~/bundles/tether", "https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js").Include(
+			Bundle tetherBundle = new ScriptBundle("~/bundles/tether", "//cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js").Include(
 				"~/Scripts/tether.min.js");
 			tetherBundle.CdnFallbackExpression = "$.Tether";
 			bundles.Add(tetherBundle);
@@ -127,6 +127,11 @@ namespace AllyisApps
 						"~/Scripts/bootstrap/*.js");
 			bootstrapJSBundle.CdnFallbackExpression = "$.fn.modal";
 			bundles.Add(bootstrapJSBundle);
+
+			Bundle dateRangeBundle = new ScriptBundle("~/bundles/daterangepicker", "//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js").Include(
+				"~/Scripts/daterangepicker.js");
+			dateRangeBundle.CdnFallbackExpression = "$.daterangepicker";
+			bundles.Add(dateRangeBundle);
 
 			// STYLE BUNDLES
 
@@ -141,6 +146,9 @@ namespace AllyisApps
 
 			bundles.Add(new StyleBundle("~/Content/BootstrapSelect").Include(
 					"~/Content/css/bootstrap-select.min.css"));
+
+			bundles.Add(new StyleBundle("~/Content/DateRangePicker").Include(
+				"~/Content/css/daterangepicker.css"));
 
 			// CDN links - fallbacks are much trickier with CSS as we cannot simply use a javascript variable as above. For now, no fallback provided.
 			bundles.Add(new StyleBundle("~/Content/bootstrap", "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"));

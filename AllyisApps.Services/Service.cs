@@ -213,36 +213,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets the lock date for the current organization.
-		/// </summary>
-		/// <returns>Lock date.</returns>
-		public async Task<DateTime?> GetLockDate(int organizationId)
-		{
-			LockDateDBEntity lockDate = await DBHelper.GetLockDateByOrganizationId(organizationId);
-			return GetLockDateFromParameters(lockDate.IsLockDateUsed, lockDate.LockDatePeriod, lockDate.LockDateQuantity);
-		}
-
-		/// <summary>
-		/// Gets a nullable DateTime for the lock date, based on supplied lock date settings.
-		/// </summary>
-		/// <param name="isLockDateUsed">A value indicating whether the lock date is used.</param>
-		/// <param name="lockDatePeriod">The lock date period ("Monthd", "Weeks", or "Days").</param>
-		/// <param name="lockDateQuantity">The quantity of the time unit defined by the period.</param>
-		/// <returns>A nullable DateTime expressing the date on or before which time entries are locked.</returns>
-		public DateTime? GetLockDateFromParameters(bool isLockDateUsed, int lockDatePeriod, int lockDateQuantity)
-		{
-			if (!isLockDateUsed)
-			{
-				return null;
-			}
-
-			DateTime date = lockDatePeriod.Equals(3)
-				? DateTime.Now.AddMonths(-1 * lockDateQuantity)
-				: DateTime.Now.AddDays(-1 * lockDateQuantity * (lockDatePeriod.Equals(2) ? 7 : 1));
-			return date;
-		}
-
-		/// <summary>
 		/// Creates a holiday and related time entries for an organization.
 		/// </summary>
 		/// <param name="holiday">Holiday.</param>
@@ -554,29 +524,6 @@ namespace AllyisApps.Services
 			return output;
 		}
 
-		/// <summary>
-		/// Updates the lock date setttings.
-		/// </summary>
-		/// <param name="lockDateUsed">Whether or not to use a lock date.</param>
-		/// <param name="lockDatePeriod">The lock date period (days/weeks/months).</param>
-		/// <param name="lockDateQuantity">The quantity of the selected period.</param>
-		/// <param name="orgId">.</param>
-		/// <returns>.</returns>
-		public async Task<bool> UpdateOldLockDate(bool lockDateUsed, int lockDatePeriod, int lockDateQuantity, int orgId)
-		{
-			if (!new[] { 1, 2, 3 }.Contains(lockDatePeriod))
-			{
-				throw new ArgumentException($"{lockDatePeriod} is not a valid value for {nameof(lockDatePeriod)}.");
-			}
-
-			if (lockDateQuantity < 0)
-			{
-				throw new ArgumentException($"{nameof(lockDateQuantity)} cannot be less than zero.");
-			}
-
-			return await DBHelper.UpdateOldLockDate(orgId, lockDateUsed, lockDatePeriod, lockDateQuantity);
-		}
-
 		public int UpdateLockDate(int organizationId, DateTime? lockDate)
 		{
 			if (organizationId < 0)
@@ -598,7 +545,7 @@ namespace AllyisApps.Services
 			UserContext.OrganizationsAndRoles.TryGetValue(organizaionId, out UserContext.OrganizationAndRole orgInfo);
 			var spResults = DBHelper.GetAllSettings(orgInfo.OrganizationId);
 			return Tuple.Create(
-				InitializeSettingsInfo(spResults.Item1),
+				DBEntityToServiceObject(spResults.Item1),
 				spResults.Item2.Select(InitializePayClassInfo).ToList(),
 				spResults.Item3.Select(InitializeHoliday).ToList());
 		}
@@ -642,7 +589,7 @@ namespace AllyisApps.Services
 
 			var spResults = await DBHelper.GetTimeEntryIndexPageInfo(orgId, (int)ProductIdEnum.TimeTracker, userId.Value, startingDate, endingDate);
 
-			return Tuple.Create(InitializeSettingsInfo(spResults.Item1),
+			return Tuple.Create(DBEntityToServiceObject(spResults.Item1),
 				spResults.Item2.Select(InitializePayClassInfo).ToList(),
 				spResults.Item3.Select(InitializeHoliday).ToList(),
 				spResults.Item4.Select(InitializeCompleteProjectInfo).ToList(),
@@ -682,33 +629,6 @@ namespace AllyisApps.Services
 				HolidayId = hol.HolidayId,
 				HolidayName = hol.HolidayName,
 				OrganizationId = hol.OrganizationId
-			};
-		}
-
-		/// <summary>
-		/// Initialized a SettingsInfo object based on a given SettingDBEntity.
-		/// </summary>
-		/// <param name="settings">The SettingsDBEntity to use.</param>
-		/// <returns>The initialized SettingsInfo object.</returns>
-		public static Setting InitializeSettingsInfo(SettingDBEntity settings)
-		{
-			if (settings == null)
-			{
-				return null;
-			}
-
-			return new Setting
-			{
-				OrganizationId = settings.OrganizationId,
-				OvertimeHours = settings.OvertimeHours,
-				OvertimeMultiplier = settings.OvertimeMultiplier,
-				OvertimePeriod = settings.OvertimePeriod,
-				StartOfWeek = settings.StartOfWeek,
-				LockDatePeriod = settings.LockDatePeriod,
-				LockDateQuantity = settings.LockDateQuantity,
-				IsLockDateUsed = settings.IsLockDateUsed,
-				LockDate = settings.LockDate,
-				PayrollProcessedDate = settings.PayrollProcessedDate
 			};
 		}
 

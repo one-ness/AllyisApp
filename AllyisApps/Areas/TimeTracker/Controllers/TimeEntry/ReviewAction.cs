@@ -41,7 +41,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			DateTime calculatedEndDate = endDate ?? DateTime.Now;
 
 			var payClasses = (await AppService.GetPayClassesByOrganizationId(organizationId)).Select(x => new PayClassInfoViewModel(x)).ToList();
-			Subscription subscription = await AppService.GetSubscription(subscriptionId);
+			var subscription = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			var allTimeEntries = (await AppService.GetTimeEntriesOverDateRange(organizationId, calculatedStartDate, calculatedEndDate))
 				.Select(entry =>
 				{
@@ -65,6 +65,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
+			PayPeriodRanges payperiodRanges = await AppService.GetPayPeriodRanges(organizationId);
+
 			var model = new ReviewViewModel
 			{
 				UserId = AppService.UserContext.UserId,
@@ -78,7 +80,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				StartDate = calculatedStartDate,
 				EndDate = calculatedEndDate,
 				TimeEntryStatusOptions = ModelHelper.GetLocalizedTimeEntryStatuses(AppService),
+				PayPeriodRanges = payperiodRanges
 			};
+
 			return View(model);
 		}
 

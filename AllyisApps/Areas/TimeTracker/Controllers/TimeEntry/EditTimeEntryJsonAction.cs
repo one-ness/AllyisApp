@@ -144,8 +144,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new ArgumentException(Resources.Strings.MustSelectPayClass);
 			}
 
-			DateTime? lockDate = await AppService.GetLockDate(AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId);
-			if (!AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId, false) && model.Date <= (lockDate == null ? -1 : Utility.GetDaysFromDateTime(lockDate.Value)))
+			DateTime? lockDate = (await AppService.GetSettingsByOrganizationId(AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId)).LockDate;
+			if (!AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId, false)
+				&& model.Date <= (lockDate == null ? -1 : Utility.GetDaysFromDateTime(lockDate.Value)))
 			{
 				throw new ArgumentException(Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
 			}
@@ -158,7 +159,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Duration = durationResult.Value,
 				Description = model.Description,
 				ApprovalState = (int)ApprovalState.NoApprovalState,
-				IsLockSaved = (model.ApprovalState == (int)ApprovalState.Approved || model.Date <= model.LockDateOld || model.IsProjectDeleted || model.IsLockSaved) && !canManage
 			});
 		}
 
@@ -172,7 +172,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			var entry = await AppService.GetTimeEntry(timeEntryId);
 
-			DateTime? lockDate = await AppService.GetLockDate(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
 			return new EditTimeEntryViewModel
 			{
 				UserId = entry.UserId,
@@ -182,8 +181,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Date = Utility.GetDaysFromDateTime(entry.Date),
 				Duration = string.Format("{0:D2}:{1:D2}", (int)entry.Duration, (int)Math.Round((entry.Duration - (int)entry.Duration) * MinutesInHour, 0)),
 				Description = entry.Description,
-				IsLockSaved = entry.IsLockSaved,
-				LockDateOld = lockDate == null ? -1 : Utility.GetDaysFromDateTime(lockDate.Value),
 				IsManager = AppService.GetProductRoleForUser(ProductNameConstants.TimeTracker, entry.UserId, AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId) == "Manager"
 			};
 		}
@@ -206,19 +203,18 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>Parsed duration or null.</returns>
 		public float? ParseDuration(string duration)
 		{
+			if (string.IsNullOrWhiteSpace(duration)) return null;
+
 			float? durationOut = null;
 			Match theMatch;
-			if (!string.IsNullOrWhiteSpace(duration))
+			if ((theMatch = Regex.Match(duration, HourMinutePattern)).Success)
 			{
-				if ((theMatch = Regex.Match(duration, HourMinutePattern)).Success)
-				{
-					float minutes = int.Parse(theMatch.Groups[2].Value) / MinutesInHour;
-					durationOut = float.Parse(theMatch.Groups[1].Value) + minutes;
-				}
-				else if ((theMatch = Regex.Match(duration, DecimalPattern)).Success)
-				{
-					durationOut = float.Parse(duration);
-				}
+				float minutes = int.Parse(theMatch.Groups[2].Value) / MinutesInHour;
+				durationOut = float.Parse(theMatch.Groups[1].Value) + minutes;
+			}
+			else if (Regex.Match(duration, DecimalPattern).Success)
+			{
+				durationOut = float.Parse(duration);
 			}
 
 			return durationOut;
