@@ -97,8 +97,8 @@ namespace AllyisApps.Services
             bool result = DBHelper.AcceptInvitation(invitationId, UserContext.UserId) == 1;
             if (!result) return false;
 
-            if (inviteInfo.ProductRolesJson != null)
-            {
+            if (inviteInfo.ProductRolesJson != null && !inviteInfo.ProductRolesJson.Equals(""))
+			{ 
                 List<InvitationPermissionsJson> roleString = Newtonsoft.Json.JsonConvert.DeserializeObject<List<InvitationPermissionsJson>>(inviteInfo.ProductRolesJson);
 
                 foreach (var invite in roleString)
