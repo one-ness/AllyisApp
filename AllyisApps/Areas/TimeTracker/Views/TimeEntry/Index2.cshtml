@@ -256,13 +256,13 @@
     @Scripts.Render("~/bundles/jqueryui")
     @Scripts.Render("~/bundles/moment")
     @Scripts.Render("~/bundles/BootstrapSelect")
-    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+	@Scripts.Render("~/bundles/DateRangePicker")
     @Scripts.Render("~/bundles/pageswithsearch")
     @Scripts.Render("~/Areas/TimeTracker/Scripts/allyis-timeentry-index2.js");
 
     <script type="text/javascript">
-		var model_startdate = @Model.EntryRange.StartDate;
-		var model_enddate = @Model.EntryRange.EndDate;
+		var model_startdate = "@Model.EntryRange.StartDate";
+		var model_enddate = "@Model.EntryRange.EndDate";
 		@* var model_lockdate = @Model.LockDateOld; //unused old lockdate *@
 		var pageSize = @Model.PageUserSize;
 		var page_container_id = "viewasuser-list";
