@@ -377,8 +377,8 @@
 			}
 
 			var result = {};
-			result.StartingDate = @(Model.EntryRange.StartDate.ToJavaScriptMilliseconds());
-			result.EndingDate = @(Model.EntryRange.EndDate.ToJavaScriptMilliseconds());
+			result.StartingDate = @(Model.StartDateint);
+			result.EndingDate = @(Model.EndDateint);
 			result.Entries = data;
 			result.SubscriptionId = @(Model.SubscriptionId);
 			var datajson = JSON.stringify(result);

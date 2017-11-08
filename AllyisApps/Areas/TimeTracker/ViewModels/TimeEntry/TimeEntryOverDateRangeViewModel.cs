@@ -112,6 +112,15 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Gets or sets the payroll process date for time entries -- null payroll process date means no entries are payroll processed
 		/// </summary>
 		public DateTime? PayrollProcessedDate { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public int StartDateint { get; internal set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public int EndDateint { get; internal set; }
+
 
 		/// <summary>
 		/// Users for Time Entries.
