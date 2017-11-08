@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using AllyisApps.ViewModels.TimeTracker.Project;
@@ -59,27 +60,27 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets the Select List of Users for this organization.
 		/// </summary>
-		public IEnumerable<SelectListItem> UserView { get; internal set; }
+		public List<SelectListItem> UserView { get; internal set; }
 
 		/// <summary>
 		/// Gets the list of Customers for this organization.
 		/// </summary>
-		public IEnumerable<Services.Crm.Customer> Customers { get; internal set; }
+		public List<Services.Crm.Customer> Customers { get; internal set; }
 
 		/// <summary>
 		/// Gets the Select List of Customers for this organization.
 		/// </summary>
-		public IEnumerable<SelectListItem> CustomerView { get; internal set; }
+		public List<SelectListItem> CustomerView { get; internal set; }
 
 		/// <summary>
 		/// Gets the list of Projects for this organization.
 		/// </summary>
-		public IEnumerable<CompleteProjectViewModel> Projects { get; internal set; }
+		public List<CompleteProjectViewModel> Projects { get; internal set; }
 
 		/// <summary>
 		/// Gets the Select List of Projects for this organization.
 		/// </summary>
-		public IEnumerable<SelectListItem> ProjectView { get; internal set; }
+		public List<SelectListItem> ProjectView { get; internal set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the export button will be shown when employees selected are from different projects.
@@ -99,7 +100,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets the preview results data.
 		/// </summary>
-		public IEnumerable<TablePreviewEntry> PreviewEntries { get; internal set; }
+		public List<TablePreviewEntry> PreviewEntries { get; internal set; }
 
 		/// <summary>
 		/// Gets the preview data total.
@@ -155,12 +156,12 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets the Start Date selection. Note: must be int and not DateTime for Json serialization to work correctly in different cultures.
 		/// </summary>
-		public int? StartDate { get; internal set; }
+		public DateTime? StartDate { get; internal set; }
 
 		/// <summary>
 		/// Gets the End Date selection. Note: must be int and not DateTime for Json serialization to work correctly in different cultures.
 		/// </summary>
-		public int? EndDate { get; internal set; }
+		public DateTime? EndDate { get; internal set; }
 
 		/// <summary>
 		/// Gets the Page selection.

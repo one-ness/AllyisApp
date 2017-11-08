@@ -67,27 +67,23 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			if (userIds == null || userIds[0] == -1)
 			{
 				result.Data = (await AppService.GetTimeEntriesOverDateRange(orgId, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1)))
-				.AsParallel().Select(timeEntry => new TimeEntryViewModel(timeEntry)).AsEnumerable();
+				.AsParallel().Select(timeEntry => new TimeEntryViewModel(timeEntry)).ToList();
 			}
 			else
 			{
-				var Get = await AppService.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1), orgId);
-				result.Data = Get.AsParallel().Select(timeEntry => new TimeEntryViewModel(timeEntry));
+				var timeEntries = await AppService.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1), orgId);
+				result.Data = timeEntries.AsParallel().Select(timeEntry => new TimeEntryViewModel(timeEntry)).ToList();
 			}
 
 			if (projectId != 0)
 			{
-				result.Data = from i in result.Data
-							  where i.ProjectId == projectId
-							  select i;
+				result.Data = result.Data.Where(i => i.ProjectId == projectId).ToList();
 			}
 			else if (customerId != 0)
 			{
 				var projGet = await AppService.GetProjectsByCustomer(customerId);
 				IEnumerable<int> projects = projGet.Select(proj => proj.ProjectId).ToList();
-				result.Data = from c in result.Data
-							  where projects.Contains(c.ProjectId)
-							  select c;
+				result.Data = result.Data.Where(c => projects.Contains(c.ProjectId)).ToList();
 			}
 
 			if (userIds != null && userIds.Count > 0)
@@ -95,14 +91,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				if (userIds.Count > 1 || userIds[0] == -1)
 				{
 					result.Projects = AppService.GetProjectsByOrganization(orgId).AsParallel().Select(proj =>
-					new CompleteProjectViewModel(proj));
+					new CompleteProjectViewModel(proj)).ToList();
 				}
 				else
 				{
 					// single user selected
 					var getProj = await AppService.GetProjectsByUserAndOrganization(userIds[0], orgId, false);
 					result.Projects = getProj.AsParallel().Select(proj =>
-					new CompleteProjectViewModel(proj));
+					new CompleteProjectViewModel(proj)).ToList();
 				}
 
 				// Add default project in case there are holiday entries

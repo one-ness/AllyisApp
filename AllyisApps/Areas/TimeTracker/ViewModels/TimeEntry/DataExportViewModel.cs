@@ -25,17 +25,17 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets the list of projects associated with this query.
 		/// </summary>
-		public IEnumerable<CompleteProjectViewModel> Projects { get; internal set; }
+		public List<CompleteProjectViewModel> Projects { get; internal set; }
 
 		/// <summary>
 		/// Gets the list of Time entry data.
 		/// </summary>
-		public IEnumerable<TimeEntryViewModel> Data { get; internal set; }
+		public List<TimeEntryViewModel> Data { get; internal set; }
 
 		/// <summary>
 		/// Gets the list of Time entry data to preview.
 		/// </summary>
-		public IEnumerable<TimeEntryViewModel> PreviewData { get; internal set; }
+		public List<TimeEntryViewModel> PreviewData { get; internal set; }
 
 		/// <summary>
 		/// Gets the total number of pages available to view.
