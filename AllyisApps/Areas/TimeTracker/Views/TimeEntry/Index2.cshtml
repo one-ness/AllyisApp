@@ -261,9 +261,6 @@
     @Scripts.Render("~/Areas/TimeTracker/Scripts/allyis-timeentry-index2.js");
 
     <script type="text/javascript">
-		var model_startdate = "@Model.EntryRange.StartDate";
-		var model_enddate = "@Model.EntryRange.EndDate";
-		@* var model_lockdate = @Model.LockDateOld; //unused old lockdate *@
 		var pageSize = @Model.PageUserSize;
 		var page_container_id = "viewasuser-list";
 		var page_item_tag = "div";
@@ -279,7 +276,6 @@
     <script>
 
         $(function () {
-
             var start = moment(@(Model.EntryRange.StartDate.ToJavaScriptMilliseconds()));
 			var end = moment(@(Model.EntryRange.EndDate.ToJavaScriptMilliseconds()));
 			var prevStart = moment(@(Model.EntryRange.PayPeriodRanges.Previous.StartDate.ToJavaScriptMilliseconds()));
