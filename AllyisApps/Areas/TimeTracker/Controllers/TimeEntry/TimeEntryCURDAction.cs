@@ -54,10 +54,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 
 			}
-
-			int sDate = items.StartingDate;
-			int eDate = items.EndingDate;
-			return RedirectToAction(ActionConstants.IndexNoUserId, new { subscriptionId = items.SubscriptionId, startDate = sDate, endDate = eDate });
+			
+						
+			return RedirectToAction(ActionConstants.IndexNoUserId, new { subscriptionId = items.SubscriptionId, startDate = items.StartingDate, endDate = items.EndingDate});
 
 		}
 	}
@@ -76,11 +75,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Start Date 
 		/// </summary>
-		public int StartingDate;
+		public long StartingDate;
 		/// <summary>
 		/// End Date 
 		/// </summary>
-		public int EndingDate;
+		public long EndingDate;
 
 		/// <summary>
 		/// Subscription ID 
