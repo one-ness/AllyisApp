@@ -35,7 +35,7 @@ namespace AllyisApps.Areas.TimeTracker
 		{
 			context.Routes.MapSubdomainRoute(
 				name: "TimeTracker_NoUserId",
-				url: "TimeTracker/{subscriptionId}/{controller}/{startDate}/{endDate}",
+				url: "timetracker/{subscriptionId}/{controller}/{startDate}/{endDate}",
 				area: AreaName,
 				defaults: new { controller = "Home", action = "IndexNoUserId" },
 				constraints: new { subscriptionId = @"\d+", startDate = @"\d+", endDate = @"\d+", },
@@ -43,7 +43,7 @@ namespace AllyisApps.Areas.TimeTracker
 
 			context.Routes.MapSubdomainRoute(
 				name: "TimeEntry_Index_User_TimeSheet",
-				url: "TimeTracker/{subscriptionId}/{controller}/{userId}/{startDate}/{endDate}",
+				url: "timetracker/{subscriptionId}/{controller}/{userId}/{startDate}/{endDate}",
 				area: AreaName,
 				defaults: new { controller = "Home", action = "Index" },
 				constraints: new { subscriptionId = @"\d+", userId = @"\d+", startDate = @"\d+", endDate = @"\d+" },
@@ -51,7 +51,7 @@ namespace AllyisApps.Areas.TimeTracker
 
 			context.Routes.MapSubdomainRoute(
 				name: "TimeEntry_Export",
-				url: "TimeTracker/{subscriptionId}/{controller}/{action}/{userId}/{startingDate}-{endingDate}",
+				url: "timetracker/{subscriptionId}/{controller}/{action}/{userId}/{startingDate}-{endingDate}",
 				area: AreaName,
 				defaults: new { controller = "Home", startingDate = UrlParameter.Optional, endingDate = UrlParameter.Optional },
 				constraints: new { action = "Export", subscriptionId = @"\d+", userId = @"\d+" },
