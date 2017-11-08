@@ -127,6 +127,7 @@ namespace AllyisApps
 		public const string CustomerImport = "customerimport";
 		public const string SettingsPayPeriod = "settingspayperiod";
 		public const string UpdatePayPeriod = "updatepayperiod";
+		public const string TimeEntryCURD = "TimeEntryCURD";
 	}
 
 	/// <summary>
