@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.ViewModels.Shared;
 
-namespace AllyisApps.Controllers
+namespace AllyisApps.Controllers.Shared
 {
 	/// <summary>
 	/// Controller for actions relating to shared components of the page.

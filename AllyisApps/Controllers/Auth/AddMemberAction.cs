@@ -27,21 +27,30 @@ namespace AllyisApps.Controllers.Auth
 		/// GET: /Add.
 		/// The page for adding members to an organization.
 		/// </summary>
-		public async Task<ActionResult> AddMember(int organizationId)
+		public async Task<ActionResult> AddMember(int id)
 		{
-			AppService.CheckOrgAction(AppService.OrgAction.AddUserToOrganization, organizationId);
-			var subs = await AppService.GetSubscriptionsAsync(organizationId);
+			AppService.CheckOrgAction(AppService.OrgAction.AddUserToOrganization, id);
+			AddMemberViewModel model = await constuctViewModel(id);
+
+			return View(model);
+		}
+
+		private async Task<AddMemberViewModel> constuctViewModel(int id)
+		{
+			var subs = await AppService.GetSubscriptionsAsync(id);
 
 			var model = new AddMemberViewModel
 			{
-				OrganizationId = organizationId,
-				EmployeeId = await AppService.GetNextEmployeeId(organizationId),
+				OrganizationId = id,
+				EmployeeId = await AppService.GetNextEmployeeId(id),
 				OrganizationName = "Organization", //AppService.GetOrganization(id).Result.OrganizationName;
 				SubscriptionRoles = subs.Select(sub => new RoleItem
 				{
 					ProductId = (int)sub.ProductId,
 					SubscriptionName = sub.SubscriptionName,
-					SelectList = GetSubRoles(sub.SkuId)
+					SelectList = GetSubRoles(sub.SkuId),
+					SubscriptionId = sub.SubscriptionId,
+
 				}).ToList(),
 				OrgRole = new SelectList(
 					new List<SelectListItem>
@@ -53,10 +62,32 @@ namespace AllyisApps.Controllers.Auth
 					"Text",
 					"1")
 			};
-
-			return View(model);
+			return model;
 		}
 
+
+		private async Task<AddMemberViewModel> reconstuctViewModel(AddMemberViewModel previous)
+		{
+			var subs = await AppService.GetSubscriptionsAsync(previous.OrganizationId);
+			previous.SubscriptionRoles = subs.Select(sub => new RoleItem
+			{
+				ProductId = (int)sub.ProductId,
+				SubscriptionName = sub.SubscriptionName,
+				SelectList = GetSubRoles(sub.SkuId),
+				SubscriptionId = sub.SubscriptionId,
+
+			}).ToList();
+			previous.OrgRole = new SelectList(
+					new List<SelectListItem>
+					{
+						new SelectListItem { Text = OrganizationRoleEnum.Member.ToString(), Value = "1"},
+						new SelectListItem { Text = OrganizationRoleEnum.Owner.ToString(), Value = "2" }
+					},
+					"Value",
+					"Text",
+					"1");
+			return previous;
+		}
 		private static List<SelectListItem> GetSubRoles(SkuIdEnum skuId)
 		{
 			switch (skuId)
@@ -68,6 +99,7 @@ namespace AllyisApps.Controllers.Auth
 						new SelectListItem { Text = Strings.User, Value = "1"},
 						new SelectListItem { Text = Strings.Manager, Value = "2"}
 					};
+
 				case SkuIdEnum.ExpenseTrackerBasic:
 					return new List<SelectListItem>
 					{
@@ -76,6 +108,7 @@ namespace AllyisApps.Controllers.Auth
 						new SelectListItem { Text = Strings.Manager, Value = "2"},
 						new SelectListItem { Text = Strings.SuperUser, Value = "4"},
 					};
+
 				case SkuIdEnum.StaffingManagerBasic:
 					return new List<SelectListItem>
 					{
@@ -97,7 +130,8 @@ namespace AllyisApps.Controllers.Auth
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> AddMember(AddMemberViewModel model)
 		{
-			if (!ModelState.IsValid) return View(model); // Invalid model, try again
+			AddMemberViewModel reModel = await reconstuctViewModel(model);
+			if (!ModelState.IsValid) return View(reModel); // Invalid model, try again
 
 			try
 			{
@@ -117,12 +151,13 @@ namespace AllyisApps.Controllers.Auth
 
 				var json = model.SubscriptionRoles.Select(role => new InvitationPermissionsJson
 				{
-					ProductId = role.ProductId,
+					SubscriptionId = role.SubscriptionId,
 					ProductRoleId = role.SelectedRoleId
 				})
 					.ToList();
 
 				string jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(json);
+				string orgName = AppService.UserContext.OrganizationsAndRoles[model.OrganizationId].OrganizationName;
 
 				int invitationId = await AppService.InviteUser(
 					url,
@@ -130,6 +165,7 @@ namespace AllyisApps.Controllers.Auth
 					model.FirstName,
 					model.LastName,
 					model.OrganizationId,
+					orgName,
 					model.OrgRoleSelection == 2 ? OrganizationRoleEnum.Owner : OrganizationRoleEnum.Member,
 					model.EmployeeId,
 					jsonString);
@@ -140,12 +176,12 @@ namespace AllyisApps.Controllers.Auth
 			catch (InvalidOperationException)
 			{
 				Notifications.Add(new BootstrapAlert(Strings.EmployeeIdNotUniqueError, Variety.Danger));
-				return View(model);
+				return View(reModel);
 			}
 			catch (System.Data.DuplicateNameException)
 			{
 				Notifications.Add(new BootstrapAlert(string.Format(Strings.UserAlreadyExists, model.FirstName, model.LastName), Variety.Warning));
-				return View(model);
+				return View(reModel);
 			}
 		}
 	}

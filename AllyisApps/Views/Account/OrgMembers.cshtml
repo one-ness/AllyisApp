@@ -15,7 +15,7 @@
             <div><a href="@Url.Action(ActionConstants.ManageOrgPermissions, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default" title="@Strings.ManagePermissions">@Strings.ManagePermissions <i class="fa fa-fw fa-lock"></i></a></div>}
         @if (Model.CanAddUser)
         {
-            <div><a href="@Url.Action(ActionConstants.AddMember, ControllerConstants.Account, new { organizationId = Model.OrganizationId })" class="btn btn-default" title="@Strings.AddMembers">@Strings.AddMembers <i class="fa fa-fw fa-user-plus"></i></a></div>}
+            <div><a href="@Url.Action(ActionConstants.AddMember, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default" title="@Strings.AddMembers">@Strings.AddMembers <i class="fa fa-fw fa-user-plus"></i></a></div>}
     </div>
 </div>
 <div class="row">
@@ -63,6 +63,11 @@
                 <script type="text/javascript">
                     function getUserIdsAndSubmit() {
                         var csvIds = "";
+
+                        if (!confirm("Do you wish to delete the selected user(s)?"))
+                        {
+                            return false;
+                        }
 
                         // gather all the ids to delete as a csv
 

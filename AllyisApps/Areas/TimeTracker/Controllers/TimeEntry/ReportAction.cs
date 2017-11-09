@@ -10,7 +10,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
-using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
@@ -34,33 +33,27 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 
-			ReportViewModel reportVM = null;
+			ReportViewModel reportVM;
 
 			var infos = await AppService.GetReportInfo(subscriptionId);
 
-			const string TempDataKey = "RVM";
-			UserContext.SubscriptionAndRole subInfo = null;
-			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			var getSub = await AppService.GetSubscription(subscriptionId);
-			string subName = getSub.SubscriptionName;
-			if (TempData[TempDataKey] != null)
+			const string tempDataKey = "RVM";
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out UserContext.SubscriptionAndRole subInfo);
+
+			if (TempData[tempDataKey] != null)
 			{
-				reportVM = (ReportViewModel)TempData[TempDataKey];
+				reportVM = (ReportViewModel)TempData[tempDataKey];
 			}
 			else
 			{
 				reportVM = ConstructReportViewModel(AppService.UserContext.UserId, subInfo.OrganizationId, true, infos.Customers, infos.CompleteProject);
-				reportVM.SubscriptionName = subName;
+				reportVM.SubscriptionName = subInfo.SubscriptionName;
 			}
 
 			reportVM.UserView = GetUserSelectList(infos.SubscriptionUserInfo, reportVM.Selection.Users);
 			reportVM.CustomerView = GetCustomerSelectList(infos.Customers, reportVM.Selection.CustomerId);
 			reportVM.ProjectView = GetProjectSelectList(infos.CompleteProject, reportVM.Selection.CustomerId, reportVM.Selection.ProjectId);
 			reportVM.SubscriptionId = subscriptionId;
-
-			var infoOrg = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
-			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infoOrg.Item1.StartOfWeek));
-			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(infoOrg.Item1.StartOfWeek));
 
 			return View(reportVM);
 		}
@@ -96,9 +89,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				CanManage = canManage,
 				OrganizationId = organizationId,
 				ShowExport = showExport,
-				Projects = projects.AsParallel().Select(proj => new CompleteProjectViewModel(proj)).AsEnumerable(),
+				Projects = projects.AsParallel().Select(proj => new CompleteProjectViewModel(proj)).ToList(),
 				PreviewPageSize = 20,
-				PreviewTotal = string.Format("{0} {1}", 0, Resources.Strings.HoursTotal),
+				PreviewTotal = $"0 {Resources.Strings.HoursTotal}",
 				PreviewEntries = null,
 				PreviewMessage = Resources.Strings.NoDataPreview,
 				PreviewPageTotal = 1,
@@ -106,10 +99,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Selection = previousSelections ?? new ReportSelectionModel
 				{
 					CustomerId = 0,
-					EndDate = Utility.GetDaysFromDateTime(DateTime.Today),
+					EndDate = DateTime.Today,
 					Page = 1,
 					ProjectId = 0,
-					StartDate = Utility.GetDaysFromDateTime(DateTime.Today),
+					StartDate = DateTime.Today,
 					Users = new List<int>()
 				}
 			};
@@ -121,9 +114,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subUsers">List of subscription users.</param>
 		/// <param name="usersSelected">List of selected user ids.</param>
 		/// <returns>The user list.</returns>
-		private IEnumerable<SelectListItem> GetUserSelectList(List<SubscriptionUser> subUsers, List<int> usersSelected)
+		private List<SelectListItem> GetUserSelectList(IList<SubscriptionUser> subUsers, List<int> usersSelected)
 		{
-			IList<SubscriptionUser> users = subUsers;
+			// ReSharper disable once SuggestVarOrType_Elsewhere
+			var users = subUsers;
 			users.Insert(0, new SubscriptionUser { FirstName = Resources.Strings.AllUsersFirst, LastName = Resources.Strings.AllUsersLast, UserId = -1 });
 
 			// select current user by default
@@ -132,18 +126,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				usersSelected.Add(Convert.ToInt32(AppService.UserContext.UserId));
 			}
 
-			var selectList = new List<SelectListItem>();
-			foreach (var user in users)
+			return users.Select(user => new SelectListItem
 			{
-				selectList.Add(new SelectListItem
-				{
-					Value = user.UserId.ToString(),
-					Text = string.Format("{0} {1}", user.FirstName, user.LastName),
-					Selected = usersSelected.Contains(user.UserId)
-				});
-			}
-
-			return selectList;
+				Value = user.UserId.ToString(),
+				Text = $"{user.FirstName} {user.LastName}",
+				Selected = usersSelected.Contains(user.UserId)
+			})
+				.ToList();
 		}
 
 		/// <summary>
@@ -152,23 +141,18 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="customers">The list of customers.</param>
 		/// <param name="customerSelected">The selected customer.</param>
 		/// <returns>The customer list.</returns>
-		private IEnumerable<SelectListItem> GetCustomerSelectList(List<Customer> customers, int customerSelected)
+		private static List<SelectListItem> GetCustomerSelectList(IList<Customer> customers, int customerSelected)
 		{
-			IList<Customer> customerData = customers;
+			var customerData = customers;
 			customerData.Insert(0, new Customer { CustomerName = Resources.Strings.NoFilter, CustomerId = 0 });
 
-			var cSelectList = new List<SelectListItem>();
-			foreach (var customer in customerData)
+			return customerData.Select(customer => new SelectListItem
 			{
-				cSelectList.Add(new SelectListItem
-				{
-					Value = customer.CustomerId.ToString(),
-					Text = customer.CustomerName,
-					Selected = customer.CustomerId == customerSelected
-				});
-			}
-
-			return cSelectList;
+				Value = customer.CustomerId.ToString(),
+				Text = customer.CustomerName,
+				Selected = customer.CustomerId == customerSelected
+			})
+				.ToList();
 		}
 
 		/// <summary>
@@ -178,7 +162,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="customerSelected">The selected customer.</param>
 		/// <param name="projectSelected">The selected project.</param>
 		/// <returns>The project list.</returns>
-		private IEnumerable<SelectListItem> GetProjectSelectList(List<CompleteProject> projects, int customerSelected, int projectSelected)
+		private static List<SelectListItem> GetProjectSelectList(List<CompleteProject> projects, int customerSelected, int projectSelected)
 		{
 			var pSelectList = new List<SelectListItem>();
 
@@ -203,16 +187,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Disabled = false
 				});
 
-				List<CompleteProject> projectData = projects.Where(cpi => cpi.owningCustomer.CustomerId == customerSelected).ToList();
-				foreach (var project in projectData)
+				var projectData = projects.Where(cpi => cpi.owningCustomer.CustomerId == customerSelected).ToList();
+				pSelectList.AddRange(projectData.Select(project => new SelectListItem
 				{
-					pSelectList.Add(new SelectListItem
-					{
-						Value = project.ProjectId.ToString(),
-						Text = project.ProjectName,
-						Selected = project.ProjectId == projectSelected
-					});
-				}
+					Value = project.ProjectId.ToString(),
+					Text = project.ProjectName,
+					Selected = project.ProjectId == projectSelected
+				}));
 			}
 
 			return pSelectList;

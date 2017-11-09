@@ -360,9 +360,9 @@
     <Compile Include="Controllers\Auth\CreateOrgAction.cs" />
     <Compile Include="Controllers\Auth\EditMemberAction.cs" />
     <Compile Include="Controllers\Auth\EditProfileAction.cs" />
-    <Compile Include="Controllers\Auth\Permissions\ManageOrgPermissionsAction.cs" />
-    <Compile Include="Controllers\Auth\Permissions\ManageSubPermissionsAction.cs" />
-    <Compile Include="Controllers\Billing\EditSubscriptionAction.cs" />
+    <Compile Include="Controllers\Auth\ManageOrgPermissionsAction.cs" />
+    <Compile Include="Controllers\Auth\ManageSubPermissionsAction.cs" />
+    <Compile Include="Controllers\Auth\EditSubscriptionAction.cs" />
     <Compile Include="Controllers\Auth\ForgotPasswordAction.cs" />
     <Compile Include="Controllers\Auth\ImportAction.cs" />
     <Compile Include="Controllers\Auth\IndexAction.cs" />
@@ -376,7 +376,7 @@
     <Compile Include="Controllers\Auth\RejectInvitationAction.cs" />
     <Compile Include="Controllers\Auth\ResendInviteAction.cs" />
     <Compile Include="Controllers\Auth\ResetPasswordAction.cs" />
-    <Compile Include="Controllers\Billing\SkusAction.cs" />
+    <Compile Include="Controllers\Auth\SkusAction.cs" />
     <Compile Include="Controllers\Auth\TemplateAction.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ErrorPageController.cs" />
@@ -393,8 +393,8 @@
     <Compile Include="Controllers\Auth\RemoveInvitationAction.cs" />
     <Compile Include="Controllers\Auth\ManagePermissionsAction.cs" />
     <Compile Include="Controllers\Auth\RemoveMemberAction.cs" />
-    <Compile Include="Controllers\Billing\SubscribeAction.cs" />
-    <Compile Include="Controllers\Billing\UnsubscribeAction.cs" />
+    <Compile Include="Controllers\Auth\SubscribeAction.cs" />
+    <Compile Include="Controllers\Auth\UnsubscribeAction.cs" />
     <Compile Include="Controllers\Shared\FooterPartialAction.cs" />
     <Compile Include="Controllers\Shared\LogOnPartialAction.cs" />
     <Compile Include="Controllers\Shared\SharedController.cs" />
@@ -463,6 +463,7 @@
     <Content Include="Content\bootstrap\css\bootstrap.min.css" />
     <Content Include="Content\css\bootstrap-select.min.css" />
     <Content Include="Content\css\margin-fixes.css" />
+    <Content Include="Content\css\daterangepicker.css" />
     <Content Include="Scripts\bootstrap\bootstrap.min.js" />
     <Content Include="Content\css\ExpenseTracker.css" />
     <Content Include="Content\css\ExpenseTracker.min.css">
@@ -613,6 +614,7 @@
     <None Include="Resources\Files\TimeEntryImportTemplate.xlsx" />
     <None Include="Resources\Files\UserImportTemplate.xlsx" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
+    <Content Include="Scripts\daterangepicker.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.js" />

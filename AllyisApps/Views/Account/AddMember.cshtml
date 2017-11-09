@@ -35,7 +35,7 @@
 					</div>
 				</div>
 				<div class="col-md-6 sm-control-width" style="margin-top: 30px;">
-					<div class="form-group">
+					<div class="form-group row">
 						<div class="form-group col-md-6">
 							@Html.ReqLabelFor(x => x.OrgRole, Model.OrganizationName + " Role")
 						</div>
@@ -54,9 +54,9 @@
 								Text = role.Text
 							});
 						}
-						@Html.HiddenFor(x => x.SubscriptionRoles[i].ProductId);
+						@Html.HiddenFor(x => x.SubscriptionRoles[i].SubscriptionId);
 						@Html.HiddenFor(x => x.SubscriptionRoles[i].SubscriptionName);
-						<div class="form-group">
+						<div class="form-group row">
 							<div class="form-group col-md-6">
 								@Html.ReqLabelFor(x => Model.SubscriptionRoles[i], Model.SubscriptionRoles[i].SubscriptionName + " Role")
 							</div>

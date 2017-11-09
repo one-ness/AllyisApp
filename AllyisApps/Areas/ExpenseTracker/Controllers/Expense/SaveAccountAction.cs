@@ -26,12 +26,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		public async Task<ActionResult> SaveAccount(int subscriptionId, CreateAccountViewModel model)
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Accounts, subscriptionId);
-			var subInfoTask = AppService.GetSubscription(subscriptionId);
+			
 			var canDisableTask = CanDisableAccount(subscriptionId, model.AccountId, model.SelectedStatus);
 
-			await Task.WhenAll(new Task[] { subInfoTask, canDisableTask });
+			await Task.WhenAll(new Task[] { canDisableTask });
 
-			var subInfo = subInfoTask.Result;
+			var subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			var canDisable = canDisableTask.Result;
 
 			bool success = false;
@@ -96,7 +96,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		public async Task<bool> CheckAccountParent(int subscriptionId, Account childAcc)
 		{
 			bool results = true;
-			var subInfo = await AppService.GetSubscription(subscriptionId);
+			var subInfo =  AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			var childId = childAcc.AccountId;
 
 			var currentAccount = childAcc;
@@ -127,7 +127,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		public async Task<bool> CanDisableAccount(int subId, int accId, string selectedStatus)
 		{
 			var results = true;
-			var subInfo = await AppService.GetSubscription(subId);
+			var subInfo = AppService.UserContext.SubscriptionsAndRoles[subId];
 			var accResults = await AppService.GetAccounts(subInfo.OrganizationId);
 			var account = accResults.Where(x => x.AccountId == accId).FirstOrDefault();
 

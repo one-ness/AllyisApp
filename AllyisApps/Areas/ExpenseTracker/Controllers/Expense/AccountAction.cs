@@ -24,7 +24,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			await SetNavData(subscriptionId);
 
 			AccountPageViewModel model = new AccountPageViewModel();
-			var subInfo = await AppService.GetSubscription(subscriptionId);
+			var subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			var accounts = await AppService.GetAccounts(subInfo.OrganizationId);
 			var results = accounts.Select(x =>
 				new AccountManagementViewModel

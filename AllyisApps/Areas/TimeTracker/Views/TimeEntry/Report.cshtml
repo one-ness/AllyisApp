@@ -1,4 +1,6 @@
-﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+﻿@using System.Globalization
+@using AllyisApps.Utilities
+@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 @using AllyisApps.ViewModels.TimeTracker.Project;
 
 @model ReportViewModel
@@ -15,111 +17,102 @@
 }
 
 <div class="row report-wrap">
-	<div class="col-md-12">
-		<div class="row">
-			@using (Html.BeginForm(ActionConstants.ViewReport, ControllerConstants.TimeEntry, FormMethod.Post, htmlAttributes: new { @id = "reportForm" }))
+	<div class="col-xs-12">
+		@using (Html.BeginForm(ActionConstants.ViewReport, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "row", id = "reportForm" }))
+		{
+			@Html.Hidden("OrganizationId", Model.OrganizationId)
+			@Html.HiddenFor(m => m.SubscriptionId)
+			<!--Get users By subscriptionUser-->
+			<!--Default selection: current user-->if (Model.CanManage)// was previously: (Permissions.Can(ProductAction.TimeTrackerCreateReportOthers, Model.OrganizationId, DB Helper.Instance.GetProductIDByName("TimeTracker")))
 			{
-				@Html.Hidden("OrganizationId", Model.OrganizationId)
-				@Html.HiddenFor(m => m.SubscriptionId)
-                <!--Get users By subscriptionUser-->
-                <!--Default selection: current user-->if (Model.CanManage)// was previously: (Permissions.Can(ProductAction.TimeTrackerCreateReportOthers, Model.OrganizationId, DB Helper.Instance.GetProductIDByName("TimeTracker")))
-				{
-					<div class="list-left slim">
-						<label for="UserSelect">@Strings.Employees</label>
-						@Html.DropDownList("UserSelect",
-											  Model.UserView,
-											  htmlAttributes: new { @class = "form-control", multiple = "multiple", size = "9" })
+				<div class="form-group col-xs-12 col-md-3">
+					<label for="UserSelect">@Strings.Employees</label>
+					@Html.DropDownList("UserSelect",
+											Model.UserView,
+											new { @class = "form-control", multiple = "multiple", size = "9" })
+				</div>
+			}
+			else
+			{
+				<div class="form-group col-xs-12 col-md-3" style="display: none;">
+					<label for="UserSelect">@Strings.Employees</label>
+					@Html.DropDownList("UserSelect",
+											Model.UserView,
+											new { @class = "form-control", /*disabled = "disabled",*/ multiple = "multiple", size = "9", style = "display: none;" })
+				</div>
+			}
+			<div class="col-xs-12 col-md-9">
+				<div class="row">
+					<div class="form-group col-md-6 col-lg-6">
+						<!--Get Customers by OrganizationId-->
+						<label for="CustomerSelect">@Strings.Customers</label>
+						@Html.DropDownList("CustomerSelect",
+											Model.CustomerView,
+											new { @class = "form-control", id = "ddl-customers" })
 					</div>
-				}
-				else
-				{
-					<div class="list-left slim" style="display: none;">
-						<label for="UserSelect">@Strings.Employees</label>
-						@Html.DropDownList("UserSelect",
-											  Model.UserView,
-											  htmlAttributes: new { @class = "form-control", /*disabled = "disabled",*/ multiple = "multiple", size = "9", style = "display: none;" })
-					</div>
-				}
-				<div class="options-right">
-					<div class="row">
-						<div class="form-group col-md-6 col-lg-6">
-							<!--Get Customers by OrganizationId-->
-							<label for="CustomerSelect">@Strings.Customers</label>
-							@Html.DropDownList("CustomerSelect",
-											  Model.CustomerView,
-											  htmlAttributes: new { @class = "form-control", @style = "width:85%", @id = "ddl-customers" })
-						</div>
 
-						<!-- A holder for all the projects, to draw from for populating the real selection list -->
-						<select id="allprojects" style="display: none;">
-							@foreach (CompleteProjectViewModel proj in Model.Projects)
-							{
-								<option value="@proj.ProjectId" data-cust="@proj.CustomerId" class="projectSelectOption">@proj.ProjectName</option>
-							}
-						</select>
-
-						@if (Model.Selection.CustomerId == 0)
+					<!-- A holder for all the projects, to draw from for populating the real selection list -->
+					<select id="allprojects" style="display: none;">
+						@foreach (CompleteProjectViewModel proj in Model.Projects)
 						{
-							<div class="form-group col-md-6 col-lg-6">
-								<label for="ddl-projects">@Strings.Projects</label>
-								<!--Get Projects by OrgID-->
-								@Html.DropDownList("ProjectSelect",
-											  Model.ProjectView,
-											  htmlAttributes: new { @class = "form-control", @style = "width:85%", @id = "ddl-projects", @disabled = "disabled" })
-							</div>
+							<option value="@proj.ProjectId" data-cust="@proj.CustomerId" class="projectSelectOption">@proj.ProjectName</option>
 						}
-						else
-						{
-							<div class="form-group col-md-6 col-lg-6">
-								<label for="ddl-projects">@Strings.Projects</label>
-								@*@Html.DropDownList("ProjectSelect",
-									Model.ProjectView,
-									htmlAttributes: new { @class = "form-control", @id = "ddl-projects" })*@
-								<select name="ProjectSelect" class="form-control" id="ddl-projects">
-									@foreach (CompleteProjectViewModel project in Model.Projects)
+					</select>
+
+					@if (Model.Selection.CustomerId == 0)
+					{
+						<div class="form-group col-xs-12 col-md-6">
+							<label for="ddl-projects">@Strings.Projects</label>
+							<!--Get Projects by OrgID-->
+							@Html.DropDownList("ProjectSelect",
+											Model.ProjectView,
+											new { @class = "form-control", id = "ddl-projects", disabled = "disabled" })
+						</div>
+					}
+					else
+					{
+						<div class="form-group col-xs-12 col-md-6">
+							<label for="ddl-projects">@Strings.Projects</label>
+							<select name="ProjectSelect" class="form-control" id="ddl-projects">
+								@foreach (CompleteProjectViewModel project in Model.Projects)
+								{
+									if (Model.Selection.CustomerId == project.CustomerId)
 									{
-										if (Model.Selection.CustomerId == project.CustomerId)
-										{
-											string selected = Model.Selection.ProjectId == project.ProjectId ? "selected" : "";
-											<option value="@project.ProjectId" data-cust="@project.CustomerId" class="projectSelectOption" @selected>@project.ProjectName</option>
-										}
+										string selected = Model.Selection.ProjectId == project.ProjectId ? "selected" : "";
+										<option value="@project.ProjectId" data-cust="@project.CustomerId" class="projectSelectOption" @selected>@project.ProjectName</option>
 									}
-								</select>
-							</div>
-						}
-					</div>
-					<div class="row">
-						<div class="form-group col-md-6 col-lg-6">
-							<label style="margin-right:200px">@Strings.StartDate</label>
-							<input type="hidden" id="DateRangeStart" name="DateRangeStart" value="@Model.Selection.StartDate" />
-							<input type="text" class="form-control" style="width: 50%; display: inline-block;" id="datePickerStart" />
-							<span class="fa fa-fw fa-calendar fa-lg" style="margin-top:10px;" id="datePickerStartButton" title="Choose start date"></span>
+								}
+							</select>
 						</div>
-						<div class="form-group col-md-6 col-lg-6">
-							<label style="margin-right:200px">@Strings.EndDate</label>
-							<input type="hidden" id="DateRangeEnd" name="DateRangeEnd" value="@Model.Selection.EndDate" />
-							<input type="text" class="form-control" style="width: 50%; display: inline-block;" id="datePickerEnd" />
-							<span class="fa fa-fw fa-calendar fa-lg" style="margin-top:10px;" id="datePickerEndButton" title="Choose end date"></span>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-12">
-							@Html.Hidden("ShowExport", Model.ShowExport)
-							@if (Model.ShowExport)
-							{
-								<div>
-									<input class="btn btn-primary pull-left" type="submit" name="viewDataButton" value=@Strings.Export title="Export Excel Time Tracker entries" />
-								</div>
-							}
-							<div>
-								<input class="btn btn-primary pull-left" type="submit" name="viewDataButton" style="margin-left: 15px;" value=@Strings.Preview title="Preview Excel Time Tracker entries" />
-							</div>
+					}
+					
+					<div class="form-group col-xs-12 col-sm-6">
+						<label>Date Range:</label>
+						<input type="hidden" id="DateRangeStart" name="DateRangeStart" value="@Model.Selection.StartDate" />
+						<input type="hidden" id="DateRangeEnd" name="DateRangeEnd" value="@Model.Selection.EndDate" />
+						<div id="selection-range" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px; width: 100%;">
+							<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+							<span></span>
 						</div>
 					</div>
 				</div>
-				@Html.Hidden("PageNum", Model.PreviewPageNum)
-			}
-		</div>
+				<div class="row">
+					<div class="col-xs-12">
+						@Html.Hidden("ShowExport", Model.ShowExport)
+						@if (Model.ShowExport)
+						{
+							<div>
+								<input class="btn btn-primary pull-left" type="submit" name="viewDataButton" value=@Strings.Export title="Export Excel Time Tracker entries" />
+							</div>
+						}
+						<div>
+							<input class="btn btn-primary pull-left" type="submit" name="viewDataButton" style="margin-left: 15px;" value=@Strings.Preview title="Preview Excel Time Tracker entries" />
+						</div>
+					</div>
+				</div>
+			</div>
+			@Html.Hidden("PageNum", Model.PreviewPageNum)
+		}
 		<br>
 	</div>
 
@@ -188,7 +181,7 @@
 
 @section css {
 	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
-	<link rel="stylesheet" type="text/css" href="~/Content/jquery.comiseo.daterangepicker.css" />
+	<link rel="stylesheet" type="text/css" href="~/Content/daterangepicker" />
 }
 
 @section scripts
@@ -196,14 +189,13 @@
 	@*Date range picker dependencies:*@
 	@Scripts.Render("~/bundles/jqueryui")
 	@Scripts.Render("~/bundles/moment")
+	@Scripts.Render("~/bundles/DateRangePicker")
 
 	<script type="text/javascript">
-        var model_startofweek = @Model.StartOfWeek;
-        var model_startdate = @Model.Selection.StartDate.Value;
-        var model_enddate = @Model.Selection.EndDate.Value;
+		var model_startdate = @(Model.Selection.StartDate != null ? Model.Selection.StartDate.Value.ToJavaScriptMilliseconds() : DateTime.Now.AddDays(-14).ToJavaScriptMilliseconds());
+		var model_enddate = @(Model.Selection.EndDate != null ? Model.Selection.EndDate.Value.ToJavaScriptMilliseconds() : DateTime.Now.ToJavaScriptMilliseconds());
 	</script>
 	<script src="~/Scripts/allyis-pages-with-filter.js" type="text/javascript"></script>
-	@Scripts.Render("~/bundles/daterangepicker")
 	@Scripts.Render("~/bundles/TTTimeEntryReport")
 	<script type="text/javascript">
 		pwf.setPageLimit(15);

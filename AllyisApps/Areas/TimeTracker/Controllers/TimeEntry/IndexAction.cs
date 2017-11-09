@@ -14,9 +14,9 @@ using AllyisApps.Lib;
 using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
-using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.TimeTracker;
+using AllyisApps.Utilities;
 using AllyisApps.ViewModels.TimeTracker.Project;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using static AllyisApps.ViewModels.TimeTracker.TimeEntry.TimeEntryOverDateRangeViewModel;
@@ -39,10 +39,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public async Task<ActionResult> Index(int subscriptionId, int userId, int? startDate = null, int? endDate = null)
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
-
+			var sub = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			int productRoleId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductRoleId;
-			Subscription getSub = await AppService.GetSubscription(subscriptionId);
-			int startOfWeek = (await AppService.GetTimeEntryIndexInfo(getSub.OrganizationId, null, null, userId)).Item1.StartOfWeek;
+
+			int startOfWeek = (await AppService.GetTimeEntryIndexInfo(sub.OrganizationId, null, null, userId)).Item1.StartOfWeek;
 			bool isManager = productRoleId == (int)TimeTrackerRole.Manager;
 
 			ViewBag.GetDateTimeFromDays = new Func<int?, DateTime?>(Utility.GetNullableDateTimeFromDays);
@@ -52,10 +52,22 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(startOfWeek));
 			ViewBag.CanManage = isManager;
 
+			
+			if (!startDate.HasValue)
+			{
+				startDate = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, startOfWeek));
+
+			}
+			if (!endDate.HasValue)
+			{
+				endDate = Utility.GetDaysFromDateTime(SetEndingDate(startOfWeek));
+			}
+
+
 			TimeEntryOverDateRangeViewModel model = await ConstructTimeEntryOverDataRangeViewModel(
-				getSub.OrganizationId,
+				sub.OrganizationId,
 				subscriptionId,
-				getSub.SubscriptionName,
+				sub.SubscriptionName,
 				userId,
 				isManager,
 				startDate,
@@ -76,9 +88,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
 
 			int userId = AppService.UserContext.UserId;
-			int productRoleId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductRoleId;
-			Subscription getSub = await AppService.GetSubscription(subscriptionId);
-			int startOfWeek = (await AppService.GetTimeEntryIndexInfo(getSub.OrganizationId, null, null, userId)).Item1.StartOfWeek;
+			var sub = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+			int productRoleId = sub.ProductRoleId;
+
+			int startOfWeek = (await AppService.GetTimeEntryIndexInfo(sub.OrganizationId, null, null, userId)).Item1.StartOfWeek;
 			bool isManager = productRoleId == (int)TimeTrackerRole.Manager;
 
 			ViewBag.GetDateTimeFromDays = new Func<int?, DateTime?>(Utility.GetNullableDateTimeFromDays);
@@ -88,10 +101,21 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(startOfWeek));
 			ViewBag.CanManage = isManager;
 
+		
+			if (!startDate.HasValue)
+			{
+				startDate = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, startOfWeek));
+
+			}
+			if (!endDate.HasValue)
+			{
+				endDate = Utility.GetDaysFromDateTime(SetEndingDate(startOfWeek));
+			}
+
 			TimeEntryOverDateRangeViewModel model = await ConstructTimeEntryOverDataRangeViewModel(
-				getSub.OrganizationId,
+				sub.OrganizationId,
 				subscriptionId,
-				getSub.SubscriptionName,
+				sub.SubscriptionName,
 				userId,
 				isManager,
 				startDate,
@@ -107,9 +131,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="startDate">The start date.</param>
 		/// <param name="endDate">The end date.</param>
 		/// <returns>A redirect to the index action.</returns>
-		public RedirectToRouteResult TimeTrackerDatePickerRedirect(int subscriptionId, int startDate, int endDate)
+		public RedirectToRouteResult TimeTrackerDatePickerRedirect(int subscriptionId, DateTime startDate, DateTime endDate)
 		{
-			return RedirectToAction("IndexNoUserId", new { subscriptionId, startDate, endDate });
+			int start = Utility.GetDaysFromDateTime(startDate);
+			int end = Utility.GetDaysFromDateTime(endDate);
+			return RedirectToAction("IndexNoUserId", new { subscriptionId, startDate = start, endDate = end });
 		}
 
 		/// <summary>
@@ -138,9 +164,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			var infos = await AppService.GetTimeEntryIndexInfo(orgId, startingDateTime, endingDateTime, userId);
+			PayPeriodRanges payRanges = await AppService.GetPayPeriodRanges(orgId);
 			int startOfWeek = infos.Item1.StartOfWeek;
-			DateTime startDate = AppService.SetStartingDate(startingDateTime, startOfWeek);
-			DateTime endDate = endingDateTime ?? SetEndingDate(startOfWeek);
+			DateTime startDate = startingDateTime != null ? AppService.SetStartingDate(startingDateTime, startOfWeek) : payRanges.Current.StartDate;
+			DateTime endDate = endingDateTime ?? payRanges.Current.EndDate;
 
 			// Get all of the projects and initialize their total hours to 0.
 			IList<CompleteProject> allProjects = infos.Item4; // Must also grab inactive projects, or the app will crash if a user has an entry on a project he is no longer a part of
@@ -171,10 +198,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			var result = new TimeEntryOverDateRangeViewModel
 			{
+				StartDateint = Utility.GetDaysFromDateTime(startDate),
+				EndDateint = Utility.GetDaysFromDateTime(endDate),
 				EntryRange = new TimeEntryRangeForUserViewModel
 				{
-					StartDate = Utility.GetDaysFromDateTime(startDate),
-					EndDate = Utility.GetDaysFromDateTime(endDate),
+					StartDate = startDate,
+					EndDate = endDate,
+					PayPeriodRanges = payRanges,
 					Entries = new List<EditTimeEntryViewModel>(),
 					UserId = userId,
 					SubscriptionId = subId

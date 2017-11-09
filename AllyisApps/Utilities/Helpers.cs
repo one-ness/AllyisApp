@@ -108,6 +108,16 @@ namespace AllyisApps.Utilities
 				? source
 				: source.Remove(place, find.Length).Insert(place, replace);
 		}
+
+		/// <summary>
+		/// Converts a c# DateTime object to js milliseconds, which can be used to initialize a js date or moment date object.
+		/// </summary>
+		/// <param name="dt">The datetime to convert</param>
+		/// <returns></returns>
+		public static long ToJavaScriptMilliseconds(this DateTime dt)
+		{
+			return (dt.ToUniversalTime().Ticks - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).Ticks) / 10000;
+		}
 	}
 
 	/// <summary>
