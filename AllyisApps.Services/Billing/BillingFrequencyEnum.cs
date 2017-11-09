@@ -8,9 +8,9 @@ namespace AllyisApps.Services.Billing
 	public enum BillingFrequencyEnum : byte
 	{
 		Monthly = 1,
-		Quarterly = 3,
+		Quarterly = 2,
 		TriAnnual = 4,
-		SemiAnnual = 6,
-		Annual = 12,
+		SemiAnnual = 8,
+		Annual = 16,
 	}
 }
