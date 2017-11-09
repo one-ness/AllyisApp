@@ -5,12 +5,10 @@
 @model EditTimeEntryViewModel
 
 @{
-	bool create = Model.ProjectId < 0;
-	const string form = "TimeEntryCURD";
 	//string createUrl = Url.Action(ActionConstants.CreateTimeEntryJson);
 	//string editUrl = Url.Action(ActionConstants.EditTimeEntryJson);
 	//string submitFunction = "ProjectId.value=ProjectIdDdl.value;PayClassId.value=PayClassNameDdl.value;return ajaxEditOrCreate(this, \"" + createUrl + "\", \"" + editUrl + "\")";
-	string extrastyle = create ? "create" : string.Empty;
+	string extrastyle = Model.ProjectId < 0 ? "create" : string.Empty;
 	string hiddensample = Model.Hidden ? "hidden-sample" : string.Empty;
 	string approvalClass = Model.ModSinceApproval ? "pending" :
 					  Model.ApprovalState == (int)ApprovalState.NotApproved ? "rejected" :
@@ -36,7 +34,7 @@
 		});
 }
 <div class="inline-form-anim-wrap @(hiddensample)">
-	@using (Html.BeginForm(form, ControllerConstants.TimeEntry, FormMethod.Get, new { @class = string.Format("very-inline-form TimeEntryForm edit {0} {1}", extrastyle, approvalClass) }))
+	@using (Html.BeginForm(ActionConstants.TimeEntryCURD, ControllerConstants.TimeEntry, FormMethod.Get, new { @class = string.Format("very-inline-form TimeEntryForm edit {0} {1}", extrastyle, approvalClass) }))
 	{
 		@Html.Hidden("CanManage", (bool)ViewBag.CanManage)
 		@Html.HiddenFor(m => m.IsCreated).RemoveIdAttribute()
@@ -89,10 +87,9 @@
 			@(
 				//? Html.TextBox("BeforeLockDateDesc", "Description", new {@class = "ovrd-form-control form-control", @style = "width: 100%", @onkeypress = "changeOccur(this)", @onchange = "changeOccur(this)", @placeholder = Strings.Description }).RemoveIdAttribute()
 				 Html.TextBoxDisabledFor(m => Model.Description, Model.IsLocked, new {@class = "ovrd-form-control form-control stretch", @onkeypress = "changeOccur(this)", @onchange = "changeOccur(this)", @placeholder = Strings.Description}).RemoveIdAttribute())
-		</div>				
-		if (Model.IsLocked) {<i class="glyphicon glyphicon-lock" style="padding-top: 9px; padding-left: 12px" title="This date is locked"></i>}
-		if (!Model.IsLocked)
-		{
+		</div>
+		if (Model.IsLocked) {
+			<i class="glyphicon glyphicon-lock" style="padding-top: 9px; padding-left: 12px" title="This date is locked"></i>
 			<div class="button-anim-wrap btn-group group right">
 				<div>
 					<button 

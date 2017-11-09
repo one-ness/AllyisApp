@@ -21,7 +21,7 @@ BEGIN
 
 	IF EXISTS (
 		SELECT * FROM [Crm].[Customer] WITH (NOLOCK)
-		WHERE [CustomerOrgId] = @customerOrgId
+		WHERE [CustomerOrgId] = @customerOrgId AND [OrganizationId] = @organizationId
 	)
 	BEGIN
 		-- CustomerOrgId is not unique
