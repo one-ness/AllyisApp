@@ -40,6 +40,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
 			var sub = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 
+			//redirect back to self with non-null default start/end dates so that we can get the desired route url
 			if (startDate == null || endDate == null)
 			{
 				PayPeriodRanges payPeriodRanges = await AppService.GetPayPeriodRanges(sub.OrganizationId);
@@ -83,7 +84,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			int start = Utility.GetDaysFromDateTime(startDate);
 			int end = Utility.GetDaysFromDateTime(endDate);
-			return RedirectToAction("IndexNoUserId", new { subscriptionId, startDate = start, endDate = end });
+			return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry, new { subscriptionId, startDate = start, endDate = end });
 		}
 
 		/// <summary>
