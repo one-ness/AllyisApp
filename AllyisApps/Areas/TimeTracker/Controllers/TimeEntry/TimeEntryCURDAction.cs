@@ -27,7 +27,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			//var list = ConvertToEditTimeEntry(items);
 
 
-			foreach (var entry in items.Entries.OrderBy(item => item.Date))
+			foreach (EditTimeEntryViewModel entry in items.Entries.OrderBy(item => item.Date))
 			{
 
 				JsonResult res = null;
@@ -37,27 +37,27 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					{
 						res = (JsonResult)await DeleteTimeEntryJson(entry);
 					}
-					else
+					else if (entry.IsEdited)
 					{
-						if (entry.IsEdited)
-						{
-							res = (JsonResult)await EditTimeEntryJson(entry);
-						}
+						res = (JsonResult)await EditTimeEntryJson(entry);
 					}
 				}
-				else
+				else if (entry.IsCreated && !entry.IsDeleted)
 				{
-					if (entry.IsCreated && !entry.IsDeleted)
-					{
-						res = (JsonResult)await CreateTimeEntryJson(entry);
-					}
+					res = (JsonResult)await CreateTimeEntryJson(entry);
 				}
-
 			}
-			
-						
-			return RedirectToAction(ActionConstants.IndexNoUserId, new { subscriptionId = items.SubscriptionId, startDate = items.StartingDate, endDate = items.EndingDate});
 
+			return RedirectToRoute(
+				RouteNameConstants.TimeEntryIndexUserTimeSheet,
+				new
+				{
+					controller = ControllerConstants.TimeEntry,
+					action = ActionConstants.Index,
+					subscriptionId = items.SubscriptionId,
+					startDate = items.StartingDate,
+					endDate = items.EndingDate
+				});
 		}
 	}
 
