@@ -238,7 +238,11 @@ a {
 
 .sidebar-offcanvas {
 	padding: 0 15px 0 10px;
+	
 }
+	.sidebar-offcanvas .panel{
+		margin-bottom:10px;
+	}
 
 .btn-sharp {
 	display: inline-block;
@@ -285,9 +289,12 @@ a {
 		overflow: hidden;
 	}
 
-.timesheet-grouping .very-inline-form {
-	border-left: 3px solid transparent;
+.timesheet-grouping{
+	margin-bottom:10px;
 }
+	.timesheet-grouping .very-inline-form {
+		border-left: 3px solid transparent;
+	}
 
 .very-inline-form {
 	-webkit-transition: opacity 0.5s ease;
@@ -477,3 +484,15 @@ a {
 /*
 	margin-fixes
 */
+#resultPartialForm .panel{
+	margin-bottom:10px;
+}
+
+.report-wrap .panel, .report-wrap .form-group {
+	margin-bottom: 10px;
+}
+
+.settings-margin .panel, .settings-margin .form-group, .settings-margin .table{
+	margin-bottom: 10px;
+}
+	
