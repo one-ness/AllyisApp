@@ -83,7 +83,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else if (customerId != 0)
 			{
-				var projGet = await AppService.GetProjectsByCustomer(customerId);
+				var projGet = await AppService.GetProjectsByCustomerAsync(customerId);
 				IEnumerable<int> projects = projGet.Select(proj => proj.ProjectId).ToList();
 				result.Data = from c in result.Data
 							  where projects.Contains(c.ProjectId)

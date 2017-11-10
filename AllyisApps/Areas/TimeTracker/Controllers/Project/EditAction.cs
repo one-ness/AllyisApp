@@ -60,7 +60,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
 
-				var projIdMatchGet = await AppService.GetAllProjectsForOrganization(orgId);
+				var projIdMatchGet = await AppService.GetAllProjectsForOrganizationAsync(orgId);
 				Services.Project.Project projIdMatch = projIdMatchGet.Where(project => project.ProjectOrgId == model.ProjectOrgId && project.owningCustomer?.CustomerId == model.ParentCustomerId).SingleOrDefault();
 				if (projIdMatch != null && projIdMatch.ProjectId != model.ProjectId)
 				{

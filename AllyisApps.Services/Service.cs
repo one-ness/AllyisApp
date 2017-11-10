@@ -415,7 +415,7 @@ namespace AllyisApps.Services
 			{
 				if (customerId > 0)
 				{
-					var proj = await GetProjectsByCustomer(customerId);
+					var proj = await GetProjectsByCustomerAsync(customerId);
 					data = data.Where(t => proj.Select(p => p.ProjectId).Contains(t.ProjectId));
 				}
 			}

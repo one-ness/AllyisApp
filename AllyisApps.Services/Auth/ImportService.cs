@@ -85,17 +85,17 @@ namespace AllyisApps.Services
 
 			if (customerImports.Any())
 			{
-				result = ImportCustomer(customerImports, orgId, subscriptionId, result).Result;
+				result = await ImportCustomerAsync(customerImports, orgId, subscriptionId, result);
 			}
 
 			if (projectImports.Any())
 			{
-				result = ImportProject(projectImports, orgId, subscriptionId, result).Result;
+				result = await ImportProject(projectImports, orgId, subscriptionId, result);
 			}
 
 			if (userImports.Any())
 			{
-				result = ImportUser(userImports, orgId, subscriptionId, inviteUrl, result).Result;
+				result = await ImportUser(userImports, orgId, subscriptionId, organizationId, inviteUrl, result);
 			}
 
 			if (timeEntryImports.Any())
@@ -106,7 +106,7 @@ namespace AllyisApps.Services
 			return result;
 		}
 
-		private async Task<ImportActionResult> ImportCustomer(List<DataTable> customerImports, int orgId, int subscriptionId, ImportActionResult result = null)
+		private async Task<ImportActionResult> ImportCustomerAsync(List<DataTable> customerImports, int orgId, int subscriptionId, ImportActionResult result = null)
 		{
 			if (result == null)
 			{
@@ -118,7 +118,7 @@ namespace AllyisApps.Services
 			{
 				customersProjects.Add(new Tuple<Customer, List<Project.Project>>(
 					customer,
-					(await GetProjectsByCustomer(customer.CustomerId)).ToList()
+					(await GetProjectsByCustomerAsync(customer.CustomerId)).ToList()
 				));
 			}
 
@@ -139,18 +139,18 @@ namespace AllyisApps.Services
 					}
 				}
 
-                // Non-required customer columns. This is checked ahead of time to eliminate useless column lookups on each row and save a lot of time.
-                bool hasCustomerStreetAddress = table.Columns.Contains(ColumnHeaders.CustomerStreetAddress);
-                bool hasCustomerCity = table.Columns.Contains(ColumnHeaders.CustomerCity);
-                bool hasCustomerCountry = table.Columns.Contains(ColumnHeaders.CustomerCountry);
-                bool hasCustomerState = table.Columns.Contains(ColumnHeaders.CustomerState);
-                bool hasCustomerPostalCode = table.Columns.Contains(ColumnHeaders.CustomerPostalCode);
-                bool hasCustomerEmail = table.Columns.Contains(ColumnHeaders.CustomerEmail);
-                bool hasCustomerPhoneNumber = table.Columns.Contains(ColumnHeaders.CustomerPhoneNumber);
-                bool hasCustomerFaxNumber = table.Columns.Contains(ColumnHeaders.CustomerFaxNumber);
-                bool hasCustomerEin = table.Columns.Contains(ColumnHeaders.CustomerEIN);
-                bool hasNonRequiredCustomerInfo = hasCustomerStreetAddress || hasCustomerCity || hasCustomerCountry || hasCustomerState ||
-                         hasCustomerPostalCode || hasCustomerEmail || hasCustomerPhoneNumber || hasCustomerFaxNumber || hasCustomerEin;
+				// Non-required customer columns. This is checked ahead of time to eliminate useless column lookups on each row and save a lot of time.
+				bool hasCustomerStreetAddress = table.Columns.Contains(ColumnHeaders.CustomerStreetAddress);
+				bool hasCustomerCity = table.Columns.Contains(ColumnHeaders.CustomerCity);
+				bool hasCustomerCountry = table.Columns.Contains(ColumnHeaders.CustomerCountry);
+				bool hasCustomerState = table.Columns.Contains(ColumnHeaders.CustomerState);
+				bool hasCustomerPostalCode = table.Columns.Contains(ColumnHeaders.CustomerPostalCode);
+				bool hasCustomerEmail = table.Columns.Contains(ColumnHeaders.CustomerEmail);
+				bool hasCustomerPhoneNumber = table.Columns.Contains(ColumnHeaders.CustomerPhoneNumber);
+				bool hasCustomerFaxNumber = table.Columns.Contains(ColumnHeaders.CustomerFaxNumber);
+				bool hasCustomerEin = table.Columns.Contains(ColumnHeaders.CustomerEIN);
+				bool hasNonRequiredCustomerInfo = hasCustomerStreetAddress || hasCustomerCity || hasCustomerCountry || hasCustomerState ||
+						 hasCustomerPostalCode || hasCustomerEmail || hasCustomerPhoneNumber || hasCustomerFaxNumber || hasCustomerEin;
 
 
 				// Do we have rows/data to import?
@@ -167,133 +167,135 @@ namespace AllyisApps.Services
 
 					Customer customer = null;
 
-                    // If there is no identifying information for customers, all customer related importing is skipped.
-                    if (hasCustomerName || hasCustomerId)
-                    {
-                        // Find the existing customer using name, or id if name isn't on this sheet.
-                        customer = customersProjects.Select(tup => tup.Item1).FirstOrDefault(c => hasCustomerName ? c.CustomerName.Equals(row[ColumnHeaders.CustomerName].ToString()) : c.CustomerOrgId.Equals(row[ColumnHeaders.CustomerId].ToString()));
-                        if (customer == null)
-                        {
-                            if (canCreateCustomers)
-                            {
-                                // No customer was found, so a new one is created.
-                                Customer newCustomer;
-                                if (customerImportLinks.Count == 0)
-                                {
-                                    // If customerImportLinks is empty, it's because all the information is on this sheet.
-                                    string name = null;
-                                    string custOrgId = null;
-                                    ReadColumn(row, ColumnHeaders.CustomerName, n => name = n);
-                                    ReadColumn(row, ColumnHeaders.CustomerId, n => custOrgId = n);
-                                    if (name == null && custOrgId == null)
-                                    {
-                                        result.CustomerFailures.Add(string.Format("Error importing customer on sheet {0}, row {1}: both {2} and {3} cannot be read.", table.TableName, table.Rows.IndexOf(row) + 2, ColumnHeaders.CustomerName, ColumnHeaders.CustomerId));
-                                        continue;
-                                    }
+					// If there is no identifying information for customers, all customer related importing is skipped.
+					if (hasCustomerName || hasCustomerId)
+					{
+						// Find the existing customer using name, or id if name isn't on this sheet.
+						customer = customersProjects.Select(tup => tup.Item1).FirstOrDefault(c => hasCustomerName ? c.CustomerName.Equals(row[ColumnHeaders.CustomerName].ToString()) : c.CustomerOrgId.Equals(row[ColumnHeaders.CustomerId].ToString()));
+						if (customer == null)
+						{
+							if (canCreateCustomers)
+							{
+								// No customer was found, so a new one is created.
+								Customer newCustomer;
+								if (customerImportLinks.Count == 0)
+								{
+									// If customerImportLinks is empty, it's because all the information is on this sheet.
+									string name = null;
+									string custOrgId = null;
+									ReadColumn(row, ColumnHeaders.CustomerName, n => name = n);
+									ReadColumn(row, ColumnHeaders.CustomerId, n => custOrgId = n);
+									if (name == null && custOrgId == null)
+									{
+										result.CustomerFailures.Add(string.Format("Error importing customer on sheet {0}, row {1}: both {2} and {3} cannot be read.", table.TableName, table.Rows.IndexOf(row) + 2, ColumnHeaders.CustomerName, ColumnHeaders.CustomerId));
+										continue;
+									}
 
-                                    if (name == null || custOrgId == null)
-                                    {
-                                        result.CustomerFailures.Add(string.Format("Could not create customer {0}: no matching {1}.", name == null ? custOrgId : name, name == null ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId));
-                                        continue;
-                                    }
+									if (name == null || custOrgId == null)
+									{
+										result.CustomerFailures.Add(string.Format("Could not create customer {0}: no matching {1}.", name == null ? custOrgId : name, name == null ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId));
+										continue;
+									}
 
-                                    newCustomer = new Customer
-                                    {
-                                        CustomerName = name,
-                                        CustomerOrgId = custOrgId,
-                                        OrganizationId = orgId
-                                    };
-                                }
-                                else
-                                {
-                                    // If customerImportLinks has been set, we have to grab some information from another sheet.
-                                    string knownValue = null;
-                                    string readValue = null;
-                                    ReadColumn(row, hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId, n => knownValue = n);
-                                    if (knownValue == null)
-                                    {
-                                        result.CustomerFailures.Add(string.Format("Error importing customer on sheet {0}, row {1}: {2} cannot be read.", table.TableName, table.Rows.IndexOf(row) + 2, hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId));
-                                        continue;
-                                    }
+									newCustomer = new Customer
+									{
+										CustomerName = name,
+										CustomerOrgId = custOrgId,
+										OrganizationId = orgId
+									};
+								}
+								else
+								{
+									// If customerImportLinks has been set, we have to grab some information from another sheet.
+									string knownValue = null;
+									string readValue = null;
+									ReadColumn(row, hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId, n => knownValue = n);
+									if (knownValue == null)
+									{
+										result.CustomerFailures.Add(string.Format("Error importing customer on sheet {0}, row {1}: {2} cannot be read.", table.TableName, table.Rows.IndexOf(row) + 2, hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId));
+										continue;
+									}
 
-                                    foreach (DataTable link in customerImportLinks)
-                                    {
-                                        try
-                                        {
-                                            readValue = link.Select(string.Format("[{0}] = '{1}'", hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId, knownValue))[0][hasCustomerName ? ColumnHeaders.CustomerId : ColumnHeaders.CustomerName].ToString();
-                                            if (readValue != null) break;
-                                        }
-                                        catch (IndexOutOfRangeException) { }
-                                    }
+									foreach (DataTable link in customerImportLinks)
+									{
+										try
+										{
+											readValue = link.Select(string.Format("[{0}] = '{1}'", hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId, knownValue))[0][hasCustomerName ? ColumnHeaders.CustomerId : ColumnHeaders.CustomerName].ToString();
+											if (readValue != null) break;
+										}
+										catch (IndexOutOfRangeException) { }
+									}
 
-                                    if (readValue == null)
-                                    {
-                                        result.CustomerFailures.Add(string.Format("Could not create customer {0}: no matching {1}.", knownValue, hasCustomerName ? ColumnHeaders.CustomerId : ColumnHeaders.CustomerName));
-                                        continue;
-                                    }
+									if (readValue == null)
+									{
+										result.CustomerFailures.Add(string.Format("Could not create customer {0}: no matching {1}.", knownValue, hasCustomerName ? ColumnHeaders.CustomerId : ColumnHeaders.CustomerName));
+										continue;
+									}
 
-                                    newCustomer = new Customer
-                                    {
-                                        CustomerName = hasCustomerName ? knownValue : readValue,
-                                        CustomerOrgId = hasCustomerName ? readValue : knownValue,
-                                        OrganizationId = orgId
-                                    };
-                                }
+									newCustomer = new Customer
+									{
+										CustomerName = hasCustomerName ? knownValue : readValue,
+										CustomerOrgId = hasCustomerName ? readValue : knownValue,
+										OrganizationId = orgId
+									};
+								}
 
-                                if (newCustomer != null)
-                                {
-                                    int? newCustomerId = await CreateCustomer(newCustomer, subscriptionId);
-									//if (newCustomerId == -1) // Customer exists, but has been deleted
-									//{
-									//	newCustomerId = await UpdateCustomer(newCustomer, subscriptionId);
-									//}
-                                    if (newCustomerId == null)
-                                    {
-                                        result.CustomerFailures.Add(string.Format("Could not create customer {0}: permission failure.", newCustomer.CustomerName));
-                                        continue;
-                                    }
+								if (newCustomer != null)
+								{
+									int? newCustomerId = await CreateCustomerAsync(newCustomer, subscriptionId);
+									if (newCustomerId == -1) // Customer exists, but has been deactivated
+									{
+										List<Customer> inactiveCustomers = GetInactiveProjectsAndCustomersForOrgAndUser(orgId).Item2;
+										int targetId = inactiveCustomers.Where(c => c.CustomerOrgId == newCustomer.CustomerOrgId).FirstOrDefault().CustomerId;
+										ReactivateCustomer(targetId, subscriptionId, orgId);
+									}
+									if (newCustomerId == null)
+									{
+										result.CustomerFailures.Add(string.Format("Could not create customer {0}: permission failure.", newCustomer.CustomerName));
+										continue;
+									}
 
-                                    newCustomer.CustomerId = newCustomerId.Value;
-                                    if (newCustomer.CustomerId == -1)
-                                    {
-                                        result.CustomerFailures.Add(string.Format("Database error while creating customer {0}.", newCustomer.CustomerName));
-                                        continue;
-                                    }
+									newCustomer.CustomerId = newCustomerId.Value;
+									if (newCustomer.CustomerId == -1)
+									{
+										result.CustomerFailures.Add(string.Format("Database error while creating customer {0}.", newCustomer.CustomerName));
+										continue;
+									}
 
-                                    customersProjects.Add(new Tuple<Customer, List<Project.Project>>(
-                                        newCustomer,
-                                        new List<Project.Project>()
-                                    ));
-                                    customer = newCustomer;
-                                    result.CustomersImported += 1;
-                                }
-                            }
-                            else
-                            {
-                                // Not enough information to create customer
-                                result.CustomerFailures.Add(string.Format("Could not create customer {0}: no matching {1}.", row[hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId], hasCustomerName ? ColumnHeaders.CustomerId : ColumnHeaders.CustomerName));
-                            }
-                        }
+									customersProjects.Add(new Tuple<Customer, List<Project.Project>>(
+										newCustomer,
+										new List<Project.Project>()
+									));
+									customer = newCustomer;
+									result.CustomersImported += 1;
+								}
+							}
+							else
+							{
+								// Not enough information to create customer
+								result.CustomerFailures.Add(string.Format("Could not create customer {0}: no matching {1}.", row[hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId], hasCustomerName ? ColumnHeaders.CustomerId : ColumnHeaders.CustomerName));
+							}
+						}
 
-                        // Importing non-required customer data
-                        if (customer != null && hasNonRequiredCustomerInfo)
-                        {
-                            bool updated = false;
+						// Importing non-required customer data
+						if (customer != null && hasNonRequiredCustomerInfo)
+						{
+							bool updated = false;
 
 							if (customer.Address == null) customer.Address = new Services.Lookup.Address();
-                            if (hasCustomerStreetAddress) updated = ReadColumn(row, ColumnHeaders.CustomerStreetAddress, val => customer.Address.Address1 = val) || updated;
-                            if (hasCustomerCity) updated = ReadColumn(row, ColumnHeaders.CustomerCity, val => customer.Address.City = val) || updated;
-                            if (hasCustomerCountry) updated = ReadColumn(row, ColumnHeaders.CustomerCountry, val => customer.Address.CountryName = val) || updated;
-                            if (hasCustomerState) updated = ReadColumn(row, ColumnHeaders.CustomerState, val => customer.Address.StateName = val) || updated;
-                            if (hasCustomerPostalCode) updated = ReadColumn(row, ColumnHeaders.CustomerPostalCode, val => customer.Address.PostalCode = val) || updated;
-                            if (hasCustomerEmail) updated = ReadColumn(row, ColumnHeaders.CustomerEmail, val => customer.ContactEmail = val) || updated;
-                            if (hasCustomerPhoneNumber) updated = ReadColumn(row, ColumnHeaders.CustomerPhoneNumber, val => customer.ContactPhoneNumber = val) || updated;
-                            if (hasCustomerFaxNumber) updated = ReadColumn(row, ColumnHeaders.CustomerFaxNumber, val => customer.FaxNumber = val) || updated;
-                            if (hasCustomerEin) updated = ReadColumn(row, ColumnHeaders.CustomerEIN, val => customer.EIN = val) || updated;
+							if (hasCustomerStreetAddress) updated = ReadColumn(row, ColumnHeaders.CustomerStreetAddress, val => customer.Address.Address1 = val) || updated;
+							if (hasCustomerCity) updated = ReadColumn(row, ColumnHeaders.CustomerCity, val => customer.Address.City = val) || updated;
+							if (hasCustomerCountry) updated = ReadColumn(row, ColumnHeaders.CustomerCountry, val => customer.Address.CountryName = val) || updated;
+							if (hasCustomerState) updated = ReadColumn(row, ColumnHeaders.CustomerState, val => customer.Address.StateName = val) || updated;
+							if (hasCustomerPostalCode) updated = ReadColumn(row, ColumnHeaders.CustomerPostalCode, val => customer.Address.PostalCode = val) || updated;
+							if (hasCustomerEmail) updated = ReadColumn(row, ColumnHeaders.CustomerEmail, val => customer.ContactEmail = val) || updated;
+							if (hasCustomerPhoneNumber) updated = ReadColumn(row, ColumnHeaders.CustomerPhoneNumber, val => customer.ContactPhoneNumber = val) || updated;
+							if (hasCustomerFaxNumber) updated = ReadColumn(row, ColumnHeaders.CustomerFaxNumber, val => customer.FaxNumber = val) || updated;
+							if (hasCustomerEin) updated = ReadColumn(row, ColumnHeaders.CustomerEIN, val => customer.EIN = val) || updated;
 
 							if (updated)
 							{
-								await UpdateCustomer(customer, subscriptionId);
+								await UpdateCustomerAsync(customer, subscriptionId);
 							}
 						}
 					}
@@ -311,7 +313,7 @@ namespace AllyisApps.Services
 			{
 				customersProjects.Add(new Tuple<Customer, List<Project.Project>>(
 					customer,
-					(await GetProjectsByCustomer(customer.CustomerId)).ToList()
+					(await GetProjectsByCustomerAsync(customer.CustomerId)).ToList()
 				));
 			}
 
@@ -639,7 +641,7 @@ namespace AllyisApps.Services
 			return result;
 		}
 
-		private async Task<ImportActionResult> ImportUser(List<DataTable> userImports, int orgId, int subscriptionId, string inviteUrl, ImportActionResult result = null)
+		private async Task<ImportActionResult> ImportUser(List<DataTable> userImports, int orgId, int subscriptionId, int organizationId, string inviteUrl, ImportActionResult result = null)
 		{
 			// Retrieval of existing user data
 			User userGet = await GetUserAsync(UserContext.UserId);
@@ -915,9 +917,15 @@ namespace AllyisApps.Services
 				}
 
 				var customersProjects = new List<Project.Project>();
-				foreach (Customer customer in GetCustomerList(orgId))
+				var customerList = GetCustomerList(orgId);
+				if (customerList.Count() == 0)
 				{
-					customersProjects.AddRange(await GetProjectsByCustomer(customer.CustomerId));
+					result.GeneralFailures.Add($"No customers exist for this organization.");
+					continue;
+				}
+				foreach (Customer customer in customerList)
+				{
+					customersProjects.AddRange(await GetProjectsByCustomerAsync(customer.CustomerId));
 				}
 				bool hasCustomerName = table.Columns.Contains(ColumnHeaders.CustomerName);
 				bool hasCustomerId = table.Columns.Contains(ColumnHeaders.CustomerId);
@@ -933,45 +941,36 @@ namespace AllyisApps.Services
 
 					var project = customersProjects
 						.FirstOrDefault(p => thisRowHasProjectName ? p.ProjectName.Equals(knownValue) : p.ProjectOrgId.Equals(knownValue));
+
+					if (project == null)
+					{
+						result.GeneralFailures.Add("Project Id not recognized.");
+						continue;
+					}
 					
 					List<User> userSubs = new List<User>();
 					string readValue = null;
 					ReadColumn(row, ColumnHeaders.EmployeeId, e => readValue = e);
 					var userTuple = users.FirstOrDefault(tup => tup.Item1.Equals(readValue));
-					User userInOrg = userTuple.Item2;
+					User userInOrg = null;
+					try
+					{
+						userInOrg = userTuple.Item2;
+					}
+					catch (NullReferenceException)
+					{
+						result.GeneralFailures.Add("Employee Id not recognized.");
+						continue;
+					}
 
                     // Double-check that previous adding/finding of project and user didn't fail
-                    if (!canImportProjectUser || project == null || userInOrg == null) continue;
+                    if (!canImportProjectUser || !canImportTimeEntry) continue;
 
-                    // Find existing project user
-                    var proj = await GetProjectsByUserAndOrganization(userInOrg.UserId);
-                    if (proj.All(p => p.ProjectId != project.ProjectId))
-                    {
-                        // If no project user entry exists for this user and project, we create one.
-                        CreateProjectUser(project.ProjectId, userInOrg.UserId);
-                    }
+					// Check for subscription role
+					bool canImportThisEntry = true;
 
-                    // Time Entry Import
-                    if (!canImportTimeEntry) continue;
-
-                    // Check for subscription role
-                    bool canImportThisEntry;
-                    if (userSubs.All(u => u.UserId != userInOrg.UserId))
-                    {
-                        // No existing subscription for this user, so we create one.
-                        await DBHelper.UpdateSubscriptionUserProductRole((int)TimeTrackerRole.User, ttSub.SubscriptionId, userInOrg.UserId);
-                        userSubs.Add(userInOrg);
-                        result.UsersAddedToSubscription += 1;
-                        canImportThisEntry = true; // Successfully created.
-                    }
-                    else
-                    {
-                        // Found existing subscription user.
-                        canImportThisEntry = true;
-                    }
-
-                    // Import entry
-                    if (!canImportThisEntry) continue;
+					// Import entry
+					if (!canImportThisEntry) continue;
 
                     string date = null;
                     string duration = null;

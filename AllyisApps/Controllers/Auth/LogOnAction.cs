@@ -76,7 +76,7 @@ namespace AllyisApps.Controllers.Auth
 
 			// login failed
 			ViewBag.ReturnUrl = returnUrl;
-			await Task.Delay(1);
+
 			return View(model);
 		}
 
