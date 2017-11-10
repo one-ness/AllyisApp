@@ -10,9 +10,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
-using AllyisApps.Lib;
 using AllyisApps.Services;
-using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -30,37 +28,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public async Task<ActionResult> SettingsPayClass(int subscriptionId)
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
-			int organizaionID = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-			var infos = AppService.GetAllSettings(organizaionID);
-			UserContext.SubscriptionAndRole subInfo;
-			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+
 			string subName = await AppService.GetSubscriptionName(subscriptionId);
-			var infoOrg = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
-			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, infoOrg.Item1.StartOfWeek));
-			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(infoOrg.Item1.StartOfWeek));
-			Services.TimeTracker.Setting settings = infos.Item1;
+			int organizaionId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			var payClasses = AppService.GetAllSettings(organizaionId).Item2.AsParallel().Select(p => new SettingsPayClassesViewModel.PayClassViewModel(p.PayClassName, p.PayClassId));
+
 			return View(new SettingsPayClassesViewModel
 			{
-				Settings = new SettingsViewModel.SettingsInfoViewModel
-				{
-					OrganizationId = settings.OrganizationId,
-					OvertimeHours = settings.OvertimeHours,
-					OvertimeMultiplier = settings.OvertimeMultiplier,
-					OvertimePeriod = settings.OvertimePeriod,
-					StartOfWeek = settings.StartOfWeek,
-					Today = DateTime.UtcNow.Date
-				},
-				PayClasses = infos.Item2.AsParallel().Select(payClass => new SettingsViewModel.PayClassViewModel
-				{
-					PayClassId = payClass.PayClassId,
-					PayClassName = payClass.PayClassName
-				}),
-				Holidays = infos.Item3.AsParallel().Select(holiday => new SettingsViewModel.HolidayViewModel
-				{
-					Date = holiday.Date,
-					HolidayId = holiday.HolidayId,
-					HolidayName = holiday.HolidayName
-				}),
+				PayClasses = payClasses,
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subName,
 				UserId = AppService.UserContext.UserId
@@ -103,7 +78,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			return RedirectToAction(ActionConstants.SettingsPayClass, new { subscriptionId = subscriptionId, id = AppService.UserContext.UserId });
+			return RedirectToAction(ActionConstants.SettingsPayClass, new { subscriptionId, id = AppService.UserContext.UserId });
 		}
 	}
 }

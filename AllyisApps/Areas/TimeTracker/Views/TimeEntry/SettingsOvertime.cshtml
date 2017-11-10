@@ -1,5 +1,5 @@
 ﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-@model SettingsViewModel
+@model SettingsOvertimeViewModel
 @{
 	ViewBag.TitleBar = Strings.Settings;
 	ViewBag.Title = Strings.Overtime;
@@ -9,10 +9,7 @@
 	ViewData["UserId"] = Model.UserId;
 	ViewData["SubscriptionId"] = Model.SubscriptionId;
 	ViewData["SubscriptionName"] = Model.SubscriptionName;
-}
-
-@section css {
-	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+	bool overTimeUsed = Model.OvertimeHours > 0;
 }
 
 <div class="slim">
@@ -27,33 +24,32 @@
 				</div>
 				<div id="Overtime" class="panel-body">
 					@using (Html.BeginForm(ActionConstants.UpdateOvertime, ControllerConstants.TimeEntry, FormMethod.Post, new { enctype = "multipart/form-data" }))
-		{
+					{
 						@Html.AntiForgeryToken();
 						@Html.HiddenFor(m => m.SubscriptionId)
 						<div id="OTCheck" style="margin:10px">
-							@{ bool overTimeUsed = Model.Settings.OvertimeHours > 0; }
 							<input type="radio" name="setting" id="setting" value="Yes" onclick="hideOT(false)" @(overTimeUsed ? " checked" : string.Empty) /><text> @Strings.Yes</text>
 							<input type="radio" name="setting" id="setting" value="No" onclick="hideOT(true)" @(!overTimeUsed ? " checked" : string.Empty) /><text> @Strings.No</text>
 						</div>
 						<div id="OTSettings" style="visibility: @(overTimeUsed ? "visible" : "hidden")">
 							<div style="margin:10px">
 								@Strings.After
-								<input type="text" id="hours" name="hours" value='@(Model.Settings.OvertimeHours < 0 ? 40 : Model.Settings.OvertimeHours)' class="form-control" style="width: 45px; text-align: center; display: inline-block;" /> @Strings.HoursPer
-								<select id="period" name="period" class="form-control" value='@Model.Settings.OvertimePeriod' style="display: inline-block; width: 100px;">
-									<option value="Day" @(Model.Settings.OvertimePeriod == "Day" ? " selected=true" : string.Empty)>@Strings.Day</option>
-									<option value="Week" @(Model.Settings.OvertimePeriod == "Week" ? " selected=true" : string.Empty)>@Strings.Week</option>
-									<option value="Month" @(Model.Settings.OvertimePeriod == "Month" ? " selected=true" : string.Empty)>@Strings.Month</option>
+								<input type="text" id="hours" name="hours" value='@(Model.OvertimeHours < 0 ? 40 : Model.OvertimeHours)' class="form-control" style="width: 45px; text-align: center; display: inline-block;" /> @Strings.HoursPer
+								<select id="period" name="period" class="form-control" value='@Model.OvertimePeriod' style="display: inline-block; width: 100px;">
+									<option value="Day" @(Model.OvertimePeriod == "Day" ? " selected=true" : string.Empty)>@Strings.Day</option>
+									<option value="Week" @(Model.OvertimePeriod == "Week" ? " selected=true" : string.Empty)>@Strings.Week</option>
+									<option value="Month" @(Model.OvertimePeriod == "Month" ? " selected=true" : string.Empty)>@Strings.Month</option>
 								</select><br />
 							</div>
 							<div style="margin:10px">
 								@Strings.WithAMultiplierOf
-								<input type="text" id="mult" name="mult" value='@Model.Settings.OvertimeMultiplier.ToString("G10")' class="form-control" style="width: 50px; text-align: center; display: inline-block;" />
+								<input type="text" id="mult" name="mult" value='@Model.OvertimeMultiplier.ToString("G10")' class="form-control" style="width: 50px; text-align: center; display: inline-block;" />
 							</div>
 						</div>
 						<div>
 							<input class="btn btn-primary tt-bottom-right" type="submit" value=@Strings.Save />
 						</div>
-		}
+					}
 				</div>
 			</div>
 		</div>

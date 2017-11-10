@@ -71,7 +71,7 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets DateOfBirth.
 		/// </summary>
-		public DateTime? DateOfBirth { get; set; }
+		public DateTime DateOfBirth { get; set; }
 
 		/// <summary>
 		/// Gets or sets user's Address Id.

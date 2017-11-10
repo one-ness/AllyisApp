@@ -56,7 +56,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> CreateAsync(EditCustomerInfoViewModel model)
+		public async Task<ActionResult> Create(EditCustomerInfoViewModel model)
 		{
 			if (ModelState.IsValid)
 			{

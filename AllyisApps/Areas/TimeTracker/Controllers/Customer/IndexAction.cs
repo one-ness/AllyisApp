@@ -69,7 +69,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="customerId">The customer id.</param>
 		/// <returns>ProjectByCustomer partial view.</returns>
 		[HttpPost]
-		public async Task<ActionResult> PopulateProjectsAsync(int customerId)
+		public async Task<ActionResult> PopulateProjects(int customerId)
 		{
 			var model = new CustomerProjectViewModel();
 			model.CustomerInfo = new CustomerProjectViewModel.CustomerViewModel { CustomerId = customerId };

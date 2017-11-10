@@ -7,7 +7,7 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
-using AllyisApps.Lib;
+using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Auth;
 
@@ -24,21 +24,24 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>Edit profile view.</returns>
 		public async Task<ActionResult> EditProfile()
 		{
-			var model = new EditProfileViewModel();
-			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService);
-			var user = await AppService.GetCurrentUserAsync();
-			model.Address = user.Address?.Address1;
-			model.AddressId = user.Address?.AddressId;
-			model.City = user.Address?.City;
-			model.DateOfBirth = Utility.GetDaysFromDateTime(user.DateOfBirth);
-			model.Email = user.Email;
-			model.FirstName = user.FirstName;
-			model.LastName = user.LastName;
-			model.PhoneNumber = user.PhoneNumber;
-			model.PostalCode = user.Address?.PostalCode;
-			model.SelectedCountryCode = user.Address?.CountryCode;
-			model.SelectedStateId = user.Address?.StateId;
-			model.LocalizedStates = ModelHelper.GetLocalizedStates(AppService, model.SelectedCountryCode);
+			User user = await AppService.GetCurrentUserAsync();
+
+			var model = new EditProfileViewModel
+			{
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
+				Address = user.Address?.Address1,
+				AddressId = user.Address?.AddressId,
+				City = user.Address?.City,
+				DateOfBirth = user.DateOfBirth,
+				Email = user.Email,
+				FirstName = user.FirstName,
+				LastName = user.LastName,
+				PhoneNumber = user.PhoneNumber,
+				PostalCode = user.Address?.PostalCode,
+				SelectedCountryCode = user.Address?.CountryCode,
+				SelectedStateId = user.Address?.StateId,
+				LocalizedStates = ModelHelper.GetLocalizedStates(AppService, user.Address?.CountryCode)
+			};
 
 			return View(model);
 		}
@@ -52,10 +55,6 @@ namespace AllyisApps.Controllers.Auth
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> EditProfile(EditProfileViewModel model)
 		{
-			if (model.DateOfBirth == -1)
-			{
-				ModelState.AddModelError("DateOfBirth", "Please enter your date of birth.");
-			}
 			if (ModelState.IsValid)
 			{
 				await AppService.UpdateCurrentUserProfile(model.DateOfBirth, model.FirstName, model.LastName, model.PhoneNumber, model.AddressId, model.Address, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode);
@@ -64,8 +63,10 @@ namespace AllyisApps.Controllers.Auth
 			}
 
 			// model error
+			User user = await AppService.GetCurrentUserAsync();
 			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService);
 			model.LocalizedStates = ModelHelper.GetLocalizedStates(AppService, model.SelectedCountryCode);
+			model.DateOfBirth = user.DateOfBirth;
 
 			return View(model);
 		}

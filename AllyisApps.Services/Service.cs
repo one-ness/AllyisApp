@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -229,14 +230,27 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="holiday">Holiday.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
-		/// <returns>Returns false if authorization fails.</returns>
-		public async Task<bool> CreateHoliday(Holiday holiday, int subscriptionId)
+		/// <returns>Returns the id of the created holiday.</returns>
+		public async Task<int> CreateHoliday(Holiday holiday, int subscriptionId)
 		{
-			if (holiday == null) throw new ArgumentException("holiday");
 			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
-			DBHelper.CreateHoliday(GetDBEntityFromHoliday(holiday));
-			await Task.Yield();
-			return true;
+
+			if (holiday == null)
+			{
+				throw new ArgumentNullException(nameof(holiday));
+			}
+
+			if (string.IsNullOrEmpty(holiday.HolidayName))
+			{
+				throw new ArgumentNullException(nameof(holiday.HolidayName));
+			}
+
+			if (holiday.Date < SqlDateTime.MinValue || holiday.Date > SqlDateTime.MaxValue)
+			{
+				throw new ArgumentOutOfRangeException(nameof(holiday.Date), $"{nameof(holiday.Date)} must be within a normal date range.");
+			}
+
+			return await DBHelper.CreateHoliday(GetDBEntityFromHoliday(holiday));
 		}
 
 		/// <summary>
