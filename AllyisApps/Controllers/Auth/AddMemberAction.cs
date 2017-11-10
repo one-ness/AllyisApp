@@ -180,7 +180,7 @@ namespace AllyisApps.Controllers.Auth
 			}
 			catch (System.Data.DuplicateNameException)
 			{
-				if (AppService.UserContext.Email.Equals(model.Email, StringComparison.CurrentCultureIgnoreCase){
+				if (AppService.UserContext.Email.Equals(model.Email, StringComparison.CurrentCultureIgnoreCase)){
 					Notifications.Add(new BootstrapAlert(Strings.CannotInviteSelf, Variety.Warning));
 				}
 				else {
