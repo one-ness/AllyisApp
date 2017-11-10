@@ -33,9 +33,11 @@ namespace AllyisApps.Controllers.Auth
 			}
 
 			ViewBag.ReturnUrl = returnUrl;
-			var model = new RegisterViewModel();
-			model.DateOfBirth = DateTime.UtcNow.AddYears(-18).AddDays(-1);
-			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService);
+			var model = new RegisterViewModel
+			{
+				DateOfBirth = DateTime.UtcNow.AddYears(-18).AddDays(-1),
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService)
+			};
 
 			return View(model);
 		}
@@ -67,10 +69,8 @@ namespace AllyisApps.Controllers.Auth
 					Notifications.Add(new BootstrapAlert(Strings.RegistationSucessful, Variety.Success));
 					return RedirectToLocal(returnUrl);
 				}
-				else
-				{
-					Notifications.Add(new BootstrapAlert(Strings.UserAccountAlreadyExists, Variety.Danger));
-				}
+
+				Notifications.Add(new BootstrapAlert(Strings.UserAccountAlreadyExists, Variety.Danger));
 			}
 
 			// error

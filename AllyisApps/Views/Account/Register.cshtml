@@ -1,4 +1,5 @@
-﻿@model RegisterViewModel
+﻿@using System.Globalization
+@model RegisterViewModel
 @{
 	ViewBag.Title = Strings.Register;
 	ViewBag.Subtitle = Strings.RegisterNewAccountDialogue;
@@ -39,9 +40,10 @@
 					</div>
 					<div class="form-group">
 						@Html.ReqLabelFor(m => m.DateOfBirth, Strings.DateOfBirth)
-						@Html.HiddenFor(m => m.DateOfBirth)
-						<input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerBirth" />
-						<span class="fa fa-fw fa-calendar pointer" id="datePickerBirthButton"></span>
+						<div class="input-group" style="width: 100%;">
+							<input type="text" class="form-control" id="DateOfBirth" name="DateOfBirth" value="@(Model.DateOfBirth.ToString("d", CultureInfo.InvariantCulture))">
+							<div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
+						</div>
 						@Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @class = "text-danger" })
 					</div>
 					<div class="field-validation-error" id="capsWarningDiv" style="visibility:hidden; height:0px"><span>@Strings.CapsLock</span></div>
@@ -89,13 +91,15 @@
 
 @section css {
 	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+	<link rel="stylesheet" type="text/css" href="~/Content/DateRangePicker" />
 }
 
 @section Scripts {
-	@Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/jqueryui")
+	@Scripts.Render("~/bundles/moment")
+	@Scripts.Render("~/bundles/daterangepicker")
+
 	<script type="text/javascript">
-		// variables passed to allyis-birthdatepicker.js
-		var model_birthdate = @Model.DateOfBirth;
 		// variables to be passed to allyis-updatestateddl.js
 		var dropdownempty = "@Strings.DropDownEmpty";
 		var ddlCountriesId = "@ViewConstants.DdlCountriesId";
@@ -104,10 +108,22 @@
 		var getStatesUrl = "/Home/GetStates";
 		var selectedCountryCode = "@Model.SelectedCountryCode";
 		var selectedStateId = "@Model.SelectedStateId";
+
+		$('document').ready(function () {
+			$('#DateOfBirth').singleDatePicker();
+		});
+
+		$.fn.singleDatePicker = function() {
+			$(this).on("apply.daterangepicker", function (e, picker) {
+				picker.element.val(picker.startDate.format(picker.locale.format));
+			});
+			return $(this).daterangepicker({
+				singleDatePicker: true,
+				showDropdowns: true,
+				autoUpdateInput: false
+			});
+		};
 	</script>
 	@Scripts.Render("~/bundles/CapsCheck")
 	@Scripts.Render("~/bundles/UpdateStateDDL")
-	@Scripts.Render("~/bundles/jqueryui")
-	@Scripts.Render("~/bundles/moment")
-	<script src="~/Scripts/allyis-birthDatepicker.js"></script>
 }
