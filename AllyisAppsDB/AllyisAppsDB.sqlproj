@@ -413,6 +413,7 @@
     <Build Include="Auth\Stored Procedures\UpdateEmployeeIdAndOrgRole.sql" />
     <Build Include="TimeTracker\Stored Procedures\UpdatePayPeriod.sql" />
     <Build Include="Pjm\Stored Procedures\GetProjectByProjectOrgId.sql" />
+    <None Include="DefaultData\Accounts.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
