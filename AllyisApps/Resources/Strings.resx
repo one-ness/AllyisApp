@@ -1759,4 +1759,7 @@
   <data name="DateOfBirthRequired" xml:space="preserve">
     <value>Date of Birth is a required field.</value>
   </data>
+  <data name="CannotInviteSelf" xml:space="preserve">
+    <value>You cannot invite yourself to your own organizaion</value>
+  </data>
 </root>
