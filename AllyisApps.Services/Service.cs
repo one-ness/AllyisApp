@@ -64,6 +64,18 @@ namespace AllyisApps.Services
 		{
 			#region Validation
 
+			var project = DBHelper.GetProjectById(entry.ProjectId);
+
+			if (!project.IsActive)
+			{
+				throw new ArgumentException("Project is not active.");
+			}
+
+			if (project.StartDate > entry.Date || project.EndDate < entry.Date)
+			{
+				throw new ArgumentException("Entry must be within date range");
+			}
+
 			if (entry == null)
 			{
 				throw new ArgumentNullException(nameof(entry), "Time entry must not be null.");

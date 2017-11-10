@@ -85,7 +85,7 @@ namespace AllyisApps.Services
 
 			if (customerImports.Any())
 			{
-				result = await ImportCustomerAsync(customerImports, orgId, subscriptionId, result);
+				result = await ImportCustomer(customerImports, orgId, subscriptionId, result);
 			}
 
 			if (projectImports.Any())
@@ -106,7 +106,7 @@ namespace AllyisApps.Services
 			return result;
 		}
 
-		private async Task<ImportActionResult> ImportCustomerAsync(List<DataTable> customerImports, int orgId, int subscriptionId, ImportActionResult result = null)
+		private async Task<ImportActionResult> ImportCustomer(List<DataTable> customerImports, int orgId, int subscriptionId, ImportActionResult result = null)
 		{
 			if (result == null)
 			{
@@ -295,7 +295,7 @@ namespace AllyisApps.Services
 
 							if (updated)
 							{
-								await UpdateCustomerAsync(customer, subscriptionId);
+								int? i = await UpdateCustomerAsync(customer, subscriptionId);
 							}
 						}
 					}
@@ -628,6 +628,13 @@ namespace AllyisApps.Services
                             if (hasProjectEndDate) updated = ReadColumn(row, ColumnHeaders.ProjectEndDate, val => endDate = val) || updated;
                             if (startDate != null) project.StartingDate = DateTime.Parse(startDate);
                             if (endDate != null) project.EndingDate = DateTime.Parse(endDate);
+							
+							var c = await GetInactiveProjectsByCustomer(customer.CustomerId);
+							if (c.Any(p => p.ProjectOrgId == project.ProjectOrgId))
+							{
+								ReactivateProject(project.ProjectId, orgId, subscriptionId);
+								updated = true;
+							}
 
 							if (updated)
 							{
@@ -807,7 +814,7 @@ namespace AllyisApps.Services
 
                                 try
                                 {
-                                    await InviteUser(inviteUrl, fields[0].Trim(), names[0], names[1], orgId, UserContext.OrganizationsAndRoles[orgId].OrganizationName, OrganizationRoleEnum.Member, fields[1], "{ \"Time\" : 0, \"Expense\" : 0, \"Staffing\" : 0 }"); //We need to update this with values from the excel sheet.
+                                    await InviteUser(inviteUrl, fields[0].Trim(), names[0], names[1], orgId, UserContext.OrganizationsAndRoles[orgId].OrganizationName, OrganizationRoleEnum.Member, fields[1], ""); //We need to update this with values from the excel sheet.
                                     result.UsersImported += 1;
                                 }
                                 catch (DuplicateNameException)
@@ -1028,25 +1035,32 @@ namespace AllyisApps.Services
                         continue;
                     }
 
-					// All required information is present and valid
-					if (await DBHelper.CreateTimeEntry(new TimeEntryDBEntity
+					try
 					{
-						Date = theDate,
-						Description = description,
-						Duration = theDuration.Value, // value is verified earlier
-						FirstName = userInOrg.FirstName,
-						LastName = userInOrg.LastName,
-						PayClassId = payClass.PayClassId,
-						ProjectId = project.ProjectId,
-						UserId = userInOrg.UserId,
-						TimeEntryStatusId = (int)TimeEntryStatus.Pending //all time entries are submitted as pending and must go through the approval process
-					}) == -1)
-					{
-						result.TimeEntryFailures.Add($"Database error importing time entry on sheet {table.TableName}, row {table.Rows.IndexOf(row) + 2}.");
+						// All required information is present and valid
+						if (await CreateTimeEntry(new TimeEntry
+						{
+							Date = theDate,
+							Description = description,
+							Duration = theDuration.Value, // value is verified earlier
+							FirstName = userInOrg.FirstName,
+							LastName = userInOrg.LastName,
+							PayClassId = payClass.PayClassId,
+							ProjectId = project.ProjectId,
+							UserId = userInOrg.UserId,
+							TimeEntryStatusId = (int)TimeEntryStatus.Pending //all time entries are submitted as pending and must go through the approval process
+						}) == -1)
+						{
+							result.TimeEntryFailures.Add($"Database error importing time entry on sheet {table.TableName}, row {table.Rows.IndexOf(row) + 2}.");
+						}
+						else
+						{
+							result.TimeEntriesImported += 1;
+						}
 					}
-					else
+					catch (ArgumentException)
 					{
-						result.TimeEntriesImported += 1;
+						result.TimeEntryFailures.Add($"Could not import time entry.");
 					}
 				}
 			}
