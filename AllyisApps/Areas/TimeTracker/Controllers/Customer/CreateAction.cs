@@ -57,11 +57,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Create(EditCustomerInfoViewModel model)
+		public async Task<ActionResult> CreateAsync(EditCustomerInfoViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
-				int? customerId = await AppService.CreateCustomer(
+				int? customerId = await AppService.CreateCustomerAsync(
 					new Customer
 					{
 						ContactEmail = model.ContactEmail,

@@ -23,14 +23,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <param name="userId">Project Id.</param>
 		/// <returns>A redirect to the customer index page controller action.</returns>
-		public async Task<ActionResult> Reactivate(int subscriptionId, int userId)
+		public ActionResult Reactivate(int subscriptionId, int userId)
 		{
 			CompleteProject project = AppService.GetProject(userId);
 			if (project != null)
 			{
 				if (!AppService.GetCustomer(project.owningCustomer.CustomerId).IsActive.Value)
 				{
-					await AppService.ReactivateCustomer(project.owningCustomer.CustomerId, subscriptionId, project.OrganizationId);
+					AppService.ReactivateCustomer(project.owningCustomer.CustomerId, subscriptionId, project.OrganizationId);
 				}
 
 				if (AppService.ReactivateProject(userId, project.OrganizationId, subscriptionId))
