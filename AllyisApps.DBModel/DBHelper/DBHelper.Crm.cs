@@ -48,10 +48,10 @@ namespace AllyisApps.DBModel
 			parameters.Add("@projectName", project.ProjectName);
 			parameters.Add("@isHourly", project.IsHourly);
 			parameters.Add("@projectOrgId", project.ProjectOrgId);
-			parameters.Add("@startingDate", project.StartingDate == null ? null : project.StartingDate.Value.ToShortDateString());
-			parameters.Add("@endingDate", project.EndingDate == null ? null : project.EndingDate.Value.ToShortDateString());
+			parameters.Add("@startingDate", project.StartingDate?.ToShortDateString());
+			parameters.Add("@endingDate", project.EndingDate?.ToShortDateString());
 			parameters.Add("@userIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
-			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
+			parameters.Add("@retId", -1, DbType.Int32, ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
@@ -81,9 +81,9 @@ namespace AllyisApps.DBModel
 			parameters.Add("@projectName", project.ProjectName);
 			parameters.Add("@isHourly", project.IsHourly);
 			parameters.Add("@projectOrgId", project.ProjectOrgId);
-			parameters.Add("@startingDate", project.StartingDate == null ? null : project.StartingDate.Value.ToShortDateString());
-			parameters.Add("@endingDate", project.EndingDate == null ? null : project.EndingDate.Value.ToShortDateString());
-			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
+			parameters.Add("@startingDate", project.StartingDate?.ToShortDateString());
+			parameters.Add("@endingDate", project.EndingDate?.ToShortDateString());
+			parameters.Add("@retId", -1, DbType.Int32, ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
@@ -160,8 +160,8 @@ namespace AllyisApps.DBModel
 			parameters.Add("@projectName", project.ProjectName);
 			parameters.Add("@isHourly", project.IsHourly);
 			parameters.Add("@projectOrgId", project.ProjectOrgId);
-			parameters.Add("@startingDate", project.StartingDate == null ? null : project.StartingDate.Value.ToShortDateString());
-			parameters.Add("@endingDate", project.EndingDate == null ? null : project.EndingDate.Value.ToShortDateString());
+			parameters.Add("@startingDate", project.StartingDate?.ToShortDateString());
+			parameters.Add("@endingDate", project.EndingDate?.ToShortDateString());
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
@@ -357,7 +357,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@eIN", customer.EIN);
 			parameters.Add("@organizationId", customer.OrganizationId);
 			parameters.Add("@customerOrgId", customer.CustomerOrgId);
-			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
+			parameters.Add("@retId", -1, DbType.Int32, ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
@@ -397,7 +397,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@website", customer.Website);
 			parameters.Add("@eIN", customer.EIN);
 			parameters.Add("@orgId", customer.CustomerOrgId);
-			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
+			parameters.Add("@retId", -1, DbType.Int32, ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{

@@ -54,7 +54,8 @@ namespace AllyisApps.Controllers.Auth
 					IsChecked = false
 				}).OrderBy(orgU => orgU.FullName).ToList()
 			};
-			
+
+			await Task.Delay(1);
 			return View("PermissionsOrg", perModel);
 		}
 

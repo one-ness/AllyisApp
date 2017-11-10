@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
-using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.Services.Crm;
 using AllyisApps.ViewModels.TimeTracker.Project;
@@ -34,8 +33,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public async Task<ActionResult> Create(int subscriptionId, int userId)
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
-			DateTime? defaultStart = null;
-			DateTime? defaultEnd = null;
 			var idAndUsers = await AppService.GetNextProjectIdAndSubUsers(userId, subscriptionId);
 
 			var list = idAndUsers.Item2; // Service.GetUsers();
@@ -54,8 +51,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					ParentCustomerId = userId,
 					ProjectUsers = new List<BasicUserInfoViewModel>(),
 					SubscriptionUsers = subList,
-					StartDate = Utility.GetDaysFromDateTime(defaultStart),
-					EndDate = Utility.GetDaysFromDateTime(defaultEnd),
 					ProjectOrgId = idAndUsers.Item1, // Service.GetRecommendedProjectId()
 					CustomerName = AppService.GetCustomer(userId).CustomerName,
 					SubscriptionId = subscriptionId,
@@ -76,56 +71,36 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public async Task<ActionResult> Create(EditProjectViewModel model)
 		{
 			var listGet = await AppService.GetNextProjectIdAndSubUsers(model.ParentCustomerId, model.SubscriptionId);
-			var list = listGet.Item2;
-			var subList = new List<BasicUserInfoViewModel>();
-			foreach (var user in list)
+			model.SubscriptionUsers = listGet.Item2.Select(user => new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId)).ToList();
+
+			if (!ModelState.IsValid) return View(model);
+
+			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
+
+			try
 			{
-				subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
+				var result = await CreateProjectAndUpdateItsUserList(model);
+				if (result == -1)
+				{
+					// duplicate projectOrgId
+					Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
+				}
+				else
+				{
+					model.ProjectId = result;
+					Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessProjectCreated, Variety.Success));
+				}
 			}
-
-			model.SubscriptionUsers = subList;
-			if (ModelState.IsValid)
+			catch (Exception ex)
 			{
-				AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
-				if (model == null)
-				{
-					throw new ArgumentNullException(nameof(model));
-				}
-
-				try
-				{
-					var result = await CreateProjectAndUpdateItsUserList(model);
-					if (result == -1)
-					{
-						// duplicate projectOrgId
-						Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
-					}
-					else
-					{
-						model.ProjectId = result;
-						Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessProjectCreated, Variety.Success));
-					}
-				}
-				catch (Exception ex)
-				{
-					string message = Resources.Strings.FailureProjectCreated;
-					if (ex.Message != null)
-					{
-						message = string.Format("{0} {1}", message, ex.Message);
-					}
-
-					// Create failure
-					Notifications.Add(new BootstrapAlert(message, Variety.Danger));
-					return View(model);
-				}
-
-				return RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = model.SubscriptionId });
-			}
-			else
-			{
-				// Invalid Model
+				// Create failure
+				Notifications.Add(new BootstrapAlert($"{Resources.Strings.FailureProjectCreated} {ex.Message}", Variety.Danger));
 				return View(model);
 			}
+
+			return RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = model.SubscriptionId });
+
+			// Invalid Model
 		}
 
 		/// <summary>
@@ -135,22 +110,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The Project Id if succeed, -1 if the ProjectOrgId is taken by another project under the same customer.</returns>
 		public async Task<int> CreateProjectAndUpdateItsUserList(EditProjectViewModel model)
 		{
-			IEnumerable<int> userIds = model.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString));
-
-			return await AppService.CreateProjectAndUpdateItsUserList(
-				new Services.Project.Project
-				{
-					owningCustomer = new Customer
-					{
-						CustomerId = model.ParentCustomerId,
-					},
-					ProjectName = model.ProjectName,
-					ProjectOrgId = model.ProjectOrgId,
-
-					StartingDate = model.StartDate == -1 ? null : Utility.GetNullableDateTimeFromDays(model.StartDate),
-					EndingDate = model.EndDate == -1 ? null : Utility.GetNullableDateTimeFromDays(model.EndDate)
-				},
-				userIds);
+			return await AppService.CreateProjectAndUpdateItsUserList(ProjectViewModelToProject(model), model.SelectedProjectUserIds.Select(int.Parse));
 		}
 
 		/// <summary>
@@ -158,9 +118,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="model"><see cref="EditProjectViewModel"/> representing new project.</param>
 		/// <returns>The Project Id.</returns>
-		public async Task<int> CreateProject(EditProjectViewModel model)
+		public async Task<int> CreateProject(EditProjectViewModel model) => await AppService.CreateProject(ProjectViewModelToProject(model));
+
+		private static Services.Project.Project ProjectViewModelToProject(EditProjectViewModel model)
 		{
-			return await AppService.CreateProject(new Services.Project.Project
+			return new Services.Project.Project
 			{
 				owningCustomer = new Customer
 				{
@@ -168,9 +130,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				},
 				ProjectName = model.ProjectName,
 				ProjectOrgId = model.ProjectOrgId,
-				StartingDate = Utility.GetDateTimeFromDays(model.StartDate),
-				EndingDate = Utility.GetDateTimeFromDays(model.EndDate)
-			});
+				StartingDate = model.StartDate,
+				EndingDate = model.EndDate
+			};
 		}
 	}
 }

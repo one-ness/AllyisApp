@@ -14,7 +14,6 @@ using AllyisApps.Lib;
 using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
-using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.Project;
@@ -32,69 +31,41 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// GET: /TimeTracker/TimeEntry/Ajax?{params}.
 		/// </summary>
 		/// <param name="subscriptionId">The SubscriptionId.</param>
-		/// <param name="userId">The id of the targeted user.</param>
+		/// <param name="userId">The id of the targeted user. Null means the current user is selected.</param>
 		/// <param name="startDate">The beginning of the Date Range.</param>
 		/// <param name="endDate">The ending of the Date Range.</param>
 		/// <returns>Provides the view for the defined user over the date range defined.</returns>
-		public async Task<ActionResult> Index(int subscriptionId, int userId, int? startDate = null, int? endDate = null)
+		public async Task<ActionResult> Index(int subscriptionId, int? startDate = null, int? endDate = null, int? userId = null)
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
 			var sub = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+
+			//redirect back to self with non-null default start/end dates so that we can get the desired route url
+			if (startDate == null || endDate == null)
+			{
+				PayPeriodRanges payPeriodRanges = await AppService.GetPayPeriodRanges(sub.OrganizationId);
+				startDate = Utility.GetDaysFromDateTime(payPeriodRanges.Current.StartDate);
+				endDate = Utility.GetDaysFromDateTime(payPeriodRanges.Current.EndDate);
+				return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry, new { subscriptionId, startDate, endDate, userId });
+			}
+
+			int actualUserId = userId ?? AppService.UserContext.UserId;
 			int productRoleId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductRoleId;
-			
-		
-			int startOfWeek = (await AppService.GetTimeEntryIndexInfo(sub.OrganizationId, null, null, userId)).Item1.StartOfWeek;
 			bool isManager = productRoleId == (int)TimeTrackerRole.Manager;
+
 
 			ViewBag.GetDateTimeFromDays = new Func<int?, DateTime?>(Utility.GetNullableDateTimeFromDays);
 			ViewBag.SignedInUserID = AppService.UserContext.UserId;
-			ViewBag.SelectedUserId = userId;
-			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, startOfWeek));
-			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(startOfWeek));
+			ViewBag.SelectedUserId = actualUserId;
+			ViewBag.WeekStart = startDate.Value;
+			ViewBag.WeekEnd = endDate.Value;
 			ViewBag.CanManage = isManager;
 
 			TimeEntryOverDateRangeViewModel model = await ConstructTimeEntryOverDataRangeViewModel(
 				sub.OrganizationId,
 				subscriptionId,
 				sub.SubscriptionName,
-				userId,
-				isManager,
-				startDate,
-				endDate);
-
-			return View("Index2", model);
-		}
-
-		/// <summary>
-		/// Get: /TimeTracker/{subscriptionId}/TimeEntry.
-		/// </summary>
-		/// <param name="subscriptionId">The SubscriptionId.</param>
-		/// <param name="startDate">The beginning of the Date Range.</param>
-		/// <param name="endDate">The ending of the Date Range.</param>
-		/// <returns>Provides the view for the defined user over the date range defined.</returns>
-		public async Task<ActionResult> IndexNoUserId(int subscriptionId, int? startDate = null, int? endDate = null)
-		{
-			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
-
-			int userId = AppService.UserContext.UserId;
-			var sub = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
-			int productRoleId = sub.ProductRoleId;
-			
-			int startOfWeek = (await AppService.GetTimeEntryIndexInfo(sub.OrganizationId, null, null, userId)).Item1.StartOfWeek;
-			bool isManager = productRoleId == (int)TimeTrackerRole.Manager;
-
-			ViewBag.GetDateTimeFromDays = new Func<int?, DateTime?>(Utility.GetNullableDateTimeFromDays);
-			ViewBag.SignedInUserID = userId;
-			ViewBag.SelectedUserId = userId;
-			ViewBag.WeekStart = Utility.GetDaysFromDateTime(AppService.SetStartingDate(null, startOfWeek));
-			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(startOfWeek));
-			ViewBag.CanManage = isManager;
-
-			TimeEntryOverDateRangeViewModel model = await ConstructTimeEntryOverDataRangeViewModel(
-				sub.OrganizationId,
-				subscriptionId,
-				sub.SubscriptionName,
-				userId,
+				actualUserId,
 				isManager,
 				startDate,
 				endDate);
@@ -109,9 +80,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="startDate">The start date.</param>
 		/// <param name="endDate">The end date.</param>
 		/// <returns>A redirect to the index action.</returns>
-		public RedirectToRouteResult TimeTrackerDatePickerRedirect(int subscriptionId, int startDate, int endDate)
+		public RedirectToRouteResult TimeTrackerDatePickerRedirect(int subscriptionId, DateTime startDate, DateTime endDate)
 		{
-			return RedirectToAction("IndexNoUserId", new { subscriptionId, startDate, endDate });
+			int start = Utility.GetDaysFromDateTime(startDate);
+			int end = Utility.GetDaysFromDateTime(endDate);
+			return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry, new { subscriptionId, startDate = start, endDate = end });
 		}
 
 		/// <summary>
@@ -140,9 +113,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			var infos = await AppService.GetTimeEntryIndexInfo(orgId, startingDateTime, endingDateTime, userId);
+			PayPeriodRanges payRanges = await AppService.GetPayPeriodRanges(orgId);
 			int startOfWeek = infos.Item1.StartOfWeek;
-			DateTime startDate = AppService.SetStartingDate(startingDateTime, startOfWeek);
-			DateTime endDate = endingDateTime ?? SetEndingDate(startOfWeek);
+			DateTime startDate = startingDateTime != null ? AppService.SetStartingDate(startingDateTime, startOfWeek) : payRanges.Current.StartDate;
+			DateTime endDate = endingDateTime ?? payRanges.Current.EndDate;
 
 			// Get all of the projects and initialize their total hours to 0.
 			IList<CompleteProject> allProjects = infos.Item4; // Must also grab inactive projects, or the app will crash if a user has an entry on a project he is no longer a part of
@@ -173,10 +147,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			var result = new TimeEntryOverDateRangeViewModel
 			{
+				StartDateint = Utility.GetDaysFromDateTime(startDate),
+				EndDateint = Utility.GetDaysFromDateTime(endDate),
 				EntryRange = new TimeEntryRangeForUserViewModel
 				{
-					StartDate = Utility.GetDaysFromDateTime(startDate),
-					EndDate = Utility.GetDaysFromDateTime(endDate),
+					StartDate = startDate,
+					EndDate = endDate,
+					PayPeriodRanges = payRanges,
 					Entries = new List<EditTimeEntryViewModel>(),
 					UserId = userId,
 					SubscriptionId = subId

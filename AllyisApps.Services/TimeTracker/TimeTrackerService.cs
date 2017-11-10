@@ -215,6 +215,7 @@ namespace AllyisApps.Services
 						Current = currentPayPeriod,
 						Next = GetNthPayPeriodByDuration(currentPayPeriod, 1)
 					};
+
 				case PayPeriodType.Dates:
 					var dates = ((JArray)payPeriodObj.dates).Select(date => (int)date).ToList();
 
@@ -224,6 +225,7 @@ namespace AllyisApps.Services
 						Current = GetNthPayPeriodByDates(dates, 0),
 						Next = GetNthPayPeriodByDates(dates, 1)
 					};
+
 				default:
 					throw new ArgumentOutOfRangeException(nameof(payPeriodObj), "The pay period object just be of type 'duration' or 'dates'.");
 			}
@@ -312,9 +314,9 @@ namespace AllyisApps.Services
 			// calculate endDate with conditionals to handle month and year overflow
 			DateTime endDate = startIndex == dates.Count - 1
 				? (month == 12
-					? new DateTime(year + 1, 0, dates[0])
+					? new DateTime(year + 1, 1, dates[0])
 					: new DateTime(year, month + 1, dates[0]))
-				: new DateTime(year, month, dates[startIndex + 1]);
+				: new DateTime(year, month, dates[Mod(startIndex + 1, dates.Count)]);
 
 			var range = new PayPeriodRanges.PayPeriodRange();
 			range.StartDate = new DateTime(year, month, dates[startIndex]);
@@ -388,7 +390,6 @@ namespace AllyisApps.Services
 				PayrollProcessedDate = settings.PayrollProcessedDate,
 				LockDate = settings.LockDate,
 				PayPeriod = settings.PayPeriod,
-
 			};
 		}
 

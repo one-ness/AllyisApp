@@ -5,16 +5,12 @@
 //------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
-using AllyisApps.Lib;
 using AllyisApps.Services;
-using AllyisApps.Services.Auth;
-using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.TimeTracker.Project;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -31,7 +27,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subscriptionId">Subscription id.</param>
 		/// <param name="userId">The project's Id.</param>
 		/// <returns>The ActionResult for the Edit view.</returns>
-		public  ActionResult Edit(int subscriptionId, int userId)
+		public ActionResult Edit(int subscriptionId, int userId)
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
 			return View(ConstructEditProjectViewModel(userId, subscriptionId));
@@ -47,52 +43,39 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public async Task<ActionResult> Edit(EditProjectViewModel model)
 		{
 			var listGet = await AppService.GetNextProjectIdAndSubUsers(model.ParentCustomerId, model.SubscriptionId);
-			var list = listGet.Item2;
-			var subList = new List<BasicUserInfoViewModel>();
-			foreach (var user in list)
-			{
-				subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
-			}
+			model.SubscriptionUsers = listGet.Item2.Select(user => new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId)).ToList();
+			if (!ModelState.IsValid) return View(model);
 
-			model.SubscriptionUsers = subList;
+			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
+
 			int orgId = AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId;
-			if (ModelState.IsValid)
+			var projIdMatchGet = await AppService.GetAllProjectsForOrganizationAsync(orgId);
+
+			// TODO: Don't check for duplicate projects in controller
+			Services.Project.Project projIdMatch = projIdMatchGet.SingleOrDefault(project => project.ProjectOrgId == model.ProjectOrgId && project.owningCustomer?.CustomerId == model.ParentCustomerId);
+			if (projIdMatch != null && projIdMatch.ProjectId != model.ProjectId)
 			{
-				AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
-
-				var projIdMatchGet = await AppService.GetAllProjectsForOrganizationAsync(orgId);
-				Services.Project.Project projIdMatch = projIdMatchGet.Where(project => project.ProjectOrgId == model.ProjectOrgId && project.owningCustomer?.CustomerId == model.ParentCustomerId).SingleOrDefault();
-				if (projIdMatch != null && projIdMatch.ProjectId != model.ProjectId)
-				{
-					Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
-					return View(model);
-				}
-
-				try
-				{
-					UpdateProject(model);
-				}
-				catch (Exception ex)
-				{
-					string message = Resources.Strings.FailureProjectEdited;
-					if (ex.Message != null)
-					{
-						message = $"{message} {ex.Message}";
-					}
-
-					// Update failure
-					Notifications.Add(new BootstrapAlert(message, Variety.Danger));
-					return View(model);
-				}
-
-				Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessProjectEdited, Variety.Success));
-
-				return Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = model.SubscriptionId }), model.ParentCustomerId));
-			}
-			else
-			{
+				Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
 				return View(model);
 			}
+
+			try
+			{
+				UpdateProject(model);
+			}
+			catch (Exception ex)
+			{
+				// Update failure
+				Notifications.Add(new BootstrapAlert($"{Resources.Strings.FailureProjectEdited} {ex.Message}", Variety.Danger));
+				return View(model);
+			}
+
+			Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessProjectEdited, Variety.Success));
+
+			return Redirect(string.Format(
+				"{0}#customerNumber{1}",
+				Url.Action(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = model.SubscriptionId }),
+				model.ParentCustomerId));
 		}
 
 		/// <summary>
@@ -101,27 +84,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="projectId">Project Id.</param>
 		/// <param name="subscriptionId">Subscription id.</param>
 		/// <returns>The EditProjectViewModel.</returns>
-		public  EditProjectViewModel ConstructEditProjectViewModel(int projectId, int subscriptionId)
+		public EditProjectViewModel ConstructEditProjectViewModel(int projectId, int subscriptionId)
 		{
 			var infos = AppService.GetProjectEditInfo(projectId, subscriptionId);
-
-			IEnumerable<User> projectUserInfos = infos.Item2;
-			var projectUsers = new List<BasicUserInfoViewModel>();
-			foreach (var projectUser in projectUserInfos)
-			{
-				projectUsers.Add(new BasicUserInfoViewModel(projectUser.FirstName, projectUser.LastName, projectUser.UserId));
-			}
-
-			IEnumerable<SubscriptionUser> subscriptionUserInfos = infos.Item3;
-			var subscriptionUsers = new List<BasicUserInfoViewModel>();
-
-			foreach (var su in subscriptionUserInfos)
-			{
-				subscriptionUsers.Add(new BasicUserInfoViewModel(su.FirstName, su.LastName, su.UserId));
-			}
-
-			var subscriptionNameToDisplay = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName;
-			
+			var projectUsers = infos.Item2.Select(projectUser => new BasicUserInfoViewModel(projectUser.FirstName, projectUser.LastName, projectUser.UserId)).ToList();
+			var subscriptionUsers = infos.Item3.Select(su => new BasicUserInfoViewModel(su.FirstName, su.LastName, su.UserId)).ToList();
+			string subscriptionNameToDisplay = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName;
 
 			return new EditProjectViewModel
 			{
@@ -133,9 +101,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				ProjectOrgId = infos.Item1.ProjectOrgId,
 				ProjectName = infos.Item1.ProjectName,
 				ProjectUsers = projectUsers,
-				SubscriptionUsers = subscriptionUsers.Where(user => !projectUsers.Any(pu => pu.UserId == user.UserId)), // Grab users that are not part of the project
-				StartDate = Utility.GetDaysFromDateTime(infos.Item1.StartDate),
-				EndDate = Utility.GetDaysFromDateTime(infos.Item1.EndDate),
+				SubscriptionUsers = subscriptionUsers.Where(user => projectUsers.All(pu => pu.UserId != user.UserId)), // Grab users that are not part of the project
+				StartDate = infos.Item1.StartDate,
+				EndDate = infos.Item1.EndDate,
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subscriptionNameToDisplay,
 				UserId = AppService.UserContext.UserId

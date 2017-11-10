@@ -97,13 +97,14 @@ namespace AllyisApps.Services
             bool result = DBHelper.AcceptInvitation(invitationId, UserContext.UserId) == 1;
             if (!result) return false;
 
-            if (inviteInfo.ProductRolesJson != null)
-            {
+            if (inviteInfo.ProductRolesJson != null && !inviteInfo.ProductRolesJson.Equals(""))
+			{ 
                 List<InvitationPermissionsJson> roleString = Newtonsoft.Json.JsonConvert.DeserializeObject<List<InvitationPermissionsJson>>(inviteInfo.ProductRolesJson);
 
                 foreach (var invite in roleString)
                 {
-                    await DBHelper.UpdateSubscriptionUserRoles(new List<int> { UserContext.UserId }, inviteInfo.OrganizationId, invite.ProductRoleId, invite.ProductId);
+					await DBHelper.UpdateSubscriptionUserProductRole(invite.ProductRoleId, invite.SubscriptionId, UserContext.UserId);
+                    //await DBHelper.UpdateSubscriptionUserRoles(new List<int> { UserContext.UserId }, inviteInfo.OrganizationId, invite.ProductRoleId, invite.ProductId);
                 }
             }
 

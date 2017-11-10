@@ -1,4 +1,7 @@
-﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+﻿@using AllyisApps.Lib
+@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+@using AllyisApps.Utilities;
+@using AllyisApps.Lib;
 @model TimeEntryOverDateRangeViewModel
 @{
 	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
@@ -12,13 +15,12 @@
 	ViewData["SubscriptionName"] = Model.SubscriptionName;
 }
 
-
 <div class="row">
 	@using (Html.BeginForm("TimeTrackerDatePickerRedirect", ControllerConstants.TimeEntry, FormMethod.Get, new { @class = "form-inline col-xs-12", @style = "margin-bottom: 20px;" }))
 	{
 		@*<input id="UserId" name="UserId" type="hidden" value="@Model.EntryRange.UserId" />*@
-		<input id="StartDate" name="startDate" type="hidden" value="@Model.EntryRange.StartDate" />
-		<input id="EndDate" name="endDate" type="hidden" value="@Model.EntryRange.EndDate" />
+		@*<input id="StartDate"  type="hidden" value="@Model.EntryRange.StartDate" />
+			<input id="EndDate"  type="hidden" value="@Model.EntryRange.EndDate" />*@
 		<div class="form-group pull-left">
 			<a href="@Url.Action(ActionConstants.Export, ControllerConstants.TimeEntry, new
 				{
@@ -41,40 +43,43 @@
 		<div id="date-select" class="form-group pull-right">
 			<div class="input-group">
 
-				<div class="input-group-btn">
-					@if (ViewBag.SelectedUserId == ViewBag.SignedInUserID)
-					{
-						<a class="btn btn-primary" title="@Strings.Previous"
-						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.SubscriptionId, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
-							<i class="fa fa-chevron-left"></i>
-						</a>
-						<a class="btn btn-primary" title="@Strings.Current"
-						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.SubscriptionId, startDate = (int) ViewBag.WeekStart, endDate = (int) ViewBag.WeekEnd })">
-							<i class="glyphicon glyphicon-flash"></i>
-						</a>
-						<a class="btn btn-primary" title="@Strings.Next"
-						   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.SubscriptionId, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
-							<i class="fa fa-chevron-right"></i>
-						</a>
-					}
-					else
-					{
-						<a class="btn btn-primary" title="@Strings.Previous"
-						   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.SubscriptionId, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
-							<i class="fa fa-chevron-left"></i>
-						</a>
-						<a class="btn btn-primary" title="@Strings.Current"
-						   href="@Url.Action(ActionConstants.Index, new {  subscriptionId = Model.SubscriptionId, userId = ViewBag.SelectedUserId,  startDate = (int) ViewBag.WeekStart, endDate = (int) ViewBag.WeekEnd })">
-							<i class="glyphicon glyphicon-flash"></i>
-						</a>
+				@*<div class="input-group-btn">
+						@if (ViewBag.SelectedUserId == ViewBag.SignedInUserID)
+						{
+							<a class="btn btn-primary" title="@Strings.Previous"
+							   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.SubscriptionId, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
+								<i class="fa fa-chevron-left"></i>
+							</a>
+							<a class="btn btn-primary" title="@Strings.Current"
+							   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.SubscriptionId, startDate = (int) ViewBag.WeekStart, endDate = (int) ViewBag.WeekEnd })">
+								<i class="glyphicon glyphicon-flash"></i>
+							</a>
+							<a class="btn btn-primary" title="@Strings.Next"
+							   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.SubscriptionId, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
+								<i class="fa fa-chevron-right"></i>
+							</a>
+						}
+						else
+						{
+							<a class="btn btn-primary" title="@Strings.Previous"
+							   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.SubscriptionId, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
+								<i class="fa fa-chevron-left"></i>
+							</a>
+							<a class="btn btn-primary" title="@Strings.Current"
+							   href="@Url.Action(ActionConstants.Index, new {  subscriptionId = Model.SubscriptionId, userId = ViewBag.SelectedUserId,  startDate = (int) ViewBag.WeekStart, endDate = (int) ViewBag.WeekEnd })">
+								<i class="glyphicon glyphicon-flash"></i>
+							</a>
 
-						<a class="btn btn-primary" title="@Strings.Next"
-						   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.SubscriptionId, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
-							<i class="fa fa-chevron-right"></i>
-						</a>
-					}
+							<a class="btn btn-primary" title="@Strings.Next"
+							   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.SubscriptionId, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
+								<i class="fa fa-chevron-right"></i>
+							</a>
+						}
+					</div>*@
+				<div id="newdaterange" class="panel-title pull-right" style="display: inline; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px; margin-left: 15px;">
+					<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+					<span></span> <b class="caret"></b>
 				</div>
-				<input type="text" name="daterange" id="daterange" class="form-control" value="" />
 				@*<div class="input-group-btn">
 						<input type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.View class="btn btn-primary" style="width: 56px" />
 					</div>*@
@@ -167,7 +172,7 @@
 							{
 								<a class="col-xs-11 text-left"
 								   data-search="@user.Email"
-								   href="@Url.Action(ActionConstants.IndexNoUserId, new
+								   href="@Url.RouteUrl(RouteNameConstants.TimeEntryIndexUserTimeSheet, new
 								{
 									startDate = Model.EntryRange.StartDate,
 									endDate = Model.EntryRange.EndDate
@@ -241,8 +246,10 @@
 
 @section css
 {
-	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
-	<link rel="stylesheet" type="text/css" href="~/Content/jquery.comiseo.daterangepicker.css" />
+	@*<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+		<link rel="stylesheet" type="text/css" href="~/Content/jquery.comiseo.daterangepicker.css" />*@
+	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+	<link rel="stylesheet" type="text/css" href="~/Content/BootstrapSelect" />
 }
 
 @section scripts
@@ -250,11 +257,12 @@
 	@*Date range picker dependencies:*@
 	@Scripts.Render("~/bundles/jqueryui")
 	@Scripts.Render("~/bundles/moment")
+	@Scripts.Render("~/bundles/BootstrapSelect")
+	@Scripts.Render("~/bundles/DateRangePicker")
+	@Scripts.Render("~/bundles/pageswithsearch")
+	@Scripts.Render("~/Areas/TimeTracker/Scripts/allyis-timeentry-index2.js");
 
 	<script type="text/javascript">
-		var model_startdate = @Model.EntryRange.StartDate;
-		var model_enddate = @Model.EntryRange.EndDate;
-		@* var model_lockdate = @Model.LockDateOld; //unused old lockdate *@
 		var pageSize = @Model.PageUserSize;
 		var page_container_id = "viewasuser-list";
 		var page_item_tag = "div";
@@ -266,11 +274,76 @@
 			}
 		});
 	</script>
-	@Scripts.Render("~/bundles/daterangepickerold")
-	@Scripts.Render("~/bundles/pageswithsearch")
-	@*Scripts.Render("~/bundles/TTTimeEntryIndex")Disable old javascript*@
-	@Scripts.Render("~/Areas/TimeTracker/Scripts/allyis-timeentry-index2.js");
+
 	<script>
+
+		$(function () {
+			var start = moment(@(Model.EntryRange.StartDate.ToJavaScriptMilliseconds()));
+			var end = moment(@(Model.EntryRange.EndDate.ToJavaScriptMilliseconds()));
+			var prevStart = moment(@(Model.EntryRange.PayPeriodRanges.Previous.StartDate.ToJavaScriptMilliseconds()));
+			var prevEnd = moment(@(Model.EntryRange.PayPeriodRanges.Previous.EndDate.ToJavaScriptMilliseconds()));
+			var curStart = moment(@(Model.EntryRange.PayPeriodRanges.Current.StartDate.ToJavaScriptMilliseconds()));
+			var curEnd = moment(@(Model.EntryRange.PayPeriodRanges.Current.EndDate.ToJavaScriptMilliseconds()));
+			var nextStart = moment(@(Model.EntryRange.PayPeriodRanges.Next.StartDate.ToJavaScriptMilliseconds()));
+			var nextEnd = moment(@(Model.EntryRange.PayPeriodRanges.Next.EndDate.ToJavaScriptMilliseconds()));
+
+			function cb(start, end) {
+				$('#newdaterange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+			}
+
+			$('#newdaterange').daterangepicker({
+				locale: "us",
+				showDropdowns: true,
+				linkedCalendars: false,
+				startDate: start,
+				endDate: end,
+				ranges: {
+					'Previous Pay Period': [prevStart, prevEnd],
+					'Current Pay Period': [curStart, curEnd],
+					'Next Pay Period': [nextStart, nextEnd]
+				}
+			}, cb);
+
+			cb(start, end);
+		});
+
+		//submit date range form to update the view with new date range
+		$("#newdaterange").on("apply.daterangepicker", function (dre, picker) {
+			if ('@(ViewBag.SelectedUserId == ViewBag.SignedInUserID)' === 'True') {
+				var newForm = jQuery('<form>', {
+					'action': '/@ProductNameConstants.TimeTracker/@Model.SubscriptionId/@ControllerConstants.TimeEntry/TimeTrackerDatePickerRedirect',
+					'target': '_top',
+					'method': 'get'
+				}).append(jQuery('<input>', {
+					'name': 'startDate',
+					'value': picker.startDate.format().slice(0, 10),
+					'type': 'hidden'
+				})).append(jQuery('<input>', {
+					'name': 'endDate',
+					'value': picker.endDate.format().slice(0, 10),
+					'type': 'hidden'
+				}));
+				newForm.appendTo(document.body).submit();
+			}
+			else
+			{
+				var newForm = jQuery('<form>', {
+					'action': '/@ProductNameConstants.TimeTracker/@Model.SubscriptionId/@ControllerConstants.TimeEntry/Index/@ViewBag.SelectedUserId',
+					'target': '_top',
+					'method': 'get'
+				}).append(jQuery('<input>', {
+					'name': 'startDate',
+					'value': picker.startDate.format().slice(0, 10),
+					'type': 'hidden'
+				})).append(jQuery('<input>', {
+					'name': 'endDate',
+					'value': picker.endDate.format().slice(0, 10),
+					'type': 'hidden'
+				}));
+				newForm.appendTo(document.body).submit();
+			}
+		});
+
 		function gatherData() {
 			var jsonEntires = [];
 			$(".TimeEntryForm").each(function (i, ele) {
@@ -302,8 +375,8 @@
 			}
 
 			var result = {};
-			result.StartingDate = @(Model.EntryRange.StartDate);
-			result.EndingDate = @(Model.EntryRange.EndDate);
+			result.StartingDate = @(Utility.GetDaysFromDateTime(Model.EntryRange.StartDate));
+			result.EndingDate = @(Utility.GetDaysFromDateTime(Model.EntryRange.EndDate));
 			result.Entries = data;
 			result.SubscriptionId = @(Model.SubscriptionId);
 			var datajson = JSON.stringify(result);

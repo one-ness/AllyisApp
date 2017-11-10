@@ -1,7 +1,4 @@
 ﻿<ul class="nav nav-pills nav-stacked panel-default" style="background-color: #fafafa;">
-	<li @Html.Raw(ViewBag.Title == Strings.OrgSOW ? "style=background-color: #d1d1d1" : "")>
-		@Html.ActionLink(Strings.WeekStart, ActionConstants.SettingsStartOfWeek, ControllerConstants.TimeEntry)
-	</li>
 	<li @Html.Raw(ViewBag.Title == Strings.PClasses ? "style=background-color: #d1d1d1" : "")>
 		@Html.ActionLink(Strings.PClasses, ActionConstants.SettingsPayClass, ControllerConstants.TimeEntry)
 	</li>
@@ -16,4 +13,4 @@
 	</li>
 </ul>
 <br />
-@Html.ActionLink(Strings.Back, ActionConstants.IndexNoUserId, ControllerConstants.TimeEntry, new { @class = "btn btn-default", type = "button" })
+@Html.ActionLink(Strings.Back, ActionConstants.Index, ControllerConstants.TimeEntry, null, new { @class = "btn btn-default", type = "button" })
