@@ -1756,4 +1756,7 @@
   <data name="UpdatePayPeriodSuccess" xml:space="preserve">
     <value>Successfully updated pay period.</value>
   </data>
+  <data name="DateOfBirthRequired" xml:space="preserve">
+    <value>Date of Birth is a required field.</value>
+  </data>
 </root>

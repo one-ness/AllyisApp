@@ -302,6 +302,8 @@
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\MergePayClassViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsPayPeriodViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsPayClassesViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsHolidayViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsOvertimeViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsWeekStartViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\TimeEntryRangeForUserViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\TimeEntryViewModel.cs" />
@@ -332,12 +334,11 @@
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\IndexAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\EditTimeEntryJsonAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\CreateTimeEntryJsonAction.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\CreatePayClassAction.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\CreateHolidayAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\SettingsPayClassAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\SettingsHolidayAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\DeletePayClassAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\DeleteHolidayAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ReportAction.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\SettingAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\SettingsPayPeriodAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\TimeEntryController.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\Customer\ManageCustomerViewModel.cs" />
@@ -459,7 +460,6 @@
     <Compile Include="ViewModels\Shared\LogOnPartialViewModel.cs" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-drp-init.js" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-index2.js" />
-    <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-settings.js" />
     <Content Include="Content\bootstrap\css\bootstrap.min.css" />
     <Content Include="Content\css\bootstrap-select.min.css" />
     <Content Include="Content\css\daterangepicker.css" />
@@ -483,7 +483,6 @@
     <Content Include="Content\icons\TimeTrackerPro.png" />
     <Content Include="Content\icons\TimeTracker.png" />
     <Content Include="Scripts\allyis-account-permission2.js" />
-    <Content Include="Scripts\allyis-holidayDatepicker.js" />
     <Content Include="Scripts\allyis-birthDatepicker.js" />
     <Content Include="Scripts\allyis-pages-with-filter.js" />
     <Content Include="Scripts\allyis-paginate.js" />
@@ -501,7 +500,6 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="Parameters.xml" />
-    <Content Include="Areas\TimeTracker\Views\TimeEntry\Settings.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\UserEdit.cshtml" />
     <Compile Include="Controllers\Auth\AccountController.cs" />
     <Compile Include="Core\AllyisAppsWebViewPage.cs" />
