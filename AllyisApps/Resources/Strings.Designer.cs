@@ -529,6 +529,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You cannot invite yourself to your own organizaion.
+        /// </summary>
+        public static string CannotInviteSelf {
+            get {
+                return ResourceManager.GetString("CannotInviteSelf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The specified pay class cannot be merged into another pay class..
         /// </summary>
         public static string CannotMergePayClass {

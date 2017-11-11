@@ -661,7 +661,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				var results = await connection.QueryAsync<ProjectDBEntity>(
-					"[Pjm].[GetProjectByIdAndUser]",
+					"[Crm].[GetProjectByIdAndUser]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
 				return results.SingleOrDefault();

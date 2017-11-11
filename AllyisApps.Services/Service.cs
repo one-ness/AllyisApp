@@ -65,6 +65,24 @@ namespace AllyisApps.Services
 		{
 			#region Validation
 
+			ProjectDBEntity project = await DBHelper.GetProjectByIdAndUser(entry.ProjectId, entry.UserId);
+			var projInfo = DBHelper.GetProjectById(entry.ProjectId);
+
+			if (!project.IsProjectUser.GetValueOrDefault())
+			{
+				throw new ArgumentException("Project is unassignable to user.");
+			}
+
+			if (!projInfo.IsActive)
+			{
+				throw new ArgumentException("Project is not active.");
+			}
+
+			if (project.StartDate > entry.Date || project.EndDate < entry.Date)
+			{
+				throw new ArgumentException("Entry must be within date range");
+			}
+
 			if (entry == null)
 			{
 				throw new ArgumentNullException(nameof(entry), "Time entry must not be null.");
