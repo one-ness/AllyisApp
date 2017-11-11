@@ -41,8 +41,8 @@ namespace AllyisApps.DBModel
 			parameters.Add("@organizationId", account.OrganizationId);
 			parameters.Add("@isActive", account.IsActive);
 			parameters.Add("@accountTypeId", account.AccountTypeId);
-			parameters.Add("@parentAccountId", account.ParentAccountId != null ? account.ParentAccountId.Value : account.ParentAccountId);
-			parameters.Add("@returnValue", -1, DbType.Int32, direction: ParameterDirection.Output);
+			parameters.Add("@parentAccountId", account.ParentAccountId);
+			parameters.Add("@returnValue", -1, DbType.Int32, ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{

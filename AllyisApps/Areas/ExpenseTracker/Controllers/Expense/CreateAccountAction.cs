@@ -26,7 +26,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			await SetNavData(subscriptionId);
 			var subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			var accounts = await AppService.GetAccounts(subInfo.OrganizationId);
-			var account = accounts != null && accountId != null ? accounts.Where(x => x.AccountId == accountId.Value).FirstOrDefault() : null;
+			var account = accounts != null && accountId != null ? accounts.FirstOrDefault(x => x.AccountId == accountId.Value) : null;
 			List<SelectListItem> parentList = new List<SelectListItem> { new SelectListItem { Text = "None", Value = "0" } };
 
 			CreateAccountViewModel model = new CreateAccountViewModel();
@@ -50,7 +50,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				.Select(x => new SelectListItem { Text = x.AccountName, Value = x.AccountId.ToString(), Selected = x.AccountId == model.ParentAccountId })
 				.Where(x => !string.Equals(x.Value, account.AccountId.ToString())).ToList());
 
-				var selected = parentList.Where(x => x.Selected).FirstOrDefault();
+				var selected = parentList.FirstOrDefault(x => x.Selected);
 				var selectedId = selected != null ? selected.Value : "0";
 
 				model.ParentAccounts = new SelectList(parentList.AsEnumerable(), "Value", "Text", selectedId);
@@ -67,7 +67,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			}
 			else
 			{
-				var selected = parentList.Where(x => x.Selected).FirstOrDefault();
+				var selected = parentList.FirstOrDefault(x => x.Selected);
 				var selectedId = selected != null ? selected.Value : "0";
 
 				parentList.AddRange(accounts.Select(x => new SelectListItem { Text = x.AccountName, Value = x.AccountId.ToString(), Selected = x.AccountId == model.ParentAccountId }).ToList());

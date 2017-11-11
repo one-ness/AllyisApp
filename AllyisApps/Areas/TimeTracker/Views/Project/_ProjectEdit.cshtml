@@ -80,10 +80,10 @@
 								id="StartDate"
 								name="StartDate"
 								value="@(Model.StartDate != null
-								        ? Model.StartDate.Value.Date.ToString("d", CultureInfo.InvariantCulture)
+								        ? Model.StartDate.Value.ToString("d", CultureInfo.InvariantCulture)
 								        : "")"
 							>
-							<div class="input-group-addon">
+							<div class="input-group-addon" style="cursor: pointer">
 								<span class="glyphicon glyphicon-calendar"></span>
 							</div>
 						</div>
@@ -98,7 +98,7 @@
 								   value="@(Model.EndDate != null
 								        ? Model.EndDate.Value.Date.ToString("d", CultureInfo.InvariantCulture)
 								        : "")">
-							<div class="input-group-addon">
+							<div class="input-group-addon" style="cursor: pointer">
 								<span class="glyphicon glyphicon-calendar"></span>
 							</div>
 						</div>

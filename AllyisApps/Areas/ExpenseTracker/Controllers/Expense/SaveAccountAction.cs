@@ -6,9 +6,9 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
 using AllyisApps.Services.Expense;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
-using AllyisApps.Services.Auth;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -26,7 +26,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		public async Task<ActionResult> SaveAccount(int subscriptionId, CreateAccountViewModel model)
 		{
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Accounts, subscriptionId);
-			
+
 			var canDisableTask = CanDisableAccount(subscriptionId, model.AccountId, model.SelectedStatus);
 
 			await Task.WhenAll(new Task[] { canDisableTask });
@@ -35,53 +35,41 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			var canDisable = canDisableTask.Result;
 
 			bool success = false;
-			if (model != null)
+
+			Account acc = new Account
 			{
-				Account acc = new Account
-				{
-					AccountId = model.AccountId,
-					AccountName = model.AccountName,
-					OrganizationId = subInfo.OrganizationId,
-					AccountTypeId = model.AccountTypeId,
-					AccountTypeName = model.AccountTypeName,
-					IsActive = !string.Equals(model.SelectedStatus, "0"),
-					ParentAccountId = Convert.ToInt32(model.SelectedAccount) != 0 ? (int?)Convert.ToInt32(model.SelectedAccount) : null
-				};
+				AccountId = model.AccountId,
+				AccountName = model.AccountName,
+				OrganizationId = subInfo.OrganizationId,
+				AccountTypeId = model.AccountTypeId,
+				AccountTypeName = model.AccountTypeName,
+				IsActive = !string.Equals(model.SelectedStatus, "0"),
+				ParentAccountId = Convert.ToInt32(model.SelectedAccount) != 0 ? (int?)Convert.ToInt32(model.SelectedAccount) : null
+			};
 
-				if (await CheckAccountParent(subscriptionId, acc))
+			if (await CheckAccountParent(subscriptionId, acc))
+			{
+				if (acc.AccountId == 0)
 				{
-					if (acc.AccountId == 0)
-					{
-						success = AppService.CreateAccount(acc);
-					}
+					success = AppService.CreateAccount(acc);
+				}
 
-					if (!success && canDisable)
-					{
-						if (AppService.UpdateAccount(acc))
-						{
-							Notifications.Add(new BootstrapAlert(string.Format("Account '{0}' was succesfully updated.", acc.AccountName), Variety.Success));
-						}
-						else
-						{
-							Notifications.Add(new BootstrapAlert(string.Format("Error occured when updating account.", acc.AccountName), Variety.Danger));
-						}
-					}
-					else
-					{
-						if (!canDisable)
-						{
-							Notifications.Add(new BootstrapAlert(string.Format("Account '{0}' cannot be disabled due to use by active report(s).", acc.AccountName), Variety.Danger));
-						}
-						else
-						{
-							Notifications.Add(new BootstrapAlert(string.Format("Account '{0}' was succesfully created.", acc.AccountName), Variety.Success));
-						}
-					}
+				if (!success && canDisable)
+				{
+					Notifications.Add(AppService.UpdateAccount(acc)
+						? new BootstrapAlert($"Account '{acc.AccountName}' was succesfully updated.", Variety.Success)
+						: new BootstrapAlert($"Error occured when updating account '{acc.AccountName}'.", Variety.Danger));
 				}
 				else
 				{
-					Notifications.Add(new BootstrapAlert(string.Format("Account '{0}' cannot be have a child account as a parent.", acc.AccountName), Variety.Danger));
+					Notifications.Add(!canDisable
+						? new BootstrapAlert($"Account '{acc.AccountName}' cannot be disabled due to use by active report(s).", Variety.Danger)
+						: new BootstrapAlert($"Account '{acc.AccountName}' was succesfully created.", Variety.Success));
 				}
+			}
+			else
+			{
+				Notifications.Add(new BootstrapAlert($"Account '{acc.AccountName}' cannot be have a child account as a parent.", Variety.Danger));
 			}
 
 			return RedirectToAction("Accounts");
@@ -96,7 +84,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		public async Task<bool> CheckAccountParent(int subscriptionId, Account childAcc)
 		{
 			bool results = true;
-			var subInfo =  AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+			var subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			var childId = childAcc.AccountId;
 
 			var currentAccount = childAcc;
@@ -105,7 +93,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			while (currentAccount.ParentAccountId != null && accounts.Count != 0)
 			{
-				currentAccount = accounts.Where(x => x.AccountId == currentAccount.ParentAccountId).FirstOrDefault();
+				currentAccount = accounts.FirstOrDefault(x => x.AccountId == currentAccount.ParentAccountId);
 				accounts.RemoveAll(x => x.AccountId == currentAccount.AccountId);
 
 				if (currentAccount.AccountId == childAcc.AccountId)
@@ -129,7 +117,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			var results = true;
 			var subInfo = AppService.UserContext.SubscriptionsAndRoles[subId];
 			var accResults = await AppService.GetAccounts(subInfo.OrganizationId);
-			var account = accResults.Where(x => x.AccountId == accId).FirstOrDefault();
+			var account = accResults.FirstOrDefault(x => x.AccountId == accId);
 
 			if (account != null && string.Equals(selectedStatus, "1"))
 			{
@@ -143,7 +131,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				var reportItems = await AppService.GetExpenseItemsByReportId(report.ExpenseReportId);
 				var accItems = reportItems.Where(x => x.AccountId == accId);
 
-				if (accItems.Count() > 0 && (ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Paid)
+				if (accItems.Any() && (ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Paid)
 				{
 					return false;
 				}

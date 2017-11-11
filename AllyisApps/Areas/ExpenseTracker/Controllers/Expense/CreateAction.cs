@@ -6,9 +6,9 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
 using AllyisApps.Services.Expense;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
-using AllyisApps.Services.Auth;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -67,10 +67,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			List<ExpenseItemCreateViewModel> itemViewModels = new List<ExpenseItemCreateViewModel>();
 			if (items != null)
 			{
-				foreach (ExpenseItem item in items)
-				{
-					itemViewModels.Add(InitializeExpenseItemViewModel(item));
-				}
+				itemViewModels.AddRange(items.Select(InitializeExpenseItemViewModel));
 			}
 
 			var model = new ExpenseCreateModel
