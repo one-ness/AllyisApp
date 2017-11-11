@@ -65,9 +65,15 @@ namespace AllyisApps.Services
 		{
 			#region Validation
 
-			var project = DBHelper.GetProjectById(entry.ProjectId);
+			ProjectDBEntity project = await DBHelper.GetProjectByIdAndUser(entry.ProjectId, entry.UserId);
+			var projInfo = DBHelper.GetProjectById(entry.ProjectId);
 
-			if (!project.IsActive)
+			if (!project.IsProjectUser.GetValueOrDefault())
+			{
+				throw new ArgumentException("Project is unassignable to user.");
+			}
+
+			if (!projInfo.IsActive)
 			{
 				throw new ArgumentException("Project is not active.");
 			}

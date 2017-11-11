@@ -550,7 +550,7 @@ namespace AllyisApps.Services
 								
 								if (customer == null)
 								{
-									result.ProjectFailures.Add(string.Format("Could not create project {0}: No customer to create it under.", knownValue));
+									result.ProjectFailures.Add(string.Format("Could not create project {0}: No customer with an id of {1} exists.", knownValue, fields[2]));
 									continue;
 								}
 
@@ -1037,6 +1037,8 @@ namespace AllyisApps.Services
 
 					try
 					{
+						DBHelper.CreateProjectUser(project.ProjectId, userInOrg.UserId);
+
 						// All required information is present and valid
 						if (await CreateTimeEntry(new TimeEntry
 						{
