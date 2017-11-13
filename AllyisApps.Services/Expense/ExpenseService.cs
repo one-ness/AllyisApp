@@ -241,7 +241,7 @@ namespace AllyisApps.Services
 			ExpenseItemDBEntity itemEntity = new ExpenseItemDBEntity
 			{
 				AccountId = item.AccountId,
-				Amount = Math.Round(item.Amount, 2),
+				Amount = Decimal.Parse(String.Format("{0}", item.Amount)),
 				CreatedUtc = item.ExpenseItemCreatedUtc,
 				ExpenseItemId = item.ExpenseItemId,
 				ExpenseReportId = item.ExpenseReportId,

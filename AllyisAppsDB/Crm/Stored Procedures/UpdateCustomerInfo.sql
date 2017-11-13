@@ -12,6 +12,7 @@ CREATE PROCEDURE [Crm].[UpdateCustomerInfo]
 	@faxNumber VARCHAR(50),
 	@website NVARCHAR(50),
 	@eIN NVARCHAR(50),
+	@isActive BIT,
 	@orgId NVARCHAR(16),
 	@retId INT OUTPUT
 AS
@@ -59,9 +60,9 @@ BEGIN
 					[Website] = @website,
 					[EIN] = @eIN,
 					[CustomerOrgId] = @orgId,
-					[AddressId] =  @temp
-				WHERE [CustomerId] = @customerId 
-					AND [IsActive] = 1;
+					[AddressId] =  @temp,
+					IsActive = @isActive
+				WHERE [CustomerId] = @customerId
 			SET @retId = 1;
 			SELECT @retId;
 			_success:
