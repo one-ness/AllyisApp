@@ -51,7 +51,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			UserContext.SubscriptionAndRole subInfo = null;
 			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 
-			var infos = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
+			//var infos = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 
 			return View("Index", await ConstructManageCustomerViewModel(subscriptionId));
 		}

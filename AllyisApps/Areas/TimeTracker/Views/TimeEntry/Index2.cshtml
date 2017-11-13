@@ -172,11 +172,12 @@
 							{
 								<a class="col-xs-11 text-left"
 								   data-search="@user.Email"
-								   href="@Url.RouteUrl(RouteNameConstants.TimeEntryIndexUserTimeSheet, new
+								   href="@Url.Action(ActionConstants.Index, new
 								{
+									userid = ViewBag.SignedInUserID,
 									startDate = Model.EntryRange.StartDate,
 									endDate = Model.EntryRange.EndDate
-								})"
+									})"
 								   style="text-decoration: none; color: #000000;">
 									@user.FirstName @user.LastName
 								</a>
@@ -326,7 +327,7 @@
 			else
 			{
 				var newForm = jQuery('<form>', {
-					'action': '/@ProductNameConstants.TimeTracker/@Model.SubscriptionId/@ControllerConstants.TimeEntry/Index/@ViewBag.SelectedUserId',
+					'action': '/@ProductNameConstants.TimeTracker/@Model.SubscriptionId/@ControllerConstants.TimeEntry/TimeTrackerDatePickerRedirect',
 					'target': '_top',
 					'method': 'get'
 				}).append(jQuery('<input>', {
@@ -336,6 +337,10 @@
 				})).append(jQuery('<input>', {
 					'name': 'endDate',
 					'value': picker.endDate.format().slice(0, 10),
+					'type': 'hidden'
+				})).append(jQuery('<input>', {
+					'name': 'userid',
+					'value': @Model.CurrentUser.UserId ,
 					'type': 'hidden'
 				}));
 				newForm.appendTo(document.body).submit();
