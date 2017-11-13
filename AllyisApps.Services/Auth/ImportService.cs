@@ -823,7 +823,7 @@ namespace AllyisApps.Services
                                 }
                                 catch (InvalidOperationException)
                                 {
-                                    result.UserFailures.Add(string.Format("{0} {1} already exists in the organization", names[0], names[1]));
+                                    result.UserFailures.Add(string.Format("{0} {1} has already received an invitation.", names[0], names[1]));
                                 }
                                 catch (System.Data.SqlClient.SqlException)
                                 {
@@ -951,7 +951,7 @@ namespace AllyisApps.Services
 
 					if (project == null)
 					{
-						result.GeneralFailures.Add("Project Id not recognized.");
+						result.GeneralFailures.Add(String.Format("Project {0} not recognized.", knownValue));
 						continue;
 					}
 					
@@ -966,7 +966,7 @@ namespace AllyisApps.Services
 					}
 					catch (NullReferenceException)
 					{
-						result.GeneralFailures.Add("Employee Id not recognized.");
+						result.GeneralFailures.Add(String.Format("Employee Id {0} not recognized.", readValue));
 						continue;
 					}
 
