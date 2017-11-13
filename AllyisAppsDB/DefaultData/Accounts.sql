@@ -1,0 +1,1 @@
+﻿INSERT INTO [Finance].[AccountType] (AccountTypeId, AccountTypeName) VALUES (0,'Defalt'); 

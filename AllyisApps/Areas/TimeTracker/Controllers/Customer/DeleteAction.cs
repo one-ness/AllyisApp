@@ -51,7 +51,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					}
 					else
 					{
-						result = await AppService.ReactivateCustomer(numValue, subscriptionId, orgId);
+						result =  AppService.ReactivateCustomer(numValue, subscriptionId, orgId);
 					}
 
 					if (!string.IsNullOrEmpty(result))

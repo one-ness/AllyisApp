@@ -27,10 +27,6 @@ namespace AllyisApps
 			// SCRIPT BUNDLES
 
 			// Time Tracker
-			bundles.Add(new ScriptBundle("~/bundles/daterangepickerold").Include(
-				"~/Scripts/jquery.comiseo.daterangepicker-0.5.0.js",
-				"~/Areas/TimeTracker/Scripts/allyis-drp-init.js"));
-
 			bundles.Add(new ScriptBundle("~/bundles/TTCustomerIndex").Include(
 				"~/Areas/TimeTracker/Scripts/allyis-customer-index.js"));
 

@@ -8,7 +8,6 @@ using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
-using AllyisApps.Lib;
 using AllyisApps.Resources;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Auth;
@@ -34,9 +33,11 @@ namespace AllyisApps.Controllers.Auth
 			}
 
 			ViewBag.ReturnUrl = returnUrl;
-			var model = new RegisterViewModel();
-			model.DateOfBirth = Utility.GetDaysFromDateTime(DateTime.UtcNow.AddYears(-18).AddDays(-1));
-			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService);
+			var model = new RegisterViewModel
+			{
+				DateOfBirth = DateTime.UtcNow.AddYears(-18).AddDays(-1),
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService)
+			};
 
 			return View(model);
 		}
@@ -52,10 +53,6 @@ namespace AllyisApps.Controllers.Auth
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Register(RegisterViewModel model, string returnUrl)
 		{
-			if (model.DateOfBirth == -1)
-			{
-				ModelState.AddModelError("DateOfBirth", "Please enter your date of birth.");
-			}
 			if (ModelState.IsValid)
 			{
 				Guid code = Guid.NewGuid();
@@ -63,11 +60,8 @@ namespace AllyisApps.Controllers.Auth
 				string confirmEmailSubject = string.Format(Strings.ConfirmEmailSubject, Strings.ApplicationTitle);
 				string confirmEmailBody = string.Format(Strings.ConfirmEmailMessage, Strings.ApplicationTitle, confirmUrl);
 
-				// compute birthdate
-				var birthdate = Utility.GetNullableDateTimeFromDays(model.DateOfBirth);
-
 				// create new user in the db and get back the userId and count of invitations
-				int userId = await AppService.SetupNewUser(model.Email, model.Password, model.FirstName, model.LastName, code, birthdate.Value, model.PhoneNumber, model.Address, null, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode, confirmEmailSubject, confirmEmailBody);
+				int userId = await AppService.SetupNewUser(model.Email, model.Password, model.FirstName, model.LastName, code, model.DateOfBirth, model.PhoneNumber, model.Address, null, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode, confirmEmailSubject, confirmEmailBody);
 				if (userId > 0)
 				{
 					// sign in (and set cookie) do not set cookie need to confirm email
@@ -75,10 +69,8 @@ namespace AllyisApps.Controllers.Auth
 					Notifications.Add(new BootstrapAlert(Strings.RegistationSucessful, Variety.Success));
 					return RedirectToLocal(returnUrl);
 				}
-				else
-				{
-					Notifications.Add(new BootstrapAlert(Strings.UserAccountAlreadyExists, Variety.Danger));
-				}
+
+				Notifications.Add(new BootstrapAlert(Strings.UserAccountAlreadyExists, Variety.Danger));
 			}
 
 			// error

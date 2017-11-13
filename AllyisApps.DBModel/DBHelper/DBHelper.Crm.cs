@@ -192,7 +192,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="customerId">The id of the customer.</param>
 		/// <returns>A collection of projects with the definied customer.</returns>
-		public async Task<IEnumerable<ProjectDBEntity>> GetProjectsByCustomer(int customerId)
+		public async Task<IEnumerable<ProjectDBEntity>> GetProjectsByCustomerAsync(int customerId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@customerId", customerId);
@@ -370,7 +370,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="customerInfo">The table with the customer to create.</param>
 		/// <returns>The Id of the customer if one was created -1 if not.</returns>
-		public async Task<int> CreateCustomerInfo(Tuple<CustomerDBEntity, AddressDBEntity> customerInfo)
+		public async Task<int> CreateCustomerInfoAsync(Tuple<CustomerDBEntity, AddressDBEntity> customerInfo)
 		{
 			if (customerInfo == null)
 			{
@@ -410,7 +410,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="customerInfo">The table with the customer to create.</param>
 		/// <return>1 if succeed, -1 if fail because CustOrgId is not unique.</return>
-		public async Task<int> UpdateCustomer(Tuple<CustomerDBEntity, AddressDBEntity> customerInfo)
+		public async Task<int> UpdateCustomerAsync(Tuple<CustomerDBEntity, AddressDBEntity> customerInfo)
 		{
 			if (customerInfo == null)
 			{
@@ -606,11 +606,11 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="customerId">The customer's Id.</param>
 		/// <returns>True if successful.</returns>
-		public async Task<string> ReactivateCustomer(int customerId)
+		public string ReactivateCustomer(int customerId)
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var resultGet = await connection.QueryAsync<string>("[Crm].[ReactivateCustomer]", new { CustomerId = customerId }, commandType: CommandType.StoredProcedure);
+				var resultGet = connection.Query<string>("[Crm].[ReactivateCustomer]", new { CustomerId = customerId }, commandType: CommandType.StoredProcedure);
 				var result = resultGet.SingleOrDefault();
 				if (result == null) { return ""; }
 				return result;
@@ -677,6 +677,26 @@ namespace AllyisApps.DBModel
 					commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
 		}
+		
+		/// <summary>
+		/// Gets a project from its id.
+		/// </summary>
+		/// <param name="projectOrgId">The project's Id.</param>
+		/// <returns>Info about the requested project.</returns>
+		public ProjectDBEntity GetProjectByProjectOrgId(string projectOrgId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@projectOrgId", projectOrgId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				var entity = connection.Query<ProjectDBEntity>(
+					"[Pjm].[GetProjectByProjectOrgId]",
+					parameters,
+					commandType: CommandType.StoredProcedure).SingleOrDefault();
+				return entity;
+			}
+		}
 
 		/// <summary>
 		/// Gets a project from its id and a user id, with the IsProjectUser field filled out
@@ -694,7 +714,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				var results = await connection.QueryAsync<ProjectDBEntity>(
-					"[Pjm].[GetProjectByIdAndUser]",
+					"[Crm].[GetProjectByIdAndUser]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
 				return results.SingleOrDefault();
@@ -807,14 +827,14 @@ namespace AllyisApps.DBModel
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="userId">User Id.</param>
 		/// <returns>.</returns>
-		public async Task<Tuple<List<ProjectDBEntity>, List<dynamic>>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId, int userId)
+		public Tuple<List<ProjectDBEntity>, List<dynamic>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
 			parameters.Add("@orgId", orgId);
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var results = await connection.QueryMultipleAsync(
+				var results = connection.QueryMultiple(
 					"[Crm].[GetInactiveProjectsAndCustomersForOrgAndUser]",
 					parameters,
 					commandType: CommandType.StoredProcedure);

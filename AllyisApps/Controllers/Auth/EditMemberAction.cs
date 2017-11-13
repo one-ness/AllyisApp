@@ -29,7 +29,7 @@ namespace AllyisApps.Controllers.Auth
 		public async Task<ActionResult> EditMember(int id, int userId)
 		{
 			var model = await ConstructViewModel(id, userId);
-			return View("editmember", model);
+			return View(ActionConstants.EditMember, model);
 		}
 
 		private async Task<EditMemberViewModel> ConstructViewModel(int orgId, int userId)
@@ -45,7 +45,7 @@ namespace AllyisApps.Controllers.Auth
 				Address = user.Address?.Address1,
 				City = user.Address?.City,
 				CountryName = user.Address?.CountryName,
-				DateOfBirth = user.DateOfBirth?.ToString("d") ?? string.Empty,
+				DateOfBirth = user.DateOfBirth.ToString("d"),
 				Email = user.Email,
 				EmployeeId = org.EmployeeId,
 				FirstName = user.FirstName,
@@ -78,7 +78,7 @@ namespace AllyisApps.Controllers.Auth
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> EditMember(EditMemberViewModel model)
 		{
-			if (!ModelState.IsValid) return RedirectToAction("EditMember", new { id = model.OrganizationId, userid = model.UserId });
+			if (!ModelState.IsValid) return RedirectToAction(ActionConstants.EditMember, new { id = model.OrganizationId, userid = model.UserId });
 			// TODO: do this in a transaction
 
 			// update employee id 

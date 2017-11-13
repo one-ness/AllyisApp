@@ -42,7 +42,7 @@ namespace AllyisApps.Services
 		public async Task<IList<ExpenseItem>> GetExpenseItemsByReportId(int reportId)
 		{
 			var results = await DBHelper.GetExpenseItemsByReportId(reportId);
-			return results.Select(x => InitializeExpenseItem(x)).AsEnumerable().ToList();
+			return results.Select(InitializeExpenseItem).AsEnumerable().ToList();
 		}
 
 		/// <summary>
@@ -248,7 +248,7 @@ namespace AllyisApps.Services
 				IsBillableToCustomer = item.IsBillableToCustomer,
 				ItemDescription = item.ItemDescription,
 				ModifiedUtc = item.ExpenseItemModifiedUtc,
-				TransactionDate = Convert.ToDateTime(item.TransactionDate),
+				TransactionDate = Convert.ToDateTime(item.TransactionDate)
 			};
 			DBHelper.CreateExpenseItem(itemEntity);
 		}

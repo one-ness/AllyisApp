@@ -91,14 +91,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				if (!model.IsActive)
 				{
-					var projects = await AppService.GetProjectsByCustomer(model.CustomerId);
+					var projects = await AppService.GetProjectsByCustomerAsync(model.CustomerId);
 					foreach (var project in projects)
 					{
 						var results = AppService.DeleteProject(project.ProjectId, model.SubscriptionId);
 					}
 				}
 
-				var result = await AppService.UpdateCustomer(
+				var result = await AppService.UpdateCustomerAsync(
 					new Customer
 					{
 						CustomerId = model.CustomerId,
@@ -144,7 +144,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					return RedirectToAction(ActionConstants.Index, new { subscriptionId = model.SubscriptionId });
 				}
 			}
-
+			await Task.Delay(1);
 			// Invalid model
 			return View(model);
 		}

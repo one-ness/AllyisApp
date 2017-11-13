@@ -415,6 +415,8 @@
     <Build Include="Pjm\Stored Procedures\GetNextProjectId.sql" />
     <Build Include="Crm\Stored Procedures\FullDeleteCustomer.sql" />
     <Build Include="Pjm\Stored Procedures\FullDeleteProject.sql" />
+    <Build Include="Pjm\Stored Procedures\GetProjectByProjectOrgId.sql" />
+    <None Include="DefaultData\Accounts.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

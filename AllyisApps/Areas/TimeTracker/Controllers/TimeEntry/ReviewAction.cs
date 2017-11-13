@@ -37,12 +37,21 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public async Task<ActionResult> Review(int subscriptionId, DateTime? startDate = null, DateTime? endDate = null)
 		{
 			int organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-			DateTime calculatedStartDate = startDate ?? DateTime.Now.AddMonths(-1);
-			DateTime calculatedEndDate = endDate ?? DateTime.Now;
+			if (!startDate.HasValue || !endDate.HasValue)
+			{
+				var payperiodred = await AppService.GetPayPeriodRanges(organizationId);
+				startDate = startDate ?? payperiodred.Current.StartDate;
+				endDate = endDate ?? payperiodred.Current.EndDate;
+				return RedirectToAction(ActionConstants.Review, new {  subscriptionId, startDate, endDate });
+			}
+
+			var payperiod =  await AppService.GetPayPeriodRanges(organizationId);
+			
+			
 
 			var payClasses = (await AppService.GetPayClassesByOrganizationId(organizationId)).Select(x => new PayClassInfoViewModel(x)).ToList();
 			var subscription = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
-			var allTimeEntries = (await AppService.GetTimeEntriesOverDateRange(organizationId, calculatedStartDate, calculatedEndDate))
+			var allTimeEntries = (await AppService.GetTimeEntriesOverDateRange(organizationId, startDate.Value, endDate.Value))
 				.Select(entry =>
 				{
 					CompleteProject project = AppService.GetProject(entry.ProjectId);
@@ -77,8 +86,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				TimeEntriesByUser = timeEntriesByUser,
 				TimeEntryTotalsByUserByPayClass = timeEntryTotalsByUserByPayClass,
 				TimeEntryIdsJSON = JsonConvert.SerializeObject(allTimeEntries.Select(entry => entry.TimeEntryId).ToArray()),
-				StartDate = calculatedStartDate,
-				EndDate = calculatedEndDate,
+				StartDate = startDate.Value,
+				EndDate = endDate.Value,
 				TimeEntryStatusOptions = ModelHelper.GetLocalizedTimeEntryStatuses(AppService),
 				PayPeriodRanges = payperiodRanges
 			};

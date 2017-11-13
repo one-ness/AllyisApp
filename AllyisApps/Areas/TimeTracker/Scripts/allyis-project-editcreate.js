@@ -91,14 +91,21 @@ $(document).ready(function () {
 	$("#EndDate").singleDatePicker();
 });
 
-$.fn.singleDatePicker = function() {
-	$(this).on("apply.daterangepicker", function (e, picker) {
+$.fn.singleDatePicker = function () {
+	var datepickerElement = this;
+
+	$(datepickerElement).on("apply.daterangepicker", function (e, picker) {
 		picker.element.val(picker.startDate.format(picker.locale.format));
 	});
-	return $(this).daterangepicker({
+
+	$(datepickerElement).siblings(".input-group-addon").click(function () {
+		$(datepickerElement).click();
+	});
+
+	return $(datepickerElement).daterangepicker({
 		singleDatePicker: true,
 		showDropdowns: true,
-		drops: "up",
-		autoUpdateInput: false
+		autoUpdateInput: false,
+		drops: "up"
 	});
 };

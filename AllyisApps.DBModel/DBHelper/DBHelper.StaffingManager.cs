@@ -274,7 +274,7 @@ namespace AllyisApps.DBModel
 		public void CreateStaffingSettings(int subId, int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", subId);
+			parameters.Add("@organizationId", orgId);
 			parameters.Add("@subscriptionId", subId);
 			parameters.Add("@defaultPositionName", "Active");
 			parameters.Add("@defaultApplicationName", "Active");

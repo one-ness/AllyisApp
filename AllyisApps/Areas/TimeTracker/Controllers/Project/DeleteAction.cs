@@ -90,7 +90,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					}
 					else
 					{
-						result = await AppService.ReactivateCustomer(parentCustomer.CustomerId, subscriptionId, orgId);
+						result = AppService.ReactivateCustomer(parentCustomer.CustomerId, subscriptionId, orgId);
 
 						if (!string.IsNullOrEmpty(result))
 						{

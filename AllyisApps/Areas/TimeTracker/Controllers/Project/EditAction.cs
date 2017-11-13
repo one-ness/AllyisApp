@@ -52,7 +52,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
 
 			int orgId = AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId;
-			var projIdMatchGet = await AppService.GetAllProjectsForOrganization(orgId);
+			var projIdMatchGet = await AppService.GetAllProjectsForOrganizationAsync(orgId);
 
 			// TODO: Don't check for duplicate projects in controller
 			Services.Project.Project projIdMatch = projIdMatchGet.SingleOrDefault(project => project.ProjectOrgId == model.ProjectOrgId && project.owningCustomer?.CustomerId == model.ParentCustomerId);
@@ -69,7 +69,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				if (!customer.IsActive.Value && model.IsActive)
 				{
 					customer.IsActive = true;
-					await AppService.UpdateCustomer(customer, subscriptionId);
+					await AppService.UpdateCustomerAsync(customer, subscriptionId);
 					UpdateProject(model);
 				}
 				else

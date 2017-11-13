@@ -36,22 +36,22 @@
 							<th><span class="pull-right">@Strings.Delete</span></th>
 						</tr>
 					</thead>
-					@foreach (SettingsViewModel.PayClassViewModel PayClass in Model.PayClasses)
+					@foreach (SettingsPayClassesViewModel.PayClassViewModel payClass in Model.PayClasses)
 				{
 						<tr>
 							@{
-							string _payClassName = Strings.ResourceManager.GetString(PayClass.PayClassName.Replace(" ", string.Empty)) ?? PayClass.PayClassName;
+							string _payClassName = Strings.ResourceManager.GetString(payClass.PayClassName.Replace(" ", string.Empty)) ?? payClass.PayClassName;
 							}
 							<td>@_payClassName</td>
 							@if (_payClassName != Strings.Regular && _payClassName != Strings.Overtime && _payClassName != Strings.Holiday && _payClassName != Strings.PaidTimeOff && _payClassName != Strings.UnpaidTimeOff)
 						{
 								<td>
 									<a href="javascript: void(0);" class="text-muted" title="@Strings.MergePayClass"
-									   onclick='mergePayClass("@PayClass.PayClassId")'><span class="fa fa-fw fa-object-group pull-right"></span></a>
+									   onclick='mergePayClass("@payClass.PayClassId")'><span class="fa fa-fw fa-object-group pull-right"></span></a>
 								</td>
 								<td>
 									<a href="javascript: void(0);" class="text-muted" title="@Strings.DeletePayClass"
-									   onclick='deletePayClass("@PayClass.PayClassId", "\"@_payClassName\"")'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
+									   onclick='deletePayClass("@payClass.PayClassId", "\"@_payClassName\"")'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
 								</td>
 						}
 						else
@@ -83,6 +83,15 @@
 		deletePayClassWarning = "@Html.Raw(Strings.ConfirmDeletePayClass)";
 		mergePayClassUrl = "@Url.Action(ActionConstants.MergePayClass , ControllerConstants.TimeEntry, new { subscriptionId = ViewData["SubscriptionId"], userId = -1 })";
 		deletePayClassUrl = "@Url.Action(ActionConstants.DeletePayClass, ControllerConstants.TimeEntry, new { subscriptionId = ViewData["SubscriptionId"], userId = -1 })";
+
+		function deletePayClass(payClassId, payClassName) {
+			if (confirm(deletePayClassWarning.replace('{0}', payClassName))) {
+				window.location = deletePayClassUrl.replace('-1', payClassId);
+			}
+		}
+
+		function mergePayClass(payClassId) {
+			window.location = mergePayClassUrl.replace('-1', payClassId);
+		}
 	</script>
-	@Scripts.Render("~/bundles/TTTimeEntrySettings")
 }
