@@ -18,9 +18,7 @@ using AllyisApps.Services.Crm;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.Project;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-using System.Globalization;
 using static AllyisApps.ViewModels.TimeTracker.TimeEntry.TimeEntryOverDateRangeViewModel;
-using AllyisApps.Areas.TimeTracker.Core;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -158,13 +156,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					PayPeriodRanges = payRanges,
 					Entries = new List<EditTimeEntryViewModel>(),
 					UserId = userId,
-					SubscriptionId = subId,
-					startOfWeek = (DayOfWeek)1,
-					weekProjector = 
-						d => CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(
-						Utility.GetDateTimeFromDays(d).Date,
-						CalendarWeekRule.FirstFourDayWeek,
-						(DayOfWeek)1),
+					SubscriptionId = subId
 				},
 				CanManage = isManager,
 				StartOfWeek = (StartOfWeekEnum)startOfWeek,
@@ -277,57 +269,56 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 						// Go to the next day.
 						date = date.AddDays(1);
+
+						// holidayPopulated = false;
 					}
-				}
-			}
-			result.EntryRange.weekGrouped = new List<DateGroup>();
-			result.EntryRange.dateGroup = new List<DateGroup>();
-			result.EntryRange.weekQuery = from entry in result.EntryRange.Entries orderby entry.Date group entry by result.EntryRange.weekProjector(entry.Date);
-			foreach(var weekGroup in result.EntryRange.weekQuery)
-			{
-				result.EntryRange.dateQuery = (from entry in weekGroup orderby entry.Date group entry by entry.Date).ToList();
-				foreach (var DateGroup in result.EntryRange.dateQuery)
-				{
-					var _dateQuery = new DateGroup();
-					_dateQuery.theEntries = (from entry in DateGroup where !entry.Sample select entry).ToList();
-					_dateQuery.theSample = (from entry in DateGroup where entry.Sample select entry).FirstOrDefault();
-					_dateQuery.totalCount = _dateQuery.theEntries.Count();
-					_dateQuery.allVotedCount = (from e in _dateQuery.theEntries where e.ApprovalState != (int)ApprovalState.NoApprovalState select e).Count();
-					_dateQuery.allApprovedCount = (from e in _dateQuery.theEntries where e.ApprovalState == (int)ApprovalState.Approved select e).Count();
-					_dateQuery.allRejectedCount = (from e in _dateQuery.theEntries where e.ApprovalState == (int)ApprovalState.NotApproved select e).Count();
-					_dateQuery.noneExist = _dateQuery.totalCount == 0;
-					_dateQuery.noneWereVoted = _dateQuery.allVotedCount == 0;
-					_dateQuery.allWereApproved = _dateQuery.allVotedCount > 0 && _dateQuery.totalCount == _dateQuery.allApprovedCount;
-					_dateQuery.allWereRejected = _dateQuery.allVotedCount > 0 && _dateQuery.totalCount == _dateQuery.allRejectedCount;
-					_dateQuery.anyWereChanged = (from e in _dateQuery.theEntries where e.ModSinceApproval select e).Any();
-					_dateQuery.containerClass = _dateQuery.noneExist ? "" :
-										_dateQuery.noneWereVoted ? "" :
-										_dateQuery.anyWereChanged ? "pending" :
-										_dateQuery.allWereApproved ? "approved" :
-										_dateQuery.allWereRejected ? "rejected" : "pending";
-					_dateQuery.headerClass = _dateQuery.containerClass;
 
-					_dateQuery.currentDate = Utility.GetDateTimeFromDays(weekGroup.First().Date).Date;
-					_dateQuery.dateStringNums = _dateQuery.currentDate.ToShortDateString();
-					_dateQuery.dateStringDayLong = _dateQuery.currentDate.DayOfWeek.ToString();
-					_dateQuery.dateStringDayShort = DateTimeFormatInfo.CurrentInfo.AbbreviatedDayNames[(int)_dateQuery.currentDate.DayOfWeek];
-
-					_dateQuery.offDayClass = "";
-					_dateQuery.holidayClass = "";
-
-					if (_dateQuery.theSample.IsOffDay)
-					{ // Note: To change the color of offdays/offday entries, edit TimeTracker.css rules for '.table-row .offDay'/'.offDay .form-control', respectively.
-						_dateQuery.offDayClass = "offDay";
-					}
-					if (_dateQuery.theSample.IsHoliday && !_dateQuery.theSample.IsOffDay)
+					/*
+					else if ((holidays.Where(x => x.Date == date).FirstOrDefault() != null) && (iter.Current == null || iter.Current.Date != date) && !holidayPopulated)
 					{
-						_dateQuery.holidayClass = "holiday";
-					}
+						/* TODO: REPLACE HOLIDY LOGIC HERE IMPORTANT: ALL HOLIDAY Calculations May not work as expected ARE CURENTLY DISABLED
+						holidayPopulated = true;
+						// Prepopulate holidays
 
-					result.EntryRange.dateGroup.Add(_dateQuery);
+						result.GrandTotal.Hours += 8;
+
+						TimeEntry timeEntryInfo = new TimeEntry()
+						{
+							ApprovalState = 1,
+							Date = date,
+							Duration = 8,
+							UserId = userId,
+							ProjectId = 0,
+							PayClassId = infos.Item2.Where(p => p.PayClassName.Equals("Holiday")).FirstOrDefault().PayClassId,
+							Description = holidays.Where(x => x.Date == date).First().HolidayName,
+						};
+
+						int timeEntryId = AppService.CreateTimeEntry(timeEntryInfo);
+
+						result.EntryRange.Entries.Add(new EditTimeEntryViewModel
+						{
+							TimeEntryId = timeEntryId,
+							Date = AppService.GetDayFromDateTime(date),
+							UserId = userId,
+							SubscriptionId = subId,
+							StartingDate = AppService.GetDayFromDateTime(startDate),
+							EndingDate = AppService.GetDayFromDateTime(endDate),
+							IsOffDay = (weekend % 7 == (int)date.DayOfWeek || (weekend + 1) % 7 == (int)date.DayOfWeek) ? true : false,
+							IsHoliday = true,
+							Projects = result.Projects,
+							ProjectsWithInactive = result.ProjectsWithInactive,
+							PayClassId = timeEntryInfo.PayClassId,
+							PayClasses = result.PayClasses,
+							Duration = string.Format("{0:D2}:{1:D2}", (int)timeEntryInfo.Duration, (int)Math.Round((timeEntryInfo.Duration - (int)timeEntryInfo.Duration) * 60, 0)),
+							Description = timeEntryInfo.Description,
+							ProjectName = allProjects.Where(x => x.ProjectId == 0).Select(x => x.ProjectName).FirstOrDefault(),
+							IsLocked = (!result.CanManage && beforeLockDate),
+							LockDate = result.LockDate
+						});
+					}
+					*/
 				}
 			}
-			for (int i = 0; i < result.EntryRange.dateGroup.Count; i++) result.EntryRange.weekGrouped.Add(result.EntryRange.dateGroup[i]);
 
 			return result;
 		}

@@ -5,19 +5,22 @@
 @model TimeEntryRangeForUserViewModel
 
 @{
-	var weekQuery = from entry in Model.Entries orderby entry.Date group entry by Model.weekProjector(entry.Date);
+	DayOfWeek startOfWeek = (DayOfWeek)ViewBag.startOfWeek;
+	Func<int, int> weekProjector =
+		d => CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(
+			Utility.GetDateTimeFromDays(d).Date,
+			CalendarWeekRule.FirstFourDayWeek,
+			startOfWeek);
+	var weekQuery = from entry in Model.Entries orderby entry.Date group entry by weekProjector(entry.Date);
 }
-@*
-@foreach (var weekGroup in @Model.weekQuery)
-	{*@
-	@*
-	@foreach (var dateGroup in dateQuery)
-		{
-	var dateQuery = from entry in weekGroup orderby entry.Date group entry by entry.Date;*@
+
+@foreach (var weekGroup in weekQuery)
+{
+	var dateQuery = from entry in weekGroup orderby entry.Date group entry by entry.Date;
 	<div class="panel panel-default timesheet-grouping">
-		@for(int i = 0; i < Model.weekGrouped.Count; i++)
+		@foreach (var dateGroup in dateQuery)
 		{
-			/*var theEntries = (from entry in dateGroup where !entry.Sample select entry).ToList();
+			var theEntries = (from entry in dateGroup where !entry.Sample select entry).ToList();
 			var theSample = (from entry in dateGroup where entry.Sample select entry).FirstOrDefault();
 			int totalCount = theEntries.Count;
 			int allVotedCount = (from e in theEntries where e.ApprovalState != (int)ApprovalState.NoApprovalState select e).Count();
@@ -50,49 +53,92 @@
 			if (theSample.IsHoliday && !theSample.IsOffDay)
 			{
 				holidayClass = "holiday";
-			}*/
+			}
 
-			<div class="panel-heading hidden visible-xs @(Model.weekGrouped[i].headerClass)">
-				<div class="panel-right table-col @Model.weekGrouped[i].offDayClass @Model.weekGrouped[i].holidayClass" style="display: block; background-color:transparent;">
+			<div class="panel-heading hidden visible-xs @(headerClass)">
+				<div class="panel-right table-col @offDayClass @holidayClass" style="display: block; background-color:transparent;">
 
-					<label style="margin-right:2em;">@(Model.weekGrouped[i].dateStringNums) @(Model.weekGrouped[i].dateStringDayLong)</label>
+					<label style="margin-right:2em;">@(dateStringNums) @(dateStringDayLong)</label>
 				</div>
 			</div>
-			<div class="table-container @(Model.weekGrouped[i].containerClass)">
+			<div class="table-container @(containerClass)">
 				<div class="table-row">
-					<div class="panel-left hidden-xs table-col text-center @Model.weekGrouped[i].offDayClass @Model.weekGrouped[i].holidayClass">
-						<label style="margin: 0 5px;">@Model.weekGrouped[i].dateStringNums</label>
-						<label style="margin: 0 5px;">@Model.weekGrouped[i].dateStringDayShort</label>
-						<div class="panel-right table-col @Model.weekGrouped[i].offDayClass @Model.weekGrouped[i].holidayClass" style="display: block; background-color:transparent;">
-
+					<div class="panel-left hidden-xs table-col text-center @offDayClass @holidayClass">
+						<label style="margin: 0 5px;">@dateStringNums</label>
+						<label style="margin: 0 5px;">@dateStringDayShort</label>
+						<div class="panel-right table-col @offDayClass @holidayClass" style="display: block; background-color:transparent;">
+							<table align="center">
+								<tr>
+									<!--@*
+									@if (currentDate.DayOfWeek == startOfWeek)
+									{
+										<td style="padding-right:5px; padding-bottom:5px;">
+											<a class="btn btn-primary weekcopier" name='@(theSample.Date <= theSample.LockDate && !theSample.IsManager ? "disabledButton" : "")'
+											   href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
+														{
+															startDateTarget=currentDate,
+															startDateCopy=currentDate.AddDays(-7),
+															endDateCopy = currentDate.AddDays(-1),
+															userId = Model.UserId,
+															subscriptionid = Model.SubscriptionId,
+															startDate = Model.StartDate,
+															endDate = Model.EndDate
+														}
+													)"
+											   style="width:100%; padding: 5px 7px;"
+											   title="@Strings.CopyWeek">
+												<i class="fa fa-files-o"></i> @Strings.WeekInitial
+											</a>
+										</td>
+									}
+									<td style="padding-bottom:5px;">
+										<a class="btn btn-primary daycopier" name='@(theSample.Date <= theSample.LockDate && !theSample.IsManager ? "disabledButton" : "")'
+										   href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
+													{
+														startDateTarget=currentDate,
+														startDateCopy=currentDate.AddDays(-1),
+														endDateCopy = currentDate.AddDays(-1),
+														userId = Model.UserId,
+														subscriptionId = Model.SubscriptionId,
+														startDate = Model.StartDate,
+														endDate = Model.EndDate
+													}
+												)"
+										   style="width:100%; padding: 5px 7px;"
+										   title="@Strings.CopyDay">
+											<i class="fa fa-files-o"></i> @Strings.DayInitial
+										</a>
+									</td>
+									*@-->
+								</tr>
+							</table>
 						</div>
 					</div>
-					<div class="panel-right table-col @Model.weekGrouped[i].offDayClass @Model.weekGrouped[i].holidayClass">
+					<div class="panel-right table-col @offDayClass @holidayClass">
 						@{
-							foreach (EditTimeEntryViewModel entry in Model.weekGrouped[i].theEntries)
+							foreach (EditTimeEntryViewModel entry in theEntries)
 							{
 								@Html.Partial("_AjaxTimeEntryBody2", entry)
 							}
-							if (Model.weekGrouped[i].theEntries.Count == 0 || !Model.weekGrouped[i].theSample.IsLocked) {
-								@Html.Partial("_AjaxTimeEntryBody2", Model.weekGrouped[i].theSample)
+							if (theEntries.Count == 0 || !theSample.IsLocked) {
+								@Html.Partial("_AjaxTimeEntryBody2", theSample)
 							}
-							if (Model.weekGrouped[i].theSample.IsManager || !Model.weekGrouped[i].theSample.IsLocked) //if the date is not locked because of lock date or logged in user is manager
+							if (theSample.IsManager || !theSample.IsLocked) //if the date is not locked because of lock date or logged in user is manager
 							{
-								Model.weekGrouped[i].theSample.Hidden = true;
-								@Html.Partial("_AjaxTimeEntryBody2", Model.weekGrouped[i].theSample)
+								theSample.Hidden = true;
+								@Html.Partial("_AjaxTimeEntryBody2", theSample)
 							}
-							else if (!Model.weekGrouped[i].theEntries.Any())//date is locked for regular user, there is no existing entry so we need 2 sample entries for styling purpose
+							else if (!theEntries.Any())//date is locked for regular user, there is no existing entry so we need 2 sample entries for styling purpose
 							{
-								@Html.Partial("_AjaxTimeEntryBody2", Model.weekGrouped[i].theSample)
+								@Html.Partial("_AjaxTimeEntryBody2", theSample)
 							}
 						}
 					</div>
 				</div>
 			</div>
-		} 
-		@*
+		}
 	</div>
-}*@
+}
 
 <div class="pull-right">
 	<a href=@Context.Request.RawUrl>

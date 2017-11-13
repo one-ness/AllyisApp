@@ -13,7 +13,7 @@
 	string approvalClass = Model.ModSinceApproval ? "pending" :
 					  Model.ApprovalState == (int)ApprovalState.NotApproved ? "rejected" :
 					  Model.ApprovalState == (int)ApprovalState.Approved ? "approved" : string.Empty;
-	var managableProjects = (bool)ViewBag.CanManage ? Model.ProjectsWithInactive : Model.Projects;
+	var managableProjects = (bool) ViewBag.CanManage ? Model.ProjectsWithInactive : Model.Projects;
 	var managableProjectsDropdown = managableProjects
 		.Where(p =>
 			(p.StartDate == null || DateTime.Compare(p.StartDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) <= 0) &&
@@ -22,9 +22,9 @@
 		{
 			Selected = Model.ProjectId == c.ProjectId,
 			Text = c.ProjectId != -1 ? string.Format("{0} - {1}", c.CustomerName, c.ProjectName) : c.ProjectName, //Only need customer - project text for project ids !=0
-					Value = c.ProjectId.ToString()
-					//Disabled = !c.IsUserActive
-				});
+			Value = c.ProjectId.ToString()
+			//Disabled = !c.IsUserActive
+		});
 	var payClassesDropdown = Model.PayClasses.Select(c =>
 		new SelectListItem
 		{
@@ -85,19 +85,20 @@
 		<!--Description-->
 		<div class="group left">
 			@(
-				 //? Html.TextBox("BeforeLockDateDesc", "Description", new {@class = "ovrd-form-control form-control", @style = "width: 100%", @onkeypress = "changeOccur(this)", @onchange = "changeOccur(this)", @placeholder = Strings.Description }).RemoveIdAttribute()
-				 Html.TextBoxDisabledFor(m => Model.Description, Model.IsLocked, new { @class = "ovrd-form-control form-control stretch", @onkeypress = "changeOccur(this)", @onchange = "changeOccur(this)", @placeholder = Strings.Description }).RemoveIdAttribute())
+				//? Html.TextBox("BeforeLockDateDesc", "Description", new {@class = "ovrd-form-control form-control", @style = "width: 100%", @onkeypress = "changeOccur(this)", @onchange = "changeOccur(this)", @placeholder = Strings.Description }).RemoveIdAttribute()
+				 Html.TextBoxDisabledFor(m => Model.Description, Model.IsLocked, new {@class = "ovrd-form-control form-control stretch", @onkeypress = "changeOccur(this)", @onchange = "changeOccur(this)", @placeholder = Strings.Description}).RemoveIdAttribute())
 		</div>
-		if (Model.IsLocked)
-		{
+		if (Model.IsLocked) {
 			<i class="glyphicon glyphicon-lock" style="padding-top: 9px; padding-left: 12px" title="This date is locked"></i>
 			<div class="button-anim-wrap btn-group group right">
 				<div>
-					<button type="button"
+					<button 
+							type="button"
 							value="Save"
 							class="btn btn-fa btn-primary btn-sharp"
 							title="@Strings.Add"
-							onclick='@("addRow(this)")'>
+							onclick= '@("addRow(this)")'
+						>
 						@*Formerally "Submit"; changed to match value and because "Save" was in resources already*@
 						<i class="allyisicon-submit"></i>
 					</button>
