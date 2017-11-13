@@ -51,7 +51,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					}
 					else
 					{
-						result =  AppService.ReactivateCustomer(numValue, subscriptionId, orgId);
+						result = AppService.ReactivateCustomer(numValue, subscriptionId, orgId);
 					}
 
 					if (!string.IsNullOrEmpty(result))
@@ -89,6 +89,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				try
 				{
 					var result = await AppService.FullDeleteCustomer(subscriptionId, Convert.ToInt32(id));
+					Notifications.Add(new BootstrapAlert(string.Format("Customer(s) successfully deleted"), Variety.Success));
 				}
 				catch
 				{

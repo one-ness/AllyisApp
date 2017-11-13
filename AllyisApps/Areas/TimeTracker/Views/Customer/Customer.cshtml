@@ -92,7 +92,7 @@
 	function getUserIdsAndSubmit() {
 		var csvIds = "";
 
-		if (!confirm("Do you wish to toggle the selected customer(s)?")) {
+		if (!confirm("Do you wish to perform action on selected customer(s)?")) {
 			return false;
 		}
 
@@ -114,7 +114,7 @@
 		csvIds = csvIds.replace(/(^,)|(,$)/g, "");
 
 		if (csvIds == "") {
-			alert("You have not chosen a user to delete");
+			alert("You have not chosen any user(s)");
 			return false;
 		}
 		$("#userIds").val(csvIds);
@@ -131,6 +131,5 @@
 		for (var i = 0, n = checkboxes.length; i < n; i++) {
 			checkboxes[i].checked = checking;
 		}
-		console.log("check all toggle, updated " + checkboxes.length + " to: " + checking);
 	}
 </script>

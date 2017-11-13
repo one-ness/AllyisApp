@@ -93,7 +93,7 @@
 	function getUserIdsAndSubmit() {
 		var csvIds = "";
 
-		if (!confirm("Do you wish to toggle the selected project(s)?")) {
+		if (!confirm("Do you wish perform action on selected project(s)?")) {
 			return false;
 		}
 
@@ -115,7 +115,7 @@
 		csvIds = csvIds.replace(/(^,)|(,$)/g, "");
 
 		if (csvIds == "") {
-			alert("You have not chosen a project to toggle");
+			alert("You have not chosen any project(s).");
 			return false;
 		}
 		$("#projIds").val(csvIds);
@@ -132,6 +132,5 @@
 		for (var i = 0, n = checkboxes.length; i < n; i++) {
 			checkboxes[i].checked = checking;
 		}
-		console.log("check all toggle, updated " + checkboxes.length + " to: " + checking);
 	}
 </script>
