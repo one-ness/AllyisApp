@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
@@ -36,6 +37,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				AppService.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
 			}
 
+			List<SelectListItem> statusOptions = new List<SelectListItem>()
+			{
+				new SelectListItem() { Text = "Active", Value = true.ToString() },
+				new SelectListItem() { Text = "Disabled", Value = false.ToString() }
+			};
+
 			var customer = await AppService.GetCustomerInfo(userId);
 			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
 			return View(new EditCustomerInfoViewModel
@@ -50,6 +57,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				SelectedCountryCode = customer.Address?.CountryCode,
 
 				SelectedStateId = customer.Address?.StateId,
+
+				IsActiveOptions = statusOptions,
+				IsActive = customer.IsActive.Value,
 
 				PostalCode = customer.Address?.PostalCode,
 				ContactPhoneNumber = customer.ContactPhoneNumber,
@@ -79,6 +89,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (ModelState.IsValid)
 			{
+				if (!model.IsActive)
+				{
+					var projects = await AppService.GetProjectsByCustomer(model.CustomerId);
+					foreach (var project in projects)
+					{
+						var results = AppService.DeleteProject(project.ProjectId, model.SubscriptionId);
+					}
+				}
+
 				var result = await AppService.UpdateCustomer(
 					new Customer
 					{
@@ -100,6 +119,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						FaxNumber = model.FaxNumber,
 						Website = model.Website,
 						EIN = model.EIN,
+						IsActive = model.IsActive,
 						CustomerOrgId = model.CustomerOrgId,
 						OrganizationId = model.OrganizationId
 					},

@@ -412,6 +412,9 @@
     <Build Include="TimeTracker\Stored Procedures\UpdatePayrollProcessedDate.sql" />
     <Build Include="Auth\Stored Procedures\UpdateEmployeeIdAndOrgRole.sql" />
     <Build Include="TimeTracker\Stored Procedures\UpdatePayPeriod.sql" />
+    <Build Include="Pjm\Stored Procedures\GetNextProjectId.sql" />
+    <Build Include="Crm\Stored Procedures\FullDeleteCustomer.sql" />
+    <Build Include="Pjm\Stored Procedures\FullDeleteProject.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

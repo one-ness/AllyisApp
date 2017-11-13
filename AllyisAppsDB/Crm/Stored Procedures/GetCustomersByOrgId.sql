@@ -27,6 +27,5 @@ AS
 	LEFT JOIN [Lookup].[Country] WITH (NOLOCK) ON [Country].[CountryCode] = [Address].[CountryCode]
 	LEFT JOIN [Lookup].[State] WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
 	WHERE [Customer].[OrganizationId] = @orgId
-	AND [Customer].[IsActive] = 1
 	ORDER BY [Customer].[CustomerName]
 END

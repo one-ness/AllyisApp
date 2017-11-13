@@ -25,22 +25,22 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	/// </summary>
 	public partial class CustomerController : BaseController
 	{
-		/// <summary>
-		/// GET: Customer/subscriptionId/Index.
-		/// </summary>
-		/// <param name="subscriptionId">The Subscription Id.</param>
-		/// <returns>Customer Index.</returns>
-		[HttpGet]
-		public async Task<ActionResult> Index(int subscriptionId)
-		{
-			if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
-			{
-				AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
-			}
-			UserContext.SubscriptionAndRole subInfo = null;
-			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			return View(await ConstructManageCustomerViewModel(subscriptionId));
-		}
+		///// <summary>
+		///// GET: Customer/subscriptionId/Index.
+		///// </summary>
+		///// <param name="subscriptionId">The Subscription Id.</param>
+		///// <returns>Customer Index.</returns>
+		//[HttpGet]
+		//public async Task<ActionResult> Index(int subscriptionId)
+		//{
+		//	if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
+		//	{
+		//		AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
+		//	}
+		//	UserContext.SubscriptionAndRole subInfo = null;
+		//	AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+		//	return View(await ConstructManageCustomerViewModel(subscriptionId));
+		//}
 
 		/// <summary>
 		/// Quick fix for new routing issue.
@@ -61,6 +61,50 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			ViewBag.WeekEnd = Utility.GetDaysFromDateTime(SetEndingDate(null, infos.Item1.StartOfWeek));
 
 			return View("Index", await ConstructManageCustomerViewModel(subscriptionId));
+		}
+
+		/// <summary>
+		/// Action for the customers page.
+		/// </summary>
+		/// <param name="subscriptionId">The current subscription id.</param>
+		/// <returns>The Customer page.</returns>
+		public async Task<ActionResult> Index(int subscriptionId)
+		{
+			ViewData["IsManager"] = AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
+			ViewData["SubscriptionId"] = subscriptionId;
+			ViewData["SubscriptionName"] = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName;
+			ViewData["UserId"] = AppService.UserContext.UserId;
+
+			var orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			var customers = (await AppService.GetCustomerList(orgId)).Select(x => new CustomerInfoViewModel()
+			{
+				Address = new CustomerInfoViewModel.AddessViewModel()
+				{
+					Address1 = x.Address?.Address1,
+					Address2 = x.Address?.Address2,
+					City = x.Address?.City,
+					CountryName = x.Address?.CountryName,
+					PostalCode = x.Address?.PostalCode,
+					StateName = x.Address?.StateName
+				},
+				CustomerId = x.CustomerId,
+				ContactEmail = x.ContactEmail,
+				ContactPhoneNumber = x.ContactPhoneNumber,
+				CreatedUtc = x.CreatedUtc,
+				CustomerName = x.CustomerName,
+				CustomerOrgId = x.CustomerOrgId,
+				EIN = x.EIN,
+				FaxNumber = x.FaxNumber,
+				IsActive = x.IsActive,
+				OrganizationId = x.OrganizationId,
+				Website = x.Website
+			}).ToList();
+
+			return View("Customer",
+				new MultiCustomerInfoViewModel()
+				{
+					CustomerList = customers
+				});
 		}
 
 		/// <summary>

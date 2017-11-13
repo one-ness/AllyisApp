@@ -426,7 +426,7 @@ namespace AllyisApps.Services
 			}
 			else
 			{
-				projects = GetProjectsByOrganization(orgId, false).ToList();
+				projects = (await GetProjectsByOrganization(orgId, false)).ToList();
 			}
 
 			// Add default project in case there are holiday entries

@@ -97,6 +97,21 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// Actually deletes the project.
+		/// </summary>
+		/// <param name="projectId">The project id.</param>
+		/// <returns></returns>
+		public async Task<bool> FullDeleteProject(int projectId)
+		{
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				var resultGet = await connection.QueryAsync<string>("[Pjm].[FullDeleteProject]", new { ProjectId = projectId }, commandType: CommandType.StoredProcedure);
+				var result = resultGet.SingleOrDefault();
+				return true;
+			}
+		}
+
+		/// <summary>
 		/// Deletes a project.
 		/// </summary>
 		/// <param name="projectId">The id of the project to be deleted.</param>
@@ -233,6 +248,27 @@ namespace AllyisApps.DBModel
 					results.Read<ProjectDBEntity>().SingleOrDefault(),
 					results.Read<UserDBEntity>().ToList(),
 					results.Read<SubscriptionUserDBEntity>().ToList());
+			}
+		}
+
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="orgId"></param>
+		/// <param name="subscriptionId"></param>
+		/// <returns></returns>
+		public async Task<string> GetNextProjectId(int orgId, int subscriptionId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@subscriptionId", subscriptionId);
+			parameters.Add("@orgId", orgId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				var results = await connection.QueryAsync("[Pjm].[GetNextProjectId]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+				return results.SingleOrDefault().ProjectOrgId;
 			}
 		}
 
@@ -396,6 +432,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@faxNumber", customer.FaxNumber);
 			parameters.Add("@website", customer.Website);
 			parameters.Add("@eIN", customer.EIN);
+			parameters.Add("@isActive", customer.IsActive);
 			parameters.Add("@orgId", customer.CustomerOrgId);
 			parameters.Add("@retId", -1, DbType.Int32, ParameterDirection.Output);
 
@@ -444,12 +481,12 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">The organization's Id.</param>
 		/// <returns>The CustomerDBEntity containing the customer's information, null if call fails.</returns>
-		public IEnumerable<dynamic> GetCustomerList(int orgId)
+		async public Task<IEnumerable<dynamic>> GetCustomerList(int orgId)
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default null
-				return connection.Query<dynamic>(
+				return await connection.QueryAsync<dynamic>(
 					"[Crm].[GetCustomersByOrgId]",
 					new { OrgId = orgId },
 					commandType: CommandType.StoredProcedure);
@@ -530,6 +567,21 @@ namespace AllyisApps.DBModel
 			}
 		}
 
+		/// <summary>
+		/// Deletes the specified customer
+		/// </summary>
+		/// <param name="customerId">The customer's id.</param>
+		/// <returns>true if successful else false.</returns>
+		public async Task<bool> FullDeleteCustomer(int customerId)
+		{
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				var resultGet = await connection.QueryAsync<string>("[Crm].[FullDeleteCustomer]", new { CustomerId = customerId }, commandType: CommandType.StoredProcedure);
+				var result = resultGet.SingleOrDefault();
+				return true;
+			}
+		}
+
 		/*
         /// <summary>
 		/// Delete the specified customer.
@@ -592,14 +644,14 @@ namespace AllyisApps.DBModel
 		/// <param name="orgId">The organization's Id.</param>
 		/// <param name="activity">The level of activity you wish to allow. Specifying 0 includes inactive projects.</param>
 		/// <returns>A collection of CompleteProjectInfo objects for each project within the organization.</returns>
-		public IEnumerable<ProjectDBEntity> GetProjectsByOrgId(int orgId, int activity)
+		async public Task<IEnumerable<ProjectDBEntity>> GetProjectsByOrgId(int orgId, int activity)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@orgId", orgId);
 			parameters.Add("@activity", activity);
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<ProjectDBEntity>(
+				return await connection.QueryAsync<ProjectDBEntity>(
 					"[Pjm].[GetProjectsByOrgId]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
@@ -655,10 +707,11 @@ namespace AllyisApps.DBModel
 		/// <param name="projectName">The new name of the project.</param>
 		/// <param name="orgId">The new orgId of the project.</param>
 		/// <param name="isHourly">The pricing type of the project.  True == hourly, false == fixed. TODO: use this parameter to update the project's isHourly column.  Currently disabled attribute.</param>
+		/// <param name="isActive">Sets if the project is active.</param>
 		/// <param name="start">The start date assigned to the project.</param>
 		/// <param name="end">The end date assigned to the project.</param>
 		/// <param name="userIds">The updated list of project users, by their Ids.</param>
-		public async void UpdateProjectAndUsers(int projectId, string projectName, string orgId, bool isHourly, DateTime? start, DateTime? end, IEnumerable<int> userIds)
+		public async void UpdateProjectAndUsers(int projectId, string projectName, string orgId, bool isHourly, bool isActive, DateTime? start, DateTime? end, IEnumerable<int> userIds)
 		{
 			if (string.IsNullOrWhiteSpace(projectName))
 			{
@@ -682,6 +735,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@projectName", projectName);
 			parameters.Add("@orgId", orgId);
 			parameters.Add("@isHourly", isHourly);
+			parameters.Add("@isActive", isActive);
 			parameters.Add("@startingDate", start?.ToShortDateString());
 			parameters.Add("@endingDate", end?.ToShortDateString());
 			parameters.Add("@userIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));

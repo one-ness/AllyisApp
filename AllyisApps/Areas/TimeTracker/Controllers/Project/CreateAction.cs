@@ -27,35 +27,32 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Gets the page for creating new projects.
 		/// </summary>
 		/// <param name="subscriptionId">Subscription id.</param>
-		/// <param name="userId">Customer Id for the project.</param>
 		/// <returns>The ActionResult for the Create view.</returns>
 		[HttpGet]
-		public async Task<ActionResult> Create(int subscriptionId, int userId)
+		public async Task<ActionResult> Create(int subscriptionId)
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
-			var idAndUsers = await AppService.GetNextProjectIdAndSubUsers(userId, subscriptionId);
-
-			var list = idAndUsers.Item2; // Service.GetUsers();
-			var subList = new List<BasicUserInfoViewModel>();
-
-			foreach (var user in list)
+			var orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			var idAndUsers = await AppService.GetNextProjectId(orgId, subscriptionId);
+			var customers = (await AppService.GetCustomerList(orgId)).Where(x => x.IsActive.Value);
+			var subUsers = AppService.GetSubscriptionUsers(subscriptionId).AsEnumerable();
+			var customersActive = customers.Select(x => new SelectListItem()
 			{
-				subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
-			}
+				Text = x.CustomerName,
+				Value = x.CustomerId.ToString()
+			}).ToList();
 
 			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
 			return View(
 				new EditProjectViewModel
 				{
 					IsCreating = true,
-					ParentCustomerId = userId,
 					ProjectUsers = new List<BasicUserInfoViewModel>(),
-					SubscriptionUsers = subList,
-					ProjectOrgId = idAndUsers.Item1, // Service.GetRecommendedProjectId()
-					CustomerName = AppService.GetCustomer(userId).CustomerName,
+					ProjectOrgId = idAndUsers, // Service.GetRecommendedProjectId()
 					SubscriptionId = subscriptionId,
+					Customers = customersActive,
 					SubscriptionName = subscriptionNameToDisplay,
-					UserId = userId,
+					SubscriptionUsers = subUsers.Select(x => new BasicUserInfoViewModel(x.FirstName, x.LastName, x.UserId)),
 					OrganizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId
 				});
 		}
@@ -98,7 +95,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return View(model);
 			}
 
-			return RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = model.SubscriptionId });
+			return RedirectToAction(ActionConstants.Index, ControllerConstants.Project, new { subscriptionId = model.SubscriptionId });
 
 			// Invalid Model
 		}
@@ -126,7 +123,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				owningCustomer = new Customer
 				{
-					CustomerId = model.ParentCustomerId,
+					CustomerId = model.CustomerId,
 				},
 				ProjectName = model.ProjectName,
 				ProjectOrgId = model.ProjectOrgId,

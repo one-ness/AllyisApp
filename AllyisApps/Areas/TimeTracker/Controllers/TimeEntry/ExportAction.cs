@@ -94,7 +94,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				if (userIds.Count > 1 || userIds[0] == -1)
 				{
-					result.Projects = AppService.GetProjectsByOrganization(orgId).AsParallel().Select(proj =>
+					result.Projects = (await AppService.GetProjectsByOrganization(orgId)).AsParallel().Select(proj =>
 					new CompleteProjectViewModel(proj));
 				}
 				else
