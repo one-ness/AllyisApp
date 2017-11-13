@@ -44,7 +44,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				project.StartDate,
 				project.EndDate,
 				project.SelectedProjectUserIds.Select(int.Parse),
-				project.SubscriptionId);
+				project.SubscriptionId,
+				false,
+				project.IsActive);
 
 			// project.IsHourly; // TODO: add an isHourly parameter to update the project's isHourly column.  Currently disabled feature
 		}

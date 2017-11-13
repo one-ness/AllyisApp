@@ -1,0 +1,135 @@
+﻿@using AllyisApps.ViewModels.TimeTracker.Customer;
+@model MultiCustomerInfoViewModel
+
+@{
+	ViewBag.Title = "Customers";
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
+}
+
+<div class="form-group pull-right">
+	<a href="@Url.Action("Create")">
+		<span class="btn btn-primary">Create Customer</span>
+	</a>
+</div>
+
+<div class="container">
+	<table class="table table-hover table-xtra-condensed">
+		<thead>
+			<tr class="" double-bottom-border"">
+				<th>
+					<input type="checkbox" id="select-all" onclick="CheckAllToggle()" />
+				</th>
+				<th>
+					Name
+				</th>
+				<th>
+					Address
+				</th>
+				<th>
+					EIN
+				</th>
+				<th>
+					Customer Code
+				</th>
+				<th>
+					Status
+				</th>
+				<th>
+					Edit
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var customer in Model.CustomerList)
+			{
+				<tr>
+					<td><input type="checkbox" class="customer-select" value="@customer.CustomerId" /></td>
+					<td>@customer.CustomerName</td>
+					<td>
+						<p>@customer.Address.Address1</p>
+						<p>@customer.Address.Address2</p>
+						<p>@customer.Address.City, @customer.Address.StateName  @customer.Address.PostalCode</p>
+					</td>
+					<td>@customer.EIN</td>
+					<td>@customer.CustomerId</td>
+					<td>
+						@if (customer.IsActive.Value)
+						{
+							<p>Active</p>
+						}
+						else
+						{
+							<p>Disabled</p>
+						}
+					</td>
+					<td>
+						<a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Customer, new {userId = customer.CustomerId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
+<div class="pull-right btn">
+	@using (Html.BeginForm(Strings.Delete, Strings.Customer, new { }, FormMethod.Get, new { @onsubmit = "return getUserIdsAndSubmit();" }))
+	{
+		<div>
+			<input type="hidden" name="userIds" id="deleteIds" value="" />
+			<button type="submit" class="btn btn-danger  pull-right">Delete</button>
+		</div>
+	}
+</div>
+<div class="pull-right btn">
+	@using (Html.BeginForm("ToggleStatus", Strings.Customer, new { }, FormMethod.Get, new { @onsubmit = "return getUserIdsAndSubmit();" }))
+	{
+		<input type="hidden" name="userIds" id="userIds" value="" />
+		<button type="submit" class="btn btn-primary  pull-right">Toggle Status</button>	
+	}
+</div>
+
+<script>
+	function getUserIdsAndSubmit() {
+		var csvIds = "";
+
+		if (!confirm("Do you wish to perform action on selected customer(s)?")) {
+			return false;
+		}
+
+		// gather all the ids to delete as a csv
+
+		var checkboxes = $(".customer-select");
+
+		//checkboxes = checkboxes.slice(1);   //We don't want to include the select all checkbox
+		checkboxes.each(function () {
+
+			var value = $(this).val();
+			var isChecked = $(this).is(":checked");
+
+			if (isChecked) {
+				csvIds += value + ",";
+			}
+		});
+
+		csvIds = csvIds.replace(/(^,)|(,$)/g, "");
+
+		if (csvIds == "") {
+			alert("You have not chosen any user(s)");
+			return false;
+		}
+		$("#userIds").val(csvIds);
+		$("#deleteIds").val(csvIds);
+
+		// submit the form
+
+		return true; // for now, delete this line later
+	}
+	function CheckAllToggle() {
+		var checkboxes = [];
+		var checking = document.getElementById("select-all").checked;
+		checkboxes = document.getElementsByClassName("customer-select");
+		for (var i = 0, n = checkboxes.length; i < n; i++) {
+			checkboxes[i].checked = checking;
+		}
+	}
+</script>

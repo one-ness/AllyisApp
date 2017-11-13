@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace AllyisApps.ViewModels.TimeTracker.Project
 {
@@ -63,9 +64,24 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		public DateTime? EndDate { get; set; }
 
 		/// <summary>
+		/// Gets or sets if the project is active.
+		/// </summary>
+		public bool IsActive { get; set; }
+
+		/// <summary>
+		///
+		/// </summary>
+		public List<SelectListItem> isActiveOptions { get; set; }
+
+		/// <summary>
+		/// Gets or sets a select list of customers.
+		/// </summary>
+		public List<SelectListItem> Customers { get; set; }
+
+		/// <summary>
 		/// Gets or sets the Customer's name.
 		/// </summary>
-		public string CustomerName { get; set; }
+		public int CustomerId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization's name.

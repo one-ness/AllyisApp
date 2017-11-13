@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace AllyisApps.ViewModels.TimeTracker.Customer
 {
@@ -153,6 +154,16 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		/// Gets or sets a value indicating whether the model is being used for creating a customer (true) or editing an existing customer (false).
 		/// </summary>
 		public bool IsCreating { get; set; }
+
+		/// <summary>
+		/// Gets or sets a list of select list items of Status options.
+		/// </summary>
+		public List<SelectListItem> IsActiveOptions { get; set; }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the customer is active on creation.
+		/// </summary>
+		public bool IsActive { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the user can edit customers.
