@@ -42,6 +42,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Value = x.CustomerId.ToString()
 			}).ToList();
 
+			List<SelectListItem> statusOptions = new List<SelectListItem>()
+			{
+				new SelectListItem() { Text = "Active", Value = true.ToString() },
+				new SelectListItem() { Text = "Disabled", Value = false.ToString() }
+			};
+
 			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
 			return View(
 				new EditProjectViewModel
@@ -51,6 +57,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					ProjectOrgId = idAndUsers, // Service.GetRecommendedProjectId()
 					SubscriptionId = subscriptionId,
 					Customers = customersActive,
+					IsActive = true,
+					isActiveOptions = statusOptions,
 					SubscriptionName = subscriptionNameToDisplay,
 					SubscriptionUsers = subUsers.Select(x => new BasicUserInfoViewModel(x.FirstName, x.LastName, x.UserId)),
 					OrganizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId
