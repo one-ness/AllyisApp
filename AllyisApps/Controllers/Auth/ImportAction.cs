@@ -80,8 +80,7 @@ namespace AllyisApps.Controllers.Auth
 				{
 					Notifications.Add(new BootstrapAlert(formattedResult[1], Variety.Warning) { IsHtmlString = true });
 				}
-
-				await Task.Delay(1);
+				
 				return RedirectToAction(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { id });
 			}
 

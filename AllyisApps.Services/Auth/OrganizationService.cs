@@ -159,7 +159,6 @@ namespace AllyisApps.Services
             if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException(nameof(firstName));
             if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException(nameof(lastName));
             if (string.IsNullOrWhiteSpace(employeedId)) throw new ArgumentNullException(nameof(employeedId));
-            if (string.IsNullOrWhiteSpace(prodJson)) throw new ArgumentNullException(nameof(employeedId));
 
             // Creation of invitation
             var result = await DBHelper.CreateInvitation(email, firstName, lastName, organizationId, organizationName, (int)organizationRoleId, employeedId, prodJson);

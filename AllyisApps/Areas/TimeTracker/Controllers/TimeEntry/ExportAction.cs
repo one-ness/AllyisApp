@@ -67,7 +67,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			if (userIds == null || userIds[0] == -1)
 			{
 				result.Data = (await AppService.GetTimeEntriesOverDateRange(orgId, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1)))
-				.AsParallel().Select(timeEntry => new TimeEntryViewModel(timeEntry)).ToList();
+				.AsParallel().Select(timeEntry => new TimeEntryViewModel(timeEntry)).OrderBy(timeEntry => timeEntry.Date).ToList();
 			}
 			else
 			{
@@ -81,7 +81,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else if (customerId != 0)
 			{
-				var projGet = await AppService.GetProjectsByCustomer(customerId);
+				var projGet = await AppService.GetProjectsByCustomerAsync(customerId);
 				IEnumerable<int> projects = projGet.Select(proj => proj.ProjectId).ToList();
 				result.Data = result.Data.Where(c => projects.Contains(c.ProjectId)).ToList();
 			}

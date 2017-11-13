@@ -11001,9 +11001,9 @@ a {
   color: #583c87 !important;
   border-color: #8666bb !important;
 }
-thead tr {
+/*thead tr {
   background-color: #ccbee2 !important;
-}
+}*/
 tbody tr {
   background-color: #ffffff !important;
 }
@@ -11032,4 +11032,7 @@ tfoot {
 }
 .status-4 {
   background-color: #362E70;
+}
+.daterangepicker td.active, .daterangepicker td.active:hover {
+	background-color: #583c87 !important;
 }

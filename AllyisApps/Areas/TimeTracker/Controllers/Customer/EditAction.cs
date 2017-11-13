@@ -79,7 +79,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				var result = await AppService.UpdateCustomer(
+				var result = await AppService.UpdateCustomerAsync(
 					new Customer
 					{
 						CustomerId = model.CustomerId,
@@ -124,7 +124,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					return RedirectToAction(ActionConstants.Index, new { subscriptionId = model.SubscriptionId });
 				}
 			}
-
+			await Task.Delay(1);
 			// Invalid model
 			return View(model);
 		}

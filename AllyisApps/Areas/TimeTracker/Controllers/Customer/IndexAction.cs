@@ -73,7 +73,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			var model = new CustomerProjectViewModel();
 			model.CustomerInfo = new CustomerProjectViewModel.CustomerViewModel { CustomerId = customerId };
-			var projGet = await AppService.GetProjectsByCustomer(customerId);
+			var projGet = await AppService.GetProjectsByCustomerAsync(customerId);
 			model.Projects = projGet.AsParallel()
 			.Select(proj => new
 			CustomerProjectViewModel.ProjectViewModel
@@ -118,7 +118,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			UserContext.SubscriptionAndRole subInfo = null;
 			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			var infosTask = AppService.GetProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
-			var inactiveInfoTask = AppService.GetInactiveProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
+			var inactiveInfoTask = Task.Run(() => AppService.GetInactiveProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId));
 
 			await Task.WhenAll(new Task[] { infosTask, inactiveInfoTask });
 

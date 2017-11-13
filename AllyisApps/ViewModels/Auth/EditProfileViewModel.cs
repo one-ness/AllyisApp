@@ -98,9 +98,9 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets Date of birth.
 		/// </summary>
-		[Required(ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "DateOfBirth")]
+		[Required(ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "DateOfBirthRequired")]
 		[MinDateValidation]
-		public int DateOfBirth { get; set; } // has to be int for localization to work correctly. Gets changed to DateTime? when saving data from view.
+		public DateTime DateOfBirth { get; set; } // has to be int for localization to work correctly. Gets changed to DateTime? when saving data from view.
 
 		/// <summary>
 		/// Gets or sets the selected state id.
@@ -133,30 +133,24 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Validates if the value meets the minimum requirement.
 		/// </summary>
-		/// <param name="value">The integer value of the birthdate to be validated.</param>
+		/// <param name="value">The birthdate to be validated.</param>
 		/// <param name="validationContext">Validation context.</param>
 		/// <returns>A validation result with the status of the value being validated.</returns>
 		protected override ValidationResult IsValid(object value, ValidationContext validationContext)
 		{
-			int minAgeYears = 15;
+			if (value == null) return new ValidationResult("Date of birth is a required field.");
 
-			// -1 represents a null date
-			if ((int)value > -1)
-			{
-				DateTime dob = new DateTime(1 / 1 / 1).AddDays((int)value);
-				dob = new DateTime(dob.Subtract(new DateTime(1 / 1 / 1)).Ticks);
-				DateTime minAgeDate = new DateTime(DateTime.Today.Ticks).AddYears(-minAgeYears);
-				if (dob > minAgeDate)
-				{
-					return new ValidationResult("Must be at least " + minAgeYears + " years of age to register");
-				}
-				else if ((int)value < 639905)
-				{
-					return new ValidationResult("Please enter a date within the last 150 years");
-				}
-			}
+			const int minAge = 15;
+			const int maxAge = 100;
+			DateTime minAgeDate = DateTime.Now.AddYears(-minAge);
+			DateTime maxAgeDate = DateTime.Now.AddYears(-maxAge);
+			var dob = (DateTime)value;
 
-			return ValidationResult.Success;
+			return dob <= minAgeDate
+				? (dob >= maxAgeDate
+					? ValidationResult.Success
+					: new ValidationResult($"Please enter a date within the last {maxAge} years."))
+				: new ValidationResult($"Must be at least {minAge} years old to register.");
 		}
 	}
 }

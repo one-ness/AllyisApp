@@ -10,7 +10,7 @@
 }
 
 <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
-<link rel="stylesheet" type="text/css" href="~/Content/jquery.comiseo.daterangepicker.css" />
+<link rel="stylesheet" type="text/css" href="~/Content/DateRangePicker" />
 
 <style>
 	.billing-amount {
@@ -194,17 +194,17 @@
 				<div class="form-group row">
 					<label>@Strings.Location:&nbsp;&nbsp;</label>
 					<span class="pull-right">
-						@if (Model.PositionAddress.City != "" && Model.PositionAddress.City != null)
+						@if (!string.IsNullOrEmpty(Model.PositionAddress.City))
 						{
 							@Model.PositionAddress.City
 						}
-						@if (Model.PositionAddress.State != "" && Model.PositionAddress.State != null)
+						@if (!string.IsNullOrEmpty(Model.PositionAddress.State))
 						{
 							@:,&nbsp;@Model.PositionAddress.State
 						}
-						@if (Model.PositionAddress.Country != "" && Model.PositionAddress.Country != null)
+						@if (!string.IsNullOrEmpty(Model.PositionAddress.Country))
 						{
-							if (Model.PositionAddress.State != "" && Model.PositionAddress.State != null)
+							if (!string.IsNullOrEmpty(Model.PositionAddress.State))
 							{
 								@:&nbsp;-&nbsp;
 							}
@@ -284,7 +284,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script>
 	$(document).ready(function () {
-		$("#datepicker").attr("value", " ");
 		loadTags();
 	});
 

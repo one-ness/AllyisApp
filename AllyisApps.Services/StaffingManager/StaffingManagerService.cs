@@ -121,9 +121,9 @@ namespace AllyisApps.Services
 		/// <param name="customer">Customer.</param>
 		/// <param name="subscriptionId">.</param>
 		/// <returns>Customer id.</returns>
-		public async Task<int?> CreateStaffingCustomer(Customer customer, int subscriptionId)
+		public async Task<int?> CreateStaffingCustomerAsync(Customer customer, int subscriptionId)
 		{
-			return await DBHelper.CreateCustomerInfo(GetDBEntitiesFromCustomerInfo(customer));
+			return await DBHelper.CreateCustomerInfoAsync(GetDBEntitiesFromCustomerInfo(customer));
 		}
 
 		#endregion CreateMethods
