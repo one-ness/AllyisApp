@@ -3,23 +3,6 @@
 	Model.LocalizedStates = new Dictionary<string, string>();
 	//Model.newCustomer = new AllyisApps.Services.Customer();
 	//Model.newCustomer.OrganizationId = Model.organizationId;
-}
-
-@{
-	<script type="text/javascript">
-		var currentDay = "";
-		var ddlCountriesId = "@ViewConstants.DdlCountriesId";
-		var preserveState = '@(Model.PositionAddress != null && Model.PositionAddress.State != null ? (States.ResourceManager.GetString(Model.PositionAddress.State) ?? Model.PositionAddress.State) : "")';
-		var dropdownempty = "@Strings.DropDownEmpty";
-		var ddlStatesId = "@ViewConstants.DdlStatesId";
-		var ddlStatesOptionsId = "@ViewConstants.DdlStatesOptionsId";
-		var getStatesUrl = "/Home/GetStates";
-		var selectedCountryCode = "@(Model.PositionAddress != null ? Model.PositionAddress.SelectedCountryCode : null)";
-		var selectedStateId = "@(Model.PositionAddress != null ? Model.PositionAddress.SelectedStateId : null)";
-	</script>
-	@Scripts.Render("~/bundles/UpdateStateDDL");
-	@Scripts.Render("~/bundles/jqueryui");
-	@Scripts.Render("~/bundles/moment");
 	ViewBag.Title = Strings.Settings;
 	DisplayHints.LayoutThemeBundle = "~/Content/StaffingManager";
 	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
@@ -219,7 +202,19 @@
 </div>
 
 @section scripts{
+	@Scripts.Render("~/bundles/jqueryui")
+	@Scripts.Render("~/bundles/moment")
 	<script type="text/javascript">
+		var currentDay = "";
+		var ddlCountriesId = "@ViewConstants.DdlCountriesId";
+		var preserveState = '@(Model.PositionAddress != null && Model.PositionAddress.State != null ? (States.ResourceManager.GetString(Model.PositionAddress.State) ?? Model.PositionAddress.State) : "")';
+		var dropdownempty = "@Strings.DropDownEmpty";
+		var ddlStatesId = "@ViewConstants.DdlStatesId";
+		var ddlStatesOptionsId = "@ViewConstants.DdlStatesOptionsId";
+		var getStatesUrl = "/Home/GetStates";
+		var selectedCountryCode = "@(Model.PositionAddress != null ? Model.PositionAddress.SelectedCountryCode : null)";
+		var selectedStateId = "@(Model.PositionAddress != null ? Model.PositionAddress.SelectedStateId : null)";
+
 		function updateDefaultStatus(orgId, PositionStatusId, subscriptionId) {
 			$.ajax({
 				url: '@Url.Action(ActionConstants.UpdatePositionStatus, ControllerConstants.Staffing)',
@@ -232,19 +227,19 @@
 		deletePositionStatusUrl = "Url.Action(ActionConstants.DeletePositionStatus, ControllerConstants.Staffing, new { ";
 		deleteEmploymentTypeUrl = "Url.Action(ActionConstants.DeleteEmploymentType, ControllerConstants.Staffing, new { ";
 
-		function deletePositionLevel(PositionLevel, userId, orgId, subscriptionId) {
+		function deletePositionLevel(positionLevel, userId, orgId, subscriptionId) {
 			$.ajax({
 				url: '@Url.Action(ActionConstants.DeletePositionLevel, ControllerConstants.Staffing)',
-				data: { positionLevelId: PositionLevel, userId: userId, orgId: orgId, subscriptionId: subscriptionId }
-			})
+				data: { positionLevelId: positionLevel, userId: userId, orgId: orgId, subscriptionId: subscriptionId }
+			});
 			window.location.reload();
 		}
 
-		function deletePositionStatus(PositionStatus, userId, orgId, subscriptionId) {
+		function deletePositionStatus(positionStatus, userId, orgId, subscriptionId) {
 			$.ajax({
 				url: '@Url.Action(ActionConstants.DeletePositionStatus, ControllerConstants.Staffing)',
-				data: { positionStatusId: PositionStatus, userId: userId, orgId: orgId, subscriptionId: subscriptionId }
-			})
+				data: { positionStatusId: positionStatus, userId: userId, orgId: orgId, subscriptionId: subscriptionId }
+			});
 			window.location.reload();
 		}
 
@@ -252,8 +247,9 @@
 			$.ajax({
 				url: '@Url.Action(ActionConstants.DeleteEmploymentType, ControllerConstants.Staffing)',
 				data: { employmentTypeId: EmploymentType, userId: userId, orgId: orgId, subscriptionId: subscriptionId }
-			})
+			});
 			window.location.reload();
 		}
 	</script>
+	@Scripts.Render("~/bundles/UpdateStateDDL")
 }
