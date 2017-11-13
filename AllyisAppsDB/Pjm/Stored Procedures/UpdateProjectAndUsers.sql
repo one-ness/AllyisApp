@@ -5,7 +5,8 @@ CREATE PROCEDURE [Pjm].[UpdateProjectAndUsers]
 	@isHourly BIT,
     @startingDate DATE,
     @endingDate DATE,
-	@userIds [Auth].[UserTable] READONLY
+	@userIds [Auth].[UserTable] READONLY,
+	@isActive BIT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -39,7 +40,8 @@ BEGIN
 			[ProjectOrgId] = @orgId,
 			[IsHourly] = @isHourly,
 			[StartUtc] = @startingDate,
-			[EndUtc] = @endingDate
+			[EndUtc] = @endingDate,
+			[IsActive] = @isActive
 		WHERE [ProjectId] = @projectId
 
 	COMMIT TRANSACTION

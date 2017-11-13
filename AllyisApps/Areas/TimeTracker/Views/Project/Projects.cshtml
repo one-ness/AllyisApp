@@ -1,0 +1,137 @@
+﻿@using AllyisApps.ViewModels.TimeTracker.Project
+@model ProjectsViewModel
+
+@{
+	ViewBag.Title = "Projects";
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
+
+}
+
+<div class="form-group pull-right">
+	<a href="@Url.Action("Create")">
+		<span class="btn btn-primary">Create Project</span>
+	</a>
+</div>
+
+<div class="container">
+	<table class="table table-hover table-xtra-condensed">
+		<thead>
+			<tr class="" double-bottom-border"">
+				<th>
+					<input type="checkbox" id="select-all" onclick="CheckAllToggle()" />
+				</th>
+				<th>
+					Name
+				</th>
+				<th>
+					Start Date
+				</th>
+				<th>
+					End Date
+				</th>
+				<th>
+					Customer
+				</th>
+				<th>
+					Project Code
+				</th>
+				<th>
+					Status
+				</th>
+				<th>
+					Edit
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var project in Model.Projects)
+			{
+				<tr>
+					<td><input type="checkbox" class="customer-select" value="@project.ProjectId" /></td>
+					<td>@project.ProjectName</td>
+					<td>
+						@project.StartDate
+					</td>
+					<td>@project.EndDate</td>
+					<td>@project.CustomerName</td>
+					<td>@project.ProjectId</td>
+					<td>
+						@if (project.IsActive)
+						{
+							<p>Active</p>
+						}
+						else
+						{
+							<p>Disabled</p>
+						}
+					</td>
+					<td>
+						<a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Project, new {userId = project.ProjectId })" t title="@Strings.EditProject"><i class="fa fa-fw fa-edit"></i></a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
+<div class="pull-right btn">
+	@using (Html.BeginForm(Strings.Delete, Strings.Project, new { }, FormMethod.Get, new { @onsubmit = "return getUserIdsAndSubmit();" }))
+	{
+		<input type="hidden" name="userIds" id="deleteIds" value="" />
+		<button type="submit" class="btn btn-danger  pull-right">Delete</button>
+	}
+</div>
+<div class="pull-right btn">
+	@using (Html.BeginForm("ToggleStatus", Strings.Project, new { }, FormMethod.Get, new { @onsubmit = "return getUserIdsAndSubmit();"}))
+	{
+			<input type="hidden" name="projIds" id="projIds" value="" />
+			<button type="submit" class="btn btn-primary  pull-right">Toggle Status</button>
+	}
+</div>
+
+<script>
+	function getUserIdsAndSubmit() {
+		var csvIds = "";
+
+		if (!confirm("Do you wish to toggle the selected project(s)?")) {
+			return false;
+		}
+
+		// gather all the ids to delete as a csv
+
+		var checkboxes = $(".customer-select");
+
+		//checkboxes = checkboxes.slice(1);   //We don't want to include the select all checkbox
+		checkboxes.each(function () {
+
+			var value = $(this).val();
+			var isChecked = $(this).is(":checked");
+
+			if (isChecked) {
+				csvIds += value + ",";
+			}
+		});
+
+		csvIds = csvIds.replace(/(^,)|(,$)/g, "");
+
+		if (csvIds == "") {
+			alert("You have not chosen a project to toggle");
+			return false;
+		}
+		$("#projIds").val(csvIds);
+		$("#deleteIds").val(csvIds);
+
+		// submit the form
+
+		return true; // for now, delete this line later
+	}
+	function CheckAllToggle() {
+		var checkboxes = [];
+		var checking = document.getElementById("select-all").checked;
+		checkboxes = document.getElementsByClassName("customer-select");
+		for (var i = 0, n = checkboxes.length; i < n; i++) {
+			checkboxes[i].checked = checking;
+		}
+		console.log("check all toggle, updated " + checkboxes.length + " to: " + checking);
+	}
+</script>

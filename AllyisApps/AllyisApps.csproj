@@ -297,7 +297,9 @@
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ImportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\TemplateAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\TimeEntryCURDAction.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\Customer\MultiCustomerInfoViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\Project\CompleteProjectViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\Project\ProjectsViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\ReviewViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\MergePayClassViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsPayPeriodViewModel.cs" />
@@ -571,6 +573,8 @@
     <Content Include="Areas\TimeTracker\Views\TimeEntry\Index2.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\_AjaxTimeEntries2.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\_AjaxTimeEntryBody2.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\Customer\Customer.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\Project\Projects.cshtml" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>

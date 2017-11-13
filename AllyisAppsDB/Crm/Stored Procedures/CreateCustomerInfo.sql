@@ -10,6 +10,7 @@ CREATE PROCEDURE [Crm].[CreateCustomerInfo]
 	@faxNumber VARCHAR(50),
 	@website NVARCHAR(50),
 	@eIN NVARCHAR(50),
+	@isActive BIT,
 	@organizationId INT,
 	@customerOrgId NVARCHAR(16),
 	@retId INT OUTPUT
@@ -48,6 +49,7 @@ BEGIN
 				[FaxNumber], 
 				[Website], 
 				[EIN], 
+				[IsActive],
 				[OrganizationId], 
 				[CustomerOrgId])
 			VALUES (@customerName, 
@@ -57,6 +59,7 @@ BEGIN
 				@faxNumber, 
 				@website, 
 				@eIN, 
+				@isActive,
 				@organizationId, 
 				@customerOrgId);
 			SET @retId = SCOPE_IDENTITY();

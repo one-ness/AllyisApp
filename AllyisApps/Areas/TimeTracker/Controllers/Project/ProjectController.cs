@@ -4,8 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
+using AllyisApps.ViewModels.TimeTracker.Project;
+using AllyisApps.Services;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -16,10 +20,25 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	public partial class ProjectController : BaseController
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ProjectController"/> class.
+		/// Projects action.
 		/// </summary>
-		public ProjectController()
+		/// <param name="subscriptionId">The current subscription id.</param>
+		/// <returns></returns>
+		async public Task<ActionResult> Index(int subscriptionId)
 		{
+			ViewData["IsManager"] = AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
+			ViewData["SubscriptionId"] = subscriptionId;
+			ViewData["SubscriptionName"] = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName;
+			ViewData["UserId"] = AppService.UserContext.UserId;
+			var orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			var projects = (await AppService.GetProjectsByOrganization(orgId, false)).Select(x => new CompleteProjectViewModel(x)).ToList();
+
+			ProjectsViewModel model = new ProjectsViewModel()
+			{
+				Projects = projects
+			};
+
+			return View("Projects", model);
 		}
 	}
 }
