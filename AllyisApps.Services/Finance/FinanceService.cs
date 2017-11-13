@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AllyisApps.DBModel.Finance;
 using AllyisApps.Services.Expense;
 using AllyisApps.Services.Auth;
+using System;
 
 namespace AllyisApps.Services
 {
@@ -66,11 +67,14 @@ namespace AllyisApps.Services
 			};
 		}
 
+
+
+
 		/// <summary>
 		/// Checks if the supplied account can be deleted.
 		/// </summary>
 		/// <returns></returns>
-		public bool CanDelete(int subId, int accId, out List<Account> associatedAccounts)
+		public async Task<CanDeleteResults> CanDelete(int subId, int accId)
 		{
 			var subInfo = UserContext.SubscriptionsAndRoles[subId];
 			List<Account> accounts = GetAccounts(subInfo.OrganizationId).Result.ToList();
@@ -78,12 +82,12 @@ namespace AllyisApps.Services
 			List<ExpenseReport> reports = GetExpenseReportByOrgId(subInfo.OrganizationId).Result.ToList();
 			List<ExpenseItem> items = new List<ExpenseItem>();
 
-			associatedAccounts = new List<Account>();
+			List<Account> associatedAccounts = new List<Account>();
 
 			//Get all report items to check their associated account.
 			foreach (var report in reports)
 			{
-				items.AddRange(GetExpenseItemsByReportId(report.ExpenseReportId).Result);
+				items.AddRange(await GetExpenseItemsByReportId(report.ExpenseReportId));
 			}
 			List<Account> parentAccounts = accounts.Where(x => x.AccountId == accId).ToList();
 
@@ -97,7 +101,11 @@ namespace AllyisApps.Services
 
 					if (currentAccItem.Count() > 0)
 					{
-						return false;
+						return new CanDeleteResults
+						{
+							canDelete = false,
+							associatedAccounts = associatedAccounts
+						};
 					}
 
 					nextAccounts.AddRange(accounts.Where(x => x.ParentAccountId == parent.AccountId));
@@ -109,10 +117,24 @@ namespace AllyisApps.Services
 			//No reports means we can remove the account(s).
 			if (items.Count == 0)
 			{
-				return true;
+				return new CanDeleteResults
+				{
+					canDelete = false,
+					associatedAccounts = associatedAccounts
+				};
 			}
 
-			return true;
+			return new CanDeleteResults
+			{
+				canDelete = true,
+				associatedAccounts = associatedAccounts
+			}; ;
 		}
+	}
+
+	public class CanDeleteResults
+	{
+		public bool canDelete { get; set; }
+		public List<Account> associatedAccounts { get; set; }
 	}
 }

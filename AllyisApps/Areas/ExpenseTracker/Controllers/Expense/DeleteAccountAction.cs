@@ -19,12 +19,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns></returns>
 		public async Task<ActionResult> DeleteAccount(int subscriptionId, int accountId)
 		{
-			List<Account> associatedAccounts = new List<Account>();
-
-			if (AppService.CanDelete(subscriptionId, accountId, out associatedAccounts))
+			
+			var canDelete = await AppService.CanDelete(subscriptionId, accountId);
+			if (canDelete.canDelete)
 			{
-				associatedAccounts.Reverse();
-				foreach (var account in associatedAccounts)
+				canDelete.associatedAccounts.Reverse();
+				foreach (var account in canDelete.associatedAccounts)
 				{
 					await AppService.DeleteAccount(account.AccountId);
 				}
