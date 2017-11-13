@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -63,6 +64,24 @@ namespace AllyisApps.Services
 		public async Task<int> CreateTimeEntry(TimeEntry entry)
 		{
 			#region Validation
+
+			ProjectDBEntity project = await DBHelper.GetProjectByIdAndUser(entry.ProjectId, entry.UserId);
+			var projInfo = DBHelper.GetProjectById(entry.ProjectId);
+
+			if (!project.IsProjectUser.GetValueOrDefault())
+			{
+				throw new ArgumentException("Project is unassignable to user.");
+			}
+
+			if (!projInfo.IsActive)
+			{
+				throw new ArgumentException("Project is not active.");
+			}
+
+			if (project.StartDate > entry.Date || project.EndDate < entry.Date)
+			{
+				throw new ArgumentException("Entry must be within date range");
+			}
 
 			if (entry == null)
 			{
@@ -217,14 +236,27 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="holiday">Holiday.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
-		/// <returns>Returns false if authorization fails.</returns>
-		public async Task<bool> CreateHoliday(Holiday holiday, int subscriptionId)
+		/// <returns>Returns the id of the created holiday.</returns>
+		public async Task<int> CreateHoliday(Holiday holiday, int subscriptionId)
 		{
-			if (holiday == null) throw new ArgumentException("holiday");
 			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
-			DBHelper.CreateHoliday(GetDBEntityFromHoliday(holiday));
-			await Task.Yield();
-			return true;
+
+			if (holiday == null)
+			{
+				throw new ArgumentNullException(nameof(holiday));
+			}
+
+			if (string.IsNullOrEmpty(holiday.HolidayName))
+			{
+				throw new ArgumentNullException(nameof(holiday.HolidayName));
+			}
+
+			if (holiday.Date < SqlDateTime.MinValue || holiday.Date > SqlDateTime.MaxValue)
+			{
+				throw new ArgumentOutOfRangeException(nameof(holiday.Date), $"{nameof(holiday.Date)} must be within a normal date range.");
+			}
+
+			return await DBHelper.CreateHoliday(GetDBEntityFromHoliday(holiday));
 		}
 
 		/// <summary>
@@ -415,7 +447,7 @@ namespace AllyisApps.Services
 			{
 				if (customerId > 0)
 				{
-					var proj = await GetProjectsByCustomer(customerId);
+					var proj = await GetProjectsByCustomerAsync(customerId);
 					data = data.Where(t => proj.Select(p => p.ProjectId).Contains(t.ProjectId));
 				}
 			}
@@ -426,7 +458,7 @@ namespace AllyisApps.Services
 			}
 			else
 			{
-				projects = GetProjectsByOrganization(orgId, false).ToList();
+				projects = (await GetProjectsByOrganization(orgId, false)).ToList();
 			}
 
 			// Add default project in case there are holiday entries

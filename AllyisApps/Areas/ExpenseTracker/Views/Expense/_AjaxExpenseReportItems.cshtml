@@ -20,7 +20,7 @@
 		string itemIdName = String.Format("[{0}].ExpenseItemId", Model.Index);
 		string accountName = String.Format("[{0}].AccountId", Model.Index);
 		var selection = Model.AccountList.ToArray().Where(a => a.AccountId == Model.AccountId);
-		var selected = selection.Count() == 0 ? Model.AccountList.First() : selection.First();
+		var selected = !selection.Any() ? Model.AccountList.First() : selection.First();
 		var selectList = new SelectList(Model.AccountList, "AccountId", "AccountName", selected.AccountId);
 
 		<td>

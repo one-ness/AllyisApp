@@ -42,7 +42,7 @@
 		var selectedCust;
 		var selectedProj;
 
-		@if (@Model.Customers.Count() > 0)
+		@if (Model.Customers.Count() > 0)
 		{
 		<text>
 			$(document).ready(function () {
@@ -61,7 +61,7 @@
 				$("#inactivePartial").addClass('hidden');
 				$("#activePartial").removeClass('hidden');
 
-				@if (@Model.Customers.Count() > 0)
+				@if (Model.Customers.Any())
 				{
 					<text>
 						PopulateProjects(@Model.Customers.First().CustomerInfo.CustomerId)
@@ -79,7 +79,7 @@
 				$("#inactiveTab").addClass('active');
 				$("#activePartial").addClass('hidden');
 				$("#inactivePartial").removeClass('hidden');
-				@if (@Model.InactiveCustomerAndProjects.Count() > 0)
+				@if (Model.InactiveCustomerAndProjects.Any())
 				{
 					if (Model.InactiveCustomerAndProjects.First().CustomerInfo.IsActive.Value)
 					{

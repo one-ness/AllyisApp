@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
@@ -36,6 +37,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			int orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 
+			List<SelectListItem> statusOptions = new List<SelectListItem>()
+			{
+				new SelectListItem() { Text = "Active", Value = true.ToString() },
+				new SelectListItem() { Text= "Disabled", Value = false.ToString() }
+			};
+
 			var NextCustomerId = await AppService.GetNextCustId(subscriptionId);
 			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
 			return View(new EditCustomerInfoViewModel
@@ -46,6 +53,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				SubscriptionId = subscriptionId,
 				OrganizationId = orgId,
 				UserId = AppService.UserContext.UserId,
+				IsActiveOptions = statusOptions,
 				SubscriptionName = subscriptionNameToDisplay,
 			});
 		}
@@ -61,7 +69,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				int? customerId = await AppService.CreateCustomer(
+				int? customerId = await AppService.CreateCustomerAsync(
 					new Customer
 					{
 						ContactEmail = model.ContactEmail,
@@ -81,7 +89,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						Website = model.Website,
 						EIN = model.EIN,
 						OrganizationId = model.OrganizationId,
-						CustomerOrgId = model.CustomerOrgId
+						CustomerOrgId = model.CustomerOrgId,
+						IsActive = model.IsActive
 					},
 					model.SubscriptionId);
 

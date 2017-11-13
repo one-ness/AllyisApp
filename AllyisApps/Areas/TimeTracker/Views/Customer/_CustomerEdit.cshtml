@@ -73,6 +73,10 @@
 						@Html.TextBoxFor(m => m.CustomerOrgId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.CustomerOrgId })
 						@Html.ValidationMessageFor(model => model.CustomerOrgId, string.Empty, new { @class = "text-danger" })
 					</div>
+					<div class="form-group">
+						@Html.ReqLabelFor(m => m.IsActiveOptions, "Status")
+						@Html.DropDownListFor(x => x.IsActive, Model.IsActiveOptions, new { @class = "form-control" })
+					</div>
 
 					@Html.HiddenFor(m => m.OrganizationId)
 					@Html.HiddenFor(m => m.CustomerId)
@@ -111,10 +115,10 @@
 								   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
 						</div>
 
-							<div style="margin-top: 10px; margin-bottom: 15px; float:right;">
-								<a class="btn btn-primary" onclick="$('input[id=upload-box]').click();" title="Choose customers Excel entries to upload">@Strings.ChooseFile</a>
-								<input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" title="Upload customers Excel entries" />
-							</div>
+						<div style="margin-top: 10px; margin-bottom: 15px; float:right;">
+							<a class="btn btn-primary" onclick="$('input[id=upload-box]').click();" title="Choose customers Excel entries to upload">@Strings.ChooseFile</a>
+							<input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" title="Upload customers Excel entries" />
+						</div>
 					}
 					@using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Customer, null, FormMethod.Get, new { style = "display: flex; justify-content: space-between;", id = "template-form" }))
 					{

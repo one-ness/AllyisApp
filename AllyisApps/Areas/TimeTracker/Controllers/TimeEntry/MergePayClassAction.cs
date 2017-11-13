@@ -40,7 +40,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			if (sourcePayClassName == "Regular" || sourcePayClassName == "Overtime" || sourcePayClassName == "Holiday" || sourcePayClassName == "Paid Time Off" || sourcePayClassName == "Unpaid Time Off")
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.CannotMergePayClass, Variety.Warning));
-				return RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId });
+				return RedirectToAction(ActionConstants.SettingsPayClass, new { subscriptionId = subscriptionId });
 			}
 
 			MergePayClassViewModel model = ConstructMergePayClassViewModel(userId, sourcePayClassName, subscriptionId, destPayClasses);

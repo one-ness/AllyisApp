@@ -42,7 +42,7 @@ namespace AllyisApps.Services
 		public async Task<IList<ExpenseItem>> GetExpenseItemsByReportId(int reportId)
 		{
 			var results = await DBHelper.GetExpenseItemsByReportId(reportId);
-			return results.Select(x => InitializeExpenseItem(x)).AsEnumerable().ToList();
+			return results.Select(InitializeExpenseItem).AsEnumerable().ToList();
 		}
 
 		/// <summary>
@@ -241,14 +241,14 @@ namespace AllyisApps.Services
 			ExpenseItemDBEntity itemEntity = new ExpenseItemDBEntity
 			{
 				AccountId = item.AccountId,
-				Amount = Decimal.Parse(String.Format("{0:c}", item.Amount)),
+				Amount = Decimal.Parse(String.Format("{0}", item.Amount)),
 				CreatedUtc = item.ExpenseItemCreatedUtc,
 				ExpenseItemId = item.ExpenseItemId,
 				ExpenseReportId = item.ExpenseReportId,
 				IsBillableToCustomer = item.IsBillableToCustomer,
 				ItemDescription = item.ItemDescription,
 				ModifiedUtc = item.ExpenseItemModifiedUtc,
-				TransactionDate = Convert.ToDateTime(item.TransactionDate),
+				TransactionDate = Convert.ToDateTime(item.TransactionDate)
 			};
 			DBHelper.CreateExpenseItem(itemEntity);
 		}

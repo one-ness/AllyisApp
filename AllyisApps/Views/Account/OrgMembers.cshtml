@@ -1,8 +1,8 @@
 ﻿@model OrganizationMembersViewModel
 @{
-    var sb = new System.Text.StringBuilder();
-    sb.AppendFormat("{0}: {1}", Strings.Members, Model.OrganizationName);
-    ViewBag.TitleBar = sb.ToString();
+	var sb = new System.Text.StringBuilder();
+	sb.AppendFormat("{0}: {1}", Strings.Members, Model.OrganizationName);
+	ViewBag.TitleBar = sb.ToString();
 }
 
 @if (Model.CanEditUser) {@Html.Partial("_MembersAndInvitationsTab", Model.TabInfo)}
@@ -11,10 +11,10 @@
     <div class="col-xs-12">
         <div>@Strings.Members  : @Model.Users.Count</div>
         @if (Model.CanManagePermissions)
-        {
+		{
             <div><a href="@Url.Action(ActionConstants.ManageOrgPermissions, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default" title="@Strings.ManagePermissions">@Strings.ManagePermissions <i class="fa fa-fw fa-lock"></i></a></div>}
         @if (Model.CanAddUser)
-        {
+		{
             <div><a href="@Url.Action(ActionConstants.AddMember, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default" title="@Strings.AddMembers">@Strings.AddMembers <i class="fa fa-fw fa-user-plus"></i></a></div>}
     </div>
 </div>
@@ -34,10 +34,10 @@
                 </tr>
             </thead>
             @foreach (var item in Model.Users)
-            {
+			{
                 <tr>
-                    @if (  Model.CanEditUser ) { <td class="col-md-1"><input class="checkbox-inline members-checkbox" type="checkbox" value="@item.UserId" /></td> }
-					@if ( !Model.CanEditUser ) { <td class="col-md-1"></td> }
+                    @if (Model.CanEditUser) { <td class="col-md-1"><input class="checkbox-inline members-checkbox" type="checkbox" value="@item.UserId" /></td> }
+					@if (!Model.CanEditUser) { <td class="col-md-1"></td> }
                     <td class="col-md-2">@item.Username</td>
                     <td class="col-md-3">@item.Email</td>
                     <td class="col-md-2">@item.EmployeeId</td>
@@ -54,8 +54,8 @@
         <a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)"
            class="btn btn-default pull-left" title="@Strings.Back"><i class="fa fa-caret-left"></i>&nbsp;@Strings.Back</a>
         @if (Model.CanDeleteUser)
-        {
-            using (Html.BeginForm(ActionConstants.RemoveMember, ControllerConstants.Account, new { @id = Model.OrganizationId }, FormMethod.Post, new { @onsubmit = "return getUserIdsAndSubmit();" }))
+			{
+				using (Html.BeginForm(ActionConstants.RemoveMember, ControllerConstants.Account, new { @id = Model.OrganizationId }, FormMethod.Post, new { @onsubmit = "return getUserIdsAndSubmit();" }))
             {
                 @Html.AntiForgeryToken();
                 <input type="hidden" id="csvUserIds" name="csvUserIds" />

@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
-using AllyisApps.ViewModels.ExpenseTracker.Expense;
 using AllyisApps.Services.Auth;
+using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -21,7 +21,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>A partial view.</returns>
 		public async Task<ActionResult> AddItem(int subscriptionId, int index)
 		{
-			IEnumerable<Account> accountEntities = await AppService.GetAccounts(subscriptionId);
+			var organizationId = (AppService.UserContext.SubscriptionsAndRoles[subscriptionId]).OrganizationId;
+			IEnumerable<Account> accountEntities = await AppService.GetAccounts(organizationId);
 			List<AccountViewModel> accountViewModels = new List<AccountViewModel>();
 			foreach (Account account in accountEntities)
 			{

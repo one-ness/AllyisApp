@@ -11083,3 +11083,12 @@ th > label {
 input:focus {
   outline: none;
 }
+.daterangepicker td.active, .daterangepicker td.active:hover {
+	background-color: #224500 !important;
+}
+.daterangepicker tr {
+	background-color: transparent !important;
+}
+.daterangepicker.dropdown-menu {
+	background-color: #fff !important;
+}

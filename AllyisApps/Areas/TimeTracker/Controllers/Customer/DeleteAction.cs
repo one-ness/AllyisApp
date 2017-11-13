@@ -4,6 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
@@ -20,37 +22,82 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// GET: Customer/SubscriptionId/Delete/CustomerId.
 		/// </summary>
 		/// <param name="subscriptionId">The Subscription Id.</param>
-		/// <param name="userId">The Customer id.</param>
+		/// <param name="userIds">The Customer ids.</param>
 		/// <returns>The Customer index.</returns>
 		[HttpGet]
-		public async Task<ActionResult> Delete(int subscriptionId, string userId)
+		public async Task<ActionResult> ToggleStatus(int subscriptionId, string userIds)
 		{
-			int numValue;
-			bool parsed = int.TryParse(userId, out numValue);
+			string[] ids = userIds.Split(',');
+			var orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			var customers = await AppService.GetCustomerList(orgId);
 
-			if (!parsed)
+			foreach (var userId in ids)
 			{
-				return RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
+				int numValue;
+				bool parsed = int.TryParse(userId, out numValue);
+
+				if (!parsed)
+				{
+					return RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
+				}
+				else
+				{
+					var customer = customers.Where(x => string.Equals(x.CustomerId, numValue)).FirstOrDefault();
+					string result = "";
+
+					if (customer.IsActive.Value)
+					{
+						result = await AppService.DeleteCustomer(subscriptionId, numValue);
+					}
+					else
+					{
+						result = AppService.ReactivateCustomer(numValue, subscriptionId, orgId);
+					}
+
+					if (!string.IsNullOrEmpty(result))
+					{
+						// if deleted successfully
+
+						Notifications.Add(new BootstrapAlert(string.Format("{0} Status was toggled sucessfully.", result), Variety.Success));
+					}
+					else if (result == null)
+					{
+						// Permission failure
+
+						Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
+					}
+				}
 			}
-			else
+
+			return RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
+		}
+
+		/// <summary>
+		/// Deletes a customer.
+		/// </summary>
+		/// <param name="subscriptionId">The subscription id.</param>
+		/// <param name="userIds">Comma seperated value of user ids.</param>
+		/// <returns>Action result to the Index page.</returns>
+		[HttpGet]
+		async public Task<ActionResult> Delete(int subscriptionId, string userIds)
+		{
+			string[] ids = userIds.Split(',');
+			var orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+
+			foreach (var id in ids)
 			{
-				var result = await AppService.DeleteCustomer(subscriptionId, numValue);
-
-				if (!string.IsNullOrEmpty(result))
+				try
 				{
-					// if deleted successfully
-
-					Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", result, Resources.Strings.CustomerDeleteNotification), Variety.Success));
+					var result = await AppService.FullDeleteCustomer(subscriptionId, Convert.ToInt32(id));
+					Notifications.Add(new BootstrapAlert(string.Format("Customer(s) successfully deleted"), Variety.Success));
 				}
-				else if (result == null)
+				catch
 				{
-					// Permission failure
-
-					Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
+					Notifications.Add(new BootstrapAlert(string.Format("Cannot Delete Customer {0}, there are dependent projects or time entries.", id), Variety.Warning));
 				}
-
-				return RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
 			}
+
+			return RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
 		}
 	}
 }

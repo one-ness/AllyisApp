@@ -28,15 +28,16 @@ namespace AllyisApps.DBModel
 		/// Creates a holiday and related TimeEntries for an organization.
 		/// </summary>
 		/// <param name="newHoliday">The HolidayDBEntity to create.</param>
-		public void CreateHoliday(HolidayDBEntity newHoliday)
+		public async Task<int> CreateHoliday(HolidayDBEntity newHoliday)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@holidayName", newHoliday.HolidayName);
 			parameters.Add("@date", newHoliday.Date);
 			parameters.Add("@organizationId", newHoliday.OrganizationId);
+
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				newHoliday.HolidayId = connection.Query<int>("[Hrm].[CreateHoliday]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				return (await connection.QueryAsync<int>("[Hrm].[CreateHoliday]", parameters, commandType: CommandType.StoredProcedure)).FirstOrDefault();
 			}
 		}
 

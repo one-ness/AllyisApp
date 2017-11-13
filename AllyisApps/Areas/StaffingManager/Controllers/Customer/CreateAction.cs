@@ -60,7 +60,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				int? customerId = await AppService.CreateCustomer(
+				int? customerId = await AppService.CreateCustomerAsync(
 					new Customer
 					{
 						ContactEmail = model.ContactEmail,
