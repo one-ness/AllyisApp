@@ -27,7 +27,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new InvalidOperationException("Project requires a name. Cannot update.");
 			}
 
-			if (string.IsNullOrWhiteSpace(project.ProjectOrgId))
+			if (string.IsNullOrWhiteSpace(project.ProjectCode))
 			{
 				throw new InvalidOperationException("Project requires a project id. Cannot update.");
 			}
@@ -40,7 +40,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			await AppService.UpdateProjectAndUsers(
 				project.ProjectId,
 				project.ProjectName,
-				project.ProjectOrgId,
+				project.ProjectCode,
 				project.StartDate,
 				project.EndDate,
 				project.SelectedProjectUserIds.Select(int.Parse),

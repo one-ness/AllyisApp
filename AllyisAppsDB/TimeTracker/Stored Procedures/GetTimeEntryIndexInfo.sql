@@ -66,10 +66,10 @@ AS
 			[Project].[IsHourly] AS [IsHourly],
 			[Organization].[OrganizationName] AS [OrganizationName],
 			[Customer].[CustomerName] AS [CustomerName],
-			[Customer].[CustomerOrgId],
+			[Customer].[CustomerCode],
 			[Customer].[IsActive] AS [IsCustomerActive],
 			[ProjectUser].[IsActive] AS [IsUserActive],
-			[ProjectOrgId]
+			[ProjectCode]
 	FROM (
 		(SELECT [OrganizationId], [UserId], [OrganizationRoleId]
 		FROM [Auth].[OrganizationUser] WITH (NOLOCK) WHERE [UserId] = @userId AND [OrganizationId] = @organizationId)
@@ -98,7 +98,7 @@ AS
 			NULL,
 			0,
 			0,
-			[ProjectOrgId]
+			[ProjectCode]
 			FROM [Pjm].[Project] WITH (NOLOCK) WHERE [ProjectId] = 0
 	ORDER BY [Project].[ProjectName]
 

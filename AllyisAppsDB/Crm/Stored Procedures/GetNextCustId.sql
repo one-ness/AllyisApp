@@ -4,8 +4,8 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	SELECT TOP 1
-		[CustomerOrgId]
+		[CustomerCode]
 	FROM [Crm].[Customer] WITH (NOLOCK)
 	WHERE [Customer].[OrganizationId] = @orgId
-	ORDER BY [CustomerOrgId] DESC;
+	ORDER BY [CustomerCode] DESC;
 END

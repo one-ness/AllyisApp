@@ -343,4 +343,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="PayrollProcessedDate" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="49db4cb6-876f-49c7-a19d-090187178b86" ChangeDateTime="11/14/2017 00:54:25">
+    <Property Name="ElementName" Value="[Crm].[Customer].[CustomerOrgId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Crm].[Customer]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Customer_Code" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="6b886332-93af-46bf-9ca5-1734f843a564" ChangeDateTime="11/14/2017 00:59:28">
+    <Property Name="ElementName" Value="[Crm].[Customer].[Customer_Code]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Crm].[Customer]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CustomerCode" />
+  </Operation>
 </Operations>

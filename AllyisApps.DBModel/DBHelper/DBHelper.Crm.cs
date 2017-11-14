@@ -47,7 +47,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@customerId", project.CustomerId);
 			parameters.Add("@projectName", project.ProjectName);
 			parameters.Add("@isHourly", project.IsHourly);
-			parameters.Add("@projectOrgId", project.ProjectOrgId);
+			parameters.Add("@projectCode", project.ProjectCode);
 			parameters.Add("@startingDate", project.StartingDate?.ToShortDateString());
 			parameters.Add("@endingDate", project.EndingDate?.ToShortDateString());
 			parameters.Add("@userIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
@@ -80,7 +80,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@customerId", project.CustomerId);
 			parameters.Add("@projectName", project.ProjectName);
 			parameters.Add("@isHourly", project.IsHourly);
-			parameters.Add("@projectOrgId", project.ProjectOrgId);
+			parameters.Add("@projectCode", project.ProjectCode);
 			parameters.Add("@startingDate", project.StartingDate?.ToShortDateString());
 			parameters.Add("@endingDate", project.EndingDate?.ToShortDateString());
 			parameters.Add("@retId", -1, DbType.Int32, ParameterDirection.Output);
@@ -174,7 +174,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@projectId", project.ProjectId);
 			parameters.Add("@projectName", project.ProjectName);
 			parameters.Add("@isHourly", project.IsHourly);
-			parameters.Add("@projectOrgId", project.ProjectOrgId);
+			parameters.Add("@projectCode", project.ProjectCode);
 			parameters.Add("@startingDate", project.StartingDate?.ToShortDateString());
 			parameters.Add("@endingDate", project.EndingDate?.ToShortDateString());
 
@@ -268,7 +268,7 @@ namespace AllyisApps.DBModel
 				var results = await connection.QueryAsync("[Pjm].[GetNextProjectId]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
-				return results.SingleOrDefault().ProjectOrgId;
+				return results.SingleOrDefault().ProjectCode;
 			}
 		}
 
@@ -393,7 +393,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@isActive", customer.IsActive);
 			parameters.Add("@eIN", customer.EIN);
 			parameters.Add("@organizationId", customer.OrganizationId);
-			parameters.Add("@customerOrgId", customer.CustomerOrgId);
+			parameters.Add("@customerOrgId", customer.CustomerCode);
 			parameters.Add("@retId", -1, DbType.Int32, ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
@@ -434,7 +434,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@website", customer.Website);
 			parameters.Add("@eIN", customer.EIN);
 			parameters.Add("@isActive", customer.IsActive);
-			parameters.Add("@orgId", customer.CustomerOrgId);
+			parameters.Add("@orgId", customer.CustomerCode);
 			parameters.Add("@retId", -1, DbType.Int32, ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
@@ -681,17 +681,17 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Gets a project from its id.
 		/// </summary>
-		/// <param name="projectOrgId">The project's Id.</param>
+		/// <param name="projectCode">The project's Id.</param>
 		/// <returns>Info about the requested project.</returns>
-		public ProjectDBEntity GetProjectByProjectOrgId(string projectOrgId)
+		public ProjectDBEntity GetProjectByProjectCode(string projectCode)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@projectOrgId", projectOrgId);
+			parameters.Add("@projectCode", projectCode);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				var entity = connection.Query<ProjectDBEntity>(
-					"[Pjm].[GetProjectByProjectOrgId]",
+					"[Pjm].[GetProjectByProjectCode]",
 					parameters,
 					commandType: CommandType.StoredProcedure).SingleOrDefault();
 				return entity;

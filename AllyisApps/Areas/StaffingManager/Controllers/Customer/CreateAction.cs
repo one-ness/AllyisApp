@@ -41,7 +41,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			{
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
 				IsCreating = true,
-				CustomerOrgId = nextCustomerId,
+				CustomerCode = nextCustomerId,
 				SubscriptionId = subscriptionId,
 				OrganizationId = orgID,
 				UserId = AppService.UserContext.UserId,
@@ -80,7 +80,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 						Website = model.Website,
 						EIN = model.EIN,
 						OrganizationId = model.OrganizationId,
-						CustomerOrgId = model.CustomerOrgId
+						CustomerCode = model.CustomerCode
 					},
 					model.SubscriptionId);
 

@@ -54,7 +54,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					IsCreating = true,
 					ProjectUsers = new List<BasicUserInfoViewModel>(),
-					ProjectOrgId = idAndUsers, // Service.GetRecommendedProjectId()
+					ProjectCode = idAndUsers, // Service.GetRecommendedProjectId()
 					SubscriptionId = subscriptionId,
 					Customers = customersActive,
 					IsActive = true,
@@ -87,7 +87,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				var result = await CreateProjectAndUpdateItsUserList(model);
 				if (result == -1)
 				{
-					// duplicate projectOrgId
+					// duplicate projectCode
 					Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
 				}
 				else
@@ -112,7 +112,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Creates a new project using a <see cref="EditProjectViewModel"/> and updates that project's properties and user list..
 		/// </summary>
 		/// <param name="model"><see cref="EditProjectViewModel"/> representing new project.</param>
-		/// <returns>The Project Id if succeed, -1 if the ProjectOrgId is taken by another project under the same customer.</returns>
+		/// <returns>The Project Id if succeed, -1 if the ProjectCode is taken by another project under the same customer.</returns>
 		public async Task<int> CreateProjectAndUpdateItsUserList(EditProjectViewModel model)
 		{
 			return await AppService.CreateProjectAndUpdateItsUserList(ProjectViewModelToProject(model), model.SelectedProjectUserIds.Select(int.Parse));
@@ -134,7 +134,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					CustomerId = model.CustomerId,
 				},
 				ProjectName = model.ProjectName,
-				ProjectOrgId = model.ProjectOrgId,
+				ProjectCode = model.ProjectCode,
 				StartingDate = model.StartDate,
 				EndingDate = model.EndDate
 			};

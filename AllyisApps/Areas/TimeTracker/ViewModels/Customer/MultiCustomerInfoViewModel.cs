@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using AllyisApps.ViewModels;
-using AllyisApps.ViewModels.TimeTracker.Customer;
+
 
 namespace AllyisApps.ViewModels.TimeTracker.Customer
 {
@@ -14,4 +14,5 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		/// </summary>
 		public List<CustomerInfoViewModel> CustomerList { get; set; }
 	}
+	
 }

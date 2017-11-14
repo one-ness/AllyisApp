@@ -9,10 +9,10 @@ SELECT	[Project].[ProjectId],
 		[Project].[ProjectCreatedUtc],
 		[Project].[ProjectName] AS [ProjectName],
 		[Project].[IsActive],
-		[ProjectOrgId],
+		[ProjectCode],
 		[Organization].[OrganizationName] AS [OrganizationName],
 		[Customer].[CustomerName] AS [CustomerName],
-		[Customer].[CustomerOrgId],
+		[Customer].[CustomerCode],
 		[Customer].[IsActive] AS [IsCustomerActive],
 		[Project].[IsHourly] AS [IsHourly]
 		--[OrganizationRoleId]
