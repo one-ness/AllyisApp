@@ -108,12 +108,13 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				{
 					case -1:
 						// the new CustOrgId is not unique
-						Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerOrgIdNotUnique, Variety.Danger));
+						Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerCodeNotUnique, Variety.Danger));
 						return View(model);
 					case 1:
 						// updated successfully
 						Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerDetailsUpdated, Variety.Success));
-						return Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, new { subscriptionId = model.SubscriptionId }), model.CustomerId));
+						return Redirect(string.Format("{0}#customerNumber{1}",
+							Url.Action(ActionConstants.Index, new { subscriptionId = model.SubscriptionId }), model.CustomerId));
 					default:
 						// Permissions failure
 						Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));

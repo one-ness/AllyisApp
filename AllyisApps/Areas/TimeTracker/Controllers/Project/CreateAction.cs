@@ -90,7 +90,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				if (result == -1)
 				{
 					// duplicate projectCode
-					Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectCodeNotUnique, Variety.Danger));
 				}
 				else
 				{

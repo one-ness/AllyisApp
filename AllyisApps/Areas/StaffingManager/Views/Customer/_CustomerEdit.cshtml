@@ -69,7 +69,7 @@
 					</div>
 
 					<div class="form-group">
-						@Html.ReqLabelFor(m => m.CustomerCode, Strings.CustomerOrgId)
+						@Html.ReqLabelFor(m => m.CustomerCode, Strings.CustomerCode)
 						@Html.TextBoxFor(m => m.CustomerCode, new { @class = "form-control", @maxlength = "16", @placeholder = Model.CustomerCode })
 						@Html.ValidationMessageFor(model => model.CustomerCode, string.Empty, new { @class = "text-danger" })
 					</div>

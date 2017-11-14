@@ -259,16 +259,16 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 						Website = model.newCustomer.Website,
 						EIN = model.newCustomer.EIN,
 						OrganizationId = subInfo.OrganizationId,
-						CustomerOrgId = model.newCustomer.CustomerOrgId
+						CustomerCode = model.newCustomer.CustomerCode
 					},
 					model.subscriptionId);
 
 				if (customerId.HasValue)
 				{
-					// CustomerOrgId is not unique
+					// CustomerCode is not unique
 					if (customerId == -1)
 					{
-						Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerOrgIdNotUnique, Variety.Danger));
+						Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerCodeNotUnique, Variety.Danger));
 						return this.View(model);
 					}
 
