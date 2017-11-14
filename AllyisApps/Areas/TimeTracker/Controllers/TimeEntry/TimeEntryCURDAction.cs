@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
+using AllyisApps.Core.Alert;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using Newtonsoft.Json;
 
@@ -45,6 +46,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				else if (entry.IsCreated && !entry.IsDeleted)
 				{
 					res = (JsonResult)await CreateTimeEntryJson(entry);
+				}
+
+				if (res == null) continue;
+
+				var results = (dynamic)res.Data;
+
+				if (results.status == "error")
+				{
+					Notifications.Add(new BootstrapAlert(results.message, Variety.Danger));
 				}
 			}
 

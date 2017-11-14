@@ -2464,6 +2464,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User must be assigned to project..
+        /// </summary>
+        public static string MustBeAssignedToProject {
+            get {
+                return ResourceManager.GetString("MustBeAssignedToProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You cant edit a time entry on a project that is Deactivated.
         /// </summary>
         public static string MustSelectActiveProject {
@@ -3459,6 +3468,15 @@ namespace AllyisApps.Resources {
         public static string ProjectDetails {
             get {
                 return ResourceManager.GetString("ProjectDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project is not active..
+        /// </summary>
+        public static string ProjectIsNotActive {
+            get {
+                return ResourceManager.GetString("ProjectIsNotActive", resourceCulture);
             }
         }
         

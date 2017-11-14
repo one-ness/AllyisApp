@@ -49,7 +49,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
 				IsCreating = true,
-				CustomerOrgId = NextCustomerId,
+				CustomerCode = NextCustomerId,
 				SubscriptionId = subscriptionId,
 				OrganizationId = orgId,
 				UserId = AppService.UserContext.UserId,
@@ -89,7 +89,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						Website = model.Website,
 						EIN = model.EIN,
 						OrganizationId = model.OrganizationId,
-						CustomerOrgId = model.CustomerOrgId,
+						CustomerCode = model.CustomerCode,
 						IsActive = model.IsActive
 					},
 					model.SubscriptionId);

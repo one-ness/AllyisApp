@@ -61,7 +61,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
 				LocalizedStates = ModelHelper.GetLocalizedStates(AppService, customer.Address?.CountryCode),
 
-				CustomerOrgId = customer.CustomerOrgId,
+				CustomerCode = customer.CustomerCode,
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subscriptionNameToDisplay
 			});
@@ -99,7 +99,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 						FaxNumber = model.FaxNumber,
 						Website = model.Website,
 						EIN = model.EIN,
-						CustomerOrgId = model.CustomerOrgId,
+						CustomerCode = model.CustomerCode,
 						OrganizationId = model.OrganizationId
 					},
 					model.SubscriptionId);

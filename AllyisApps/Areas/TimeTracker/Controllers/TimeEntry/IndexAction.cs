@@ -79,12 +79,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="startDate">The start date.</param>
 		/// <param name="endDate">The end date.</param>
+		/// <param name="userId"></param>
 		/// <returns>A redirect to the index action.</returns>
-		public RedirectToRouteResult TimeTrackerDatePickerRedirect(int subscriptionId, DateTime startDate, DateTime endDate)
+		public RedirectToRouteResult TimeTrackerDatePickerRedirect(int subscriptionId, DateTime startDate, DateTime endDate, int? userId)
 		{
 			int start = Utility.GetDaysFromDateTime(startDate);
 			int end = Utility.GetDaysFromDateTime(endDate);
-			return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry, new { subscriptionId, startDate = start, endDate = end });
+			return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry, new { subscriptionId, startDate = start, endDate = end, userId = userId });
 		}
 
 		/// <summary>
@@ -272,51 +273,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 						// holidayPopulated = false;
 					}
-
-					/*
-					else if ((holidays.Where(x => x.Date == date).FirstOrDefault() != null) && (iter.Current == null || iter.Current.Date != date) && !holidayPopulated)
-					{
-						/* TODO: REPLACE HOLIDY LOGIC HERE IMPORTANT: ALL HOLIDAY Calculations May not work as expected ARE CURENTLY DISABLED
-						holidayPopulated = true;
-						// Prepopulate holidays
-
-						result.GrandTotal.Hours += 8;
-
-						TimeEntry timeEntryInfo = new TimeEntry()
-						{
-							ApprovalState = 1,
-							Date = date,
-							Duration = 8,
-							UserId = userId,
-							ProjectId = 0,
-							PayClassId = infos.Item2.Where(p => p.PayClassName.Equals("Holiday")).FirstOrDefault().PayClassId,
-							Description = holidays.Where(x => x.Date == date).First().HolidayName,
-						};
-
-						int timeEntryId = AppService.CreateTimeEntry(timeEntryInfo);
-
-						result.EntryRange.Entries.Add(new EditTimeEntryViewModel
-						{
-							TimeEntryId = timeEntryId,
-							Date = AppService.GetDayFromDateTime(date),
-							UserId = userId,
-							SubscriptionId = subId,
-							StartingDate = AppService.GetDayFromDateTime(startDate),
-							EndingDate = AppService.GetDayFromDateTime(endDate),
-							IsOffDay = (weekend % 7 == (int)date.DayOfWeek || (weekend + 1) % 7 == (int)date.DayOfWeek) ? true : false,
-							IsHoliday = true,
-							Projects = result.Projects,
-							ProjectsWithInactive = result.ProjectsWithInactive,
-							PayClassId = timeEntryInfo.PayClassId,
-							PayClasses = result.PayClasses,
-							Duration = string.Format("{0:D2}:{1:D2}", (int)timeEntryInfo.Duration, (int)Math.Round((timeEntryInfo.Duration - (int)timeEntryInfo.Duration) * 60, 0)),
-							Description = timeEntryInfo.Description,
-							ProjectName = allProjects.Where(x => x.ProjectId == 0).Select(x => x.ProjectName).FirstOrDefault(),
-							IsLocked = (!result.CanManage && beforeLockDate),
-							LockDate = result.LockDate
-						});
-					}
-					*/
+					
 				}
 			}
 

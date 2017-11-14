@@ -498,9 +498,9 @@ namespace AllyisApps.Services
 						entry.Duration.ToString(CultureInfo.CurrentCulture),
 						entry.PayClassName,
 						project?.ProjectName ?? string.Empty,
-						project?.ProjectOrgId ?? string.Empty,
+						project?.ProjectCode ?? string.Empty,
 						project?.owningCustomer?.CustomerName ?? string.Empty,
-						project?.owningCustomer?.CustomerOrgId ?? string.Empty,
+						project?.owningCustomer?.CustomerCode ?? string.Empty,
 						entry.Description,
 						((TimeEntryStatus)entry.TimeEntryStatusId).ToString()
 					};
@@ -879,7 +879,7 @@ namespace AllyisApps.Services
 				ContactPhoneNumber = customer.ContactPhoneNumber,
 				CreatedUtc = customer.CreatedUtc,
 				CustomerId = customer.CustomerId,
-				CustomerOrgId = customer.CustomerOrgId,
+				CustomerCode = customer.CustomerCode,
 				EIN = customer.EIN,
 				FaxNumber = customer.FaxNumber,
 				CustomerName = customer.CustomerName,

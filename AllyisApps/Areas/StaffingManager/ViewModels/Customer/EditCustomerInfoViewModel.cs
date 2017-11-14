@@ -115,7 +115,7 @@ namespace AllyisApps.ViewModels.Staffing.Customer
 		[Required]
 		[DataType(DataType.Text)]
 		[Display(Name = "Customer Id")]
-		public string CustomerOrgId { get; set; }
+		public string CustomerCode { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Customer's organization id.

@@ -69,9 +69,9 @@
 					</div>
 
 					<div class="form-group">
-						@Html.ReqLabelFor(m => m.CustomerOrgId, Strings.CustomerOrgId)
-						@Html.TextBoxFor(m => m.CustomerOrgId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.CustomerOrgId })
-						@Html.ValidationMessageFor(model => model.CustomerOrgId, string.Empty, new { @class = "text-danger" })
+						@Html.ReqLabelFor(m => m.CustomerCode, Strings.CustomerOrgId)
+						@Html.TextBoxFor(m => m.CustomerCode, new { @class = "form-control", @maxlength = "16", @placeholder = Model.CustomerCode })
+						@Html.ValidationMessageFor(model => model.CustomerCode, string.Empty, new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
 						@Html.ReqLabelFor(m => m.IsActiveOptions, "Status")

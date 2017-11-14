@@ -1762,4 +1762,10 @@
   <data name="CannotInviteSelf" xml:space="preserve">
     <value>You cannot invite yourself to your own organizaion</value>
   </data>
+	<data name="ProjectIsNotActive" xml:space="preserve">
+    <value>Project is not active.</value>
+  </data>
+	<data name="MustBeAssignedToProject" xml:space="preserve">
+    <value>User must be assigned to project.</value>
+  </data>
 </root>

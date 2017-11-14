@@ -251,7 +251,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="newProject">Project with project information.</param>
 		/// <param name="userIds">List of users being assigned to the project.</param>
-		/// <returns>Project Id if succeed, -1 if ProjectOrgId is taken.</returns>
+		/// <returns>Project Id if succeed, -1 if projectCode is taken.</returns>
 		public async Task<int> CreateProjectAndUpdateItsUserList(Project.Project newProject, IEnumerable<int> userIds)
 		{
 			#region Validation
@@ -266,9 +266,9 @@ namespace AllyisApps.Services
 				throw new ArgumentNullException("name", "Project name must have a value and cannot be whitespace.");
 			}
 
-			if (string.IsNullOrEmpty(newProject.ProjectOrgId))
+			if (string.IsNullOrEmpty(newProject.ProjectCode))
 			{
-				throw new ArgumentNullException("projectOrgId", "Project must have an Id");
+				throw new ArgumentNullException("projectCode", "Project must have an Id");
 			}
 
 			if (newProject.StartingDate.HasValue && newProject.EndingDate.HasValue && DateTime.Compare(newProject.StartingDate.Value, newProject.EndingDate.Value) > 0)
@@ -300,9 +300,9 @@ namespace AllyisApps.Services
 				throw new ArgumentNullException("name", "Project name must have a value and cannot be whitespace.");
 			}
 
-			if (string.IsNullOrEmpty(newProject.ProjectOrgId))
+			if (string.IsNullOrEmpty(newProject.ProjectCode))
 			{
-				throw new ArgumentNullException("projectOrgId", "Project must have an Id");
+				throw new ArgumentNullException("ProjectCode", "Project must have an Id");
 			}
 
 			if (newProject.StartingDate.HasValue && newProject.EndingDate.HasValue && DateTime.Compare(newProject.StartingDate.Value, newProject.EndingDate.Value) > 0)
@@ -720,7 +720,7 @@ namespace AllyisApps.Services
 				ContactPhoneNumber = customer.ContactPhoneNumber,
 				CreatedUtc = customer.CreatedUtc,
 				CustomerId = customer.CustomerId,
-				CustomerOrgId = customer.CustomerOrgId,
+				CustomerCode = customer.CustomerCode,
 				EIN = customer.EIN,
 				FaxNumber = customer.FaxNumber,
 				CustomerName = customer.CustomerName,
@@ -764,7 +764,7 @@ namespace AllyisApps.Services
 				ContactPhoneNumber = customer.ContactPhoneNumber,
 				CreatedUtc = customer.CreatedUtc,
 				CustomerId = customer.CustomerId,
-				CustomerOrgId = customer.CustomerOrgId,
+				CustomerCode = customer.CustomerCode,
 				EIN = customer.EIN,
 				FaxNumber = customer.FaxNumber,
 				CustomerName = customer.CustomerName,
@@ -823,7 +823,7 @@ namespace AllyisApps.Services
 					ContactPhoneNumber = customer.ContactPhoneNumber,
 					CreatedUtc = customer.CreatedUtc,
 					CustomerId = customer.CustomerId,
-					CustomerOrgId = customer.CustomerOrgId,
+					CustomerCode = customer.CustomerCode,
 					EIN = customer.EIN,
 					FaxNumber = customer.FaxNumber,
 					CustomerName = customer.CustomerName,
@@ -867,7 +867,7 @@ namespace AllyisApps.Services
 				ProjectName = project.ProjectName,
 				OrganizationId = project.OrganizationId,
 				ProjectId = project.ProjectId,
-				ProjectOrgId = project.ProjectOrgId,
+				ProjectCode = project.ProjectCode,
 				StartingDate = project.StartingDate,
 				IsHourly = project.IsHourly
 			};
@@ -892,7 +892,7 @@ namespace AllyisApps.Services
 				ProjectName = project.ProjectName,
 				OrganizationId = project.OrganizationId,
 				ProjectId = project.ProjectId,
-				ProjectOrgId = project.ProjectOrgId,
+				ProjectCode = project.ProjectCode,
 				StartingDate = project.StartingDate,
 				IsHourly = project.IsHourly
 			};
@@ -917,7 +917,7 @@ namespace AllyisApps.Services
 				{
 					CustomerId = completeProject.CustomerId,
 					CustomerName = completeProject.CustomerName,
-					CustomerOrgId = completeProject.CustomerOrgId,
+					CustomerCode = completeProject.CustomerCode,
 				},
 				EndDate = completeProject.EndDate,
 				IsActive = completeProject.IsActive,
@@ -929,7 +929,7 @@ namespace AllyisApps.Services
 				ProjectId = completeProject.ProjectId,
 				ProjectName = completeProject.ProjectName,
 				StartDate = completeProject.StartDate,
-				ProjectOrgId = completeProject.ProjectOrgId,
+				ProjectCode = completeProject.ProjectCode,
 				IsProjectUser = completeProject.IsProjectUser
 			};
 		}

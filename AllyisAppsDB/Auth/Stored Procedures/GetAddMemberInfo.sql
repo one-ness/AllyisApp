@@ -32,30 +32,7 @@ AS
 	RIGHT JOIN [Auth].[ProductRole]  WITH (NOLOCK) ON [ProductRole].[ProductId] = [Sku].[ProductId]
 	WHERE [Subscription].[OrganizationId] = @organizationId AND [Subscription].[IsActive] = 1
 
-	/*
-	SELECT	[Project].[ProjectId],
-		[Project].[CustomerId],
-		[Customer].[OrganizationId],
-		[Project].[ProjectCreatedUtc],
-		[Project].[ProjectName] AS [ProjectName],
-		[Project].[IsActive],
-		[ProjectOrgId],
-		[Organization].[OrganizationName] AS [OrganizationName],
-		[Customer].[CustomerName] AS [CustomerName],
-		[Customer].[CustomerOrgId],
-		[Customer].[IsActive] AS [IsCustomerActive],
-		[Project].[IsHourly] AS [IsHourly]
-	FROM (
-		[Auth].[Organization]	WITH (NOLOCK) 
-		JOIN [Crm].[Customer]	WITH (NOLOCK) ON ([Customer].[OrganizationId] = [Organization].[OrganizationId] AND [Organization].[OrganizationId] = @organizationId)
-		JOIN [Pjm].[Project]	WITH (NOLOCK) ON [Project].[CustomerId] = [Customer].[CustomerId]
-	)
 	
-	WHERE [Customer].[IsActive] >= 1
-		AND [Project].[IsActive] >= 1
-
-	ORDER BY [Project].[ProjectName]
-	*/
 
 	SELECT TOP 1
 		[EmployeeId]

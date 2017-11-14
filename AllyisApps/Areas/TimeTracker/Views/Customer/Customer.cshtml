@@ -16,7 +16,7 @@
 <div class="container">
 	<table class="table table-hover table-xtra-condensed">
 		<thead>
-			<tr class="" double-bottom-border"">
+			<tr class="double-bottom-border">
 				<th>
 					<input type="checkbox" id="select-all" onclick="CheckAllToggle()" />
 				</th>
@@ -52,7 +52,7 @@
 						<p>@customer.Address.City, @customer.Address.StateName  @customer.Address.PostalCode</p>
 					</td>
 					<td>@customer.EIN</td>
-					<td>@customer.CustomerId</td>
+					<td>@customer.CustomerCode</td>
 					<td>
 						@if (customer.IsActive.Value)
 						{
