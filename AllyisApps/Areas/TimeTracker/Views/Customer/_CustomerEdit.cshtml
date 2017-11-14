@@ -73,10 +73,13 @@
 						@Html.TextBoxFor(m => m.CustomerCode, new { @class = "form-control", @maxlength = "16", @placeholder = Model.CustomerCode })
 						@Html.ValidationMessageFor(model => model.CustomerCode, string.Empty, new { @class = "text-danger" })
 					</div>
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.IsActiveOptions, "Status")
-						@Html.DropDownListFor(x => x.IsActive, Model.IsActiveOptions, new { @class = "form-control" })
-					</div>
+					@if ((string)ViewData[ActionConstants.Action] == ActionConstants.Edit)
+					{
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.IsActiveOptions, "Status")
+							@Html.DropDownListFor(x => x.IsActive, Model.IsActiveOptions, new { @class = "form-control" })
+						</div>
+					}
 
 					@Html.HiddenFor(m => m.OrganizationId)
 					@Html.HiddenFor(m => m.CustomerId)
@@ -84,7 +87,7 @@
 					@Html.HiddenFor(m => m.SubscriptionId)
 					@Html.HiddenFor(m => m.AddressId)
 
-					<div class="form-group allyis-action-buttons">
+					<div class="form-group pull-right allyis-action-buttons">
 						@if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)
 						{
 							<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Customer)" class="btn btn-default">@Strings.Cancel</a>
@@ -96,36 +99,6 @@
 							<input type="submit" value="@Strings.Save" class="btn btn-primary" />
 						}
 					</div>
-				</div>
-			</div>
-		}
-		<br />
-		@if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)
-		{
-			<div class="row">
-				<div class="col-md-6 sm-control-width">
-					<label>@Strings.Upload</label>
-					@using (Html.BeginForm(ActionConstants.CustomerImport, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
-					{
-						@Html.AntiForgeryToken();
-						<div>
-							<input type="file" id="upload-box" name="file" style="display:none;"
-								   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-							<input id="upload-file-name-display" name="file" class="form-control"
-								   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-						</div>
-
-						<div style="margin-top: 10px; margin-bottom: 15px; float:right;">
-							<a class="btn btn-primary" onclick="$('input[id=upload-box]').click();" title="Choose customers Excel entries to upload">@Strings.ChooseFile</a>
-							<input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" title="Upload customers Excel entries" />
-						</div>
-					}
-					@using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Customer, null, FormMethod.Get, new { style = "display: flex; justify-content: space-between;", id = "template-form" }))
-					{
-						<div style="margin-top:10px; float:left">
-							<input type="submit" form="template-form" id="template-button" value="@Strings.Template" class="btn btn-primary" title="Download customers Excel template" />
-						</div>
-					}
 				</div>
 			</div>
 		}

@@ -5,6 +5,8 @@
 	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
 	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
 	ViewBag.Title = Strings.EditProject;
+	ViewData.Add(ControllerConstants.Controller, ControllerConstants.Project);
+	ViewData.Add(ActionConstants.Action, ActionConstants.Edit);
 	ViewBag.Action = "Edit";
 	ViewData["UserId"] = Model.UserId;
 	ViewData["SubscriptionId"] = Model.SubscriptionId;
