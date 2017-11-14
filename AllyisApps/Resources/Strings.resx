@@ -147,7 +147,7 @@
   <data name="CustomerDetailsUpdated" xml:space="preserve">
     <value>Customer details have been updated successfully.</value>
   </data>
-  <data name="CustomerOrgIdNotUnique" xml:space="preserve">
+  <data name="CustomerCodeNotUnique" xml:space="preserve">
     <value>This Customer ID is already in use. The Customer ID must be a unique value.</value>
   </data>
   <data name="EmployeeIdNotUniqueError" xml:space="preserve">
@@ -483,7 +483,7 @@
   <data name="CustomerList" xml:space="preserve">
     <value>Customers</value>
   </data>
-  <data name="CustomerOrgId" xml:space="preserve">
+  <data name="CustomerCode" xml:space="preserve">
     <value>Organization Specific Id</value>
   </data>
   <data name="Customers" xml:space="preserve">
@@ -1047,11 +1047,11 @@
   <data name="ProjectList" xml:space="preserve">
     <value>Back</value>
   </data>
-  <data name="ProjectOrgId" xml:space="preserve">
+  <data name="ProjectCode" xml:space="preserve">
     <value>Project ID</value>
   </data>
-  <data name="ProjectOrgIdNotUnique" xml:space="preserve">
-    <value>The chosen Project ID already exists. The value must be a unique value.</value>
+  <data name="ProjectCodeNotUnique" xml:space="preserve">
+    <value>The chosen Project ID already exists for this customer. The value must be a unique value.</value>
   </data>
   <data name="Projects" xml:space="preserve">
     <value>Projects</value>
@@ -1762,10 +1762,10 @@
   <data name="CannotInviteSelf" xml:space="preserve">
     <value>You cannot invite yourself to your own organizaion</value>
   </data>
-	<data name="ProjectIsNotActive" xml:space="preserve">
+  <data name="ProjectIsNotActive" xml:space="preserve">
     <value>Project is not active.</value>
   </data>
-	<data name="MustBeAssignedToProject" xml:space="preserve">
+  <data name="MustBeAssignedToProject" xml:space="preserve">
     <value>User must be assigned to project.</value>
   </data>
 </root>

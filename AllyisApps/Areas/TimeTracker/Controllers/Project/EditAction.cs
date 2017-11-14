@@ -58,7 +58,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			Services.Project.Project projIdMatch = projIdMatchGet.SingleOrDefault(project => project.ProjectCode == model.ProjectCode && project.owningCustomer?.CustomerId == model.ParentCustomerId);
 			if (projIdMatch != null && projIdMatch.ProjectId != model.ProjectId)
 			{
-				Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectCodeNotUnique, Variety.Danger));
 				return View(model);
 			}
 

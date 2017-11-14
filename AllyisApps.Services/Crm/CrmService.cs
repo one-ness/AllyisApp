@@ -784,7 +784,7 @@ namespace AllyisApps.Services
 		//        ContactPhoneNumber = customer.ContactPhoneNumber,
 		//        CreatedUtc = customer.CreatedUtc,
 		//        CustomerId = customer.CustomerId,
-		//        CustomerOrgId = customer.CustomerOrgId,
+		//        CustomerCode = customer.CustomerCode,
 		//        EIN = customer.EIN,
 		//        FaxNumber = customer.FaxNumber,
 		//        CustomerName = customer.CustomerName,
