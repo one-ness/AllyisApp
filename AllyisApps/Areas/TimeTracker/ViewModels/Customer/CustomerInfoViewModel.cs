@@ -4,6 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------\
 
+using System.Collections.Generic;
+
 namespace AllyisApps.ViewModels.TimeTracker.Customer
 {
 	/// <summary>
@@ -126,5 +128,15 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 			/// </summary>
 			public string CountryCode { get; set; }
 		}
+	}
+	/// <summary>
+	/// 
+	/// </summary>
+	public class MultiCustomerInfoViewModel : BaseViewModel
+	{
+		/// <summary>
+		/// Gets or sets a list of customers.
+		/// </summary>
+		public List<CustomerInfoViewModel> CustomerList { get; set; }
 	}
 }

@@ -16,7 +16,7 @@ BEGIN
 		AND [CustomerId] = @customerId
 	)
 		BEGIN
-			-- ProjectOrgId is not unique
+			-- ProjectCode is not unique
 			SET @retId = -1;
 		END
 	ELSE

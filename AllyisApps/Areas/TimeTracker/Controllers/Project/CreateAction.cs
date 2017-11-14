@@ -75,8 +75,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Create(EditProjectViewModel model)
 		{
-			var listGet = await AppService.GetNextProjectIdAndSubUsers(model.ParentCustomerId, model.SubscriptionId);
-			model.SubscriptionUsers = listGet.Item2.Select(user => new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId)).ToList();
+			//for repopulating form choices upon edit error
+			var totalUsers = model.ProjectUsers.Concat(model.SubscriptionUsers).ToList();
+			model.ProjectUsers = totalUsers.Where(subUsers => model.SelectedProjectUserIds.Contains(subUsers.UserId)); //right multi-select box
+			model.SubscriptionUsers = totalUsers.Except(model.ProjectUsers); //left multi-select box
 
 			if (!ModelState.IsValid) return View(model);
 
@@ -88,7 +90,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				if (result == -1)
 				{
 					// duplicate projectCode
-					Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectCodeNotUnique, Variety.Danger));
 				}
 				else
 				{
