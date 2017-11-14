@@ -1,5 +1,7 @@
 ﻿@{
 	ViewBag.Title = "Customer Import";
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
 }
 
 <div class="row">
@@ -23,5 +25,8 @@
 				<input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" title="Upload customers Excel entries" />
 			</div>
 		}
+		<div class="pull-left" style="padding-top: 15px; padding-bottom: 15px;">
+			<span type="button" class="btn btn-default" value=@Strings.Cancel onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Customer)'">Cancel</span>
+		</div>
 	</div>
 </div>

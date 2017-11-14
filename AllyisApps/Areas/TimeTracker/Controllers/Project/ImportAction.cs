@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using AllyisApps.Controllers;
+using AllyisApps.Services;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -16,6 +17,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpGet]
 		public ActionResult ProjectImport(int subscriptionId)
 		{
+			ViewData["IsManager"] = AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
+			ViewData["SubscriptionId"] = subscriptionId;
+			ViewData["SubscriptionName"] = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName;
+			ViewData["UserId"] = AppService.UserContext.UserId;
 			return View();
 		}
 	}
