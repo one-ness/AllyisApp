@@ -113,7 +113,7 @@ namespace AllyisApps.Services
 		/// <param name="orgId">The Organization Id.</param>
 		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public  string ReactivateCustomer(int customerId, int subscriptionId, int orgId)
+		public string ReactivateCustomer(int customerId, int subscriptionId, int orgId)
 		{
 			CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
 			return DBHelper.ReactivateCustomer(customerId);
@@ -818,7 +818,7 @@ namespace AllyisApps.Services
 					CustomerName = customer.CustomerName,
 					OrganizationId = customer.OrganizationId,
 					Website = customer.Website,
-					IsActive = customer.IsActive
+					IsActive = customer.IsActive ?? true
 				},
 				new AddressDBEntity
 				{

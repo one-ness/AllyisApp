@@ -26,6 +26,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	public partial class CustomerController : BaseController
 	{
 		/// <summary>
+		/// Directs the user to the customer import view.
+		/// </summary>
+		/// <param name="subscriptionId">The subscription id.</param>
+		/// <returns>the view to the customer import view.</returns>
+		[HttpGet]
+		public ActionResult CustomerImport(int subscriptionId)
+		{
+			return View();
+		}
+
+		/// <summary>
 		/// POST: Customer/Import.
 		/// Code adapted from http://techbrij.com/read-excel-xls-xlsx-asp-net-mvc-upload.
 		/// </summary>

@@ -291,6 +291,7 @@
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ReactivateAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\TemplateAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Home\HomeController.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\Project\ImportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Project\ReactivateAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ReviewAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\MergePayClassAction.cs" />
@@ -575,6 +576,8 @@
     <Content Include="Areas\TimeTracker\Views\TimeEntry\_AjaxTimeEntryBody2.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\Customer.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Project\Projects.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\Customer\CustomerImport.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\Project\ProjectImport.cshtml" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
@@ -748,6 +751,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\TimeTracker\ViewModels\Manage\" />
+    <Folder Include="Areas\TimeTracker\Views\ImportAction\" />
     <Folder Include="Areas\TimeTracker\Views\Setting2Action\" />
   </ItemGroup>
   <ItemGroup>
