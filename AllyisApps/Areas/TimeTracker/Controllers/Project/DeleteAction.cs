@@ -70,7 +70,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 					if (!string.IsNullOrEmpty(result))
 					{
-						Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", result, Resources.Strings.ProjectDeleteNotification), Variety.Success));
+						Notifications.Add(new BootstrapAlert(string.Format("{0} Status was toggled sucessfully.", project.ProjectName), Variety.Success));
 					}
 					else
 					{
