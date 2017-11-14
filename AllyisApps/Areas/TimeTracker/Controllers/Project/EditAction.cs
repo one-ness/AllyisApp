@@ -47,6 +47,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			var listGet = await AppService.GetNextProjectIdAndSubUsers(model.ParentCustomerId, model.SubscriptionId);
 			model.SubscriptionUsers = listGet.Item2.Select(user => new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId)).ToList();
+
 			if (!ModelState.IsValid) return View(model);
 
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
@@ -65,7 +66,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			try
 			{
 				var customer = await AppService.GetCustomerInfo(model.ParentCustomerId);
-
+				if (model.StartDate != projIdMatch.StartingDate || model.EndDate != projIdMatch.EndingDate) // check new date range to see if entries outside of the new range
+				{
+					await AppService.CheckUpdateProjectStartEndDate(projIdMatch.ProjectId, model.StartDate, model.EndDate);
+				}
 				if (!customer.IsActive.Value && model.IsActive)
 				{
 					customer.IsActive = true;
@@ -121,7 +125,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				Customers = customers,
 				IsActive = infos.Item1.IsActive,
-				isActiveOptions = statusOptions,
+				IsActiveOptions = statusOptions,
 				OrganizationName = infos.Item1.OrganizationName,
 				ParentCustomerId = infos.Item1.owningCustomer.CustomerId,
 				OrganizationId = infos.Item1.OrganizationId,

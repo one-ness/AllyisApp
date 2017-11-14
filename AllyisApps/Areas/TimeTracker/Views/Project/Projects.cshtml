@@ -9,6 +9,9 @@
 }
 
 <div class="form-group pull-right">
+	<a href="@Url.Action("ProjectImport")">
+		<span class="btn btn-primary">Project Import</span>
+	</a>
 	<a href="@Url.Action("Create")">
 		<span class="btn btn-primary">Create Project</span>
 	</a>
@@ -81,10 +84,10 @@
 		<button type="submit" class="btn btn-danger  pull-right">Delete</button>
 	}
 </div>
-<div class="pull-right btn">
-	@using (Html.BeginForm("ToggleStatus", Strings.Project, new { }, FormMethod.Get, new { @onsubmit = "return getUserIdsAndSubmit();"}))
+<div class="pull-left btn">
+	@using (Html.BeginForm("ToggleStatus", Strings.Project, new { }, FormMethod.Get, new { @onsubmit = "return getUserIdsAndSubmit();" }))
 	{
-			<input type="hidden" name="projIds" id="projIds" value="" />
+		<input type="hidden" name="projIds" id="projIds" value="" />
 			<button type="submit" class="btn btn-primary  pull-right">Toggle Status</button>
 	}
 </div>

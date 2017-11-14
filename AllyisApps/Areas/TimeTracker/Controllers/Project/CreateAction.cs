@@ -58,7 +58,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					SubscriptionId = subscriptionId,
 					Customers = customersActive,
 					IsActive = true,
-					isActiveOptions = statusOptions,
+					IsActiveOptions = statusOptions,
 					SubscriptionName = subscriptionNameToDisplay,
 					SubscriptionUsers = subUsers.Select(x => new BasicUserInfoViewModel(x.FirstName, x.LastName, x.UserId)),
 					OrganizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId

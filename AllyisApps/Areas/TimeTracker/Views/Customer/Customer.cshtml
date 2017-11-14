@@ -8,11 +8,13 @@
 }
 
 <div class="form-group pull-right">
+	<a href="@Url.Action("CustomerImport")">
+		<span class="btn btn-primary">Customer Import</span>
+	</a>
 	<a href="@Url.Action("Create")">
 		<span class="btn btn-primary">Create Customer</span>
 	</a>
 </div>
-
 <div class="container">
 	<table class="table table-hover table-xtra-condensed">
 		<thead>
@@ -80,11 +82,11 @@
 		</div>
 	}
 </div>
-<div class="pull-right btn">
+<div class="pull-left btn">
 	@using (Html.BeginForm("ToggleStatus", Strings.Customer, new { }, FormMethod.Get, new { @onsubmit = "return getUserIdsAndSubmit();" }))
 	{
 		<input type="hidden" name="userIds" id="userIds" value="" />
-		<button type="submit" class="btn btn-primary  pull-right">Toggle Status</button>	
+		<button type="submit" class="btn btn-primary  pull-right">Toggle Status</button>
 	}
 </div>
 
