@@ -237,8 +237,8 @@ namespace AllyisApps.Services
 		{
 			// Get all time entries for selected project
 			var project = DBHelper.GetProjectById(projectId);
-			var oldStartDate = project.StartDate ?? DateTime.MinValue;
-			var oldEndDate = project.EndDate ?? DateTime.MaxValue;
+			var oldStartDate = project.StartDate ?? (DateTime)SqlDateTime.MinValue;
+			var oldEndDate = project.EndDate ?? (DateTime)SqlDateTime.MaxValue;
 			var entries = await DBHelper.GetTimeEntriesOverDateRange(project.OrganizationId, oldStartDate, oldEndDate);
 
 			// Check new End Date, see if time entries are outside of new project date range
@@ -250,12 +250,12 @@ namespace AllyisApps.Services
 					if (newEndDate != null && entry.Date > newEndDate)
 					{
 						outsideNewDateRange = true;
-						throw new ArgumentOutOfRangeException(nameof(newEndDate), "Cannot change Project End Date specified new date, there are currently time entries outside of the project's new date range");
+						throw new ArgumentOutOfRangeException(nameof(newEndDate), String.Format("{0}{1}{2}", "Cannot change Project End Date to the specified new date, there are currently time entries outside of the project's new date range: (", entry.Date.ToShortDateString(), "). "));
 					}
 					if (newStartDate != null && entry.Date < newStartDate)
 					{
 						outsideNewDateRange = true;
-						throw new ArgumentOutOfRangeException(nameof(newStartDate), "Cannot change Project Start Date specified new date, there are currently time entries outside of the project's new date range");
+						throw new ArgumentOutOfRangeException(nameof(newStartDate), String.Format("{0}{1}{2}", "Cannot change Project Start Date to the specified new date, there are currently time entries outside of the project's new date range: (", entry.Date.ToShortDateString(), "). "));
 					}
 				}
 			}
