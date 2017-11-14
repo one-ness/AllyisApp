@@ -439,6 +439,8 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentOutOfRangeException(nameof(projectId), "Project Id cannot be 0 or negative.");
 			}
+			
+			await CheckUpdateProjectStartEndDate(projectId, null, DateTime.Now);
 
 			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
 			return await DBHelper.DeleteProject(projectId);
@@ -585,7 +587,16 @@ namespace AllyisApps.Services
 		/// <returns></returns>
 		async public Task<string> GetNextProjectId(int orgId, int subscriptionId)
 		{
-			var results = await DBHelper.GetNextProjectId(orgId, subscriptionId);
+			var results = "";
+			try
+			{
+				results = await DBHelper.GetNextProjectId(orgId, subscriptionId);
+			}
+			catch (Exception e)
+			{
+				results = e.ToString();
+				results = "";
+			}
 			return string.IsNullOrEmpty(results) ? "0000000000000000" : new string(IncrementAlphanumericCharArray(results.ToCharArray()));
 		}
 

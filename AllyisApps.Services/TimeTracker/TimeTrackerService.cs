@@ -233,6 +233,36 @@ namespace AllyisApps.Services
 
 		#region public static
 
+		public async Task<bool> CheckUpdateProjectStartEndDate(int projectId, DateTime? newStartDate, DateTime? newEndDate)
+		{
+			// Get all time entries for selected project
+			var project = DBHelper.GetProjectById(projectId);
+			var oldStartDate = project.StartDate ?? DateTime.MinValue;
+			var oldEndDate = project.EndDate ?? DateTime.MaxValue;
+			var entries = await DBHelper.GetTimeEntriesOverDateRange(project.OrganizationId, oldStartDate, oldEndDate);
+
+			// Check new End Date, see if time entries are outside of new project date range
+			bool outsideNewDateRange = false;
+			foreach (var entry in entries)
+			{
+				if(entry.ProjectId == projectId) //only check for the specific project
+				{
+					if (newEndDate != null && entry.Date > newEndDate)
+					{
+						outsideNewDateRange = true;
+						throw new ArgumentOutOfRangeException(nameof(newEndDate), "Cannot change Project End Date specified new date, there are currently time entries outside of the project's new date range");
+					}
+					if (newStartDate != null && entry.Date < newStartDate)
+					{
+						outsideNewDateRange = true;
+						throw new ArgumentOutOfRangeException(nameof(newStartDate), "Cannot change Project Start Date specified new date, there are currently time entries outside of the project's new date range");
+					}
+				}
+			}
+
+			return outsideNewDateRange;
+		}
+
 		public static DateTime SetStartingDate(DateTime? date, int startOfWeek)
 		{
 			if (date != null) return date.Value.Date;
