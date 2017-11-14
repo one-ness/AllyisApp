@@ -28,7 +28,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subscriptionId">Subscription id.</param>
 		/// <param name="userId">The project's Id.</param>
 		/// <returns>The ActionResult for the Edit view.</returns>
-		async public Task<ActionResult> Edit(int subscriptionId, int userId)
+		public async Task<ActionResult> Edit(int subscriptionId, int userId)
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
 			var model = await ConstructEditProjectViewModel(userId, subscriptionId);
@@ -45,8 +45,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpPost]
 		public async Task<ActionResult> Edit(int subscriptionId, EditProjectViewModel model)
 		{
-			var listGet = await AppService.GetNextProjectIdAndSubUsers(model.ParentCustomerId, model.SubscriptionId);
-			model.SubscriptionUsers = listGet.Item2.Select(user => new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId)).ToList();
+			//for repopulating form choices upon edit error
+			var totalUsers = model.ProjectUsers.Concat(model.SubscriptionUsers).ToList();
+			model.ProjectUsers = totalUsers.Where(subUsers => model.SelectedProjectUserIds.Contains(subUsers.UserId)); //right multi-select box
+			model.SubscriptionUsers = totalUsers.Except(model.ProjectUsers); //left multi-select box
 
 			if (!ModelState.IsValid) return View(model);
 
@@ -102,23 +104,23 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="projectId">Project Id.</param>
 		/// <param name="subscriptionId">Subscription id.</param>
 		/// <returns>The EditProjectViewModel.</returns>
-		async public Task<EditProjectViewModel> ConstructEditProjectViewModel(int projectId, int subscriptionId)
+		public async Task<EditProjectViewModel> ConstructEditProjectViewModel(int projectId, int subscriptionId)
 		{
 			var infos = AppService.GetProjectEditInfo(projectId, subscriptionId);
 			var projectUsers = infos.Item2.Select(projectUser => new BasicUserInfoViewModel(projectUser.FirstName, projectUser.LastName, projectUser.UserId)).ToList();
 			var subscriptionUsers = infos.Item3.Select(su => new BasicUserInfoViewModel(su.FirstName, su.LastName, su.UserId)).ToList();
 			string subscriptionNameToDisplay = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName;
 			var orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-			var customers = (await AppService.GetCustomerList(orgId)).Select(x => new SelectListItem()
+			var customers = (await AppService.GetCustomerList(orgId)).Select(x => new SelectListItem
 			{
 				Text = x.CustomerName,
 				Value = x.CustomerId.ToString()
 			}).ToList();
 
-			List<SelectListItem> statusOptions = new List<SelectListItem>()
+			var statusOptions = new List<SelectListItem>
 			{
-				new SelectListItem() { Text = "Active", Value = true.ToString() },
-				new SelectListItem() { Text = "Disabled", Value = false.ToString() }
+				new SelectListItem { Text = "Active", Value = true.ToString() },
+				new SelectListItem { Text = "Disabled", Value = false.ToString() }
 			};
 
 			return new EditProjectViewModel
@@ -133,7 +135,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				ProjectCode = infos.Item1.ProjectCode,
 				ProjectName = infos.Item1.ProjectName,
 				ProjectUsers = projectUsers,
-				SubscriptionUsers = subscriptionUsers.Where(user => projectUsers.All(pu => pu.UserId != user.UserId)), // Grab users that are not part of the project
+				SubscriptionUsers = subscriptionUsers.Where(user => !projectUsers.Select(pu => pu.UserId).Contains(user.UserId)), // Grab users that are not part of the project
 				StartDate = infos.Item1.StartDate,
 				EndDate = infos.Item1.EndDate,
 				SubscriptionId = subscriptionId,

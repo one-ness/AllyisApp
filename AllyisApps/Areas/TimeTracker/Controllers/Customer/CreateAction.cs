@@ -67,56 +67,53 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Create(EditCustomerInfoViewModel model)
 		{
-			if (ModelState.IsValid)
-			{
-				int? customerId = await AppService.CreateCustomerAsync(
-					new Customer
-					{
-						ContactEmail = model.ContactEmail,
-						CustomerName = model.CustomerName,
-						Address = new Address
-						{
-							Address1 = model.Address,
-							City = model.City,
-							StateName = model.State,
-							CountryName = model.Country,
-							PostalCode = model.PostalCode,
-							CountryCode = model.SelectedCountryCode,
-							StateId = model.SelectedStateId
-						},
-						ContactPhoneNumber = model.ContactPhoneNumber,
-						FaxNumber = model.FaxNumber,
-						Website = model.Website,
-						EIN = model.EIN,
-						OrganizationId = model.OrganizationId,
-						CustomerCode = model.CustomerCode,
-						IsActive = model.IsActive
-					},
-					model.SubscriptionId);
+			// Invalid model
+			if (!ModelState.IsValid) return View(model);
 
-				if (customerId.HasValue)
+			int? customerId = await AppService.CreateCustomerAsync(
+				new Customer
 				{
-					// CustomerCode is not unique
-					if (customerId == -1)
+					ContactEmail = model.ContactEmail,
+					CustomerName = model.CustomerName,
+					Address = new Address
 					{
-						Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerCodeNotUnique, Variety.Danger));
-						return View(model);
-					}
+						Address1 = model.Address,
+						City = model.City,
+						StateName = model.State,
+						CountryName = model.Country,
+						PostalCode = model.PostalCode,
+						CountryCode = model.SelectedCountryCode,
+						StateId = model.SelectedStateId
+					},
+					ContactPhoneNumber = model.ContactPhoneNumber,
+					FaxNumber = model.FaxNumber,
+					Website = model.Website,
+					EIN = model.EIN,
+					OrganizationId = model.OrganizationId,
+					CustomerCode = model.CustomerCode,
+					IsActive = true
+				},
+				model.SubscriptionId);
 
-					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerCreatedNotification, Variety.Success));
-
-					// Redirect to the user details page
-					return RedirectToAction(ActionConstants.Index, new { subscriptionId = model.SubscriptionId });
+			if (customerId.HasValue)
+			{
+				// CustomerCode is not unique
+				if (customerId == -1)
+				{
+					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerCodeNotUnique, Variety.Danger));
+					return View(model);
 				}
 
-				// No customer value, should only happen because of a permission failure
-				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerCreatedNotification, Variety.Success));
 
-				return RedirectToAction(ActionConstants.Index);
+				// Redirect to the user details page
+				return RedirectToAction(ActionConstants.Index, new { subscriptionId = model.SubscriptionId });
 			}
 
-			// Invalid model
-			return View(model);
+			// No customer value, should only happen because of a permission failure
+			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
+
+			return RedirectToAction(ActionConstants.Index);
 		}
 	}
 }

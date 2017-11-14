@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
+using AllyisApps.Services.Crm;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -47,7 +48,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 					if (customer.IsActive.Value)
 					{
-						result = await AppService.DeleteCustomer(subscriptionId, numValue);
+						var canDisable = await CanDisable(customer, orgId);
+
+						if (canDisable)
+						{
+							result = await AppService.DeleteCustomer(subscriptionId, numValue);
+						}
+						else
+						{
+							Notifications.Add(new BootstrapAlert(string.Format("Cannot toggle {0}, dependent projects are still active.", customer.CustomerName), Variety.Warning));
+						}
 					}
 					else
 					{
@@ -70,6 +80,27 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			return RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
+		}
+
+		/// <summary>
+		/// Checks if a customer can be disabled or deleted.
+		/// </summary>
+		/// <param name="customer"></param>
+		/// <param name="orgId"></param>
+		/// <returns></returns>
+		async public Task<bool> CanDisable(Customer customer, int orgId)
+		{
+			var projects = (await AppService.GetProjectsByOrganization(orgId, false)).Where(x => x.owningCustomer.CustomerId == customer.CustomerId);
+
+			foreach (var project in projects)
+			{
+				if (project.EndDate == null || DateTime.UtcNow < project.EndDate.Value.Date)
+				{
+					return false;
+				}
+			}
+
+			return true;
 		}
 
 		/// <summary>

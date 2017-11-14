@@ -139,6 +139,11 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 	public class BasicUserInfoViewModel
 	{
 		/// <summary>
+		/// Default constructor for use with automatic assignment helper methods.
+		/// </summary>
+		public BasicUserInfoViewModel() { }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="BasicUserInfoViewModel"/> class.
 		/// </summary>
 		/// <param name="firstName"> User's first name.</param>
