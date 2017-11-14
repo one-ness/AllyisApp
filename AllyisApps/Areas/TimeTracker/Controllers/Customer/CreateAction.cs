@@ -90,7 +90,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						EIN = model.EIN,
 						OrganizationId = model.OrganizationId,
 						CustomerCode = model.CustomerCode,
-						IsActive = model.IsActive
+						IsActive = true
 					},
 					model.SubscriptionId);
 
