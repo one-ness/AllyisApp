@@ -93,7 +93,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerCodeNotUnique, Variety.Danger));
 					return View(model);
 				}
-
+				if(customerId == -2)
+				{
+					Notifications.Add(new BootstrapAlert("Could Not Create Customer", Variety.Danger));
+					return View(model);
+				}
 				Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerCreatedNotification, Variety.Success));
 
 				// Redirect to the user details page

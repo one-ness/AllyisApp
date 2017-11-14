@@ -26,8 +26,8 @@
 				{
 					subscriptionId = Model.SubscriptionId,
 					userId = Model.EntryRange.UserId,
-					startingDate = Model.EntryRange.StartDate,
-					endingDate = Model.EntryRange.EndDate
+					startingDate = Utility.GetDaysFromDateTime(Model.EntryRange.StartDate),
+					endingDate = Utility.GetDaysFromDateTime(Model.EntryRange.EndDate)
 				})">
 				<span>
 					<span class="btn btn-primary" style="margin-right: 15px;">@Strings.Export</span>
