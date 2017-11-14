@@ -103,6 +103,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerCodeNotUnique, Variety.Danger));
 					return View(model);
 				}
+				if(customerId == -2)
+				{
+					Notifications.Add(new BootstrapAlert("Failed To Create Customer", Variety.Danger));
+					return View(model);
+				}
 
 				Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerCreatedNotification, Variety.Success));
 
