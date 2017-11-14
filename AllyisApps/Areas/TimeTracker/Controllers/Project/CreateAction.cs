@@ -58,7 +58,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					SubscriptionId = subscriptionId,
 					Customers = customersActive,
 					IsActive = true,
-					isActiveOptions = statusOptions,
+					IsActiveOptions = statusOptions,
 					SubscriptionName = subscriptionNameToDisplay,
 					SubscriptionUsers = subUsers.Select(x => new BasicUserInfoViewModel(x.FirstName, x.LastName, x.UserId)),
 					OrganizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId
@@ -88,7 +88,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				if (result == -1)
 				{
 					// duplicate projectCode
-					Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectCodeNotUnique, Variety.Danger));
 				}
 				else
 				{

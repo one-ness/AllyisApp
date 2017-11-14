@@ -47,16 +47,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			var listGet = await AppService.GetNextProjectIdAndSubUsers(model.ParentCustomerId, model.SubscriptionId);
 			model.SubscriptionUsers = listGet.Item2.Select(user => new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId)).ToList();
-			if (model.Customers == null) model.Customers = (await AppService.GetCustomerList(model.OrganizationId.Value)).Select(x => new SelectListItem()
-			{
-				Text = x.CustomerName,
-				Value = x.CustomerId.ToString()
-			}).ToList();
-			if (model.isActiveOptions == null) model.isActiveOptions = new List<SelectListItem>()
-			{
-				new SelectListItem() { Text = "Active", Value = true.ToString() },
-				new SelectListItem() { Text = "Disabled", Value = false.ToString() }
-			};
+
 			if (!ModelState.IsValid) return View(model);
 
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
@@ -68,14 +59,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			Services.Project.Project projIdMatch = projIdMatchGet.SingleOrDefault(project => project.ProjectCode == model.ProjectCode && project.owningCustomer?.CustomerId == model.ParentCustomerId);
 			if (projIdMatch != null && projIdMatch.ProjectId != model.ProjectId)
 			{
-				Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectCodeNotUnique, Variety.Danger));
 				return View(model);
 			}
 
 			try
 			{
 				var customer = await AppService.GetCustomerInfo(model.ParentCustomerId);
-				if(model.StartDate != projIdMatch.StartingDate || model.EndDate != projIdMatch.EndingDate) // check new date range to see if entries outside of the new range
+				if (model.StartDate != projIdMatch.StartingDate || model.EndDate != projIdMatch.EndingDate) // check new date range to see if entries outside of the new range
 				{
 					await AppService.CheckUpdateProjectStartEndDate(projIdMatch.ProjectId, model.StartDate, model.EndDate);
 				}
@@ -134,7 +125,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				Customers = customers,
 				IsActive = infos.Item1.IsActive,
-				isActiveOptions = statusOptions,
+				IsActiveOptions = statusOptions,
 				OrganizationName = infos.Item1.OrganizationName,
 				ParentCustomerId = infos.Item1.owningCustomer.CustomerId,
 				OrganizationId = infos.Item1.OrganizationId,

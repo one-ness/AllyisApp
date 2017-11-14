@@ -71,7 +71,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		/// <summary>
 		///
 		/// </summary>
-		public List<SelectListItem> isActiveOptions { get; set; }
+		public List<SelectListItem> IsActiveOptions { get; set; }
 
 		/// <summary>
 		/// Gets or sets a select list of customers.

@@ -25,7 +25,7 @@ BEGIN
 		AND [CustomerId] != @customerId
 	)
 		BEGIN
-			-- new CustomerOrgId is taken by a different Customer
+			-- new CustomerCode is taken by a different Customer
 			SET @retId = -1;
 		END
 	ELSE

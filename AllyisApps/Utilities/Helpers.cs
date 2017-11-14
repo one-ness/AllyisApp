@@ -8,8 +8,13 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.Mvc.Html;
 
 namespace AllyisApps.Utilities
 {
@@ -117,6 +122,113 @@ namespace AllyisApps.Utilities
 		public static long ToJavaScriptMilliseconds(this DateTime dt)
 		{
 			return (dt.ToUniversalTime().Ticks - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).Ticks) / 10000;
+		}
+
+		/// <summary>
+		/// Returns hiddens for every IEnumerable item, with it's selected properties, if any memberPropsExpression provided.
+		/// </summary>
+		public static MvcHtmlString HiddenForEnumerable<TModel, TModelProperty>(this HtmlHelper<TModel> helper,
+			Expression<Func<TModel, IEnumerable<TModelProperty>>> expression, params Expression<Func<TModelProperty, object>>[] memberPropsExpressions)
+		{
+			var sb = new StringBuilder();
+
+			var membername = expression.GetMemberName();
+			var model = helper.ViewData.Model;
+			var list = expression.Compile()(model);
+
+			var memPropsInfo = memberPropsExpressions.Select(x => new
+			{
+				MemberPropName = x.GetMemberName(),
+				ListItemPropGetter = x.Compile()
+			}).ToList();
+
+			for (var i = 0; i < list.Count(); i++)
+			{
+				var listItem = list.ElementAt(i);
+				if (memPropsInfo.Any())
+				{
+					foreach (var q in memPropsInfo)
+					{
+						sb.Append(helper.Hidden(string.Format("{0}[{1}].{2}", membername, i, q.MemberPropName), q.ListItemPropGetter(listItem)));
+					}
+				}
+				else
+				{
+					sb.Append(helper.Hidden(string.Format("{0}[{1}]", membername, i), listItem));
+				}
+			}
+
+			return new MvcHtmlString(sb.ToString());
+		}
+
+		/// <summary>
+		/// A custom html helper extension for making a hidden input for enumerables in the view model.
+		/// </summary>
+		/// <typeparam name="TModel">The view model type.</typeparam>
+		/// <typeparam name="TModelProperty">The type of the enumerable to make the hidden input for.</typeparam>
+		/// <param name="helper">The Html helper class that we're extending.</param>
+		/// <param name="expression">Lambda for getting the enumerable from the model. e.g. (model => model.MyList)</param>
+		/// <param name="allPublicProps">Bool for whether or not to also make hiddens for all the props of the expression object.</param>
+		/// <returns>MvcHtmlString parsable into the view model enumerable.</returns>
+		/// <summary>
+		/// Returns hiddens for every IEnumerable item, with it's all public writable properties, if allPublicProps set to true.
+		/// </summary>
+		public static MvcHtmlString HiddenForEnumerable<TModel, TModelProperty>(this HtmlHelper<TModel> helper,
+			Expression<Func<TModel, IEnumerable<TModelProperty>>> expression, bool allPublicProps)
+		{
+			if (!allPublicProps)
+				return HiddenForEnumerable(helper, expression);
+
+			var sb = new StringBuilder();
+
+			var membername = expression.GetMemberName();
+			var model = helper.ViewData.Model;
+			var list = expression.Compile()(model);
+
+			var type = typeof(TModelProperty);
+			var memPropsInfo = type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+				.Where(x => x.GetSetMethod(false) != null && x.GetGetMethod(false) != null)
+				.Select(x => new
+				{
+					MemberPropName = x.Name,
+					ListItemPropGetter = (Func<TModelProperty, object>)(p => x.GetValue(p, null))
+				}).ToList();
+
+			if (memPropsInfo.Count == 0)
+				return HiddenForEnumerable(helper, expression);
+
+			for (var i = 0; i < list.Count(); i++)
+			{
+				var listItem = list.ElementAt(i);
+				foreach (var q in memPropsInfo)
+				{
+					sb.Append(helper.Hidden(string.Format("{0}[{1}].{2}", membername, i, q.MemberPropName), q.ListItemPropGetter(listItem)));
+				}
+			}
+
+			return new MvcHtmlString(sb.ToString());
+		}
+
+		/// <summary>
+		/// Gets the name of the view model object from the inputted exression.
+		/// </summary>
+		/// <typeparam name="TModel">View model.</typeparam>
+		/// <typeparam name="T">Type of the object in the expression</typeparam>
+		/// <param name="input">Expression.</param>
+		/// <returns>Name of the view model object from the inputted exression.</returns>
+		private static string GetMemberName<TModel, T>(this Expression<Func<TModel, T>> input)
+		{
+			if (input == null)
+				return null;
+
+			MemberExpression memberExp = null;
+
+			if (input.Body.NodeType == ExpressionType.MemberAccess)
+				memberExp = input.Body as MemberExpression;
+			else if (input.Body.NodeType == ExpressionType.Convert)
+				memberExp = ((UnaryExpression)input.Body).Operand as MemberExpression;
+
+			return memberExp != null ? memberExp.Member.Name : null;
 		}
 	}
 

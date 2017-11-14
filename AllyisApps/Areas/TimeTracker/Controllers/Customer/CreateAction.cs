@@ -96,10 +96,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				if (customerId.HasValue)
 				{
-					// CustomerOrgId is not unique
+					// CustomerCode is not unique
 					if (customerId == -1)
 					{
-						Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerOrgIdNotUnique, Variety.Danger));
+						Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerCodeNotUnique, Variety.Danger));
 						return View(model);
 					}
 

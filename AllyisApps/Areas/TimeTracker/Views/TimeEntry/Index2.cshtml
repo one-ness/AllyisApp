@@ -172,7 +172,7 @@
 							{
 								<a class="col-xs-11 text-left"
 								   data-search="@user.Email"
-								   href="@Url.Action(ActionConstants.Index, new
+								   href="@Url.Action("TimeTrackerDatePickerRedirect", new
 									{
 									userId = ViewBag.SignedInUserID,
 									startDate = Model.EntryRange.StartDate,
@@ -185,7 +185,7 @@
 							else
 							{
 								<a class="col-xs-11 text-left" data-search="@user.Email"
-								   href="@Url.Action(ActionConstants.Index, new
+								   href="@Url.Action("TimeTrackerDatePickerRedirect", new
 								{
 									userId = user.UserId,
 									startDate = Model.EntryRange.StartDate,

@@ -99,8 +99,16 @@ namespace AllyisApps.Services
 
 			if (inviteInfo.ProductRolesJson != null && !inviteInfo.ProductRolesJson.Equals(""))
 			{
-				List<InvitationPermissionsJson> roleString = Newtonsoft.Json.JsonConvert.DeserializeObject<List<InvitationPermissionsJson>>(inviteInfo.ProductRolesJson);
-
+				List<InvitationPermissionsJson> roleString;
+				try { 
+					roleString = Newtonsoft.Json.JsonConvert.DeserializeObject<List<InvitationPermissionsJson>>(inviteInfo.ProductRolesJson);
+				}
+				catch
+				{
+					//if roleString does not convert then assume that it is using old spfication resets to defalt value.
+					
+					roleString = new List<InvitationPermissionsJson>();
+				}
 				foreach (var invite in roleString)
 				{
 					await DBHelper.UpdateSubscriptionUserProductRole(invite.ProductRoleId, invite.SubscriptionId, UserContext.UserId);
