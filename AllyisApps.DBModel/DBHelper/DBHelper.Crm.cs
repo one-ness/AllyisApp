@@ -476,7 +476,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@faxNumber", customer.FaxNumber);
 			parameters.Add("@website", customer.Website);
 			parameters.Add("@eIN", customer.EIN);
-			parameters.Add("@orgId", customer.CustomerOrgId);
+			parameters.Add("@orgId", customer.CustomerCode);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
