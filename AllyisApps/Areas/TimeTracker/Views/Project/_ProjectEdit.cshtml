@@ -29,19 +29,6 @@
 					@Html.TextBoxFor(m => m.ProjectCode, new { @class = "form-control", maxlength = "16", placeholder = Model.ProjectCode })
 					@Html.ValidationMessageFor(x => x.ProjectCode, "", new { @class = "text-danger" })
 				</div>
-				@if (Model.SelectedProjectUserIds.Any())
-				{
-					var _projectUsers = Model.ProjectUsers.ToList();
-					var _subscriptionUsers = Model.SubscriptionUsers.ToList();
-					foreach (string id in Model.SelectedProjectUserIds)
-					{
-						BasicUserInfoViewModel choice = Model.SubscriptionUsers.FirstOrDefault(m => m.UserId == id);
-						_projectUsers.Add(choice);
-						_subscriptionUsers.Remove(choice);
-					}
-					Model.ProjectUsers = _projectUsers;
-					Model.SubscriptionUsers = _subscriptionUsers;
-				}
 				<div id="swapper-ui" class="swapper-ui">
 					<div class="left">
 						<label>@Strings.OffProj</label>
@@ -119,6 +106,8 @@
 				@Html.HiddenFor(m => m.SubscriptionId)
 				@Html.HiddenForEnumerable(m => m.Customers, true)
 				@Html.HiddenForEnumerable(m => m.IsActiveOptions, true)
+				@Html.HiddenForEnumerable(m => m.SubscriptionUsers, true)
+				@Html.HiddenForEnumerable(m => m.ProjectUsers, true)
 			</div>
 
 			<div class="pull-right" style="padding-top: 15px; padding-bottom: 15px;">
