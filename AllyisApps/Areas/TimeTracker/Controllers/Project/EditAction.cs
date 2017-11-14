@@ -55,7 +55,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var projIdMatchGet = await AppService.GetAllProjectsForOrganizationAsync(orgId);
 
 			// TODO: Don't check for duplicate projects in controller
-			Services.Project.Project projIdMatch = projIdMatchGet.SingleOrDefault(project => project.ProjectOrgId == model.ProjectOrgId && project.owningCustomer?.CustomerId == model.ParentCustomerId);
+			Services.Project.Project projIdMatch = projIdMatchGet.SingleOrDefault(project => project.ProjectCode == model.ProjectCode && project.owningCustomer?.CustomerId == model.ParentCustomerId);
 			if (projIdMatch != null && projIdMatch.ProjectId != model.ProjectId)
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
@@ -126,7 +126,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				ParentCustomerId = infos.Item1.owningCustomer.CustomerId,
 				OrganizationId = infos.Item1.OrganizationId,
 				ProjectId = infos.Item1.ProjectId,
-				ProjectOrgId = infos.Item1.ProjectOrgId,
+				ProjectCode = infos.Item1.ProjectCode,
 				ProjectName = infos.Item1.ProjectName,
 				ProjectUsers = projectUsers,
 				SubscriptionUsers = subscriptionUsers.Where(user => projectUsers.All(pu => pu.UserId != user.UserId)), // Grab users that are not part of the project

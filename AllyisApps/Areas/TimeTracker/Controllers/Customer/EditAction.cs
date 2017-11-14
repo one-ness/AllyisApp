@@ -72,7 +72,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
 				LocalizedStates = ModelHelper.GetLocalizedStates(AppService, customer.Address?.CountryCode),
 
-				CustomerOrgId = customer.CustomerOrgId,
+				CustomerCode = customer.CustomerCode,
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subscriptionNameToDisplay
 			});
@@ -120,7 +120,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						Website = model.Website,
 						EIN = model.EIN,
 						IsActive = model.IsActive,
-						CustomerOrgId = model.CustomerOrgId,
+						CustomerCode = model.CustomerCode,
 						OrganizationId = model.OrganizationId
 					},
 					model.SubscriptionId);

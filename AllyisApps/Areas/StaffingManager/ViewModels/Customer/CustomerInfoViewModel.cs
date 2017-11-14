@@ -69,7 +69,7 @@ namespace AllyisApps.ViewModels.Staffing.Customer
 		/// <summary>
 		/// Gets or sets the id of the customer to be used by the users within the organization.
 		/// </summary>
-		public string CustomerOrgId { get; set; }
+		public string CustomerCode { get; set; }
 
 		/// <summary>
 		/// Gets or sets the bool value indicating if this Customer is currently active.

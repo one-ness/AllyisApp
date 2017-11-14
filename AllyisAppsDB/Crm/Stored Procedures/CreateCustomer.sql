@@ -20,7 +20,7 @@ BEGIN
 			[Website], 
 			[EIN], 
 			[OrganizationId], 
-			[CustomerOrgId])
+			[CustomerCode])
 		VALUES (@customerName, 
 			@addressId,
 			@contactEmail, 

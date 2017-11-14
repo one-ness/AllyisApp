@@ -37,7 +37,7 @@ BEGIN
 		UPDATE [Pjm].[Project]
 		SET 
 			[ProjectName] = @projectName,
-			[ProjectOrgId] = @orgId,
+			[ProjectCode] = @orgId,
 			[IsHourly] = @isHourly,
 			[StartUtc] = @startingDate,
 			[EndUtc] = @endingDate,

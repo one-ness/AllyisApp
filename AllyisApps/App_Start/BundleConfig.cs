@@ -126,7 +126,7 @@ namespace AllyisApps
 
 			Bundle dateRangeBundle = new ScriptBundle("~/bundles/daterangepicker", "//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js").Include(
 				"~/Scripts/daterangepicker.js");
-			dateRangeBundle.CdnFallbackExpression = "$.daterangepicker";
+			dateRangeBundle.CdnFallbackExpression = "$.fn.daterangepicker";
 			bundles.Add(dateRangeBundle);
 
 			// STYLE BUNDLES

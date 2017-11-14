@@ -4,7 +4,7 @@ AS
 	SET NOCOUNT ON;
 	SELECT [ProjectName],
 		   [ProjectId],
-		   [ProjectOrgId],
+		   [ProjectCode],
 		   [IsHourly],
 		   [CustomerId],
 		   [StartUtc] AS [StartingDate],

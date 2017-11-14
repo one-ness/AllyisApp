@@ -118,7 +118,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		[Required]
 		[DataType(DataType.Text)]
 		[Display(Name = "Organization Uique ID Name")]
-		public string CustomerOrgId { get; set; }
+		public string CustomerCode { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Customer's organization id.

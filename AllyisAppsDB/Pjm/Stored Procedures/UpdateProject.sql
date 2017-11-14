@@ -4,7 +4,7 @@ CREATE PROCEDURE [Pjm].[UpdateProject]
 	@isHourly BIT,
     @startingDate DATE,
     @endingDate DATE,
-	@projectOrgId NVARCHAR(16)
+	@projectCode NVARCHAR(16)
 AS
 	SET NOCOUNT ON;
 	UPDATE [Pjm].[Project]
@@ -13,6 +13,6 @@ AS
 		[IsHourly] = @isHourly,
 		[StartUtc] = @startingDate,
 		[EndUtc] = @endingDate,
-		[ProjectOrgId] = @projectOrgId
+		[ProjectCode] = @projectCode
 
 	WHERE [ProjectId] = @projectId

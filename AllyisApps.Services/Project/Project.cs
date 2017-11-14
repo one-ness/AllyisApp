@@ -37,7 +37,7 @@ namespace AllyisApps.Services.Project
 		/// <summary>
 		/// Gets or sets the project's org id.
 		/// </summary>
-		public string ProjectOrgId { get; set; }
+		public string ProjectCode { get; set; }
 
 		/// <summary>
 		/// Gets or sets the project's starting date.
