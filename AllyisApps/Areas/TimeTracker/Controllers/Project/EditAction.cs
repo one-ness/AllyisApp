@@ -52,7 +52,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Text = x.CustomerName,
 				Value = x.CustomerId.ToString()
 			}).ToList();
-			if (model.isActiveOptions == null) model.isActiveOptions = new List<SelectListItem>()
+			if (model.IsActiveOptions == null) model.IsActiveOptions = new List<SelectListItem>()
 			{
 				new SelectListItem() { Text = "Active", Value = true.ToString() },
 				new SelectListItem() { Text = "Disabled", Value = false.ToString() }
@@ -134,7 +134,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				Customers = customers,
 				IsActive = infos.Item1.IsActive,
-				isActiveOptions = statusOptions,
+				IsActiveOptions = statusOptions,
 				OrganizationName = infos.Item1.OrganizationName,
 				ParentCustomerId = infos.Item1.owningCustomer.CustomerId,
 				OrganizationId = infos.Item1.OrganizationId,
