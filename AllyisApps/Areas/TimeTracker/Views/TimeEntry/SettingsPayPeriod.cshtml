@@ -50,7 +50,7 @@
 									         ? Model.StartDate.Value.Date.ToString("d", CultureInfo.InvariantCulture)
 									         : DateTime.Now.Date.ToString("d", CultureInfo.InvariantCulture))"
 								style="width:100px">
-							<div class="input-group-addon">
+							<div class="input-group-addon" style="cursor: pointer">
 								<span class="glyphicon glyphicon-calendar"></span>
 							</div>
 						</div>
@@ -81,10 +81,7 @@
 	@Scripts.Render("~/bundles/DateRangePicker")
 	<script>
 		$(document).ready(function () {
-			$("#StartDate").daterangepicker({
-				singleDatePicker: true,
-				showDropdowns: true
-			});
+			$("#StartDate").singleDatePicker();
 
 			toggleDisable($("input[name=PayPeriodTypeId]:checked").val() === "@((int)PayPeriodType.Duration)");
 
@@ -92,6 +89,19 @@
 				toggleDisable(this.value === "@((int)PayPeriodType.Duration)");
 			});
 		});
+
+		$.fn.singleDatePicker = function () {
+			var datepickerElement = this;
+
+			$(datepickerElement).siblings(".input-group-addon").click(function () {
+				$(datepickerElement).click();
+			});
+
+			return $(datepickerElement).daterangepicker({
+				singleDatePicker: true,
+				showDropdowns: true
+			});
+		};
 
 		function toggleDisable(disableDates) {
 			$("input[name=Dates]").prop("disabled", disableDates);

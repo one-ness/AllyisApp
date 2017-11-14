@@ -473,3 +473,7 @@ a {
 .check-no-match {
 	color: #888;
 }
+
+.ml-1 {
+	margin-left: 5px;
+}
