@@ -126,13 +126,13 @@ namespace AllyisApps.Services
 			{
 				// Customer importing: requires both customer name and customer id. Other information is optional, and can be filled in later.
 				bool hasCustomerName = table.Columns.Contains(ColumnHeaders.CustomerName);
-				bool hasCustomerId = table.Columns.Contains(ColumnHeaders.CustomerId);
-				bool canCreateCustomers = hasCustomerName && hasCustomerId;
+				bool hasCustomerCode = table.Columns.Contains(ColumnHeaders.CustomerCode);
+				bool canCreateCustomers = hasCustomerName && hasCustomerCode;
 				var customerImportLinks = new List<DataTable>();
-				if (hasCustomerName ^ hasCustomerId)
+				if (hasCustomerName ^ hasCustomerCode)
 				{
 					// If only one thing is on this sheet, we see if both exist together on another sheet
-					customerImportLinks = customerImports.Where(t => t.Columns.Contains(ColumnHeaders.CustomerName) && t.Columns.Contains(ColumnHeaders.CustomerId)).ToList();
+					customerImportLinks = customerImports.Where(t => t.Columns.Contains(ColumnHeaders.CustomerName) && t.Columns.Contains(ColumnHeaders.CustomerCode)).ToList();
 					if (customerImportLinks.Any())
 					{
 						canCreateCustomers = true;
@@ -156,7 +156,7 @@ namespace AllyisApps.Services
 				// Do we have rows/data to import?
 				if (table.Rows.Count == 0
 					|| !hasCustomerName
-					&& !hasCustomerId)
+					&& !hasCustomerCode)
 				{
 					result.GeneralFailures.Add($"There is no readable data to import from spreadsheet \"{table.TableName}\".");
 				}
@@ -168,10 +168,10 @@ namespace AllyisApps.Services
 					Customer customer = null;
 
 					// If there is no identifying information for customers, all customer related importing is skipped.
-					if (hasCustomerName || hasCustomerId)
+					if (hasCustomerName || hasCustomerCode)
 					{
-						// Find the existing customer using name, or id if name isn't on this sheet.
-						customer = customersProjects.Select(tup => tup.Item1).FirstOrDefault(c => hasCustomerName ? c.CustomerName.Equals(row[ColumnHeaders.CustomerName].ToString()) : c.CustomerCode.Equals(row[ColumnHeaders.CustomerId].ToString()));
+						// Find the existing customer using name, id, or code if name isn't on this sheet.
+						customer = customersProjects.Select(tup => tup.Item1).FirstOrDefault(c => hasCustomerName ? c.CustomerName.Equals(row[ColumnHeaders.CustomerName].ToString()) : c.CustomerCode.Equals(row[ColumnHeaders.CustomerCode].ToString()));
 						if (customer == null)
 						{
 							if (canCreateCustomers)
@@ -184,16 +184,16 @@ namespace AllyisApps.Services
 									string name = null;
 									string custOrgId = null;
 									ReadColumn(row, ColumnHeaders.CustomerName, n => name = n);
-									ReadColumn(row, ColumnHeaders.CustomerId, n => custOrgId = n);
+									ReadColumn(row, ColumnHeaders.CustomerCode, n => custOrgId = n);
 									if (name == null && custOrgId == null)
 									{
-										result.CustomerFailures.Add(string.Format("Error importing customer on sheet {0}, row {1}: both {2} and {3} cannot be read.", table.TableName, table.Rows.IndexOf(row) + 2, ColumnHeaders.CustomerName, ColumnHeaders.CustomerId));
+										result.CustomerFailures.Add(string.Format("Error importing customer on sheet {0}, row {1}: both {2} and {3} cannot be read.", table.TableName, table.Rows.IndexOf(row) + 2, ColumnHeaders.CustomerName, ColumnHeaders.CustomerCode));
 										continue;
 									}
 
 									if (name == null || custOrgId == null)
 									{
-										result.CustomerFailures.Add(string.Format("Could not create customer {0}: no matching {1}.", name == null ? custOrgId : name, name == null ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId));
+										result.CustomerFailures.Add(string.Format("Could not create customer {0}: no matching {1}.", name == null ? custOrgId : name, name == null ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerCode));
 										continue;
 									}
 
@@ -201,7 +201,8 @@ namespace AllyisApps.Services
 									{
 										CustomerName = name,
 										CustomerCode = custOrgId,
-										OrganizationId = orgId
+										OrganizationId = orgId,
+										IsActive = true
 									};
 								}
 								else
@@ -209,10 +210,10 @@ namespace AllyisApps.Services
 									// If customerImportLinks has been set, we have to grab some information from another sheet.
 									string knownValue = null;
 									string readValue = null;
-									ReadColumn(row, hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId, n => knownValue = n);
+									ReadColumn(row, hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerCode, n => knownValue = n);
 									if (knownValue == null)
 									{
-										result.CustomerFailures.Add(string.Format("Error importing customer on sheet {0}, row {1}: {2} cannot be read.", table.TableName, table.Rows.IndexOf(row) + 2, hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId));
+										result.CustomerFailures.Add(string.Format("Error importing customer on sheet {0}, row {1}: {2} cannot be read.", table.TableName, table.Rows.IndexOf(row) + 2, hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerCode));
 										continue;
 									}
 
@@ -220,7 +221,7 @@ namespace AllyisApps.Services
 									{
 										try
 										{
-											readValue = link.Select(string.Format("[{0}] = '{1}'", hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId, knownValue))[0][hasCustomerName ? ColumnHeaders.CustomerId : ColumnHeaders.CustomerName].ToString();
+											readValue = link.Select(string.Format("[{0}] = '{1}'", hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerCode, knownValue))[0][hasCustomerName ? ColumnHeaders.CustomerCode : ColumnHeaders.CustomerName].ToString();
 											if (readValue != null) break;
 										}
 										catch (IndexOutOfRangeException) { }
@@ -228,7 +229,7 @@ namespace AllyisApps.Services
 
 									if (readValue == null)
 									{
-										result.CustomerFailures.Add(string.Format("Could not create customer {0}: no matching {1}.", knownValue, hasCustomerName ? ColumnHeaders.CustomerId : ColumnHeaders.CustomerName));
+										result.CustomerFailures.Add(string.Format("Could not create customer {0}: no matching {1}.", knownValue, hasCustomerName ? ColumnHeaders.CustomerCode : ColumnHeaders.CustomerName));
 										continue;
 									}
 
@@ -236,7 +237,8 @@ namespace AllyisApps.Services
 									{
 										CustomerName = hasCustomerName ? knownValue : readValue,
 										CustomerCode = hasCustomerName ? readValue : knownValue,
-										OrganizationId = orgId
+										OrganizationId = orgId,
+										IsActive = true
 									};
 								}
 
@@ -273,7 +275,7 @@ namespace AllyisApps.Services
 							else
 							{
 								// Not enough information to create customer
-								result.CustomerFailures.Add(string.Format("Could not create customer {0}: no matching {1}.", row[hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId], hasCustomerName ? ColumnHeaders.CustomerId : ColumnHeaders.CustomerName));
+								result.CustomerFailures.Add(string.Format("Could not create customer {0}: no matching {1}.", row[hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerCode], !hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerCode));
 							}
 						}
 
@@ -320,7 +322,7 @@ namespace AllyisApps.Services
 			foreach (DataTable table in projectImports)
 			{
 				bool hasCustomerName = table.Columns.Contains(ColumnHeaders.CustomerName);
-				bool hasCustomerId = table.Columns.Contains(ColumnHeaders.CustomerId);
+				bool hasCustomerCode = table.Columns.Contains(ColumnHeaders.CustomerCode);
 
 				// Project importing: requires both project name and project id, as well as one identifying field for a customer (name or id)
 				bool hasProjectName = table.Columns.Contains(ColumnHeaders.ProjectName);
@@ -331,7 +333,7 @@ namespace AllyisApps.Services
 				projectLinks[1, 2] = projectLinks[2, 1] = projectImports.Where(t => t.Columns.Contains(ColumnHeaders.ProjectId) && (t.Columns.Contains(ColumnHeaders.CustomerName) || t.Columns.Contains(ColumnHeaders.CustomerId))).ToList();
 				bool canImportProjects = (hasProjectName || projectLinks[0, 1].Count > 0 || projectLinks[0, 2].Count > 0) &&
 					(hasProjectId || projectLinks[1, 0].Count > 0 || projectLinks[1, 2].Count > 0) &&
-					(hasCustomerName || hasCustomerId || projectLinks[2, 0].Count > 0 || projectLinks[2, 1].Count > 0);
+					(hasCustomerName || hasCustomerCode || projectLinks[2, 0].Count > 0 || projectLinks[2, 1].Count > 0);
 
 				// Non-required project columns
 
@@ -360,9 +362,9 @@ namespace AllyisApps.Services
 					if (hasProjectName || hasProjectId)
 					{
 						Customer customer = null;
-						if (hasCustomerName || hasCustomerId)
+						if (hasCustomerName || hasCustomerCode)
 						{
-							customer = customersProjects.Select(tup => tup.Item1).FirstOrDefault(c => hasCustomerName ? c.CustomerName.Equals(row[ColumnHeaders.CustomerName].ToString()) : c.CustomerCode.Equals(row[ColumnHeaders.CustomerId].ToString()));
+							customer = customersProjects.Select(tup => tup.Item1).FirstOrDefault(c => c.CustomerCode.Equals(row[ColumnHeaders.CustomerCode].ToString()));
 						}
 
 						bool thisRowHasProjectName = hasProjectName;
@@ -402,7 +404,7 @@ namespace AllyisApps.Services
 						{
 							// We now have the customer and at least one piece of identifying project information. That's enough to tell if the project already exists.
 							project = customersProjects
-								.FirstOrDefault(tup => tup.Item1.CustomerId == customer.CustomerId).Item2
+								.FirstOrDefault(tup => tup.Item1.CustomerCode == customer.CustomerCode).Item2
 								.FirstOrDefault(p => thisRowHasProjectName ? p.ProjectName.Equals(knownValue) : p.ProjectCode.Equals(knownValue));
 							if (project == null)
 							{
@@ -441,8 +443,9 @@ namespace AllyisApps.Services
 								{
 									owningCustomer = new Customer
 									{
-										CustomerId = customer.CustomerId,
+										CustomerCode = customer.CustomerCode,
 										OrganizationId = orgId,
+										CustomerId = customer.CustomerId
 									},
 									ProjectName = thisRowHasProjectName ? knownValue : readValue,
 									IsHourly = false, // TODO un-hardcode once project isHourly property is supported.  Currently disabled
@@ -511,7 +514,7 @@ namespace AllyisApps.Services
 															? ColumnHeaders.ProjectId
 															: thisLinkCustomerFieldIsName
 																? ColumnHeaders.CustomerName
-																: ColumnHeaders.CustomerId;
+																: ColumnHeaders.CustomerCode;
 
 												fields[j] = link
 													.Select(
@@ -523,7 +526,7 @@ namespace AllyisApps.Services
 																	? ColumnHeaders.ProjectId
 																	: thisLinkCustomerFieldIsName
 																		? ColumnHeaders.CustomerName
-																		: ColumnHeaders.CustomerId,
+																		: ColumnHeaders.CustomerCode,
 															fields[k].Replace("'", "''")
 														)
 													)[rowNum][col].ToString();
@@ -555,7 +558,7 @@ namespace AllyisApps.Services
 								}
 
 								project = customersProjects
-									.FirstOrDefault(tup => tup.Item1.CustomerId == customer.CustomerId).Item2
+									.FirstOrDefault(tup => tup.Item1.CustomerCode == customer.CustomerCode).Item2
 									.FirstOrDefault(p => p.ProjectName.Equals(fields[0]));
 								if (project == null)
 								{
@@ -571,6 +574,7 @@ namespace AllyisApps.Services
 									{
 										owningCustomer = new Customer
 										{
+											CustomerCode = customer.CustomerCode,
 											CustomerId = customer.CustomerId
 										},
 										ProjectName = fields[0],
@@ -881,6 +885,7 @@ namespace AllyisApps.Services
 
 			foreach (DataTable table in timeEntryImports)
 			{
+				bool hasCustomerCode = table.Columns.Contains(ColumnHeaders.CustomerCode);
 				bool hasProjectName = table.Columns.Contains(ColumnHeaders.ProjectName);
 				bool hasProjectId = table.Columns.Contains(ColumnHeaders.ProjectId);
 				bool hasUserEmail = table.Columns.Contains(ColumnHeaders.UserEmail);
@@ -888,7 +893,7 @@ namespace AllyisApps.Services
 				bool hasUserName = table.Columns.Contains(ColumnHeaders.UserFirstName) && table.Columns.Contains(ColumnHeaders.UserLastName);
 
 				// Project-user importing: perfomed when identifying information for both project and user are present
-				bool canImportProjectUser = (hasProjectName || hasProjectId) && (hasUserEmail || hasEmployeeId || hasUserName);
+				bool canImportProjectUser = (hasProjectName || hasProjectId) && (hasUserEmail || hasEmployeeId || hasUserName) && hasCustomerCode;
 
 				// Time Entry importing: unlike customers, projects, and users, time entry data must have all time entry information on the same sheet
 				// Requires indentifying data for user and project, as well as date, duration, and pay class
@@ -912,7 +917,8 @@ namespace AllyisApps.Services
 
 				// Do we have rows/data to import?
 				if (table.Rows.Count == 0
-					|| !hasProjectName
+					|| !hasCustomerCode
+					&& !hasProjectName
 					&& !hasProjectId
 					&& !hasUserEmail
 					&& !hasEmployeeId
@@ -923,20 +929,6 @@ namespace AllyisApps.Services
 					result.GeneralFailures.Add($"There is no readable data to import from spreadsheet \"{table.TableName}\".");
 				}
 
-				var customersProjects = new List<Project.Project>();
-				var customerList = await GetCustomerList(orgId);
-				if (customerList.Count() == 0)
-				{
-					result.GeneralFailures.Add($"No customers exist for this organization.");
-					continue;
-				}
-				foreach (Customer customer in customerList)
-				{
-					customersProjects.AddRange(await GetProjectsByCustomerAsync(customer.CustomerId));
-				}
-				bool hasCustomerName = table.Columns.Contains(ColumnHeaders.CustomerName);
-				bool hasCustomerId = table.Columns.Contains(ColumnHeaders.CustomerId);
-
 				User userGet = await GetUserAsync(UserContext.UserId);
 				var users = GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, userGet)).ToList();
 
@@ -945,6 +937,23 @@ namespace AllyisApps.Services
 					bool thisRowHasProjectName = table.Columns.Contains(ColumnHeaders.ProjectName);
 					String knownValue = null;
 					ReadColumn(row, hasProjectName ? ColumnHeaders.ProjectName : ColumnHeaders.ProjectId, p => knownValue = p);
+					
+					var customersProjects = new List<Project.Project>();
+					var customerList = await GetCustomerList(orgId);
+					if (customerList.Count() == 0)
+					{
+						result.GeneralFailures.Add($"No customers exist for this organization.");
+						continue;
+					}
+
+					var custCode = row[ColumnHeaders.CustomerCode].ToString();
+					var customer = customerList.Where(c => c.CustomerCode == custCode).FirstOrDefault();
+					if (customer == null)
+					{
+						result.GeneralFailures.Add(String.Format("Customer with id: {0} doesn't exist.", custCode));
+						continue;
+					}
+					customersProjects.AddRange(await GetProjectsByCustomerAsync(customer.CustomerId));
 
 					var project = customersProjects
 						.FirstOrDefault(p => thisRowHasProjectName ? p.ProjectName.Equals(knownValue) : p.ProjectCode.Equals(knownValue));

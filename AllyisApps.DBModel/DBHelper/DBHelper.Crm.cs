@@ -393,7 +393,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@isActive", customer.IsActive);
 			parameters.Add("@eIN", customer.EIN);
 			parameters.Add("@organizationId", customer.OrganizationId);
-			parameters.Add("@customerOrgId", customer.CustomerCode);
+			parameters.Add("@customerCode", customer.CustomerCode);
 			parameters.Add("@retId", -1, DbType.Int32, ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))

@@ -290,9 +290,9 @@ namespace AllyisApps.Services
 		{
 			#region Validation
 
-			if (newProject.owningCustomer.CustomerId <= 0)
+			if (String.IsNullOrWhiteSpace(newProject.owningCustomer.CustomerCode))
 			{
-				throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be 0 or negative.");
+				throw new ArgumentNullException("customerCode", "Customer Code must have a value and cannot be whitespace.");
 			}
 
 			if (string.IsNullOrWhiteSpace(newProject.ProjectName))
