@@ -86,7 +86,7 @@ BEGIN
 		[Customer].[EIN],
 		[Customer].[CustomerCreatedUtc],
 		[Customer].[OrganizationId],
-		[Customer].[CustomerOrgId],
+		[Customer].[CustomerCode],
 		[Customer].[IsActive]
     FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK)
     WHERE [Customer].[OrganizationId] = @organizationId

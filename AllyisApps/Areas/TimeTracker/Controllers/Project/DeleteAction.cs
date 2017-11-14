@@ -35,10 +35,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				try
 				{
 					var result = await AppService.FullDeleteProject(Convert.ToInt32(id), subscriptionId);
+					Notifications.Add(new BootstrapAlert(string.Format("Project(s) successfully deleted"), Variety.Success));
 				}
 				catch
 				{
-					Notifications.Add(new BootstrapAlert(string.Format("Cannot Delete Customer {0}, there are dependent projects or time entries.", id), Variety.Warning));
+					Notifications.Add(new BootstrapAlert(string.Format("Cannot Delete Project {0}, there are dependent time entries or users.", id), Variety.Warning));
 				}
 			}
 

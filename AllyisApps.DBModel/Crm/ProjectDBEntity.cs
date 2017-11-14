@@ -46,7 +46,7 @@ namespace AllyisApps.DBModel.Crm
 		/// <summary>
 		/// Gets or sets the project's Id as used by the organization.
 		/// </summary>
-		public string ProjectOrgId { get; set; }
+		public string ProjectCode { get; set; }
 
 		/// <summary>
 		/// Gets or sets the project's starting date.
@@ -76,7 +76,7 @@ namespace AllyisApps.DBModel.Crm
 		/// <summary>
 		/// Gets or sets the customer org id.
 		/// </summary>
-		public string CustomerOrgId { get; set; }
+		public string CustomerCode { get; set; }
 
 		/// <summary>
 		/// Gets or sets The name of the organization.

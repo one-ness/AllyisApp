@@ -109,7 +109,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		[Required]
 		[DataType(DataType.Text)]
 		[Display(Name = "Project Id")]
-		public string ProjectOrgId { get; set; }
+		public string ProjectCode { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the model is being used for creating a project (true), or editing an existing project (false).

@@ -114,7 +114,7 @@ BEGIN
 		   [EIN],
 		   [CustomerCreatedUtc],
 		   [OrganizationId],
-		   [CustomerOrgId],
+		   [CustomerCode],
 		   [IsActive]
 	FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK)
 	WHERE [Customer].[OrganizationId] = @organizationId

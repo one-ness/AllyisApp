@@ -19,7 +19,7 @@ AS
 		   [Customer].[Website],
 		   [Customer].[EIN],
 		   [Customer].[CustomerCreatedUtc],
-		   [Customer].[CustomerOrgId],
+		   [Customer].[CustomerCode],
 		   [Customer].[OrganizationId],
 		   [Customer].[IsActive]
 	FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK) 
@@ -35,10 +35,10 @@ AS
 		[Project].[ProjectCreatedUtc],
 		[Project].[ProjectName] AS [ProjectName],
 		[Project].[IsActive],
-		[ProjectOrgId],
+		[ProjectCode],
 		[Organization].[OrganizationName] AS [OrganizationName],
 		[Customer].[CustomerName] AS [CustomerName],
-		[Customer].[CustomerOrgId],
+		[Customer].[CustomerCode],
 		[Customer].[IsActive] AS [IsCustomerActive],
 		[Project].[IsHourly] AS [IsHourly]
 	FROM [Auth].[Organization] WITH (NOLOCK) 

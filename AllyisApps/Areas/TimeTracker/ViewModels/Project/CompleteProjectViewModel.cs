@@ -81,12 +81,12 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		/// <summary>
 		/// Gets or sets the Id of the project to be used by the organization.
 		/// </summary>
-		public string ProjectOrgId { get; set; }
+		public string ProjectCode { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Id of the customer to be used by the organization.
 		/// </summary>
-		public string CustomerOrgId { get; set; }
+		public string CustomerCode { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the user is a user of this project, in some contexts.
@@ -109,7 +109,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 			CreatedUtc = proj.CreatedUtc;
 			CustomerId = proj.owningCustomer?.CustomerId;
 			CustomerName = proj.owningCustomer?.CustomerName;
-			CustomerOrgId = proj.owningCustomer?.CustomerOrgId;
+			CustomerCode = proj.owningCustomer?.CustomerCode;
 			EndDate = proj.EndDate;
 			IsActive = proj.IsActive;
 			IsCustomerActive = proj.IsCustomerActive;
@@ -120,7 +120,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 			PriceType = proj.PriceType;
 			ProjectId = proj.ProjectId;
 			ProjectName = proj.ProjectName;
-			ProjectOrgId = proj.ProjectOrgId;
+			ProjectCode = proj.ProjectCode;
 			StartDate = proj.StartDate;
 		}
 	}

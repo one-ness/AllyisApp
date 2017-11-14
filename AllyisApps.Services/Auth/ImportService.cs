@@ -171,7 +171,7 @@ namespace AllyisApps.Services
 					if (hasCustomerName || hasCustomerId)
 					{
 						// Find the existing customer using name, or id if name isn't on this sheet.
-						customer = customersProjects.Select(tup => tup.Item1).FirstOrDefault(c => hasCustomerName ? c.CustomerName.Equals(row[ColumnHeaders.CustomerName].ToString()) : c.CustomerOrgId.Equals(row[ColumnHeaders.CustomerId].ToString()));
+						customer = customersProjects.Select(tup => tup.Item1).FirstOrDefault(c => hasCustomerName ? c.CustomerName.Equals(row[ColumnHeaders.CustomerName].ToString()) : c.CustomerCode.Equals(row[ColumnHeaders.CustomerId].ToString()));
 						if (customer == null)
 						{
 							if (canCreateCustomers)
@@ -200,7 +200,7 @@ namespace AllyisApps.Services
 									newCustomer = new Customer
 									{
 										CustomerName = name,
-										CustomerOrgId = custOrgId,
+										CustomerCode = custOrgId,
 										OrganizationId = orgId
 									};
 								}
@@ -235,7 +235,7 @@ namespace AllyisApps.Services
 									newCustomer = new Customer
 									{
 										CustomerName = hasCustomerName ? knownValue : readValue,
-										CustomerOrgId = hasCustomerName ? readValue : knownValue,
+										CustomerCode = hasCustomerName ? readValue : knownValue,
 										OrganizationId = orgId
 									};
 								}
@@ -246,7 +246,7 @@ namespace AllyisApps.Services
 									if (newCustomerId == -1) // Customer exists, but has been deactivated
 									{
 										List<Customer> inactiveCustomers = GetInactiveProjectsAndCustomersForOrgAndUser(orgId).Item2;
-										int targetId = inactiveCustomers.Where(c => c.CustomerOrgId == newCustomer.CustomerOrgId).FirstOrDefault().CustomerId;
+										int targetId = inactiveCustomers.Where(c => c.CustomerCode == newCustomer.CustomerCode).FirstOrDefault().CustomerId;
 										ReactivateCustomer(targetId, subscriptionId, orgId);
 									}
 									if (newCustomerId == null)
@@ -362,7 +362,7 @@ namespace AllyisApps.Services
 						Customer customer = null;
 						if (hasCustomerName || hasCustomerId)
 						{
-							customer = customersProjects.Select(tup => tup.Item1).FirstOrDefault(c => hasCustomerName ? c.CustomerName.Equals(row[ColumnHeaders.CustomerName].ToString()) : c.CustomerOrgId.Equals(row[ColumnHeaders.CustomerId].ToString()));
+							customer = customersProjects.Select(tup => tup.Item1).FirstOrDefault(c => hasCustomerName ? c.CustomerName.Equals(row[ColumnHeaders.CustomerName].ToString()) : c.CustomerCode.Equals(row[ColumnHeaders.CustomerId].ToString()));
 						}
 
 						bool thisRowHasProjectName = hasProjectName;
@@ -403,7 +403,7 @@ namespace AllyisApps.Services
 							// We now have the customer and at least one piece of identifying project information. That's enough to tell if the project already exists.
 							project = customersProjects
 								.FirstOrDefault(tup => tup.Item1.CustomerId == customer.CustomerId).Item2
-								.FirstOrDefault(p => thisRowHasProjectName ? p.ProjectName.Equals(knownValue) : p.ProjectOrgId.Equals(knownValue));
+								.FirstOrDefault(p => thisRowHasProjectName ? p.ProjectName.Equals(knownValue) : p.ProjectCode.Equals(knownValue));
 							if (project == null)
 							{
 								// Project does not exist, so we should create it
@@ -447,7 +447,7 @@ namespace AllyisApps.Services
 									ProjectName = thisRowHasProjectName ? knownValue : readValue,
 									IsHourly = false, // TODO un-hardcode once project isHourly property is supported.  Currently disabled
 									OrganizationId = orgId,
-									ProjectOrgId = thisRowHasProjectName ? readValue : knownValue,
+									ProjectCode = thisRowHasProjectName ? readValue : knownValue,
 									StartingDate = defaultProjectStartDate,
 									EndingDate = defaultProjectEndDate
 								};
@@ -546,7 +546,7 @@ namespace AllyisApps.Services
 							// After that, if we don't have all the information, it's safe to say it can't be found
 							if (!string.IsNullOrEmpty(fields[2]))
 							{
-								customer = customersProjects.Select(tup => tup.Item1).FirstOrDefault(c => customerFieldIsName ? c.CustomerName.Equals(fields[2]) : c.CustomerOrgId.Equals(fields[2]));
+								customer = customersProjects.Select(tup => tup.Item1).FirstOrDefault(c => customerFieldIsName ? c.CustomerName.Equals(fields[2]) : c.CustomerCode.Equals(fields[2]));
 								
 								if (customer == null)
 								{
@@ -576,7 +576,7 @@ namespace AllyisApps.Services
 										ProjectName = fields[0],
 										IsHourly = false,  // TODO un-hardocode once project isHourly property is supported.  Currently disabled
 										OrganizationId = orgId,
-										ProjectOrgId = fields[1],
+										ProjectCode = fields[1],
 										StartingDate = defaultProjectStartDate,
 										EndingDate = defaultProjectEndDate
 									};
@@ -602,8 +602,8 @@ namespace AllyisApps.Services
 										.FirstOrDefault(p =>
 											thisRowHasProjectName
 												&& p.ProjectName.Equals(knownValue)
-												&& (string.IsNullOrEmpty(fields[1]) || p.ProjectOrgId.Equals(fields[1]))
-											|| p.ProjectOrgId.Equals(knownValue)
+												&& (string.IsNullOrEmpty(fields[1]) || p.ProjectCode.Equals(fields[1]))
+											|| p.ProjectCode.Equals(knownValue)
 												&& (string.IsNullOrEmpty(fields[0]) || p.ProjectName.Equals(fields[0]))))
 									.FirstOrDefault(p => p != null);
 
@@ -630,7 +630,7 @@ namespace AllyisApps.Services
                             if (endDate != null) project.EndingDate = DateTime.Parse(endDate);
 							
 							var c = await GetInactiveProjectsByCustomer(customer.CustomerId);
-							if (c.Any(p => p.ProjectOrgId == project.ProjectOrgId))
+							if (c.Any(p => p.ProjectCode == project.ProjectCode))
 							{
 								ReactivateProject(project.ProjectId, orgId, subscriptionId);
 								updated = true;
@@ -947,7 +947,7 @@ namespace AllyisApps.Services
 					ReadColumn(row, hasProjectName ? ColumnHeaders.ProjectName : ColumnHeaders.ProjectId, p => knownValue = p);
 
 					var project = customersProjects
-						.FirstOrDefault(p => thisRowHasProjectName ? p.ProjectName.Equals(knownValue) : p.ProjectOrgId.Equals(knownValue));
+						.FirstOrDefault(p => thisRowHasProjectName ? p.ProjectName.Equals(knownValue) : p.ProjectCode.Equals(knownValue));
 
 					if (project == null)
 					{

@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using AllyisApps.Areas.TimeTracker.Core;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
+using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
@@ -39,7 +40,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return Json(new
 				{
 					status = "error",
-					message = Resources.Strings.InvalidApprovalState,
+					message = Strings.InvalidApprovalState,
 					reason = "UNDEFINED_APPROVAL",
 					action = "REVERT",
 					values = new { duration = GetDurationDisplay(defaults.Duration), description = defaults.Description, id = model.TimeEntryId }
@@ -57,7 +58,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					return Json(new
 					{
 						status = "error",
-						message = Resources.Strings.NotAuthZTimeEntryOtherUserEdit,
+						message = Strings.NotAuthZTimeEntryOtherUserEdit,
 						action = "REVERT",
 						values = new { duration = GetDurationDisplay(defaults.Duration), description = defaults.Description, id = model.TimeEntryId }
 					});
@@ -72,7 +73,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return Json(new
 				{
 					status = "error",
-					message = Resources.Strings.AlreadyApprovedCannotEdit,
+					message = Strings.AlreadyApprovedCannotEdit,
 					action = "REVERT",
 					values = new { duration = GetDurationDisplay(defaults.Duration), description = defaults.Description, id = model.TimeEntryId }
 				});
@@ -107,12 +108,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			model.IsManager = canManage;
 			if (!(durationResult = ParseDuration(model.Duration)).HasValue)
 			{
-				throw new ArgumentException(Resources.Strings.DurationFormat);
+				throw new ArgumentException(Strings.DurationFormat);
 			}
 
 			if (ParseDuration(model.Duration) == 0)
 			{
-				throw new ArgumentException(Resources.Strings.EnterATimeLongerThanZero);
+				throw new ArgumentException(Strings.EnterATimeLongerThanZero);
 			}
 
 			var otherEntriesToday = await AppService.GetTimeEntriesByUserOverDateRange(
@@ -131,24 +132,24 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			if (durationResult + durationOther > 24.00)
 			{
-				throw new ArgumentException(Resources.Strings.CannotExceed24);
+				throw new ArgumentException(Strings.CannotExceed24);
 			}
 
 			if (model.ProjectId <= 0)
 			{
-				throw new ArgumentException(Resources.Strings.MustSelectProject);
+				throw new ArgumentException(Strings.MustSelectProject);
 			}
 
 			if (model.PayClassId < 1)
 			{
-				throw new ArgumentException(Resources.Strings.MustSelectPayClass);
+				throw new ArgumentException(Strings.MustSelectPayClass);
 			}
 
 			DateTime? lockDate = (await AppService.GetSettingsByOrganizationId(AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId)).LockDate;
 			if (!AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId, false)
 				&& model.Date <= (lockDate == null ? -1 : Utility.GetDaysFromDateTime(lockDate.Value)))
 			{
-				throw new ArgumentException(Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
+				throw new ArgumentException(Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
 			}
 
 			AppService.UpdateTimeEntry(new Services.TimeTracker.TimeEntry
