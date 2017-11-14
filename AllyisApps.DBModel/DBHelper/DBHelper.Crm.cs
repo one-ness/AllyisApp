@@ -128,11 +128,11 @@ namespace AllyisApps.DBModel
 		}
 
 		/*
-        /// <summary>
-        /// Deletes a project.
-        /// </summary>
-        /// <param name="projectId">The id of the project to be deleted.</param>
-        public void DeleteProject(int projectId)
+		/// <summary>
+		/// Deletes a project.
+		/// </summary>
+		/// <param name="projectId">The id of the project to be deleted.</param>
+		public void DeleteProject(int projectId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@projectId", projectId);
@@ -445,11 +445,11 @@ namespace AllyisApps.DBModel
 		}
 
 		/*
-        /// <summary>
-        /// Updates the customer with the specified Id.
-        /// </summary>
-        /// <param name="customer">The table with the customer to create.</param>
-        public void UpdateCustomer(CustomerDBEntity customer)
+		/// <summary>
+		/// Updates the customer with the specified Id.
+		/// </summary>
+		/// <param name="customer">The table with the customer to create.</param>
+		public void UpdateCustomer(CustomerDBEntity customer)
 		{
 			if (customer == null)
 			{
@@ -584,7 +584,7 @@ namespace AllyisApps.DBModel
 		}
 
 		/*
-        /// <summary>
+		/// <summary>
 		/// Delete the specified customer.
 		/// </summary>
 		/// <param name="customerId">The customer's Id.</param>
@@ -599,7 +599,7 @@ namespace AllyisApps.DBModel
 
 			return true;
 		}
-    */
+	*/
 
 		/// <summary>
 		/// Delete the specified customer.
@@ -677,7 +677,7 @@ namespace AllyisApps.DBModel
 					commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
 		}
-		
+
 		/// <summary>
 		/// Gets a project from its id.
 		/// </summary>
