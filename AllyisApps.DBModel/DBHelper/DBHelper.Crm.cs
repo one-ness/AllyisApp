@@ -87,10 +87,17 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				await connection.ExecuteAsync(
-					"[Pjm].[CreateProject]",
-					parameters,
-					commandType: CommandType.StoredProcedure);
+				try
+				{
+					await connection.ExecuteAsync(
+						"[Pjm].[CreateProject]",
+						parameters,
+						commandType: CommandType.StoredProcedure);
+				}
+				catch (SqlException e)
+				{
+					throw new ArgumentException(e.Message);
+				}
 			}
 
 			return parameters.Get<int>("@retId");
@@ -390,11 +397,11 @@ namespace AllyisApps.DBModel
 			parameters.Add("@contactPhoneNumber", customer.ContactPhoneNumber);
 			parameters.Add("@faxNumber", customer.FaxNumber);
 			parameters.Add("@website", customer.Website);
-			parameters.Add("@isActive", customer.IsActive);
+			parameters.Add("@isActive", true);
 			parameters.Add("@eIN", customer.EIN);
 			parameters.Add("@organizationId", customer.OrganizationId);
-			parameters.Add("@customerOrgId", customer.CustomerCode);
-			parameters.Add("@retId", -1, DbType.Int32, ParameterDirection.Output);
+			parameters.Add("@customerCode", customer.CustomerCode);
+			parameters.Add("@retId", -2, DbType.Int32, ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
@@ -469,7 +476,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@faxNumber", customer.FaxNumber);
 			parameters.Add("@website", customer.Website);
 			parameters.Add("@eIN", customer.EIN);
-			parameters.Add("@orgId", customer.CustomerOrgId);
+			parameters.Add("@orgId", customer.CustomerCode);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{

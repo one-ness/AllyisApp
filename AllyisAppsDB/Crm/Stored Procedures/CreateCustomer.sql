@@ -7,7 +7,7 @@ CREATE PROCEDURE [Crm].[CreateCustomer]
 	@website NVARCHAR(128),
 	@eIN NVARCHAR(16),
 	@organizationId INT,
-	@customerOrgId NVARCHAR(16)
+	@customerCode NVARCHAR(16)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -29,7 +29,7 @@ BEGIN
 			@website, 
 			@eIN, 
 			@organizationId, 
-			@customerOrgId);
+			@customerCode);
 	
 	SELECT
 		SCOPE_IDENTITY();

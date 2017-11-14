@@ -242,6 +242,7 @@ namespace AllyisApps.Services
 
 								if (newCustomer != null)
 								{
+									
 									int? newCustomerId = await CreateCustomerAsync(newCustomer, subscriptionId);
 									if (newCustomerId == -1) // Customer exists, but has been deactivated
 									{
@@ -256,7 +257,7 @@ namespace AllyisApps.Services
 									}
 
 									newCustomer.CustomerId = newCustomerId.Value;
-									if (newCustomer.CustomerId == -1)
+									if (newCustomer.CustomerId == -2)
 									{
 										result.CustomerFailures.Add(string.Format("Database error while creating customer {0}.", newCustomer.CustomerName));
 										continue;
@@ -451,16 +452,24 @@ namespace AllyisApps.Services
 									StartingDate = defaultProjectStartDate,
 									EndingDate = defaultProjectEndDate
 								};
-								project.ProjectId = await CreateProject(project);
-								if (project.ProjectId == -1)
+								try
 								{
-									result.ProjectFailures.Add(string.Format("Database error while creating project {0}", project.ProjectName));
-									project = null;
+									project.ProjectId = await CreateProject(project);
+									if (project.ProjectId == -1)
+									{
+										result.ProjectFailures.Add(string.Format("Database error while creating project {0}", project.ProjectName));
+										project = null;
+									}
+									else
+									{
+										customersProjects.FirstOrDefault(tup => tup.Item1 == customer).Item2.Add(project);
+										result.ProjectsImported += 1;
+									}
 								}
-								else
+								catch(Exception e)
 								{
-									customersProjects.FirstOrDefault(tup => tup.Item1 == customer).Item2.Add(project);
-									result.ProjectsImported += 1;
+									result.ProjectFailures.Add(string.Format("Database error while creating project {0}. {1}", project.ProjectName, e.Message));
+									project = null;
 								}
 							}
 						}
@@ -580,16 +589,26 @@ namespace AllyisApps.Services
 										StartingDate = defaultProjectStartDate,
 										EndingDate = defaultProjectEndDate
 									};
-									project.ProjectId = await CreateProject(project);
-									if (project.ProjectId == -1)
+									try
 									{
-										result.ProjectFailures.Add(string.Format("Database error while creating project {0}", project.ProjectName));
-										project = null;
+										project.ProjectId = await CreateProject(project);
+
+
+										if (project.ProjectId == -1)
+										{
+											result.ProjectFailures.Add(string.Format("Database error while creating project {0}", project.ProjectName));
+											project = null;
+										}
+										else
+										{
+											customersProjects.FirstOrDefault(tup => tup.Item1 == customer).Item2.Add(project);
+											result.ProjectsImported += 1;
+										}
 									}
-									else
+									catch (ArgumentException e)
 									{
-										customersProjects.FirstOrDefault(tup => tup.Item1 == customer).Item2.Add(project);
-										result.ProjectsImported += 1;
+										result.ProjectFailures.Add(string.Format("Database error while creating project {0}. {1}", project.ProjectName, e.Message));
+										project = null;
 									}
 								}
 							}
@@ -652,7 +671,7 @@ namespace AllyisApps.Services
 		{
 			// Retrieval of existing user data
 			User userGet = await GetUserAsync(UserContext.UserId);
-			var users = GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, userGet)).ToList();
+			var users = GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, o)).ToList();
 			
 			foreach (DataTable table in userImports)
 			{
@@ -927,7 +946,7 @@ namespace AllyisApps.Services
 				var customerList = await GetCustomerList(orgId);
 				if (customerList.Count() == 0)
 				{
-					result.GeneralFailures.Add($"No customers exist for this organization.");
+					result.GeneralFailures.Add($"Time entry's cannot be created as No customers exist for this organization.");
 					continue;
 				}
 				foreach (Customer customer in customerList)
@@ -938,7 +957,7 @@ namespace AllyisApps.Services
 				bool hasCustomerId = table.Columns.Contains(ColumnHeaders.CustomerId);
 
 				User userGet = await GetUserAsync(UserContext.UserId);
-				var users = GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, userGet)).ToList();
+				var users = GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, o)).ToList();
 
 				foreach (DataRow row in table.Rows)
 				{
@@ -951,7 +970,7 @@ namespace AllyisApps.Services
 
 					if (project == null)
 					{
-						result.GeneralFailures.Add("Project Id not recognized.");
+						result.GeneralFailures.Add($"Project Id/Project Name {knownValue} is not recognized. On row {table.Rows.IndexOf(row) + 2}");
 						continue;
 					}
 					
@@ -966,7 +985,7 @@ namespace AllyisApps.Services
 					}
 					catch (NullReferenceException)
 					{
-						result.GeneralFailures.Add("Employee Id not recognized.");
+						result.GeneralFailures.Add($"Employee Id {readValue} not recognized. On row {table.Rows.IndexOf(row) + 2}");
 						continue;
 					}
 
@@ -1012,12 +1031,12 @@ namespace AllyisApps.Services
 
 					if (!(theDuration = ParseDuration(duration)).HasValue)
 					{
-						result.TimeEntryFailures.Add($"You must enter the duration as HH:MM or H.HH format for the date {theDate}");
+						result.TimeEntryFailures.Add($"You must enter the duration as HH:MM or H.HH format for the date {theDate}, row {table.Rows.IndexOf(row) + 2}");
 						continue;
 					}
 					if (ParseDuration(duration) == 0)
 					{
-						result.TimeEntryFailures.Add($"You must enter a time larger than 00:00 for the date {theDate}");
+						result.TimeEntryFailures.Add($"You must enter a time larger than 00:00 for the date {theDate}, row {table.Rows.IndexOf(row) + 2}");
 						continue;
 					}
 
@@ -1062,7 +1081,7 @@ namespace AllyisApps.Services
 					}
 					catch (ArgumentException)
 					{
-						result.TimeEntryFailures.Add($"Could not import time entry.");
+						result.TimeEntryFailures.Add($"Could not import time entry on sheet {table.TableName}, row {table.Rows.IndexOf(row) + 2}.");
 					}
 				}
 			}

@@ -107,7 +107,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				if (result == -1)
 				{
 					// the new CustOrgId is not unique
-					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerOrgIdNotUnique, Variety.Danger));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerCodeNotUnique, Variety.Danger));
 					return View(model);
 				}
 				else if (result == 1)

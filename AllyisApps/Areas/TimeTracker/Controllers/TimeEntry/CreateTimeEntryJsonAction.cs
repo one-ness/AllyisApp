@@ -66,17 +66,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				DateTime? lockDate = (await AppService.GetSettingsByOrganizationId(AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId)).LockDate;
 				if (durationResult + durationOther > 24.00)
 				{
-					throw new ArgumentException(Strings.CannotExceed24);
+					throw new ArgumentException(Strings.CannotExceed24 + " For time entry on date " + Utility.GetDateTimeFromDays(model.Date).ToString());
 				}
 
 				if (model.ProjectId <= 0)
 				{
-					throw new ArgumentException(Strings.MustSelectProject);
+					throw new ArgumentException(Strings.MustSelectProject + " For time entry on date " + Utility.GetDateTimeFromDays(model.Date).ToString());
 				}
 
 				if (model.PayClassId < 1)
 				{
-					throw new ArgumentException(Strings.MustSelectPayClass);
+					throw new ArgumentException(Strings.MustSelectPayClass + " For time entry on date " + Utility.GetDateTimeFromDays(model.Date).ToString());
 				}
 
 				if (subInfo.ProductRoleId != (int)TimeTrackerRole.Manager && model.Date <= (lockDate == null ? -1 : Utility.GetDaysFromDateTime(lockDate.Value)))
