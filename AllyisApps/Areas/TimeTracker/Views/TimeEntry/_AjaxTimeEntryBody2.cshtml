@@ -13,18 +13,19 @@
 	string approvalClass = Model.ModSinceApproval ? "pending" :
 					  Model.ApprovalState == (int)ApprovalState.NotApproved ? "rejected" :
 					  Model.ApprovalState == (int)ApprovalState.Approved ? "approved" : string.Empty;
-	var managableProjects = (bool) ViewBag.CanManage ? Model.ProjectsWithInactive : Model.Projects;
+	var managableProjects = Model.ProjectsWithInactive;
 	var managableProjectsDropdown = managableProjects
 		.Where(p =>
 			(p.StartDate == null || p.StartDate.Value <= (DateTime)ViewBag.GetDateTimeFromDays(Model.Date)) &&
 			(p.EndDate == null || p.EndDate.Value >= (DateTime)ViewBag.GetDateTimeFromDays(Model.Date)) &&
-			(p.IsUserActive || !Model.Sample))
+			(p.IsUserActive || (!Model.Sample && Model.ProjectId == p.ProjectId))
+			)
 		.Select(p => new SelectListItem
 		{
 			Selected = Model.ProjectId == p.ProjectId,
 			Text = p.ProjectId != -1 ? string.Format("{0} - {1}", p.CustomerName, p.ProjectName) : p.ProjectName, //Only need customer - project text for project ids !=0
-			Value = p.ProjectId.ToString()
-			//Disabled = !c.IsUserActive && Model.Sample
+			Value = p.ProjectId.ToString(),
+			//Disabled = !p.IsUserActive && !Model.Sample
 		});
 	var payClassesDropdown = Model.PayClasses.Select(c =>
 		new SelectListItem
