@@ -948,7 +948,7 @@ namespace AllyisApps.Services
 				}
 
 				User userGet = await GetUserAsync(UserContext.UserId);
-				var users = GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, userGet)).ToList();
+				var users = GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, o)).ToList();
 
 				foreach (DataRow row in table.Rows)
 				{
@@ -1054,7 +1054,11 @@ namespace AllyisApps.Services
 					if (entries.Any(e => (e.Description == null && description.Equals("") || description.Equals(e.Description))
 						&& e.Duration == theDuration
 						&& e.PayClassId == payClass.PayClassId
-						&& e.ProjectId == project.ProjectId)) continue;
+						&& e.ProjectId == project.ProjectId))
+					{
+						result.TimeEntryFailures.Add($"Time Entry for user {userInOrg.FirstName} {userInOrg.LastName} and project {project.ProjectName} already exists on {theDate.ToString()}");
+						continue;
+					}
 
 					if (entries.Select(e => e.Duration).Sum() + theDuration > 24)
 					{
