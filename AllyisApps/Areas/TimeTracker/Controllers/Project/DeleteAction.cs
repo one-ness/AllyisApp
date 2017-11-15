@@ -64,7 +64,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			foreach (var project in projects)
 			{
-				if (project.IsActive)
+				if (project.EndDate == null || project.EndDate.Value > DateTime.UtcNow)
 				{
 					result = await AppService.DeleteProject(project.ProjectId, subscriptionId);
 
