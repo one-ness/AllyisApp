@@ -55,25 +55,31 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
 
 			int orgId = AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId;
-			var projIdMatchGet = await AppService.GetAllProjectsForOrganizationAsync(orgId);
+			var projects = (await AppService.GetAllProjectsForOrganizationAsync(orgId, false)).ToList();
 
 			// TODO: Don't check for duplicate projects in controller
 			Services.Project.Project projIdMatch = projIdMatchGet.SingleOrDefault(project => project.ProjectCode.Equals(model.ProjectCode) && project.owningCustomer?.CustomerId == model.ParentCustomerId && project.ProjectId != model.ProjectId);
 			if (projIdMatch != null && projIdMatch.ProjectId != model.ProjectId)
+			Services.Project.Project projCodeMatch = projects.SingleOrDefault(project => project.ProjectCode == model.ProjectCode && project.owningCustomer?.CustomerId == model.ParentCustomerId);
+			if (projCodeMatch != null && projCodeMatch.ProjectId != model.ProjectId)
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectCodeNotUnique, Variety.Danger));
 				return View(model);
 			}
-			var oldproject = AppService.GetProject(model.ProjectId);
-			
+
+			bool projectIsActive = (model.StartDate == null || model.StartDate <= DateTime.Now)
+								&& (model.EndDate == null || model.EndDate >= DateTime.Now);
+			var projectBeforeEdit = projects.Single(p => p.ProjectId == model.ProjectId);
+			model.IsActive = projectIsActive;
+
 			try
 			{
 				var customer = await AppService.GetCustomerInfo(model.ParentCustomerId);
-				if (model.StartDate != oldproject.StartingDate || model.EndDate != oldproject.EndingDate) // check new date range to see if entries outside of the new range
+				if (model.StartDate != projectBeforeEdit.StartingDate || model.EndDate != projectBeforeEdit.EndingDate) // check new date range to see if entries outside of the new range
 				{
-					await AppService.CheckUpdateProjectStartEndDate(oldproject.ProjectId, model.StartDate, model.EndDate);
+					await AppService.CheckUpdateProjectStartEndDate(projectBeforeEdit.ProjectId, model.StartDate, model.EndDate);
 				}
-				if (!customer.IsActive.Value && model.IsActive)
+				if (!customer.IsActive.Value && projectIsActive)
 				{
 					customer.IsActive = true;
 					await AppService.UpdateCustomerAsync(customer, subscriptionId);
@@ -127,7 +133,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			return new EditProjectViewModel
 			{
 				Customers = customers,
-				IsActive = infos.Item1.IsActive,
 				IsActiveOptions = statusOptions,
 				OrganizationName = infos.Item1.OrganizationName,
 				ParentCustomerId = infos.Item1.owningCustomer.CustomerId,
