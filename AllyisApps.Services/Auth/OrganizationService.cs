@@ -297,6 +297,22 @@ namespace AllyisApps.Services
 			return collection.Select(item => this.InitializeOrganizationUser(item)).Cast<OrganizationUser>().ToList();
 		}
 
+		public async Task<int> GetOrganizationUserCountAsync(int orgId)
+		{
+			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
+			CheckOrgAction(OrgAction.ReadUsersList, orgId);
+
+			return await this.DBHelper.GetOrganizationUserCountAsync(orgId);
+		}
+
+		public async Task<int> GetOrganizationInvitationCountAsync(int orgId, InvitationStatusEnum statusMask)
+		{
+			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
+			CheckOrgAction(OrgAction.ReadInvitationsList, orgId);
+
+			return await this.DBHelper.GetOrganizationInvitationCountAsync(orgId, (int)statusMask);
+		}
+
 		/// <summary>
 		/// Removes an organization user.
 		/// </summary>

@@ -65,29 +65,8 @@
 							</div>
 						</div>
 						}
-						@*<div class="form-group">
-								<div class="form-group col-md-6">
-									@if (Model.hasTT)
-									{ @Html.ReqLabelFor(x => x.TTRoles, Model.ttName + " Role") }
-								</div>
-								<div class="form-group col-md-6">
-									@if (Model.hasTT)
-									{ @Html.DropDownListFor(x => x.ttSelection, Model.TTRoles, new { @class = "form-control" }) }
-								</div>
-							</div>
-
-							<div class="form-group">
-								<div class="form-group col-md-6">
-									@if (Model.hasET)
-									{ @Html.ReqLabelFor(x => x.ETRoles, Model.etName + " Role") }
-								</div>
-								<div class="form-group col-md-6">
-									@if (Model.hasET)
-									{@Html.DropDownListFor(x => x.etSelection, Model.ETRoles, new { @class = "form-control" }) }
-								</div>
-							</div>*@
 						<div class="form-group allyis-action-buttons pull-right">
-							<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account, new { @id = Model.OrganizationId })" class="btn btn-default">@Strings.Cancel</a>&nbsp;
+							<a href="@Url.Action(ActionConstants.OrganizationInvitations, ControllerConstants.Account, new { @id = Model.OrganizationId })" class="btn btn-default">@Strings.Cancel</a>&nbsp;
 							<input type="submit" id="addMember" value="@Strings.Add" class="btn btn-primary" />
 						</div>
 </div>
