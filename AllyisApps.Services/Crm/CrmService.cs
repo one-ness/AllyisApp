@@ -200,25 +200,23 @@ namespace AllyisApps.Services
 		/// Gets a list of <see cref="Project"/>'s for a customer.
 		/// </summary>
 		/// <param name="customerId">Customer Id.</param>
+		/// <param name="onlyActive">Bool whether or not to only get active projects.</param>
 		/// <returns>List of ProjectInfo's.</returns>
-		public async Task<IEnumerable<Project.Project>> GetProjectsByCustomerAsync(int customerId)
+		public async Task<IEnumerable<Project.Project>> GetProjectsByCustomerAsync(int customerId, bool onlyActive = true)
 		{
 			if (customerId <= 0)
 			{
 				throw new ArgumentOutOfRangeException(nameof(customerId), "Customer Id cannot be 0 or negative.");
 			}
 
-			IEnumerable<ProjectDBEntity> dbeList = await DBHelper.GetProjectsByCustomerAsync(customerId);
-			List<Project.Project> list = new List<Project.Project>();
-			foreach (ProjectDBEntity dbe in dbeList)
+			var projects = await DBHelper.GetProjectsByCustomerAsync(customerId);
+
+			if (onlyActive)
 			{
-				if (dbe != null)
-				{
-					list.Add(InitializeProject(dbe));
-				}
+				projects = projects.Where(p => p.IsActive);
 			}
 
-			return list;
+			return projects.Where(p => p != null).Select(InitializeProject).ToList();
 		}
 
 		/// <summary>
@@ -439,7 +437,7 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentOutOfRangeException(nameof(projectId), "Project Id cannot be 0 or negative.");
 			}
-			
+
 			await CheckUpdateProjectStartEndDate(projectId, null, DateTime.Now);
 
 			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
@@ -624,14 +622,15 @@ namespace AllyisApps.Services
 		/// Gets all the projects in every customer in the entire organization.
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
+		/// <param name="onlyActive">Bool whether or not to only get active projects.</param>
 		/// <returns>All the projects in the organization.</returns>
-		public async Task<IEnumerable<Project.Project>> GetAllProjectsForOrganizationAsync(int orgId)
+		public async Task<IEnumerable<Project.Project>> GetAllProjectsForOrganizationAsync(int orgId, bool onlyActive)
 		{
 			var result = new List<Project.Project>();
 			var customers = await GetCustomerList(orgId);
 			foreach (var customer in customers)
 			{
-				result.AddRange(await GetProjectsByCustomerAsync(customer.CustomerId));
+				result.AddRange(await GetProjectsByCustomerAsync(customer.CustomerId, onlyActive));
 			}
 			return result;
 		}
