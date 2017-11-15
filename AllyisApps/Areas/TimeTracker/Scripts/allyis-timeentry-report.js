@@ -38,7 +38,8 @@ $(document).ready(function() {
 			showDropdowns: true,
 			linkedCalendars: false,
 			startDate: start,
-			endDate: end
+			endDate: end,
+			autoApply: true,
 		}, cb);
 
 		cb(start, end);
