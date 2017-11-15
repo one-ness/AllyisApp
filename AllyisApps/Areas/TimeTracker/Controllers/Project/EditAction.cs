@@ -72,7 +72,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			bool projectIsActive = (model.StartDate == null || model.StartDate <= DateTime.Now)
 								&& (model.EndDate == null || model.EndDate >= DateTime.Now);
 			var projectBeforeEdit = projects.Single(p => p.ProjectId == model.ProjectId);
-			model.IsActive = projectIsActive;
 
 			try
 			{
@@ -126,16 +125,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Value = x.CustomerId.ToString()
 			}).ToList();
 
-			var statusOptions = new List<SelectListItem>
-			{
-				new SelectListItem { Text = "Active", Value = true.ToString() },
-				new SelectListItem { Text = "Disabled", Value = false.ToString() }
-			};
-
 			return new EditProjectViewModel
 			{
 				Customers = customers,
-				IsActiveOptions = statusOptions,
 				OrganizationName = infos.Item1.OrganizationName,
 				ParentCustomerId = infos.Item1.owningCustomer.CustomerId,
 				OrganizationId = infos.Item1.OrganizationId,
