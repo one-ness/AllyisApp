@@ -170,7 +170,7 @@
 							 style="width: 100%; display: @hide; justify-content: flex-end;">
 							@if (user.UserId == ViewBag.SignedInUserID)
 							{
-								<a class="col-xs-11 text-left"
+								<a class="col-xs-12 text-center"
 								   data-search="@user.Email"
 								   href="@Url.Action("TimeTrackerDatePickerRedirect", new
 									{
@@ -178,20 +178,20 @@
 									startDate = Model.EntryRange.StartDate,
 									endDate = Model.EntryRange.EndDate
 									})"
-								   style="text-decoration: none; color: #000000;">
+								   style="color: #000000;">
 									@user.FirstName @user.LastName
 								</a>
 							}
 							else
 							{
-								<a class="col-xs-11 text-left" data-search="@user.Email"
+								<a class="col-xs-12 text-center" data-search="@user.Email"
 								   href="@Url.Action("TimeTrackerDatePickerRedirect", new
 								{
 									userId = user.UserId,
 									startDate = Model.EntryRange.StartDate,
 									endDate = Model.EntryRange.EndDate
 									})"
-								   style="text-decoration: none; color: #000000;">
+								   style="color: #000000;">
 									@user.FirstName @user.LastName
 								</a>
 							}

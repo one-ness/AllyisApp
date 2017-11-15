@@ -7,4 +7,4 @@ AS
 	WHERE [ProjectId] = @projectId
 
 	UPDATE [Pjm].[ProjectUser] SET [IsActive] = 1
-	WHERE [ProjectUser].[ProjectId] IN (SELECT [ProjectId] FROM [Pjm].[Project] WHERE [IsActive] = 1)
+	WHERE [ProjectUser].[ProjectId] = @projectId 
