@@ -94,7 +94,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					var projects = await AppService.GetProjectsByCustomerAsync(model.CustomerId);
 					foreach (var project in projects)
 					{
-						var results = AppService.DeleteProject(project.ProjectId, model.SubscriptionId);
+						await AppService.DeleteProject(project.ProjectId, model.SubscriptionId);
 					}
 				}
 
