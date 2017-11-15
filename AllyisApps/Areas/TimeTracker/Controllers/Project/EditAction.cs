@@ -58,10 +58,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var projects = (await AppService.GetAllProjectsForOrganizationAsync(orgId, false)).ToList();
 
 			// TODO: Don't check for duplicate projects in controller
-			
-			var projCodeMatch = projects.FindAll(project => project.ProjectCode == model.ProjectCode && project.owningCustomer?.CustomerId == model.ParentCustomerId &&
-				model.ProjectId != project.ProjectId);
-			if (projCodeMatch.Count() > 0)
+
+			var projCodeMatch = projects.FindAll(project =>
+				   project.ProjectCode == model.ProjectCode
+				&& project.owningCustomer?.CustomerId == model.ParentCustomerId
+				&& model.ProjectId != project.ProjectId);
+			if (projCodeMatch.Any())
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectCodeNotUnique, Variety.Danger));
 				return View(model);
@@ -70,7 +72,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			bool projectIsActive = (model.StartDate == null || model.StartDate <= DateTime.Now)
 								&& (model.EndDate == null || model.EndDate >= DateTime.Now);
 			var projectBeforeEdit = projects.Single(p => p.ProjectId == model.ProjectId);
-			model.IsActive = projectIsActive;
 
 			try
 			{
@@ -124,16 +125,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Value = x.CustomerId.ToString()
 			}).ToList();
 
-			var statusOptions = new List<SelectListItem>
-			{
-				new SelectListItem { Text = "Active", Value = true.ToString() },
-				new SelectListItem { Text = "Disabled", Value = false.ToString() }
-			};
-
 			return new EditProjectViewModel
 			{
 				Customers = customers,
-				IsActiveOptions = statusOptions,
 				OrganizationName = infos.Item1.OrganizationName,
 				ParentCustomerId = infos.Item1.owningCustomer.CustomerId,
 				OrganizationId = infos.Item1.OrganizationId,

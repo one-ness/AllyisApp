@@ -22,28 +22,38 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Deletes a customer.
 		/// </summary>
 		/// <param name="subscriptionId">The subscription id.</param>
-		/// <param name="userIds">Comma seperated value of user ids.</param>
+		/// <param name="userIds">Comma seperated value of project ids.  Called userIds because routing.</param>
 		/// <returns>Action result to the Index page.</returns>
 		[HttpGet]
-		async public Task<ActionResult> Delete(int subscriptionId, string userIds)
+		public async Task<ActionResult> Delete(int subscriptionId, string userIds)
 		{
-			string[] ids = userIds.Split(',');
+			int[] projectIds = userIds.Split(',').Select(id => Convert.ToInt32(id)).ToArray();
 			var orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 
-			foreach (var id in ids)
+			foreach (var id in projectIds)
 			{
+				string projectName = AppService.GetProject(id).ProjectName;
 				try
 				{
-					var result = await AppService.FullDeleteProject(Convert.ToInt32(id), subscriptionId);
-					Notifications.Add(new BootstrapAlert(string.Format("Project(s) successfully deleted"), Variety.Success));
+					var result = await AppService.FullDeleteProject(id, subscriptionId);
+					if (result == -1)
+					{
+						Notifications.Add(new BootstrapAlert(
+							$"Project \"{projectName}\" cannot be deleted because time entries have already been made for this project",
+							Variety.Danger));
+					}
+					else
+					{
+						Notifications.Add(new BootstrapAlert($"Project {projectName} successfully deleted", Variety.Success));
+					}
 				}
 				catch
 				{
-					Notifications.Add(new BootstrapAlert(string.Format("Cannot Delete Project {0}, there are dependent time entries or users.", id), Variety.Warning));
+					Notifications.Add(new BootstrapAlert($"Cannot Delete Project {projectName}, there are dependent time entries or users.", Variety.Warning));
 				}
 			}
 
-			return RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
+			return RedirectToAction(ActionConstants.Index, new { subscriptionId });
 		}
 
 		/// <summary>
@@ -52,7 +62,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="projIds">A comma seperated value of user ids for toggling.</param>
 		/// <returns>Redirects to the index action.</returns>
-		async public Task<ActionResult> ToggleStatus(int subscriptionId, string projIds)
+		public async Task<ActionResult> ToggleStatus(int subscriptionId, string projIds)
 		{
 			string[] idStrings = projIds.Split(',');
 			var ids = idStrings.Select(x => Convert.ToInt32(x)).ToList();
@@ -62,10 +72,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var projects = projectTest.Where(x => ids.Contains(x.ProjectId)).ToList();
 			string result = "";
 
-			
+
 			foreach (var project in projects)
 			{
-				if (project.IsActive)
+				if ((project.EndDate == null || project.EndDate.Value >= DateTime.UtcNow) && (project.StartDate == null || project.StartDate <= DateTime.UtcNow))
 				{
 					try
 					{
@@ -73,9 +83,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 						if (!string.IsNullOrEmpty(result))
 						{
-							Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", result, Resources.Strings.ProjectDeleteNotification), Variety.Success));
+							Notifications.Add(new BootstrapAlert(string.Format("{0} Status was toggled sucessfully.", project.ProjectName), Variety.Success));
 						}
-					}catch(Exception e){
+					}
+					catch (Exception e)
+					{
 						Notifications.Add(new BootstrapAlert(e.Message, Variety.Danger));
 					}
 				}

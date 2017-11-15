@@ -156,6 +156,10 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Gets or sets value for whether the time entry is locked or not
 		/// </summary>
 		public bool IsLocked { get; set; }
+		/// <summary>
+		/// Selected Project Id 
+		/// </summary>
+		public int SelectedProjectId { get; set; }
 	}
 
 	/// <summary>

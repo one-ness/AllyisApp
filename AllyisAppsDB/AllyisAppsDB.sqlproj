@@ -417,7 +417,8 @@
     <Build Include="Pjm\Stored Procedures\FullDeleteProject.sql" />
     <Build Include="Pjm\Stored Procedures\GetProjectByProjectOrgId.sql" />
     <None Include="DefaultData\Accounts.sql" />
-    <Build Include="Auth\Stored Procedures\GetOrgUserCount.sql" />
+	<Build Include="TimeTracker\Stored Procedures\GetTimeEntriesByProjectId.sql" />
+	<Build Include="Auth\Stored Procedures\GetOrgUserCount.sql" />
     <Build Include="Auth\Stored Procedures\GetOrgInvitationCount.sql" />
   </ItemGroup>
   <ItemGroup>

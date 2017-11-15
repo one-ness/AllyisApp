@@ -68,7 +68,7 @@
 					<td>@project.CustomerName</td>
 					<td>@project.ProjectCode</td>
 					<td>
-						@if (project.EndDate > DateTime.UtcNow || project.EndDate == null)
+						@if ((project.EndDate == null || project.EndDate >= DateTime.UtcNow) && project.StartDate == null || project.StartDate <= DateTime.UtcNow)
 						{
 							<p>Active</p>
 						}
@@ -92,13 +92,13 @@
 		<button type="submit" class="btn btn-danger  pull-right">Delete</button>
 	}
 </div>
-<div class="pull-left btn">
+@*<div class="pull-left btn">
 	@using (Html.BeginForm("ToggleStatus", Strings.Project, new { }, FormMethod.Get, new { @onsubmit = "return getUserIdsAndSubmit();" }))
 	{
 		<input type="hidden" name="projIds" id="projIds" value="" />
 		<button type="submit" class="btn btn-primary  pull-right">Toggle Status</button>
 	}
-</div>
+</div>*@
 
 <script>
 	function getUserIdsAndSubmit() {
