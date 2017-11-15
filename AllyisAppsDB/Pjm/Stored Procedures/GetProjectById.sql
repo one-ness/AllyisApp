@@ -16,8 +16,8 @@ AS
 			[Project].[EndUtc] AS [EndDate],
 			[Project].[ProjectCode]
 			FROM (
-		(SELECT [ProjectId], [CustomerId], [ProjectName], [IsHourly], [StartUtc], [EndUtc], [IsActive], 
-				[ProjectCreatedUtc], [ProjectCode] FROM [Pjm].[Project] WITH (NOLOCK) WHERE [ProjectId] = @projectId) AS [Project]
+		(SELECT *
+			FROM [Pjm].[Project] WITH (NOLOCK) WHERE [ProjectId] = @projectId) AS [Project]
 			JOIN [Crm].[Customer] WITH (NOLOCK) ON [Customer].[CustomerId] = [Project].[CustomerId]
 			JOIN [Auth].[Organization] WITH (NOLOCK) ON [Organization].[OrganizationId] = [Customer].[OrganizationId]
 	)

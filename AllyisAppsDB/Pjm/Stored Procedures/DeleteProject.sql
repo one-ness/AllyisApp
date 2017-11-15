@@ -19,7 +19,7 @@ BEGIN
 		WHERE [ProjectId] = @projectId
 	 
 		UPDATE [Pjm].[ProjectUser] SET [IsActive] = 0
-		WHERE [ProjectUser].[ProjectId] IN (SELECT [ProjectId] FROM [Pjm].[Project] WHERE [IsActive] = 0);
+		WHERE [ProjectUser].[ProjectId] = @projectId;
 	END
 	SELECT @projectName
 END
