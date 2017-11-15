@@ -58,10 +58,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var projects = (await AppService.GetAllProjectsForOrganizationAsync(orgId, false)).ToList();
 
 			// TODO: Don't check for duplicate projects in controller
-			Services.Project.Project projIdMatch = projIdMatchGet.SingleOrDefault(project => project.ProjectCode.Equals(model.ProjectCode) && project.owningCustomer?.CustomerId == model.ParentCustomerId && project.ProjectId != model.ProjectId);
-			if (projIdMatch != null && projIdMatch.ProjectId != model.ProjectId)
-			Services.Project.Project projCodeMatch = projects.SingleOrDefault(project => project.ProjectCode == model.ProjectCode && project.owningCustomer?.CustomerId == model.ParentCustomerId);
-			if (projCodeMatch != null && projCodeMatch.ProjectId != model.ProjectId)
+			
+			var projCodeMatch = projects.FindAll(project => project.ProjectCode == model.ProjectCode && project.owningCustomer?.CustomerId == model.ParentCustomerId &&
+				model.ProjectId != project.ProjectId);
+			if (projCodeMatch.Count() > 0)
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectCodeNotUnique, Variety.Danger));
 				return View(model);
