@@ -27,7 +27,7 @@ BEGIN
 			WHERE [OrganizationId] = @organizationId AND [EmployeeId] = @employeeId
 		) OR EXISTS (
 			SELECT * FROM [Auth].[Invitation] WITH (NOLOCK)
-			WHERE [OrganizationId] = @organizationId AND [EmployeeId] = @employeeId
+			WHERE [OrganizationId] = @organizationId AND [EmployeeId] = @employeeId AND [InvitationStatus] = 1
 		)
 		BEGIN
 			SELECT -2 -- Indicates employee id already taken
