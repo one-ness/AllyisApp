@@ -48,6 +48,8 @@ namespace AllyisApps.Controllers.Auth
 
 			var org = await AppService.GetOrganization(id);
 			model.OrganizationName = org.OrganizationName;
+			model.TabInfo.MemberCount = model.Users.Count;
+			model.TabInfo.PendingInvitationCount = await this.AppService.GetOrganizationInvitationCountAsync(id, Services.Auth.InvitationStatusEnum.Pending);
 
 			return View(model);
 		}

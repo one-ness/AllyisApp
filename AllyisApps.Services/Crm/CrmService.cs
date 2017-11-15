@@ -346,13 +346,12 @@ namespace AllyisApps.Services
 		/// <param name="name">Project name.</param>
 		/// <param name="orgId">Project org id.</param>
 		/// <param name="isHourly">Project type.  True == hourly, false == fixed. TODO: use this parameter to update the project's isHourly column.  Currently disabled attribute.</param>
-		/// <param name="isActive">Sets if the project is active</param>
 		/// <param name="start">Starting date. <see cref="DateTime"/>.</param>
 		/// <param name="end">Ending date. <see cref="DateTime"/>.</param>
 		/// <param name="userIds">Updated on-project user list.</param>
 		/// <param name="subscriptionId">.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public async Task<bool> UpdateProjectAndUsers(int projectId, string name, string orgId, DateTime? start, DateTime? end, IEnumerable<int> userIds, int subscriptionId, bool isHourly = true, bool isActive = false)
+		public async Task<bool> UpdateProjectAndUsers(int projectId, string name, string orgId, DateTime? start, DateTime? end, IEnumerable<int> userIds, int subscriptionId, bool isHourly = true)
 		{
 			#region Validation
 
@@ -384,7 +383,7 @@ namespace AllyisApps.Services
 			#endregion Validation
 
 			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
-			DBHelper.UpdateProjectAndUsers(projectId, name, orgId, isHourly, isActive, start, end, userIds);
+			DBHelper.UpdateProjectAndUsers(projectId, name, orgId, isHourly, start, end, userIds);
 			await Task.Yield();
 			return true;
 		}
@@ -413,10 +412,18 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="projectId">The project id.</param>
 		/// <param name="subscriptionId">The subscription id.</param>
-		/// <returns></returns>
-		async public Task<bool> FullDeleteProject(int projectId, int subscriptionId)
+		/// <returns>The number of rows deleted -- includes projectUsers deleted.</returns>
+		public async Task<int> FullDeleteProject(int projectId, int subscriptionId)
 		{
 			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
+
+			var timeEntries = await DBHelper.GetTimeEntriesByProjectId(projectId);
+
+			if (timeEntries.Any())
+			{
+				return -1;
+			}
+
 			return await DBHelper.FullDeleteProject(projectId);
 		}
 
@@ -433,10 +440,10 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException(nameof(projectId), "Project Id cannot be 0 or negative.");
 			}
 
+			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
+
 			await CheckUpdateProjectStartEndDate(projectId, null, DateTime.Now);
 
-
-			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
 			return await DBHelper.DeleteProject(projectId);
 		}
 

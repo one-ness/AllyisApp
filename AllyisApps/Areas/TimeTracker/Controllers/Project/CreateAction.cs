@@ -42,12 +42,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Value = x.CustomerId.ToString()
 			}).ToList();
 
-			var statusOptions = new List<SelectListItem>
-			{
-				new SelectListItem { Text = "Active", Value = true.ToString() },
-				new SelectListItem { Text = "Disabled", Value = false.ToString() }
-			};
-
 			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
 			return View(
 				new EditProjectViewModel
@@ -57,8 +51,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					ProjectCode = idAndUsers, // Service.GetRecommendedProjectId()
 					SubscriptionId = subscriptionId,
 					Customers = customersActive,
-					IsActive = true,
-					IsActiveOptions = statusOptions,
 					SubscriptionName = subscriptionNameToDisplay,
 					SubscriptionUsers = subUsers.Select(x => new BasicUserInfoViewModel(x.FirstName, x.LastName, x.UserId)),
 					OrganizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId
@@ -83,8 +75,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			// Invalid Model
 			if (!ModelState.IsValid) return View(model);
 
-			model.IsActive = (model.StartDate == null || model.StartDate <= DateTime.Now)
-							&& (model.EndDate == null || model.EndDate >= DateTime.Now);
+			//model.IsActive = (model.StartDate == null || model.StartDate <= DateTime.Now)
+			//				&& (model.EndDate == null || model.EndDate >= DateTime.Now);
 
 			try
 			{
@@ -114,8 +106,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				ProjectName = model.ProjectName,
 				ProjectCode = model.ProjectCode,
 				StartingDate = model.StartDate,
-				EndingDate = model.EndDate,
-				IsActive = model.IsActive
+				EndingDate = model.EndDate
 			};
 		}
 	}

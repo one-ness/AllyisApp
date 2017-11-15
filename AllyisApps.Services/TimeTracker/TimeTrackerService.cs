@@ -245,7 +245,7 @@ namespace AllyisApps.Services
 			bool outsideNewDateRange = false;
 			foreach (var entry in entries)
 			{
-				if(entry.ProjectId == projectId) //only check for the specific project
+				if (entry.ProjectId == projectId) //only check for the specific project
 				{
 					if (newEndDate != null && entry.Date > newEndDate)
 					{
