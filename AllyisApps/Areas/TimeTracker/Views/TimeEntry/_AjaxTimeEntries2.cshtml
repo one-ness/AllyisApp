@@ -141,8 +141,6 @@
 }
 
 <div class="pull-right">
-	<a href=@Context.Request.RawUrl>
-		<span class="btn btn-default" >@Strings.Cancel</span>
-	</a>
-	<span class="btn btn-primary" onclick="saveForm()" style="margin-right: 15px;">@Strings.Save</span>
+	<a href="@Context.Request.RawUrl" class="btn btn-default" style="margin-right: 10px;">@Strings.Cancel</a>
+	<span class="btn btn-primary" onclick="saveForm()">@Strings.Save</span>
 </div>

@@ -17,8 +17,10 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44326</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <NuGetPackageImportStamp>
@@ -613,7 +615,9 @@
     <Content Include="Scripts\allyis-list-group-search.js" />
     <Content Include="Scripts\bootstrap-select.min.js" />
     <Content Include="Scripts\bootstrap.js" />
-    <None Include="Resources\Files\CustomerProjectImportTemplate.xlsx" />
+    <Content Include="Resources\Files\BulkImportTemplate.xlsx" />
+    <Content Include="Resources\Files\CustomerImportTemplate.xlsx" />
+    <Content Include="Resources\Files\ProjectImportTemplate.xlsx" />
     <None Include="Resources\Files\TimeEntryImportTemplate.xlsx" />
     <None Include="Resources\Files\UserImportTemplate.xlsx" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
@@ -703,7 +707,6 @@
     <Content Include="Scripts\bootstrap.min.js.map">
       <DependentUpon>bootstrap.min.js</DependentUpon>
     </Content>
-    <None Include="Resources\Files\ImportUserTemplate.csv" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
@@ -782,6 +785,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Files\Files.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
       <LastGenOutput>Files.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Images.resx">
