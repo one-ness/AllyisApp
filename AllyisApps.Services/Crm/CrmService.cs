@@ -232,17 +232,8 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException(nameof(customerId), "Customer Id cannot be 0 or negative.");
 			}
 
-			IEnumerable<ProjectDBEntity> dbeList = await DBHelper.GetInactiveProjectsByCustomer(customerId);
-			List<Project.Project> list = new List<Project.Project>();
-			foreach (ProjectDBEntity dbe in dbeList)
-			{
-				if (dbe != null)
-				{
-					list.Add(InitializeProject(dbe));
-				}
-			}
-
-			return list;
+			var projects = await DBHelper.GetInactiveProjectsByCustomer(customerId);
+			return projects.Where(p => p != null).Select(InitializeProject).ToList();
 		}
 
 		/// <summary>
@@ -250,10 +241,13 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="newProject">Project with project information.</param>
 		/// <param name="userIds">List of users being assigned to the project.</param>
+		/// <param name="subscriptionId">The subscription that the user is operating under.</param>
 		/// <returns>Project Id if succeed, -1 if projectCode is taken.</returns>
-		public async Task<int> CreateProjectAndUpdateItsUserList(Project.Project newProject, IEnumerable<int> userIds)
+		public async Task<int> CreateProjectAndUpdateItsUserList(Project.Project newProject, IEnumerable<int> userIds, int subscriptionId)
 		{
 			#region Validation
+
+			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
 
 			if (newProject.owningCustomer.CustomerId <= 0)
 			{
@@ -440,8 +434,8 @@ namespace AllyisApps.Services
 			}
 
 			await CheckUpdateProjectStartEndDate(projectId, null, DateTime.Now);
-			
-			
+
+
 			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
 			return await DBHelper.DeleteProject(projectId);
 		}
@@ -896,7 +890,8 @@ namespace AllyisApps.Services
 				ProjectId = project.ProjectId,
 				ProjectCode = project.ProjectCode,
 				StartingDate = project.StartingDate,
-				IsHourly = project.IsHourly
+				IsHourly = project.IsHourly,
+				IsActive = project.IsActive
 			};
 		}
 
