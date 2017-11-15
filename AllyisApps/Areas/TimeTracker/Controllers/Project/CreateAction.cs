@@ -36,16 +36,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var idAndUsers = await AppService.GetNextProjectId(orgId, subscriptionId);
 			var customers = (await AppService.GetCustomerList(orgId)).Where(x => x.IsActive.Value);
 			var subUsers = AppService.GetSubscriptionUsers(subscriptionId).AsEnumerable();
-			var customersActive = customers.Select(x => new SelectListItem()
+			var customersActive = customers.Select(x => new SelectListItem
 			{
 				Text = x.CustomerName,
 				Value = x.CustomerId.ToString()
 			}).ToList();
 
-			List<SelectListItem> statusOptions = new List<SelectListItem>()
+			var statusOptions = new List<SelectListItem>
 			{
-				new SelectListItem() { Text = "Active", Value = true.ToString() },
-				new SelectListItem() { Text = "Disabled", Value = false.ToString() }
+				new SelectListItem { Text = "Active", Value = true.ToString() },
+				new SelectListItem { Text = "Disabled", Value = false.ToString() }
 			};
 
 			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
@@ -80,23 +80,18 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			model.ProjectUsers = totalUsers.Where(subUsers => model.SelectedProjectUserIds.Contains(subUsers.UserId)); //right multi-select box
 			model.SubscriptionUsers = totalUsers.Except(model.ProjectUsers); //left multi-select box
 
+			// Invalid Model
 			if (!ModelState.IsValid) return View(model);
 
-			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
+			model.IsActive = (model.StartDate == null || model.StartDate <= DateTime.Now)
+							&& (model.EndDate == null || model.EndDate >= DateTime.Now);
 
 			try
 			{
-				var result = await CreateProjectAndUpdateItsUserList(model);
-				if (result == -1)
-				{
-					// duplicate projectCode
-					Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectCodeNotUnique, Variety.Danger));
-				}
-				else
-				{
-					model.ProjectId = result;
-					Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessProjectCreated, Variety.Success));
-				}
+				int result = await AppService.CreateProjectAndUpdateItsUserList(ProjectViewModelToProject(model), model.SelectedProjectUserIds.Select(int.Parse), model.SubscriptionId);
+				Notifications.Add(result == -1
+					? new BootstrapAlert(Resources.Strings.ProjectCodeNotUnique, Variety.Danger)
+					: new BootstrapAlert(Resources.Strings.SuccessProjectCreated, Variety.Success));
 			}
 			catch (Exception ex)
 			{
@@ -106,26 +101,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			return RedirectToAction(ActionConstants.Index, ControllerConstants.Project, new { subscriptionId = model.SubscriptionId });
-
-			// Invalid Model
 		}
-
-		/// <summary>
-		/// Creates a new project using a <see cref="EditProjectViewModel"/> and updates that project's properties and user list..
-		/// </summary>
-		/// <param name="model"><see cref="EditProjectViewModel"/> representing new project.</param>
-		/// <returns>The Project Id if succeed, -1 if the ProjectCode is taken by another project under the same customer.</returns>
-		public async Task<int> CreateProjectAndUpdateItsUserList(EditProjectViewModel model)
-		{
-			return await AppService.CreateProjectAndUpdateItsUserList(ProjectViewModelToProject(model), model.SelectedProjectUserIds.Select(int.Parse));
-		}
-
-		/// <summary>
-		/// Creates a new project using a <see cref="EditProjectViewModel"/>.
-		/// </summary>
-		/// <param name="model"><see cref="EditProjectViewModel"/> representing new project.</param>
-		/// <returns>The Project Id.</returns>
-		public async Task<int> CreateProject(EditProjectViewModel model) => await AppService.CreateProject(ProjectViewModelToProject(model));
 
 		private static Services.Project.Project ProjectViewModelToProject(EditProjectViewModel model)
 		{
@@ -138,7 +114,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				ProjectName = model.ProjectName,
 				ProjectCode = model.ProjectCode,
 				StartingDate = model.StartDate,
-				EndingDate = model.EndDate
+				EndingDate = model.EndDate,
+				IsActive = model.IsActive
 			};
 		}
 	}
