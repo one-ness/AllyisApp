@@ -68,7 +68,7 @@
 					<td>@project.CustomerName</td>
 					<td>@project.ProjectCode</td>
 					<td>
-						@if (project.EndDate > DateTime.UtcNow || project.EndDate == null)
+						@if ((project.EndDate == null || project.EndDate >= DateTime.UtcNow) && project.StartDate == null || project.StartDate <= DateTime.UtcNow)
 						{
 							<p>Active</p>
 						}

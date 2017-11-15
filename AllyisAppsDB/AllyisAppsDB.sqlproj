@@ -417,6 +417,7 @@
     <Build Include="Pjm\Stored Procedures\FullDeleteProject.sql" />
     <Build Include="Pjm\Stored Procedures\GetProjectByProjectOrgId.sql" />
     <None Include="DefaultData\Accounts.sql" />
+    <Build Include="TimeTracker\Stored Procedures\GetTimeEntriesByProjectId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

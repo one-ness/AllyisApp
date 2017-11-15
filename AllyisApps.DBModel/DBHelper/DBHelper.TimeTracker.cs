@@ -565,5 +565,24 @@ namespace AllyisApps.DBModel
 					commandType: CommandType.StoredProcedure);
 			}
 		}
+
+		/// <summary>
+		/// Gets all time entries that belong to the given project.
+		/// </summary>
+		/// <param name="projectId">The id of the project that the time entries belong to.</param>
+		/// <returns>Gets all time entries that belong to the given project.</returns>
+		public async Task<IEnumerable<TimeEntryDBEntity>> GetTimeEntriesByProjectId(int projectId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@projectId", projectId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				return await connection.QueryAsync<TimeEntryDBEntity>(
+					"[TimeTracker].[GetTimeEntriesByProjectId]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+			}
+		}
 	}
 }
