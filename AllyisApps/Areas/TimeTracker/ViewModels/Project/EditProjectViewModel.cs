@@ -64,16 +64,6 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		public DateTime? EndDate { get; set; }
 
 		/// <summary>
-		/// Gets or sets if the project is active.
-		/// </summary>
-		public bool IsActive { get; set; }
-
-		/// <summary>
-		///
-		/// </summary>
-		public List<SelectListItem> IsActiveOptions { get; set; }
-
-		/// <summary>
 		/// Gets or sets a select list of customers.
 		/// </summary>
 		public List<SelectListItem> Customers { get; set; }
