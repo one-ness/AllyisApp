@@ -108,14 +108,12 @@ namespace AllyisApps.DBModel
 		/// Actually deletes the project.
 		/// </summary>
 		/// <param name="projectId">The project id.</param>
-		/// <returns></returns>
-		public async Task<bool> FullDeleteProject(int projectId)
+		/// <returns>The number of rows deleted -- includes projectUsers deleted.</returns>
+		public async Task<int> FullDeleteProject(int projectId)
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var resultGet = await connection.QueryAsync<string>("[Pjm].[FullDeleteProject]", new { ProjectId = projectId }, commandType: CommandType.StoredProcedure);
-				var result = resultGet.SingleOrDefault();
-				return true;
+				return await connection.ExecuteAsync("[Pjm].[FullDeleteProject]", new { ProjectId = projectId }, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -130,8 +128,7 @@ namespace AllyisApps.DBModel
 			{
 				var resultGet = await connection.QueryAsync<string>("[Pjm].[DeleteProject]", new { ProjectId = projectId, DeactivateDate = DateTime.Now }, commandType: CommandType.StoredProcedure);
 				var result = resultGet.SingleOrDefault();
-				if (result == null) { return ""; }
-				return result;
+				return result ?? "";
 			}
 		}
 
