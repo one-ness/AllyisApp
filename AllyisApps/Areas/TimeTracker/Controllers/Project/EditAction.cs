@@ -58,19 +58,20 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var projIdMatchGet = await AppService.GetAllProjectsForOrganizationAsync(orgId);
 
 			// TODO: Don't check for duplicate projects in controller
-			Services.Project.Project projIdMatch = projIdMatchGet.SingleOrDefault(project => project.ProjectCode.Equals(model.ProjectCode) && project.owningCustomer?.CustomerId == model.ParentCustomerId);
+			Services.Project.Project projIdMatch = projIdMatchGet.SingleOrDefault(project => project.ProjectCode.Equals(model.ProjectCode) && project.owningCustomer?.CustomerId == model.ParentCustomerId && project.ProjectId != model.ProjectId);
 			if (projIdMatch != null && projIdMatch.ProjectId != model.ProjectId)
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectCodeNotUnique, Variety.Danger));
 				return View(model);
 			}
-
+			var oldproject = AppService.GetProject(model.ProjectId);
+			
 			try
 			{
 				var customer = await AppService.GetCustomerInfo(model.ParentCustomerId);
-				if (model.StartDate != projIdMatch.StartingDate || model.EndDate != projIdMatch.EndingDate) // check new date range to see if entries outside of the new range
+				if (model.StartDate != oldproject.StartingDate || model.EndDate != oldproject.EndingDate) // check new date range to see if entries outside of the new range
 				{
-					await AppService.CheckUpdateProjectStartEndDate(projIdMatch.ProjectId, model.StartDate, model.EndDate);
+					await AppService.CheckUpdateProjectStartEndDate(oldproject.ProjectId, model.StartDate, model.EndDate);
 				}
 				if (!customer.IsActive.Value && model.IsActive)
 				{

@@ -6,5 +6,5 @@ AS
 	SET [IsActive] = 1, [EndUtc] = NULL
 	WHERE [ProjectId] = @projectId
 
-	UPDATE [Pjm].[ProjectUser] SET [IsActive] = 1
-	WHERE [ProjectUser].[ProjectId] = @projectId 
+	/*UPDATE [Pjm].[ProjectUser] SET [IsActive] = 1
+	WHERE [ProjectUser].[ProjectId] = @projectId */
