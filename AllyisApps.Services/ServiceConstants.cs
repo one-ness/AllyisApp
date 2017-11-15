@@ -82,6 +82,11 @@
 		public const string ProjectId = "Project Id";
 
 		/// <summary>
+		/// Project-Property: Project Code.
+		/// </summary>
+		public const string ProjectCode = "Project Code";
+
+		/// <summary>
 		/// Project-Property: Type.
 		/// </summary>
 		public const string ProjectType = "Project Type";

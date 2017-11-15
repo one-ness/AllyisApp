@@ -326,13 +326,13 @@ namespace AllyisApps.Services
 
 				// Project importing: requires both project name and project id, as well as one identifying field for a customer (name or id)
 				bool hasProjectName = table.Columns.Contains(ColumnHeaders.ProjectName);
-				bool hasProjectId = table.Columns.Contains(ColumnHeaders.ProjectId);
+				bool hasProjectCode = table.Columns.Contains(ColumnHeaders.ProjectCode);
 				List<DataTable>[,] projectLinks = new List<DataTable>[3, 3];
-				projectLinks[0, 1] = projectLinks[1, 0] = projectImports.Where(t => t.Columns.Contains(ColumnHeaders.ProjectName) && t.Columns.Contains(ColumnHeaders.ProjectId)).ToList();
-				projectLinks[0, 2] = projectLinks[2, 0] = projectImports.Where(t => t.Columns.Contains(ColumnHeaders.ProjectName) && (t.Columns.Contains(ColumnHeaders.CustomerName) || t.Columns.Contains(ColumnHeaders.CustomerId))).ToList();
-				projectLinks[1, 2] = projectLinks[2, 1] = projectImports.Where(t => t.Columns.Contains(ColumnHeaders.ProjectId) && (t.Columns.Contains(ColumnHeaders.CustomerName) || t.Columns.Contains(ColumnHeaders.CustomerId))).ToList();
+				projectLinks[0, 1] = projectLinks[1, 0] = projectImports.Where(t => t.Columns.Contains(ColumnHeaders.ProjectName) && t.Columns.Contains(ColumnHeaders.ProjectCode)).ToList();
+				projectLinks[0, 2] = projectLinks[2, 0] = projectImports.Where(t => t.Columns.Contains(ColumnHeaders.ProjectName) && (t.Columns.Contains(ColumnHeaders.CustomerName) || t.Columns.Contains(ColumnHeaders.CustomerCode))).ToList();
+				projectLinks[1, 2] = projectLinks[2, 1] = projectImports.Where(t => t.Columns.Contains(ColumnHeaders.ProjectCode) && (t.Columns.Contains(ColumnHeaders.CustomerName) || t.Columns.Contains(ColumnHeaders.CustomerCode))).ToList();
 				bool canImportProjects = (hasProjectName || projectLinks[0, 1].Count > 0 || projectLinks[0, 2].Count > 0) &&
-					(hasProjectId || projectLinks[1, 0].Count > 0 || projectLinks[1, 2].Count > 0) &&
+					(hasProjectCode || projectLinks[1, 0].Count > 0 || projectLinks[1, 2].Count > 0) &&
 					(hasCustomerName || hasCustomerCode || projectLinks[2, 0].Count > 0 || projectLinks[2, 1].Count > 0);
 
 				// Non-required project columns
@@ -346,7 +346,7 @@ namespace AllyisApps.Services
 				// Do we have rows/data to import?
 				if (table.Rows.Count == 0
 					|| !hasProjectName
-					&& !hasProjectId)
+					&& !hasProjectCode)
 				{
 					result.GeneralFailures.Add($"There is no readable data to import from spreadsheet \"{table.TableName}\".");
 				}
@@ -359,7 +359,7 @@ namespace AllyisApps.Services
 					DateTime? defaultProjectEndDate = null;
 
 					// If there is no identifying information for projects, all project related importing is skipped.
-					if (hasProjectName || hasProjectId)
+					if (hasProjectName || hasProjectCode)
 					{
 						Customer customer = null;
 						if (hasCustomerName || hasCustomerCode)
@@ -368,16 +368,16 @@ namespace AllyisApps.Services
 						}
 
 						bool thisRowHasProjectName = hasProjectName;
-						bool thisRowHasProjectId = hasProjectId;
+						bool thisRowHasProjectCode = hasProjectCode;
 
 						// Start with getting the project information that is known from this sheet
 						string knownValue = null;
 						string readValue = null;
-						ReadColumn(row, hasProjectName ? ColumnHeaders.ProjectName : ColumnHeaders.ProjectId, p => knownValue = p);
-						if (hasProjectName && hasProjectId)
+						ReadColumn(row, hasProjectName ? ColumnHeaders.ProjectName : ColumnHeaders.ProjectCode, p => knownValue = p);
+						if (hasProjectName && hasProjectCode)
 						{
 							// If both columns exist, knownValue is Name and readValue will be Id
-							if (!ReadColumn(row, ColumnHeaders.ProjectId, p => readValue = p))
+							if (!ReadColumn(row, ColumnHeaders.ProjectCode, p => readValue = p))
 							{
 								if (knownValue == null)
 								{
@@ -387,7 +387,7 @@ namespace AllyisApps.Services
 								}
 
 								// Failed to read Id, but read Name successfully.
-								thisRowHasProjectId = false;
+								thisRowHasProjectCode = false;
 							}
 
 							if (knownValue == null)
@@ -411,18 +411,18 @@ namespace AllyisApps.Services
 								// Project does not exist, so we should create it
 								if (!canImportProjects)
 								{
-									result.ProjectFailures.Add(string.Format("Could not create project {0}: no corresponding {1}.", knownValue, thisRowHasProjectName ? ColumnHeaders.ProjectId : ColumnHeaders.ProjectName));
+									result.ProjectFailures.Add(string.Format("Could not create project {0}: no corresponding {1}.", knownValue, thisRowHasProjectName ? ColumnHeaders.ProjectCode : ColumnHeaders.ProjectName));
 									continue;
 								}
 
-								if (thisRowHasProjectName ^ thisRowHasProjectId)
+								if (thisRowHasProjectName ^ thisRowHasProjectCode)
 								{
 									// We still need the other bit of project info
 									foreach (DataTable link in projectLinks[0, 1])
 									{
 										try
 										{
-											readValue = link.Select(string.Format("[{0}] = '{1}'", thisRowHasProjectName ? ColumnHeaders.ProjectName : ColumnHeaders.ProjectId, knownValue))[0][thisRowHasProjectName ? ColumnHeaders.ProjectId : ColumnHeaders.ProjectName].ToString();
+											readValue = link.Select(string.Format("[{0}] = '{1}'", thisRowHasProjectName ? ColumnHeaders.ProjectName : ColumnHeaders.ProjectCode, knownValue))[0][thisRowHasProjectName ? ColumnHeaders.ProjectCode : ColumnHeaders.ProjectName].ToString();
 											if (!string.IsNullOrEmpty(readValue))
 											{
 												break; // Match found.
@@ -433,7 +433,7 @@ namespace AllyisApps.Services
 
 									if (string.IsNullOrEmpty(readValue))
 									{
-										result.ProjectFailures.Add(string.Format("Could not create project {0}: no corresponding {1}.", knownValue, thisRowHasProjectName ? ColumnHeaders.ProjectId : ColumnHeaders.ProjectName));
+										result.ProjectFailures.Add(string.Format("Could not create project {0}: no corresponding {1}.", knownValue, thisRowHasProjectName ? ColumnHeaders.ProjectCode : ColumnHeaders.ProjectName));
 										continue;
 									}
 								}
@@ -469,17 +469,11 @@ namespace AllyisApps.Services
 						}
 						else
 						{
-							// if(!canImportProjects)
-							//{
-							//    result.ProjectFailures.Add(string.Format("Could not create project {0}: no corresponding {1}.", knownValue, thisRowHasProjectName ? ColumnHeaders.ProjectId : ColumnHeaders.ProjectName));
-							//    continue;
-							//}
-
 							// No customer yet specified. Now, we have to use all the links to try and get customer and the complete project info
 							string[] fields =
 								{
 									thisRowHasProjectName ? knownValue : null,
-									thisRowHasProjectId ? thisRowHasProjectName ? readValue : knownValue : null,
+									thisRowHasProjectCode ? thisRowHasProjectName ? readValue : knownValue : null,
 									null
 								};
 							bool customerFieldIsName = true;
@@ -511,7 +505,7 @@ namespace AllyisApps.Services
 													j == 0
 														? ColumnHeaders.ProjectName
 														: j == 1
-															? ColumnHeaders.ProjectId
+															? ColumnHeaders.ProjectCode
 															: thisLinkCustomerFieldIsName
 																? ColumnHeaders.CustomerName
 																: ColumnHeaders.CustomerCode;
@@ -523,7 +517,7 @@ namespace AllyisApps.Services
 															k == 0
 																? ColumnHeaders.ProjectName
 																: k == 1
-																	? ColumnHeaders.ProjectId
+																	? ColumnHeaders.ProjectCode
 																	: thisLinkCustomerFieldIsName
 																		? ColumnHeaders.CustomerName
 																		: ColumnHeaders.CustomerCode,
@@ -565,7 +559,7 @@ namespace AllyisApps.Services
 									// Project does not exist, so we should create it
 									if (string.IsNullOrEmpty(fields[0]) || string.IsNullOrEmpty(fields[1]))
 									{
-										result.ProjectFailures.Add(string.Format("Could not create project {0}: no corresponding {1}.", knownValue, thisRowHasProjectName ? ColumnHeaders.ProjectId : ColumnHeaders.ProjectName));
+										result.ProjectFailures.Add(string.Format("Could not create project {0}: no corresponding {1}.", knownValue, thisRowHasProjectName ? ColumnHeaders.ProjectCode : ColumnHeaders.ProjectName));
 										continue;
 									}
 
@@ -887,13 +881,13 @@ namespace AllyisApps.Services
 			{
 				bool hasCustomerCode = table.Columns.Contains(ColumnHeaders.CustomerCode);
 				bool hasProjectName = table.Columns.Contains(ColumnHeaders.ProjectName);
-				bool hasProjectId = table.Columns.Contains(ColumnHeaders.ProjectId);
+				bool hasProjectCode = table.Columns.Contains(ColumnHeaders.ProjectCode);
 				bool hasUserEmail = table.Columns.Contains(ColumnHeaders.UserEmail);
 				bool hasEmployeeId = table.Columns.Contains(ColumnHeaders.EmployeeId);
 				bool hasUserName = table.Columns.Contains(ColumnHeaders.UserFirstName) && table.Columns.Contains(ColumnHeaders.UserLastName);
 
 				// Project-user importing: perfomed when identifying information for both project and user are present
-				bool canImportProjectUser = (hasProjectName || hasProjectId) && (hasUserEmail || hasEmployeeId || hasUserName) && hasCustomerCode;
+				bool canImportProjectUser = (hasProjectName || hasProjectCode) && (hasUserEmail || hasEmployeeId || hasUserName) && hasCustomerCode;
 
 				// Time Entry importing: unlike customers, projects, and users, time entry data must have all time entry information on the same sheet
 				// Requires indentifying data for user and project, as well as date, duration, and pay class
@@ -919,7 +913,7 @@ namespace AllyisApps.Services
 				if (table.Rows.Count == 0
 					|| !hasCustomerCode
 					&& !hasProjectName
-					&& !hasProjectId
+					&& !hasProjectCode
 					&& !hasUserEmail
 					&& !hasEmployeeId
 					&& !hasUserName
@@ -936,7 +930,7 @@ namespace AllyisApps.Services
 				{
 					bool thisRowHasProjectName = table.Columns.Contains(ColumnHeaders.ProjectName);
 					String knownValue = null;
-					ReadColumn(row, hasProjectName ? ColumnHeaders.ProjectName : ColumnHeaders.ProjectId, p => knownValue = p);
+					ReadColumn(row, hasProjectName ? ColumnHeaders.ProjectName : ColumnHeaders.ProjectCode, p => knownValue = p);
 					
 					var customersProjects = new List<Project.Project>();
 					var customerList = await GetCustomerList(orgId);
