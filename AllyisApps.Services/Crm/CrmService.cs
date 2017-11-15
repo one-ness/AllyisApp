@@ -441,7 +441,8 @@ namespace AllyisApps.Services
 			}
 			
 			await CheckUpdateProjectStartEndDate(projectId, null, DateTime.Now);
-
+			
+			
 			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
 			return await DBHelper.DeleteProject(projectId);
 		}

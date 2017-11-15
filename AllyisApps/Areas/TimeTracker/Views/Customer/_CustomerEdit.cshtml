@@ -1,4 +1,5 @@
-﻿@model AllyisApps.ViewModels.TimeTracker.Customer.EditCustomerInfoViewModel
+﻿@using AllyisApps.Utilities;
+@model AllyisApps.ViewModels.TimeTracker.Customer.EditCustomerInfoViewModel
 
 <div class="shrink-wrap-center">
 	<div>
@@ -6,6 +7,7 @@
 		{
 			@Html.AntiForgeryToken()
 			@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
+			@Html.HiddenForEnumerable(model => model.IsActiveOptions)
 			<div class="row">
 				<div class="col-md-6 sm-control-width">
 

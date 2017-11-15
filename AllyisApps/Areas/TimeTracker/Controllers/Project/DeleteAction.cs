@@ -62,19 +62,21 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var projects = projectTest.Where(x => ids.Contains(x.ProjectId)).ToList();
 			string result = "";
 
+			
 			foreach (var project in projects)
 			{
 				if (project.IsActive)
 				{
-					result = await AppService.DeleteProject(project.ProjectId, subscriptionId);
+					try
+					{
+						result = await AppService.DeleteProject(project.ProjectId, subscriptionId);
 
-					if (!string.IsNullOrEmpty(result))
-					{
-						Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", result, Resources.Strings.ProjectDeleteNotification), Variety.Success));
-					}
-					else
-					{
-						//TODO: FAILED?
+						if (!string.IsNullOrEmpty(result))
+						{
+							Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", result, Resources.Strings.ProjectDeleteNotification), Variety.Success));
+						}
+					}catch(Exception e){
+						Notifications.Add(new BootstrapAlert(e.Message, Variety.Danger));
 					}
 				}
 				else
