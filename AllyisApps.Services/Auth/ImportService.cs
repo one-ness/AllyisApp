@@ -730,6 +730,11 @@ namespace AllyisApps.Services
 								if (ReadColumn(row, ColumnHeaders.EmployeeId, e => readValue = e))
 								{
 									userTuple = users.FirstOrDefault(tup => tup.Item1.Equals(readValue));
+									if (userTuple != null)
+									{
+										result.GeneralFailures.Add($"User with Employee Id: {readValue} already exists.");
+										continue;
+									}
 								}
 							}//Remove logic only email matters.
 							if (userTuple == null)
