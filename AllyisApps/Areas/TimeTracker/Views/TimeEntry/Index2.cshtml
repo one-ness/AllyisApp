@@ -76,7 +76,7 @@
 							</a>
 						}
 					</div>*@
-				<div id="newdaterange" class="panel-title pull-right" style="display: inline; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px; margin-left: 15px;">
+				<div id="newdaterange" class="pull-right" style="display: inline; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px; margin-left: 15px;">
 					<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
 					<span></span> <b class="caret"></b>
 				</div>
@@ -296,6 +296,8 @@
 				linkedCalendars: false,
 				startDate: start,
 				endDate: end,
+				buttonClasses: "btn btn-sm pull-right",
+				applyClass: "btn-primary ml-1",
 				ranges: {
 					'Previous Pay Period': [prevStart, prevEnd],
 					'Current Pay Period': [curStart, curEnd],
@@ -327,7 +329,7 @@
 			else
 			{
 				var newForm = jQuery('<form>', {
-                    'action': '/@ProductNameConstants.TimeTracker/@Model.SubscriptionId/@ControllerConstants.TimeEntry/TimeTrackerDatePickerRedirect',
+					'action': '/@ProductNameConstants.TimeTracker/@Model.SubscriptionId/@ControllerConstants.TimeEntry/TimeTrackerDatePickerRedirect',
 					'target': '_top',
 					'method': 'get'
 				}).append(jQuery('<input>', {
