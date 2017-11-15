@@ -50,6 +50,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@projectCode", project.ProjectCode);
 			parameters.Add("@startingDate", project.StartingDate?.ToShortDateString());
 			parameters.Add("@endingDate", project.EndingDate?.ToShortDateString());
+			parameters.Add("@isActive", project.IsActive);
 			parameters.Add("@userIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
 			parameters.Add("@retId", -1, DbType.Int32, ParameterDirection.Output);
 
