@@ -64,6 +64,7 @@
 						<div class=" form-group col-xs-12 col-sm-5">
 							<label>@Strings.Customer</label>
 							@Html.DropDownListFor(m => m.CustomerId, Model.Customers.AsEnumerable(), new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.CustomerId, "", new { @class = "text-danger" })
 						</div>
 					</div>
 				}
@@ -104,8 +105,8 @@
 				@Html.HiddenFor(m => m.IsCreating)
 				@Html.HiddenFor(m => m.OrganizationId)
 				@Html.HiddenFor(m => m.SubscriptionId)
+				@Html.HiddenFor(m => m.SubscriptionName)
 				@Html.HiddenForEnumerable(m => m.Customers, true)
-				@Html.HiddenForEnumerable(m => m.IsActiveOptions, true)
 				@Html.HiddenForEnumerable(m => m.SubscriptionUsers, true)
 				@Html.HiddenForEnumerable(m => m.ProjectUsers, true)
 			</div>
