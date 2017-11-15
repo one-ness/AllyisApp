@@ -1,0 +1,32 @@
+﻿@{
+	ViewBag.Title = "Project Import";
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
+}
+
+<div class="row">
+	<div class="col-md-6 sm-control-width">
+		<label>@Strings.Upload</label>
+		<div class="pull-right">
+			<a style="color:dodgerblue">@Html.RouteLink("Template", "TimeTracker_Default", new { controller = ControllerConstants.Customer, action = ActionConstants.Template })</a>
+		</div>
+		@using (Html.BeginForm(ActionConstants.CustomerImport, ControllerConstants.Customer, FormMethod.Post, new { enctype = "multipart/form-data" }))
+		{
+			Html.AntiForgeryToken();
+			<div>
+				<input type="file" id="upload-box" name="file" style="display:none;"
+					   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+				<input id="upload-file-name-display" name="file" class="form-control"
+					   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+			</div>
+			
+			<div style="margin-top: 10px; margin-bottom: 15px; float:right;">
+				<a class="btn btn-primary" onclick="$('input[id=upload-box]').click();" title="Choose project Excel entries to upload">@Strings.ChooseFile</a>
+				<input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" title="Upload project Excel entries" />
+			</div>
+		}
+		<div class="pull-left" style="padding-top: 15px; padding-bottom: 15px;">
+			<span type="button" class="btn btn-default" value=@Strings.Cancel onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Project)'">Cancel</span>
+		</div>
+	</div>
+</div>

@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using AllyisApps.Utilities
 @using AllyisApps.ViewModels.TimeTracker.Project
 @model EditProjectViewModel
 
@@ -24,23 +25,10 @@
 					@Html.ValidationMessageFor(x => x.ProjectName, "", new { @class = "text-danger" })
 				</div>
 				<div class="form-group">
-					@Html.ReqLabelFor(m => m.ProjectCode, Strings.ProjectOrgId)
+					@Html.ReqLabelFor(m => m.ProjectCode, Strings.ProjectCode)
 					@Html.TextBoxFor(m => m.ProjectCode, new { @class = "form-control", maxlength = "16", placeholder = Model.ProjectCode })
 					@Html.ValidationMessageFor(x => x.ProjectCode, "", new { @class = "text-danger" })
 				</div>
-				@if (Model.SelectedProjectUserIds.Any())
-				{
-					var _projectUsers = Model.ProjectUsers.ToList();
-					var _subscriptionUsers = Model.SubscriptionUsers.ToList();
-					foreach (string id in Model.SelectedProjectUserIds)
-					{
-						BasicUserInfoViewModel choice = Model.SubscriptionUsers.FirstOrDefault(m => m.UserId == id);
-						_projectUsers.Add(choice);
-						_subscriptionUsers.Remove(choice);
-					}
-					Model.ProjectUsers = _projectUsers;
-					Model.SubscriptionUsers = _subscriptionUsers;
-				}
 				<div id="swapper-ui" class="swapper-ui">
 					<div class="left">
 						<label>@Strings.OffProj</label>
@@ -70,29 +58,26 @@
 						@Html.ListBoxFor(m => m.SelectedProjectUserIds, new MultiSelectList(Model.ProjectUsers, "UserId", "Name"), new { name = "Included", id = "included-users", @class = "filter-list", Multiple = "multiple" })
 					</div>
 				</div>
-				<div class="form-group row" style="margin-bottom:0;margin-top: 15px;">
-					<div class=" form-group col-xs-12 col-sm-5">
-						<label>@Strings.Customer</label>
-						@Html.DropDownListFor(x => x.CustomerId, Model.Customers.AsEnumerable(), new { @class = "form-control" })
+				@if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)
+				{
+					<div class="form-group row" style="margin-bottom:0;margin-top: 15px;">
+						<div class=" form-group col-xs-12 col-sm-5">
+							<label>@Strings.Customer</label>
+							@Html.DropDownListFor(m => m.CustomerId, Model.Customers.AsEnumerable(), new { @class = "form-control" })
+						</div>
 					</div>
-					<div class="form-group col-xs-12 col-sm-offset-2 col-sm-5">
-						@Html.ReqLabelFor(m => m.isActiveOptions, "Is Active")
-						@Html.DropDownListFor(m => m.IsActive, Model.isActiveOptions, new { @class = "form-control" })
-					</div>
-				</div>
+				}
 				<div class="form-group row" style="margin-bottom: 0; margin-top: 15px;">
 					<div class="form-group col-xs-12 col-sm-5">
 						<label>@Strings.StartDate</label>
 						<div class="input-group">
-							<input 
-								type="text"
-								class="form-control"
-								id="StartDate"
-								name="StartDate"
-								value="@(Model.StartDate != null
+							<input type="text"
+								   class="form-control"
+								   id="StartDate"
+								   name="StartDate"
+								   value="@(Model.StartDate != null
 								        ? Model.StartDate.Value.ToString("d", CultureInfo.InvariantCulture)
-								        : "")"
-							>
+								        : "")">
 							<div class="input-group-addon" style="cursor: pointer">
 								<span class="glyphicon glyphicon-calendar"></span>
 							</div>
@@ -113,49 +98,21 @@
 							</div>
 						</div>
 					</div>
-
 				</div>
 				@Html.HiddenFor(m => m.ParentCustomerId)
 				@Html.HiddenFor(m => m.ProjectId)
 				@Html.HiddenFor(m => m.IsCreating)
 				@Html.HiddenFor(m => m.OrganizationId)
 				@Html.HiddenFor(m => m.SubscriptionId)
+				@Html.HiddenForEnumerable(m => m.Customers, true)
+				@Html.HiddenForEnumerable(m => m.IsActiveOptions, true)
+				@Html.HiddenForEnumerable(m => m.SubscriptionUsers, true)
+				@Html.HiddenForEnumerable(m => m.ProjectUsers, true)
 			</div>
 
-			<div class="text-right" style="padding-top: 15px; padding-bottom: 15px;">
+			<div class="pull-right" style="padding-top: 15px; padding-bottom: 15px;">
 				<input type="button" class="btn btn-default" value=@Strings.Cancel onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Project, new { subscriptionId = Model.SubscriptionId })'" />
 				<input type="submit" value=@Strings.Save class="btn btn-primary" id="submitProject" />
-			</div>
-		}
-
-		<br />
-		@if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)
-		{
-			<div class="row">
-				<div class="col-md-6 sm-control-width">
-					<label>@Strings.Upload</label>
-					@using (Html.BeginForm(ActionConstants.CustomerImport, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
-					{
-						@Html.AntiForgeryToken()
-						<div>
-							<input type="file" id="upload-box" name="file" style="display:none;"
-								   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-							<input id="upload-file-name-display" class="form-control"
-								   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-						</div>
-
-						<div style="margin-top: 10px; margin-bottom: 15px; float:right;">
-							<a class="btn btn-primary" onclick="$('input[id=upload-box]').click();" title="Choose project entries Excel file to upload">@Strings.ChooseFile</a>
-							<input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" title="Upload project entries from Excel" />
-						</div>
-					}
-					@using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Customer, null, FormMethod.Get, new { style = "display: flex; justify-content: space-between;", id = "template-form" }))
-					{
-						<div style="margin-top: 10px; margin-bottom: 15px; float:left">
-							<input type="submit" form="template-form" id="template-button" value="@Strings.Template" class="btn btn-primary" title="Download Excel template for project entries" />
-						</div>
-					}
-				</div>
 			</div>
 		}
 	</div><!-- /.modal-content -->

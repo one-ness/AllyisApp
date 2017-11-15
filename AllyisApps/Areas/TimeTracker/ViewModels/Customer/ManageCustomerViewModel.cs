@@ -48,4 +48,5 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		/// </summary>
 		public bool CanEdit { get; set; }
 	}
+	
 }

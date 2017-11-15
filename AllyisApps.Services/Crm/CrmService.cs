@@ -113,7 +113,7 @@ namespace AllyisApps.Services
 		/// <param name="orgId">The Organization Id.</param>
 		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public  string ReactivateCustomer(int customerId, int subscriptionId, int orgId)
+		public string ReactivateCustomer(int customerId, int subscriptionId, int orgId)
 		{
 			CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
 			return DBHelper.ReactivateCustomer(customerId);
@@ -439,6 +439,8 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentOutOfRangeException(nameof(projectId), "Project Id cannot be 0 or negative.");
 			}
+			
+			await CheckUpdateProjectStartEndDate(projectId, null, DateTime.Now);
 
 			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
 			return await DBHelper.DeleteProject(projectId);
@@ -585,7 +587,16 @@ namespace AllyisApps.Services
 		/// <returns></returns>
 		async public Task<string> GetNextProjectId(int orgId, int subscriptionId)
 		{
-			var results = await DBHelper.GetNextProjectId(orgId, subscriptionId);
+			var results = "";
+			try
+			{
+				results = await DBHelper.GetNextProjectId(orgId, subscriptionId);
+			}
+			catch (Exception e)
+			{
+				results = e.ToString();
+				results = "";
+			}
 			return string.IsNullOrEmpty(results) ? "0000000000000000" : new string(IncrementAlphanumericCharArray(results.ToCharArray()));
 		}
 
@@ -784,7 +795,7 @@ namespace AllyisApps.Services
 		//        ContactPhoneNumber = customer.ContactPhoneNumber,
 		//        CreatedUtc = customer.CreatedUtc,
 		//        CustomerId = customer.CustomerId,
-		//        CustomerOrgId = customer.CustomerOrgId,
+		//        CustomerCode = customer.CustomerCode,
 		//        EIN = customer.EIN,
 		//        FaxNumber = customer.FaxNumber,
 		//        CustomerName = customer.CustomerName,
@@ -818,7 +829,7 @@ namespace AllyisApps.Services
 					CustomerName = customer.CustomerName,
 					OrganizationId = customer.OrganizationId,
 					Website = customer.Website,
-					IsActive = customer.IsActive
+					IsActive = customer.IsActive ?? true
 				},
 				new AddressDBEntity
 				{

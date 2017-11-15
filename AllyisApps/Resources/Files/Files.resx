@@ -118,14 +118,17 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="CustomerProjectImportTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>CustomerProjectImportTemplate.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="ProjectImportTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>ProjectImportTemplate.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="ImportUserTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>importusertemplate.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="CustomerImportTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>CustomerImportTemplate.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="TimeEntryImportTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>TimeEntryImportTemplate.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="BulkImportTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>BulkImportTemplate.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="UserImportTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>UserImportTemplate.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

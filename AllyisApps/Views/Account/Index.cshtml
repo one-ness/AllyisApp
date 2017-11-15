@@ -43,7 +43,7 @@
 
 			@if (Model.Invitations.Count > 0)
 			{
-				<div class="panel-body">
+				<div class="panel-body panel panel-default" style="margin: 20px">
 					<div class="index-details" style="padding-left: 15px">
 						<p>
 							<label>@Strings.Invitations</label>
@@ -59,7 +59,7 @@
 						@foreach (var invite in Model.Invitations)
 						{
 							<div class="invites">
-								<span class="col-xs-4 col-xs-6" style="margin-top:25px;">@invite.OrganizationName</span>
+								<span class="col-xs-4 col-xs-6 h3">@invite.OrganizationName</span>
 								@using (Html.BeginForm(ActionConstants.AcceptInvitation, ControllerConstants.Account, new { id = @invite.InvitationId }, FormMethod.Post))
 								{
 
@@ -70,7 +70,7 @@
 								@using (Html.BeginForm(ActionConstants.RejectInvitation, ControllerConstants.Account, new { id = @invite.InvitationId }, FormMethod.Post))
 								{
 									<span class="col-xs-4 col-xs-3 pull-right" style="margin-top:15px;">
-										<input type="submit" value="@Strings.Reject" class="btn btn-primary col-xs-12" />
+										<input type="submit" value="@Strings.Reject" class="btn btn-danger col-xs-12" />
 									</span>
 								}
 							</div>

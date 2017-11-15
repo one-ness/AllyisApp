@@ -71,7 +71,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		/// <summary>
 		///
 		/// </summary>
-		public List<SelectListItem> isActiveOptions { get; set; }
+		public List<SelectListItem> IsActiveOptions { get; set; }
 
 		/// <summary>
 		/// Gets or sets a select list of customers.
@@ -138,6 +138,11 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 	/// </summary>
 	public class BasicUserInfoViewModel
 	{
+		/// <summary>
+		/// Default constructor for use with automatic assignment helper methods.
+		/// </summary>
+		public BasicUserInfoViewModel() { }
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BasicUserInfoViewModel"/> class.
 		/// </summary>

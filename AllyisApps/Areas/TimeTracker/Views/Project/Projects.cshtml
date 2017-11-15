@@ -9,6 +9,9 @@
 }
 
 <div class="form-group pull-right">
+	<a href="@Url.Action("ProjectImport")">
+		<span class="btn btn-primary">Project Import</span>
+	</a>
 	<a href="@Url.Action("Create")">
 		<span class="btn btn-primary">Create Project</span>
 	</a>
@@ -51,13 +54,21 @@
 					<td><input type="checkbox" class="customer-select" value="@project.ProjectId" /></td>
 					<td>@project.ProjectName</td>
 					<td>
-						@project.StartDate
+						@if (project.StartDate != null)
+						{
+							@project.StartDate.Value.Date.ToString("d")
+						}
 					</td>
-					<td>@project.EndDate</td>
-					<td>@project.CustomerName</td>
-					<td>@project.ProjectId</td>
 					<td>
-						@if (project.IsActive)
+						@if (project.EndDate != null)
+						{
+							@project.EndDate.Value.Date.ToString("d")
+						}
+					</td>
+					<td>@project.CustomerName</td>
+					<td>@project.ProjectCode</td>
+					<td>
+						@if (project.EndDate > DateTime.UtcNow || project.EndDate == null)
 						{
 							<p>Active</p>
 						}
@@ -81,11 +92,11 @@
 		<button type="submit" class="btn btn-danger  pull-right">Delete</button>
 	}
 </div>
-<div class="pull-right btn">
-	@using (Html.BeginForm("ToggleStatus", Strings.Project, new { }, FormMethod.Get, new { @onsubmit = "return getUserIdsAndSubmit();"}))
+<div class="pull-left btn">
+	@using (Html.BeginForm("ToggleStatus", Strings.Project, new { }, FormMethod.Get, new { @onsubmit = "return getUserIdsAndSubmit();" }))
 	{
-			<input type="hidden" name="projIds" id="projIds" value="" />
-			<button type="submit" class="btn btn-primary  pull-right">Toggle Status</button>
+		<input type="hidden" name="projIds" id="projIds" value="" />
+		<button type="submit" class="btn btn-primary  pull-right">Toggle Status</button>
 	}
 </div>
 

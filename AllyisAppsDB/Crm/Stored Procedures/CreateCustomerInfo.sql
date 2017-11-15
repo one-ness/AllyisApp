@@ -25,7 +25,7 @@ BEGIN
 		WHERE [CustomerCode] = @customerCode AND [OrganizationId] = @organizationId
 	)
 	BEGIN
-		-- CustomerOrgId is not unique
+		-- CustomerCode is not unique
 		SET @retId = -1;
 	END
 	ELSE

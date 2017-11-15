@@ -387,7 +387,7 @@ $(document).ready(function () {
     });
     $("#viewasuser-search").keyup(_.debounce(
         function (key) {
-            if (key.which === 13 || key.keyCode === 13) {
+            //if (key.which === 13 || key.keyCode === 13) {
                 //alert("keypress val:" + this.value);
                 if (this.value === "")
                     MODULE.search(" "); //search on a value that is present in all entries
@@ -395,7 +395,7 @@ $(document).ready(function () {
                     MODULE.search(this.value);
                 //after search, set new page numbers
                 paginate();
-            }
+            //}
         },
         200
     ));

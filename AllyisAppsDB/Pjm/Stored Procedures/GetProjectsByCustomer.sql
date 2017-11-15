@@ -10,5 +10,5 @@ AS
 		   [StartUtc] AS [StartingDate],
 		   [EndUtc] AS [EndingDate]
 	FROM [Pjm].[Project] WITH (NOLOCK) 
-	WHERE [IsActive] = 1 AND [CustomerId] = @customerId
+	WHERE [CustomerId] = @customerId
 	ORDER BY [Project].[ProjectName]

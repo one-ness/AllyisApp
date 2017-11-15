@@ -952,6 +952,24 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Organization Specific Id.
+        /// </summary>
+        public static string CustomerCode {
+            get {
+                return ResourceManager.GetString("CustomerCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This Customer ID is already in use. The Customer ID must be a unique value..
+        /// </summary>
+        public static string CustomerCodeNotUnique {
+            get {
+                return ResourceManager.GetString("CustomerCodeNotUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have successfully created the customer..
         /// </summary>
         public static string CustomerCreatedNotification {
@@ -1002,24 +1020,6 @@ namespace AllyisApps.Resources {
         public static string CustomerNameWarning {
             get {
                 return ResourceManager.GetString("CustomerNameWarning", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Organization Specific Id.
-        /// </summary>
-        public static string CustomerOrgId {
-            get {
-                return ResourceManager.GetString("CustomerOrgId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This Customer ID is already in use. The Customer ID must be a unique value..
-        /// </summary>
-        public static string CustomerOrgIdNotUnique {
-            get {
-                return ResourceManager.GetString("CustomerOrgIdNotUnique", resourceCulture);
             }
         }
         
@@ -3454,6 +3454,24 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Project ID.
+        /// </summary>
+        public static string ProjectCode {
+            get {
+                return ResourceManager.GetString("ProjectCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The chosen Project ID already exists for this customer. The value must be a unique value..
+        /// </summary>
+        public static string ProjectCodeNotUnique {
+            get {
+                return ResourceManager.GetString("ProjectCodeNotUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to has been deleted successfully..
         /// </summary>
         public static string ProjectDeleteNotification {
@@ -3486,24 +3504,6 @@ namespace AllyisApps.Resources {
         public static string ProjectList {
             get {
                 return ResourceManager.GetString("ProjectList", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Project ID.
-        /// </summary>
-        public static string ProjectOrgId {
-            get {
-                return ResourceManager.GetString("ProjectOrgId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The chosen Project ID already exists. The value must be a unique value..
-        /// </summary>
-        public static string ProjectOrgIdNotUnique {
-            get {
-                return ResourceManager.GetString("ProjectOrgIdNotUnique", resourceCulture);
             }
         }
         

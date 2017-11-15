@@ -29,7 +29,6 @@ AS
 	LEFT JOIN [Crm].[Customer]	WITH (NOLOCK) ON [Customer].[CustomerId] = [Project].[CustomerId]
 	LEFT JOIN [Auth].[User] WITH (NOLOCK) ON [User].[UserId] = [ProjectUser].[UserId]
 	WHERE [Customer].[IsActive] = 1 
-		AND [Project].[IsActive] = 1
 		AND [ProjectUser].[IsActive] = 1
 		AND [ProjectUser].[ProjectId] = @projectId
 	ORDER BY [User].[LastName]
