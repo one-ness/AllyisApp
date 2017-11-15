@@ -202,7 +202,7 @@ namespace AllyisApps.Services
 		/// <param name="customerId">Customer Id.</param>
 		/// <param name="onlyActive">Bool whether or not to only get active projects.</param>
 		/// <returns>List of ProjectInfo's.</returns>
-		public async Task<IEnumerable<Project.Project>> GetProjectsByCustomerAsync(int customerId, bool onlyActive = true)
+		public async Task<IEnumerable<Project.Project>> GetProjectsByCustomerAsync(int customerId, bool onlyActive = false)
 		{
 			if (customerId <= 0)
 			{
@@ -216,7 +216,8 @@ namespace AllyisApps.Services
 				projects = projects.Where(p => p.IsActive);
 			}
 
-			return projects.Where(p => p != null).Select(InitializeProject).ToList();
+			var thing = projects.Where(p => p != null).Select(InitializeProject).ToList();
+			return thing;
 		}
 
 		/// <summary>
@@ -861,6 +862,7 @@ namespace AllyisApps.Services
 				{
 					CustomerId = project.CustomerId,
 					CustomerName = project.CustomerName,
+					CustomerCode = project.CustomerCode
 				},
 				EndingDate = project.EndingDate,
 				ProjectName = project.ProjectName,
