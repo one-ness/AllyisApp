@@ -144,10 +144,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					StartDate = null, //null start/end date to always be active
 					EndDate = null
 				});
-
-			List<User> SortedList = infos.Item5;
-			IEnumerable<UserViewModel> users = SortedList.AsParallel().Select(ConstuctUserViewModel);
-			users = users.OrderBy(o => (o.LastName + o.FirstName)).ToList();
+			
+			IEnumerable<UserViewModel> users = infos.Item5.AsParallel().Select(ConstuctUserViewModel).OrderBy(o => (o.LastName + o.FirstName)).ToList();
 
 			var result = new TimeEntryOverDateRangeViewModel
 			{
