@@ -7,60 +7,66 @@
 	ViewData["IsManager"] = Model.CanEditCustomers;
 }
 
-<div class="row">
-	<div class="float-center max-600">
-		<div class="col-md-6 xs-control-width float-center">
-			<div class="form-group">
-				@Html.LabelFor(m => m.Address, Strings.Address)
-				<div class="text-box-padded">@Html.DisplayTextFor(m => m.Address)</div>
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="row">
+				<div class="float-center max-600">
+					<div class="col-md-6 xs-control-width float-center">
+						<div class="form-group">
+							@Html.LabelFor(m => m.Address, Strings.Address)
+							<div class="text-box-padded">@Html.DisplayTextFor(m => m.Address)</div>
+						</div>
+						<div class="form-group">
+							@Html.LabelFor(m => m.City, Strings.City)
+							<div class="text-box-padded">@Html.DisplayTextFor(m => m.City)</div>
+						</div>
+						<div class="form-group">
+							@Html.LabelFor(m => m.Country, Strings.Country)
+							<div class="text-box-padded">@Html.DisplayTextFor(m => m.Country)</div>
+						</div>
+						<div class="form-group">
+							@Html.LabelFor(m => m.State, Strings.State)
+							<div class="text-box-padded">@Html.DisplayTextFor(m => m.State)</div>
+						</div>
+						<div class="form-group">
+							@Html.LabelFor(m => m.PostalCode, Strings.PostalCode)
+							<div class="text-box-padded">@Html.DisplayTextFor(m => m.PostalCode)</div>
+						</div>
+					</div>
+					<div class="col-md-6 xs-control-width float-center">
+						<div class="form-group">
+							@Html.LabelFor(m => m.ContactEmail, Strings.ContactEmail)
+							<div class="text-box-padded">@Html.DisplayTextFor(m => m.ContactEmail)</div>
+						</div>
+						<div class="form-group">
+							@Html.LabelFor(m => m.ContactPhoneNumber, Strings.ContactPhoneNumber)
+							<div class="text-box-padded">@Html.DisplayTextFor(m => m.ContactPhoneNumber)</div>
+						</div>
+						<div class="form-group">
+							@Html.LabelFor(m => m.FaxNumber, Strings.FaxNumber)
+							<div class="text-box-padded">@Html.DisplayTextFor(m => m.FaxNumber)</div>
+						</div>
+						<div class="form-group">
+							@Html.LabelFor(m => m.EIN, Strings.EIN)
+							<div class="text-box-padded">@Html.DisplayTextFor(m => m.EIN)</div>
+						</div>
+						<div class="form-group">
+							@Html.LabelFor(m => m.CustomerCode, Strings.CustomerCode)
+							<div class="text-box-padded">@Html.DisplayTextFor(m => m.CustomerCode)</div>
+						</div>
+					</div>
+				</div>
 			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.City, Strings.City)
-				<div class="text-box-padded">@Html.DisplayTextFor(m => m.City)</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.Country, Strings.Country)
-				<div class="text-box-padded">@Html.DisplayTextFor(m => m.Country)</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.State, Strings.State)
-				<div class="text-box-padded">@Html.DisplayTextFor(m => m.State)</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.PostalCode, Strings.PostalCode)
-				<div class="text-box-padded">@Html.DisplayTextFor(m => m.PostalCode)</div>
+			<div class="row md-control-width float-center">
+				<div class="form-group allyis-action-buttons">
+					<a href="/TimeTracker/Customer" class="btn btn-default">@Strings.Back</a>
+					@if (Model.CanEditCustomers)
+					{
+						<a class="btn btn-primary" onclick="location='@Url.Action(ActionConstants.Edit, ControllerConstants.Customer, new { id = Model.CustomerId })'">@Strings.Edit</a>
+					}
+				</div>
 			</div>
 		</div>
-		<div class="col-md-6 xs-control-width float-center">
-			<div class="form-group">
-				@Html.LabelFor(m => m.ContactEmail, Strings.ContactEmail)
-				<div class="text-box-padded">@Html.DisplayTextFor(m => m.ContactEmail)</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.ContactPhoneNumber, Strings.ContactPhoneNumber)
-				<div class="text-box-padded">@Html.DisplayTextFor(m => m.ContactPhoneNumber)</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.FaxNumber, Strings.FaxNumber)
-				<div class="text-box-padded">@Html.DisplayTextFor(m => m.FaxNumber)</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.EIN, Strings.EIN)
-				<div class="text-box-padded">@Html.DisplayTextFor(m => m.EIN)</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.CustomerCode, Strings.CustomerCode)
-				<div class="text-box-padded">@Html.DisplayTextFor(m => m.CustomerCode)</div>
-			</div>
-		</div>
-   </div>
-</div>
-<div class="row md-control-width float-center">
-	<div class="form-group allyis-action-buttons">
-		<a href="/TimeTracker/Customer" class="btn btn-default">@Strings.Back</a>
-		@if (Model.CanEditCustomers)
-		{
-			<a class="btn btn-primary" onclick="location='@Url.Action(ActionConstants.Edit, ControllerConstants.Customer, new { id = Model.CustomerId })'">@Strings.Edit</a>
-		}
 	</div>
 </div>

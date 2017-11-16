@@ -12,60 +12,62 @@
 	ViewData["SubscriptionName"] = Model.SubscriptionName;
 }
 
-
-<div class="row" style="padding-right: 15px; padding-left: 15px;">
-	<div class="panel panel-default pull-left">
-		<div class="panel-body" style="padding:5px;">
-			<div class="pull-left" style="padding-right: 15px;">Legend: </div>
-			<div style="float:left; margin-right:15px;">
-				<i class="fa fa-square color-code-Pending" aria-hidden="true"></i>
-				- Pending
-			</div>
-			<div style="float:left; margin-right:15px;">
-				<i class="fa fa-square color-code-Rejected" aria-hidden="true"></i>
-				- Rejected
-			</div>
-			<div style="float:left; margin-right:15px;">
-				<i class="fa fa-square color-code-Approved" aria-hidden="true"></i>
-				- Approved
-			</div>
-			<div style="padding-right: 10px; float:left; margin-right:15px;">
-				<i class="fa fa-square color-code-PayrollProcessed" aria-hidden="true"></i>
-				- PayrollProcessed
-			</div>
-		</div>
-	</div>
-	@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new {@class = "form-inline pull-right", role = "form"}))
-	{
-		<label>Set status for selected entries as: </label>
-		<div class="input-group">
-			@Html.DropDownList("timeEntryStatusId",
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="row" style="padding-right: 15px; padding-left: 15px;">
+				<div class="panel panel-default pull-left">
+					<div class="panel-body" style="padding:5px;">
+						<div class="pull-left" style="padding-right: 15px;">Legend: </div>
+						<div style="float:left; margin-right:15px;">
+							<i class="fa fa-square color-code-Pending" aria-hidden="true"></i>
+							- Pending
+						</div>
+						<div style="float:left; margin-right:15px;">
+							<i class="fa fa-square color-code-Rejected" aria-hidden="true"></i>
+							- Rejected
+						</div>
+						<div style="float:left; margin-right:15px;">
+							<i class="fa fa-square color-code-Approved" aria-hidden="true"></i>
+							- Approved
+						</div>
+						<div style="padding-right: 10px; float:left; margin-right:15px;">
+							<i class="fa fa-square color-code-PayrollProcessed" aria-hidden="true"></i>
+							- PayrollProcessed
+						</div>
+					</div>
+				</div>
+				@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "form-inline pull-right", role = "form" }))
+				{
+					<label>Set status for selected entries as: </label>
+					<div class="input-group">
+						@Html.DropDownList("timeEntryStatusId",
 				new SelectList(Model.TimeEntryStatusOptions.Where(keyVal => keyVal.Key != (int)TimeEntryStatus.PayrollProcessed), "Key", "Value"),
 				new
 				{
 					@class = "form-control selectpicker set-status-select",
 					data_width = "fit"
 				})
-			<span class="input-group-btn">
-				<button id="submit-status" class="btn btn-primary" type="submit" tabindex="-1">Save</button>
-			</span>
-		</div>
-		<input type="hidden" name="timeEntryIdsJSON" class="time-entries-input" value="[]"/>
-		@Html.HiddenFor(m => m.StartDate)
-		@Html.HiddenFor(m => m.EndDate)
-	}
-</div>
-
-<div class="panel panel-default">
-	<div class="panel-heading row" style="margin: 0; padding-left: 0; padding-right: 0;">
-		<div class="col-lg-4">
-			<h4 class="pull-left">Time Entry Totals for Date Range:</h4>
-		</div>
-		<div class="col-lg-8">
-			<div id="review-range" class="panel-title pull-right" style="display: inline; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px; margin-left: 15px;">
-				<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-				<span></span> <b class="caret"></b>
+						<span class="input-group-btn">
+							<button id="submit-status" class="btn btn-primary" type="submit" tabindex="-1">Save</button>
+						</span>
+					</div>
+					<input type="hidden" name="timeEntryIdsJSON" class="time-entries-input" value="[]" />
+					@Html.HiddenFor(m => m.StartDate)
+					@Html.HiddenFor(m => m.EndDate)
+				}
 			</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading row" style="margin: 0; padding-left: 0; padding-right: 0;">
+					<div class="col-lg-4">
+						<h4 class="pull-left">Time Entry Totals for Date Range:</h4>
+					</div>
+					<div class="col-lg-8">
+						<div id="review-range" class="panel-title pull-right" style="display: inline; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px; margin-left: 15px;">
+							<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+							<span></span> <b class="caret"></b>
+						</div>
 						@Html.DropDownList("statusFilter",
 				new SelectList(Model.TimeEntryStatusOptions, "Key", "Value"),
 				new
@@ -76,16 +78,16 @@
 					data_selected_text_format = "count > 2",
 					data_width = "fit"
 				})
-			<div class="pull-right dropdown" style="padding-right:15px;">
-				<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					Organization Actions
-					<b class="caret"></b>
-				</button>
-				<div class="dropdown-menu">
-					<ul style="list-style: none; padding: 0; margin: 0;">
-						<li style="height: 26px; width: 230px">
-							<span class="text" style="margin: 5px 5px;">
-								@Html.ActionLink(
+						<div class="pull-right dropdown" style="padding-right:15px;">
+							<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Organization Actions
+								<b class="caret"></b>
+							</button>
+							<div class="dropdown-menu">
+								<ul style="list-style: none; padding: 0; margin: 0;">
+									<li style="height: 26px; width: 230px">
+										<span class="text" style="margin: 5px 5px;">
+											@Html.ActionLink(
 									String.Format(Strings.LockEntries, Model.EndDate.ToShortDateString()),
 									ActionConstants.LockTimeEntries,
 									ControllerConstants.TimeEntry,
@@ -100,11 +102,11 @@
 										@class = "dropdown-item",
 										style = "color: #333"
 									})
-							</span>
-						</li>
-						<li style="height: 26px;">
-							<span class="text" style="margin: 5px 5px;">
-								@Html.ActionLink(
+										</span>
+									</li>
+									<li style="height: 26px;">
+										<span class="text" style="margin: 5px 5px;">
+											@Html.ActionLink(
 									Strings.UnlockEntries,
 									ActionConstants.UnlockTimeEntries,
 									ControllerConstants.TimeEntry,
@@ -119,11 +121,11 @@
 										@class = "dropdown-item",
 										style = "color: #333"
 									})
-							</span>
-						</li>
-						<li style="height: 26px;">
-							<span class="text" style="margin: 5px 5px;">
-								@Html.ActionLink(
+										</span>
+									</li>
+									<li style="height: 26px;">
+										<span class="text" style="margin: 5px 5px;">
+											@Html.ActionLink(
 									Strings.PayrollProcess,
 									ActionConstants.PayrollProcessTimeEntries,
 									ControllerConstants.TimeEntry,
@@ -139,182 +141,185 @@
 										style = "color: #333",
 										onclick = "return confirm('" + string.Format(Strings.PayrollProcessConfirm, Model.EndDate.ToShortDateString()) + "');"
 									})
-							</span>
-						</li>
-					</ul>
-				</div>
-			</div>
-			<div class="clearfix"></div>
-		</div>
-	</div>
-	<table class="table table-xtra-condensed table-responsive">
-		<thead>
-			<tr class="double-bottom-border">
-				<th><input type="checkbox" class="check-all" check-all-id="0"></th>
-				<th></th>
-				<th>Name</th>
-				@foreach (string payClassName in Model.PayClasses.Select(x => x.PayClassName))
-				{
-					<th>@payClassName</th>
-				}
-				<th>Total</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var group in Model.TimeEntriesByUser)
-			{
-				<tr class="parent-row">
-					<td><input type="checkbox" class="check check-all" check-id="0" check-all-id="@group.Key"></td>
-					<td><i class="fa fa-chevron-down toggle-on-click child-row-controller" rowId=@group.Key style="cursor:pointer"></i></td>
-					<td>@group.First().FirstName @group.First().LastName</td>
-					@foreach (int payClassId in Model.PayClasses.Select(x => x.PayClassId))
-					{
-						<td>@Model.TimeEntryTotalsByUserByPayClass[group.Key][payClassId]</td>
-					}
-					<td>
-						<div class="pull-left">@group.Sum(entry => entry.Duration)</div>
-						<div class="pull-right">
-							<div class="status-dots">
-								<i class="fa fa-circle status-dot color-code-Pending  @(group.All(entry => entry.TimeEntryStatusId != 0) ? "greyed-out" : "")" aria-hidden="true"></i>
-								<i class="fa fa-circle status-dot color-code-Rejected @(group.All(entry => entry.TimeEntryStatusId != 1) ? "greyed-out" : "")" aria-hidden="true"></i>
-								<i class="fa fa-circle status-dot color-code-Approved @(group.All(entry => entry.TimeEntryStatusId != 2) ? "greyed-out" : "")" aria-hidden="true"></i>
-								<i class="fa fa-circle status-dot color-code-PayrollProcessed @(group.All(entry => entry.TimeEntryStatusId != 3) ? "greyed-out" : "")" aria-hidden="true"></i>
+										</span>
+									</li>
+								</ul>
 							</div>
 						</div>
-					</td>
-				</tr>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+				<table class="table table-xtra-condensed table-responsive">
+					<thead>
+						<tr class="double-bottom-border">
+							<th><input type="checkbox" class="check-all" check-all-id="0"></th>
+							<th></th>
+							<th>Name</th>
+							@foreach (string payClassName in Model.PayClasses.Select(x => x.PayClassName))
+							{
+								<th>@payClassName</th>
+							}
+							<th>Total</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var group in Model.TimeEntriesByUser)
+			{
+							<tr class="parent-row">
+								<td><input type="checkbox" class="check check-all" check-id="0" check-all-id="@group.Key"></td>
+								<td><i class="fa fa-chevron-down toggle-on-click child-row-controller" rowId=@group.Key style="cursor:pointer"></i></td>
+								<td>@group.First().FirstName @group.First().LastName</td>
+								@foreach (int payClassId in Model.PayClasses.Select(x => x.PayClassId))
+								{
+									<td>@Model.TimeEntryTotalsByUserByPayClass[group.Key][payClassId]</td>
+								}
+								<td>
+									<div class="pull-left">@group.Sum(entry => entry.Duration)</div>
+									<div class="pull-right">
+										<div class="status-dots">
+											<i class="fa fa-circle status-dot color-code-Pending  @(group.All(entry => entry.TimeEntryStatusId != 0) ? "greyed-out" : "")" aria-hidden="true"></i>
+											<i class="fa fa-circle status-dot color-code-Rejected @(group.All(entry => entry.TimeEntryStatusId != 1) ? "greyed-out" : "")" aria-hidden="true"></i>
+											<i class="fa fa-circle status-dot color-code-Approved @(group.All(entry => entry.TimeEntryStatusId != 2) ? "greyed-out" : "")" aria-hidden="true"></i>
+											<i class="fa fa-circle status-dot color-code-PayrollProcessed @(group.All(entry => entry.TimeEntryStatusId != 3) ? "greyed-out" : "")" aria-hidden="true"></i>
+										</div>
+									</div>
+								</td>
+							</tr>
 				foreach (var timeEntry in group)
 				{
-					<tr class="child-row hidden @(timeEntry.IsLocked ? "greyed-out" : "")" rowId=@group.Key data-time-entry-status-id="@timeEntry.TimeEntryStatusId">
-						<td></td>
-						<td><input type="checkbox" class="check time-entry-check" check-id="@group.Key" data-time-entry-id="@timeEntry.TimeEntryId" @(timeEntry.IsLocked ? "disabled" : "")></td>
-						<td>
-							<a class="details-modal-input" data-time-entry-object='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(timeEntry))' style="cursor:pointer">
-								@timeEntry.Date.ToShortDateString()
-							</a>
-						</td>
-						@foreach (int payClassId in Model.PayClasses.Select(x => x.PayClassId))
-						{
-							if (timeEntry.PayClassId == payClassId)
-							{
-								<td>@timeEntry.Duration</td>
-							}
-							else
-							{
-								<td>-</td>
-							}
-						}
-						<td>
-							<div class="pull-left">@timeEntry.Duration</div>
-							<div class="pull-right">
-								<div class="status-dots">
-									<i class="fa fa-circle status-dot color-code-Pending  @(timeEntry.TimeEntryStatusId != 0 ? "hidden" : "")" aria-hidden="true"></i>
-									<i class="fa fa-circle status-dot color-code-Rejected @(timeEntry.TimeEntryStatusId != 1 ? "hidden" : "")" aria-hidden="true"></i>
-									<i class="fa fa-circle status-dot color-code-Approved @(timeEntry.TimeEntryStatusId != 2 ? "hidden" : "")" aria-hidden="true"></i>
-									<i class="fa fa-circle status-dot color-code-PayrollProcessed @(timeEntry.TimeEntryStatusId != 3 ? "hidden" : "")" aria-hidden="true"></i>
-								</div>
-							</div>
-						</td>
-					</tr>
+								<tr class="child-row hidden @(timeEntry.IsLocked ? "greyed-out" : "")" rowId=@group.Key data-time-entry-status-id="@timeEntry.TimeEntryStatusId">
+									<td></td>
+									<td><input type="checkbox" class="check time-entry-check" check-id="@group.Key" data-time-entry-id="@timeEntry.TimeEntryId" @(timeEntry.IsLocked ? "disabled" : "")></td>
+									<td>
+										<a class="details-modal-input" data-time-entry-object='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(timeEntry))' style="cursor:pointer">
+											@timeEntry.Date.ToShortDateString()
+										</a>
+									</td>
+									@foreach (int payClassId in Model.PayClasses.Select(x => x.PayClassId))
+									{
+										if (timeEntry.PayClassId == payClassId)
+										{
+											<td>@timeEntry.Duration</td>
+										}
+										else
+										{
+											<td>-</td>
+										}
+									}
+									<td>
+										<div class="pull-left">@timeEntry.Duration</div>
+										<div class="pull-right">
+											<div class="status-dots">
+												<i class="fa fa-circle status-dot color-code-Pending  @(timeEntry.TimeEntryStatusId != 0 ? "hidden" : "")" aria-hidden="true"></i>
+												<i class="fa fa-circle status-dot color-code-Rejected @(timeEntry.TimeEntryStatusId != 1 ? "hidden" : "")" aria-hidden="true"></i>
+												<i class="fa fa-circle status-dot color-code-Approved @(timeEntry.TimeEntryStatusId != 2 ? "hidden" : "")" aria-hidden="true"></i>
+												<i class="fa fa-circle status-dot color-code-PayrollProcessed @(timeEntry.TimeEntryStatusId != 3 ? "hidden" : "")" aria-hidden="true"></i>
+											</div>
+										</div>
+									</td>
+								</tr>
 				}
 			}
-			@if (Model.TimeEntriesByUser.Count == 0)
+						@if (Model.TimeEntriesByUser.Count == 0)
 			{
-				<tr><td colspan="@(Model.PayClasses.Count + 3)">There are no time entries in this date range, please select a different date range.</td></tr>
+							<tr><td colspan="@(Model.PayClasses.Count + 3)">There are no time entries in this date range, please select a different date range.</td></tr>
 			}
-		</tbody>
-	</table>
-	<div class="pageContainer"></div>
-</div>
+					</tbody>
+				</table>
+				<div class="pageContainer"></div>
+			</div>
 
-<div class="row" style="padding-right: 15px; padding-left: 15px;">
-	<div class="panel panel-default pull-left">
-		<div class="panel-body" style="padding:5px;">
-			<div class="pull-left" style="padding-right: 15px;">Legend: </div>
-			<div style="float:left; margin-right:15px;">
-				<i class="fa fa-square color-code-Pending" aria-hidden="true"></i>
-				- Pending
-			</div>
-			<div style="float:left; margin-right:15px;">
-				<i class="fa fa-square color-code-Rejected" aria-hidden="true"></i>
-				- Rejected
-			</div>
-			<div style="float:left; margin-right:15px;">
-				<i class="fa fa-square color-code-Approved" aria-hidden="true"></i>
-				- Approved
-			</div>
-			<div style="padding-right: 10px; float:left; margin-right:15px;">
-				<i class="fa fa-square color-code-PayrollProcessed" aria-hidden="true"></i>
-				- PayrollProcessed
-			</div>
-		</div>
-	</div>
-	@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "form-inline pull-right", role = "form" }))
-	{
-		<label>Set status for selected entries as: </label>
-		<div class="input-group">
-			@Html.DropDownList("timeEntryStatusId",
+			<div class="row" style="padding-right: 15px; padding-left: 15px;">
+				<div class="panel panel-default pull-left">
+					<div class="panel-body" style="padding:5px;">
+						<div class="pull-left" style="padding-right: 15px;">Legend: </div>
+						<div style="float:left; margin-right:15px;">
+							<i class="fa fa-square color-code-Pending" aria-hidden="true"></i>
+							- Pending
+						</div>
+						<div style="float:left; margin-right:15px;">
+							<i class="fa fa-square color-code-Rejected" aria-hidden="true"></i>
+							- Rejected
+						</div>
+						<div style="float:left; margin-right:15px;">
+							<i class="fa fa-square color-code-Approved" aria-hidden="true"></i>
+							- Approved
+						</div>
+						<div style="padding-right: 10px; float:left; margin-right:15px;">
+							<i class="fa fa-square color-code-PayrollProcessed" aria-hidden="true"></i>
+							- PayrollProcessed
+						</div>
+					</div>
+				</div>
+				@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "form-inline pull-right", role = "form" }))
+				{
+					<label>Set status for selected entries as: </label>
+					<div class="input-group">
+						@Html.DropDownList("timeEntryStatusId",
 				new SelectList(Model.TimeEntryStatusOptions.Where(keyVal => keyVal.Key != (int)TimeEntryStatus.PayrollProcessed), "Key", "Value"),
 			new
 			{
 				@class = "form-control selectpicker set-status-select",
 				data_width = "fit"
 			})
-			<span class="input-group-btn">
-				<button id="submit-status" class="btn btn-primary" type="submit" tabindex="-1">Save</button>
-			</span>
-		</div>
-		<input type="hidden" name="timeEntryIdsJson" class="time-entries-input" value="[]" />
-		@Html.HiddenFor(m => m.StartDate)
-		@Html.HiddenFor(m => m.EndDate)
-	}
-</div>
+						<span class="input-group-btn">
+							<button id="submit-status" class="btn btn-primary" type="submit" tabindex="-1">Save</button>
+						</span>
+					</div>
+					<input type="hidden" name="timeEntryIdsJson" class="time-entries-input" value="[]" />
+					@Html.HiddenFor(m => m.StartDate)
+					@Html.HiddenFor(m => m.EndDate)
+				}
+			</div>
 
-<div class="modal fade" id="time-entry-details-modal" tabindex="-1" role="dialog" aria-labelledby="details-modal-title" aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="details-modal-title">Time Entry Details</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-xs-6">User Name:</div>
-					<div class="col-xs-6" id="modal-details-name"></div>
+			<div class="modal fade" id="time-entry-details-modal" tabindex="-1" role="dialog" aria-labelledby="details-modal-title" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="details-modal-title">Time Entry Details</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-xs-6">User Name:</div>
+								<div class="col-xs-6" id="modal-details-name"></div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6">Customer:</div>
+								<div class="col-xs-6" id="modal-details-customer"></div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6">Project:</div>
+								<div class="col-xs-6" id="modal-details-project"></div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6">Pay Type:</div>
+								<div class="col-xs-6" id="modal-details-pay-type"></div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6">Duration:</div>
+								<div class="col-xs-6" id="modal-details-duration"></div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6">Description:</div>
+								<div class="col-xs-6" id="modal-details-description"></div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6">Status:</div>
+								<div class="col-xs-6" id="modal-details-status"></div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6">Locked:</div>
+								<div class="col-xs-6" id="modal-details-locked"></div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						</div>
+					</div>
 				</div>
-				<div class="row">
-					<div class="col-xs-6">Customer:</div>
-					<div class="col-xs-6" id="modal-details-customer"></div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">Project:</div>
-					<div class="col-xs-6" id="modal-details-project"></div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">Pay Type:</div>
-					<div class="col-xs-6" id="modal-details-pay-type"></div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">Duration:</div>
-					<div class="col-xs-6" id="modal-details-duration"></div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">Description:</div>
-					<div class="col-xs-6" id="modal-details-description"></div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">Status:</div>
-					<div class="col-xs-6" id="modal-details-status"></div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">Locked:</div>
-					<div class="col-xs-6" id="modal-details-locked"></div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
@@ -395,13 +400,13 @@
 }
 
 @section Scripts {
-@*Date range picker dependencies:*@
-@Scripts.Render("~/bundles/jqueryui")
-@Scripts.Render("~/bundles/moment")
-@Scripts.Render("~/bundles/BootstrapSelect")
-@Scripts.Render("~/bundles/DateRangePicker")
+	@*Date range picker dependencies:*@
+	@Scripts.Render("~/bundles/jqueryui")
+	@Scripts.Render("~/bundles/moment")
+	@Scripts.Render("~/bundles/BootstrapSelect")
+	@Scripts.Render("~/bundles/DateRangePicker")
 
-<script type="text/javascript">
+	<script type="text/javascript">
 	$(document).ready(function() {
 		//toggles the expand row icon up or down
 		$(".toggle-on-click").click(function () {
@@ -534,5 +539,5 @@
 			}).addClass("filtered");
 		});
 	});
-</script>
+	</script>
 }

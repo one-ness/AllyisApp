@@ -8,95 +8,101 @@
 
 }
 
-<div class="form-group pull-right">
-	<a href="@Url.Action("ProjectImport")">
-		<span class="btn btn-primary">Project Import</span>
-	</a>
-	<a href="@Url.Action("Create")">
-		<span class="btn btn-primary">Create Project</span>
-	</a>
-</div>
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="form-group pull-right">
+				<a href="@Url.Action("ProjectImport")">
+					<span class="btn btn-primary">Project Import</span>
+				</a>
+				<a href="@Url.Action("Create")">
+					<span class="btn btn-primary">Create Project</span>
+				</a>
+			</div>
 
-<table class="table table-hover table-xtra-condensed">
-	<thead>
-		<tr class="double-bottom-border">
-			<th>
-				<input type="checkbox" id="select-all" onclick="CheckAllToggle()" />
-			</th>
-			<th>
-				Name
-			</th>
-			<th>
-				Start Date
-			</th>
-			<th>
-				End Date
-			</th>
-			<th>
-				Customer
-			</th>
-			<th>
-				Project Code
-			</th>
-			<th>
-				Status
-			</th>
-			<th>
-				Edit
-			</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var project in Model.Projects)
-		{
-			<tr>
-				<td><input type="checkbox" class="customer-select" value="@project.ProjectId" /></td>
-				<td>@project.ProjectName</td>
-				<td>
-					@if (project.StartDate != null)
+			<table class="table table-hover table-xtra-condensed">
+				<thead>
+					<tr class="double-bottom-border">
+						<th>
+							<input type="checkbox" id="select-all" onclick="CheckAllToggle()" />
+						</th>
+						<th>
+							Name
+						</th>
+						<th>
+							Start Date
+						</th>
+						<th>
+							End Date
+						</th>
+						<th>
+							Customer
+						</th>
+						<th>
+							Project Code
+						</th>
+						<th>
+							Status
+						</th>
+						<th>
+							Edit
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var project in Model.Projects)
 					{
-						@project.StartDate.Value.Date.ToString("d")
+						<tr>
+							<td><input type="checkbox" class="customer-select" value="@project.ProjectId" /></td>
+							<td>@project.ProjectName</td>
+							<td>
+								@if (project.StartDate != null)
+								{
+									@project.StartDate.Value.Date.ToString("d")
+								}
+							</td>
+							<td>
+								@if (project.EndDate != null)
+								{
+									@project.EndDate.Value.Date.ToString("d")
+								}
+							</td>
+							<td>@project.CustomerName</td>
+							<td>@project.ProjectCode</td>
+							<td>
+								@if ((project.EndDate == null || project.EndDate.Value.Date >= DateTime.UtcNow.Date) && (project.StartDate == null || project.StartDate.Value <= DateTime.UtcNow))
+								{
+									<p>Active</p>
+								}
+								else
+								{
+									<p>Disabled</p>
+								}
+							</td>
+							<td>
+								<a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Project, new {userId = project.ProjectId })" t title="@Strings.EditProject"><i class="fa fa-fw fa-edit"></i></a>
+							</td>
+						</tr>
 					}
-				</td>
-				<td>
-					@if (project.EndDate != null)
+				</tbody>
+			</table>
+			<div class="pull-right btn">
+				@using (Html.BeginForm(Strings.Delete, Strings.Project, new { }, FormMethod.Get, new { @onsubmit = "return getUserIdsAndSubmit();" }))
+				{
+					<input type="hidden" name="userIds" id="deleteIds" value="" />
+					<button type="submit" class="btn btn-danger  pull-right">Delete</button>
+				}
+			</div>
+			@*<div class="pull-left btn">
+					@using (Html.BeginForm("ToggleStatus", Strings.Project, new { }, FormMethod.Get, new { @onsubmit = "return getUserIdsAndSubmit();" }))
 					{
-						@project.EndDate.Value.Date.ToString("d")
+						<input type="hidden" name="projIds" id="projIds" value="" />
+						<button type="submit" class="btn btn-primary  pull-right">Toggle Status</button>
 					}
-				</td>
-				<td>@project.CustomerName</td>
-				<td>@project.ProjectCode</td>
-				<td>
-					@if ((project.EndDate == null || project.EndDate.Value.Date >= DateTime.UtcNow.Date) && (project.StartDate == null || project.StartDate.Value <= DateTime.UtcNow))
-					{
-						<p>Active</p>
-					}
-					else
-					{
-						<p>Disabled</p>
-					}
-				</td>
-				<td>
-					<a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Project, new {userId = project.ProjectId })" t title="@Strings.EditProject"><i class="fa fa-fw fa-edit"></i></a>
-				</td>
-			</tr>
-		}
-	</tbody>
-</table>
-<div class="pull-right btn">
-	@using (Html.BeginForm(Strings.Delete, Strings.Project, new { }, FormMethod.Get, new { @onsubmit = "return getUserIdsAndSubmit();" }))
-	{
-		<input type="hidden" name="userIds" id="deleteIds" value="" />
-		<button type="submit" class="btn btn-danger  pull-right">Delete</button>
-	}
+				</div>*@
+		</div>
+	</div>
 </div>
-@*<div class="pull-left btn">
-	@using (Html.BeginForm("ToggleStatus", Strings.Project, new { }, FormMethod.Get, new { @onsubmit = "return getUserIdsAndSubmit();" }))
-	{
-		<input type="hidden" name="projIds" id="projIds" value="" />
-		<button type="submit" class="btn btn-primary  pull-right">Toggle Status</button>
-	}
-</div>*@
 
 <script>
 	function getUserIdsAndSubmit() {

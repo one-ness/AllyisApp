@@ -12,32 +12,38 @@
 	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
 }
 
-<p id="notice" style="color:red"></p>
-<div class="row">
-	<div class="col-md-4 col-md-offset-4">
-		<div class="panel panel-info" style="min-width:350px;">
-			<div class="panel-heading">
-				<h3 style="margin-top: 0; margin-bottom: 0;">
-					@String.Format(Strings.ChoosePayClassToMerge, "\"" + Model.SourcePayClassName + "\"")
-				</h3>
-			</div>
-			<div class="panel-body">
-				@using (Html.BeginForm(ActionConstants.MergePayClass, ControllerConstants.TimeEntry, FormMethod.Post, new { enctype = "multipart/form-data" }))
-				{
-					@Html.AntiForgeryToken();
-					@Html.HiddenFor(m => m.SourcePayClassId)
-					@Html.HiddenFor(m => m.SourcePayClassName)
-					foreach (var payClass in Model.DestinationPayClasses)
-					{
-						string _payClassName = Strings.ResourceManager.GetString(payClass.PayClassName.Replace(" ", string.Empty)) ?? payClass.PayClassName;
-						<input type="radio" name="destPayClass" style="margin:5px" id="mpc" value="@payClass.PayClassId" @(payClass.PayClassName == "Regular" ? " checked " : string.Empty)><text>@_payClassName</text><br />
-					}
-					<br />
-					<div class="pull-right">
-						<a href="@Url.Action(ActionConstants.SettingsPayClass, ControllerConstants.TimeEntry)" class="btn btn-default">@Strings.Cancel</a>
-						<input type="submit" class="btn btn-primary" value=@Strings.Save onClick="this.form.submit(); this.disabled=true; this.value='Saving...';" />
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			<p id="notice" style="color:red"></p>
+			<div class="row">
+				<div class="col-md-4 col-md-offset-4">
+					<div class="panel panel-info" style="min-width:350px;">
+						<div class="panel-heading">
+							<h3 style="margin-top: 0; margin-bottom: 0;">
+								@String.Format(Strings.ChoosePayClassToMerge, "\"" + Model.SourcePayClassName + "\"")
+							</h3>
+						</div>
+						<div class="panel-body">
+							@using (Html.BeginForm(ActionConstants.MergePayClass, ControllerConstants.TimeEntry, FormMethod.Post, new { enctype = "multipart/form-data" }))
+							{
+								@Html.AntiForgeryToken();
+								@Html.HiddenFor(m => m.SourcePayClassId)
+								@Html.HiddenFor(m => m.SourcePayClassName)
+								foreach (var payClass in Model.DestinationPayClasses)
+								{
+									string _payClassName = Strings.ResourceManager.GetString(payClass.PayClassName.Replace(" ", string.Empty)) ?? payClass.PayClassName;
+									<input type="radio" name="destPayClass" style="margin:5px" id="mpc" value="@payClass.PayClassId" @(payClass.PayClassName == "Regular" ? " checked " : string.Empty)><text>@_payClassName</text><br />
+								}
+								<br />
+								<div class="pull-right">
+									<a href="@Url.Action(ActionConstants.SettingsPayClass, ControllerConstants.TimeEntry)" class="btn btn-default">@Strings.Cancel</a>
+									<input type="submit" class="btn btn-primary" value=@Strings.Save onClick="this.form.submit(); this.disabled=true; this.value='Saving...';" />
+								</div>
+							}
+						</div>
 					</div>
-				}
+				</div>
 			</div>
 		</div>
 	</div>

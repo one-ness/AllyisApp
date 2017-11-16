@@ -14,87 +14,93 @@
 	ViewData["SubscriptionName"] = Model.SubscriptionName;
 }
 
-<div class="row">
-	@using (Html.BeginForm("TimeTrackerDatePickerRedirect", ControllerConstants.TimeEntry, FormMethod.Get, new { @class = "form-inline col-xs-12", @style = "margin-bottom: 20px;" }))
-	{
-		@*<input id="UserId" name="UserId" type="hidden" value="@Model.EntryRange.UserId" />*@
-		@*<input id="StartDate"  type="hidden" value="@Model.EntryRange.StartDate" />
-			<input id="EndDate"  type="hidden" value="@Model.EntryRange.EndDate" />*@
-		<div class="form-group pull-left">
-			<a href="@Url.Action(ActionConstants.Export, ControllerConstants.TimeEntry, new
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="row">
+				@using (Html.BeginForm("TimeTrackerDatePickerRedirect", ControllerConstants.TimeEntry, FormMethod.Get, new { @class = "form-inline col-xs-12", @style = "margin-bottom: 20px;" }))
+				{
+					@*<input id="UserId" name="UserId" type="hidden" value="@Model.EntryRange.UserId" />*@
+					@*<input id="StartDate"  type="hidden" value="@Model.EntryRange.StartDate" />
+						<input id="EndDate"  type="hidden" value="@Model.EntryRange.EndDate" />*@
+					<div class="form-group pull-left">
+						<a href="@Url.Action(ActionConstants.Export, ControllerConstants.TimeEntry, new
 				{
 					subscriptionId = Model.SubscriptionId,
 					userId = Model.EntryRange.UserId,
 					startingDate = Utility.GetDaysFromDateTime(Model.EntryRange.StartDate),
 					endingDate = Utility.GetDaysFromDateTime(Model.EntryRange.EndDate)
 				})">
-				<span>
-					<span class="btn btn-primary" style="margin-right: 15px;">@Strings.Export</span>
-				</span>
-			</a>
-		</div>
+							<span>
+								<span class="btn btn-primary" style="margin-right: 15px;">@Strings.Export</span>
+							</span>
+						</a>
+					</div>
 		<!-- Temp fix for Users button for smaller viewports -->
-		<div class="form-group pull-right">
-			<button type="button" class="btn btn-primary visible-xs" data-toggle="offcanvas" style="margin: 0 0 0 15px">@Strings.Users</button>
-		</div>
-		@*To be moved to a separate settings page*@
+					<div class="form-group pull-right">
+						<button type="button" class="btn btn-primary visible-xs" data-toggle="offcanvas" style="margin: 0 0 0 15px">@Strings.Users</button>
+					</div>
+					@*To be moved to a separate settings page*@
 
-		<div id="date-select" class="form-group pull-right">
-			<div class="input-group">
+					<div id="date-select" class="form-group pull-right">
+						<div class="input-group">
 
-				@*<div class="input-group-btn">
-						@if (ViewBag.SelectedUserId == ViewBag.SignedInUserID)
-						{
-							<a class="btn btn-primary" title="@Strings.Previous"
-							   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.SubscriptionId, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
-								<i class="fa fa-chevron-left"></i>
-							</a>
-							<a class="btn btn-primary" title="@Strings.Current"
-							   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.SubscriptionId, startDate = (int) ViewBag.WeekStart, endDate = (int) ViewBag.WeekEnd })">
-								<i class="glyphicon glyphicon-flash"></i>
-							</a>
-							<a class="btn btn-primary" title="@Strings.Next"
-							   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.SubscriptionId, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
-								<i class="fa fa-chevron-right"></i>
-							</a>
-						}
-						else
-						{
-							<a class="btn btn-primary" title="@Strings.Previous"
-							   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.SubscriptionId, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
-								<i class="fa fa-chevron-left"></i>
-							</a>
-							<a class="btn btn-primary" title="@Strings.Current"
-							   href="@Url.Action(ActionConstants.Index, new {  subscriptionId = Model.SubscriptionId, userId = ViewBag.SelectedUserId,  startDate = (int) ViewBag.WeekStart, endDate = (int) ViewBag.WeekEnd })">
-								<i class="glyphicon glyphicon-flash"></i>
-							</a>
+							@*<div class="input-group-btn">
+									@if (ViewBag.SelectedUserId == ViewBag.SignedInUserID)
+									{
+										<a class="btn btn-primary" title="@Strings.Previous"
+										   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.SubscriptionId, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
+											<i class="fa fa-chevron-left"></i>
+										</a>
+										<a class="btn btn-primary" title="@Strings.Current"
+										   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.SubscriptionId, startDate = (int) ViewBag.WeekStart, endDate = (int) ViewBag.WeekEnd })">
+											<i class="glyphicon glyphicon-flash"></i>
+										</a>
+										<a class="btn btn-primary" title="@Strings.Next"
+										   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.SubscriptionId, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
+											<i class="fa fa-chevron-right"></i>
+										</a>
+									}
+									else
+									{
+										<a class="btn btn-primary" title="@Strings.Previous"
+										   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.SubscriptionId, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
+											<i class="fa fa-chevron-left"></i>
+										</a>
+										<a class="btn btn-primary" title="@Strings.Current"
+										   href="@Url.Action(ActionConstants.Index, new {  subscriptionId = Model.SubscriptionId, userId = ViewBag.SelectedUserId,  startDate = (int) ViewBag.WeekStart, endDate = (int) ViewBag.WeekEnd })">
+											<i class="glyphicon glyphicon-flash"></i>
+										</a>
 
-							<a class="btn btn-primary" title="@Strings.Next"
-							   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.SubscriptionId, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
-								<i class="fa fa-chevron-right"></i>
-							</a>
-						}
-					</div>*@
-				<div id="newdaterange" class="pull-right" style="display: inline; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px; margin-left: 15px;">
-					<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-					<span></span> <b class="caret"></b>
-				</div>
-				@*<div class="input-group-btn">
-						<input type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.View class="btn btn-primary" style="width: 56px" />
-					</div>*@
+										<a class="btn btn-primary" title="@Strings.Next"
+										   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.SubscriptionId, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
+											<i class="fa fa-chevron-right"></i>
+										</a>
+									}
+								</div>*@
+							<div id="newdaterange" class="pull-right" style="display: inline; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px; margin-left: 15px;">
+								<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+								<span></span> <b class="caret"></b>
+							</div>
+							@*<div class="input-group-btn">
+									<input type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.View class="btn btn-primary" style="width: 56px" />
+								</div>*@
+						</div>
+					</div>
+				}
 			</div>
+
+			@Html.Partial("_AjaxTimeEntries2", Model.EntryRange)
+
+			@{ViewBag.SidebarToggleText = Strings.Details;
+				ViewBag.RenderSidebar = true;}
+			@if (Model.CanManage)
+			{
+				ViewBag.SidebarToggleText = Strings.Users;
+			}
 		</div>
-	}
+	</div>
 </div>
-
-@Html.Partial("_AjaxTimeEntries2", Model.EntryRange)
-
-@{ViewBag.SidebarToggleText = Strings.Details;
-	ViewBag.RenderSidebar = true;}
-@if (Model.CanManage)
-{
-	ViewBag.SidebarToggleText = Strings.Users;
-}
 
 @section sidebar {
 	<div class="panel panel-info" id="timesheet-summary">
@@ -199,7 +205,7 @@
 								userId = user.UserId })"
 							   style="text-decoration: none; color: #0066AA; padding-right:5%" title="Assign Projects to User"><i class="fa fa-cog"></i></a>
 							-->
-							</div>count++;
+						</div>count++;
 					}
 				}
 			</div>
