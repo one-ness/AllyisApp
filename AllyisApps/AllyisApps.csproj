@@ -618,6 +618,7 @@
     <Content Include="Resources\Files\BulkImportTemplate.xlsx" />
     <Content Include="Resources\Files\CustomerImportTemplate.xlsx" />
     <Content Include="Resources\Files\ProjectImportTemplate.xlsx" />
+    <Content Include="Resources\Files\CustomerProjectImportTemplate.xlsx" />
     <None Include="Resources\Files\TimeEntryImportTemplate.xlsx" />
     <None Include="Resources\Files\UserImportTemplate.xlsx" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />

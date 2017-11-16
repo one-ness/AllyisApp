@@ -83,6 +83,16 @@ namespace AllyisApps.Resources.Files {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        public static byte[] CustomerProjectImportTemplate {
+            get {
+                object obj = ResourceManager.GetObject("CustomerProjectImportTemplate", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         public static byte[] ProjectImportTemplate {
             get {
                 object obj = ResourceManager.GetObject("ProjectImportTemplate", resourceCulture);
