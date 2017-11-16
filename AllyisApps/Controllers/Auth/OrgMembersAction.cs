@@ -4,14 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Services;
-using AllyisApps.ViewModels.Auth;
 using AllyisApps.Services.Auth;
-using System.Web.Mvc.Html;
-using System;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -37,14 +36,14 @@ namespace AllyisApps.Controllers.Auth
 			{
 				var roles = await AppService.GetProductRolesAsync(id, Services.Billing.ProductIdEnum.AllyisApps);
 				OrganizationRoleEnum orgRole = (OrganizationRoleEnum)item.OrganizationRoleId;
-				
-				var role = roles.Where(x => x.ProductRoleId == item.OrganizationRoleId).FirstOrDefault();
+
+				var role = roles.FirstOrDefault(x => x.ProductRoleId == item.OrganizationRoleId);
 				var data = new OrganizationMembersViewModel.ViewModelItem
 				{
 					Email = item.Email,
 					EmployeeId = item.EmployeeId,
 					JoinedDate = item.OrganizationUserCreatedUtc,
-					RoleName = Enum.GetName(typeof(OrganizationRoleEnum),orgRole) ?? string.Empty,
+					RoleName = Enum.GetName(typeof(OrganizationRoleEnum), orgRole) ?? string.Empty,
 					UserId = item.UserId,
 					Username = $"{item.FirstName} {item.LastName}"
 				};
@@ -56,7 +55,8 @@ namespace AllyisApps.Controllers.Auth
 			model.OrganizationName = org.OrganizationName;
 			model.TabInfo.MemberCount = model.Users.Count;
 
-			if (model.CanAddUser) { 
+			if (model.CanAddUser)
+			{
 				model.TabInfo.PendingInvitationCount = await this.AppService.GetOrganizationInvitationCountAsync(id, Services.Auth.InvitationStatusEnum.Pending);
 			}
 			return View(model);

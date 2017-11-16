@@ -77,7 +77,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					ProjectId = 0,
 					ProjectName = Resources.Strings.NoFilter,
-					owningCustomer = new Customer
+					OwningCustomer = new Customer
 					{
 						CustomerId = 0
 					}
@@ -187,7 +187,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Disabled = false
 				});
 
-				var projectData = projects.Where(cpi => cpi.owningCustomer.CustomerId == customerSelected).ToList();
+				var projectData = projects.Where(cpi => cpi.OwningCustomer.CustomerId == customerSelected).ToList();
 				pSelectList.AddRange(projectData.Select(project => new SelectListItem
 				{
 					Value = project.ProjectId.ToString(),

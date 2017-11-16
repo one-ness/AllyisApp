@@ -90,7 +90,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns></returns>
 		async public Task<bool> CanDisable(Customer customer, int orgId)
 		{
-			var projects = (await AppService.GetProjectsByOrganization(orgId, false)).Where(x => x.owningCustomer.CustomerId == customer.CustomerId);
+			var projects = (await AppService.GetProjectsByOrganization(orgId, false)).Where(x => x.OwningCustomer.CustomerId == customer.CustomerId);
 
 			foreach (var project in projects)
 			{

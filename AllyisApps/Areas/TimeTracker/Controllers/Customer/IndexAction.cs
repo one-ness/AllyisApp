@@ -122,7 +122,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			.Select(proj => new
 			CustomerProjectViewModel.ProjectViewModel
 			{
-				CustomerId = proj.owningCustomer.CustomerId,
+				CustomerId = proj.OwningCustomer.CustomerId,
 				OrganizationId = proj.OrganizationId,
 				ProjectId = proj.ProjectId,
 				ProjectName = proj.ProjectName
@@ -144,7 +144,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			model.Projects = projects.AsParallel().Select(proj => new
 			CustomerProjectViewModel.ProjectViewModel
 			{
-				CustomerId = proj.owningCustomer.CustomerId,
+				CustomerId = proj.OwningCustomer.CustomerId,
 				OrganizationId = proj.OrganizationId,
 				ProjectId = proj.ProjectId,
 				ProjectName = proj.ProjectName
@@ -185,10 +185,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						IsActive = currentCustomer.IsActive
 					},
 					Projects = from p in projects
-							   where p.owningCustomer.CustomerId == currentCustomer.CustomerId
+							   where p.OwningCustomer.CustomerId == currentCustomer.CustomerId
 							   select new CustomerProjectViewModel.ProjectViewModel
 							   {
-								   CustomerId = p.owningCustomer.CustomerId,
+								   CustomerId = p.OwningCustomer.CustomerId,
 								   OrganizationId = p.OrganizationId,
 								   ProjectName = p.ProjectName,
 								   ProjectId = p.ProjectId
@@ -217,10 +217,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						IsActive = currentCustomer.IsActive
 					},
 					Projects = from p in inactiveProjects
-							   where p.owningCustomer.CustomerId == currentCustomer.CustomerId
+							   where p.OwningCustomer.CustomerId == currentCustomer.CustomerId
 							   select new CustomerProjectViewModel.ProjectViewModel
 							   {
-								   CustomerId = p.owningCustomer.CustomerId,
+								   CustomerId = p.OwningCustomer.CustomerId,
 								   OrganizationId = p.OrganizationId,
 								   ProjectName = p.ProjectName,
 								   ProjectId = p.ProjectId

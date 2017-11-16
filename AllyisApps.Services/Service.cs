@@ -499,8 +499,8 @@ namespace AllyisApps.Services
 						entry.PayClassName,
 						project?.ProjectName ?? string.Empty,
 						project?.ProjectCode ?? string.Empty,
-						project?.owningCustomer?.CustomerName ?? string.Empty,
-						project?.owningCustomer?.CustomerCode ?? string.Empty,
+						project?.OwningCustomer?.CustomerName ?? string.Empty,
+						project?.OwningCustomer?.CustomerCode ?? string.Empty,
 						entry.Description,
 						((TimeEntryStatus)entry.TimeEntryStatusId).ToString()
 					};

@@ -13,12 +13,11 @@
 	string approvalClass = Model.ModSinceApproval ? "pending" :
 					  Model.ApprovalState == (int)ApprovalState.NotApproved ? "rejected" :
 					  Model.ApprovalState == (int)ApprovalState.Approved ? "approved" : string.Empty;
-	var managableProjects = Model.ProjectsWithInactive;
-	var managableProjectsDropdown = managableProjects
+	var managableProjectsDropdown = Model.ProjectsWithInactive
 		.Where(p =>
 			(p.StartDate == null || p.StartDate.Value <= (DateTime)ViewBag.GetDateTimeFromDays(Model.Date)) &&
 			(p.EndDate == null || p.EndDate.Value >= (DateTime)ViewBag.GetDateTimeFromDays(Model.Date)) &&
-			(p.IsUserActive || (!Model.Sample && Model.ProjectId == p.ProjectId))
+			(p.IsUserActive || !Model.Sample && Model.ProjectId == p.ProjectId)
 			)
 		.Select(p => new SelectListItem
 		{

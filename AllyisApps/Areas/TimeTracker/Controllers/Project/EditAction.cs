@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -61,7 +60,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			var projCodeMatch = projects.FindAll(project =>
 				   project.ProjectCode == model.ProjectCode
-				&& project.owningCustomer?.CustomerId == model.ParentCustomerId
+				&& project.OwningCustomer?.CustomerId == model.ParentCustomerId
 				&& model.ProjectId != project.ProjectId);
 			if (projCodeMatch.Any())
 			{
@@ -76,7 +75,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			try
 			{
 				var customer = await AppService.GetCustomerInfo(model.ParentCustomerId);
-				if (model.StartDate != projectBeforeEdit.StartingDate || model.EndDate != projectBeforeEdit.EndingDate) // check new date range to see if entries outside of the new range
+				if (model.StartDate != projectBeforeEdit.StartDate || model.EndDate != projectBeforeEdit.EndDate) // check new date range to see if entries outside of the new range
 				{
 					await AppService.CheckUpdateProjectStartEndDate(projectBeforeEdit.ProjectId, model.StartDate, model.EndDate);
 				}
@@ -129,7 +128,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				Customers = customers,
 				OrganizationName = infos.Item1.OrganizationName,
-				ParentCustomerId = infos.Item1.owningCustomer.CustomerId,
+				ParentCustomerId = infos.Item1.OwningCustomer.CustomerId,
 				OrganizationId = infos.Item1.OrganizationId,
 				ProjectId = infos.Item1.ProjectId,
 				ProjectCode = infos.Item1.ProjectCode,
