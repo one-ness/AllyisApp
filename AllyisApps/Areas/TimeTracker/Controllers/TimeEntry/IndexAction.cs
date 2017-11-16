@@ -149,11 +149,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				.AsParallel()
 				.Where(p => p.ProjectId != 0)
 				.Select(proj => new CompleteProjectViewModel(proj))
-				.OrderBy(p => p.CustomerName)
-				.ThenBy(p => p.ProjectName)
+				.OrderBy(p => p.CustomerName + p.ProjectName)
 				.ToList();
 
-			IEnumerable<User> users = infos.Item5;
+			var sortedList = infos.Item5;
+			IEnumerable<UserViewModel> users = sortedList.AsParallel().Select(ConstuctUserViewModel);
+			users = users.OrderBy(o => o.LastName + o.FirstName).ToList();
 
 			var payClasses = infos.Item2;
 
@@ -174,9 +175,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				StartOfWeek = (StartOfWeekEnum)startOfWeek,
 				GrandTotal = new ProjectHours { Project = new CompleteProjectViewModel { ProjectName = Strings.Total }, Hours = 0.0f },
 				ProjectHours = hours.Values.Where(x => x.Hours > 0),
-				Users = users.AsParallel().Select(ConstuctUserViewModel),
+				Users = users,
 				TotalUsers = users.Count(),
-				CurrentUser = ConstuctUserViewModel(users.Single(x => x.UserId == userId)),
+				CurrentUser = users.Single(x => x.UserId == userId),
 				LockDate = infos.Item1.LockDate,
 				PayrollProcessedDate = infos.Item1.PayrollProcessedDate,
 				SubscriptionId = subId,
