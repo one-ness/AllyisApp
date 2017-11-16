@@ -94,7 +94,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			foreach (var project in projects)
 			{
-				if (project.EndDate == null || DateTime.UtcNow < project.EndDate.Value.Date)
+				if ((project.EndDate == null || DateTime.UtcNow.Date < project.EndDate.Value.Date) && (project.StartDate == null || DateTime.UtcNow.Date > project.StartDate.Value.Date))
 				{
 					return false;
 				}
