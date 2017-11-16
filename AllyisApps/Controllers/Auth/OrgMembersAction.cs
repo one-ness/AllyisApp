@@ -32,7 +32,7 @@ namespace AllyisApps.Controllers.Auth
 			foreach (var item in collection)
 			{
 				var roles = await AppService.GetProductRolesAsync(id, Services.Billing.ProductIdEnum.AllyisApps);
-				var role = roles.Where(x => x.ProductRoleId == item.OrganizationRoleId).FirstOrDefault();
+				var role = roles.FirstOrDefault(x => x.ProductRoleId == item.OrganizationRoleId);
 				var data = new OrganizationMembersViewModel.ViewModelItem
 				{
 					Email = item.Email,
