@@ -144,7 +144,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					IsUserActive = true
 				});
 
-			IEnumerable<User> users = infos.Item5;
+			List<User> SortedList = infos.Item5;
+			IEnumerable<UserViewModel> users = SortedList.AsParallel().Select(ConstuctUserViewModel);
+			users = users.OrderBy(o => (o.LastName + o.FirstName)).ToList();
 
 			var result = new TimeEntryOverDateRangeViewModel
 			{
@@ -172,9 +174,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					.AsParallel()
 					.Select(proj => new CompleteProjectViewModel(proj)),
 				ProjectHours = hours.Values.Where(x => x.Hours > 0),
-				Users = users.AsParallel().Select(ConstuctUserViewModel),
+				Users = users,
 				TotalUsers = users.Count(),
-				CurrentUser = ConstuctUserViewModel(users.Single(x => x.UserId == userId)),
+				CurrentUser = users.Single(x => x.UserId == userId),
 				LockDate = infos.Item1.LockDate,
 				PayrollProcessedDate = infos.Item1.PayrollProcessedDate,
 				SubscriptionId = subId,
