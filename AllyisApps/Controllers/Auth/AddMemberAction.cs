@@ -68,6 +68,7 @@ namespace AllyisApps.Controllers.Auth
 
 		private async Task<AddMemberViewModel> reconstuctViewModel(AddMemberViewModel previous)
 		{
+			
 			var subs = await AppService.GetSubscriptionsAsync(previous.OrganizationId);
 			previous.SubscriptionRoles = subs.Select(sub => new RoleItem
 			{
@@ -130,7 +131,7 @@ namespace AllyisApps.Controllers.Auth
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> AddMember(AddMemberViewModel model)
 		{
-			AddMemberViewModel reModel = await reconstuctViewModel(model);
+			AddMemberViewModel reModel = await constuctViewModel(model.OrganizationId);
 			if (!ModelState.IsValid) return View(reModel); // Invalid model, try again
 
 			try
@@ -149,12 +150,11 @@ namespace AllyisApps.Controllers.Auth
 				//prodJson = prodJson.TrimEnd(new char[] { ' ', ',' });
 				//prodJson += " }}";
 
-				var json = model.SubscriptionRoles.Select(role => new InvitationPermissionsJson
+				List<InvitationPermissionsJson> json = model.SubscriptionRoles.Select(role => new InvitationPermissionsJson
 				{
 					SubscriptionId = role.SubscriptionId,
 					ProductRoleId = role.SelectedRoleId
-				})
-					.ToList();
+				}).ToList<InvitationPermissionsJson>();
 
 				string jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(json);
 				string orgName = AppService.UserContext.OrganizationsAndRoles[model.OrganizationId].OrganizationName;

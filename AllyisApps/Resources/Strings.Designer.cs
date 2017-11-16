@@ -19,7 +19,7 @@ namespace AllyisApps.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Strings {
@@ -2203,7 +2203,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lock Entries.
+        ///   Looks up a localized string similar to Lock Entries up to {0}.
         /// </summary>
         public static string LockEntries {
             get {
@@ -2221,7 +2221,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot lock time entries &lt;= {0} because of a db error..
+        ///   Looks up a localized string similar to Cannot lock time entries through {0} because of a db error..
         /// </summary>
         public static string LockTimeEntriesDBError {
             get {
@@ -2230,7 +2230,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot set new lock date {0} because the date is on or before the previous lock or payroll processed date.
+        ///   Looks up a localized string similar to Cannot set new lock date to {0} because the date is on or before the previous lock or payroll processed date.
         /// </summary>
         public static string LockTimeEntriesInvalidLockDate {
             get {
@@ -2239,7 +2239,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot lock time entries &lt;= {0} because not all of them are status Approved or Rejected..
+        ///   Looks up a localized string similar to Cannot lock time entries up to {0} because not all of them are status Approved or Rejected..
         /// </summary>
         public static string LockTimeEntriesInvalidStatuses {
             get {
@@ -2248,7 +2248,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Successfully locked all dates for time entries &lt;= {0}..
+        ///   Looks up a localized string similar to Successfully locked all dates for time entries up to {0}..
         /// </summary>
         public static string LockTimeEntriesSuccess {
             get {
@@ -3139,7 +3139,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Payroll Process.
+        ///   Looks up a localized string similar to Payroll Process all Locked Entries.
         /// </summary>
         public static string PayrollProcess {
             get {
@@ -4525,7 +4525,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unlock Entries.
+        ///   Looks up a localized string similar to Unlock all locked Entries.
         /// </summary>
         public static string UnlockEntries {
             get {
