@@ -44,6 +44,11 @@ namespace AllyisApps.ViewModels.Auth
 		public bool CanResendInvitations { get; set; }
 
 		/// <summary>
+		/// count of pending invitations
+		/// </summary>
+		public int PendingInvitationCount { get; set; }
+
+		/// <summary>
 		/// constructor
 		/// </summary>
 		public OrganizationInvitationsViewModel()

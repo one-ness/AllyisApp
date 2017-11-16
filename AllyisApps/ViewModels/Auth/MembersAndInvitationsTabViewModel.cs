@@ -9,6 +9,21 @@ namespace AllyisApps.ViewModels.Auth
 	{
 		public int OrganizationId { get; set; }
 		public string MembersTabActive { get; set; }
+		public int MemberCount { get; set; }
 		public string InvitationsTabActive { get; set; }
+		public int PendingInvitationCount { get; set; }
+		public string InvitationCountDisplay
+		{
+			get
+			{
+				var result = string.Empty;
+				if (this.PendingInvitationCount > 0)
+				{
+					result = string.Format("({0})", this.PendingInvitationCount);
+				}
+
+				return result;
+			}
+		}
 	}
 }
