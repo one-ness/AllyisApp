@@ -149,7 +149,7 @@
     <Build Include="Crm\Stored Procedures\GetCustomerProfile.sql" />
     <Build Include="Crm\Stored Procedures\GetNextCustId.sql" />
     <Build Include="Crm\Stored Procedures\CreateCustomerInfo.sql" />
-    <Build Include="Crm\Stored Procedures\DeleteCustomer.sql" />
+    <Build Include="Crm\Stored Procedures\DeactivateCustomer.sql" />
     <Build Include="Crm\Stored Procedures\GetCustomerInfo.sql" />
     <Build Include="Crm\Stored Procedures\GetCustomersByOrgId.sql" />
     <Build Include="Crm\Stored Procedures\UpdateCustomerInfo.sql" />
@@ -279,7 +279,7 @@
     <Build Include="Pjm\Stored Procedures\CreateProject.sql" />
     <Build Include="Pjm\Stored Procedures\CreateProjectAndUpdateItsUserList.sql" />
     <Build Include="Pjm\Stored Procedures\CreateProjectUser.sql" />
-    <Build Include="Pjm\Stored Procedures\DeleteProject.sql" />
+    <Build Include="Pjm\Stored Procedures\DeactivateProject.sql" />
     <Build Include="Pjm\Stored Procedures\DeleteProjectUser.sql" />
     <Build Include="Pjm\Stored Procedures\GetInactiveProjectsByCustomer.sql" />
     <Build Include="Pjm\Stored Procedures\GetNextProjectIdAndSubUsers.sql" />
@@ -413,12 +413,12 @@
     <Build Include="Auth\Stored Procedures\UpdateEmployeeIdAndOrgRole.sql" />
     <Build Include="TimeTracker\Stored Procedures\UpdatePayPeriod.sql" />
     <Build Include="Pjm\Stored Procedures\GetNextProjectId.sql" />
-    <Build Include="Crm\Stored Procedures\FullDeleteCustomer.sql" />
-    <Build Include="Pjm\Stored Procedures\FullDeleteProject.sql" />
+    <Build Include="Crm\Stored Procedures\DeleteCustomer.sql" />
+    <Build Include="Pjm\Stored Procedures\DeleteProject.sql" />
     <Build Include="Pjm\Stored Procedures\GetProjectByProjectOrgId.sql" />
     <None Include="DefaultData\Accounts.sql" />
-	<Build Include="TimeTracker\Stored Procedures\GetTimeEntriesByProjectId.sql" />
-	<Build Include="Auth\Stored Procedures\GetOrgUserCount.sql" />
+    <Build Include="TimeTracker\Stored Procedures\GetTimeEntriesByProjectId.sql" />
+    <Build Include="Auth\Stored Procedures\GetOrgUserCount.sql" />
     <Build Include="Auth\Stored Procedures\GetOrgInvitationCount.sql" />
   </ItemGroup>
   <ItemGroup>
