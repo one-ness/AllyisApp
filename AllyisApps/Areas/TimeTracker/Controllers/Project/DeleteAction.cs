@@ -93,7 +93,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 				else
 				{
-					var parentCustomer = customers.Where(x => x.CustomerId == project.owningCustomer.CustomerId).FirstOrDefault();
+					var parentCustomer = customers.Where(x => x.CustomerId == project.OwningCustomer.CustomerId).FirstOrDefault();
 					if (parentCustomer.IsActive.Value)
 					{
 						var success = AppService.ReactivateProject(project.ProjectId, orgId, subscriptionId);

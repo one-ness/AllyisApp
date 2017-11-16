@@ -114,7 +114,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					})
 					.Select(t => new TablePreviewEntry
 					{
-						CustomerName = t.orgProj.owningCustomer?.CustomerName,
+						CustomerName = t.orgProj.OwningCustomer?.CustomerName,
 						ProjectName = t.orgProj.ProjectName,
 						TimeEntry = t.data
 					})
