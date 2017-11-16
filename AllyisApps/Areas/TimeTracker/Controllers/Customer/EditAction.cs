@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -94,7 +95,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					var projects = await AppService.GetProjectsByCustomerAsync(model.CustomerId);
 					foreach (var project in projects)
 					{
-						await AppService.DeleteProject(project.ProjectId, model.SubscriptionId);
+						if (/*Project is active*/ true)
+						{
+							Notifications.Add(new BootstrapAlert(string.Format("Cannot deactivate {0}, dependent projects are still active.", model.CustomerName), Variety.Warning));
+							return View(model);
+						}
 					}
 				}
 
@@ -144,7 +149,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					return RedirectToAction(ActionConstants.Index, new { subscriptionId = model.SubscriptionId });
 				}
 			}
-			await Task.Delay(1);
+
 			// Invalid model
 			return View(model);
 		}

@@ -17,10 +17,8 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44326</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>
-    </IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>
-    </IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <NuGetPackageImportStamp>
@@ -288,6 +286,7 @@
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseIndexViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\TagViewModel.cs" />
     <Compile Include="Areas\TimeTracker\Constants.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\Customer\DeactivateAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\DetailsAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ImportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ReactivateAction.cs" />
@@ -295,6 +294,7 @@
     <Compile Include="Areas\TimeTracker\Controllers\Home\HomeController.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Project\ImportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Project\ReactivateAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\Project\ToggleStatusAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ReviewAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\MergePayClassAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ImportAction.cs" />
@@ -755,8 +755,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\TimeTracker\ViewModels\Manage\" />
+    <Folder Include="Areas\TimeTracker\Views\DeactivateAction\" />
     <Folder Include="Areas\TimeTracker\Views\ImportAction\" />
     <Folder Include="Areas\TimeTracker\Views\Setting2Action\" />
+    <Folder Include="Areas\TimeTracker\Views\ToggleStatusAction\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
