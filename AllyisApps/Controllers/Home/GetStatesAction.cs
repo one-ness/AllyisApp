@@ -29,10 +29,5 @@ namespace AllyisApps.Controllers.Home
 			// NOTE: to serialize a dictionary to json, it can contain only strings
 			return Json(ModelHelper.GetLocalizedStates(AppService, countryCode));
 		}
-
-		private string Clean(string stringToClean)
-		{
-			return CharsToReplace.Aggregate(stringToClean, (str, l) => str.Replace(string.Empty + l, string.Empty));
-		}
 	}
 }

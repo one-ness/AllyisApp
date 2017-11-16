@@ -64,16 +64,6 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		public DateTime? EndDate { get; set; }
 
 		/// <summary>
-		/// Gets or sets if the project is active.
-		/// </summary>
-		public bool IsActive { get; set; }
-
-		/// <summary>
-		///
-		/// </summary>
-		public List<SelectListItem> isActiveOptions { get; set; }
-
-		/// <summary>
 		/// Gets or sets a select list of customers.
 		/// </summary>
 		public List<SelectListItem> Customers { get; set; }
@@ -109,7 +99,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		[Required]
 		[DataType(DataType.Text)]
 		[Display(Name = "Project Id")]
-		public string ProjectOrgId { get; set; }
+		public string ProjectCode { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the model is being used for creating a project (true), or editing an existing project (false).
@@ -138,6 +128,11 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 	/// </summary>
 	public class BasicUserInfoViewModel
 	{
+		/// <summary>
+		/// Default constructor for use with automatic assignment helper methods.
+		/// </summary>
+		public BasicUserInfoViewModel() { }
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BasicUserInfoViewModel"/> class.
 		/// </summary>

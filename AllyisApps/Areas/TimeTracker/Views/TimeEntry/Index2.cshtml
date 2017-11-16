@@ -26,8 +26,8 @@
 				{
 					subscriptionId = Model.SubscriptionId,
 					userId = Model.EntryRange.UserId,
-					startingDate = Model.EntryRange.StartDate,
-					endingDate = Model.EntryRange.EndDate
+					startingDate = Utility.GetDaysFromDateTime(Model.EntryRange.StartDate),
+					endingDate = Utility.GetDaysFromDateTime(Model.EntryRange.EndDate)
 				})">
 				<span>
 					<span class="btn btn-primary" style="margin-right: 15px;">@Strings.Export</span>
@@ -76,7 +76,7 @@
 							</a>
 						}
 					</div>*@
-				<div id="newdaterange" class="panel-title pull-right" style="display: inline; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px; margin-left: 15px;">
+				<div id="newdaterange" class="pull-right" style="display: inline; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px; margin-left: 15px;">
 					<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
 					<span></span> <b class="caret"></b>
 				</div>
@@ -170,36 +170,37 @@
 							 style="width: 100%; display: @hide; justify-content: flex-end;">
 							@if (user.UserId == ViewBag.SignedInUserID)
 							{
-								<a class="col-xs-11 text-left"
+								<a class="col-xs-12 text-center"
 								   data-search="@user.Email"
-								   href="@Url.Action(ActionConstants.Index, new
-								{
-									userid = ViewBag.SignedInUserID,
+								   href="@Url.Action("TimeTrackerDatePickerRedirect", new
+									{
+									userId = ViewBag.SignedInUserID,
 									startDate = Model.EntryRange.StartDate,
 									endDate = Model.EntryRange.EndDate
 									})"
-								   style="text-decoration: none; color: #000000;">
+								   style="color: #000000;">
 									@user.FirstName @user.LastName
 								</a>
 							}
 							else
 							{
-								<a class="col-xs-11 text-left" data-search="@user.Email"
-								   href="@Url.Action(ActionConstants.Index, new
+								<a class="col-xs-12 text-center" data-search="@user.Email"
+								   href="@Url.Action("TimeTrackerDatePickerRedirect", new
 								{
 									userId = user.UserId,
 									startDate = Model.EntryRange.StartDate,
 									endDate = Model.EntryRange.EndDate
 									})"
-								   style="text-decoration: none; color: #000000;">
+								   style="color: #000000;">
 									@user.FirstName @user.LastName
 								</a>
 							}
-							<a href="@Url.Action(ActionConstants.UserEdit, new {
+							<!-- <a href="@Url.Action(ActionConstants.UserEdit, new {
 								subscriptionId = Model.SubscriptionId,
 								userId = user.UserId })"
 							   style="text-decoration: none; color: #0066AA; padding-right:5%" title="Assign Projects to User"><i class="fa fa-cog"></i></a>
-						</div>count++;
+							-->
+							</div>count++;
 					}
 				}
 			</div>
@@ -296,6 +297,8 @@
 				linkedCalendars: false,
 				startDate: start,
 				endDate: end,
+				buttonClasses: "btn btn-sm pull-right",
+				applyClass: "btn-primary ml-1",
 				ranges: {
 					'Previous Pay Period': [prevStart, prevEnd],
 					'Current Pay Period': [curStart, curEnd],

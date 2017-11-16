@@ -8,15 +8,17 @@
 }
 
 <div class="form-group pull-right">
+	<a href="@Url.Action("CustomerImport")">
+		<span class="btn btn-primary">Customer Import</span>
+	</a>
 	<a href="@Url.Action("Create")">
 		<span class="btn btn-primary">Create Customer</span>
 	</a>
 </div>
-
 <div class="container">
 	<table class="table table-hover table-xtra-condensed">
 		<thead>
-			<tr class="" double-bottom-border"">
+			<tr class="double-bottom-border">
 				<th>
 					<input type="checkbox" id="select-all" onclick="CheckAllToggle()" />
 				</th>
@@ -47,12 +49,15 @@
 					<td><input type="checkbox" class="customer-select" value="@customer.CustomerId" /></td>
 					<td>@customer.CustomerName</td>
 					<td>
+						@{ 
+							var adressCityDispaly = (customer.Address.City != null) ? customer.Address.City + ", " + customer.Address.StateName : customer.Address.StateName;
+						}
 						<p>@customer.Address.Address1</p>
 						<p>@customer.Address.Address2</p>
-						<p>@customer.Address.City, @customer.Address.StateName  @customer.Address.PostalCode</p>
+						<p>@adressCityDispaly  @customer.Address.PostalCode</p>
 					</td>
 					<td>@customer.EIN</td>
-					<td>@customer.CustomerId</td>
+					<td>@customer.CustomerCode</td>
 					<td>
 						@if (customer.IsActive.Value)
 						{
@@ -80,11 +85,11 @@
 		</div>
 	}
 </div>
-<div class="pull-right btn">
+<div class="pull-left btn">
 	@using (Html.BeginForm("ToggleStatus", Strings.Customer, new { }, FormMethod.Get, new { @onsubmit = "return getUserIdsAndSubmit();" }))
 	{
 		<input type="hidden" name="userIds" id="userIds" value="" />
-		<button type="submit" class="btn btn-primary  pull-right">Toggle Status</button>	
+		<button type="submit" class="btn btn-primary  pull-right">Toggle Status</button>
 	}
 </div>
 

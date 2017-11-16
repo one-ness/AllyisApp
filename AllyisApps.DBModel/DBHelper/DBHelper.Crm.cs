@@ -47,9 +47,10 @@ namespace AllyisApps.DBModel
 			parameters.Add("@customerId", project.CustomerId);
 			parameters.Add("@projectName", project.ProjectName);
 			parameters.Add("@isHourly", project.IsHourly);
-			parameters.Add("@projectOrgId", project.ProjectOrgId);
+			parameters.Add("@projectCode", project.ProjectCode);
 			parameters.Add("@startingDate", project.StartingDate?.ToShortDateString());
 			parameters.Add("@endingDate", project.EndingDate?.ToShortDateString());
+			parameters.Add("@isActive", project.IsActive);
 			parameters.Add("@userIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
 			parameters.Add("@retId", -1, DbType.Int32, ParameterDirection.Output);
 
@@ -80,17 +81,24 @@ namespace AllyisApps.DBModel
 			parameters.Add("@customerId", project.CustomerId);
 			parameters.Add("@projectName", project.ProjectName);
 			parameters.Add("@isHourly", project.IsHourly);
-			parameters.Add("@projectOrgId", project.ProjectOrgId);
+			parameters.Add("@projectCode", project.ProjectCode);
 			parameters.Add("@startingDate", project.StartingDate?.ToShortDateString());
 			parameters.Add("@endingDate", project.EndingDate?.ToShortDateString());
 			parameters.Add("@retId", -1, DbType.Int32, ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				await connection.ExecuteAsync(
-					"[Pjm].[CreateProject]",
-					parameters,
-					commandType: CommandType.StoredProcedure);
+				try
+				{
+					await connection.ExecuteAsync(
+						"[Pjm].[CreateProject]",
+						parameters,
+						commandType: CommandType.StoredProcedure);
+				}
+				catch (SqlException e)
+				{
+					throw new ArgumentException(e.Message);
+				}
 			}
 
 			return parameters.Get<int>("@retId");
@@ -100,14 +108,12 @@ namespace AllyisApps.DBModel
 		/// Actually deletes the project.
 		/// </summary>
 		/// <param name="projectId">The project id.</param>
-		/// <returns></returns>
-		public async Task<bool> FullDeleteProject(int projectId)
+		/// <returns>The number of rows deleted -- includes projectUsers deleted.</returns>
+		public async Task<int> FullDeleteProject(int projectId)
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var resultGet = await connection.QueryAsync<string>("[Pjm].[FullDeleteProject]", new { ProjectId = projectId }, commandType: CommandType.StoredProcedure);
-				var result = resultGet.SingleOrDefault();
-				return true;
+				return await connection.ExecuteAsync("[Pjm].[FullDeleteProject]", new { ProjectId = projectId }, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -122,17 +128,16 @@ namespace AllyisApps.DBModel
 			{
 				var resultGet = await connection.QueryAsync<string>("[Pjm].[DeleteProject]", new { ProjectId = projectId, DeactivateDate = DateTime.Now }, commandType: CommandType.StoredProcedure);
 				var result = resultGet.SingleOrDefault();
-				if (result == null) { return ""; }
-				return result;
+				return result ?? "";
 			}
 		}
 
 		/*
-        /// <summary>
-        /// Deletes a project.
-        /// </summary>
-        /// <param name="projectId">The id of the project to be deleted.</param>
-        public void DeleteProject(int projectId)
+		/// <summary>
+		/// Deletes a project.
+		/// </summary>
+		/// <param name="projectId">The id of the project to be deleted.</param>
+		public void DeleteProject(int projectId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@projectId", projectId);
@@ -174,7 +179,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@projectId", project.ProjectId);
 			parameters.Add("@projectName", project.ProjectName);
 			parameters.Add("@isHourly", project.IsHourly);
-			parameters.Add("@projectOrgId", project.ProjectOrgId);
+			parameters.Add("@projectCode", project.ProjectCode);
 			parameters.Add("@startingDate", project.StartingDate?.ToShortDateString());
 			parameters.Add("@endingDate", project.EndingDate?.ToShortDateString());
 
@@ -268,7 +273,7 @@ namespace AllyisApps.DBModel
 				var results = await connection.QueryAsync("[Pjm].[GetNextProjectId]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
-				return results.SingleOrDefault().ProjectOrgId;
+				return results.SingleOrDefault().ProjectCode;
 			}
 		}
 
@@ -390,11 +395,11 @@ namespace AllyisApps.DBModel
 			parameters.Add("@contactPhoneNumber", customer.ContactPhoneNumber);
 			parameters.Add("@faxNumber", customer.FaxNumber);
 			parameters.Add("@website", customer.Website);
-			parameters.Add("@isActive", customer.IsActive);
+			parameters.Add("@isActive", true);
 			parameters.Add("@eIN", customer.EIN);
 			parameters.Add("@organizationId", customer.OrganizationId);
-			parameters.Add("@customerOrgId", customer.CustomerOrgId);
-			parameters.Add("@retId", -1, DbType.Int32, ParameterDirection.Output);
+			parameters.Add("@customerCode", customer.CustomerCode);
+			parameters.Add("@retId", -2, DbType.Int32, ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
@@ -434,7 +439,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@website", customer.Website);
 			parameters.Add("@eIN", customer.EIN);
 			parameters.Add("@isActive", customer.IsActive);
-			parameters.Add("@orgId", customer.CustomerOrgId);
+			parameters.Add("@orgId", customer.CustomerCode);
 			parameters.Add("@retId", -1, DbType.Int32, ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
@@ -445,11 +450,11 @@ namespace AllyisApps.DBModel
 		}
 
 		/*
-        /// <summary>
-        /// Updates the customer with the specified Id.
-        /// </summary>
-        /// <param name="customer">The table with the customer to create.</param>
-        public void UpdateCustomer(CustomerDBEntity customer)
+		/// <summary>
+		/// Updates the customer with the specified Id.
+		/// </summary>
+		/// <param name="customer">The table with the customer to create.</param>
+		public void UpdateCustomer(CustomerDBEntity customer)
 		{
 			if (customer == null)
 			{
@@ -469,7 +474,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@faxNumber", customer.FaxNumber);
 			parameters.Add("@website", customer.Website);
 			parameters.Add("@eIN", customer.EIN);
-			parameters.Add("@orgId", customer.CustomerOrgId);
+			parameters.Add("@orgId", customer.CustomerCode);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -584,7 +589,7 @@ namespace AllyisApps.DBModel
 		}
 
 		/*
-        /// <summary>
+		/// <summary>
 		/// Delete the specified customer.
 		/// </summary>
 		/// <param name="customerId">The customer's Id.</param>
@@ -599,7 +604,7 @@ namespace AllyisApps.DBModel
 
 			return true;
 		}
-    */
+	*/
 
 		/// <summary>
 		/// Delete the specified customer.
@@ -677,21 +682,21 @@ namespace AllyisApps.DBModel
 					commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
 		}
-		
+
 		/// <summary>
 		/// Gets a project from its id.
 		/// </summary>
-		/// <param name="projectOrgId">The project's Id.</param>
+		/// <param name="projectCode">The project's Id.</param>
 		/// <returns>Info about the requested project.</returns>
-		public ProjectDBEntity GetProjectByProjectOrgId(string projectOrgId)
+		public ProjectDBEntity GetProjectByProjectCode(string projectCode)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@projectOrgId", projectOrgId);
+			parameters.Add("@projectCode", projectCode);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				var entity = connection.Query<ProjectDBEntity>(
-					"[Pjm].[GetProjectByProjectOrgId]",
+					"[Pjm].[GetProjectByProjectCode]",
 					parameters,
 					commandType: CommandType.StoredProcedure).SingleOrDefault();
 				return entity;
@@ -728,11 +733,10 @@ namespace AllyisApps.DBModel
 		/// <param name="projectName">The new name of the project.</param>
 		/// <param name="orgId">The new orgId of the project.</param>
 		/// <param name="isHourly">The pricing type of the project.  True == hourly, false == fixed. TODO: use this parameter to update the project's isHourly column.  Currently disabled attribute.</param>
-		/// <param name="isActive">Sets if the project is active.</param>
 		/// <param name="start">The start date assigned to the project.</param>
 		/// <param name="end">The end date assigned to the project.</param>
 		/// <param name="userIds">The updated list of project users, by their Ids.</param>
-		public async void UpdateProjectAndUsers(int projectId, string projectName, string orgId, bool isHourly, bool isActive, DateTime? start, DateTime? end, IEnumerable<int> userIds)
+		public async void UpdateProjectAndUsers(int projectId, string projectName, string orgId, bool isHourly, DateTime? start, DateTime? end, IEnumerable<int> userIds)
 		{
 			if (string.IsNullOrWhiteSpace(projectName))
 			{
@@ -756,7 +760,6 @@ namespace AllyisApps.DBModel
 			parameters.Add("@projectName", projectName);
 			parameters.Add("@orgId", orgId);
 			parameters.Add("@isHourly", isHourly);
-			parameters.Add("@isActive", isActive);
 			parameters.Add("@startingDate", start?.ToShortDateString());
 			parameters.Add("@endingDate", end?.ToShortDateString());
 			parameters.Add("@userIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));

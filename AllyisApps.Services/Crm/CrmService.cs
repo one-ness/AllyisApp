@@ -113,7 +113,7 @@ namespace AllyisApps.Services
 		/// <param name="orgId">The Organization Id.</param>
 		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public  string ReactivateCustomer(int customerId, int subscriptionId, int orgId)
+		public string ReactivateCustomer(int customerId, int subscriptionId, int orgId)
 		{
 			CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
 			return DBHelper.ReactivateCustomer(customerId);
@@ -200,25 +200,24 @@ namespace AllyisApps.Services
 		/// Gets a list of <see cref="Project"/>'s for a customer.
 		/// </summary>
 		/// <param name="customerId">Customer Id.</param>
+		/// <param name="onlyActive">Bool whether or not to only get active projects.</param>
 		/// <returns>List of ProjectInfo's.</returns>
-		public async Task<IEnumerable<Project.Project>> GetProjectsByCustomerAsync(int customerId)
+		public async Task<IEnumerable<Project.Project>> GetProjectsByCustomerAsync(int customerId, bool onlyActive = false)
 		{
 			if (customerId <= 0)
 			{
 				throw new ArgumentOutOfRangeException(nameof(customerId), "Customer Id cannot be 0 or negative.");
 			}
 
-			IEnumerable<ProjectDBEntity> dbeList = await DBHelper.GetProjectsByCustomerAsync(customerId);
-			List<Project.Project> list = new List<Project.Project>();
-			foreach (ProjectDBEntity dbe in dbeList)
+			var projects = await DBHelper.GetProjectsByCustomerAsync(customerId);
+
+			if (onlyActive)
 			{
-				if (dbe != null)
-				{
-					list.Add(InitializeProject(dbe));
-				}
+				projects = projects.Where(p => p.IsActive);
 			}
 
-			return list;
+			var thing = projects.Where(p => p != null).Select(InitializeProject).ToList();
+			return thing;
 		}
 
 		/// <summary>
@@ -233,17 +232,8 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException(nameof(customerId), "Customer Id cannot be 0 or negative.");
 			}
 
-			IEnumerable<ProjectDBEntity> dbeList = await DBHelper.GetInactiveProjectsByCustomer(customerId);
-			List<Project.Project> list = new List<Project.Project>();
-			foreach (ProjectDBEntity dbe in dbeList)
-			{
-				if (dbe != null)
-				{
-					list.Add(InitializeProject(dbe));
-				}
-			}
-
-			return list;
+			var projects = await DBHelper.GetInactiveProjectsByCustomer(customerId);
+			return projects.Where(p => p != null).Select(InitializeProject).ToList();
 		}
 
 		/// <summary>
@@ -251,10 +241,13 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="newProject">Project with project information.</param>
 		/// <param name="userIds">List of users being assigned to the project.</param>
-		/// <returns>Project Id if succeed, -1 if ProjectOrgId is taken.</returns>
-		public async Task<int> CreateProjectAndUpdateItsUserList(Project.Project newProject, IEnumerable<int> userIds)
+		/// <param name="subscriptionId">The subscription that the user is operating under.</param>
+		/// <returns>Project Id if succeed, -1 if projectCode is taken.</returns>
+		public async Task<int> CreateProjectAndUpdateItsUserList(Project.Project newProject, IEnumerable<int> userIds, int subscriptionId)
 		{
 			#region Validation
+
+			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
 
 			if (newProject.owningCustomer.CustomerId <= 0)
 			{
@@ -266,9 +259,9 @@ namespace AllyisApps.Services
 				throw new ArgumentNullException("name", "Project name must have a value and cannot be whitespace.");
 			}
 
-			if (string.IsNullOrEmpty(newProject.ProjectOrgId))
+			if (string.IsNullOrEmpty(newProject.ProjectCode))
 			{
-				throw new ArgumentNullException("projectOrgId", "Project must have an Id");
+				throw new ArgumentNullException("projectCode", "Project must have an Id");
 			}
 
 			if (newProject.StartingDate.HasValue && newProject.EndingDate.HasValue && DateTime.Compare(newProject.StartingDate.Value, newProject.EndingDate.Value) > 0)
@@ -290,9 +283,9 @@ namespace AllyisApps.Services
 		{
 			#region Validation
 
-			if (newProject.owningCustomer.CustomerId <= 0)
+			if (String.IsNullOrWhiteSpace(newProject.owningCustomer.CustomerCode))
 			{
-				throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be 0 or negative.");
+				throw new ArgumentNullException("customerCode", "Customer Code must have a value and cannot be whitespace.");
 			}
 
 			if (string.IsNullOrWhiteSpace(newProject.ProjectName))
@@ -300,9 +293,9 @@ namespace AllyisApps.Services
 				throw new ArgumentNullException("name", "Project name must have a value and cannot be whitespace.");
 			}
 
-			if (string.IsNullOrEmpty(newProject.ProjectOrgId))
+			if (string.IsNullOrEmpty(newProject.ProjectCode))
 			{
-				throw new ArgumentNullException("projectOrgId", "Project must have an Id");
+				throw new ArgumentNullException("ProjectCode", "Project must have an Id");
 			}
 
 			if (newProject.StartingDate.HasValue && newProject.EndingDate.HasValue && DateTime.Compare(newProject.StartingDate.Value, newProject.EndingDate.Value) > 0)
@@ -353,13 +346,12 @@ namespace AllyisApps.Services
 		/// <param name="name">Project name.</param>
 		/// <param name="orgId">Project org id.</param>
 		/// <param name="isHourly">Project type.  True == hourly, false == fixed. TODO: use this parameter to update the project's isHourly column.  Currently disabled attribute.</param>
-		/// <param name="isActive">Sets if the project is active</param>
 		/// <param name="start">Starting date. <see cref="DateTime"/>.</param>
 		/// <param name="end">Ending date. <see cref="DateTime"/>.</param>
 		/// <param name="userIds">Updated on-project user list.</param>
 		/// <param name="subscriptionId">.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public async Task<bool> UpdateProjectAndUsers(int projectId, string name, string orgId, DateTime? start, DateTime? end, IEnumerable<int> userIds, int subscriptionId, bool isHourly = true, bool isActive = false)
+		public async Task<bool> UpdateProjectAndUsers(int projectId, string name, string orgId, DateTime? start, DateTime? end, IEnumerable<int> userIds, int subscriptionId, bool isHourly = true)
 		{
 			#region Validation
 
@@ -391,7 +383,7 @@ namespace AllyisApps.Services
 			#endregion Validation
 
 			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
-			DBHelper.UpdateProjectAndUsers(projectId, name, orgId, isHourly, isActive, start, end, userIds);
+			DBHelper.UpdateProjectAndUsers(projectId, name, orgId, isHourly, start, end, userIds);
 			await Task.Yield();
 			return true;
 		}
@@ -420,10 +412,18 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="projectId">The project id.</param>
 		/// <param name="subscriptionId">The subscription id.</param>
-		/// <returns></returns>
-		async public Task<bool> FullDeleteProject(int projectId, int subscriptionId)
+		/// <returns>The number of rows deleted -- includes projectUsers deleted.</returns>
+		public async Task<int> FullDeleteProject(int projectId, int subscriptionId)
 		{
 			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
+
+			var timeEntries = await DBHelper.GetTimeEntriesByProjectId(projectId);
+
+			if (timeEntries.Any())
+			{
+				return -1;
+			}
+
 			return await DBHelper.FullDeleteProject(projectId);
 		}
 
@@ -441,6 +441,9 @@ namespace AllyisApps.Services
 			}
 
 			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
+
+			await CheckUpdateProjectStartEndDate(projectId, null, DateTime.Now);
+
 			return await DBHelper.DeleteProject(projectId);
 		}
 
@@ -585,7 +588,16 @@ namespace AllyisApps.Services
 		/// <returns></returns>
 		async public Task<string> GetNextProjectId(int orgId, int subscriptionId)
 		{
-			var results = await DBHelper.GetNextProjectId(orgId, subscriptionId);
+			var results = "";
+			try
+			{
+				results = await DBHelper.GetNextProjectId(orgId, subscriptionId);
+			}
+			catch (Exception e)
+			{
+				results = e.ToString();
+				results = "";
+			}
 			return string.IsNullOrEmpty(results) ? "0000000000000000" : new string(IncrementAlphanumericCharArray(results.ToCharArray()));
 		}
 
@@ -613,14 +625,15 @@ namespace AllyisApps.Services
 		/// Gets all the projects in every customer in the entire organization.
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
+		/// <param name="onlyActive">Bool whether or not to only get active projects.</param>
 		/// <returns>All the projects in the organization.</returns>
-		public async Task<IEnumerable<Project.Project>> GetAllProjectsForOrganizationAsync(int orgId)
+		public async Task<IEnumerable<Project.Project>> GetAllProjectsForOrganizationAsync(int orgId, bool onlyActive)
 		{
 			var result = new List<Project.Project>();
 			var customers = await GetCustomerList(orgId);
 			foreach (var customer in customers)
 			{
-				result.AddRange(await GetProjectsByCustomerAsync(customer.CustomerId));
+				result.AddRange(await GetProjectsByCustomerAsync(customer.CustomerId, onlyActive));
 			}
 			return result;
 		}
@@ -709,7 +722,7 @@ namespace AllyisApps.Services
 				ContactPhoneNumber = customer.ContactPhoneNumber,
 				CreatedUtc = customer.CreatedUtc,
 				CustomerId = customer.CustomerId,
-				CustomerOrgId = customer.CustomerOrgId,
+				CustomerCode = customer.CustomerCode,
 				EIN = customer.EIN,
 				FaxNumber = customer.FaxNumber,
 				CustomerName = customer.CustomerName,
@@ -753,7 +766,7 @@ namespace AllyisApps.Services
 				ContactPhoneNumber = customer.ContactPhoneNumber,
 				CreatedUtc = customer.CreatedUtc,
 				CustomerId = customer.CustomerId,
-				CustomerOrgId = customer.CustomerOrgId,
+				CustomerCode = customer.CustomerCode,
 				EIN = customer.EIN,
 				FaxNumber = customer.FaxNumber,
 				CustomerName = customer.CustomerName,
@@ -784,7 +797,7 @@ namespace AllyisApps.Services
 		//        ContactPhoneNumber = customer.ContactPhoneNumber,
 		//        CreatedUtc = customer.CreatedUtc,
 		//        CustomerId = customer.CustomerId,
-		//        CustomerOrgId = customer.CustomerOrgId,
+		//        CustomerCode = customer.CustomerCode,
 		//        EIN = customer.EIN,
 		//        FaxNumber = customer.FaxNumber,
 		//        CustomerName = customer.CustomerName,
@@ -812,13 +825,13 @@ namespace AllyisApps.Services
 					ContactPhoneNumber = customer.ContactPhoneNumber,
 					CreatedUtc = customer.CreatedUtc,
 					CustomerId = customer.CustomerId,
-					CustomerOrgId = customer.CustomerOrgId,
+					CustomerCode = customer.CustomerCode,
 					EIN = customer.EIN,
 					FaxNumber = customer.FaxNumber,
 					CustomerName = customer.CustomerName,
 					OrganizationId = customer.OrganizationId,
 					Website = customer.Website,
-					IsActive = customer.IsActive
+					IsActive = customer.IsActive ?? true
 				},
 				new AddressDBEntity
 				{
@@ -851,12 +864,13 @@ namespace AllyisApps.Services
 				{
 					CustomerId = project.CustomerId,
 					CustomerName = project.CustomerName,
+					CustomerCode = project.CustomerCode
 				},
 				EndingDate = project.EndingDate,
 				ProjectName = project.ProjectName,
 				OrganizationId = project.OrganizationId,
 				ProjectId = project.ProjectId,
-				ProjectOrgId = project.ProjectOrgId,
+				ProjectCode = project.ProjectCode,
 				StartingDate = project.StartingDate,
 				IsHourly = project.IsHourly
 			};
@@ -881,9 +895,10 @@ namespace AllyisApps.Services
 				ProjectName = project.ProjectName,
 				OrganizationId = project.OrganizationId,
 				ProjectId = project.ProjectId,
-				ProjectOrgId = project.ProjectOrgId,
+				ProjectCode = project.ProjectCode,
 				StartingDate = project.StartingDate,
-				IsHourly = project.IsHourly
+				IsHourly = project.IsHourly,
+				IsActive = project.IsActive
 			};
 		}
 
@@ -906,7 +921,7 @@ namespace AllyisApps.Services
 				{
 					CustomerId = completeProject.CustomerId,
 					CustomerName = completeProject.CustomerName,
-					CustomerOrgId = completeProject.CustomerOrgId,
+					CustomerCode = completeProject.CustomerCode,
 				},
 				EndDate = completeProject.EndDate,
 				IsActive = completeProject.IsActive,
@@ -918,7 +933,7 @@ namespace AllyisApps.Services
 				ProjectId = completeProject.ProjectId,
 				ProjectName = completeProject.ProjectName,
 				StartDate = completeProject.StartDate,
-				ProjectOrgId = completeProject.ProjectOrgId,
+				ProjectCode = completeProject.ProjectCode,
 				IsProjectUser = completeProject.IsProjectUser
 			};
 		}

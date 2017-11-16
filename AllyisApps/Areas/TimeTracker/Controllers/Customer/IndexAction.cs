@@ -92,7 +92,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				ContactPhoneNumber = x.ContactPhoneNumber,
 				CreatedUtc = x.CreatedUtc,
 				CustomerName = x.CustomerName,
-				CustomerOrgId = x.CustomerOrgId,
+				CustomerCode = x.CustomerCode,
 				EIN = x.EIN,
 				FaxNumber = x.FaxNumber,
 				IsActive = x.IsActive,
@@ -101,7 +101,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}).ToList();
 
 			return View("Customer",
-				new MultiCustomerInfoViewModel()
+				new AllyisApps.ViewModels.TimeTracker.Customer.MultiCustomerInfoViewModel()
 				{
 					CustomerList = customers
 				});

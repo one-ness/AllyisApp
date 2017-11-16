@@ -2,29 +2,44 @@ CREATE PROCEDURE [Pjm].[CreateProjectAndUpdateItsUserList]
 	@customerId INT,
 	@projectName NVARCHAR(MAX),
 	@isHourly BIT,
-	@projectOrgId NVARCHAR(16),
+	@projectCode NVARCHAR(16),
 	@startingDate DATETIME2(0),
 	@endingDate DATETIME2(0),
+	@isActive BIT,
 	@userIds [Auth].[UserTable] READONLY,
-    @retId INT OUTPUT
+	@retId INT OUTPUT
 AS
 BEGIN
 	SET NOCOUNT ON;
 	IF EXISTS (
 		SELECT * FROM [Pjm].[Project] WITH (NOLOCK)
-		WHERE [ProjectOrgId] = @projectOrgId
+		WHERE [ProjectCode] = @projectCode
 		AND [CustomerId] = @customerId
 	)
 		BEGIN
-			-- ProjectOrgId is not unique
+			-- ProjectCode is not unique
 			SET @retId = -1;
 		END
 	ELSE
 		BEGIN
 			BEGIN TRANSACTION
 				-- Create the new project in Project table
-				INSERT INTO [Pjm].[Project] ([CustomerId], [ProjectName], [IsHourly], [ProjectOrgId], [StartUtc], [EndUtc])
-				VALUES	(@customerId, @projectName, @isHourly, @projectOrgId, @startingDate, @endingDate);
+				INSERT INTO [Pjm].[Project] (
+					[CustomerId],
+					[ProjectName],
+					[IsHourly],
+					[ProjectCode],
+					[StartUtc],
+					[EndUtc],
+					[IsActive])
+				VALUES	(
+					@customerId,
+					@projectName,
+					@isHourly,
+					@projectCode,
+					@startingDate,
+					@endingDate,
+					@isActive);
 				SET @retId = SCOPE_IDENTITY()
 
 				/* Update new users that used to be users at some point */

@@ -144,83 +144,82 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
 		public async Task<ActionResult> SubmitUpdatePosition(EditPositionViewModel model, int subscriptionId)
 		{
-			if (ModelState.IsValid)
+			// Invalid model TODO: redirect back to form page
+			if (!ModelState.IsValid)
 			{
-				var tags = new List<Tag>();
-				if (model.OrganizationId == 0)
-				{
-					UserContext.SubscriptionAndRole subInfo = null;
-					AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-					model.OrganizationId = subInfo.OrganizationId;
-					if (model.TagsToSubmit != null)
-					{
-						JavaScriptSerializer js = new JavaScriptSerializer();
-						var tagArray = js.Deserialize<string[]>(model.TagsToSubmit);
-
-						foreach (string tag in tagArray)
-						{
-							if (tag == "") tags.Add(new Tag { TagName = "New", TagId = -1, PositionId = -1 });
-							else tags.Add(new Tag { TagName = tag, TagId = -1, PositionId = -1 });
-						}
-					}
-					if (model.PositionStatusId == 0)
-					{
-						var defaultGet = await AppService.GetStaffingDefaultStatus(subInfo.SubscriptionId);
-						model.PositionStatusId = defaultGet[0];
-					}
-				}
-				int? positionId = await AppService.UpdatePosition(
-					new Position
-					{
-						OrganizationId = model.OrganizationId,
-						CustomerId = model.CustomerId,
-						AddressId = model.AddressId,
-						PositionStatusId = model.PositionStatusId,
-						PositionTitle = model.PositionTitle,
-						DurationMonths = model.DurationMonths,
-						EmploymentTypeId = model.EmploymentTypeId,
-						PositionCount = model.PositionCount,
-						RequiredSkills = model.RequiredSkills,
-						PositionLevelId = model.PositionLevelId,
-						PositionId = model.PositionId,
-						PositionCreatedUtc = model.PositionCreatedUtc,
-						PositionModifiedUtc = model.PositionModifiedUtc,
-						StartDate = model.StartDate,
-						BillingRateFrequency = (int)model.BillingRateFrequency,
-						BillingRateAmount = model.BillingRateAmount,
-						JobResponsibilities = model.JobResponsibilities,
-						DesiredSkills = model.DesiredSkills,
-						HiringManager = model.HiringManager,
-						TeamName = model.TeamName,
-
-						Address = new Address
-						{
-							Address1 = model.PositionAddress.Address,
-							City = model.PositionAddress.City,
-							StateId = model.PositionAddress.SelectedStateId,
-							CountryCode = model.PositionAddress.SelectedCountryCode,
-							PostalCode = model.PositionAddress.PostalCode
-						},
-
-						Tags = tags
-					});
-
-				if (positionId.HasValue)
-				{
-					Notifications.Add(new BootstrapAlert("Successfully created a new Position", Variety.Success));
-
-					// Redirect to the user position page
-					return RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
-				}
-
-				// No customer value, should only happen because of a permission failure
-				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-
-				return RedirectToAction(ActionConstants.Index);
+				return RedirectToAction(ActionConstants.CreatePosition, new { subscriptionId });
 			}
 
-			// Invalid model TODO: redirect back to form page
-			return RedirectToAction(ActionConstants.CreatePosition, new { subscriptionId = subscriptionId });
+			var tags = new List<Tag>();
+			if (model.OrganizationId == 0)
+			{
+				AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out UserContext.SubscriptionAndRole subInfo);
+				model.OrganizationId = subInfo.OrganizationId;
+				if (model.TagsToSubmit != null)
+				{
+					var tagArray = new JavaScriptSerializer().Deserialize<string[]>(model.TagsToSubmit);
+
+					tags = tagArray.Select(tag => new Tag
+					{
+						TagName = tag == "" ? "New" : tag,
+						TagId = -1,
+						PositionId = -1
+					}).ToList();
+				}
+				if (model.PositionStatusId == 0)
+				{
+					var defaultGet = await AppService.GetStaffingDefaultStatus(subInfo.SubscriptionId);
+					model.PositionStatusId = defaultGet[0];
+				}
+			}
+			int? positionId = await AppService.UpdatePosition(
+				new Position
+				{
+					OrganizationId = model.OrganizationId,
+					CustomerId = model.CustomerId,
+					AddressId = model.AddressId,
+					PositionStatusId = model.PositionStatusId,
+					PositionTitle = model.PositionTitle,
+					DurationMonths = model.DurationMonths,
+					EmploymentTypeId = model.EmploymentTypeId,
+					PositionCount = model.PositionCount,
+					RequiredSkills = model.RequiredSkills,
+					PositionLevelId = model.PositionLevelId,
+					PositionId = model.PositionId,
+					PositionCreatedUtc = model.PositionCreatedUtc,
+					PositionModifiedUtc = model.PositionModifiedUtc,
+					StartDate = model.StartDate,
+					BillingRateFrequency = (int)model.BillingRateFrequency,
+					BillingRateAmount = model.BillingRateAmount,
+					JobResponsibilities = model.JobResponsibilities,
+					DesiredSkills = model.DesiredSkills,
+					HiringManager = model.HiringManager,
+					TeamName = model.TeamName,
+
+					Address = new Address
+					{
+						Address1 = model.PositionAddress.Address,
+						City = model.PositionAddress.City,
+						StateId = model.PositionAddress.SelectedStateId,
+						CountryCode = model.PositionAddress.SelectedCountryCode,
+						PostalCode = model.PositionAddress.PostalCode
+					},
+
+					Tags = tags
+				});
+
+			if (positionId.HasValue)
+			{
+				Notifications.Add(new BootstrapAlert("Successfully created a new Position", Variety.Success));
+
+				// Redirect to the user position page
+				return RedirectToAction(ActionConstants.Index, new { subscriptionId });
+			}
+
+			// No customer value, should only happen because of a permission failure
+			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
+
+			return RedirectToAction(ActionConstants.Index);
 		}
 	}
 }

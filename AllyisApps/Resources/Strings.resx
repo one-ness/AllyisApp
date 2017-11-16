@@ -147,7 +147,7 @@
   <data name="CustomerDetailsUpdated" xml:space="preserve">
     <value>Customer details have been updated successfully.</value>
   </data>
-  <data name="CustomerOrgIdNotUnique" xml:space="preserve">
+  <data name="CustomerCodeNotUnique" xml:space="preserve">
     <value>This Customer ID is already in use. The Customer ID must be a unique value.</value>
   </data>
   <data name="EmployeeIdNotUniqueError" xml:space="preserve">
@@ -483,7 +483,7 @@
   <data name="CustomerList" xml:space="preserve">
     <value>Customers</value>
   </data>
-  <data name="CustomerOrgId" xml:space="preserve">
+  <data name="CustomerCode" xml:space="preserve">
     <value>Organization Specific Id</value>
   </data>
   <data name="Customers" xml:space="preserve">
@@ -1047,11 +1047,11 @@
   <data name="ProjectList" xml:space="preserve">
     <value>Back</value>
   </data>
-  <data name="ProjectOrgId" xml:space="preserve">
+  <data name="ProjectCode" xml:space="preserve">
     <value>Project ID</value>
   </data>
-  <data name="ProjectOrgIdNotUnique" xml:space="preserve">
-    <value>The chosen Project ID already exists. The value must be a unique value.</value>
+  <data name="ProjectCodeNotUnique" xml:space="preserve">
+    <value>The chosen Project ID already exists for this customer. The value must be a unique value.</value>
   </data>
   <data name="Projects" xml:space="preserve">
     <value>Projects</value>
@@ -1595,13 +1595,13 @@
     <value>Value of var \"{0}\" is not a valid option for LockEntriesResult</value>
   </data>
   <data name="LockTimeEntriesInvalidStatuses" xml:space="preserve">
-    <value>Cannot lock time entries &lt;= {0} because not all of them are status Approved or Rejected.</value>
+    <value>Cannot lock time entries up to {0} because not all of them are status Approved or Rejected.</value>
   </data>
   <data name="LockTimeEntriesDBError" xml:space="preserve">
-    <value>Cannot lock time entries &lt;= {0} because of a db error.</value>
+    <value>Cannot lock time entries through {0} because of a db error.</value>
   </data>
   <data name="LockTimeEntriesSuccess" xml:space="preserve">
-    <value>Successfully locked all dates for time entries &lt;= {0}.</value>
+    <value>Successfully locked all dates for time entries up to {0}.</value>
   </data>
   <data name="UpdateTimeEntryStatusSuccess" xml:space="preserve">
     <value>Successfully updated selected time entry statuses.</value>
@@ -1619,13 +1619,13 @@
     <value>Value of var \"{0}\" is not a valid enum in {1}.</value>
   </data>
   <data name="LockEntries" xml:space="preserve">
-    <value>Lock Entries</value>
+    <value>Lock Entries up to {0}</value>
   </data>
   <data name="UnlockEntries" xml:space="preserve">
-    <value>Unlock Entries</value>
+    <value>Unlock all locked Entries</value>
   </data>
   <data name="PayrollProcess" xml:space="preserve">
-    <value>Payroll Process</value>
+    <value>Payroll Process all Locked Entries</value>
   </data>
   <data name="PayrollProcessNoLockDate" xml:space="preserve">
     <value>You must lock time entries before changing them to payroll processed.</value>
@@ -1646,7 +1646,7 @@
     <value>Cannot update time entries status, there are no statuses selected.</value>
   </data>
   <data name="LockTimeEntriesInvalidLockDate" xml:space="preserve">
-    <value>Cannot set new lock date {0} because the date is on or before the previous lock or payroll processed date</value>
+    <value>Cannot set new lock date to {0} because the date is on or before the previous lock or payroll processed date</value>
   </data>
   <data name="PayrollProcessConfirm" xml:space="preserve">
     <value>Are you sure you want to payroll process all approved time entries at and before {0}?</value>
@@ -1761,5 +1761,11 @@
   </data>
   <data name="CannotInviteSelf" xml:space="preserve">
     <value>You cannot invite yourself to your own organizaion</value>
+  </data>
+  <data name="ProjectIsNotActive" xml:space="preserve">
+    <value>Project is not active.</value>
+  </data>
+  <data name="MustBeAssignedToProject" xml:space="preserve">
+    <value>User must be assigned to project.</value>
   </data>
 </root>

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.ViewModels.Auth;
+using AllyisApps.ViewModels;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -34,6 +35,11 @@ namespace AllyisApps.Controllers.Auth
 				data.InvitedOn = item.InvitationCreatedUtc;
 				//data.ProductAndRoleNames = item.ProductRolesJson; TODO: parse the json to get the product names and roles
 				data.Status = item.InvitationStatus.ToString();
+				if (item.InvitationStatus == Services.Auth.InvitationStatusEnum.Pending)
+				{
+					model.PendingInvitationCount++;
+				}
+
 				StringBuilder sb = new StringBuilder();
 				sb.Append(item.FirstName);
 				sb.Append(" ");
@@ -46,6 +52,8 @@ namespace AllyisApps.Controllers.Auth
 			model.OrganizationName = org.OrganizationName;
 			model.OrganizationId = id;
 			model.TabInfo.OrganizationId = id;
+			model.TabInfo.MemberCount = await this.AppService.GetOrganizationUserCountAsync(id);
+			model.TabInfo.PendingInvitationCount = model.PendingInvitationCount;
 			model.CanDeleteInvitations = AppService.CheckOrgAction(Services.AppService.OrgAction.DeleteInvitation, id, false);
 			model.CanResendInvitations = AppService.CheckOrgAction(Services.AppService.OrgAction.AddUserToOrganization, id, false);
 			return View(model);

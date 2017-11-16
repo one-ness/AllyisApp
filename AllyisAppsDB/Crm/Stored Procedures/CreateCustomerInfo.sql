@@ -12,7 +12,7 @@ CREATE PROCEDURE [Crm].[CreateCustomerInfo]
 	@eIN NVARCHAR(50),
 	@isActive BIT,
 	@organizationId INT,
-	@customerOrgId NVARCHAR(16),
+	@customerCode NVARCHAR(16),
 	@retId INT OUTPUT
 AS
 BEGIN
@@ -22,10 +22,10 @@ BEGIN
 
 	IF EXISTS (
 		SELECT * FROM [Crm].[Customer] WITH (NOLOCK)
-		WHERE [CustomerOrgId] = @customerOrgId AND [OrganizationId] = @organizationId
+		WHERE [CustomerCode] = @customerCode AND [OrganizationId] = @organizationId
 	)
 	BEGIN
-		-- CustomerOrgId is not unique
+		-- CustomerCode is not unique
 		SET @retId = -1;
 	END
 	ELSE
@@ -51,7 +51,7 @@ BEGIN
 				[EIN], 
 				[IsActive],
 				[OrganizationId], 
-				[CustomerOrgId])
+				[CustomerCode])
 			VALUES (@customerName, 
 				@addressId,
 				@contactEmail, 
@@ -61,7 +61,7 @@ BEGIN
 				@eIN, 
 				@isActive,
 				@organizationId, 
-				@customerOrgId);
+				@customerCode);
 			SET @retId = SCOPE_IDENTITY();
 			if (@@ERROR <> 0)
 					goto _failure

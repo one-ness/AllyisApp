@@ -13,17 +13,19 @@
 	string approvalClass = Model.ModSinceApproval ? "pending" :
 					  Model.ApprovalState == (int)ApprovalState.NotApproved ? "rejected" :
 					  Model.ApprovalState == (int)ApprovalState.Approved ? "approved" : string.Empty;
-	var managableProjects = (bool) ViewBag.CanManage ? Model.ProjectsWithInactive : Model.Projects;
+	var managableProjects = Model.ProjectsWithInactive;
 	var managableProjectsDropdown = managableProjects
 		.Where(p =>
-			(p.StartDate == null || DateTime.Compare(p.StartDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) <= 0) &&
-			(p.EndDate == null || DateTime.Compare(p.EndDate.Value, ViewBag.GetDateTimeFromDays(Model.Date)) >= 0))
-		.Select(c => new SelectListItem
+			(p.StartDate == null || p.StartDate.Value <= (DateTime)ViewBag.GetDateTimeFromDays(Model.Date)) &&
+			(p.EndDate == null || p.EndDate.Value >= (DateTime)ViewBag.GetDateTimeFromDays(Model.Date)) &&
+			(p.IsUserActive || (!Model.Sample && Model.ProjectId == p.ProjectId))
+			)
+		.Select(p => new SelectListItem
 		{
-			Selected = Model.ProjectId == c.ProjectId,
-			Text = c.ProjectId != -1 ? string.Format("{0} - {1}", c.CustomerName, c.ProjectName) : c.ProjectName, //Only need customer - project text for project ids !=0
-			Value = c.ProjectId.ToString()
-			//Disabled = !c.IsUserActive
+			Selected = Model.ProjectId == p.ProjectId,
+			Text = p.ProjectId != -1 ? string.Format("{0} - {1}", p.CustomerName, p.ProjectName) : p.ProjectName, //Only need customer - project text for project ids !=0
+			Value = p.ProjectId.ToString(),
+			//Disabled = !p.IsUserActive && !Model.Sample
 		});
 	var payClassesDropdown = Model.PayClasses.Select(c =>
 		new SelectListItem

@@ -6,13 +6,11 @@
 }
 
 @Html.Partial("_MembersAndInvitationsTab", Model.TabInfo)
-<div style="margin-bottom: 25px;"></div>
 @if (Model.Invitations.Count <= 0)
 {
 	<div class="row" style="margin-bottom: 20px;">
 		<div class="col-xs-12">
-			<p><i>You have not sent any invitations.</i></p>
-			<p><i>Click on Members and then Add Members to invite users to your organization</i></p>
+			<p><i>You have not sent any invitations. Click on Add Members to invite users to your organization</i></p>
 		</div>
 	</div><br/>
 	<div class="row">

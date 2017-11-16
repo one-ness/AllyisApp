@@ -4,7 +4,7 @@ CREATE PROCEDURE [Pjm].[GetProjectsForOrgAndUser]
 AS
 	SELECT [P].[ProjectId],
 			[P].[ProjectName],
-			[P].[ProjectOrgId],
+			[P].[ProjectCode],
 			[C].[CustomerName] AS CustomerName
 	FROM [Pjm].[ProjectUser] AS [PU] WITH (NOLOCK)
 	LEFT JOIN [Pjm].[Project] AS [P] WITH (NOLOCK) ON [P].[ProjectId] = [PU].[ProjectId]
@@ -14,7 +14,7 @@ AS
 
 	SELECT [P].[ProjectId],
 			[P].[ProjectName],
-			[P].[ProjectOrgId],
+			[P].[ProjectCode],
 			[C].[CustomerName] AS CustomerName
 	FROM [Pjm].[Project] AS [P] WITH (NOLOCK)
 		JOIN [Crm].[Customer] AS [C] WITH (NOLOCK) ON [C].[CustomerId] = [P].[CustomerId]

@@ -147,18 +147,18 @@ namespace AllyisApps.Services
 			await DBHelper.DeleteOrganization(orgId);
 		}
 
-        /// <summary>
-        /// Creates an invitation for a new user in the database, and also sends an email to the new user with their access code.
-        /// </summary>
-        public async Task<int> InviteUser(string url, string email, string firstName, string lastName, int organizationId, string organizationName, OrganizationRoleEnum organizationRoleId, string employeedId, string prodJson)
-        {
-            if (organizationId <= 0) throw new ArgumentOutOfRangeException(nameof(organizationId));
-            CheckOrgAction(OrgAction.AddUserToOrganization, organizationId);
-            if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
-            if (string.IsNullOrWhiteSpace(email)) throw new ArgumentNullException(nameof(email));
-            if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException(nameof(firstName));
-            if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException(nameof(lastName));
-            if (string.IsNullOrWhiteSpace(employeedId)) throw new ArgumentNullException(nameof(employeedId));
+		/// <summary>
+		/// Creates an invitation for a new user in the database, and also sends an email to the new user with their access code.
+		/// </summary>
+		public async Task<int> InviteUser(string url, string email, string firstName, string lastName, int organizationId, string organizationName, OrganizationRoleEnum organizationRoleId, string employeedId, string prodJson)
+		{
+			if (organizationId <= 0) throw new ArgumentOutOfRangeException(nameof(organizationId));
+			CheckOrgAction(OrgAction.AddUserToOrganization, organizationId);
+			if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
+			if (string.IsNullOrWhiteSpace(email)) throw new ArgumentNullException(nameof(email));
+			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException(nameof(firstName));
+			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException(nameof(lastName));
+			if (string.IsNullOrWhiteSpace(employeedId)) throw new ArgumentNullException(nameof(employeedId));
 
 			// Creation of invitation
 			var result = await DBHelper.CreateInvitation(email, firstName, lastName, organizationId, organizationName, (int)organizationRoleId, employeedId, prodJson);
@@ -295,6 +295,23 @@ namespace AllyisApps.Services
 			var collection = await DBHelper.GetOrganizationUsersAsync(orgId);
 
 			return collection.Select(item => this.InitializeOrganizationUser(item)).Cast<OrganizationUser>().ToList();
+		}
+
+		public async Task<int> GetOrganizationUserCountAsync(int orgId)
+		{
+			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
+			CheckOrgAction(OrgAction.ReadUsersList, orgId);
+
+			return await this.DBHelper.GetOrganizationUserCountAsync(orgId);
+		}
+
+		public async Task<int> GetOrganizationInvitationCountAsync(int orgId, InvitationStatusEnum statusMask)
+		{
+			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
+			CheckOrgAction(OrgAction.ReadInvitationsList, orgId);
+			
+
+			return await this.DBHelper.GetOrganizationInvitationCountAsync(orgId, (int)statusMask);
 		}
 
 		/// <summary>

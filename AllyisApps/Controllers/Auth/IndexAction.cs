@@ -102,7 +102,7 @@ namespace AllyisApps.Controllers.Auth
 
 				// Add subscription info
 				foreach (var subItem in accountInfo.Subscriptions
-					.Where(sub => sub.OrganizationId == item.OrganizationId)
+					.Where(sub => sub.OrganizationId == item.OrganizationId  && sub.ProductRoleId != 0 )
 					.OrderBy(sub => sub.ProductId))
 				{
 					string description = string.Empty;

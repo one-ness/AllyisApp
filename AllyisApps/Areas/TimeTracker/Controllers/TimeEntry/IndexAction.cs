@@ -79,13 +79,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="startDate">The start date.</param>
 		/// <param name="endDate">The end date.</param>
-		/// <param name="userid"></param>
+		/// <param name="userId"></param>
 		/// <returns>A redirect to the index action.</returns>
-		public RedirectToRouteResult TimeTrackerDatePickerRedirect(int subscriptionId, DateTime startDate, DateTime endDate, int? userid)
+		public RedirectToRouteResult TimeTrackerDatePickerRedirect(int subscriptionId, DateTime startDate, DateTime endDate, int? userId)
 		{
 			int start = Utility.GetDaysFromDateTime(startDate);
 			int end = Utility.GetDaysFromDateTime(endDate);
-			return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry, new { subscriptionId, startDate = start, endDate = end, userid = userid });
+			return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry, new { subscriptionId, startDate = start, endDate = end, userId = userId });
 		}
 
 		/// <summary>
@@ -273,7 +273,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 						// holidayPopulated = false;
 					}
-
 					
 				}
 			}

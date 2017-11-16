@@ -8,8 +8,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
-using AllyisApps.ViewModels.TimeTracker.Project;
 using AllyisApps.Services;
+using AllyisApps.ViewModels.TimeTracker.Project;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -24,7 +24,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The current subscription id.</param>
 		/// <returns></returns>
-		async public Task<ActionResult> Index(int subscriptionId)
+		public async Task<ActionResult> Index(int subscriptionId)
 		{
 			ViewData["IsManager"] = AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
 			ViewData["SubscriptionId"] = subscriptionId;

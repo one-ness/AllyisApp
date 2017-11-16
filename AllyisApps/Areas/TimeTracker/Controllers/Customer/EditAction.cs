@@ -72,7 +72,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
 				LocalizedStates = ModelHelper.GetLocalizedStates(AppService, customer.Address?.CountryCode),
 
-				CustomerOrgId = customer.CustomerOrgId,
+				CustomerCode = customer.CustomerCode,
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subscriptionNameToDisplay
 			});
@@ -94,7 +94,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					var projects = await AppService.GetProjectsByCustomerAsync(model.CustomerId);
 					foreach (var project in projects)
 					{
-						var results = AppService.DeleteProject(project.ProjectId, model.SubscriptionId);
+						await AppService.DeleteProject(project.ProjectId, model.SubscriptionId);
 					}
 				}
 
@@ -120,7 +120,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						Website = model.Website,
 						EIN = model.EIN,
 						IsActive = model.IsActive,
-						CustomerOrgId = model.CustomerOrgId,
+						CustomerCode = model.CustomerCode,
 						OrganizationId = model.OrganizationId
 					},
 					model.SubscriptionId);
@@ -128,7 +128,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				if (result == -1)
 				{
 					// the new CustOrgId is not unique
-					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerOrgIdNotUnique, Variety.Danger));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerCodeNotUnique, Variety.Danger));
 					return View(model);
 				}
 				else if (result == 1)

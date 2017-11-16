@@ -18,6 +18,11 @@
 		public const string CustomerId = "Customer Id";
 
 		/// <summary>
+		/// Customer-Property: CustomerCode.
+		/// </summary>
+		public const string CustomerCode = "Customer Code";
+
+		/// <summary>
 		/// Customer-Property: Street Address.
 		/// </summary>
 		public const string CustomerStreetAddress = "Customer Street Address";
@@ -75,6 +80,11 @@
 		/// Project-Property: Id.
 		/// </summary>
 		public const string ProjectId = "Project Id";
+
+		/// <summary>
+		/// Project-Property: Project Code.
+		/// </summary>
+		public const string ProjectCode = "Project Code";
 
 		/// <summary>
 		/// Project-Property: Type.

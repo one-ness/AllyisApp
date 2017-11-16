@@ -5,10 +5,10 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	SELECT TOP 1
-		[ProjectOrgId]
+		[ProjectCode]
 	FROM [Pjm].[Project] WITH (NOLOCK)
 	WHERE [Project].[CustomerId] = @customerId
-	ORDER BY [ProjectOrgId] DESC
+	ORDER BY [ProjectCode] DESC
 
 	SELECT [FirstName], [LastName], [ProductRoleId], [User].[UserId]
 	FROM [Auth].[OrganizationUser] WITH (NOLOCK) 

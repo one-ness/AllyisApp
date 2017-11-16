@@ -55,7 +55,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				OrganizationId = customer.OrganizationId,
 				CustomerId = customerId,
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
-				CustomerOrgId = infos.CustomerOrgId,
+				CustomerCode = infos.CustomerCode,
 				CanEditCustomers = AppService.CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId, false)
 			});
 		}

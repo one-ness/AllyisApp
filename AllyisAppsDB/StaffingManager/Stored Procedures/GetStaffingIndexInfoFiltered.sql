@@ -42,7 +42,7 @@ BEGIN
 			[Customer].[EIN],
 			[Customer].[CustomerCreatedUtc],
 			[Customer].[OrganizationId],
-			[Customer].[CustomerOrgId],
+			[Customer].[CustomerCode],
 			[Customer].[IsActive]
 		FROM [StaffingManager].[Position]
 		LEFT JOIN [StaffingManager].[PositionTag]	 WITH (NOLOCK) ON [PositionTag].[PositionId] = [Position].[PositionId]
@@ -114,7 +114,7 @@ BEGIN
 		   [EIN],
 		   [CustomerCreatedUtc],
 		   [OrganizationId],
-		   [CustomerOrgId],
+		   [CustomerCode],
 		   [IsActive]
 	FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK)
 	WHERE [Customer].[OrganizationId] = @organizationId

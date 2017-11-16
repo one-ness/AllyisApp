@@ -27,7 +27,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new InvalidOperationException("Project requires a name. Cannot update.");
 			}
 
-			if (string.IsNullOrWhiteSpace(project.ProjectOrgId))
+			if (string.IsNullOrWhiteSpace(project.ProjectCode))
 			{
 				throw new InvalidOperationException("Project requires a project id. Cannot update.");
 			}
@@ -40,13 +40,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			await AppService.UpdateProjectAndUsers(
 				project.ProjectId,
 				project.ProjectName,
-				project.ProjectOrgId,
+				project.ProjectCode,
 				project.StartDate,
 				project.EndDate,
 				project.SelectedProjectUserIds.Select(int.Parse),
 				project.SubscriptionId,
-				false,
-				project.IsActive);
+				false);
 
 			// project.IsHourly; // TODO: add an isHourly parameter to update the project's isHourly column.  Currently disabled feature
 		}

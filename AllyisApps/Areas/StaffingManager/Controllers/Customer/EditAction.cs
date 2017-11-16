@@ -61,7 +61,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
 				LocalizedStates = ModelHelper.GetLocalizedStates(AppService, customer.Address?.CountryCode),
 
-				CustomerOrgId = customer.CustomerOrgId,
+				CustomerCode = customer.CustomerCode,
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subscriptionNameToDisplay
 			});
@@ -99,28 +99,26 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 						FaxNumber = model.FaxNumber,
 						Website = model.Website,
 						EIN = model.EIN,
-						CustomerOrgId = model.CustomerOrgId,
+						CustomerCode = model.CustomerCode,
 						OrganizationId = model.OrganizationId
 					},
 					model.SubscriptionId);
 
-				if (result == -1)
+				switch (result)
 				{
-					// the new CustOrgId is not unique
-					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerOrgIdNotUnique, Variety.Danger));
-					return View(model);
-				}
-				else if (result == 1)
-				{
-					// updated successfully
-					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerDetailsUpdated, Variety.Success));
-					return Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, new { subscriptionId = model.SubscriptionId }), model.CustomerId));
-				}
-				else
-				{
-					// Permissions failure
-					Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-					return RedirectToAction(ActionConstants.Index, new { subscriptionId = model.SubscriptionId });
+					case -1:
+						// the new CustOrgId is not unique
+						Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerCodeNotUnique, Variety.Danger));
+						return View(model);
+					case 1:
+						// updated successfully
+						Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerDetailsUpdated, Variety.Success));
+						return Redirect(string.Format("{0}#customerNumber{1}",
+							Url.Action(ActionConstants.Index, new { subscriptionId = model.SubscriptionId }), model.CustomerId));
+					default:
+						// Permissions failure
+						Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
+						return RedirectToAction(ActionConstants.Index, new { subscriptionId = model.SubscriptionId });
 				}
 			}
 			await Task.Delay(1);

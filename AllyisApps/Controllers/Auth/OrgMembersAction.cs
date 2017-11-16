@@ -9,6 +9,10 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
+using AllyisApps.Services.Auth;
+using System.Web.Mvc.Html;
+using System;
+
 namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
@@ -32,13 +36,15 @@ namespace AllyisApps.Controllers.Auth
 			foreach (var item in collection)
 			{
 				var roles = await AppService.GetProductRolesAsync(id, Services.Billing.ProductIdEnum.AllyisApps);
+				OrganizationRoleEnum orgRole = (OrganizationRoleEnum)item.OrganizationRoleId;
+				
 				var role = roles.Where(x => x.ProductRoleId == item.OrganizationRoleId).FirstOrDefault();
 				var data = new OrganizationMembersViewModel.ViewModelItem
 				{
 					Email = item.Email,
 					EmployeeId = item.EmployeeId,
 					JoinedDate = item.OrganizationUserCreatedUtc,
-					RoleName = role?.ProductRoleName ?? string.Empty,
+					RoleName = Enum.GetName(typeof(OrganizationRoleEnum),orgRole) ?? string.Empty,
 					UserId = item.UserId,
 					Username = $"{item.FirstName} {item.LastName}"
 				};
@@ -48,7 +54,11 @@ namespace AllyisApps.Controllers.Auth
 
 			var org = await AppService.GetOrganization(id);
 			model.OrganizationName = org.OrganizationName;
+			model.TabInfo.MemberCount = model.Users.Count;
 
+			if (model.CanAddUser) { 
+				model.TabInfo.PendingInvitationCount = await this.AppService.GetOrganizationInvitationCountAsync(id, Services.Auth.InvitationStatusEnum.Pending);
+			}
 			return View(model);
 		}
 	}

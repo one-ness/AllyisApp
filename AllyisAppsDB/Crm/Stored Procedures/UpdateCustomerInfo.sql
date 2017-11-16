@@ -20,12 +20,12 @@ BEGIN
 	SET NOCOUNT ON;
 	IF EXISTS (
 		SELECT * FROM [Crm].[Customer] WITH (NOLOCK)
-		WHERE [CustomerOrgId] = @orgId
+		WHERE [CustomerCode] = @orgId
 		AND [IsActive] = 1
 		AND [CustomerId] != @customerId
 	)
 		BEGIN
-			-- new CustomerOrgId is taken by a different Customer
+			-- new CustomerCode is taken by a different Customer
 			SET @retId = -1;
 		END
 	ELSE
@@ -59,7 +59,7 @@ BEGIN
 					[FaxNumber] = @faxNumber,
 					[Website] = @website,
 					[EIN] = @eIN,
-					[CustomerOrgId] = @orgId,
+					[CustomerCode] = @orgId,
 					[AddressId] =  @temp,
 					IsActive = @isActive
 				WHERE [CustomerId] = @customerId

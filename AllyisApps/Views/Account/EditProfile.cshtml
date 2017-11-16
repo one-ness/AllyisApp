@@ -12,7 +12,7 @@
 			@Html.AntiForgeryToken()
 			@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" });
 			<div class="row">
-				<div class="col-md-6 min300">
+				<div class="col-md-6 sm-control-width">
 					<div class="form-group">
 						@Html.ReqLabelFor(m => m.Email, Strings.Email)
 						@Html.ValidationMessageFor(m => m.Email)
@@ -42,7 +42,7 @@
 						@Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
 					</div>
 				</div>
-				<div class="col-md-6 min300">
+				<div class="col-md-6 sm-control-width">
 					<div class="form-group">
 						@Html.LabelFor(m => m.Address, Strings.Address)
 						@Html.TextBoxFor(m => m.Address, new { @class = "form-control" })

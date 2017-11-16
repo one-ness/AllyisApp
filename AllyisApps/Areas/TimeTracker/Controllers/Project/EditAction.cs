@@ -28,7 +28,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subscriptionId">Subscription id.</param>
 		/// <param name="userId">The project's Id.</param>
 		/// <returns>The ActionResult for the Edit view.</returns>
-		async public Task<ActionResult> Edit(int subscriptionId, int userId)
+		public async Task<ActionResult> Edit(int subscriptionId, int userId)
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
 			var model = await ConstructEditProjectViewModel(userId, subscriptionId);
@@ -45,28 +45,42 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpPost]
 		public async Task<ActionResult> Edit(int subscriptionId, EditProjectViewModel model)
 		{
-			var listGet = await AppService.GetNextProjectIdAndSubUsers(model.ParentCustomerId, model.SubscriptionId);
-			model.SubscriptionUsers = listGet.Item2.Select(user => new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId)).ToList();
+			//for repopulating form choices upon edit error
+			var totalUsers = model.ProjectUsers.Concat(model.SubscriptionUsers).ToList();
+			model.ProjectUsers = totalUsers.Where(subUsers => model.SelectedProjectUserIds.Contains(subUsers.UserId)); //right multi-select box
+			model.SubscriptionUsers = totalUsers.Except(model.ProjectUsers); //left multi-select box
+
 			if (!ModelState.IsValid) return View(model);
 
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
 
 			int orgId = AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId;
-			var projIdMatchGet = await AppService.GetAllProjectsForOrganizationAsync(orgId);
+			var projects = (await AppService.GetAllProjectsForOrganizationAsync(orgId, false)).ToList();
 
 			// TODO: Don't check for duplicate projects in controller
-			Services.Project.Project projIdMatch = projIdMatchGet.SingleOrDefault(project => project.ProjectOrgId == model.ProjectOrgId && project.owningCustomer?.CustomerId == model.ParentCustomerId);
-			if (projIdMatch != null && projIdMatch.ProjectId != model.ProjectId)
+
+			var projCodeMatch = projects.FindAll(project =>
+				   project.ProjectCode == model.ProjectCode
+				&& project.owningCustomer?.CustomerId == model.ParentCustomerId
+				&& model.ProjectId != project.ProjectId);
+			if (projCodeMatch.Any())
 			{
-				Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectCodeNotUnique, Variety.Danger));
 				return View(model);
 			}
+
+			bool projectIsActive = (model.StartDate == null || model.StartDate <= DateTime.Now)
+								&& (model.EndDate == null || model.EndDate >= DateTime.Now);
+			var projectBeforeEdit = projects.Single(p => p.ProjectId == model.ProjectId);
 
 			try
 			{
 				var customer = await AppService.GetCustomerInfo(model.ParentCustomerId);
-
-				if (!customer.IsActive.Value && model.IsActive)
+				if (model.StartDate != projectBeforeEdit.StartingDate || model.EndDate != projectBeforeEdit.EndingDate) // check new date range to see if entries outside of the new range
+				{
+					await AppService.CheckUpdateProjectStartEndDate(projectBeforeEdit.ProjectId, model.StartDate, model.EndDate);
+				}
+				if (!customer.IsActive.Value && projectIsActive)
 				{
 					customer.IsActive = true;
 					await AppService.UpdateCustomerAsync(customer, subscriptionId);
@@ -98,38 +112,30 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="projectId">Project Id.</param>
 		/// <param name="subscriptionId">Subscription id.</param>
 		/// <returns>The EditProjectViewModel.</returns>
-		async public Task<EditProjectViewModel> ConstructEditProjectViewModel(int projectId, int subscriptionId)
+		public async Task<EditProjectViewModel> ConstructEditProjectViewModel(int projectId, int subscriptionId)
 		{
 			var infos = AppService.GetProjectEditInfo(projectId, subscriptionId);
 			var projectUsers = infos.Item2.Select(projectUser => new BasicUserInfoViewModel(projectUser.FirstName, projectUser.LastName, projectUser.UserId)).ToList();
 			var subscriptionUsers = infos.Item3.Select(su => new BasicUserInfoViewModel(su.FirstName, su.LastName, su.UserId)).ToList();
 			string subscriptionNameToDisplay = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName;
 			var orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-			var customers = (await AppService.GetCustomerList(orgId)).Select(x => new SelectListItem()
+			var customers = (await AppService.GetCustomerList(orgId)).Select(x => new SelectListItem
 			{
 				Text = x.CustomerName,
 				Value = x.CustomerId.ToString()
 			}).ToList();
 
-			List<SelectListItem> statusOptions = new List<SelectListItem>()
-			{
-				new SelectListItem() { Text = "Active", Value = true.ToString() },
-				new SelectListItem() { Text = "Disabled", Value = false.ToString() }
-			};
-
 			return new EditProjectViewModel
 			{
 				Customers = customers,
-				IsActive = infos.Item1.IsActive,
-				isActiveOptions = statusOptions,
 				OrganizationName = infos.Item1.OrganizationName,
 				ParentCustomerId = infos.Item1.owningCustomer.CustomerId,
 				OrganizationId = infos.Item1.OrganizationId,
 				ProjectId = infos.Item1.ProjectId,
-				ProjectOrgId = infos.Item1.ProjectOrgId,
+				ProjectCode = infos.Item1.ProjectCode,
 				ProjectName = infos.Item1.ProjectName,
 				ProjectUsers = projectUsers,
-				SubscriptionUsers = subscriptionUsers.Where(user => projectUsers.All(pu => pu.UserId != user.UserId)), // Grab users that are not part of the project
+				SubscriptionUsers = subscriptionUsers.Where(user => !projectUsers.Select(pu => pu.UserId).Contains(user.UserId)), // Grab users that are not part of the project
 				StartDate = infos.Item1.StartDate,
 				EndDate = infos.Item1.EndDate,
 				SubscriptionId = subscriptionId,

@@ -17,8 +17,10 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44326</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <NuGetPackageImportStamp>
@@ -291,6 +293,7 @@
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ReactivateAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\TemplateAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Home\HomeController.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\Project\ImportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Project\ReactivateAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ReviewAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\MergePayClassAction.cs" />
@@ -576,6 +579,8 @@
     <Content Include="Areas\TimeTracker\Views\TimeEntry\_AjaxTimeEntryBody2.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\Customer.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Project\Projects.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\Customer\CustomerImport.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\Project\ProjectImport.cshtml" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
@@ -611,7 +616,10 @@
     <Content Include="Scripts\allyis-list-group-search.js" />
     <Content Include="Scripts\bootstrap-select.min.js" />
     <Content Include="Scripts\bootstrap.js" />
-    <None Include="Resources\Files\CustomerProjectImportTemplate.xlsx" />
+    <Content Include="Resources\Files\BulkImportTemplate.xlsx" />
+    <Content Include="Resources\Files\CustomerImportTemplate.xlsx" />
+    <Content Include="Resources\Files\ProjectImportTemplate.xlsx" />
+    <Content Include="Resources\Files\CustomerProjectImportTemplate.xlsx" />
     <None Include="Resources\Files\TimeEntryImportTemplate.xlsx" />
     <None Include="Resources\Files\UserImportTemplate.xlsx" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
@@ -701,7 +709,6 @@
     <Content Include="Scripts\bootstrap.min.js.map">
       <DependentUpon>bootstrap.min.js</DependentUpon>
     </Content>
-    <None Include="Resources\Files\ImportUserTemplate.csv" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
@@ -749,6 +756,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\TimeTracker\ViewModels\Manage\" />
+    <Folder Include="Areas\TimeTracker\Views\ImportAction\" />
     <Folder Include="Areas\TimeTracker\Views\Setting2Action\" />
   </ItemGroup>
   <ItemGroup>
@@ -779,6 +787,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Files\Files.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
       <LastGenOutput>Files.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Images.resx">

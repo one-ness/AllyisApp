@@ -4,6 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------\
 
+using System.Collections.Generic;
+
 namespace AllyisApps.ViewModels.TimeTracker.Customer
 {
 	/// <summary>
@@ -69,7 +71,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		/// <summary>
 		/// Gets or sets the id of the customer to be used by the users within the organization.
 		/// </summary>
-		public string CustomerOrgId { get; set; }
+		public string CustomerCode { get; set; }
 
 		/// <summary>
 		/// Gets or sets the bool value indicating if this Customer is currently active.
@@ -126,5 +128,15 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 			/// </summary>
 			public string CountryCode { get; set; }
 		}
+	}
+	/// <summary>
+	/// 
+	/// </summary>
+	public class MultiCustomerInfoViewModel : BaseViewModel
+	{
+		/// <summary>
+		/// Gets or sets a list of customers.
+		/// </summary>
+		public List<CustomerInfoViewModel> CustomerList { get; set; }
 	}
 }

@@ -540,12 +540,34 @@ namespace AllyisApps.DBModel
             }
         }
 
-        /// <summary>
-        /// Retreives the id of the organization that registered the given subdomain.
-        /// </summary>
-        /// <param name="subdomain">The organization's subdomain.</param>
-        /// <returns>The id of the organization.</returns>
-        public int GetIdBySubdomain(string subdomain)
+		/// <summary>
+		/// get the count of organization users
+		/// </summary>
+		public async Task<int> GetOrganizationUserCountAsync(int orgId)
+		{
+			using (var con = new SqlConnection(SqlConnectionString))
+			{
+				return (await con.QueryAsync<int>("Auth.GetOrgUserCount @a", new { a = orgId })).FirstOrDefault();
+			}
+		}
+
+		/// <summary>
+		/// get the count of organization invitations
+		/// </summary>
+		public async Task<int> GetOrganizationInvitationCountAsync(int orgId, int statusMask)
+		{
+			using (var con = new SqlConnection(SqlConnectionString))
+			{
+				return (await con.QueryAsync<int>("Auth.GetOrgInvitationCount @a, @b", new { a = orgId, b = statusMask })).FirstOrDefault();
+			}
+		}
+
+		/// <summary>
+		/// Retreives the id of the organization that registered the given subdomain.
+		/// </summary>
+		/// <param name="subdomain">The organization's subdomain.</param>
+		/// <returns>The id of the organization.</returns>
+		public int GetIdBySubdomain(string subdomain)
         {
             DynamicParameters param = new DynamicParameters();
             param.Add("@subdomain", subdomain);
