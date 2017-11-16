@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
+using AllyisApps.Services.Auth;
+
 namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
@@ -49,8 +51,10 @@ namespace AllyisApps.Controllers.Auth
 			var org = await AppService.GetOrganization(id);
 			model.OrganizationName = org.OrganizationName;
 			model.TabInfo.MemberCount = model.Users.Count;
-			model.TabInfo.PendingInvitationCount = await this.AppService.GetOrganizationInvitationCountAsync(id, Services.Auth.InvitationStatusEnum.Pending);
 
+			if (model.CanAddUser) { 
+				model.TabInfo.PendingInvitationCount = await this.AppService.GetOrganizationInvitationCountAsync(id, Services.Auth.InvitationStatusEnum.Pending);
+			}
 			return View(model);
 		}
 	}
