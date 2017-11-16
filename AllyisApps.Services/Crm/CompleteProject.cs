@@ -8,6 +8,7 @@ using System;
 
 namespace AllyisApps.Services.Crm
 {
+	/// <inheritdoc />
 	/// <summary>
 	/// Represents a project.
 	/// </summary>
@@ -37,16 +38,6 @@ namespace AllyisApps.Services.Crm
 		/// Gets or sets the Project Pricing Type.
 		/// </summary>
 		public string PriceType { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Project start date.
-		/// </summary>
-		public DateTime? StartDate { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Project end date.
-		/// </summary>
-		public DateTime? EndDate { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the current user can edit the project.

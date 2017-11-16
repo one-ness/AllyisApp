@@ -294,7 +294,7 @@ namespace AllyisApps.Services
 			CheckOrgAction(OrgAction.ReadUsersList, orgId);
 			var collection = await DBHelper.GetOrganizationUsersAsync(orgId);
 
-			return collection.Select(item => this.InitializeOrganizationUser(item)).Cast<OrganizationUser>().ToList();
+			return collection.Select(InitializeOrganizationUser).ToList();
 		}
 
 		public async Task<int> GetOrganizationUserCountAsync(int orgId)

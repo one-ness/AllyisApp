@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AllyisApps.DBModel.Billing;
-using AllyisApps.DBModel.TimeTracker;
 using AllyisApps.Lib;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
@@ -244,7 +243,7 @@ namespace AllyisApps.Services
 
 								if (newCustomer != null)
 								{
-									
+
 									int? newCustomerId = await CreateCustomerAsync(newCustomer, subscriptionId);
 									if (newCustomerId == -1) // Customer exists, but has been deactivated
 									{
@@ -343,7 +342,7 @@ namespace AllyisApps.Services
 				bool hasProjectStartDate = table.Columns.Contains(ColumnHeaders.ProjectStartDate);
 				bool hasProjectEndDate = table.Columns.Contains(ColumnHeaders.ProjectEndDate);
 				bool hasNonRequiredProjectInfo = /*hasProjectType ||*/ hasProjectStartDate || hasProjectEndDate;
-				
+
 				// Do we have rows/data to import?
 				if (table.Rows.Count == 0
 					|| !hasProjectName
@@ -442,7 +441,7 @@ namespace AllyisApps.Services
 								// All required information is known: time to create the project
 								project = new Project.Project
 								{
-									owningCustomer = new Customer
+									OwningCustomer = new Customer
 									{
 										CustomerCode = customer.CustomerCode,
 										OrganizationId = orgId,
@@ -452,8 +451,8 @@ namespace AllyisApps.Services
 									IsHourly = false, // TODO un-hardcode once project isHourly property is supported.  Currently disabled
 									OrganizationId = orgId,
 									ProjectCode = thisRowHasProjectName ? readValue : knownValue,
-									StartingDate = defaultProjectStartDate,
-									EndingDate = defaultProjectEndDate
+									StartDate = defaultProjectStartDate,
+									EndDate = defaultProjectEndDate
 								};
 								try
 								{
@@ -469,7 +468,7 @@ namespace AllyisApps.Services
 										result.ProjectsImported += 1;
 									}
 								}
-								catch(Exception e)
+								catch (Exception e)
 								{
 									result.ProjectFailures.Add(string.Format("Database error while creating project {0}. {1}", project.ProjectName, e.Message));
 									project = null;
@@ -553,7 +552,7 @@ namespace AllyisApps.Services
 							if (!string.IsNullOrEmpty(fields[2]))
 							{
 								customer = customersProjects.Select(tup => tup.Item1).FirstOrDefault(c => customerFieldIsName ? c.CustomerName.Equals(fields[2]) : c.CustomerCode.Equals(fields[2]));
-								
+
 								if (customer == null)
 								{
 									result.ProjectFailures.Add(string.Format("Could not create project {0}: No customer with an id of {1} exists.", knownValue, fields[2]));
@@ -575,7 +574,7 @@ namespace AllyisApps.Services
 									// All required information is known: time to create the project
 									project = new Project.Project
 									{
-										owningCustomer = new Customer
+										OwningCustomer = new Customer
 										{
 											CustomerCode = customer.CustomerCode,
 											CustomerId = customer.CustomerId
@@ -584,8 +583,8 @@ namespace AllyisApps.Services
 										IsHourly = false,  // TODO un-hardocode once project isHourly property is supported.  Currently disabled
 										OrganizationId = orgId,
 										ProjectCode = fields[1],
-										StartingDate = defaultProjectStartDate,
-										EndingDate = defaultProjectEndDate
+										StartDate = defaultProjectStartDate,
+										EndDate = defaultProjectEndDate
 									};
 									try
 									{
@@ -639,13 +638,13 @@ namespace AllyisApps.Services
 							string startDate = null;
 							string endDate = null;
 
-                            // TODO use this line once project isHourly property is supported.  Currently disabled
-                            // if (hasProjectType) updated = this.readColumn(row, ColumnHeaders.ProjectType, val => project.isHourly = val) || updated;
-                            if (hasProjectStartDate) updated = ReadColumn(row, ColumnHeaders.ProjectStartDate, val => startDate = val) || updated;
-                            if (hasProjectEndDate) updated = ReadColumn(row, ColumnHeaders.ProjectEndDate, val => endDate = val) || updated;
-                            if (startDate != null) project.StartingDate = DateTime.Parse(startDate);
-                            if (endDate != null) project.EndingDate = DateTime.Parse(endDate);
-							
+							// TODO use this line once project isHourly property is supported.  Currently disabled
+							// if (hasProjectType) updated = this.readColumn(row, ColumnHeaders.ProjectType, val => project.isHourly = val) || updated;
+							if (hasProjectStartDate) updated = ReadColumn(row, ColumnHeaders.ProjectStartDate, val => startDate = val) || updated;
+							if (hasProjectEndDate) updated = ReadColumn(row, ColumnHeaders.ProjectEndDate, val => endDate = val) || updated;
+							if (startDate != null) project.StartDate = DateTime.Parse(startDate);
+							if (endDate != null) project.EndDate = DateTime.Parse(endDate);
+
 							var c = await GetInactiveProjectsByCustomer(customer.CustomerId);
 							if (c.Any(p => p.ProjectCode == project.ProjectCode))
 							{
@@ -670,7 +669,7 @@ namespace AllyisApps.Services
 			// Retrieval of existing user data
 			User userGet = await GetUserAsync(UserContext.UserId);
 			var users = GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, o)).ToList();
-			
+
 			foreach (DataTable table in userImports)
 			{
 				// User importing: requires email, id, first and last name
@@ -834,26 +833,26 @@ namespace AllyisApps.Services
 									continue;
 								}
 
-                                try
-                                {
-                                    await InviteUser(inviteUrl, fields[0].Trim(), names[0], names[1], orgId, UserContext.OrganizationsAndRoles[orgId].OrganizationName, OrganizationRoleEnum.Member, fields[1], ""); //We need to update this with values from the excel sheet.
-                                    result.UsersImported += 1;
-                                }
-                                catch (DuplicateNameException)
-                                {
-                                    result.UserFailures.Add(string.Format("Employee Id: {0} is already taken. Please assign a different Id.", fields[1]));
-                                }
-                                catch (InvalidOperationException)
-                                {
-                                    result.UserFailures.Add(string.Format("{0} {1} has already received an invitation.", names[0], names[1]));
-                                }
-                                catch (System.Data.SqlClient.SqlException)
-                                {
-                                    result.UserFailures.Add(string.Format("Database error creating user {0} {1}.", names[0], names[1]));
-                                    continue;
-                                }
-                            }
-                        }
+								try
+								{
+									await InviteUser(inviteUrl, fields[0].Trim(), names[0], names[1], orgId, UserContext.OrganizationsAndRoles[orgId].OrganizationName, OrganizationRoleEnum.Member, fields[1], ""); //We need to update this with values from the excel sheet.
+									result.UsersImported += 1;
+								}
+								catch (DuplicateNameException)
+								{
+									result.UserFailures.Add(string.Format("Employee Id: {0} is already taken. Please assign a different Id.", fields[1]));
+								}
+								catch (InvalidOperationException)
+								{
+									result.UserFailures.Add(string.Format("{0} {1} has already received an invitation.", names[0], names[1]));
+								}
+								catch (System.Data.SqlClient.SqlException)
+								{
+									result.UserFailures.Add(string.Format("Database error creating user {0} {1}.", names[0], names[1]));
+									continue;
+								}
+							}
+						}
 
 						// Importing non-required user data
 						if (userInOrg != null && hasNonRequiredUserInfo)//If user exists then allow org to change user.
@@ -955,7 +954,7 @@ namespace AllyisApps.Services
 					bool thisRowHasProjectName = table.Columns.Contains(ColumnHeaders.ProjectName);
 					String knownValue = null;
 					ReadColumn(row, hasProjectName ? ColumnHeaders.ProjectName : ColumnHeaders.ProjectCode, p => knownValue = p);
-					
+
 					var customersProjects = new List<Project.Project>();
 					var customerList = await GetCustomerList(orgId);
 					if (customerList.Count() == 0)
@@ -981,7 +980,7 @@ namespace AllyisApps.Services
 						result.GeneralFailures.Add($"Project Id/Project Name {knownValue} is not recognized. On row {table.Rows.IndexOf(row) + 2}");
 						continue;
 					}
-					
+
 					List<User> userSubs = new List<User>();
 					string readValue = null;
 					ReadColumn(row, ColumnHeaders.EmployeeId, e => readValue = e);
@@ -997,8 +996,8 @@ namespace AllyisApps.Services
 						continue;
 					}
 
-                    // Double-check that previous adding/finding of project and user didn't fail
-                    if (!canImportProjectUser || !canImportTimeEntry) continue;
+					// Double-check that previous adding/finding of project and user didn't fail
+					if (!canImportProjectUser || !canImportTimeEntry) continue;
 
 					// Check for subscription role
 					bool canImportThisEntry = true;

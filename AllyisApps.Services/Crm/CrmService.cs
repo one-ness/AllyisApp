@@ -94,16 +94,16 @@ namespace AllyisApps.Services
 		/// <param name="customerId">Customer id.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public async Task<string> DeleteCustomer(int subscriptionId, int customerId)
+		public async Task<string> DeactivateCustomer(int subscriptionId, int customerId)
+		{
+			CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
+			return await DBHelper.DeactivateCustomer(customerId);
+		}
+
+		public async Task<bool> DeleteCustomer(int subscriptionId, int customerId)
 		{
 			CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
 			return await DBHelper.DeleteCustomer(customerId);
-		}
-
-		public async Task<bool> FullDeleteCustomer(int subscriptionId, int customerId)
-		{
-			CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
-			return await DBHelper.FullDeleteCustomer(customerId);
 		}
 
 		/// <summary>
@@ -249,7 +249,7 @@ namespace AllyisApps.Services
 
 			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
 
-			if (newProject.owningCustomer.CustomerId <= 0)
+			if (newProject.OwningCustomer.CustomerId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be 0 or negative.");
 			}
@@ -264,7 +264,7 @@ namespace AllyisApps.Services
 				throw new ArgumentNullException("projectCode", "Project must have an Id");
 			}
 
-			if (newProject.StartingDate.HasValue && newProject.EndingDate.HasValue && DateTime.Compare(newProject.StartingDate.Value, newProject.EndingDate.Value) > 0)
+			if (newProject.StartDate.HasValue && newProject.EndDate.HasValue && DateTime.Compare(newProject.StartDate.Value, newProject.EndDate.Value) > 0)
 			{
 				throw new ArgumentException("Project cannot end before it starts.");
 			}
@@ -283,7 +283,7 @@ namespace AllyisApps.Services
 		{
 			#region Validation
 
-			if (String.IsNullOrWhiteSpace(newProject.owningCustomer.CustomerCode))
+			if (String.IsNullOrWhiteSpace(newProject.OwningCustomer.CustomerCode))
 			{
 				throw new ArgumentNullException("customerCode", "Customer Code must have a value and cannot be whitespace.");
 			}
@@ -298,7 +298,7 @@ namespace AllyisApps.Services
 				throw new ArgumentNullException("ProjectCode", "Project must have an Id");
 			}
 
-			if (newProject.StartingDate.HasValue && newProject.EndingDate.HasValue && DateTime.Compare(newProject.StartingDate.Value, newProject.EndingDate.Value) > 0)
+			if (newProject.StartDate.HasValue && newProject.EndDate.HasValue && DateTime.Compare(newProject.StartDate.Value, newProject.EndDate.Value) > 0)
 			{
 				throw new ArgumentException("Project cannot end before it starts.");
 			}
@@ -327,7 +327,7 @@ namespace AllyisApps.Services
 				throw new ArgumentNullException("Name", "Project name must have a value and cannot be whitespace.");
 			}
 
-			if (project.StartingDate.HasValue && project.EndingDate.HasValue && DateTime.Compare(project.StartingDate.Value, project.EndingDate.Value) > 0)
+			if (project.StartDate.HasValue && project.EndDate.HasValue && DateTime.Compare(project.StartDate.Value, project.EndDate.Value) > 0)
 			{
 				throw new ArgumentException("Project cannot end before it starts.");
 			}
@@ -413,7 +413,7 @@ namespace AllyisApps.Services
 		/// <param name="projectId">The project id.</param>
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <returns>The number of rows deleted -- includes projectUsers deleted.</returns>
-		public async Task<int> FullDeleteProject(int projectId, int subscriptionId)
+		public async Task<int> DeleteProject(int projectId, int subscriptionId)
 		{
 			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
 
@@ -424,7 +424,7 @@ namespace AllyisApps.Services
 				return -1;
 			}
 
-			return await DBHelper.FullDeleteProject(projectId);
+			return await DBHelper.DeleteProject(projectId);
 		}
 
 		/// <summary>
@@ -433,7 +433,7 @@ namespace AllyisApps.Services
 		/// <param name="projectId">Project Id.</param>
 		/// <param name="subscriptionId">.</param>
 		/// <returns>Returns null if authorization fails, project name is succeed, empty string if not found.</returns>
-		public async Task<string> DeleteProject(int projectId, int subscriptionId)
+		public async Task<string> DeactivateProject(int projectId, int subscriptionId)
 		{
 			if (projectId <= 0)
 			{
@@ -444,7 +444,7 @@ namespace AllyisApps.Services
 
 			await CheckUpdateProjectStartEndDate(projectId, null, DateTime.Now);
 
-			return await DBHelper.DeleteProject(projectId);
+			return await DBHelper.DeactivateProject(projectId);
 		}
 
 		/// <summary>
@@ -860,18 +860,18 @@ namespace AllyisApps.Services
 
 			return new Project.Project
 			{
-				owningCustomer = new Customer
+				OwningCustomer = new Customer
 				{
 					CustomerId = project.CustomerId,
 					CustomerName = project.CustomerName,
 					CustomerCode = project.CustomerCode
 				},
-				EndingDate = project.EndingDate,
+				EndDate = project.EndingDate,
 				ProjectName = project.ProjectName,
 				OrganizationId = project.OrganizationId,
 				ProjectId = project.ProjectId,
 				ProjectCode = project.ProjectCode,
-				StartingDate = project.StartingDate,
+				StartDate = project.StartingDate,
 				IsHourly = project.IsHourly
 			};
 		}
@@ -890,13 +890,13 @@ namespace AllyisApps.Services
 
 			return new ProjectDBEntity
 			{
-				CustomerId = project.owningCustomer.CustomerId,
-				EndingDate = project.EndingDate,
+				CustomerId = project.OwningCustomer.CustomerId,
+				EndingDate = project.EndDate,
 				ProjectName = project.ProjectName,
 				OrganizationId = project.OrganizationId,
 				ProjectId = project.ProjectId,
 				ProjectCode = project.ProjectCode,
-				StartingDate = project.StartingDate,
+				StartingDate = project.StartDate,
 				IsHourly = project.IsHourly,
 				IsActive = project.IsActive
 			};
@@ -917,14 +917,13 @@ namespace AllyisApps.Services
 			return new CompleteProject
 			{
 				CreatedUtc = completeProject.CreatedUtc,
-				owningCustomer = new Customer
+				OwningCustomer = new Customer
 				{
 					CustomerId = completeProject.CustomerId,
 					CustomerName = completeProject.CustomerName,
 					CustomerCode = completeProject.CustomerCode,
 				},
 				EndDate = completeProject.EndDate,
-				IsActive = completeProject.IsActive,
 				IsCustomerActive = completeProject.IsCustomerActive,
 				IsUserActive = completeProject.IsUserActive,
 				OrganizationId = completeProject.OrganizationId,

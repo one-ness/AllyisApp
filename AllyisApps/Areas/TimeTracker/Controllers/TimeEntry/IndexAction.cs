@@ -139,9 +139,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					ProjectId = -1,
 					ProjectName = Strings.SelectProject,
-					IsActive = true,
 					IsCustomerActive = true,
-					IsUserActive = true
+					IsUserActive = true,
+					StartDate = null, //null start/end date to always be active
+					EndDate = null
 				});
 
 			List<User> SortedList = infos.Item5;
@@ -275,7 +276,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 						// holidayPopulated = false;
 					}
-					
+
 				}
 			}
 

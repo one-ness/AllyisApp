@@ -3,8 +3,8 @@ CREATE PROCEDURE [Pjm].[UpdateProjectAndUsers]
 	@projectName NVARCHAR(MAX),
 	@orgId NVARCHAR(16),
 	@isHourly BIT,
-    @startingDate DATE,
-    @endingDate DATE,
+	@startingDate DATE,
+	@endingDate DATE,
 	@userIds [Auth].[UserTable] READONLY
 AS
 BEGIN
