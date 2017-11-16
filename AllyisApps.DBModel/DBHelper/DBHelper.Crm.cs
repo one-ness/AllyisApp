@@ -109,11 +109,11 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="projectId">The project id.</param>
 		/// <returns>The number of rows deleted -- includes projectUsers deleted.</returns>
-		public async Task<int> FullDeleteProject(int projectId)
+		public async Task<int> DeleteProject(int projectId)
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return await connection.ExecuteAsync("[Pjm].[FullDeleteProject]", new { ProjectId = projectId }, commandType: CommandType.StoredProcedure);
+				return await connection.ExecuteAsync("[Pjm].[DeleteProject]", new { ProjectId = projectId }, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -122,11 +122,11 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="projectId">The id of the project to be deleted.</param>
 		/// <returns>Returns project name if successful, return empty string if not found.</returns>
-		public async Task<string> DeleteProject(int projectId)
+		public async Task<string> DeactivateProject(int projectId)
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var resultGet = await connection.QueryAsync<string>("[Pjm].[DeleteProject]", new { ProjectId = projectId, DeactivateDate = DateTime.Now }, commandType: CommandType.StoredProcedure);
+				var resultGet = await connection.QueryAsync<string>("[Pjm].[DeactivateProject]", new { ProjectId = projectId, DeactivateDate = DateTime.Now }, commandType: CommandType.StoredProcedure);
 				var result = resultGet.SingleOrDefault();
 				return result ?? "";
 			}
@@ -327,7 +327,7 @@ namespace AllyisApps.DBModel
 		/// <param name="projectId">The project Id.</param>
 		/// <param name="userId">The User Id.</param>
 		/// <param name="isActive">Is active.</param>
-		/// <returns>The number of rows successfully updated.</returns>C:\Users\v-trsan\Desktop\AllyisApps\aa\src\main\aadb\StoredProcedures\TimeTracker
+		/// <returns>The number of rows successfully updated.</returns>
 		public async Task<int> UpdateProjectUser(int projectId, int userId, int isActive)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -562,11 +562,11 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="customerId">The customer's Id.</param>
 		/// <returns>Customer's name if successful, empty string if not found.</returns>
-		public async Task<string> DeleteCustomer(int customerId)
+		public async Task<string> DeactivateCustomer(int customerId)
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var resultGet = await connection.QueryAsync<string>("[Crm].[DeleteCustomer]", new { CustomerId = customerId }, commandType: CommandType.StoredProcedure);
+				var resultGet = await connection.QueryAsync<string>("[Crm].[DeactivateCustomer]", new { CustomerId = customerId }, commandType: CommandType.StoredProcedure);
 				var result = resultGet.SingleOrDefault();
 				if (result == null) { return ""; }
 				return result;
@@ -578,11 +578,11 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="customerId">The customer's id.</param>
 		/// <returns>true if successful else false.</returns>
-		public async Task<bool> FullDeleteCustomer(int customerId)
+		public async Task<bool> DeleteCustomer(int customerId)
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var resultGet = await connection.QueryAsync<string>("[Crm].[FullDeleteCustomer]", new { CustomerId = customerId }, commandType: CommandType.StoredProcedure);
+				var resultGet = await connection.QueryAsync<string>("[Crm].[DeleteCustomer]", new { CustomerId = customerId }, commandType: CommandType.StoredProcedure);
 				var result = resultGet.SingleOrDefault();
 				return true;
 			}

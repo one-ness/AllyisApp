@@ -94,16 +94,16 @@ namespace AllyisApps.Services
 		/// <param name="customerId">Customer id.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public async Task<string> DeleteCustomer(int subscriptionId, int customerId)
+		public async Task<string> DeactivateCustomer(int subscriptionId, int customerId)
+		{
+			CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
+			return await DBHelper.DeactivateCustomer(customerId);
+		}
+
+		public async Task<bool> DeleteCustomer(int subscriptionId, int customerId)
 		{
 			CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
 			return await DBHelper.DeleteCustomer(customerId);
-		}
-
-		public async Task<bool> FullDeleteCustomer(int subscriptionId, int customerId)
-		{
-			CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
-			return await DBHelper.FullDeleteCustomer(customerId);
 		}
 
 		/// <summary>
@@ -413,7 +413,7 @@ namespace AllyisApps.Services
 		/// <param name="projectId">The project id.</param>
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <returns>The number of rows deleted -- includes projectUsers deleted.</returns>
-		public async Task<int> FullDeleteProject(int projectId, int subscriptionId)
+		public async Task<int> DeleteProject(int projectId, int subscriptionId)
 		{
 			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
 
@@ -424,7 +424,7 @@ namespace AllyisApps.Services
 				return -1;
 			}
 
-			return await DBHelper.FullDeleteProject(projectId);
+			return await DBHelper.DeleteProject(projectId);
 		}
 
 		/// <summary>
@@ -433,7 +433,7 @@ namespace AllyisApps.Services
 		/// <param name="projectId">Project Id.</param>
 		/// <param name="subscriptionId">.</param>
 		/// <returns>Returns null if authorization fails, project name is succeed, empty string if not found.</returns>
-		public async Task<string> DeleteProject(int projectId, int subscriptionId)
+		public async Task<string> DeactivateProject(int projectId, int subscriptionId)
 		{
 			if (projectId <= 0)
 			{
@@ -444,7 +444,7 @@ namespace AllyisApps.Services
 
 			await CheckUpdateProjectStartEndDate(projectId, null, DateTime.Now);
 
-			return await DBHelper.DeleteProject(projectId);
+			return await DBHelper.DeactivateProject(projectId);
 		}
 
 		/// <summary>
