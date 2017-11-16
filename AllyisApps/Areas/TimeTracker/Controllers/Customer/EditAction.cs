@@ -95,8 +95,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					var projects = await AppService.GetProjectsByCustomerAsync(model.CustomerId);
 					foreach (var project in projects)
 					{
-						if (/*Project is active*/ true)
+						if (project.IsActive)
 						{
+							List<SelectListItem> statusOptions = new List<SelectListItem>()
+							{
+								new SelectListItem() { Text = "Active", Value = true.ToString() },
+								new SelectListItem() { Text = "Disabled", Value = false.ToString() }
+							};
+
+							model.IsActiveOptions = statusOptions;
+
 							Notifications.Add(new BootstrapAlert(string.Format("Cannot deactivate {0}, dependent projects are still active.", model.CustomerName), Variety.Warning));
 							return View(model);
 						}

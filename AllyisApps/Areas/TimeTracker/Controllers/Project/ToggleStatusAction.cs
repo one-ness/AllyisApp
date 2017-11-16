@@ -21,8 +21,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var ids = idStrings.Select(x => Convert.ToInt32(x)).ToList();
 			var orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			var customers = await AppService.GetCustomerList(orgId);
-			var projectTest = (await AppService.GetProjectsByOrganization(orgId, false));
-			var projects = projectTest.Where(x => ids.Contains(x.ProjectId)).ToList();
+			var projectAll = (await AppService.GetProjectsByOrganization(orgId, false));
+			var projects = projectAll.Where(x => ids.Contains(x.ProjectId)).ToList();
 			string result = "";
 
 			foreach (var project in projects)
@@ -45,7 +45,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 				else
 				{
-					var parentCustomer = customers.Where(x => x.CustomerId == project.owningCustomer.CustomerId).FirstOrDefault();
+					var parentCustomer = customers.Where(x => x.CustomerId == project.OwningCustomer.CustomerId).FirstOrDefault();
 					if (parentCustomer.IsActive.Value)
 					{
 						var success = AppService.ReactivateProject(project.ProjectId, orgId, subscriptionId);
