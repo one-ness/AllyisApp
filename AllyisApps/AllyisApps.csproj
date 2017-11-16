@@ -286,7 +286,7 @@
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseIndexViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\TagViewModel.cs" />
     <Compile Include="Areas\TimeTracker\Constants.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\Customer\DeactivateAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\Customer\ToggleStatusAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\DetailsAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ImportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ReactivateAction.cs" />
