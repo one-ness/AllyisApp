@@ -50,9 +50,7 @@ label.required:after {
 	font-weight: bolder;
 }
 
-p {
-	/*margin: 0 0 10px;*/
-}
+
 
 a {
 	color: #595959;
@@ -106,7 +104,7 @@ a {
 .header-bar {
 	position: relative;
 	min-height: 50px;
-	margin-bottom: 5px;
+	margin-bottom: 10px;
 	margin-top: 15px;
 	border: 1px solid rgb(160, 160, 160);
 	border-width: 1px 5px;
@@ -214,6 +212,47 @@ input.members-checkbox {
 .pointer {
 	cursor: pointer;
 }
+
+
+.pageContainer {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+	.pageContainer .page-btn,
+	.pageContainer .chevron-btn {
+		margin: -20px 5px 5px 5px;
+		width: 25px;
+		padding: 2px;
+	}
+
+		.pageContainer .page-btn.pageButtonFiller,
+		.pageContainer .chevron-btn.pageButtonFiller {
+			visibility: hidden;
+		}
+
+	.pageContainer .chevron-btn {
+		width: 22px;
+		padding: 1px;
+		background-color: #ddd;
+		color: #000;
+		border-color: #aaa;
+	}
+
+.all-check {
+	outline: 1px solid black;
+}
+
+.no-match,
+.off-page {
+	display: none;
+}
+
+.check-no-match {
+	color: #888;
+}
+
 
 h1 {
 	margin-top: 5px;

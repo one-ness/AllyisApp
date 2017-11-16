@@ -1,0 +1,46 @@
+﻿/*Layout 
+
+*/
+.margin-alert{
+	margin-bottom:10px;
+
+}
+
+/*
+	Headers 
+*/
+#title .title-headers h1{
+	margin-bottom:10px;
+	margin-top:0px;
+}
+
+/*
+	Forms
+*/
+.form-grouping .form-group{
+	margin-bottom:10px;
+}
+
+.pannel-heading{
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+/*
+	Account Index Page
+*/
+.panel-body .index-details p label{
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+
+.margin-fixes .panel,
+.margin-fixes .form-group,
+.margin-fixes .table,
+.margin-fixes .h4,
+.margin-fixes .h3,
+.margin-fixes .h2,
+.margin-fixes .h1 {
+	margin-bottom: 10px;
+}
