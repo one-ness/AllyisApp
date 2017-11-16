@@ -12,7 +12,6 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Resources;
-using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.Utilities;
@@ -42,12 +41,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				var payperiodred = await AppService.GetPayPeriodRanges(organizationId);
 				startDate = startDate ?? payperiodred.Current.StartDate;
 				endDate = endDate ?? payperiodred.Current.EndDate;
-				return RedirectToAction(ActionConstants.Review, new {  subscriptionId, startDate, endDate });
+				return RedirectToAction(ActionConstants.Review, new { subscriptionId, startDate, endDate });
 			}
 
-			var payperiod =  await AppService.GetPayPeriodRanges(organizationId);
-			
-			
+			var payperiod = await AppService.GetPayPeriodRanges(organizationId);
+
+
 
 			var payClasses = (await AppService.GetPayClassesByOrganizationId(organizationId)).Select(x => new PayClassInfoViewModel(x)).ToList();
 			var subscription = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
@@ -58,7 +57,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					return new TimeEntryViewModel(entry)
 					{
 						ProjectName = project.ProjectName,
-						CustomerName = project.owningCustomer.CustomerName
+						CustomerName = project.OwningCustomer.CustomerName
 					};
 				})
 				.ToList();

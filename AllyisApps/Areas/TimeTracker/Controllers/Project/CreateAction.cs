@@ -99,14 +99,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			return new Services.Project.Project
 			{
-				owningCustomer = new Customer
+				OwningCustomer = new Customer
 				{
 					CustomerId = model.CustomerId,
 				},
 				ProjectName = model.ProjectName,
 				ProjectCode = model.ProjectCode,
-				StartingDate = model.StartDate,
-				EndingDate = model.EndDate
+				StartDate = model.StartDate,
+				EndDate = model.EndDate
 			};
 		}
 	}

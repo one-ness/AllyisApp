@@ -89,10 +89,10 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 						IsActive = currentCustomer.IsActive
 					},
 					Projects = from p in projects
-							   where p.owningCustomer.CustomerId == currentCustomer.CustomerId
+							   where p.OwningCustomer.CustomerId == currentCustomer.CustomerId
 							   select new CustomerProjectViewModel.ProjectViewModel
 							   {
-								   CustomerId = p.owningCustomer.CustomerId,
+								   CustomerId = p.OwningCustomer.CustomerId,
 								   OrganizationId = p.OrganizationId,
 								   ProjectName = p.ProjectName,
 								   ProjectId = p.ProjectId

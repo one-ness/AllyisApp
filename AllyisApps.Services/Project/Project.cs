@@ -42,18 +42,19 @@ namespace AllyisApps.Services.Project
 		/// <summary>
 		/// Gets or sets the project's starting date.
 		/// </summary>
-		public DateTime? StartingDate { get; set; }
+		public DateTime? StartDate { get; set; }
 
 		/// <summary>
 		/// Gets or sets the project's ending date.
 		/// </summary>
-		public DateTime? EndingDate { get; set; }
+		public DateTime? EndDate { get; set; }
 
 		/// <summary>
-		/// Gets or sets the bool value indicating if this Customer is currently active.
+		/// Returns the bool value indicating if this project is currently active.
 		/// </summary>
-		public bool IsActive { get; set; }
+		public bool IsActive =>
+			(StartDate == null || StartDate <= DateTime.Now) && (EndDate == null || EndDate >= DateTime.Now);
 
-		public Customer owningCustomer { get; set; }
+		public Customer OwningCustomer { get; set; }
 	}
 }
