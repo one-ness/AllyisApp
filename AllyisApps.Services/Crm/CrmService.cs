@@ -515,17 +515,16 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="userId">User Id.</param>
 		/// <param name="orgId">The organization's Id.</param>
-		/// <param name="onlyActive">True (default) to only return active projects, false to include all projects, active or not.</param>
 		/// <returns>A list of all the projects a user can access in an organization.</returns>
-		public async Task<IEnumerable<CompleteProject>> GetProjectsByUserAndOrganization(int userId, int orgId = -1, bool onlyActive = true)
+		public async Task<IEnumerable<CompleteProject>> GetProjectsByUserAndOrganization(int userId, int orgId)
 		{
 			if (userId <= 0)
 			{
 				throw new ArgumentOutOfRangeException(nameof(userId), "User Id cannot be 0 or negative.");
 			}
 
-			var results = await DBHelper.GetProjectsByUserAndOrganization(userId, orgId, onlyActive ? 1 : 0);
-			return results.Select(c => InitializeCompleteProjectInfo(c));
+			var results = await DBHelper.GetProjectsByUserAndOrganization(userId, orgId, false);
+			return results.Select(InitializeCompleteProjectInfo);
 		}
 
 		/// <summary>

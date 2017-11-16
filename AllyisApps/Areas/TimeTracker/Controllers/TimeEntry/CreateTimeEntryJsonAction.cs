@@ -87,7 +87,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				//validate correct project
 				int organizationId = AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId;
 				var projectUsers = await AppService.GetProjectsByUserAndOrganization(model.UserId, organizationId);
-				var project = projectUsers.SingleOrDefault(p => model.ProjectId == p.ProjectId);
+				var project = projectUsers.SingleOrDefault(p => model.ProjectId == p.ProjectId && p.IsActive);
 				if (project == null || !project.IsUserActive)
 				{
 					throw new ArgumentException(Strings.MustBeAssignedToProject);

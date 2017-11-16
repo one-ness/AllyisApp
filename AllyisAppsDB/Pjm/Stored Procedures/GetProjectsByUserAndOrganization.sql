@@ -36,7 +36,7 @@ FROM (
 WHERE [Customer].[IsActive] >= @activity
 	AND [Project].[IsActive] >= @activity
 	AND [ProjectUser].[IsActive] >= @activity
-	UNION ALL
+UNION ALL
 SELECT	[ProjectId],
 		[CustomerId],
 		0,
