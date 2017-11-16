@@ -66,21 +66,16 @@ namespace AllyisApps.Services
 			#region Validation
 
 			ProjectDBEntity project = await DBHelper.GetProjectByIdAndUser(entry.ProjectId, entry.UserId);
-			var projInfo = DBHelper.GetProjectById(entry.ProjectId);
 
 			if (!project.IsProjectUser.GetValueOrDefault())
 			{
 				throw new ArgumentException("Project is unassignable to user.");
 			}
 
-			if (!projInfo.IsActive)
+			if (project.StartDate != null && entry.Date < project.StartDate
+				|| project.EndDate != null && entry.Date > project.EndDate)
 			{
 				throw new ArgumentException("Project is not active.");
-			}
-
-			if (project.StartDate > entry.Date || project.EndDate < entry.Date)
-			{
-				throw new ArgumentException("Entry must be within date range");
 			}
 
 			if (entry == null)
@@ -454,7 +449,7 @@ namespace AllyisApps.Services
 
 			if (userIds != null && userIds.Count == 1 && userIds[0] > 0)
 			{
-				projects = (await GetProjectsByUserAndOrganization(userIds[0], orgId, false)).ToList();
+				projects = (await GetProjectsByUserAndOrganization(userIds[0], orgId)).ToList();
 			}
 			else
 			{

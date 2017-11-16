@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Web.Mvc;
 using AllyisApps.ViewModels.TimeTracker.Project;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
@@ -25,7 +26,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets or sets the payClasses for an org.
 		/// </summary>
-		public IEnumerable<PayClassInfoViewModel> PayClasses { get; set; }
+		public IEnumerable<SelectListItem> PayClasses { get; set; }
 
 		/// <summary>
 		/// Gets or sets the starting date of the date range.
@@ -78,11 +79,6 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public bool IsHoliday { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether the project is deleted or not.
-		/// </summary>
-		public bool IsProjectDeleted { get; set; }
-
-		/// <summary>
 		/// Gets or sets the date associated with this entry.
 		/// </summary>
 		public int Date { get; set; }  // Note: this must be an int and not a DateTime for correct, culture-independant serialization/deserialization
@@ -125,7 +121,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets or sets the list of projects available to select from, including inactive projects.
 		/// </summary>
-		public IEnumerable<CompleteProjectViewModel> ProjectsWithInactive { get; set; }
+		public IEnumerable<SelectListItem> ProjectsWithInactive { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the current user a manager and can approve time entries  [This needs logics].

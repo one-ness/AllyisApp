@@ -60,7 +60,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			int organizationId = subInfo.OrganizationId;
 
 			// Reference for checking status of entries
-			var allProjectsGet = await AppService.GetProjectsByUserAndOrganization(userId, organizationId, false);
+			var allProjectsGet = await AppService.GetProjectsByUserAndOrganization(userId, organizationId);
 			List<CompleteProject> allProjects = allProjectsGet.ToList();
 			DateTime? lockDate = (await AppService.GetSettingsByOrganizationId(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId)).LockDate;
 

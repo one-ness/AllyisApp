@@ -2,9 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AllyisApps.DBModel.Finance;
-using AllyisApps.Services.Expense;
 using AllyisApps.Services.Auth;
-using System;
+using AllyisApps.Services.Expense;
 
 namespace AllyisApps.Services
 {
@@ -128,7 +127,7 @@ namespace AllyisApps.Services
 			{
 				canDelete = true,
 				associatedAccounts = associatedAccounts
-			}; ;
+			};
 		}
 	}
 

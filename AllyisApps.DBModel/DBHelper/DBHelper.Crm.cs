@@ -627,14 +627,14 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="userId">The user's Id.</param>
 		/// <param name="orgId">The organization's Id.</param>
-		/// <param name="activity">The level of activity you wish to allow. Specifying 0 includes inactive projects.</param>
+		/// <param name="onlyActive">True gets all projects. False includes inactive projects.</param>
 		/// <returns>A collection of CompleteProjectDBEntity objects for each project the user has access to within the organization.</returns>
-		public async Task<IEnumerable<ProjectDBEntity>> GetProjectsByUserAndOrganization(int userId, int orgId, int activity)
+		public async Task<IEnumerable<ProjectDBEntity>> GetProjectsByUserAndOrganization(int userId, int orgId, bool onlyActive)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
 			parameters.Add("@orgId", orgId);
-			parameters.Add("@activity", activity);
+			parameters.Add("@activity", onlyActive);
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return await connection.QueryAsync<ProjectDBEntity>(
