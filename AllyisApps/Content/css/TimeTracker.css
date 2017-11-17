@@ -42,7 +42,7 @@ a {
 .header-bar {
 	position: relative;
 	min-height: 50px;
-	margin-bottom: 20px;
+	margin-bottom: 0px;
 	margin-top: 15px;
 	border: 1px solid #72a8d7;
 	border-width: 1px 5px;
@@ -238,7 +238,11 @@ a {
 
 .sidebar-offcanvas {
 	padding: 0 15px 0 10px;
+	
 }
+	.sidebar-offcanvas .panel{
+		margin-bottom:10px;
+	}
 
 .btn-sharp {
 	display: inline-block;
@@ -285,9 +289,12 @@ a {
 		overflow: hidden;
 	}
 
-.timesheet-grouping .very-inline-form {
-	border-left: 3px solid transparent;
+.timesheet-grouping{
+	margin-bottom:10px;
 }
+	.timesheet-grouping .very-inline-form {
+		border-left: 3px solid transparent;
+	}
 
 .very-inline-form {
 	-webkit-transition: opacity 0.5s ease;
@@ -473,6 +480,23 @@ a {
 .check-no-match {
 	color: #888;
 }
+
+/*
+	margin-fixes
+*/
+#resultPartialForm .panel{
+	margin-bottom:10px;
+}
+
+.report-wrap .panel, .report-wrap .form-group {
+	margin-bottom: 10px;
+}
+
+.settings-margin .panel, .settings-margin .form-group, .settings-margin .table{
+	margin-bottom: 10px;
+}
+	
+
 
 .ml-1 {
 	margin-left: 5px;
