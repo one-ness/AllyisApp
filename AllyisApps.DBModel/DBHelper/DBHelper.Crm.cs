@@ -632,7 +632,7 @@ namespace AllyisApps.DBModel
 		/// <param name="orgId">The organization's Id.</param>
 		/// <param name="activity">The level of activity you wish to allow. Specifying 0 includes inactive projects.</param>
 		/// <returns>A collection of CompleteProjectInfo objects for each project within the organization.</returns>
-		async public Task<IEnumerable<ProjectDBEntity>> GetProjectsByOrgId(int orgId, int activity)
+		public async Task<IEnumerable<ProjectDBEntity>> GetProjectsByOrgId(int orgId, int activity)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@orgId", orgId);

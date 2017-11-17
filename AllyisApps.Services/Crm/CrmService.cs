@@ -114,6 +114,17 @@ namespace AllyisApps.Services
 		public async Task<bool> DeleteCustomer(int subscriptionId, int customerId)
 		{
 			CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
+
+			if (customerId <= 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(customerId), "Customer id must be greater than 0.");
+			}
+
+			if (subscriptionId <= 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(subscriptionId), "Subscription id must be greater than 0.");
+			}
+
 			return await DBHelper.DeleteCustomer(customerId);
 		}
 
@@ -135,7 +146,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns><see cref="IEnumerable{CustomerDBEntity}"/>.</returns>
-		async public Task<IEnumerable<Customer>> GetCustomerList(int orgId)
+		public async Task<IEnumerable<Customer>> GetCustomerList(int orgId)
 		{
 			IEnumerable<dynamic> dbeList = await DBHelper.GetCustomerList(orgId);
 			List<Customer> list = new List<Customer>();
@@ -185,26 +196,28 @@ namespace AllyisApps.Services
 		/// </summary>
 		public async Task<Tuple<List<Project.Project>, List<Project.Project>, string, string>> GetProjectsForOrgAndUser(int userId, int subscriptionId)
 		{
-			if (userId <= 0) throw new ArgumentException("userId");
-			if (subscriptionId <= 0) throw new ArgumentException("subscriptionId");
+			if (userId <= 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(userId), "User id must be greater than 0.");
+			}
 
-			UserContext.SubscriptionAndRole subInfo = null;
-			UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			if (subInfo != null)
+			if (subscriptionId <= 0)
 			{
-				var spResults = await DBHelper.GetProjectsForOrgAndUser(userId, subInfo.OrganizationId);
-				var userDBEntity = spResults.Item3;
-				string name = string.Format("{0} {1}", userDBEntity.FirstName, userDBEntity.LastName);
-				return Tuple.Create(
-					spResults.Item1.Select(pdb => InitializeProject(pdb)).ToList(),
-					spResults.Item2.Select(pdb => InitializeProject(pdb)).ToList(),
-					name,
-					userDBEntity.Email);
+				throw new ArgumentOutOfRangeException(nameof(subscriptionId), "Subscription id must be greater than 0.");
 			}
-			else
-			{
-				return null;
-			}
+
+			UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out UserContext.SubscriptionAndRole subInfo);
+
+			if (subInfo == null) return null;
+
+			var spResults = await DBHelper.GetProjectsForOrgAndUser(userId, subInfo.OrganizationId);
+			var userDBEntity = spResults.Item3;
+			string name = $"{userDBEntity.FirstName} {userDBEntity.LastName}";
+			return Tuple.Create(
+				spResults.Item1.Select(InitializeProject).ToList(),
+				spResults.Item2.Select(InitializeProject).ToList(),
+				name,
+				userDBEntity.Email);
 		}
 
 		/// <summary>
@@ -596,7 +609,7 @@ namespace AllyisApps.Services
 		/// <param name="orgId"></param>
 		/// <param name="subscriptionId"></param>
 		/// <returns></returns>
-		async public Task<string> GetNextProjectId(int orgId, int subscriptionId)
+		public async Task<string> GetNextProjectId(int orgId, int subscriptionId)
 		{
 			var results = "";
 			try
