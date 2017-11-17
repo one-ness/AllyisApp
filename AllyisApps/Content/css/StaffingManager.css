@@ -8315,17 +8315,7 @@ pre,
 code {
   white-space: pre-line;
 }
-.min300 {
-  min-width: 300px;
-}
 /*Use a div inside a div for this*/
-div.shrink-wrap-center {
-  text-align: center;
-}
-div.shrink-wrap-center > div {
-  text-align: left;
-  display: inline-block;
-}
 .btn-zone {
   color: #000;
   background-color: #987dc5;
@@ -9431,14 +9421,6 @@ textarea.comiseo-daterangepicker-triggerbutton {
   word-break: break-all;
   height: 2em;
 }
-.sm-control-width {
-  width: 320px;
-}
-@media (min-width: 992px) {
-  .sm-control-width {
-    width: 420px;
-  }
-}
 #user-edit-div {
   display: block;
   max-width: 600px;
@@ -9979,42 +9961,6 @@ li.list-placeholder {
 }
 td.checked {
   text-align: center;
-}
-.pageContainer {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-.pageContainer .page-btn,
-.pageContainer .chevron-btn {
-  margin: -20px 5px 5px 5px;
-  width: 25px;
-  padding: 2px;
-}
-.pageContainer .page-btn.pageButtonFiller,
-.pageContainer .chevron-btn.pageButtonFiller {
-  visibility: hidden;
-}
-.pageContainer .chevron-btn {
-  width: 22px;
-  padding: 1px;
-  background-color: #ddd;
-  color: #000;
-  border-color: #aaa;
-}
-.all-check {
-  outline: 1px solid black;
-}
-.no-match,
-.off-page {
-  display: none;
-}
-.check-no-match {
-  color: #888;
-}
-.whitetext {
-  color: #fff;
-  border-color: #fff !important;
 }
 #permissions-wrap {
   min-height: 200px;
