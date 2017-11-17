@@ -9,7 +9,7 @@
 			@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
 			//@Html.HiddenForEnumerable(model => model.IsActiveOptions)
 			<div class="row">
-				<div class="col-md-6 sm-control-width">
+				<div class="col-md-6">
 
 					<div class="form-group">
 						@Html.ReqLabelFor(model => model.CustomerName, Strings.Name)
@@ -44,7 +44,7 @@
 						@Html.ValidationMessageFor(model => model.PostalCode, string.Empty, new { @class = "text-danger" })
 					</div>
 				</div>
-				<div class="col-md-6 sm-control-width">
+				<div class="col-md-6">
 
 					<div class="form-group">
 						@Html.ReqLabelFor(model => model.ContactEmail, Strings.ContactEmail)
