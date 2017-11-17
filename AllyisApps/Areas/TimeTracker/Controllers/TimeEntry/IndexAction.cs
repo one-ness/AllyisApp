@@ -85,7 +85,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			int start = Utility.GetDaysFromDateTime(startDate);
 			int end = Utility.GetDaysFromDateTime(endDate);
-			return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry, new { subscriptionId, startDate = start, endDate = end, userId = userId });
+			return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry, new { subscriptionId, startDate = start, endDate = end, userId });
 		}
 
 		/// <summary>
@@ -186,7 +186,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			};
 
 			// Initialize the starting dates and get all of the time entries within that date range.
-			IEnumerable<Services.TimeTracker.TimeEntry> timeEntries = infos.Item6; // Service.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDate, endDate);
+			IEnumerable<TimeEntry> timeEntries = infos.Item6; // Service.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDate, endDate);
 			using (var iter = timeEntries.GetEnumerator())
 			{
 				iter.MoveNext();
@@ -239,7 +239,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 								.Select(p => new SelectListItem
 								{
 									Selected = iter.Current.ProjectId == p.ProjectId,
-									Text = p.ProjectId != -1 ? string.Format("{0} - {1}", p.CustomerName, p.ProjectName) : p.ProjectName, //Only need customer - project text for project ids !=0
+									Text = p.ProjectId != -1 ? $"{p.CustomerName} - {p.ProjectName}" : p.ProjectName, //Only need customer - project text for project ids !=0
 									Value = p.ProjectId.ToString()
 									//Disabled = !p.IsUserActive && !Model.Sample
 								}).ToList(),
@@ -291,7 +291,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 								.Select(p => new SelectListItem
 								{
 									Selected = p.ProjectId == -1,
-									Text = p.ProjectId != -1 ? string.Format("{0} - {1}", p.CustomerName, p.ProjectName) : p.ProjectName, //Only need customer - project text for project ids !=0
+									Text = p.ProjectId != -1 ? $"{p.CustomerName} - {p.ProjectName}" : p.ProjectName, //Only need customer - project text for project ids !=0
 									Value = p.ProjectId.ToString()
 									//Disabled = !p.IsUserActive && !Model.Sample
 								}).ToList(),
@@ -334,13 +334,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				LastName = user.LastName,
 				UserId = user.UserId
 			};
-		}
-
-		private static DateTime SetEndingDate(int startOfWeek)
-		{
-			int dayOfWeek = (int)DateTime.Now.DayOfWeek;
-			int daysLeftInWeek = startOfWeek - dayOfWeek + (dayOfWeek < startOfWeek ? -1 : 6);
-			return DateTime.Now.AddDays(daysLeftInWeek).Date;
 		}
 	}
 }
