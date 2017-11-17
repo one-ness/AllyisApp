@@ -5,124 +5,120 @@
 	ViewBag.TitleBar = sb.ToString();
 }
 
-@if (Model.CanAddUser)
-{
-	@Html.Partial("_MembersAndInvitationsTab", Model.TabInfo)
-}
-
 <div class="container">
 	<div class="row">
 		<div class="col-xs-12">
-			<div class="row">
-				<div class="col-xs-12">
-					<table class="table table-striped table-condensed">
-						<thead>
-							<tr>
-								<th><input class="checkbox-inline members-checkbox" type="checkbox" id="checkAll" onclick="CheckAllToggle()" /></th>
-								<th>Name</th>
-								<th>Email</th>
-								<th>Employee ID</th>
-								<th>Joined Date</th>
-								<th>Role</th>
-								@if (Model.CanEditUser)
-								{
-									<th><i class="fa fa-edit"> Edit</i></th>
-								}
-								else
-								{
-									<th><i class="fa fa-television"> View</i></th>
-								}
-							</tr>
-						</thead>
-						@foreach (var item in Model.Users)
+			@if (Model.CanAddUser)
 			{
-							<tr>
-								@if (Model.CanEditUser)
-								{
-									<td class="col-md-1"><input class="checkbox-inline members-checkbox" type="checkbox" value="@item.UserId" /></td>
-								}
-								@if (!Model.CanEditUser)
-								{
-									<td class="col-md-1"></td> }
-								<td class="col-md-2">@item.Username</td>
-								<td class="col-md-3">@item.Email</td>
-								<td class="col-md-2">@item.EmployeeId</td>
-								<td class="col-md-2">@item.FormattedJoinedDate</td>
-								<td class="col-md-1">@item.RoleName</td>
-								@if (Model.CanEditUser)
-								{
-									<td class="col-md-1"><a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account, new { @id = Model.OrganizationId, @userId = item.UserId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a></td>
-								}
-								@if (!Model.CanEditUser)
-								{
-									<td class="col-md-1"><a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account, new { @id = Model.OrganizationId, @userId = item.UserId })" title="@Strings.EditUser"><i class="fa fa-fw fa-television"></i></a></td>
-								}
-							</tr>
+				@Html.Partial("_MembersAndInvitationsTab", Model.TabInfo)
 			}
-					</table>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-xs-12">
-					<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)"
-					   class="btn btn-default pull-left" title="@Strings.Back"><i class="fa fa-caret-left"></i>&nbsp;@Strings.Back</a>
-					@if (Model.CanDeleteUser)
-					{
-						using (Html.BeginForm(ActionConstants.RemoveMember, ControllerConstants.Account, new { @id = Model.OrganizationId }, FormMethod.Post, new { @onsubmit = "return getUserIdsAndSubmit();" }))
+			
+			<table class="table table-striped table-condensed">
+				<thead>
+					<tr>
+						<th><input class="checkbox-inline members-checkbox" type="checkbox" id="checkAll" onclick="CheckAllToggle()" /></th>
+						<th>Name</th>
+						<th>Email</th>
+						<th>Employee ID</th>
+						<th>Joined Date</th>
+						<th>Role</th>
+						@if (Model.CanEditUser)
 						{
-							@Html.AntiForgeryToken();
-							<input type="hidden" id="csvUserIds" name="csvUserIds" />
-							<button type="submit" class="btn btn-danger pull-right" title="@Strings.Back">@Strings.Delete</button>
-							<script type="text/javascript">
-								function getUserIdsAndSubmit() {
-									var csvIds = "";
-
-									if (!confirm("Do you wish to delete the selected user(s)?")) {
-										return false;
-									}
-
-									// gather all the ids to delete as a csv
-
-									var checkboxes = $(".members-checkbox");
-
-									checkboxes = checkboxes.slice(1);   //We don't want to include the select all checkbox
-									checkboxes.each(function () {
-
-										var value = $(this).val();
-										var isChecked = $(this).is(":checked");
-
-										if (isChecked) {
-											csvIds += value + ",";
-										}
-									});
-
-									csvIds = csvIds.replace(/(^,)|(,$)/g, "");
-
-									if (csvIds == "") {
-										alert("You have not chosen a user to delete");
-										return false;
-									}
-									$("#csvUserIds").val(csvIds);
-
-									// submit the form
-
-									return true; // for now, delete this line later
-								}
-
-								function CheckAllToggle() {
-									var checkboxes = [];
-									var checking = document.getElementById("checkAll").checked;
-									checkboxes = document.getElementsByClassName("members-checkbox");
-									for (var i = 0, n = checkboxes.length; i < n; i++) {
-										checkboxes[i].checked = checking;
-									}
-									console.log("check all toggle, updated " + checkboxes.length + " to: " + checking);
-								}
-							</script>
+							<th><i class="fa fa-edit"> Edit</i></th>
 						}
-					}
-				</div>
-			</div>
+						else
+						{
+							<th><i class="fa fa-television"> View</i></th>
+						}
+					</tr>
+				</thead>
+				@foreach (var item in Model.Users)
+	{
+					<tr>
+						@if (Model.CanEditUser)
+						{
+							<td class="col-md-1"><input class="checkbox-inline members-checkbox" type="checkbox" value="@item.UserId" /></td>
+						}
+						@if (!Model.CanEditUser)
+						{
+							<td class="col-md-1"></td> }
+						<td class="col-md-2">@item.Username</td>
+						<td class="col-md-3">@item.Email</td>
+						<td class="col-md-2">@item.EmployeeId</td>
+						<td class="col-md-2">@item.FormattedJoinedDate</td>
+						<td class="col-md-1">@item.RoleName</td>
+						@if (Model.CanEditUser)
+						{
+							<td class="col-md-1"><a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account, new { @id = Model.OrganizationId, @userId = item.UserId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a></td>
+						}
+						@if (!Model.CanEditUser)
+						{
+							<td class="col-md-1"><a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account, new { @id = Model.OrganizationId, @userId = item.UserId })" title="@Strings.EditUser"><i class="fa fa-fw fa-television"></i></a></td>
+						}
+					</tr>
+	}
+			</table>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)"
+				class="btn btn-default pull-left" title="@Strings.Back"><i class="fa fa-caret-left"></i>&nbsp;@Strings.Back</a>
+			@if (Model.CanDeleteUser)
+			{
+				using (Html.BeginForm(ActionConstants.RemoveMember, ControllerConstants.Account, new { @id = Model.OrganizationId }, FormMethod.Post, new { @onsubmit = "return getUserIdsAndSubmit();" }))
+				{
+					@Html.AntiForgeryToken();
+					<input type="hidden" id="csvUserIds" name="csvUserIds" />
+					<button type="submit" class="btn btn-danger pull-right" title="@Strings.Back">@Strings.Delete</button>
+					<script type="text/javascript">
+						function getUserIdsAndSubmit() {
+							var csvIds = "";
+
+							if (!confirm("Do you wish to delete the selected user(s)?")) {
+								return false;
+							}
+
+							// gather all the ids to delete as a csv
+
+							var checkboxes = $(".members-checkbox");
+
+							checkboxes = checkboxes.slice(1);   //We don't want to include the select all checkbox
+							checkboxes.each(function () {
+
+								var value = $(this).val();
+								var isChecked = $(this).is(":checked");
+
+								if (isChecked) {
+									csvIds += value + ",";
+								}
+							});
+
+							csvIds = csvIds.replace(/(^,)|(,$)/g, "");
+
+							if (csvIds == "") {
+								alert("You have not chosen a user to delete");
+								return false;
+							}
+							$("#csvUserIds").val(csvIds);
+
+							// submit the form
+
+							return true; // for now, delete this line later
+						}
+
+						function CheckAllToggle() {
+							var checkboxes = [];
+							var checking = document.getElementById("checkAll").checked;
+							checkboxes = document.getElementsByClassName("members-checkbox");
+							for (var i = 0, n = checkboxes.length; i < n; i++) {
+								checkboxes[i].checked = checking;
+							}
+							console.log("check all toggle, updated " + checkboxes.length + " to: " + checking);
+						}
+					</script>
+				}
+			}
 		</div>
 	</div>
 </div>

@@ -6,45 +6,41 @@
 
 <div class="container">
 	<div class="row">
-		<div class="col-xs-12">
-			<div class="row">
-				<div class="col-sm-6">
-					<h3>Instuctions</h3>
-					<p>
-						This workbook demonstrates how to import customers and projects in bulk. Required columns have bold column headers in this example (you don't need to use bold for importing), and optional column headers are not bold. It is important that you spell the columns headers exactly as you see them here, but it does not matter what order the columns are in or if there are additional columns with other headers (they will be ignored). You may have empty cells in any of the non-required columns, but leaving out any of the information in the (bold) required columns will result in an error and a failure to import that customer or project.
-						The next sheet ("Customers") shows what you need to import customers, and the following sheet ("Projects") shows what you need for projects.
-					</p>
-					<p>
-						In this example, ""Customer Id"" is used to identify which customer a project should fall under, but you could alternatively use ""Customer Name"" the same way. If you do not provide the optional information for ""Project Type"", ""Project Start Date"", or ""Project End Date"", the imported project will have default values (""Hourly"", today's date, and 6 months from now, respectively).
-						You can import both customers and projects at once using different sheets in the same workbook, as shown here. Or, you can import them in separate files. In that case, be sure to import customers first.
-					</p>
-				</div>
-				<div class="col-sm-6 sm-control-width">
-					<label>@Strings.Upload</label>
-					<div class="pull-right">
-						<a style="color:dodgerblue">@Html.RouteLink("Template", "TimeTracker_Default", new { controller = ControllerConstants.Customer, action = ActionConstants.Template })</a>
-					</div>
-					@using (Html.BeginForm(ActionConstants.CustomerImport, ControllerConstants.Customer, FormMethod.Post, new { enctype = "multipart/form-data" }))
-					{
-						Html.AntiForgeryToken();
-						<div>
-							<input type="file" id="upload-box" name="file" style="display:none;"
-								   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-							<input id="upload-file-name-display" name="file" class="form-control"
-								   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-						</div>
-
-						<div style="margin-top: 10px; margin-bottom: 15px; float:right;">
-							<a class="btn btn-primary" onclick="$('input[id=upload-box]').click();" title="Choose project Excel entries to upload">@Strings.ChooseFile</a>
-							<input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" title="Upload project Excel entries" />
-						</div>
-					}
-					<div class="pull-left" style="padding-top: 15px; padding-bottom: 15px;">
-						<span type="button" class="btn btn-default" value=@Strings.Cancel onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Project)'">Cancel</span>
-					</div>
+		<div class="col-sm-6">
+			<h3>Instuctions</h3>
+			<p>
+				This workbook demonstrates how to import customers and projects in bulk. Required columns have bold column headers in this example (you don't need to use bold for importing), and optional column headers are not bold. It is important that you spell the columns headers exactly as you see them here, but it does not matter what order the columns are in or if there are additional columns with other headers (they will be ignored). You may have empty cells in any of the non-required columns, but leaving out any of the information in the (bold) required columns will result in an error and a failure to import that customer or project.
+				The next sheet ("Customers") shows what you need to import customers, and the following sheet ("Projects") shows what you need for projects.
+			</p>
+			<p>
+				In this example, ""Customer Id"" is used to identify which customer a project should fall under, but you could alternatively use ""Customer Name"" the same way. If you do not provide the optional information for ""Project Type"", ""Project Start Date"", or ""Project End Date"", the imported project will have default values (""Hourly"", today's date, and 6 months from now, respectively).
+				You can import both customers and projects at once using different sheets in the same workbook, as shown here. Or, you can import them in separate files. In that case, be sure to import customers first.
+			</p>
+		</div>
+		<div class="col-sm-6 sm-control-width">
+			<label>@Strings.Upload</label>
+			<div class="pull-right">
+				<a style="color:dodgerblue">@Html.RouteLink("Template", "TimeTracker_Default", new { controller = ControllerConstants.Customer, action = ActionConstants.Template })</a>
+			</div>
+			@using (Html.BeginForm(ActionConstants.CustomerImport, ControllerConstants.Customer, FormMethod.Post, new { enctype = "multipart/form-data" }))
+			{
+				Html.AntiForgeryToken();
+				<div>
+					<input type="file" id="upload-box" name="file" style="display:none;"
+							onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+					<input id="upload-file-name-display" name="file" class="form-control"
+							onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
 				</div>
 
+				<div style="margin-top: 10px; margin-bottom: 15px; float:right;">
+					<a class="btn btn-primary" onclick="$('input[id=upload-box]').click();" title="Choose project Excel entries to upload">@Strings.ChooseFile</a>
+					<input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" title="Upload project Excel entries" />
+				</div>
+			}
+			<div class="pull-left" style="padding-top: 15px; padding-bottom: 15px;">
+				<span type="button" class="btn btn-default" value=@Strings.Cancel onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Project)'">Cancel</span>
 			</div>
 		</div>
+
 	</div>
 </div>

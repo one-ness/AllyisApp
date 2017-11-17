@@ -18,35 +18,31 @@
 }
 
 <div class="container">
-	<div class="row">
-		<div class="col-xs-12">
-			<div class="slim row">
-				<div class="col-sm-2 width-control">
-					@Html.Partial("_ManageSettingSideBar")
+	<div class="slim row">
+		<div class="col-sm-2 width-control">
+			@Html.Partial("_ManageSettingSideBar")
+		</div>
+		<div class="col-sm-10">
+			<div class="panel panel-info" style="position: relative;">
+				<div class="panel-heading">
+					<h1 class="panel-title">@Strings.OrgSOW</h1>
 				</div>
-				<div class="col-sm-10">
-					<div class="panel panel-info" style="position: relative;">
-						<div class="panel-heading">
-							<h1 class="panel-title">@Strings.OrgSOW</h1>
-						</div>
-						<div class="panel-body" id="SOWSetting">
-							@using (Html.BeginForm(ActionConstants.UpdateStartOfWeek, ControllerConstants.TimeEntry, FormMethod.Post, new { enctype = "multipart/form-data" }))
-							{
-								@Html.AntiForgeryToken();
-								@Html.HiddenFor(m => m.SubscriptionId)
+				<div class="panel-body" id="SOWSetting">
+					@using (Html.BeginForm(ActionConstants.UpdateStartOfWeek, ControllerConstants.TimeEntry, FormMethod.Post, new { enctype = "multipart/form-data" }))
+					{
+						@Html.AntiForgeryToken();
+						@Html.HiddenFor(m => m.SubscriptionId)
 
-								<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="1" @(Model.StartOfWeek == (int)StartOfWeekEnum.Monday ? " checked " : string.Empty)><text>@Strings.Monday</text><br />
-								<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="2" @(Model.StartOfWeek == (int)StartOfWeekEnum.Tuesday ? " checked " : string.Empty)><text>@Strings.Tuesday</text><br />
-								<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="3" @(Model.StartOfWeek == (int)StartOfWeekEnum.Wednesday ? " checked " : string.Empty)><text>@Strings.Wednesday</text><br />
-								<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="4" @(Model.StartOfWeek == (int)StartOfWeekEnum.Thursday ? " checked " : string.Empty)><text>@Strings.Thursday</text><br />
-								<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="5" @(Model.StartOfWeek == (int)StartOfWeekEnum.Friday ? " checked " : string.Empty)><text>@Strings.Friday</text><br />
-								<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="6" @(Model.StartOfWeek == (int)StartOfWeekEnum.Saturday ? " checked " : string.Empty)><text>@Strings.Saturday</text><br />
-								<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="0" @(Model.StartOfWeek == (int)StartOfWeekEnum.Sunday ? " checked " : string.Empty)><text>@Strings.Sunday</text><br />
-								<br />
-								<input type="submit" value=@Strings.Save class="btn btn-primary tt-bottom-right" />
-							}
-						</div>
-					</div>
+						<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="1" @(Model.StartOfWeek == (int)StartOfWeekEnum.Monday ? " checked " : string.Empty)><text>@Strings.Monday</text><br />
+						<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="2" @(Model.StartOfWeek == (int)StartOfWeekEnum.Tuesday ? " checked " : string.Empty)><text>@Strings.Tuesday</text><br />
+						<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="3" @(Model.StartOfWeek == (int)StartOfWeekEnum.Wednesday ? " checked " : string.Empty)><text>@Strings.Wednesday</text><br />
+						<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="4" @(Model.StartOfWeek == (int)StartOfWeekEnum.Thursday ? " checked " : string.Empty)><text>@Strings.Thursday</text><br />
+						<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="5" @(Model.StartOfWeek == (int)StartOfWeekEnum.Friday ? " checked " : string.Empty)><text>@Strings.Friday</text><br />
+						<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="6" @(Model.StartOfWeek == (int)StartOfWeekEnum.Saturday ? " checked " : string.Empty)><text>@Strings.Saturday</text><br />
+						<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="0" @(Model.StartOfWeek == (int)StartOfWeekEnum.Sunday ? " checked " : string.Empty)><text>@Strings.Sunday</text><br />
+						<br />
+						<input type="submit" value=@Strings.Save class="btn btn-primary tt-bottom-right" />
+					}
 				</div>
 			</div>
 		</div>
