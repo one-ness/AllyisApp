@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
+using AllyisApps.Core.Alert;
 using AllyisApps.Lib;
 using AllyisApps.Resources;
 using AllyisApps.Services;
@@ -40,9 +41,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
 			var sub = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 
-			//redirect back to self with non-null default start/end dates so that we can get the desired route url
-			if (startDate == null || endDate == null)
+			//redirect back to self with default start/end dates if dates are invalid -- redirecting to get proper url route
+			if (startDate == null || endDate == null || endDate - startDate > 180 || endDate < startDate)
 			{
+				if (startDate != null && endDate != null)
+				{
+					Notifications.Add(new BootstrapAlert("Invalid date range, defaulting to current pay period.", Variety.Warning));
+				}
+
 				PayPeriodRanges payPeriodRanges = await AppService.GetPayPeriodRanges(sub.OrganizationId);
 				startDate = Utility.GetDaysFromDateTime(payPeriodRanges.Current.StartDate);
 				endDate = Utility.GetDaysFromDateTime(payPeriodRanges.Current.EndDate);
