@@ -79,7 +79,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					await AppService.CheckUpdateProjectStartEndDate(projectBeforeEdit.ProjectId, model.StartDate, model.EndDate);
 				}
-				if (!customer.IsActive.Value && projectIsActive)
+				if (!customer.IsActive && projectIsActive)
 				{
 					customer.IsActive = true;
 					await AppService.UpdateCustomerAsync(customer, subscriptionId);
