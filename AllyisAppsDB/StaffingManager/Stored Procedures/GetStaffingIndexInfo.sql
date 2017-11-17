@@ -30,9 +30,9 @@ BEGIN
 		[Country].[CountryName],
 		[Address].[PostalCode]
 	FROM [StaffingManager].[Position]
-	LEFT JOIN [Lookup].[Address]				WITH (NOLOCK) ON [Address].[AddressId] = [Position].[AddressId]
-	LEFT JOIN [Lookup].[Country]				WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
-	LEFT JOIN [Lookup].[State]					WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
+	LEFT JOIN [Lookup].[Address] WITH (NOLOCK) ON [Address].[AddressId] = [Position].[AddressId]
+	LEFT JOIN [Lookup].[Country] WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
+	LEFT JOIN [Lookup].[State]   WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
 	WHERE [Position].[OrganizationId] = @organizationId
 	ORDER BY [StaffingManager].[Position].[StartDate] ASC
 
@@ -88,6 +88,6 @@ BEGIN
 		[Customer].[OrganizationId],
 		[Customer].[CustomerCode],
 		[Customer].[IsActive]
-    FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK)
-    WHERE [Customer].[OrganizationId] = @organizationId
+	FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK)
+	WHERE [Customer].[OrganizationId] = @organizationId
 END

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -33,14 +31,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				if (!parsed)
 				{
-					return RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
+					return RedirectToAction(ActionConstants.Index, new { subscriptionId });
 				}
 				else
 				{
-					var customer = customers.Where(x => string.Equals(x.CustomerId, numValue)).FirstOrDefault();
+					var customer = customers.FirstOrDefault(x => x.CustomerId == numValue);
 					string result = "";
 
-					if (customer.IsActive.Value)
+					if (customer.IsActive)
 					{
 						var canDisable = await CanDisable(customer, orgId);
 

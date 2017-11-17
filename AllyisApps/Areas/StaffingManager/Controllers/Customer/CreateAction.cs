@@ -81,7 +81,8 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					Website = model.Website,
 					EIN = model.EIN,
 					OrganizationId = model.OrganizationId,
-					CustomerCode = model.CustomerCode
+					CustomerCode = model.CustomerCode,
+					IsActive = true
 				},
 				model.SubscriptionId);
 
@@ -93,7 +94,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerCodeNotUnique, Variety.Danger));
 					return View(model);
 				}
-				if(customerId == -2)
+				if (customerId == -2)
 				{
 					Notifications.Add(new BootstrapAlert("Could Not Create Customer", Variety.Danger));
 					return View(model);

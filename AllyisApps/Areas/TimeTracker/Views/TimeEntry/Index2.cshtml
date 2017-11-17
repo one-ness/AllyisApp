@@ -15,7 +15,7 @@
 }
 
 <div class="row">
-	@using (Html.BeginForm("TimeTrackerDatePickerRedirect", ControllerConstants.TimeEntry, FormMethod.Get, new { @class = "form-inline col-xs-12", @style = "margin-bottom: 20px;" }))
+	@using (Html.BeginForm("TimeTrackerDatePickerRedirect", ControllerConstants.TimeEntry, FormMethod.Get, new { @class = "form-inline col-xs-12"}))
 	{
 		@*<input id="UserId" name="UserId" type="hidden" value="@Model.EntryRange.UserId" />*@
 		@*<input id="StartDate"  type="hidden" value="@Model.EntryRange.StartDate" />
@@ -149,9 +149,12 @@
 				<input id="viewasuser-search" type="text" class="form-control" placeholder=@Strings.SearchPlaceholder />
 			</div>
 			<div id="viewasuser-list" class="list-group allyis-search" style="max-height: 50vh; overflow-y: auto;">
-				@{ var count = 0;
-					foreach (var user in Model.Users)
+				@{
+					var count = 0;
+					var userList = Model.Users.ToList();
+					for(int i = 0; i < userList.Count; i++)
 					{
+						var user = userList[i];
 						int pageCount = 1 + count / Model.PageUserSize;
 						const string hide = "flex";
 

@@ -145,7 +145,18 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					EndDate = null
 				});
 
-			IEnumerable<User> users = infos.Item5;
+			var projects = allProjects
+				.AsParallel()
+				.Where(p => p.ProjectId != 0)
+				.Select(proj => new CompleteProjectViewModel(proj))
+				.OrderBy(p => p.CustomerName + p.ProjectName)
+				.ToList();
+
+			var sortedList = infos.Item5;
+			IEnumerable<UserViewModel> users = sortedList.AsParallel().Select(ConstuctUserViewModel);
+			users = users.OrderBy(o => o.LastName + o.FirstName).ToList();
+
+			var payClasses = infos.Item2;
 
 			var result = new TimeEntryOverDateRangeViewModel
 			{
@@ -162,20 +173,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				},
 				CanManage = isManager,
 				StartOfWeek = (StartOfWeekEnum)startOfWeek,
-				PayClasses = infos.Item2.Select(payclass => new PayClassInfoViewModel(payclass)),
 				GrandTotal = new ProjectHours { Project = new CompleteProjectViewModel { ProjectName = Strings.Total }, Hours = 0.0f },
-				Projects = allProjects
-					.Where(x => x.IsActive && x.IsCustomerActive && x.IsUserActive)
-					.AsParallel()
-					.Select(proj => new CompleteProjectViewModel(proj)),
-				ProjectsWithInactive = allProjects
-					.Where(p => p.ProjectId != 0)
-					.AsParallel()
-					.Select(proj => new CompleteProjectViewModel(proj)),
 				ProjectHours = hours.Values.Where(x => x.Hours > 0),
-				Users = users.AsParallel().Select(ConstuctUserViewModel),
+				Users = users,
 				TotalUsers = users.Count(),
-				CurrentUser = ConstuctUserViewModel(users.Single(x => x.UserId == userId)),
+				CurrentUser = users.Single(x => x.UserId == userId),
 				LockDate = infos.Item1.LockDate,
 				PayrollProcessedDate = infos.Item1.PayrollProcessedDate,
 				SubscriptionId = subId,
@@ -214,8 +216,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						result.GrandTotal.Hours += iter.Current.Duration;
 
 						// And add its entry to Entries.
-						bool isProjectDeleted = result.Projects.Where(x => x.ProjectId == iter.Current.ProjectId).Select(x => x.ProjectName).FirstOrDefault() == null;
-
 						result.EntryRange.Entries.Add(new EditTimeEntryViewModel
 						{
 							TimeEntryId = iter.Current.TimeEntryId,
@@ -230,13 +230,30 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 							EndingDate = Utility.GetDaysFromDateTime(endDate),
 							IsOffDay = weekend % 7 == (int)iter.Current.Date.DayOfWeek || (weekend + 1) % 7 == (int)iter.Current.Date.DayOfWeek,
 							IsHoliday = holidays.Any(x => x.Date.Date == date.Date),
-							Projects = result.Projects,
-							ProjectsWithInactive = result.ProjectsWithInactive,
+							ProjectsWithInactive = projects
+								.Where(p =>
+									(p.StartDate == null || p.StartDate.Value <= iter.Current.Date) &&
+									(p.EndDate == null || p.EndDate.Value >= iter.Current.Date) &&
+									(p.IsUserActive || iter.Current.ProjectId == p.ProjectId)
+								)
+								.Select(p => new SelectListItem
+								{
+									Selected = iter.Current.ProjectId == p.ProjectId,
+									Text = p.ProjectId != -1 ? string.Format("{0} - {1}", p.CustomerName, p.ProjectName) : p.ProjectName, //Only need customer - project text for project ids !=0
+									Value = p.ProjectId.ToString()
+									//Disabled = !p.IsUserActive && !Model.Sample
+								}).ToList(),
 							ProjectName = allProjects.FirstOrDefault(x => x.ProjectId == iter.Current.ProjectId)?.ProjectName ?? "",
-							IsProjectDeleted = isProjectDeleted,
 							ApprovalState = iter.Current.ApprovalState,
 							ModSinceApproval = iter.Current.ModSinceApproval,
-							PayClasses = result.PayClasses,
+							PayClasses = payClasses
+								.Select(c => new SelectListItem
+								{
+									Selected = payClasses.Count == 1 || iter.Current.PayClassId == c.PayClassId,
+									Text = Strings.ResourceManager.GetString(c.PayClassName.Replace(" ", "")) ?? c.PayClassName,
+									Value = c.PayClassId.ToString()
+								})
+								.ToList(),
 							IsLocked = iter.Current.TimeEntryStatusId != (int)TimeEntryStatus.Pending //can't edit
 						});
 
@@ -249,6 +266,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					}
 					else
 					{
+						int payClassId =
+							infos.Item2.FirstOrDefault(p => p.PayClassName.Equals(Strings.Regular, StringComparison.OrdinalIgnoreCase))
+								?.PayClassId ?? 0;
+
 						// Otherwise if date is not locked, create an empty entry.
 						result.EntryRange.Entries.Add(new EditTimeEntryViewModel
 						{
@@ -261,10 +282,28 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 							IsOffDay = weekend % 7 == (int)date.DayOfWeek || (weekend + 1) % 7 == (int)date.DayOfWeek,
 							IsHoliday = holidays.Any(x => x.Date.Date == date.Date),
 							ProjectId = -1,
-							Projects = result.Projects,
-							ProjectsWithInactive = result.ProjectsWithInactive,
-							PayClassId = infos.Item2.FirstOrDefault(p => p.PayClassName.Equals(Strings.Regular, StringComparison.OrdinalIgnoreCase))?.PayClassId ?? 0,
-							PayClasses = result.PayClasses,
+							ProjectsWithInactive = projects
+								.Where(p =>
+									(p.StartDate == null || p.StartDate.Value <= date) &&
+									(p.EndDate == null || p.EndDate.Value >= date) &&
+									(p.IsUserActive)
+								)
+								.Select(p => new SelectListItem
+								{
+									Selected = p.ProjectId == -1,
+									Text = p.ProjectId != -1 ? string.Format("{0} - {1}", p.CustomerName, p.ProjectName) : p.ProjectName, //Only need customer - project text for project ids !=0
+									Value = p.ProjectId.ToString()
+									//Disabled = !p.IsUserActive && !Model.Sample
+								}).ToList(),
+							PayClassId = payClassId,
+							PayClasses = payClasses
+								.Select(c => new SelectListItem
+								{
+									Selected = payClasses.Count == 1 || payClassId == c.PayClassId,
+									Text = Strings.ResourceManager.GetString(c.PayClassName.Replace(" ", "")) ?? c.PayClassName,
+									Value = c.PayClassId.ToString()
+								})
+								.ToList(),
 							IsManager = result.CanManage,
 							IsLocked = date <= (result.LockDate ?? result.PayrollProcessedDate ?? DateTime.MinValue) //can't add
 						});

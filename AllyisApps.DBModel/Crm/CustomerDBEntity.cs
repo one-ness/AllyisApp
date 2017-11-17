@@ -8,6 +8,7 @@ using System.ComponentModel;
 
 namespace AllyisApps.DBModel.Crm
 {
+	/// <inheritdoc />
 	/// <summary>
 	/// Represents the Users table in the database.
 	/// </summary>
@@ -115,6 +116,6 @@ namespace AllyisApps.DBModel.Crm
 		/// <summary>
 		/// Gets or sets the IsActive bool value for the customer. True means currently active.
 		/// </summary>
-		public bool? IsActive { get; set; }
+		public bool IsActive { get; set; }
 	}
 }

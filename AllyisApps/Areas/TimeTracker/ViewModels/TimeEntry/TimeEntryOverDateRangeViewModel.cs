@@ -49,16 +49,6 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public UserViewModel CurrentUser { get; internal set; }
 
 		/// <summary>
-		/// Gets the list of active projects available.
-		/// </summary>
-		public IEnumerable<CompleteProjectViewModel> Projects { get; internal set; }
-
-		/// <summary>
-		/// Gets the list of projects available, including inactive projects.
-		/// </summary>
-		public IEnumerable<CompleteProjectViewModel> ProjectsWithInactive { get; internal set; }
-
-		/// <summary>
 		/// Gets the list of projects available, associated with their total hours.
 		/// </summary>
 		public IEnumerable<ProjectHours> ProjectHours { get; internal set; }
@@ -92,11 +82,6 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Gets start of week for an Organization.
 		/// </summary>
 		public StartOfWeekEnum StartOfWeek { get; internal set; }
-
-		/// <summary>
-		/// Gets pay classes for an org.
-		/// </summary>
-		public IEnumerable<PayClassInfoViewModel> PayClasses { get; internal set; }
 
 		/// <summary>
 		/// Gets or sets the type of product.

@@ -96,7 +96,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				else
 				{
 					// single user selected
-					var getProj = await AppService.GetProjectsByUserAndOrganization(userIds[0], orgId, false);
+					var getProj = await AppService.GetProjectsByUserAndOrganization(userIds[0], orgId);
 					result.Projects = getProj.AsParallel().Select(proj =>
 					new CompleteProjectViewModel(proj)).ToList();
 				}

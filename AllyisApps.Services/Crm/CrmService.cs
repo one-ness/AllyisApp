@@ -85,6 +85,17 @@ namespace AllyisApps.Services
 		public async Task<int?> UpdateCustomerAsync(Customer customer, int subscriptionId)
 		{
 			CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
+
+			// Deactivating customer validation
+			if (!customer.IsActive)
+			{
+				var projects = await GetProjectsByCustomerAsync(customer.CustomerId);
+				if (projects.Any(project => project.IsActive))
+				{
+					return -2;
+				}
+			}
+
 			return await DBHelper.UpdateCustomerAsync(GetDBEntitiesFromCustomerInfo(customer));
 		}
 
@@ -515,17 +526,16 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="userId">User Id.</param>
 		/// <param name="orgId">The organization's Id.</param>
-		/// <param name="onlyActive">True (default) to only return active projects, false to include all projects, active or not.</param>
 		/// <returns>A list of all the projects a user can access in an organization.</returns>
-		public async Task<IEnumerable<CompleteProject>> GetProjectsByUserAndOrganization(int userId, int orgId = -1, bool onlyActive = true)
+		public async Task<IEnumerable<CompleteProject>> GetProjectsByUserAndOrganization(int userId, int orgId)
 		{
 			if (userId <= 0)
 			{
 				throw new ArgumentOutOfRangeException(nameof(userId), "User Id cannot be 0 or negative.");
 			}
 
-			var results = await DBHelper.GetProjectsByUserAndOrganization(userId, orgId, onlyActive ? 1 : 0);
-			return results.Select(c => InitializeCompleteProjectInfo(c));
+			var results = await DBHelper.GetProjectsByUserAndOrganization(userId, orgId, false);
+			return results.Select(InitializeCompleteProjectInfo);
 		}
 
 		/// <summary>
@@ -815,7 +825,7 @@ namespace AllyisApps.Services
 		//    };
 		//}
 
-		public Tuple<CustomerDBEntity, AddressDBEntity> GetDBEntitiesFromCustomerInfo(Customer customer)
+		public static Tuple<CustomerDBEntity, AddressDBEntity> GetDBEntitiesFromCustomerInfo(Customer customer)
 		{
 			return new Tuple<CustomerDBEntity, AddressDBEntity>(
 				new CustomerDBEntity
@@ -831,7 +841,7 @@ namespace AllyisApps.Services
 					CustomerName = customer.CustomerName,
 					OrganizationId = customer.OrganizationId,
 					Website = customer.Website,
-					IsActive = customer.IsActive ?? true
+					IsActive = customer.IsActive
 				},
 				new AddressDBEntity
 				{
@@ -842,7 +852,7 @@ namespace AllyisApps.Services
 					CountryCode = customer.Address?.CountryCode,
 					PostalCode = customer.Address?.PostalCode,
 					State = customer.Address?.StateName,
-					StateId = customer.Address?.StateId,
+					StateId = customer.Address?.StateId
 				});
 		}
 

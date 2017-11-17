@@ -10,30 +10,15 @@
 	//string submitFunction = "ProjectId.value=ProjectIdDdl.value;PayClassId.value=PayClassNameDdl.value;return ajaxEditOrCreate(this, \"" + createUrl + "\", \"" + editUrl + "\")";
 	string extrastyle = Model.ProjectId < 0 ? "create" : string.Empty;
 	string hiddensample = Model.Hidden ? "hidden-sample" : string.Empty;
-	string approvalClass = Model.ModSinceApproval ? "pending" :
-					  Model.ApprovalState == (int)ApprovalState.NotApproved ? "rejected" :
-					  Model.ApprovalState == (int)ApprovalState.Approved ? "approved" : string.Empty;
-	var managableProjectsDropdown = Model.ProjectsWithInactive
-		.Where(p =>
-			(p.StartDate == null || p.StartDate.Value <= (DateTime)ViewBag.GetDateTimeFromDays(Model.Date)) &&
-			(p.EndDate == null || p.EndDate.Value >= (DateTime)ViewBag.GetDateTimeFromDays(Model.Date)) &&
-			(p.IsUserActive || !Model.Sample && Model.ProjectId == p.ProjectId)
-			)
-		.Select(p => new SelectListItem
-		{
-			Selected = Model.ProjectId == p.ProjectId,
-			Text = p.ProjectId != -1 ? string.Format("{0} - {1}", p.CustomerName, p.ProjectName) : p.ProjectName, //Only need customer - project text for project ids !=0
-			Value = p.ProjectId.ToString(),
-			//Disabled = !p.IsUserActive && !Model.Sample
-		});
-	var payClassesDropdown = Model.PayClasses.Select(c =>
-		new SelectListItem
-		{
-			Selected = Model.PayClasses.Count() == 1 || Model.PayClassId == c.PayClassId,
-			Text = Strings.ResourceManager.GetString(c.PayClassName.Replace(" ", "")) ?? c.PayClassName,
-			Value = c.PayClassId.ToString()
-		});
+	string approvalClass = Model.ModSinceApproval
+		? "pending"
+		: Model.ApprovalState == (int)ApprovalState.NotApproved
+			? "rejected"
+			: Model.ApprovalState == (int)ApprovalState.Approved
+				? "approved"
+				: string.Empty;
 }
+
 <div class="inline-form-anim-wrap @(hiddensample)">
 	@using (Html.BeginForm(ActionConstants.TimeEntryCURD, ControllerConstants.TimeEntry, FormMethod.Get, new { @class = string.Format("very-inline-form TimeEntryForm edit {0} {1}", extrastyle, approvalClass) }))
 	{
@@ -58,7 +43,7 @@
 			@*Ddl name must be different than model property name or the selected value cannot be adjusted*@
 			@Html.DropDownListDisabled(
 				"ProjectIdDdl",
-				managableProjectsDropdown,
+				Model.ProjectsWithInactive,
 				Model.IsLocked,
 				new
 				{
@@ -72,7 +57,7 @@
 		<div class="group left" style="width: 150px;">
 			@Html.DropDownListDisabled(
 				"PayClassNameDdl",
-				payClassesDropdown,
+				Model.PayClasses,
 				Model.IsLocked,
 				new
 				{

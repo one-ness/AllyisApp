@@ -62,6 +62,20 @@ namespace AllyisApps.Controllers.Auth
 					"Text",
 					"1")
 			};
+
+			for (int i = 0; i < model.SubscriptionRoles.Count(); i++)
+			{
+				List<SelectListItem> roleList = new List<SelectListItem>();
+				foreach (var role in model.SubscriptionRoles[i].SelectList)
+				{
+					roleList.Add(new SelectListItem()
+					{
+						Value = role.Value,
+						Text = role.Text
+					});
+				}
+				model.SubscriptionRoles[i].SelectList = roleList;
+			}
 			return model;
 		}
 

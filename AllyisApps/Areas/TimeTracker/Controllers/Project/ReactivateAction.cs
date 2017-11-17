@@ -27,7 +27,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			CompleteProject project = AppService.GetProject(userId);
 			if (project != null)
 			{
-				if (!AppService.GetCustomer(project.OwningCustomer.CustomerId).IsActive.Value)
+				if (!AppService.GetCustomer(project.OwningCustomer.CustomerId).IsActive)
 				{
 					AppService.ReactivateCustomer(project.OwningCustomer.CustomerId, subscriptionId, project.OrganizationId);
 				}

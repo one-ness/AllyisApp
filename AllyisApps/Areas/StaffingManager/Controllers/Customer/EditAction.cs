@@ -100,7 +100,8 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 						Website = model.Website,
 						EIN = model.EIN,
 						CustomerCode = model.CustomerCode,
-						OrganizationId = model.OrganizationId
+						OrganizationId = model.OrganizationId,
+						IsActive = true
 					},
 					model.SubscriptionId);
 
