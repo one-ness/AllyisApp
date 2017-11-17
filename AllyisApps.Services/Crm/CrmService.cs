@@ -85,6 +85,17 @@ namespace AllyisApps.Services
 		public async Task<int?> UpdateCustomerAsync(Customer customer, int subscriptionId)
 		{
 			CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
+
+			// Deactivating customer validation
+			if (!customer.IsActive)
+			{
+				var projects = await GetProjectsByCustomerAsync(customer.CustomerId);
+				if (projects.Any(project => project.IsActive))
+				{
+					return -2;
+				}
+			}
+
 			return await DBHelper.UpdateCustomerAsync(GetDBEntitiesFromCustomerInfo(customer));
 		}
 
@@ -814,7 +825,7 @@ namespace AllyisApps.Services
 		//    };
 		//}
 
-		public Tuple<CustomerDBEntity, AddressDBEntity> GetDBEntitiesFromCustomerInfo(Customer customer)
+		public static Tuple<CustomerDBEntity, AddressDBEntity> GetDBEntitiesFromCustomerInfo(Customer customer)
 		{
 			return new Tuple<CustomerDBEntity, AddressDBEntity>(
 				new CustomerDBEntity
@@ -830,7 +841,7 @@ namespace AllyisApps.Services
 					CustomerName = customer.CustomerName,
 					OrganizationId = customer.OrganizationId,
 					Website = customer.Website,
-					IsActive = customer.IsActive ?? true
+					IsActive = customer.IsActive
 				},
 				new AddressDBEntity
 				{
@@ -841,7 +852,7 @@ namespace AllyisApps.Services
 					CountryCode = customer.Address?.CountryCode,
 					PostalCode = customer.Address?.PostalCode,
 					State = customer.Address?.StateName,
-					StateId = customer.Address?.StateId,
+					StateId = customer.Address?.StateId
 				});
 		}
 

@@ -88,6 +88,7 @@
 					@Html.HiddenFor(m => m.IsCreating)
 					@Html.HiddenFor(m => m.SubscriptionId)
 					@Html.HiddenFor(m => m.AddressId)
+					@Html.HiddenForEnumerable(m => m.IsActiveOptions, true)
 
 					<div class="form-group pull-right allyis-action-buttons">
 						@if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)

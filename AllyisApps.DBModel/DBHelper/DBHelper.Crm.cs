@@ -395,7 +395,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@contactPhoneNumber", customer.ContactPhoneNumber);
 			parameters.Add("@faxNumber", customer.FaxNumber);
 			parameters.Add("@website", customer.Website);
-			parameters.Add("@isActive", true);
+			parameters.Add("@isActive", customer.IsActive);
 			parameters.Add("@eIN", customer.EIN);
 			parameters.Add("@organizationId", customer.OrganizationId);
 			parameters.Add("@customerCode", customer.CustomerCode);
@@ -587,24 +587,6 @@ namespace AllyisApps.DBModel
 				return true;
 			}
 		}
-
-		/*
-		/// <summary>
-		/// Delete the specified customer.
-		/// </summary>
-		/// <param name="customerId">The customer's Id.</param>
-		/// <returns>True if successful.</returns>
-		public bool DeleteCustomer(int customerId)
-		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				// default null
-				connection.Query<CustomerDBEntity>("[Crm].[DeleteCustomer]", new { CustomerId = customerId }, commandType: CommandType.StoredProcedure).SingleOrDefault();
-			}
-
-			return true;
-		}
-	*/
 
 		/// <summary>
 		/// Delete the specified customer.
