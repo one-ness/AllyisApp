@@ -10,9 +10,11 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
+using AllyisApps.Services.Crm;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
+	/// <inheritdoc />
 	/// <summary>
 	/// Represents pages for the management of a Customer.
 	/// </summary>
@@ -25,25 +27,26 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="userIds">Comma seperated value of user ids.</param>
 		/// <returns>Action result to the Index page.</returns>
 		[HttpGet]
-		async public Task<ActionResult> Delete(int subscriptionId, string userIds)
+		public async Task<ActionResult> Delete(int subscriptionId, string userIds)
 		{
-			string[] ids = userIds.Split(',');
-			var orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			var customerIds = userIds.Split(',').Select(id => Convert.ToInt32(id));
 
-			foreach (var id in ids)
+			foreach (int customerId in customerIds)
 			{
 				try
 				{
-					var result = await AppService.DeleteCustomer(subscriptionId, Convert.ToInt32(id));
-					Notifications.Add(new BootstrapAlert(string.Format("Customer(s) successfully deleted"), Variety.Success));
+					await AppService.DeleteCustomer(subscriptionId, customerId);
+					Notifications.Add(new BootstrapAlert("Customer(s) successfully deleted.", Variety.Success));
 				}
 				catch
 				{
-					Notifications.Add(new BootstrapAlert(string.Format("Cannot Delete Customer {0}, there are dependent projects or time entries.", id), Variety.Warning));
+					Customer customer = AppService.GetCustomer(customerId);
+					Notifications.Add(new BootstrapAlert(
+						$"Cannot delete customer \"{customer.CustomerName}\", there are dependent projects or time entries.", Variety.Warning));
 				}
 			}
 
-			return RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
+			return RedirectToAction(ActionConstants.Index, new { subscriptionId });
 		}
 	}
 }
