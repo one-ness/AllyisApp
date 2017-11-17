@@ -12,8 +12,12 @@
 	ViewData.Add(ActionConstants.Action, ActionConstants.Create);
 }
 
-<div>
-	@{Html.RenderPartial("_ProjectEdit", Model, ViewData);}
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			@{Html.RenderPartial("_ProjectEdit", Model, ViewData);}
+		</div>
+	</div>
 </div>
 
 @section css {

@@ -11,11 +11,18 @@
 	ViewData["SubscriptionName"] = Model.SubscriptionName;
 }
 
-<div>
-	@{Html.RenderPartial("_CustomerEdit", Model, ViewData);}
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			<div>
+				@{Html.RenderPartial("_CustomerEdit", Model, ViewData);}
+			</div>
+		</div>
+	</div>
 </div>
 
-@section Scripts {
+@section Scripts
+{
 	<script type="text/javascript">
 		var preserveState = '@(Model.State != null ? (States.ResourceManager.GetString(Model.State) ?? Model.State) : "")';
 		var dropdownempty = "@Strings.DropDownEmpty";

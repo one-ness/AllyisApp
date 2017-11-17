@@ -16,12 +16,14 @@
 	<link rel="icon" href="/Content/icons/fav32.png?v=2" sizes="32x32" type="image/png" />
 	<link rel="icon" href="/Content/icons/fav16.png?v=2" sizes="16x16" type="image/png" />
 	<link rel="shortcut icon" href="favicon.ico?v=2" />
+	
 	<title>@title</title>
 	@Styles.Render("~/Content/Bootstrap")
 	@Styles.Render("~/Content/FontAwesome")
 	@Scripts.Render("~/bundles/underscore")
 	@RenderSection("css", required: false)
 	<link href="@Url.Content(DisplayHints.LayoutThemeBundle.Replace("Content/", "Content/css/") + ".css")" rel="stylesheet" type="text/css" />
+	<link href="~/Content/css/margin-fixes.css" rel="stylesheet" type="text/css" />
 	<meta name="description" content="@Strings.MetaDescription" />
 </head>
 <body id="@DisplayHints.PageBodyId" class="@DisplayHints.PageBodyClasses">
@@ -29,14 +31,10 @@
 	<!-- breadcrumbs partial should be rendered here -->
 	@Html.Partial("_NotificationPartial")
 	@Html.Partial("_Title")
-	<div class="container">
-		<div class="row">
-			<div class="col-xs-12">
-				@RenderBody()
-			</div>
-		</div>
-	</div>
-	
+<div class="margin-fixes">
+	@RenderBody()
+</div>
+
 	@Html.Action(ActionConstants.FooterPartial, ControllerConstants.Shared, new { area = "" })
 
 	@RenderSection("modals", required: false)

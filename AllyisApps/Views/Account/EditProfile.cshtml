@@ -4,74 +4,76 @@
 	ViewBag.Title = Strings.EditProfile;
 }
 
-<div class="shrink-wrap-center">
-	<div class="min300">
-		@using (Html.BeginForm(ActionConstants.EditProfile, ControllerConstants.Account, new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form", role = "form" }))
-		{
-			@Html.HiddenFor(m => m.AddressId)
-			@Html.AntiForgeryToken()
-			@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" });
-			<div class="row">
-				<div class="col-md-6 sm-control-width">
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.Email, Strings.Email)
-						@Html.ValidationMessageFor(m => m.Email)
-						@Html.TextBoxFor(m => m.Email, new { @readonly = "readonly", @class = "form-control" })
-					</div>
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.FirstName, Strings.FirstName)
-						@Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
-					</div>
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.LastName, Strings.LastName)
-						@Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
-					</div>
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.DateOfBirth)
-						<div class="input-group" style="width: 100%;">
-							<input type="text" class="form-control" id="DateOfBirth" name="DateOfBirth" value="@(Model.DateOfBirth.ToString("d", CultureInfo.InvariantCulture))">
-							<div class="input-group-addon" style="cursor: pointer"><span class="glyphicon glyphicon-calendar"></span></div>
+<div class="container">
+	<div class="shrink-wrap-center">
+		<div class="min300">
+			@using (Html.BeginForm(ActionConstants.EditProfile, ControllerConstants.Account, new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form", role = "form" }))
+			{
+				@Html.HiddenFor(m => m.AddressId)
+				@Html.AntiForgeryToken()
+				@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" });
+				<div class="row">
+					<div class="col-md-6 sm-control-width">
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.Email, Strings.Email)
+							@Html.ValidationMessageFor(m => m.Email)
+							@Html.TextBoxFor(m => m.Email, new { @readonly = "readonly", @class = "form-control" })
 						</div>
-						@Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @class = "text-danger" })
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.FirstName, Strings.FirstName)
+							@Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+						</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.LastName, Strings.LastName)
+							@Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+						</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.DateOfBirth)
+							<div class="input-group" style="width: 100%;">
+								<input type="text" class="form-control" id="DateOfBirth" name="DateOfBirth" value="@(Model.DateOfBirth.ToString("d", CultureInfo.InvariantCulture))">
+								<div class="input-group-addon" style="cursor: pointer"><span class="glyphicon glyphicon-calendar"></span></div>
+							</div>
+							@Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @class = "text-danger" })
+						</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.PhoneNumber, Strings.PhoneNumber)
+							@Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
+						</div>
 					</div>
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.PhoneNumber, Strings.PhoneNumber)
-						@Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
+					<div class="col-md-6 sm-control-width">
+						<div class="form-group">
+							@Html.LabelFor(m => m.Address, Strings.Address)
+							@Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
+						</div>
+						<div class="form-group">
+							@Html.LabelFor(m => m.LocalizedCountries, Strings.Country)
+							@Html.DropDownListFor(m => m.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new { @id = @ViewConstants.DdlCountriesId, @class = "form-control" })
+						</div>
+						<div class="form-group">
+							@Html.LabelFor(m => m.LocalizedStates, Strings.State)
+							@Html.DropDownListFor(m => m.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @id = ViewConstants.DdlStatesId, @class = "form-control" })
+						</div>
+						<div class="form-group">
+							@Html.LabelFor(m => m.City, Strings.City)
+							@Html.TextBoxFor(m => m.City, new { @class = "form-control" })
+						</div>
+						<div class="form-group">
+							@Html.LabelFor(m => m.PostalCode, Strings.PostalCode)
+							@Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control" })
+						</div>
 					</div>
 				</div>
-				<div class="col-md-6 sm-control-width">
-					<div class="form-group">
-						@Html.LabelFor(m => m.Address, Strings.Address)
-						@Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
-					</div>
-					<div class="form-group">
-						@Html.LabelFor(m => m.LocalizedCountries, Strings.Country)
-						@Html.DropDownListFor(m => m.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new { @id = @ViewConstants.DdlCountriesId, @class = "form-control" })
-					</div>
-					<div class="form-group">
-						@Html.LabelFor(m => m.LocalizedStates, Strings.State)
-						@Html.DropDownListFor(m => m.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @id = ViewConstants.DdlStatesId, @class = "form-control" })
-					</div>
-					<div class="form-group">
-						@Html.LabelFor(m => m.City, Strings.City)
-						@Html.TextBoxFor(m => m.City, new { @class = "form-control" })
-					</div>
-					<div class="form-group">
-						@Html.LabelFor(m => m.PostalCode, Strings.PostalCode)
-						@Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control" })
-					</div>
-				</div>
-			</div>
 
-			<div class="form-group allyis-action-buttons">
-				<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)" class="btn btn-default"> @Strings.Cancel </a>
-				<button class="btn btn-primary btn-gray" type="submit" value=@Strings.Save>@Strings.Save</button>
-			</div>
-		}
+				<div class="form-group allyis-action-buttons">
+					<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)" class="btn btn-default"> @Strings.Cancel </a>
+					<button class="btn btn-primary btn-gray" type="submit" value=@Strings.Save>@Strings.Save</button>
+				</div>
+			}
+		</div>
 	</div>
 </div>
 
@@ -87,36 +89,36 @@
 	@Scripts.Render("~/bundles/daterangepicker")
 
 	<script type="text/javascript">
-		// variables to be passed to allyis-updatestateddl.js
-		var dropdownempty = "@Strings.DropDownEmpty";
-		var ddlCountriesId = "@ViewConstants.DdlCountriesId";
-		var ddlStatesId = "@ViewConstants.DdlStatesId";
-		var ddlStatesOptionsId = "@ViewConstants.DdlStatesOptionsId";
-		var getStatesUrl = "/Home/GetStates";
-		var selectedCountryCode = "@Model.SelectedCountryCode";
-		var selectedStateId = "@Model.SelectedStateId";
+// variables to be passed to allyis-updatestateddl.js
+var dropdownempty = "@Strings.DropDownEmpty";
+var ddlCountriesId = "@ViewConstants.DdlCountriesId";
+var ddlStatesId = "@ViewConstants.DdlStatesId";
+var ddlStatesOptionsId = "@ViewConstants.DdlStatesOptionsId";
+var getStatesUrl = "/Home/GetStates";
+var selectedCountryCode = "@Model.SelectedCountryCode";
+var selectedStateId = "@Model.SelectedStateId";
 
-		$('document').ready(function () {
-			$('#DateOfBirth').singleDatePicker();
-		});
+$('document').ready(function () {
+$('#DateOfBirth').singleDatePicker();
+});
 
-		$.fn.singleDatePicker = function () {
-			var datepickerElement = this;
+$.fn.singleDatePicker = function () {
+var datepickerElement = this;
 
-			$(datepickerElement).on("apply.daterangepicker", function (e, picker) {
-				picker.element.val(picker.startDate.format(picker.locale.format));
-			});
+$(datepickerElement).on("apply.daterangepicker", function (e, picker) {
+	picker.element.val(picker.startDate.format(picker.locale.format));
+});
 
-			$(datepickerElement).siblings(".input-group-addon").click(function () {
-				$(datepickerElement).click();
-			});
+$(datepickerElement).siblings(".input-group-addon").click(function () {
+	$(datepickerElement).click();
+});
 
-			return $(datepickerElement).daterangepicker({
-				singleDatePicker: true,
-				showDropdowns: true,
-				autoUpdateInput: false
-			});
-		};
+return $(datepickerElement).daterangepicker({
+	singleDatePicker: true,
+	showDropdowns: true,
+	autoUpdateInput: false
+});
+};
 	</script>
 	@Scripts.Render("~/bundles/UpdateStateDDL")
 }

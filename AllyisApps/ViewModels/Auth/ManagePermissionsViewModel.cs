@@ -128,5 +128,10 @@ namespace AllyisApps.ViewModels.Auth
 		/// Is selected for the action
 		/// </summary>
 		public bool IsChecked { get; set; }
+
+		/// <summary>
+		/// Current User can't change own permissions, used by view to disable input
+		/// </summary>
+		public bool IsCurrentUser { get; set; }
 	}
 }

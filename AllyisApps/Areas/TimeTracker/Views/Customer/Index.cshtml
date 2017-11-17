@@ -16,24 +16,26 @@
 	ViewData["SubscriptionName"] = Model.SubscriptionName;
 }
 
-<div class="row">
-	<div class="col-xs-12 col-md-8 col-md-push-2">
-		<ul class="nav nav-tabs">
-			<li id="activeTab" class="active"><a onclick="populateActiveForm()">Active</a></li>
-			<li id="inactiveTab"><a onclick="populateInactiveForm()">Inactive</a></li>
-		</ul>
-		<br />
-		<form>
-			<div id="resultPartialForm" class="row">
-				<!--Partial view will be updated here every time a tab is chosen-->
-				<div id="activePartial">
-					@Html.Partial("_IndexPartial_Active")
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12 col-md-8 col-md-push-2">
+			<ul class="nav nav-tabs">
+				<li id="activeTab" class="active"><a onclick="populateActiveForm()">Active</a></li>
+				<li id="inactiveTab"><a onclick="populateInactiveForm()">Inactive</a></li>
+			</ul>
+			<br />
+			<form>
+				<div id="resultPartialForm" class="row">
+					<!--Partial view will be updated here every time a tab is chosen-->
+					<div id="activePartial">
+						@Html.Partial("_IndexPartial_Active")
+					</div>
+					<div id="inactivePartial" class="hidden">
+						@Html.Partial("_IndexPartial_Inactive")
+					</div>
 				</div>
-				<div id="inactivePartial" class="hidden">
-					@Html.Partial("_IndexPartial_Inactive")
-				</div>
-			</div>
-		</form>
+			</form>
+		</div>
 	</div>
 </div>
 

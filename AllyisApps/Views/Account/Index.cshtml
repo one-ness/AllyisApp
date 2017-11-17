@@ -5,222 +5,223 @@
 	ViewBag.TitleBar = Strings.MyAccount;
 	var cityState = Model.UserInfo.City != null && Model.UserInfo.State != null ? Model.UserInfo.City + ", " + Model.UserInfo.State : string.Empty;
 }
-
-<div class="row">
-	<div class="col-md-8 col-md-push-2">
-		@*<div class="row">
-			<div class="col-xs-12">
-				<h1 class="pull-left" style="margin-bottom:5px; margin-top:0px;">@Strings.MyAccount</h1>
-			</div>
-		</div>*@
-
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h2 style="margin-top: 0px; margin-bottom: 0px;">
-					@Model.UserInfo.FirstName @Model.UserInfo.LastName
-					<span class="small text-muted" style="margin-left: 10px;">
-						(@Model.UserInfo.Email)
-					</span>
-				</h2>
-			</div>
-			<div class="panel-body">
-				<div class="col-sm-9 index-details">
-					<p>
-						<label>@Strings.PhoneNumber:</label>
-						@Model.UserInfo.PhoneNumber @Model.UserInfo.PhoneExtension
-					</p>
-					<p>
-						<label>@Strings.Address:</label>
-						<span class="address-row">@Model.UserInfo.Address1</span>
-						<span class="address-row">@cityState @Model.UserInfo.PostalCode</span>
-					</p>
+<div class="container">
+	<div class="row">
+		<div class="col-md-8 col-md-push-2">
+			@*<div class="row">
+				<div class="col-xs-12">
+					<h1 class="pull-left" style="margin-bottom:5px; margin-top:0px;">@Strings.MyAccount</h1>
 				</div>
-				<div class="col-sm-3 vertically-stacked-buttons text-right" style="padding-right:5px">
-					<a href="@Url.Action(ActionConstants.ChangePassword, ControllerConstants.Account)" class="btn btn-default btn-full">@Strings.ChangePassword <i class="fa fa-user-secret"></i></a><br/>
-					<a href="@Url.Action(ActionConstants.EditProfile, ControllerConstants.Account)" class="btn btn-default btn-full">@Strings.EditProfile <i class="fa fa-info-circle"></i></a>
-				</div>
-			</div>
+			</div>*@
 
-			@if (Model.Invitations.Count > 0)
-			{
-				<div class="panel-body panel panel-default" style="margin: 20px">
-					<div class="index-details" style="padding-left: 15px">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h2 style="margin-top: 0px; margin-bottom: 0px;">
+						@Model.UserInfo.FirstName @Model.UserInfo.LastName
+						<span class="small text-muted" style="margin-left: 10px;">
+							(@Model.UserInfo.Email)
+						</span>
+					</h2>
+				</div>
+				<div class="panel-body">
+					<div class="col-sm-9 index-details">
 						<p>
-							<label>@Strings.Invitations</label>
-							@if (Model.Invitations.Count == 1)
-							{
-								@Strings.Invite
-							}
-							else
-							{
-								@Strings.Invites
-							}
+							<label>@Strings.PhoneNumber:</label>
+							@Model.UserInfo.PhoneNumber @Model.UserInfo.PhoneExtension
 						</p>
-						@foreach (var invite in Model.Invitations)
-						{
-							<div class="invites">
-								<span class="col-xs-4 col-xs-6 h3">@invite.OrganizationName</span>
-								@using (Html.BeginForm(ActionConstants.AcceptInvitation, ControllerConstants.Account, new { id = @invite.InvitationId }, FormMethod.Post))
-								{
+						<p>
+							<label>@Strings.Address:</label>
+							<span class="address-row">@Model.UserInfo.Address1</span>
+							<span class="address-row">@cityState @Model.UserInfo.PostalCode</span>
+						</p>
+					</div>
+					<div class="col-sm-3 vertically-stacked-buttons text-right" style="padding-right:5px">
+						<a href="@Url.Action(ActionConstants.ChangePassword, ControllerConstants.Account)" class="btn btn-default btn-full">@Strings.ChangePassword <i class="fa fa-user-secret"></i></a><br/>
+						<a href="@Url.Action(ActionConstants.EditProfile, ControllerConstants.Account)" class="btn btn-default btn-full">@Strings.EditProfile <i class="fa fa-info-circle"></i></a>
+					</div>
+				</div>
 
-									<span class="col-xs-4 col-xs-3 pull-right" style="margin-top:15px;">
-										<input type="submit" value="@Strings.Accept" class="btn btn-primary col-xs-12" />
-									</span>
-								}
-								@using (Html.BeginForm(ActionConstants.RejectInvitation, ControllerConstants.Account, new { id = @invite.InvitationId }, FormMethod.Post))
+				@if (Model.Invitations.Count > 0)
+				{
+					<div class="panel-body panel panel-default" style="margin: 20px">
+						<div class="index-details" style="padding-left: 15px">
+							<p>
+								<label>@Strings.Invitations</label>
+								@if (Model.Invitations.Count == 1)
 								{
-									<span class="col-xs-4 col-xs-3 pull-right" style="margin-top:15px;">
-										<input type="submit" value="@Strings.Reject" class="btn btn-danger col-xs-12" />
-									</span>
+									@Strings.Invite
 								}
-							</div>
-						}
+								else
+								{
+									@Strings.Invites
+								}
+							</p>
+							@foreach (var invite in Model.Invitations)
+							{
+								<div class="invites">
+									<span class="col-xs-4 col-xs-6" style="margin-top:10px;">@invite.OrganizationName</span>
+									@using (Html.BeginForm(ActionConstants.AcceptInvitation, ControllerConstants.Account, new { id = @invite.InvitationId }, FormMethod.Post))
+									{
+
+										<span class="col-xs-4 col-xs-3 pull-right" style="margin-top:10px;">
+											<input type="submit" value="@Strings.Accept" class="btn btn-primary col-xs-12" />
+										</span>
+									}
+									@using (Html.BeginForm(ActionConstants.RejectInvitation, ControllerConstants.Account, new { id = @invite.InvitationId }, FormMethod.Post))
+									{
+										<span class="col-xs-4 col-xs-3 pull-right" style="margin-top:10px;">
+											<input type="submit" value="@Strings.Reject" class="btn btn-primary col-xs-12" />
+										</span>
+									}
+								</div>
+							}
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-push-2 col-md-8">
+			<div class="row" style="margin-bottom:5px;">
+				<div class="col-xs-6">
+					<h1 class="pull-left" style="margin-bottom:0px; margin-top:0px;">@Strings.YourOrganizations</h1>
+				</div>
+				<div class="col-xs-6">
+					<a href="@Url.Action(ActionConstants.CreateOrg, ControllerConstants.Account)" class="btn btn-default pull-right">@Strings.CreateOrganization <i class="fa fa-building"></i></a>
+				</div>
+			</div>
+			@if (Model.Organizations.Count <= 0)
+			{
+				<div class="row">
+					<div class="col-xs-12">
+						<p><i>@Strings.NoOrganizationMessage</i></p>
+						<p><i>@Strings.NoOrganizationMessage2</i></p>
 					</div>
 				</div>
 			}
-		</div>
-	</div>
-</div>
-
-<div class="row">
-	<div class="col-md-push-2 col-md-8">
-		<div class="row" style="margin-bottom:5px;">
-			<div class="col-xs-6">
-				<h1 class="pull-left" style="margin-bottom:0px; margin-top:0px;">@Strings.YourOrganizations</h1>
-			</div>
-			<div class="col-xs-6">
-				<a href="@Url.Action(ActionConstants.CreateOrg, ControllerConstants.Account)" class="btn btn-default pull-right">@Strings.CreateOrganization <i class="fa fa-building"></i></a>
-			</div>
-		</div>
-		@if (Model.Organizations.Count <= 0)
-		{
-			<div class="row">
-				<div class="col-xs-12">
-					<p><i>@Strings.NoOrganizationMessage</i></p>
-					<p><i>@Strings.NoOrganizationMessage2</i></p>
-				</div>
-			</div>
-		}
-		else
-		{
-			foreach (var org in Model.Organizations)
+			else
 			{
-				string title = org.OrganizationName;
-				string subtitle = org.SiteUrl ?? "";
-				var OrgcityState = org.City != null && org.State != null ? org.City + ", " + org.State : org.City + org.State;
+				foreach (var org in Model.Organizations)
+				{
+					string title = org.OrganizationName;
+					string subtitle = org.SiteUrl ?? "";
+					var OrgcityState = org.City != null && org.State != null ? org.City + ", " + org.State : org.City + org.State;
 
-				<div class="row">
-					<div class="col-md-12">
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<div class="row">
-									<div class="col-xs-9">
-										<h2 style="margin-top:0px; margin-bottom:0px;">@title</h2>
-									</div>
-									<div class="col-xs-3">
-										<div id="managebtn" class="dropdown pull-right">
-											<a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> @Strings.Manage <i class="fa fa-caret-down"></i></a>
-											<ul class="dropdown-menu">
-												@if (org.IsReadOrgDetailsAllowed)
-												{
-													<li><a href="@Url.Action(ActionConstants.OrganizationDetails, ControllerConstants.Account, new { @id = org.OrganizationId })" title="@Strings.OrganizationDetails">@Strings.Details <i class="fa fa-info-circle"></i></a></li>
-												}
-												@if (org.IsReadMembersListAllowed)
-												{
-													<li><a href="@Url.Action(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { @id = org.OrganizationId })" title="@Strings.MemberList">@Strings.Members <i class="fa fa-users"></i></a></li>
-												}
-												@if (org.IsReadPermissionsListAllowed)
-												{
-													<li><a href="@Url.Action(ActionConstants.ManageOrgPermissions, ControllerConstants.Account, new { @id = org.OrganizationId })" title="@Strings.ManagePermissions">@Strings.Permissions <i class="fa fa-lock"></i></a></li>
-												}
-												@if (org.IsReadSubscriptionsListAllowed)
-												{
-													<li><a href="@Url.Action(ActionConstants.OrganizationSubscriptions, ControllerConstants.Account, new { @id = org.OrganizationId })" title="@Strings.Subscriptions">@Strings.Subscriptions <i class="fa fa-list"></i></a></li>
-												}
-												@if (org.IsReadBillingDetailsAllowed)
-												{
-													<li><a href="javascript:void(0);">@Strings.Billing <i class="fa fa-dollar"></i></a></li>
-												}
-											</ul>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<div class="row">
+										<div class="col-xs-9">
+											<h2 style="margin-top:0px; margin-bottom:0px;">@title</h2>
 										</div>
-										@*}*@
+										<div class="col-xs-3">
+											<div id="managebtn" class="dropdown pull-right">
+												<a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> @Strings.Manage <i class="fa fa-caret-down"></i></a>
+												<ul class="dropdown-menu">
+													@if (org.IsReadOrgDetailsAllowed)
+													{
+														<li><a href="@Url.Action(ActionConstants.OrganizationDetails, ControllerConstants.Account, new { @id = org.OrganizationId })" title="@Strings.OrganizationDetails">@Strings.Details <i class="fa fa-info-circle"></i></a></li>
+													}
+													@if (org.IsReadMembersListAllowed)
+													{
+														<li><a href="@Url.Action(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { @id = org.OrganizationId })" title="@Strings.MemberList">@Strings.Members <i class="fa fa-users"></i></a></li>
+													}
+													@if (org.IsReadPermissionsListAllowed)
+													{
+														<li><a href="@Url.Action(ActionConstants.ManageOrgPermissions, ControllerConstants.Account, new { @id = org.OrganizationId })" title="@Strings.ManagePermissions">@Strings.Permissions <i class="fa fa-lock"></i></a></li>
+													}
+													@if (org.IsReadSubscriptionsListAllowed)
+													{
+														<li><a href="@Url.Action(ActionConstants.OrganizationSubscriptions, ControllerConstants.Account, new { @id = org.OrganizationId })" title="@Strings.Subscriptions">@Strings.Subscriptions <i class="fa fa-list"></i></a></li>
+													}
+													@if (org.IsReadBillingDetailsAllowed)
+													{
+														<li><a href="javascript:void(0);">@Strings.Billing <i class="fa fa-dollar"></i></a></li>
+													}
+												</ul>
+											</div>
+											@*}*@
+										</div>
 									</div>
 								</div>
-							</div>
-							<div class="panel-body">
-								<div class="col-sm-8 index-details">
-									<p>
-										<label>@Strings.PhoneNumber:</label>
-										@org.PhoneNumber
-									</p>
-									<p>
-										<label>@Strings.Address:</label>
-										<span class="address-row">@org.Address1</span>
-										<span class="address-row">@org.Address2</span>
-										<span class="address-row">@OrgcityState @org.PostalCode</span>
-									</p>
-								</div>
-								<div class="col-sm-4 index-details">
-									<p>
-										<label>@Strings.Website:</label>
-										@{
-											string orgWebSite = subtitle;
-											if (!(subtitle == null || subtitle == ""))
-											{
-												if (!subtitle.StartsWith("http"))
+								<div class="panel-body">
+									<div class="col-sm-8 index-details">
+										<p>
+											<label>@Strings.PhoneNumber:</label>
+											@org.PhoneNumber
+										</p>
+										<p>
+											<label>@Strings.Address:</label>
+											<span class="address-row">@org.Address1</span>
+											<span class="address-row">@org.Address2</span>
+											<span class="address-row">@OrgcityState @org.PostalCode</span>
+										</p>
+									</div>
+									<div class="col-sm-4 index-details">
+										<p>
+											<label>@Strings.Website:</label>
+											@{
+												string orgWebSite = subtitle;
+												if (!(subtitle == null || subtitle == ""))
 												{
-													orgWebSite = "http://" + subtitle;
+													if (!subtitle.StartsWith("http"))
+													{
+														orgWebSite = "http://" + subtitle;
+													}
+													<a href="@orgWebSite" target="_blank">@subtitle</a>
 												}
-												<a href="@orgWebSite" target="_blank">@subtitle</a>
+											}
+										</p>
+										<p>
+											<label>@Strings.Fax:</label>
+											@org.FaxNumber
+										</p>
+									</div>
+									<div class="col-md-12" style="height: 100%; margin-top:10px; display: flex; flex-wrap: wrap; justify-content: space-around; clear: both;">
+										@if (org.Subscriptions.Count <= 0)
+										{
+											<p>@Strings.NoSubscriptionMessage</p>
+											if (org.IsCreateSubscriptionAllowed)
+											{
+												<p><i>Please visit the <a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { @id = org.OrganizationId })" style="color:cornflowerblue">subscriptions page</a> to subscribe to our products.</i></p>
 											}
 										}
-									</p>
-									<p>
-										<label>@Strings.Fax:</label>
-										@org.FaxNumber
-									</p>
-								</div>
-								<div class="col-md-12" style="height: 100%; margin-top:15px; display: flex; flex-wrap: wrap; justify-content: space-around; clear: both;">
-									@if (org.Subscriptions.Count <= 0)
-									{
-										<p>@Strings.NoSubscriptionMessage</p>
-										if (org.IsCreateSubscriptionAllowed)
+										else
 										{
-											<p><i>Please visit the <a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { @id = org.OrganizationId })" style="color:cornflowerblue">subscriptions page</a> to subscribe to our products.</i></p>
-										}
-									}
-									else
-									{
-										foreach (AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel sub in org.Subscriptions)
-										{
-											<div class="square-box">
-												<a href="@sub.ProductGoToUrl" style="text-decoration: none">
-													<div class="panel panel-default">
-														<div class="btn default" style="text-align:center; margin:5px;">
-															<div class="center-block" style="text-align:center; vertical-align:middle;">
-																<img src="@(Url.Content(sub.IconUrl))" alt="@sub.ProductName" />
+											foreach (AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel sub in org.Subscriptions)
+											{
+												<div class="square-box">
+													<a href="@sub.ProductGoToUrl" style="text-decoration: none">
+														<div class="panel panel-default">
+															<div class="btn default" style="text-align:center; margin:5px;">
+																<div class="center-block" style="text-align:center; vertical-align:middle;">
+																	<img src="@(Url.Content(sub.IconUrl))" alt="@sub.ProductName" />
+																</div>
+																<h4>
+																	@sub.ProductName
+																</h4>
+																<p>
+																	@sub.SubscriptionName
+																</p>
 															</div>
-															<h4>
-																@sub.ProductName
-															</h4>
-															<p>
-																@sub.SubscriptionName
-															</p>
 														</div>
-													</div>
-												</a>
-											</div>
+													</a>
+												</div>
+											}
 										}
-									}
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
 
-				<div class="row">
-				</div>
+					@*<div class="row">
+					</div>*@
+													}
 												}
-											}
+		</div>
 	</div>
 </div>

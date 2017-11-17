@@ -6,54 +6,60 @@
 
 @foreach (var prod in Model.Products)
 {
-	<div class="row">
-		<div class="col-md-6 col-md-push-3">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h2 style="margin-top: 0px; margin-bottom: 0px; text-align: center;">
-						@prod.ProductName
-					</h2>
-				</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="row">
+					<div class="col-md-6 col-md-push-3">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h2 style="margin-top: 0px; margin-bottom: 0px; text-align: center;">
+									@prod.ProductName
+								</h2>
+							</div>
 
-				<div class="panel-body">
-					@foreach (var sku in prod.Skus)
-					{
-						<div class="row">
-							<div class="panel-wrap panel-wrap-one col-md-10 col-md-push-1">
-								<div class="panel panel-default">
-									<div class="panel-heading" style="display: table; width: 100%; height: 100%;">
-										<div class="row">
-											<div class="col-md-4">
-												<div class="row" style="text-align: center; vertical-align: middle; margin-top: 25px; margin-bottom: 10px;"><img src="~/@sku.SkuIconUrl" alt="@sku.SkuName" /></div>
-												<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><strong>$@sku.Price.ToString("N2")</strong></div>
-												@if (Model.CanSubscribe)
-												{
-													<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;">
-														<a href="@Url.Action(ActionConstants.Subscribe, ControllerConstants.Account, new { id = Model.OrganizationId, skuId = sku.SkuId })" style="text-decoration: none" class="btn btn-default">@Strings.Subscribe</a>
+							<div class="panel-body">
+								@foreach (var sku in prod.Skus)
+								{
+									<div class="row">
+										<div class="panel-wrap panel-wrap-one col-md-10 col-md-push-1">
+											<div class="panel panel-default">
+												<div class="panel-heading" style="display: table; width: 100%; height: 100%;">
+													<div class="row">
+														<div class="col-md-4">
+															<div class="row" style="text-align: center; vertical-align: middle; margin-top: 25px; margin-bottom: 10px;"><img src="~/@sku.SkuIconUrl" alt="@sku.SkuName" /></div>
+															<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><strong>$@sku.Price.ToString("N2")</strong></div>
+															@if (Model.CanSubscribe)
+															{
+																<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;">
+																	<a href="@Url.Action(ActionConstants.Subscribe, ControllerConstants.Account, new { id = Model.OrganizationId, skuId = sku.SkuId })" style="text-decoration: none" class="btn btn-default">@Strings.Subscribe</a>
+																</div>		}
+														</div>
+														<div class="col-md-8">
+															<h3>
+																@sku.SkuName
+															</h3>
+															<p>
+																@sku.SkuDescription
+															</p>
+														</div>
 													</div>
-												}
-											</div>
-											<div class="col-md-8">
-												<h3>
-													@sku.SkuName
-												</h3>
-												<p>
-													@sku.SkuDescription
-												</p>
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
+								}
 							</div>
 						</div>
-					}
+					</div>
+				</div>
+				<br />
+				}
+
+				<div>
+					<a href="@Url.Action(ActionConstants.OrganizationSubscriptions, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default" title="@Strings.Back"><i class="fa fa-caret-left"></i> @Strings.Back</a>
 				</div>
 			</div>
 		</div>
 	</div>
-	<br />
 }
-
-<div>
-	<a href="@Url.Action(ActionConstants.OrganizationSubscriptions, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default" title="@Strings.Back"><i class="fa fa-caret-left"></i> @Strings.Back</a>
-</div>
