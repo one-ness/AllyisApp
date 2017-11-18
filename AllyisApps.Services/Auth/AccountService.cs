@@ -80,7 +80,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="invitationId">Id of invite.</param>
 		/// <returns>Inviation info </returns>
-		public async Task<Invitation> GetInvitationByID(int invitationId)
+		public async Task<Invitation> GetInvitation(int invitationId)
 		{
 			InvitationDBEntity invitation = await DBHelper.GetInvitation(invitationId);
 			return InitializeInvitationInfo(invitation);
