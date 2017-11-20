@@ -613,7 +613,7 @@ namespace AllyisApps.Services
 			}
 
 			#endregion Validation
-			
+
 			var spResults = await DBHelper.GetTimeEntryIndexPageInfo(orgId, (int)ProductIdEnum.TimeTracker, userId.Value, startingDate, endingDate);
 
 			return Tuple.Create(DBEntityToServiceObject(spResults.Item1),

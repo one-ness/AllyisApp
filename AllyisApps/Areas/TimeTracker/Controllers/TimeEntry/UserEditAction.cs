@@ -14,6 +14,7 @@ using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
+	/// <inheritdoc />
 	/// <summary>
 	/// Class which manages Time Entry objects.
 	/// </summary>
@@ -31,7 +32,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var infosTask = AppService.GetProjectsForOrgAndUser(userId, subscriptionId);
 			var subscriptionNameToDisplayTask = AppService.GetSubscriptionName(subscriptionId);
 
-			await Task.WhenAll(new Task[] { infosTask, subscriptionNameToDisplayTask });
+			await Task.WhenAll(infosTask, subscriptionNameToDisplayTask);
 
 			var infos = infosTask.Result;
 			string subscriptionNameToDisplay = subscriptionNameToDisplayTask.Result;
@@ -98,10 +99,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				return Json(new { status = "success" });
 			}
-			else
-			{
-				return Json(new { status = "failure" });
-			}
+			return Json(new { status = "failure" });
 		}
 	}
 }

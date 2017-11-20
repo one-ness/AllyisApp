@@ -1,7 +1,7 @@
-﻿@model AllyisApps.ViewModels.Staffing.Customer.EditCustomerInfoViewModel
+﻿@model AllyisApps.ViewModels.StaffingManager.Customer.EditCustomerInfoViewModel
 
 @{
-	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/StaffingManager/Views/Shared/_BreadcrumbNavPartial.cshtml";
 	DisplayHints.LayoutThemeBundle = "~/Content/StaffingManager";
 	ViewBag.Title = Strings.Create;
 	ViewData.Add(ControllerConstants.Controller, ControllerConstants.Customer);
@@ -11,11 +11,18 @@
 	ViewData["SubscriptionName"] = Model.SubscriptionName;
 }
 
-<div>
-	@{Html.RenderPartial("_CustomerEdit", Model, ViewData);}
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			<div>
+				@{Html.RenderPartial("_CustomerEdit", Model, ViewData);}
+			</div>
+		</div>
+	</div>
 </div>
 
-@section Scripts {
+@section Scripts
+{
 	<script type="text/javascript">
 		var preserveState = '@(Model.State != null ? (States.ResourceManager.GetString(Model.State) ?? Model.State) : "")';
 		var dropdownempty = "@Strings.DropDownEmpty";

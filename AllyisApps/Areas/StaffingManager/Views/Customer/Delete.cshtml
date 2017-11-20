@@ -1,0 +1,29 @@
+﻿@model AllyisApps.ViewModels.StaffingManager.Customer.EditCustomerInfoViewModel
+
+@{
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/StaffingManager/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/StaffingManager";
+	ViewBag.Title = Strings.Delete;
+}
+
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			<h2>@Strings.Delete</h2>
+
+			<h3>@Strings.DeleteHeader</h3>
+			<div>
+
+				@using (Html.BeginForm())
+				{
+					@Html.AntiForgeryToken()
+
+					<div class="form-actions no-color">
+						<input type="submit" value=@Strings.Delete class="btn btn-default" /> |
+						@Html.ActionLink(Strings.BackToList, "Index")
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</div>

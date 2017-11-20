@@ -5,9 +5,9 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Threading.Tasks;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
-using System.Threading.Tasks;
 
 namespace AllyisApps.Services
 {
@@ -54,7 +54,9 @@ namespace AllyisApps.Services
 
 		public enum StaffingManagerAction
 		{
-			EditCustomer
+			EditCustomer,
+			ViewCustomer,
+			EditProject
 		}
 
 		/// <summary>
@@ -176,12 +178,16 @@ namespace AllyisApps.Services
 		public bool CheckStaffingManagerAction(StaffingManagerAction action, int subId, bool throwException = true)
 		{
 			bool result = false;
-			if (UserContext.SubscriptionsAndRoles.TryGetValue(subId, out UserContext.SubscriptionAndRole subInfo) && subInfo.ProductId == ProductIdEnum.StaffingManager)
+			UserContext.SubscriptionsAndRoles.TryGetValue(subId, out UserContext.SubscriptionAndRole subInfo);
+			if (subInfo?.ProductId == ProductIdEnum.StaffingManager)
 			{
 				StaffingManagerRole smRole = (StaffingManagerRole)subInfo.ProductRoleId;
 				switch (action)
 				{
 					case StaffingManagerAction.EditCustomer:
+						result = true;
+						break;
+					default:
 						result = true;
 						break;
 				}
@@ -202,7 +208,8 @@ namespace AllyisApps.Services
 		public bool CheckTimeTrackerAction(TimeTrackerAction action, int subId, bool throwException = true)
 		{
 			bool result = false;
-			if (UserContext.SubscriptionsAndRoles.TryGetValue(subId, out UserContext.SubscriptionAndRole subInfo) && subInfo.ProductId == ProductIdEnum.TimeTracker)
+			UserContext.SubscriptionsAndRoles.TryGetValue(subId, out UserContext.SubscriptionAndRole subInfo);
+			if (subInfo?.ProductId == ProductIdEnum.TimeTracker)
 			{
 				TimeTrackerRole ttRole = (TimeTrackerRole)subInfo.ProductRoleId;
 				switch (action)

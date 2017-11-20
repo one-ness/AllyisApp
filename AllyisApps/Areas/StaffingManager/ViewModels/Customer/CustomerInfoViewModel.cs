@@ -4,8 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.ViewModels.Staffing.Customer
+namespace AllyisApps.ViewModels.StaffingManager.Customer
 {
+	/// <inheritdoc />
 	/// <summary>
 	/// Represents basic Customer info.
 	/// </summary>

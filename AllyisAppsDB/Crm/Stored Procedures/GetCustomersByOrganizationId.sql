@@ -1,4 +1,4 @@
-CREATE PROCEDURE [Crm].[GetCustomersByOrgId]
+CREATE PROCEDURE [Crm].[GetCustomersByOrganizationId]
 	@orgId INT
 AS
 	BEGIN

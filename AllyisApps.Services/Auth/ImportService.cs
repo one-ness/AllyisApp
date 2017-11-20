@@ -113,7 +113,7 @@ namespace AllyisApps.Services
 			}
 			// Retrieval of existing customer and project data
 			var customersProjects = new List<Tuple<Customer, List<Project.Project>>>();
-			foreach (Customer customer in await GetCustomerList(orgId))
+			foreach (Customer customer in await GetCustomersByOrganizationId(orgId))
 			{
 				customersProjects.Add(new Tuple<Customer, List<Project.Project>>(
 					customer,
@@ -247,9 +247,8 @@ namespace AllyisApps.Services
 									int? newCustomerId = await CreateCustomerAsync(newCustomer, subscriptionId);
 									if (newCustomerId == -1) // Customer exists, but has been deactivated
 									{
-										List<Customer> inactiveCustomers = GetInactiveProjectsAndCustomersForOrgAndUser(orgId).Item2;
-										int targetId = inactiveCustomers.Where(c => c.CustomerCode == newCustomer.CustomerCode).FirstOrDefault().CustomerId;
-										ReactivateCustomer(targetId, subscriptionId, orgId);
+										int targetId = (await GetCustomersByOrganizationId(orgId)).FirstOrDefault(c => !c.IsActive && c.CustomerCode == newCustomer.CustomerCode).CustomerId;
+										await UpdateCustomerIsActive(targetId, subscriptionId, true);
 									}
 									if (newCustomerId == null)
 									{
@@ -311,7 +310,7 @@ namespace AllyisApps.Services
 		{
 			// Retrieval of existing customer and project data
 			var customersProjects = new List<Tuple<Customer, List<Project.Project>>>();
-			foreach (Customer customer in await GetCustomerList(orgId))
+			foreach (Customer customer in await GetCustomersByOrganizationId(orgId))
 			{
 				customersProjects.Add(new Tuple<Customer, List<Project.Project>>(
 					customer,
@@ -645,13 +644,6 @@ namespace AllyisApps.Services
 							if (startDate != null) project.StartDate = DateTime.Parse(startDate);
 							if (endDate != null) project.EndDate = DateTime.Parse(endDate);
 
-							var c = await GetInactiveProjectsByCustomer(customer.CustomerId);
-							if (c.Any(p => p.ProjectCode == project.ProjectCode))
-							{
-								ReactivateProject(project.ProjectId, orgId, subscriptionId);
-								updated = true;
-							}
-
 							if (updated)
 							{
 								UpdateProject(subscriptionId, project);
@@ -956,7 +948,7 @@ namespace AllyisApps.Services
 					ReadColumn(row, hasProjectName ? ColumnHeaders.ProjectName : ColumnHeaders.ProjectCode, p => knownValue = p);
 
 					var customersProjects = new List<Project.Project>();
-					var customerList = await GetCustomerList(orgId);
+					var customerList = await GetCustomersByOrganizationId(orgId);
 					if (customerList.Count() == 0)
 					{
 						result.GeneralFailures.Add($"No customers exist for this organization.");

@@ -12,7 +12,7 @@ using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services.Crm;
 
-namespace AllyisApps.Areas.TimeTracker.Controllers
+namespace AllyisApps.Areas.StaffingManager.Controllers
 {
 	/// <inheritdoc />
 	/// <summary>
