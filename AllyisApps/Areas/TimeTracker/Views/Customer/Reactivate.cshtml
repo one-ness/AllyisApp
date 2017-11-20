@@ -13,39 +13,41 @@
 	var createButtonClass = !Model.CanEdit ? "invisible" : "";
 }
 
-<div class="row">
-	<div class="col-xs-12 col-md-8 col-md-push-2">
-		<div class="allyis-action-buttons-top">
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12 col-md-8 col-md-push-2">
+			<div class="allyis-action-buttons-top">
 
-			<input type="text" id="SearchInput" placeholder=@Strings.SearchPlaceholder class="form-control">
-		</div>
+				<input type="text" id="SearchInput" placeholder=@Strings.SearchPlaceholder class="form-control">
+			</div>
 
-		<div class="flexbox-row flexbox-row-2-col-collapse">
-			<div class="panel panel-info" style="position: relative;">
-				<div class="panel-heading">
-					<h1 class="panel-title">@Strings.CustomerList</h1>
+			<div class="flexbox-row flexbox-row-2-col-collapse">
+				<div class="panel panel-info" style="position: relative;">
+					<div class="panel-heading">
+						<h1 class="panel-title">@Strings.CustomerList</h1>
+					</div>
+					<div class="panel-body list-group" id="Customers">
+						@foreach (CustomerProjectViewModel customer in Model.Customers)
+						{
+							<a onclick="PopulateProjects('@customer.CustomerInfo.CustomerId')" class="list-group-item"><text>@customer.CustomerInfo.CustomerName</text></a>
+						}
+						<br />
+					</div>
 				</div>
-				<div class="panel-body list-group" id="Customers">
-					@foreach (CustomerProjectViewModel customer in Model.Customers)
-					{
-						<a onclick="PopulateProjects('@customer.CustomerInfo.CustomerId')" class="list-group-item"><text>@customer.CustomerInfo.CustomerName</text></a>
-					}
-					<br />
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						<h1 class="panel-title">@Strings.Project</h1>
+					</div>
+					<div id="Projects">
+						<!--projects belong to chosen customer will be populated here-->
+					</div>
 				</div>
-			</div>
-			<div class="panel panel-info">
-				<div class="panel-heading">
-					<h1 class="panel-title">@Strings.Project</h1>
+				<div>
+					<a href="#" class="btn btn-default @createButtonClass">@Strings.Reactivate <i class="fa fa-plus"></i></a>
 				</div>
-				<div id="Projects">
-					<!--projects belong to chosen customer will be populated here-->
+				<div>
+					<a href="#" class="btn btn-default @createButtonClass">@Strings.Reactivate <i class="fa fa-plus"></i></a>
 				</div>
-			</div>
-			<div>
-				<a href="#" class="btn btn-default @createButtonClass">@Strings.Reactivate <i class="fa fa-plus"></i></a>
-			</div>
-			<div>
-				<a href="#" class="btn btn-default @createButtonClass">@Strings.Reactivate <i class="fa fa-plus"></i></a>
 			</div>
 		</div>
 	</div>

@@ -1,4 +1,5 @@
 ﻿using System;
+using AllyisApps.Resources;
 
 namespace AllyisApps.Services
 {
@@ -18,19 +19,107 @@ namespace AllyisApps.Services
 			switch (value)
 			{
 				case BillingRateEnum.Hourly:
-					name = "Hourly";
+					name = Strings.Hourly;
 					break;
 
 				case BillingRateEnum.Monthly:
-					name = "Monthly";
+					name = Strings.Months;
 					break;
 
 				case BillingRateEnum.Yearly:
-					name = "Yearly:";
+					name = "Yearly";
 					break;
 			}
 
 			return name;
+		}
+
+		public static string GetEnumName(this AppService.OrgAction value)
+		{
+			string name = "";
+			switch (value)
+			{
+				case AppService.OrgAction.CreateSubscription:
+					name = Strings.CreateSubscription;
+					break;
+
+				case AppService.OrgAction.CreateBilling:
+					name = "Create Billing";
+					break;
+
+				case AppService.OrgAction.ReadBilling:
+					name = "Read Billing";
+					break;
+
+				case AppService.OrgAction.ReadInvitationsList:
+					break;
+
+				case AppService.OrgAction.ReadOrganization:
+					break;
+
+				case AppService.OrgAction.ReadSubscription:
+					break;
+
+				case AppService.OrgAction.ReadPermissions:
+					break;
+
+				case AppService.OrgAction.ReadSubscriptions:
+					break;
+
+				case AppService.OrgAction.ReadUser:
+					break;
+
+				case AppService.OrgAction.ReadUsersList:
+					break;
+
+				case AppService.OrgAction.EditUser:
+					break;
+
+				case AppService.OrgAction.EditUserPermission:
+					break;
+
+				case AppService.OrgAction.EditOrganization:
+					break;
+
+				case AppService.OrgAction.EditSubscription:
+					break;
+
+				case AppService.OrgAction.EditSubscriptionUser:
+					break;
+
+				case AppService.OrgAction.EditBilling:
+					break;
+
+				case AppService.OrgAction.AddUserToOrganization:
+					break;
+
+				case AppService.OrgAction.AddUserToSubscription:
+					break;
+
+				case AppService.OrgAction.ChangePassword:
+					break;
+
+				case AppService.OrgAction.ResendInvitation:
+					break;
+
+				case AppService.OrgAction.DeleteUserFromOrganization:
+					break;
+
+				case AppService.OrgAction.DeleteUserFromSubscription:
+					break;
+
+				case AppService.OrgAction.DeleteInvitation:
+					break;
+
+				case AppService.OrgAction.DeleteOrganization:
+					break;
+
+				case AppService.OrgAction.DeleteSubscritpion:
+					break;
+
+				case AppService.OrgAction.DeleteBilling:
+					break;
+			}
 		}
 	}
 }
@@ -53,19 +142,19 @@ namespace AllyisApps.Services.Auth
 			switch (value)
 			{
 				case InvitationStatusEnum.Accepted:
-					name = "Accepted";
+					name = Strings.BillingAccepted;
 					break;
 
 				case InvitationStatusEnum.Any:
-					name = "Any";
+					name = Strings.Any;
 					break;
 
 				case InvitationStatusEnum.Pending:
-					name = "Pending";
+					name = Strings.Pending;
 					break;
 
 				case InvitationStatusEnum.Rejected:
-					name = "Rejected";
+					name = Strings.Rejected;
 					break;
 			}
 
@@ -83,11 +172,11 @@ namespace AllyisApps.Services.Auth
 			switch (value)
 			{
 				case OrganizationRoleEnum.Member:
-					name = "Member";
+					name = Strings.Member;
 					break;
 
 				case OrganizationRoleEnum.Owner:
-					name = "Owner";
+					name = Strings.Owner;
 					break;
 			}
 
@@ -105,15 +194,15 @@ namespace AllyisApps.Services.Auth
 			switch (value)
 			{
 				case StaffingManagerRole.Manager:
-					name = "Manager";
+					name = Strings.Manager;
 					break;
 
 				case StaffingManagerRole.NotInProduct:
-					name = "Not In Product";
+					name = Strings.Unassigned;
 					break;
 
 				case StaffingManagerRole.User:
-					name = "User";
+					name = Strings.User;
 					break;
 			}
 
@@ -131,15 +220,15 @@ namespace AllyisApps.Services.Auth
 			switch (value)
 			{
 				case TimeTrackerRole.Manager:
-					name = "Manager";
+					name = Strings.Manager;
 					break;
 
 				case TimeTrackerRole.NotInProduct:
-					name = "Not In Product";
+					name = Strings.Unassigned;
 					break;
 
 				case TimeTrackerRole.User:
-					name = "User";
+					name = Strings.User;
 					break;
 			}
 
@@ -157,19 +246,19 @@ namespace AllyisApps.Services.Auth
 			switch (value)
 			{
 				case ExpenseTrackerRole.Manager:
-					name = "Manager";
+					name = Strings.Manager;
 					break;
 
 				case ExpenseTrackerRole.NotInProduct:
-					name = "Not In Product";
+					name = Strings.Unassigned;
 					break;
 
 				case ExpenseTrackerRole.SuperUser:
-					name = "Super User";
+					name = Strings.SuperUser;
 					break;
 
 				case ExpenseTrackerRole.User:
-					name = "User";
+					name = Strings.User;
 					break;
 			}
 
@@ -252,19 +341,19 @@ namespace AllyisApps.Services.Billing
 					break;
 
 				case ProductIdEnum.ExpenseTracker:
-					name = "Expense Tracker";
+					name = Strings.ExpenseTracker;
 					break;
 
 				case ProductIdEnum.None:
-					name = "Name";
+					name = Strings.None;
 					break;
 
 				case ProductIdEnum.StaffingManager:
-					name = "Staffing Manager";
+					name = Strings.StaffingManager;
 					break;
 
 				case ProductIdEnum.TimeTracker:
-					name = "Time Tracker";
+					name = Strings.TimeTracker;
 					break;
 			}
 
@@ -290,7 +379,7 @@ namespace AllyisApps.Services.Billing
 					break;
 
 				case SkuIdEnum.None:
-					name = "None";
+					name = Strings.None;
 					break;
 
 				case SkuIdEnum.StaffingManagerBasic:
@@ -332,7 +421,7 @@ namespace AllyisApps.Services.Billing
 					break;
 
 				case UnitTypeEnum.User:
-					name = "User";
+					name = Strings.User;
 					break;
 			}
 
@@ -359,11 +448,11 @@ namespace AllyisApps.Services.Expense
 			switch (value)
 			{
 				case ExpenseStatusEnum.Any:
-					name = "Any";
+					name = Strings.Any;
 					break;
 
 				case ExpenseStatusEnum.Approved:
-					name = "Approved";
+					name = Strings.Approved;
 					break;
 
 				case ExpenseStatusEnum.Draft:
@@ -375,11 +464,11 @@ namespace AllyisApps.Services.Expense
 					break;
 
 				case ExpenseStatusEnum.Pending:
-					name = "Pending";
+					name = Strings.Pending;
 					break;
 
 				case ExpenseStatusEnum.Rejected:
-					name = "Rejected";
+					name = Strings.Rejected;
 					break;
 			}
 

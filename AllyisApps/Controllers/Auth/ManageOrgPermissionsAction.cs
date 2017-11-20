@@ -52,10 +52,11 @@ namespace AllyisApps.Controllers.Auth
 					Email = orgU.Email,
 					FullName = orgU.FirstName + " " + orgU.LastName,
 					UserId = orgU.UserId,
-					IsChecked = false
+					IsChecked = false,
+					IsCurrentUser = false
 				}).OrderBy(orgU => orgU.FullName).ToList()
 			};
-
+			foreach (var user in perModel.Users) if (user.UserId == perModel.UserId) user.IsCurrentUser = true;
 			return View("PermissionsOrg", perModel);
 		}
 	}

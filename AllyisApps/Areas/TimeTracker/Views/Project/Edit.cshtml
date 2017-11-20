@@ -13,8 +13,14 @@
 	ViewData["SubscriptionName"] = Model.SubscriptionName;
 }
 
-<div class="shrink-wrap-center">
-	@{Html.RenderPartial("_ProjectEdit", Model, ViewData);}
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="shrink-wrap-center">
+				@{Html.RenderPartial("_ProjectEdit", Model, ViewData);}
+			</div>
+		</div>
+	</div>
 </div>
 
 @section css {

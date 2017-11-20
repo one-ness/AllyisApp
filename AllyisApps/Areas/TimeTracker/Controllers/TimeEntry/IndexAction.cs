@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
+using AllyisApps.Core.Alert;
 using AllyisApps.Lib;
 using AllyisApps.Resources;
 using AllyisApps.Services;
@@ -40,9 +41,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
 			var sub = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 
-			//redirect back to self with non-null default start/end dates so that we can get the desired route url
-			if (startDate == null || endDate == null)
+			//redirect back to self with default start/end dates if dates are invalid -- redirecting to get proper url route
+			if (startDate == null || endDate == null || endDate - startDate > 180 || endDate < startDate)
 			{
+				if (startDate != null && endDate != null)
+				{
+					Notifications.Add(new BootstrapAlert("Invalid date range, defaulting to current pay period.", Variety.Warning));
+				}
+
 				PayPeriodRanges payPeriodRanges = await AppService.GetPayPeriodRanges(sub.OrganizationId);
 				startDate = Utility.GetDaysFromDateTime(payPeriodRanges.Current.StartDate);
 				endDate = Utility.GetDaysFromDateTime(payPeriodRanges.Current.EndDate);
@@ -85,7 +91,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			int start = Utility.GetDaysFromDateTime(startDate);
 			int end = Utility.GetDaysFromDateTime(endDate);
-			return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry, new { subscriptionId, startDate = start, endDate = end, userId = userId });
+			return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry, new { subscriptionId, startDate = start, endDate = end, userId });
 		}
 
 		/// <summary>
@@ -186,7 +192,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			};
 
 			// Initialize the starting dates and get all of the time entries within that date range.
-			IEnumerable<Services.TimeTracker.TimeEntry> timeEntries = infos.Item6; // Service.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDate, endDate);
+			IEnumerable<TimeEntry> timeEntries = infos.Item6; // Service.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDate, endDate);
 			using (var iter = timeEntries.GetEnumerator())
 			{
 				iter.MoveNext();
@@ -239,7 +245,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 								.Select(p => new SelectListItem
 								{
 									Selected = iter.Current.ProjectId == p.ProjectId,
-									Text = p.ProjectId != -1 ? string.Format("{0} - {1}", p.CustomerName, p.ProjectName) : p.ProjectName, //Only need customer - project text for project ids !=0
+									Text = p.ProjectId != -1 ? $"{p.CustomerName} - {p.ProjectName}" : p.ProjectName, //Only need customer - project text for project ids !=0
 									Value = p.ProjectId.ToString()
 									//Disabled = !p.IsUserActive && !Model.Sample
 								}).ToList(),
@@ -291,7 +297,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 								.Select(p => new SelectListItem
 								{
 									Selected = p.ProjectId == -1,
-									Text = p.ProjectId != -1 ? string.Format("{0} - {1}", p.CustomerName, p.ProjectName) : p.ProjectName, //Only need customer - project text for project ids !=0
+									Text = p.ProjectId != -1 ? $"{p.CustomerName} - {p.ProjectName}" : p.ProjectName, //Only need customer - project text for project ids !=0
 									Value = p.ProjectId.ToString()
 									//Disabled = !p.IsUserActive && !Model.Sample
 								}).ToList(),
@@ -334,13 +340,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				LastName = user.LastName,
 				UserId = user.UserId
 			};
-		}
-
-		private static DateTime SetEndingDate(int startOfWeek)
-		{
-			int dayOfWeek = (int)DateTime.Now.DayOfWeek;
-			int daysLeftInWeek = startOfWeek - dayOfWeek + (dayOfWeek < startOfWeek ? -1 : 6);
-			return DateTime.Now.AddDays(daysLeftInWeek).Date;
 		}
 	}
 }

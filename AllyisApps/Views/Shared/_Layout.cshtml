@@ -31,14 +31,10 @@
 	<!-- breadcrumbs partial should be rendered here -->
 	@Html.Partial("_NotificationPartial")
 	@Html.Partial("_Title")
-	<div class="container">
-		<div class="row">
-			<div class="col-xs-12 margin-fixes">
-				@RenderBody()
-			</div>
-		</div>
-	</div>
-	
+<div class="margin-fixes">
+	@RenderBody()
+</div>
+
 	@Html.Action(ActionConstants.FooterPartial, ControllerConstants.Shared, new { area = "" })
 
 	@RenderSection("modals", required: false)

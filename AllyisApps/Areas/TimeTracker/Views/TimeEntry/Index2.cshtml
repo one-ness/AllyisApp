@@ -22,12 +22,12 @@
 			<input id="EndDate"  type="hidden" value="@Model.EntryRange.EndDate" />*@
 		<div class="form-group pull-left">
 			<a href="@Url.Action(ActionConstants.Export, ControllerConstants.TimeEntry, new
-				{
-					subscriptionId = Model.SubscriptionId,
-					userId = Model.EntryRange.UserId,
-					startingDate = Utility.GetDaysFromDateTime(Model.EntryRange.StartDate),
-					endingDate = Utility.GetDaysFromDateTime(Model.EntryRange.EndDate)
-				})">
+	{
+		subscriptionId = Model.SubscriptionId,
+		userId = Model.EntryRange.UserId,
+		startingDate = Utility.GetDaysFromDateTime(Model.EntryRange.StartDate),
+		endingDate = Utility.GetDaysFromDateTime(Model.EntryRange.EndDate)
+	})">
 				<span>
 					<span class="btn btn-primary" style="margin-right: 15px;">@Strings.Export</span>
 				</span>
@@ -46,31 +46,31 @@
 						@if (ViewBag.SelectedUserId == ViewBag.SignedInUserID)
 						{
 							<a class="btn btn-primary" title="@Strings.Previous"
-							   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.SubscriptionId, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
+								href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.SubscriptionId, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
 								<i class="fa fa-chevron-left"></i>
 							</a>
 							<a class="btn btn-primary" title="@Strings.Current"
-							   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.SubscriptionId, startDate = (int) ViewBag.WeekStart, endDate = (int) ViewBag.WeekEnd })">
+								href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.SubscriptionId, startDate = (int) ViewBag.WeekStart, endDate = (int) ViewBag.WeekEnd })">
 								<i class="glyphicon glyphicon-flash"></i>
 							</a>
 							<a class="btn btn-primary" title="@Strings.Next"
-							   href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.SubscriptionId, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
+								href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.SubscriptionId, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
 								<i class="fa fa-chevron-right"></i>
 							</a>
 						}
 						else
 						{
 							<a class="btn btn-primary" title="@Strings.Previous"
-							   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.SubscriptionId, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
+								href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.SubscriptionId, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
 								<i class="fa fa-chevron-left"></i>
 							</a>
 							<a class="btn btn-primary" title="@Strings.Current"
-							   href="@Url.Action(ActionConstants.Index, new {  subscriptionId = Model.SubscriptionId, userId = ViewBag.SelectedUserId,  startDate = (int) ViewBag.WeekStart, endDate = (int) ViewBag.WeekEnd })">
+								href="@Url.Action(ActionConstants.Index, new {  subscriptionId = Model.SubscriptionId, userId = ViewBag.SelectedUserId,  startDate = (int) ViewBag.WeekStart, endDate = (int) ViewBag.WeekEnd })">
 								<i class="glyphicon glyphicon-flash"></i>
 							</a>
 
 							<a class="btn btn-primary" title="@Strings.Next"
-							   href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.SubscriptionId, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
+								href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.SubscriptionId, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
 								<i class="fa fa-chevron-right"></i>
 							</a>
 						}
@@ -202,7 +202,7 @@
 								userId = user.UserId })"
 							   style="text-decoration: none; color: #0066AA; padding-right:5%" title="Assign Projects to User"><i class="fa fa-cog"></i></a>
 							-->
-							</div>count++;
+						</div>count++;
 					}
 				}
 			</div>

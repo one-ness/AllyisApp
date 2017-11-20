@@ -18,58 +18,59 @@
 	<link rel="stylesheet" type="text/css" href="~/Content/DateRangePicker" />
 }
 
-<div class="row slim">
+<div class="container">
+	<div class="row slim">
 
-	<div class="col-sm-2">
-		@Html.Partial("_ManageSettingSideBar")
-	</div>
-	<div class="col-sm-10">
-		<div class="panel panel-info" style="position: relative; padding-bottom: 40px;" @*style="width: 400px; margin: 10px auto;"*@>
-			<div class="panel-heading">
-				<h1 class="panel-title">@Strings.PayPeriod</h1>
-			</div>
-			<div class="panel-body" id="pay-period">
-				@using (Html.BeginForm(ActionConstants.SettingsPayPeriod, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "form-inline", id = "pay-period-form" }))
-				{
-					@Html.HiddenFor(m => m.OrganizationId)
-					<div class="radio">
-						<label>
-							<input type="radio" id="PayPeriodTypeId" name="PayPeriodTypeId" value="@((int)PayPeriodType.Duration)" style="margin-right: 15px;" @Html.Raw(Model.PayPeriodTypeId == 0 ? "checked" : "")/>
-							<strong>Duration:</strong>
-						</label>
-						<span>Each pay period is </span>
-						@Html.TextBoxFor(m => m.Duration, new { @class= "form-control", style = "width:50px" })
-						<span>days long.  Starting on </span>
-						<div class="input-group">
-							<input 
-								type="text"
-								class="form-control"
-								id="StartDate"
-								name="StartDate"
-								value="@(Model.StartDate != null
-									         ? Model.StartDate.Value.Date.ToString("d", CultureInfo.InvariantCulture)
-									         : DateTime.Now.Date.ToString("d", CultureInfo.InvariantCulture))"
-								style="width:100px">
-							<div class="input-group-addon" style="cursor: pointer">
-								<span class="glyphicon glyphicon-calendar"></span>
+		<div class="col-sm-2">
+			@Html.Partial("_ManageSettingSideBar")
+		</div>
+		<div class="col-sm-10">
+			<div class="panel panel-info" style="position: relative; padding-bottom: 40px;" @*style="width: 400px; margin: 10px auto;"*@>
+				<div class="panel-heading">
+					<h1 class="panel-title">@Strings.PayPeriod</h1>
+				</div>
+				<div class="panel-body" id="pay-period">
+					@using (Html.BeginForm(ActionConstants.SettingsPayPeriod, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "form-inline", id = "pay-period-form" }))
+					{
+						@Html.HiddenFor(m => m.OrganizationId)
+						<div class="radio">
+							<label>
+								<input type="radio" id="PayPeriodTypeId" name="PayPeriodTypeId" value="@((int)PayPeriodType.Duration)" style="margin-right: 15px;" @Html.Raw(Model.PayPeriodTypeId == 0 ? "checked" : "") />
+								<strong>Duration:</strong>
+							</label>
+							<span>Each pay period is </span>
+							@Html.TextBoxFor(m => m.Duration, new { @class = "form-control", style = "width:50px" })
+							<span>days long.  Starting on </span>
+							<div class="input-group">
+								<input type="text"
+										class="form-control"
+										id="StartDate"
+										name="StartDate"
+										value="@(Model.StartDate != null
+									    ? Model.StartDate.Value.Date.ToString("d", CultureInfo.InvariantCulture)
+									    : DateTime.Now.Date.ToString("d", CultureInfo.InvariantCulture))"
+										style="width:100px">
+								<div class="input-group-addon" style="cursor: pointer">
+									<span class="glyphicon glyphicon-calendar"></span>
+								</div>
 							</div>
+							@Html.ValidationMessageFor(m => m.Duration, "", new { @class = "text-danger" })
 						</div>
-						@Html.ValidationMessageFor(m => m.Duration, "", new { @class="text-danger" })
-					</div>
-					<br/>
-					<div class="radio">
-						<label>
-							<input type="radio" id="PayPeriodTypeId" name="PayPeriodTypeId" value="@((int)PayPeriodType.Dates)" style="margin-right: 15px;" @Html.Raw(Model.PayPeriodTypeId == 1 ? "checked" : "")/>
-							<strong>Dates:</strong>
-						</label>
-						<span>Each pay period starts on the </span>
-						@Html.TextBoxFor(m => m.Dates, new { @class = "form-control", style = "width:100px" })
-						<span>of every month.</span>
-					</div>
-					@Html.ValidationMessageFor(m => m.Dates, "", new { @class = "text-danger" })
-					<br/>
-					<input class="btn btn-primary" type="submit" value=@Strings.Save />
-				}
+						<br />
+						<div class="radio">
+							<label>
+								<input type="radio" id="PayPeriodTypeId" name="PayPeriodTypeId" value="@((int)PayPeriodType.Dates)" style="margin-right: 15px;" @Html.Raw(Model.PayPeriodTypeId == 1 ? "checked" : "") />
+								<strong>Dates:</strong>
+							</label>
+							<span>Each pay period starts on the </span>
+							@Html.TextBoxFor(m => m.Dates, new { @class = "form-control", style = "width:100px" })
+							<span>of every month.</span>
+						</div>
+						@Html.ValidationMessageFor(m => m.Dates, "", new { @class = "text-danger" })
+						<br />
+						<input class="btn btn-primary" type="submit" value=@Strings.Save />
+					}
+				</div>
 			</div>
 		</div>
 	</div>

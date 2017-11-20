@@ -17,8 +17,10 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44326</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <NuGetPackageImportStamp>
@@ -662,7 +664,6 @@
     <Content Include="Views\Account\Subscribe.cshtml" />
     <Content Include="Views\Account\NewMemberJoin.cshtml" />
     <Content Include="Views\Account\_OrgBillingInfo.cshtml" />
-    <Content Include="Views\Shared\_LayoutModal.cshtml" />
     <Content Include="Views\Account\AddBillingToSubscribe.cshtml" />
     <Content Include="Views\Home\PrivacyPolicy.cshtml" />
     <Content Include="Views\Home\Help.cshtml" />
