@@ -48,10 +48,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>An admin report model.</returns>
 		public async Task<AdminReportModel> CreateAdminReportModel(int subId)
 		{
-			
 			var reportInfoTask = AppService.GetReportInfo(subId);
 
-			await Task.WhenAll(new Task[] {reportInfoTask });
+			await Task.WhenAll(new Task[] { reportInfoTask });
 
 			var subInfo = AppService.UserContext.SubscriptionsAndRoles[subId];
 			var reportInfo = reportInfoTask.Result;
@@ -67,26 +66,26 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			List<SelectListItem> enumList = new List<SelectListItem>();
 			List<SelectListItem> userList = new List<SelectListItem>();
 
-			foreach (var item in Enum.GetValues(typeof(ExpenseStatusEnum)))
+			foreach (ExpenseStatusEnum item in Enum.GetValues(typeof(ExpenseStatusEnum)))
 			{
 				int value = 0;
 				switch (item.ToString())
 				{
 					// We dont want reports on rough drafts for now.
 					case "Pending":
-						value = 1;
+						value = (int)ExpenseStatusEnum.Pending;
 						break;
 
 					case "Approved":
-						value = 2;
+						value = (int)ExpenseStatusEnum.Approved;
 						break;
 
 					case "Rejected":
-						value = 3;
+						value = (int)ExpenseStatusEnum.Rejected;
 						break;
 
 					case "Paid":
-						value = 4;
+						value = (int)ExpenseStatusEnum.Paid;
 						break;
 
 					default:
@@ -98,7 +97,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					enumList.Add(new SelectListItem
 					{
 						Disabled = false,
-						Text = item.ToString(),
+						Text = item.GetEnumName(),
 						Value = value.ToString(),
 						Selected = string.Equals("1", value.ToString()) // Set pending as the default status.
 					});

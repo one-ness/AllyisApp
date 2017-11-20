@@ -131,8 +131,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Value = user.UserId.ToString(),
 				Text = $"{user.FirstName} {user.LastName}",
 				Selected = usersSelected.Contains(user.UserId)
-			})
-				.ToList();
+			}).ToList();
 		}
 
 		/// <summary>
