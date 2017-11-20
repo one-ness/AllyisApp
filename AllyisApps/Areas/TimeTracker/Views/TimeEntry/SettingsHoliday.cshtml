@@ -70,7 +70,7 @@
 									<div class="input-group" style="width: 50%;">
 										<input type="text" class="form-control" id="newHolidayDate" name="newHolidayDate" value="@(DateTime.Now.ToString("d", CultureInfo.InvariantCulture))" required>
 										<div class="input-group-addon">
-											<span class="glyphicon glyphicon-calendar"></span>
+											<span class="glyphicon glyphicon-calendar" style="cursor: pointer"></span>
 										</div>
 									</div>
 								</td>
@@ -112,10 +112,17 @@
 	};
 
 	$.fn.singleDatePicker = function() {
-		$(this).on("apply.daterangepicker", function (e, picker) {
+		var datepickerElement = this;
+
+		$(datepickerElement).on("apply.daterangepicker", function (e, picker) {
 			picker.element.val(picker.startDate.format(picker.locale.format));
 		});
-		return $(this).daterangepicker({
+
+		$(datepickerElement).siblings(".input-group-addon").click(function () {
+			$(datepickerElement).click();
+		});
+
+		return $(datepickerElement).daterangepicker({
 			singleDatePicker: true,
 			showDropdowns: true,
 			autoUpdateInput: false
