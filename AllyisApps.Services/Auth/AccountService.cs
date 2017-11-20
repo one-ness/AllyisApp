@@ -80,7 +80,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="invitationId">Id of invite.</param>
 		/// <returns>Inviation info </returns>
-		public async Task<Invitation> GetInvitationByID(int invitationId)
+		public async Task<Invitation> GetInvitation(int invitationId)
 		{
 			InvitationDBEntity invitation = await DBHelper.GetInvitation(invitationId);
 			return InitializeInvitationInfo(invitation);
@@ -93,32 +93,29 @@ namespace AllyisApps.Services
 		{
 			if (invitationId <= 0) throw new ArgumentOutOfRangeException(nameof(invitationId));
 
-			Invitation inviteInfo = InitializeInvitationInfo(await DBHelper.GetInvitation(invitationId));
 			bool result = DBHelper.AcceptInvitation(invitationId, UserContext.UserId) == 1;
-			if (!result) return false;
-
-			if (inviteInfo.ProductRolesJson != null && !inviteInfo.ProductRolesJson.Equals(""))
+			Invitation invite = InitializeInvitationInfo(await DBHelper.GetInvitation(invitationId));
+			if (result && !string.IsNullOrWhiteSpace(invite.ProductRolesJson))
 			{
-				List<InvitationPermissionsJson> roleString;
-				try { 
-					roleString = Newtonsoft.Json.JsonConvert.DeserializeObject<List<InvitationPermissionsJson>>(inviteInfo.ProductRolesJson);
+				var roles = new List<InvitationPermissionsJson>();
+				try
+				{ 
+					roles = Newtonsoft.Json.JsonConvert.DeserializeObject<List<InvitationPermissionsJson>>(invite.ProductRolesJson);
 				}
 				catch
 				{
-					//if roleString does not convert then assume that it is using old spfication resets to defalt value.
-					
-					roleString = new List<InvitationPermissionsJson>();
+					// if roleString does not convert then assume that it is using old spfication resets to empty json list.
 				}
-				foreach (var invite in roleString)
+
+				foreach (var item in roles)
 				{
-					await DBHelper.UpdateSubscriptionUserProductRole(invite.ProductRoleId, invite.SubscriptionId, UserContext.UserId);
-					//await DBHelper.UpdateSubscriptionUserRoles(new List<int> { UserContext.UserId }, inviteInfo.OrganizationId, invite.ProductRoleId, invite.ProductId);
+					await DBHelper.UpdateSubscriptionUserProductRole(item.ProductRoleId, item.SubscriptionId, UserContext.UserId);
 				}
 			}
 
 			NotifyInviteAcceptAsync(invitationId);
 
-			return true;
+			return result;
 		}
 
 		private int extractRole(JObject roleString, ProductIdEnum productId, SkuIdEnum skuId)

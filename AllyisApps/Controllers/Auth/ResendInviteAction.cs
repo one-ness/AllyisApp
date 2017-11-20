@@ -20,7 +20,7 @@ namespace AllyisApps.Controllers.Auth
             int[] concat = StringToIntList(checkedResendIds);
             foreach (int inviteId in concat)
             {
-                var invite = await AppService.GetInvitationByID(inviteId);
+                var invite = await AppService.GetInvitation(inviteId);
                 AppService.CheckOrgAction(Services.AppService.OrgAction.AddUserToOrganization, invite.OrganizationId);
                 User usr = await AppService.GetUserByEmail(invite.Email);
                 string url = usr != null ?
