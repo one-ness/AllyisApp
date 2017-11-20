@@ -16,167 +16,163 @@
 	ViewData["SubscriptionName"] = Model.SubscriptionName;
 }
 
-<div class="container">
-	<div class="row report-wrap">
-		<div class="col-xs-12">
-			@using (Html.BeginForm(ActionConstants.ViewReport, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "row", id = "reportForm" }))
-			{
-				@Html.Hidden("OrganizationId", Model.OrganizationId)
-				@Html.HiddenFor(m => m.SubscriptionId)
-	<!--Get users By subscriptionUser-->
-	<!--Default selection: current user-->if (Model.CanManage)// was previously: (Permissions.Can(ProductAction.TimeTrackerCreateReportOthers, Model.OrganizationId, DB Helper.Instance.GetProductIDByName("TimeTracker")))
+<div class="col-xs-12">
+	@using (Html.BeginForm(ActionConstants.ViewReport, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "row", id = "reportForm" }))
+	{
+		@Html.Hidden("OrganizationId", Model.OrganizationId)
+		@Html.HiddenFor(m => m.SubscriptionId)
+		<!--Get users By subscriptionUser-->
+		<!--Default selection: current user-->if (Model.CanManage)// was previously: (Permissions.Can(ProductAction.TimeTrackerCreateReportOthers, Model.OrganizationId, DB Helper.Instance.GetProductIDByName("TimeTracker")))
+		{
+			<div class="form-group col-xs-12 col-md-3">
+				<label for="UserSelect">@Strings.Employees</label>
+				@Html.DropDownList("UserSelect",
+							Model.UserView,
+							new { @class = "form-control", multiple = "multiple", size = "9" })
+			</div>
+		}
+		else
+		{
+			<div class="form-group col-xs-12 col-md-3" style="display: none;">
+				<label for="UserSelect">@Strings.Employees</label>
+				@Html.DropDownList("UserSelect",
+							Model.UserView,
+							new { @class = "form-control", /*disabled = "disabled",*/ multiple = "multiple", size = "9", style = "display: none;" })
+			</div>
+		}
+		<div class="col-xs-12 col-md-9">
+			<div class="row">
+				<div class="form-group col-md-6 col-lg-6">
+					<!--Get Customers by OrganizationId-->
+					<label for="CustomerSelect">@Strings.Customers</label>
+					@Html.DropDownList("CustomerSelect",
+							Model.CustomerView,
+							new { @class = "form-control", id = "ddl-customers" })
+				</div>
+
+				<!-- A holder for all the projects, to draw from for populating the real selection list -->
+				<select id="allprojects" style="display: none;">
+					@foreach (CompleteProjectViewModel proj in Model.Projects)
+					{
+						<option value="@proj.ProjectId" data-cust="@proj.CustomerId" class="projectSelectOption">@proj.ProjectName</option>
+					}
+				</select>
+
+				@if (Model.Selection.CustomerId == 0)
 				{
-					<div class="form-group col-xs-12 col-md-3">
-						<label for="UserSelect">@Strings.Employees</label>
-						@Html.DropDownList("UserSelect",
-									Model.UserView,
-									new { @class = "form-control", multiple = "multiple", size = "9" })
+					<div class="form-group col-xs-12 col-md-6">
+						<label for="ddl-projects">@Strings.Projects</label>
+						<!--Get Projects by OrgID-->
+						@Html.DropDownList("ProjectSelect",
+							Model.ProjectView,
+							new { @class = "form-control", id = "ddl-projects", disabled = "disabled" })
 					</div>
 				}
 				else
 				{
-					<div class="form-group col-xs-12 col-md-3" style="display: none;">
-						<label for="UserSelect">@Strings.Employees</label>
-						@Html.DropDownList("UserSelect",
-									Model.UserView,
-									new { @class = "form-control", /*disabled = "disabled",*/ multiple = "multiple", size = "9", style = "display: none;" })
-					</div>
-				}
-				<div class="col-xs-12 col-md-9">
-					<div class="row">
-						<div class="form-group col-md-6 col-lg-6">
-							<!--Get Customers by OrganizationId-->
-							<label for="CustomerSelect">@Strings.Customers</label>
-							@Html.DropDownList("CustomerSelect",
-									Model.CustomerView,
-									new { @class = "form-control", id = "ddl-customers" })
-						</div>
-
-						<!-- A holder for all the projects, to draw from for populating the real selection list -->
-						<select id="allprojects" style="display: none;">
-							@foreach (CompleteProjectViewModel proj in Model.Projects)
+					<div class="form-group col-xs-12 col-md-6">
+						<label for="ddl-projects">@Strings.Projects</label>
+						<select name="ProjectSelect" class="form-control" id="ddl-projects">
+							@foreach (CompleteProjectViewModel project in Model.Projects)
 							{
-								<option value="@proj.ProjectId" data-cust="@proj.CustomerId" class="projectSelectOption">@proj.ProjectName</option>
+								if (Model.Selection.CustomerId == project.CustomerId)
+								{
+									string selected = Model.Selection.ProjectId == project.ProjectId ? "selected" : "";
+									<option value="@project.ProjectId" data-cust="@project.CustomerId" class="projectSelectOption" @selected>@project.ProjectName</option>
+								}
 							}
 						</select>
-
-						@if (Model.Selection.CustomerId == 0)
-						{
-							<div class="form-group col-xs-12 col-md-6">
-								<label for="ddl-projects">@Strings.Projects</label>
-								<!--Get Projects by OrgID-->
-								@Html.DropDownList("ProjectSelect",
-									Model.ProjectView,
-									new { @class = "form-control", id = "ddl-projects", disabled = "disabled" })
-							</div>
-						}
-						else
-						{
-							<div class="form-group col-xs-12 col-md-6">
-								<label for="ddl-projects">@Strings.Projects</label>
-								<select name="ProjectSelect" class="form-control" id="ddl-projects">
-									@foreach (CompleteProjectViewModel project in Model.Projects)
-									{
-										if (Model.Selection.CustomerId == project.CustomerId)
-										{
-											string selected = Model.Selection.ProjectId == project.ProjectId ? "selected" : "";
-											<option value="@project.ProjectId" data-cust="@project.CustomerId" class="projectSelectOption" @selected>@project.ProjectName</option>
-										}
-									}
-								</select>
-							</div>
-						}
-
-						<div class="form-group col-xs-12 col-sm-6">
-							<label>Date Range:</label>
-							<input type="hidden" id="DateRangeStart" name="DateRangeStart" value="@Model.Selection.StartDate" />
-							<input type="hidden" id="DateRangeEnd" name="DateRangeEnd" value="@Model.Selection.EndDate" />
-							<div id="selection-range" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px; width: 100%;">
-								<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-								<span></span>
-							</div>
-						</div>
 					</div>
-					<div class="row">
-						<div class="col-xs-12">
-							@Html.Hidden("ShowExport", Model.ShowExport)
-							@if (Model.ShowExport)
-							{
-								<div>
-									<input class="btn btn-primary pull-left" type="submit" name="viewDataButton" value=@Strings.Export title="Export Excel Time Tracker entries" />
-								</div>
-							}
-							<div>
-								<input class="btn btn-primary pull-left" type="submit" name="viewDataButton" style="margin-left: 15px;" value=@Strings.Preview title="Preview Excel Time Tracker entries" />
-							</div>
-						</div>
+				}
+
+				<div class="form-group col-xs-12 col-sm-6">
+					<label>Date Range:</label>
+					<input type="hidden" id="DateRangeStart" name="DateRangeStart" value="@Model.Selection.StartDate" />
+					<input type="hidden" id="DateRangeEnd" name="DateRangeEnd" value="@Model.Selection.EndDate" />
+					<div id="selection-range" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px; width: 100%;">
+						<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+						<span></span>
 					</div>
-				</div>
-				@Html.Hidden("PageNum", Model.PreviewPageNum)
-			}
-			<br>
-		</div>
-
-		<div class="col-xs-12">
-			<div class="panel panel-default">
-				<div class="panel-body" style="padding: 0px">
-					@if (Model.PreviewMessage == "")
-					{
-						<table class="table table-hover table-condensed">
-							<thead class="panel-heading">
-								<tr class="double-bottom-border">
-									<th>@Strings.LastName</th>
-									<th>@Strings.FirstName</th>
-									<th>@Strings.Date</th>
-									<th>@Strings.Duration</th>
-									<th>@Strings.PayClass</th>
-									<th>@Strings.Project</th>
-									<th>@Strings.Customer</th>
-									<th>@Strings.Description</th>
-									<th>@Strings.Status</th>
-								</tr>
-							</thead>
-							<tbody>
-								@foreach (TablePreviewEntry pe in Model.PreviewEntries)
-								{
-									<tr class="previewRow">
-										<td>@pe.TimeEntry.LastName</td>
-										<td>@pe.TimeEntry.FirstName</td>
-										<td>@pe.TimeEntry.Date.ToShortDateString()</td>
-										<td>@pe.TimeEntry.Duration</td>
-										<td>@pe.TimeEntry.PayClassName</td>
-										<td>@pe.ProjectName</td>
-										<td>@pe.CustomerName</td>
-										<td>@pe.TimeEntry.Description</td>
-										<td>@pe.TimeEntry.TimeEntryStatusName</td>
-									</tr>
-								}
-
-								<tr id="tableEnd" class="nohover">
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-								</tr>
-							</tbody>
-						</table>
-						<div class="pageContainer"></div>
-					}
-					else
-					{
-						<p>
-							&hellip;
-						</p>
-					}
-				</div>
-				<div id="data-message" class="panel-footer">
-					@Model.PreviewMessage
 				</div>
 			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					@Html.Hidden("ShowExport", Model.ShowExport)
+					@if (Model.ShowExport)
+					{
+						<div>
+							<input class="btn btn-primary pull-left" type="submit" name="viewDataButton" value=@Strings.Export title="Export Excel Time Tracker entries" />
+						</div>
+					}
+					<div>
+						<input class="btn btn-primary pull-left" type="submit" name="viewDataButton" style="margin-left: 15px;" value=@Strings.Preview title="Preview Excel Time Tracker entries" />
+					</div>
+				</div>
+			</div>
+		</div>
+		@Html.Hidden("PageNum", Model.PreviewPageNum)
+	}
+	<br>
+</div>
+
+<div class="col-xs-12">
+	<div class="panel panel-default">
+		<div class="panel-body" style="padding: 0px">
+			@if (Model.PreviewMessage == "")
+			{
+				<table class="table table-hover table-condensed">
+					<thead class="panel-heading">
+						<tr class="double-bottom-border">
+							<th>@Strings.LastName</th>
+							<th>@Strings.FirstName</th>
+							<th>@Strings.Date</th>
+							<th>@Strings.Duration</th>
+							<th>@Strings.PayClass</th>
+							<th>@Strings.Project</th>
+							<th>@Strings.Customer</th>
+							<th>@Strings.Description</th>
+							<th>@Strings.Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (TablePreviewEntry pe in Model.PreviewEntries)
+						{
+							<tr class="previewRow">
+								<td>@pe.TimeEntry.LastName</td>
+								<td>@pe.TimeEntry.FirstName</td>
+								<td>@pe.TimeEntry.Date.ToShortDateString()</td>
+								<td>@pe.TimeEntry.Duration</td>
+								<td>@pe.TimeEntry.PayClassName</td>
+								<td>@pe.ProjectName</td>
+								<td>@pe.CustomerName</td>
+								<td>@pe.TimeEntry.Description</td>
+								<td>@pe.TimeEntry.TimeEntryStatusName</td>
+							</tr>
+						}
+
+						<tr id="tableEnd" class="nohover">
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="pageContainer"></div>
+			}
+			else
+			{
+				<p>
+					&hellip;
+				</p>
+			}
+		</div>
+		<div id="data-message" class="panel-footer">
+			@Model.PreviewMessage
 		</div>
 	</div>
 </div>
