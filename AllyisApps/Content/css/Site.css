@@ -72,9 +72,9 @@ a:hover, a:focus
 	color: #333333;
 }
 
-.btn-primary:hover, .btn-primary:focus{
-	background-color: #333333;
-	border-color: #333333;
+.btn-primary:hover, .btn-primary:focus {
+	background-color: #404040;
+	border-color: #2e2e2e;
 }
 
 a#homelink:hover, a#homelink:focus
