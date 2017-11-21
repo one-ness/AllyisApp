@@ -103,7 +103,7 @@ namespace AllyisApps.DBModel
 			dynamic result = new ExpandoObject();
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				var res = await con.QueryMultipleAsync("Auth.GetUser", new { userId });
+				var res = await con.QueryMultipleAsync("Auth.GetUser", new { userId }, commandType: CommandType.StoredProcedure);
 				result.User = res.Read().FirstOrDefault();
 				result.Organizations = res.Read().ToList();
 				result.Subscriptions = res.Read().ToList();
@@ -155,9 +155,15 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		public async Task<int> UpdateEmployeeIdAndOrgRole(int orgId, int userId, string employeeId, int orgRoleId)
 		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@orgId", orgId);
+			parameters.Add("@userId", userId);
+			parameters.Add("@employeeId", employeeId);
+			parameters.Add("@orgRoleId", orgRoleId);
+
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return (await con.QueryAsync<int>("[Auth].[UpdateEmployeeIdAndOrgRole]", new { orgId, userId, employeeId, orgRoleId })).FirstOrDefault();
+				return (await con.QueryAsync<int>("[Auth].[UpdateEmployeeIdAndOrgRole]", parameters, commandType: CommandType.StoredProcedure)).FirstOrDefault();
 			}
 		}
 
@@ -413,8 +419,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@isInvited", isInvited);
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var queryResults = await connection.QueryAsync<int>("[Auth].[UpdateMember]", parameters, commandType: CommandType.StoredProcedure);
-				return queryResults.FirstOrDefault();
+				return await connection.QueryFirstOrDefaultAsync<int>("[Auth].[UpdateMember]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -425,12 +430,12 @@ namespace AllyisApps.DBModel
 		/// <param name="userId">The user's Id.</param>
 		public async Task RemoveOrganizationUser(int organizationId, int userId)
 		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationId", organizationId);
+			parameters.Add("@userId", userId);
+
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				DynamicParameters parameters = new DynamicParameters();
-				parameters.Add("@organizationId", organizationId);
-				parameters.Add("@userId", userId);
-
 				await connection.ExecuteAsync("[Auth].[DeleteOrgUser]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
@@ -490,7 +495,7 @@ namespace AllyisApps.DBModel
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var queryResults = await connection.QueryAsync<dynamic>("[Auth].[GetOrg] @a", new { a = organizationId });
+				var queryResults = await connection.QueryAsync<dynamic>("[Auth].[GetOrg]", new { organizationId }, commandType: CommandType.StoredProcedure);
 				return queryResults.FirstOrDefault();
 			}
 		}
@@ -504,14 +509,7 @@ namespace AllyisApps.DBModel
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				// default null
-				return connection.Query<OrganizationUserDBEntity>(
-					"[Auth].[GetOrgUserList]",
-					new
-					{
-						OrganizationId = organizationId
-					},
-				commandType: CommandType.StoredProcedure);
+				return connection.Query<OrganizationUserDBEntity>("[Auth].[GetOrgUserList]", new { organizationId }, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -522,7 +520,7 @@ namespace AllyisApps.DBModel
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return (await con.QueryAsync<dynamic>("Auth.GetOrganizationUsers @a", new { a = orgId })).ToList();
+				return (await con.QueryAsync<dynamic>("[Auth].[GetOrganizationUsers]", new { orgId }, commandType: CommandType.StoredProcedure)).ToList();
 			}
 		}
 
@@ -533,7 +531,7 @@ namespace AllyisApps.DBModel
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return (await con.QueryAsync<int>("Auth.GetOrgUserCount @a", new { a = orgId })).FirstOrDefault();
+				return await con.QueryFirstOrDefaultAsync<int>("[Auth].[GetOrgUserCount]", new { orgId }, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -544,7 +542,7 @@ namespace AllyisApps.DBModel
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return (await con.QueryAsync<int>("Auth.GetOrgInvitationCount @a, @b", new { a = orgId, b = statusMask })).FirstOrDefault();
+				return await con.QueryFirstOrDefaultAsync<int>("[Auth].[GetOrgInvitationCount]", new { orgId, statusMask }, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -557,14 +555,7 @@ namespace AllyisApps.DBModel
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				// default empty list
-				return connection.Query<dynamic>(
-					"[Auth].[GetOrganizationsByUserId]",
-					new
-					{
-						UserId = userId
-					},
-					commandType: CommandType.StoredProcedure);
+				return connection.Query<dynamic>("[Auth].[GetOrganizationsByUserId]", new { userId }, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -592,8 +583,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@prodJson", prodJson);
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				var results = await con.QueryAsync<int>("[Auth].[CreateInvitation]", parameters, commandType: CommandType.StoredProcedure);
-				return results.FirstOrDefault();
+				return await con.QueryFirstOrDefaultAsync<int>("[Auth].[CreateInvitation]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -611,7 +601,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@callingUserId", userId);
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return con.Query<int>("[Auth].[AcceptInvitation]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				return con.QueryFirstOrDefault<int>("[Auth].[AcceptInvitation]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -654,31 +644,13 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Gets the first name of a user if they are in that organizaiton.
-		/// </summary>
-		/// <param name="organizationId">The organization id.</param>
-		/// <param name="email">The user email.</param>
-		/// <returns>The user first name.</returns>
-		public string GetOrgUserFirstName(int organizationId, string email)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@email", email);
-			parameters.Add("@orgId", organizationId);
-
-			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
-			{
-				return connection.Query<string>("[Auth].[GetOrgUserByEmail]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
-			}
-		}
-
-		/// <summary>
 		/// Gets all the invitations for the given organization
 		/// </summary>
 		public async Task<List<InvitationDBEntity>> GetInvitationsAsync(int organizationId, int statusMask)
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return (await con.QueryAsync<InvitationDBEntity>("[Auth].[GetInvitations] @a, @b", new { a = organizationId, b = statusMask })).ToList();
+				return (await con.QueryAsync<InvitationDBEntity>("[Auth].[GetInvitations]", new { organizationId, statusMask }, commandType: CommandType.StoredProcedure)).ToList();
 			}
 		}
 
@@ -689,12 +661,9 @@ namespace AllyisApps.DBModel
 		/// <returns>List of all roles.</returns>
 		public async Task<InvitationDBEntity> GetInvitation(int inviteId)
 		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@inviteId", inviteId);
-
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var results = await connection.QueryAsync<InvitationDBEntity>("[Auth].[GetInvitation]", parameters, commandType: CommandType.StoredProcedure);
+				var results = await connection.QueryAsync<InvitationDBEntity>("[Auth].[GetInvitation]", new { inviteId }, commandType: CommandType.StoredProcedure);
 				return results.FirstOrDefault();
 			}
 		}
@@ -707,7 +676,7 @@ namespace AllyisApps.DBModel
 			dynamic result = new ExpandoObject();
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				var query = con.QueryMultiple("Auth.GetUserContext @a", new { a = userId });
+				var query = con.QueryMultiple("[Auth].[GetUserContext]", new { userId }, commandType: CommandType.StoredProcedure);
 				result.User = query.Read<dynamic>().FirstOrDefault();
 				result.OrganizationsAndRoles = query.Read<dynamic>().ToList();
 				result.SubscriptionsAndRoles = query.Read<dynamic>().ToList();
@@ -728,10 +697,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@organizationId", organizationId);
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var results = await connection.QueryMultipleAsync(
-					"[Auth].[GetOrgManagementInfo]",
-					parameters,
-					commandType: CommandType.StoredProcedure);
+				var results = await connection.QueryMultipleAsync("[Auth].[GetOrgManagementInfo]", parameters, commandType: CommandType.StoredProcedure);
 				return Tuple.Create(
 					results.Read<dynamic>().SingleOrDefault(),
 					results.Read<OrganizationUserDBEntity>().ToList(),
@@ -751,7 +717,7 @@ namespace AllyisApps.DBModel
 
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return con.ExecuteScalar<int>("[Auth].[UpdateEmailConfirmed]", parameters, commandType: CommandType.StoredProcedure);
+				return con.Execute("[Auth].[UpdateEmailConfirmed]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -762,7 +728,7 @@ namespace AllyisApps.DBModel
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return (await con.QueryAsync<string>("Auth.GetMaxEmployeeId @a", new { a = organizationId })).FirstOrDefault();
+				return await con.QuerySingleOrDefaultAsync<string>("[Auth].[GetMaxEmployeeId]", new { organizationId }, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -773,7 +739,7 @@ namespace AllyisApps.DBModel
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return (await con.QueryAsync<ProductRoleDBEntity>("Auth.GetProductRoles @a, @b", new { a = orgId, b = productId })).ToList();
+				return (await con.QueryAsync<ProductRoleDBEntity>("[Auth].[GetProductRoles]", new { orgId, productId }, commandType: CommandType.StoredProcedure)).ToList();
 			}
 		}
 	}

@@ -177,7 +177,6 @@
     <Build Include="Billing\Stored Procedures\UpdateSubscriptionUserProductRole.sql" />
     <Build Include="Billing\Stored Procedures\CreateBillingHistory.sql" />
     <Build Include="Auth\Stored Procedures\GetOrgManagementInfo.sql" />
-    <Build Include="Auth\Stored Procedures\GetOrgUserByEmail.sql" />
     <Build Include="Auth\Stored Procedures\GetOrgUserList.sql" />
     <Build Include="Auth\Stored Procedures\GetUserFromEmail.sql" />
     <Build Include="Auth\Stored Procedures\GetInvitations.sql" />
