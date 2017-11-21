@@ -1,25 +1,23 @@
-﻿@using AllyisApps.ViewModels.TimeTracker.Project
-@model ProjectsViewModel
+﻿@using AllyisApps.ViewModels.StaffingManager.Customer;
+@model MultiCustomerInfoViewModel
 
 @{
-	ViewBag.Title = "Projects";
+	ViewBag.Title = "Customers";
 	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
 	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
-
 }
 
 <div class="container">
 	<div class="row">
 		<div class="col-xs-12">
 			<div class="form-group pull-right">
-				<a href="@Url.Action("ProjectImport")">
-					<span class="btn btn-primary">Project Import</span>
+				<a href="@Url.Action("CustomerImport")">
+					<span class="btn btn-primary">Customer Import</span>
 				</a>
 				<a href="@Url.Action("Create")">
-					<span class="btn btn-primary">Create Project</span>
+					<span class="btn btn-primary">Create Customer</span>
 				</a>
 			</div>
-
 			<table class="table table-hover table-xtra-condensed">
 				<thead>
 					<tr class="double-bottom-border">
@@ -30,16 +28,13 @@
 							Name
 						</th>
 						<th>
-							Start Date
+							Address
 						</th>
 						<th>
-							End Date
+							EIN
 						</th>
 						<th>
-							Customer
-						</th>
-						<th>
-							Project Code
+							Customer Code
 						</th>
 						<th>
 							Status
@@ -50,27 +45,23 @@
 					</tr>
 				</thead>
 				<tbody>
-					@foreach (var project in Model.Projects)
+					@foreach (var customer in Model.CustomerList)
 					{
 						<tr>
-							<td><input type="checkbox" class="customer-select" value="@project.ProjectId" /></td>
-							<td>@project.ProjectName</td>
+							<td><input type="checkbox" class="customer-select" value="@customer.CustomerId" /></td>
+							<td>@customer.CustomerName</td>
 							<td>
-								@if (project.StartDate != null)
-								{
-									@project.StartDate.Value.Date.ToString("d")
+								@{
+									var adressCityDispaly = (customer.Address.City != null) ? customer.Address.City + ", " + customer.Address.StateName : customer.Address.StateName;
 								}
+								<p>@customer.Address.Address1</p>
+								<p>@customer.Address.Address2</p>
+								<p>@adressCityDispaly  @customer.Address.PostalCode</p>
 							</td>
+							<td>@customer.EIN</td>
+							<td>@customer.CustomerCode</td>
 							<td>
-								@if (project.EndDate != null)
-								{
-									@project.EndDate.Value.Date.ToString("d")
-								}
-							</td>
-							<td>@project.CustomerName</td>
-							<td>@project.ProjectCode</td>
-							<td>
-								@if ((project.EndDate == null || project.EndDate.Value.Date >= DateTime.UtcNow.Date) && (project.StartDate == null || project.StartDate.Value <= DateTime.UtcNow))
+								@if (customer.IsActive.Value)
 								{
 									<p>Active</p>
 								}
@@ -80,17 +71,26 @@
 								}
 							</td>
 							<td>
-								<a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Project, new {userId = project.ProjectId })" t title="@Strings.EditProject"><i class="fa fa-fw fa-edit"></i></a>
+								<a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Customer, new {userId = customer.CustomerId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a>
 							</td>
 						</tr>
-					}
+									}
 				</tbody>
 			</table>
 			<div class="pull-right btn">
-				@using (Html.BeginForm(Strings.Delete, Strings.Project, new { }, FormMethod.Get, new { @onsubmit = "return getUserIdsAndSubmit();" }))
+				@using (Html.BeginForm(Strings.Delete, Strings.Customer, new { }, FormMethod.Get, new { @onsubmit = "return getUserIdsAndSubmit();" }))
 				{
-					<input type="hidden" name="userIds" id="deleteIds" value="" />
-					<button type="submit" class="btn btn-danger  pull-right">Delete</button>
+					<div>
+						<input type="hidden" name="userIds" id="deleteIds" value="" />
+						<button type="submit" class="btn btn-danger  pull-right">Delete</button>
+					</div>
+				}
+			</div>
+			<div class="pull-left btn">
+				@using (Html.BeginForm("ToggleStatus", Strings.Customer, new { }, FormMethod.Get, new { @onsubmit = "return getUserIdsAndSubmit();" }))
+				{
+					<input type="hidden" name="userIds" id="userIds" value="" />
+					<button type="submit" class="btn btn-primary  pull-right">Toggle Status</button>
 				}
 			</div>
 		</div>
@@ -101,7 +101,7 @@
 	function getUserIdsAndSubmit() {
 		var csvIds = "";
 
-		if (!confirm("Do you wish perform action on selected project(s)?")) {
+		if (!confirm("Do you wish to perform action on selected customer(s)?")) {
 			return false;
 		}
 
@@ -123,10 +123,10 @@
 		csvIds = csvIds.replace(/(^,)|(,$)/g, "");
 
 		if (csvIds == "") {
-			alert("You have not chosen any project(s).");
+			alert("You have not chosen any user(s)");
 			return false;
 		}
-		$("#projIds").val(csvIds);
+		$("#userIds").val(csvIds);
 		$("#deleteIds").val(csvIds);
 
 		// submit the form

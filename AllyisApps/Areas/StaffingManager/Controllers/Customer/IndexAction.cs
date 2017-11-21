@@ -4,19 +4,16 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
-using AllyisApps.Services.Auth;
-using AllyisApps.Services.Billing;
-using AllyisApps.Services.Crm;
-using AllyisApps.ViewModels.TimeTracker.Customer;
+using AllyisApps.ViewModels.StaffingManager.Customer;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
+	/// <inheritdoc />
 	/// <summary>
 	/// GET: /TimeTracker/Customer/subscriptionId
 	/// Represents pages for the management of a Customer.
@@ -24,95 +21,48 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 	public partial class CustomerController : BaseController
 	{
 		/// <summary>
-		/// GET: Customer/subscriptionId/Index.
+		/// Action for the customers page.
 		/// </summary>
-		/// <param name="subscriptionId">The Subscription Id.</param>
-		/// <returns>Customer Index.</returns>
-		[HttpGet]
+		/// <param name="subscriptionId">The current subscription id.</param>
+		/// <returns>The Customer page.</returns>
 		public async Task<ActionResult> Index(int subscriptionId)
 		{
-			UserContext.SubscriptionAndRole subInfo = null;
-			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			return View(await ConstructManageCustomerViewModel(subscriptionId));
-		}
+			ViewData["IsManager"] = AppService.CheckStaffingManagerAction(AppService.StaffingManagerAction.EditProject, subscriptionId);
+			ViewData["SubscriptionId"] = subscriptionId;
+			ViewData["SubscriptionName"] = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName;
+			ViewData["UserId"] = AppService.UserContext.UserId;
 
-		/// <summary>
-		/// Quick fix for new routing issue.
-		/// </summary>
-		/// <param name="subscriptionId">Subscription id.</param>
-		/// <returns>The index page.</returns>
-		public async Task<ActionResult> IndexNoUserId(int subscriptionId)
-		{
-			if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
+			var orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			var customers = await AppService.GetCustomersByOrganizationId(orgId);
+
+			var model = new MultiCustomerInfoViewModel
 			{
-				AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
-			}
-
-			UserContext.SubscriptionAndRole subInfo = null;
-			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-
-			//var infos = await AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
-
-			return View("Index", await ConstructManageCustomerViewModel(subscriptionId));
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="AllyisApps.ViewModels.Staffing.Customer.ManageCustomerViewModel" /> class.
-		/// </summary>
-		/// <param name="subscriptionId">The id of the current subscription.</param>
-		/// <returns>The ManageCustomerViewModel.</returns>
-		public async Task<AllyisApps.ViewModels.Staffing.Customer.ManageCustomerViewModel> ConstructManageCustomerViewModel(int subscriptionId)
-		{
-			UserContext.SubscriptionAndRole subInfo = null;
-			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			var infosTask = AppService.GetProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
-			var inactiveInfoTask = Task.Run(() => AppService.GetInactiveProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId));
-
-			await Task.WhenAll(new Task[] { infosTask, inactiveInfoTask });
-
-			var infos = infosTask.Result;
-			var inactiveInfo = inactiveInfoTask.Result;
-
-			bool canEditProjects = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
-			string subName = await AppService.GetSubscriptionName(subscriptionId);
-			List<CompleteProject> projects = canEditProjects ? infos.Item1 : infos.Item1.Where(p => p.IsProjectUser == true).ToList();
-			List<Customer> customers = infos.Item2;
-			IList<CustomerProjectViewModel> customersList = new List<CustomerProjectViewModel>();
-			foreach (Customer currentCustomer in customers)
-			{
-				CustomerProjectViewModel customerResult = new CustomerProjectViewModel
+				CustomerList = customers.Select(x => new CustomerInfoViewModel
 				{
-					CustomerInfo = new CustomerProjectViewModel.CustomerViewModel
+					Address = new CustomerInfoViewModel.AddessViewModel
 					{
-						CustomerName = currentCustomer.CustomerName,
-						CustomerId = currentCustomer.CustomerId,
-						IsActive = currentCustomer.IsActive
+						Address1 = x.Address?.Address1,
+						Address2 = x.Address?.Address2,
+						City = x.Address?.City,
+						CountryName = x.Address?.CountryName,
+						PostalCode = x.Address?.PostalCode,
+						StateName = x.Address?.StateName
 					},
-					Projects = from p in projects
-							   where p.OwningCustomer.CustomerId == currentCustomer.CustomerId
-							   select new CustomerProjectViewModel.ProjectViewModel
-							   {
-								   CustomerId = p.OwningCustomer.CustomerId,
-								   OrganizationId = p.OrganizationId,
-								   ProjectName = p.ProjectName,
-								   ProjectId = p.ProjectId
-							   }
-				};
-
-				customersList.Add(customerResult);
-			}
-
-			IList<CustomerProjectViewModel> inactiveCustomersList = new List<CustomerProjectViewModel>();
-			return new AllyisApps.ViewModels.Staffing.Customer.ManageCustomerViewModel
-			{
-				Customers = customersList,
-				InactiveCustomerAndProjects = inactiveCustomersList,
-				OrganizationId = subInfo.OrganizationId,
-				CanEdit = canEditProjects,
-				SubscriptionId = subscriptionId,
-				SubscriptionName = subName,
-				UserId = AppService.UserContext.UserId
+					CustomerId = x.CustomerId,
+					ContactEmail = x.ContactEmail,
+					ContactPhoneNumber = x.ContactPhoneNumber,
+					CreatedUtc = x.CreatedUtc,
+					CustomerName = x.CustomerName,
+					CustomerCode = x.CustomerCode,
+					EIN = x.EIN,
+					FaxNumber = x.FaxNumber,
+					IsActive = x.IsActive,
+					OrganizationId = x.OrganizationId,
+					Website = x.Website
+				}).ToList()
 			};
+
+			return View(ActionConstants.Customer, model);
 		}
 	}
 }

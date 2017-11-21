@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AllyisApps.ViewModels.TimeTracker.Customer
+namespace AllyisApps.ViewModels.StaffingManager.Customer
 {
 	/// <inheritdoc />
 	/// <summary>

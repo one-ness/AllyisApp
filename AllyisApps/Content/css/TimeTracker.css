@@ -226,7 +226,7 @@ a {
 .btn-sharp {
 	display: inline-block;
 	border-radius: 0px;
-	float: right;
+	/*float: right;*/
 	overflow: visible;
 }
 
@@ -339,7 +339,7 @@ a {
 		}
 
 .very-inline-form .left {
-	float: left;
+	/*float: left;*/
 	display: inline-block;
 }
 

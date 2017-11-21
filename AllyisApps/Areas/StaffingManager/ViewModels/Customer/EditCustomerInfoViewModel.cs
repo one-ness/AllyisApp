@@ -6,9 +6,11 @@
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
-namespace AllyisApps.ViewModels.Staffing.Customer
+namespace AllyisApps.ViewModels.StaffingManager.Customer
 {
+	/// <inheritdoc />
 	/// <summary>
 	/// Represents an editable view of user information.
 	/// </summary>
@@ -17,7 +19,7 @@ namespace AllyisApps.ViewModels.Staffing.Customer
 		private const string CharsToReplace = @"""/\[]:|<>+=; ,?*'`()@";
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="EditCustomerInfoViewModel"/> class.
+		/// Initializes a new instance of the <see cref="AllyisApps.ViewModels.StaffingManager.Customer.EditCustomerInfoViewModel"/> class.
 		/// </summary>
 		public EditCustomerInfoViewModel()
 		{
@@ -56,6 +58,8 @@ namespace AllyisApps.ViewModels.Staffing.Customer
 		/// Gets or sets the user's phone number.
 		/// </summary>
 		[RegularExpression(@"^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$", ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "PhoneFormatValidation")] // [Phone] does not work
+
+		//[RegularExpression(@"^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$", ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "PhoneFormatValidation")] // [Phone] does not work
 		[Display(Name = "Contact Phone Number")]
 		public string ContactPhoneNumber { get; set; }
 
@@ -66,7 +70,7 @@ namespace AllyisApps.ViewModels.Staffing.Customer
 		public string FaxNumber { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Customer's phone extension.
+		/// Gets or sets the Customer's EIN identification.
 		/// </summary>
 		[Display(Name = "EIN")]
 		public string EIN { get; set; }
@@ -110,11 +114,11 @@ namespace AllyisApps.ViewModels.Staffing.Customer
 		public string PostalCode { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Customer's Organization Id.
+		/// Gets or sets the Customer's Unique organizaion ID.
 		/// </summary>
 		[Required]
 		[DataType(DataType.Text)]
-		[Display(Name = "Customer Id")]
+		[Display(Name = "Organization Uique ID Name")]
 		public string CustomerCode { get; set; }
 
 		/// <summary>
@@ -151,6 +155,16 @@ namespace AllyisApps.ViewModels.Staffing.Customer
 		/// Gets or sets a value indicating whether the model is being used for creating a customer (true) or editing an existing customer (false).
 		/// </summary>
 		public bool IsCreating { get; set; }
+
+		/// <summary>
+		/// Gets or sets a list of select list items of Status options.
+		/// </summary>
+		public List<SelectListItem> IsActiveOptions { get; set; }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the customer is active on creation.
+		/// </summary>
+		public bool IsActive { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the user can edit customers.

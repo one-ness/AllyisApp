@@ -237,6 +237,11 @@
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\CreateReportAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Home\HomeController.cs" />
     <Compile Include="Areas\ExpenseTracker\ExpenseTrackerAreaRegistration.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Customer\DeleteAction.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Customer\DetailsAction.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Customer\ImportAction.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Customer\TemplateAction.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Customer\ToggleStatusAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\StaffingHelper.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Customer\CreateAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Customer\CustomerController.cs" />
@@ -266,6 +271,7 @@
     <Compile Include="Areas\StaffingManager\ViewModels\Customer\CustomerInfoViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Customer\EditCustomerInfoViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Customer\ManageCustomerViewModel.cs" />
+    <Compile Include="Areas\StaffingManager\ViewModels\Customer\MultiCustomerInfoViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\ApplicationInfoViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\CreateApplicationDocumentViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\ApplicantListViewModel.cs" />
@@ -289,12 +295,9 @@
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ToggleStatusAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\DetailsAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ImportAction.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\Customer\ReactivateAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\TemplateAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Home\HomeController.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Project\ImportAction.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\Project\ReactivateAction.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\Project\ToggleStatusAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ReviewAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\MergePayClassAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ImportAction.cs" />
@@ -501,7 +504,6 @@
     <Content Include="Areas\TimeTracker\Views\Customer\Create.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\Delete.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\Edit.cshtml" />
-    <Content Include="Areas\TimeTracker\Views\Customer\Index.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Project\_ProjectEdit.cshtml">
       <SubType>Code</SubType>
     </Content>
@@ -529,10 +531,6 @@
     <Content Include="Areas\TimeTracker\Views\Customer\Details.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\MergePayClass.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Shared\_TimeTrackerSidebar.cshtml" />
-    <Content Include="Areas\TimeTracker\Views\Customer\Reactivate.cshtml" />
-    <Content Include="Areas\TimeTracker\Views\Customer\_ProjectsByCustomer.cshtml" />
-    <Content Include="Areas\TimeTracker\Views\Customer\_IndexPartial_Active.cshtml" />
-    <Content Include="Areas\TimeTracker\Views\Customer\_IndexPartial_Inactive.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\_ViewStart.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\Index.cshtml" />
@@ -558,10 +556,8 @@
     <Content Include="Areas\StaffingManager\Views\Staffing\_PositionEditDetails.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\settings.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\UserSettings.cshtml" />
-    <Content Include="Areas\StaffingManager\Views\Customer\Index.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Customer\_CustomerEdit.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Customer\Create.cshtml" />
-    <Content Include="Areas\StaffingManager\Views\Customer\_IndexPartial_Active.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Customer\Edit.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\Accounts.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\CreateAccount.cshtml" />
@@ -582,6 +578,10 @@
     <Content Include="Areas\TimeTracker\Views\Project\Projects.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\CustomerImport.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Project\ProjectImport.cshtml" />
+    <Content Include="Areas\StaffingManager\Views\Customer\Customer.cshtml" />
+    <Content Include="Areas\StaffingManager\Views\Customer\CustomerImport.cshtml" />
+    <Content Include="Areas\StaffingManager\Views\Customer\Delete.cshtml" />
+    <Content Include="Areas\StaffingManager\Views\Customer\Details.cshtml" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>

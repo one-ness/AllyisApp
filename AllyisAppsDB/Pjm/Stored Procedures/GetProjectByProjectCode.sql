@@ -1,5 +1,5 @@
-CREATE PROCEDURE [Pjm].[GetProjectById]
-	@projectId INT
+﻿CREATE PROCEDURE [Pjm].[GetProjectByProjectCode]
+	@projectCode NVARCHAR
 AS
 	SET NOCOUNT ON;
 	SELECT	[Project].[ProjectId],
@@ -8,8 +8,8 @@ AS
 			[Project].[StartUtc] AS [StartDate],
 			[Project].[EndUtc] AS [EndDate],
 			[Project].[ProjectCode],
-			[Project].[ProjectName],
 			[Project].[ProjectCreatedUtc],
+			[Project].[ProjectName],
 			[Customer].[OrganizationId],
 			[Customer].[CustomerName],
 			[Customer].[CustomerCode],
@@ -17,4 +17,4 @@ AS
 	FROM [Pjm].[Project] WITH (NOLOCK)
 	JOIN [Crm].[Customer] WITH (NOLOCK) ON [Customer].[CustomerId] = [Project].[CustomerId]
 	JOIN [Auth].[Organization] WITH (NOLOCK) ON [Organization].[OrganizationId] = [Customer].[OrganizationId]
-	WHERE [ProjectId] = @projectId
+	WHERE [ProjectCode] = @projectCode

@@ -5,7 +5,6 @@ CREATE PROCEDURE [Pjm].[CreateProjectAndUpdateItsUserList]
 	@projectCode NVARCHAR(16),
 	@startingDate DATETIME2(0),
 	@endingDate DATETIME2(0),
-	@isActive BIT,
 	@userIds [Auth].[UserTable] READONLY,
 	@retId INT OUTPUT
 AS
@@ -30,16 +29,14 @@ BEGIN
 					[IsHourly],
 					[ProjectCode],
 					[StartUtc],
-					[EndUtc],
-					[IsActive])
+					[EndUtc])
 				VALUES	(
 					@customerId,
 					@projectName,
 					@isHourly,
 					@projectCode,
 					@startingDate,
-					@endingDate,
-					@isActive);
+					@endingDate);
 				SET @retId = SCOPE_IDENTITY()
 
 				/* Update new users that used to be users at some point */

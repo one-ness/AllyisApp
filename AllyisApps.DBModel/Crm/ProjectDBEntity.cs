@@ -8,6 +8,7 @@ using System;
 
 namespace AllyisApps.DBModel.Crm
 {
+	/// <inheritdoc />
 	/// <summary>
 	/// The project table.
 	/// </summary>
@@ -57,11 +58,6 @@ namespace AllyisApps.DBModel.Crm
 		/// Gets or sets the project's ending date.
 		/// </summary>
 		public DateTime? EndingDate { get; set; }
-
-		/// <summary>
-		/// Gets or sets a value indicating whether or not the project is active.
-		/// </summary>
-		public bool IsActive { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether or not the Customer is active.

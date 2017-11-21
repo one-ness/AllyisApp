@@ -111,7 +111,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 			CustomerName = proj.OwningCustomer?.CustomerName;
 			CustomerCode = proj.OwningCustomer?.CustomerCode;
 			EndDate = proj.EndDate;
-			IsActive = proj.IsActive;
+			IsActive = proj.IsCurrentlyActive;
 			IsCustomerActive = proj.IsCustomerActive;
 			IsProjectUser = proj.IsProjectUser;
 			IsUserActive = proj.IsUserActive;

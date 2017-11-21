@@ -4,14 +4,18 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
+using AllyisApps.Resources;
+using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels;
-using AllyisApps.ViewModels.Staffing.Customer;
+using AllyisApps.ViewModels.StaffingManager.Customer;
+using static AllyisApps.Services.AppService;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -29,14 +33,19 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		[HttpGet]
 		public async Task<ActionResult> Edit(int subscriptionId, int userId)
 		{
-			var customerTask = AppService.GetCustomerInfo(userId);
-			var subscriptionNameToDisplayTask = AppService.GetSubscriptionName(subscriptionId);
+			if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
+			{
+				AppService.CheckStaffingManagerAction(StaffingManagerAction.EditCustomer, subscriptionId);
+			}
 
-			await Task.WhenAll(new Task[] { customerTask, subscriptionNameToDisplayTask });
+			var statusOptions = new List<SelectListItem>
+			{
+				new SelectListItem { Text = "Active", Value = true.ToString() },
+				new SelectListItem { Text = "Disabled", Value = false.ToString() }
+			};
 
-			var customer = customerTask.Result;
-			var subscriptionNameToDisplay = subscriptionNameToDisplayTask.Result;
-
+			var customer = await AppService.GetCustomerInfo(userId);
+			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
 			return View(new EditCustomerInfoViewModel
 			{
 				ContactEmail = customer.ContactEmail,
@@ -49,6 +58,9 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				SelectedCountryCode = customer.Address?.CountryCode,
 
 				SelectedStateId = customer.Address?.StateId,
+
+				IsActiveOptions = statusOptions,
+				IsActive = customer.IsActive,
 
 				PostalCode = customer.Address?.PostalCode,
 				ContactPhoneNumber = customer.ContactPhoneNumber,
@@ -76,55 +88,55 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Edit(EditCustomerInfoViewModel model)
 		{
-			if (ModelState.IsValid)
-			{
-				var result = await AppService.UpdateCustomerAsync(
-					new Customer
-					{
-						CustomerId = model.CustomerId,
-						ContactEmail = model.ContactEmail,
-						CustomerName = model.CustomerName,
-						Address = new Address
-						{
-							Address1 = model.Address,
-							AddressId = model.AddressId,
-							City = model.City,
-							StateId = model.SelectedStateId,
-							StateName = model.State,
-							CountryCode = model.SelectedCountryCode,
-							CountryName = model.Country,
-							PostalCode = model.PostalCode
-						},
-						ContactPhoneNumber = model.ContactPhoneNumber,
-						FaxNumber = model.FaxNumber,
-						Website = model.Website,
-						EIN = model.EIN,
-						CustomerCode = model.CustomerCode,
-						OrganizationId = model.OrganizationId,
-						IsActive = true
-					},
-					model.SubscriptionId);
-
-				switch (result)
-				{
-					case -1:
-						// the new CustOrgId is not unique
-						Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerCodeNotUnique, Variety.Danger));
-						return View(model);
-					case 1:
-						// updated successfully
-						Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerDetailsUpdated, Variety.Success));
-						return Redirect(string.Format("{0}#customerNumber{1}",
-							Url.Action(ActionConstants.Index, new { subscriptionId = model.SubscriptionId }), model.CustomerId));
-					default:
-						// Permissions failure
-						Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-						return RedirectToAction(ActionConstants.Index, new { subscriptionId = model.SubscriptionId });
-				}
-			}
-			await Task.Delay(1);
 			// Invalid model
-			return View(model);
+			if (!ModelState.IsValid) return View(model);
+
+			var result = await AppService.UpdateCustomerAsync(
+				new Customer
+				{
+					CustomerId = model.CustomerId,
+					ContactEmail = model.ContactEmail,
+					CustomerName = model.CustomerName,
+					Address = new Address
+					{
+						Address1 = model.Address,
+						AddressId = model.AddressId,
+						City = model.City,
+						StateId = model.SelectedStateId,
+						StateName = model.State,
+						CountryCode = model.SelectedCountryCode,
+						CountryName = model.Country,
+						PostalCode = model.PostalCode
+					},
+					ContactPhoneNumber = model.ContactPhoneNumber,
+					FaxNumber = model.FaxNumber,
+					Website = model.Website,
+					EIN = model.EIN,
+					IsActive = model.IsActive,
+					CustomerCode = model.CustomerCode,
+					OrganizationId = model.OrganizationId
+				},
+				model.SubscriptionId);
+
+			switch (result)
+			{
+				case -1:
+					// the new CustOrgId is not unique
+					Notifications.Add(new BootstrapAlert(Strings.CustomerCodeNotUnique, Variety.Danger));
+					return View(model);
+				case -2:
+					// there are still active projects underneath this customer -- can't deactivate
+					Notifications.Add(new BootstrapAlert($"Cannot deactivate \"{model.CustomerName}\", dependent projects are still active.", Variety.Warning));
+					return View(model);
+				case 1:
+					// updated successfully
+					Notifications.Add(new BootstrapAlert(Strings.CustomerDetailsUpdated, Variety.Success));
+					return Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, new { subscriptionId = model.SubscriptionId }), model.CustomerId));
+				default:
+					// Permissions failure
+					Notifications.Add(new BootstrapAlert(Strings.ActionUnauthorizedMessage, Variety.Warning));
+					return RedirectToAction(ActionConstants.Index, new { subscriptionId = model.SubscriptionId });
+			}
 		}
 	}
 }

@@ -57,49 +57,25 @@ AS
 
 	SELECT	[Project].[ProjectId],
 			[Project].[CustomerId],
-			[Customer].[OrganizationId],
 			[Project].[ProjectCreatedUtc],
-			[Project].[StartUtc] as [StartDate],
-			[Project].[EndUtc] as [EndDate],
-			[Project].[ProjectName] AS [ProjectName],
-			[Project].[IsActive],
+			[Project].[StartUtc] AS [StartDate],
+			[Project].[EndUtc] AS [EndDate],
+			[Project].[ProjectName],
 			[Project].[IsHourly] AS [IsHourly],
-			[Organization].[OrganizationName] AS [OrganizationName],
-			[Customer].[CustomerName] AS [CustomerName],
+			[Project].[ProjectCode],
+			[ProjectUser].[IsActive] AS [IsUserActive],
+			[Customer].[OrganizationId],
+			[Customer].[CustomerName],
 			[Customer].[CustomerCode],
 			[Customer].[IsActive] AS [IsCustomerActive],
-			[ProjectUser].[IsActive] AS [IsUserActive],
-			[ProjectCode]
-	FROM (
-		(SELECT [OrganizationId], [UserId], [OrganizationRoleId]
-		FROM [Auth].[OrganizationUser] WITH (NOLOCK) WHERE [UserId] = @userId AND [OrganizationId] = @organizationId)
-		AS [OrganizationUser]
-		JOIN [Auth].[Organization]		WITH (NOLOCK) ON [OrganizationUser].[OrganizationId] = [Organization].[OrganizationId]
-		JOIN [Crm].[Customer]		WITH (NOLOCK) ON [Customer].[OrganizationId] = [Organization].[OrganizationId]
-		JOIN ( [Pjm].[Project]
-			JOIN [Pjm].[ProjectUser] WITH (NOLOCK) ON [ProjectUser].[ProjectId] = [Project].[ProjectId]
-		)
-										ON [Project].[CustomerId] = [Customer].[CustomerId]
-										AND [ProjectUser].[UserId] = [OrganizationUser].[UserId]
-	
-	)
-	UNION ALL
-	SELECT	[ProjectId],
-			[CustomerId],
-			0,
-			[ProjectCreatedUtc],
-			[StartUtc],
-			[EndUtc],
-			[ProjectName],
-			[IsActive],
-			[IsHourly],
-			(SELECT [OrganizationName] FROM [Auth].[Organization] WITH (NOLOCK) WHERE [OrganizationId] = 0),
-			(SELECT [CustomerName] FROM [Crm].[Customer] WITH (NOLOCK) WHERE [CustomerId] = 0),
-			NULL,
-			0,
-			0,
-			[ProjectCode]
-			FROM [Pjm].[Project] WITH (NOLOCK) WHERE [ProjectId] = 0
+			[Organization].[OrganizationName]
+	FROM [Auth].[OrganizationUser] WITH (NOLOCK)
+	JOIN [Auth].[Organization]     WITH (NOLOCK) ON [OrganizationUser].[OrganizationId] = [Organization].[OrganizationId]
+	JOIN [Crm].[Customer]          WITH (NOLOCK) ON [Customer].[OrganizationId] = [Organization].[OrganizationId]
+	JOIN [Pjm].[Project]           WITH (NOLOCK) ON [Project].[CustomerId] = [Customer].[CustomerId]
+	JOIN [Pjm].[ProjectUser]       WITH (NOLOCK) ON [ProjectUser].[ProjectId] = [Project].[ProjectId] AND [ProjectUser].[UserId] = [OrganizationUser].[UserId]
+	WHERE [OrganizationUser].[UserId] = @userId
+	AND [Organization].[OrganizationId] = @organizationId
 	ORDER BY [Project].[ProjectName]
 
 	SELECT [User].[UserId],
@@ -107,14 +83,14 @@ AS
 		[User].[LastName],
 		[User].[Email]
 	FROM [Auth].[User] WITH (NOLOCK) 
-	LEFT JOIN [Billing].[SubscriptionUser]	WITH (NOLOCK) ON [SubscriptionUser].[UserId] = [User].[UserId]
-	LEFT JOIN [Billing].[Subscription]		WITH (NOLOCK) ON [Subscription].[SubscriptionId] = [SubscriptionUser].[SubscriptionId]
+	LEFT JOIN [Billing].[SubscriptionUser] WITH (NOLOCK) ON [SubscriptionUser].[UserId] = [User].[UserId]
+	LEFT JOIN [Billing].[Subscription] WITH (NOLOCK) ON [Subscription].[SubscriptionId] = [SubscriptionUser].[SubscriptionId]
 	WHERE 
 		[Subscription].[SubscriptionId] = (
 		SELECT [SubscriptionId] 
 		FROM [Billing].[Subscription] WITH (NOLOCK) 
-		LEFT JOIN [Billing].[Sku]		WITH (NOLOCK) ON [Sku].[SkuId] = [Subscription].[SkuId]
-		LEFT JOIN [Auth].[Organization]	WITH (NOLOCK) ON [Organization].[OrganizationId] = [Subscription].[OrganizationId]
+		LEFT JOIN [Billing].[Sku] WITH (NOLOCK) ON [Sku].[SkuId] = [Subscription].[SkuId]
+		LEFT JOIN [Auth].[Organization] WITH (NOLOCK) ON [Organization].[OrganizationId] = [Subscription].[OrganizationId]
 		WHERE [Subscription].[OrganizationId] = @organizationId
 			AND [Sku].[ProductId] = @productId
 			AND [Subscription].[IsActive] = 1

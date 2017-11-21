@@ -29,6 +29,11 @@ namespace AllyisApps.Services
 		/// <returns>The customer entity.</returns>
 		public Customer GetCustomer(int customerId)
 		{
+			if (customerId <= 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(customerId), "Customer id must be greater than 0.");
+			}
+
 			return InitializeCustomer(DBHelper.GetCustomerInfo(customerId));
 		}
 
@@ -66,14 +71,13 @@ namespace AllyisApps.Services
 		/// <returns>Customer id.</returns>
 		public async Task<int?> CreateCustomerAsync(Customer customer, int subscriptionId)
 		{
-			if (CheckStaffingManagerAction(StaffingManagerAction.EditCustomer, subscriptionId, false) || CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId, false))
-			{
-				// TODO: make sure valid countries and states are added during import
-				//customer.Address?.EnsureDBRef(this);
-				return await DBHelper.CreateCustomerInfoAsync(GetDBEntitiesFromCustomerInfo(customer));
-			}
-			string message = string.Format("action {0} denied for subscription {1}", TimeTrackerAction.EditCustomer, subscriptionId);
-			throw new AccessViolationException(message);
+			// Permission validation
+			if (!CheckStaffingManagerAction(StaffingManagerAction.EditCustomer, subscriptionId, false) && !CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId, false))
+				throw new AccessViolationException($"action {TimeTrackerAction.EditCustomer} denied for subscription {subscriptionId}");
+
+			// TODO: make sure valid countries and states are added during import
+			//customer.Address?.EnsureDBRef(this);
+			return await DBHelper.CreateCustomerInfoAsync(GetDBEntitiesFromCustomerInfo(customer));
 		}
 
 		/// <summary>
@@ -90,7 +94,7 @@ namespace AllyisApps.Services
 			if (!customer.IsActive)
 			{
 				var projects = await GetProjectsByCustomerAsync(customer.CustomerId);
-				if (projects.Any(project => project.IsActive))
+				if (projects.Any(project => project.IsCurrentlyActive))
 				{
 					return -2;
 				}
@@ -100,20 +104,26 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Deletes a customer.
+		/// Updates the customer [IsActive] column, after checking for user permissions.
 		/// </summary>
 		/// <param name="customerId">Customer id.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
-		/// <returns>Returns false if authorization fails.</returns>
-		public async Task<string> DeactivateCustomer(int subscriptionId, int customerId)
+		/// <param name="isActive">Bool to set the [IsActive] column of the given customer.</param>
+		/// <returns>Name of the customer, null if none found.</returns>
+		public async Task<string> UpdateCustomerIsActive(int subscriptionId, int customerId, bool isActive)
 		{
-			CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
-			return await DBHelper.DeactivateCustomer(customerId);
+			// Permission validation for both staffing and time tracker
+			if (!CheckStaffingManagerAction(StaffingManagerAction.EditCustomer, subscriptionId, false) && !CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId, false))
+				throw new AccessViolationException($"action {TimeTrackerAction.EditCustomer} denied for subscription {subscriptionId}");
+
+			return await DBHelper.UpdateCustomerIsActive(customerId, isActive);
 		}
 
 		public async Task<bool> DeleteCustomer(int subscriptionId, int customerId)
 		{
-			CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
+			// Permission validation for both staffing and time tracker
+			if (!CheckStaffingManagerAction(StaffingManagerAction.EditCustomer, subscriptionId, false) && !CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId, false))
+				throw new AccessViolationException($"action {TimeTrackerAction.EditCustomer} denied for subscription {subscriptionId}");
 
 			if (customerId <= 0)
 			{
@@ -129,64 +139,19 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Reactivate a Customer.
-		/// </summary>
-		/// <param name="customerId">Customer id.</param>
-		/// <param name="orgId">The Organization Id.</param>
-		/// <param name="subscriptionId">The subscription Id.</param>
-		/// <returns>Returns false if authorization fails.</returns>
-		public string ReactivateCustomer(int customerId, int subscriptionId, int orgId)
-		{
-			CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
-			return DBHelper.ReactivateCustomer(customerId);
-		}
-
-		/// <summary>
 		/// Gets a list of <see cref="Customer"/>'s for an organization.
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns><see cref="IEnumerable{CustomerDBEntity}"/>.</returns>
-		public async Task<IEnumerable<Customer>> GetCustomerList(int orgId)
+		public async Task<IEnumerable<Customer>> GetCustomersByOrganizationId(int orgId)
 		{
-			IEnumerable<dynamic> dbeList = await DBHelper.GetCustomerList(orgId);
-			List<Customer> list = new List<Customer>();
-			foreach (dynamic dbe in dbeList)
-			{
-				if (dbe != null)
-				{
-					list.Add(InitializeCustomer(dbe));
-				}
-			}
+			var customers = await DBHelper.GetCustomersByOrganizationId(orgId);
 
-			return list;
-		}
+			return customers
+				.Where(dbe => dbe != null)
+				.Select(dbe => (Customer)InitializeCustomer(dbe))
+				.ToList();
 
-		/// <summary>
-		/// Returns a list of CompleteProjectInfos for the current organization with the IsProjectUser field filled
-		/// out for the current user, and a list of CustomerInfos for the organization.
-		/// </summary>
-		/// <param name="orgId">The organization Id.</param>
-		/// <returns>.</returns>
-		public async Task<Tuple<List<CompleteProject>, List<Customer>>> GetProjectsAndCustomersForOrgAndUser(int orgId)
-		{
-			var spResults = await DBHelper.GetProjectsAndCustomersForOrgAndUser(orgId, UserContext.UserId);
-			return Tuple.Create(
-				spResults.Item1.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
-				spResults.Item2.Select(cdb => (Customer)InitializeCustomer(cdb)).ToList());
-		}
-
-		/// <summary>
-		/// Returns a list of CompleteProjectInfos for the current organization with the IsProjectUser field filled
-		/// out for the current user, and a list of CustomerInfos for the organization.
-		/// </summary>
-		/// <param name="orgId">The Organization Id.</param>
-		/// <returns>.</returns>
-		public Tuple<List<CompleteProject>, List<Customer>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId)
-		{
-			var spResults = DBHelper.GetInactiveProjectsAndCustomersForOrgAndUser(orgId, UserContext.UserId);
-			return Tuple.Create(
-				spResults.Item1.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
-				spResults.Item2.Select(cdb => (Customer)InitializeCustomer(cdb)).ToList());
 		}
 
 		/// <summary>
@@ -224,9 +189,8 @@ namespace AllyisApps.Services
 		/// Gets a list of <see cref="Project"/>'s for a customer.
 		/// </summary>
 		/// <param name="customerId">Customer Id.</param>
-		/// <param name="onlyActive">Bool whether or not to only get active projects.</param>
 		/// <returns>List of ProjectInfo's.</returns>
-		public async Task<IEnumerable<Project.Project>> GetProjectsByCustomerAsync(int customerId, bool onlyActive = false)
+		public async Task<IEnumerable<Project.Project>> GetProjectsByCustomerAsync(int customerId)
 		{
 			if (customerId <= 0)
 			{
@@ -235,29 +199,7 @@ namespace AllyisApps.Services
 
 			var projects = await DBHelper.GetProjectsByCustomerAsync(customerId);
 
-			if (onlyActive)
-			{
-				projects = projects.Where(p => p.IsActive);
-			}
-
-			var thing = projects.Where(p => p != null).Select(InitializeProject).ToList();
-			return thing;
-		}
-
-		/// <summary>
-		/// Gets a list of <see cref="Project"/>'s for a customer.
-		/// </summary>
-		/// <param name="customerId">Customer Id.</param>
-		/// <returns>List of ProjectInfo's.</returns>
-		public async Task<IEnumerable<Project.Project>> GetInactiveProjectsByCustomer(int customerId)
-		{
-			if (customerId <= 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(customerId), "Customer Id cannot be 0 or negative.");
-			}
-
-			var projects = await DBHelper.GetInactiveProjectsByCustomer(customerId);
-			return projects.Where(p => p != null).Select(InitializeProject).ToList();
+			return projects.Where(p => p != null).Select(InitializeProject);
 		}
 
 		/// <summary>
@@ -413,25 +355,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Reactivate a project.
-		/// </summary>
-		/// <param name="projectId">Project Id.</param>
-		/// <param name="organizationId">Organization Id.</param>
-		/// <param name="subscriptionId"> subscription Id.</param>
-		/// <returns>Returns false if authorization fails.</returns>
-		public bool ReactivateProject(int projectId, int organizationId, int subscriptionId)
-		{
-			if (projectId <= 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(projectId), "Project Id cannot be 0 or negative.");
-			}
-
-			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
-			DBHelper.ReactivateProject(projectId);
-			return true;
-		}
-
-		/// <summary>
 		/// Deletes a project
 		/// </summary>
 		/// <param name="projectId">The project id.</param>
@@ -449,26 +372,6 @@ namespace AllyisApps.Services
 			}
 
 			return await DBHelper.DeleteProject(projectId);
-		}
-
-		/// <summary>
-		/// Deletes a project.
-		/// </summary>
-		/// <param name="projectId">Project Id.</param>
-		/// <param name="subscriptionId">.</param>
-		/// <returns>Returns null if authorization fails, project name is succeed, empty string if not found.</returns>
-		public async Task<string> DeactivateProject(int projectId, int subscriptionId)
-		{
-			if (projectId <= 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(projectId), "Project Id cannot be 0 or negative.");
-			}
-
-			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
-
-			await CheckUpdateProjectStartEndDate(projectId, null, DateTime.Now);
-
-			return await DBHelper.DeactivateProject(projectId);
 		}
 
 		/// <summary>
@@ -600,7 +503,7 @@ namespace AllyisApps.Services
 			return Tuple.Create(
 				InitializeCompleteProjectInfo(spResults.Item1),
 				spResults.Item2.Select(udb => InitializeUser(udb, false)).ToList(),
-				spResults.Item3.Select(sudb => InitializeSubscriptionUser(sudb)).ToList());
+				spResults.Item3.Select(InitializeSubscriptionUser).ToList());
 		}
 
 		/// <summary>
@@ -648,15 +551,14 @@ namespace AllyisApps.Services
 		/// Gets all the projects in every customer in the entire organization.
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
-		/// <param name="onlyActive">Bool whether or not to only get active projects.</param>
 		/// <returns>All the projects in the organization.</returns>
-		public async Task<IEnumerable<Project.Project>> GetAllProjectsForOrganizationAsync(int orgId, bool onlyActive)
+		public async Task<IEnumerable<Project.Project>> GetAllProjectsForOrganizationAsync(int orgId)
 		{
 			var result = new List<Project.Project>();
-			var customers = await GetCustomerList(orgId);
+			var customers = await GetCustomersByOrganizationId(orgId);
 			foreach (var customer in customers)
 			{
-				result.AddRange(await GetProjectsByCustomerAsync(customer.CustomerId, onlyActive));
+				result.AddRange(await GetProjectsByCustomerAsync(customer.CustomerId));
 			}
 			return result;
 		}
@@ -920,8 +822,7 @@ namespace AllyisApps.Services
 				ProjectId = project.ProjectId,
 				ProjectCode = project.ProjectCode,
 				StartingDate = project.StartDate,
-				IsHourly = project.IsHourly,
-				IsActive = project.IsActive
+				IsHourly = project.IsHourly
 			};
 		}
 

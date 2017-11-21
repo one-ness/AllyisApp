@@ -54,7 +54,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
 
 			int orgId = AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId;
-			var projects = (await AppService.GetAllProjectsForOrganizationAsync(orgId, false)).ToList();
+			var projects = (await AppService.GetAllProjectsForOrganizationAsync(orgId)).ToList();
 
 			// TODO: Don't check for duplicate projects in controller
 
@@ -118,7 +118,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var subscriptionUsers = infos.Item3.Select(su => new BasicUserInfoViewModel(su.FirstName, su.LastName, su.UserId)).ToList();
 			string subscriptionNameToDisplay = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName;
 			var orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-			var customers = (await AppService.GetCustomerList(orgId)).Select(x => new SelectListItem
+			var customers = (await AppService.GetCustomersByOrganizationId(orgId)).Select(x => new SelectListItem
 			{
 				Text = x.CustomerName,
 				Value = x.CustomerId.ToString()

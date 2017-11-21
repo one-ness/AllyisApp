@@ -4,14 +4,17 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
+using AllyisApps.Services;
+using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels;
-using AllyisApps.ViewModels.Staffing.Customer;
+using AllyisApps.ViewModels.StaffingManager.Customer;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -22,29 +25,35 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 	{
 		/// <summary>
 		/// GET: Customer/Create.
-		/// </summary>
+		/// </summary>.
 		/// <param name="subscriptionId">The subscription.</param>
 		/// <returns>Presents a page for the creation of a new Customer.</returns>
 		[HttpGet]
 		public async Task<ActionResult> Create(int subscriptionId)
 		{
-			var nextCustomerIdTask = AppService.GetNextCustId(subscriptionId);
-			var subscriptionNameToDisplayTask = AppService.GetSubscriptionName(subscriptionId);
+			if (AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId != ProductIdEnum.StaffingManager)
+			{
+				AppService.CheckStaffingManagerAction(AppService.StaffingManagerAction.EditCustomer, subscriptionId);
+			}
+			int orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 
-			await Task.WhenAll(new Task[] { nextCustomerIdTask, subscriptionNameToDisplayTask });
+			List<SelectListItem> statusOptions = new List<SelectListItem>()
+			{
+				new SelectListItem() { Text = "Active", Value = true.ToString() },
+				new SelectListItem() { Text= "Disabled", Value = false.ToString() }
+			};
 
-			var nextCustomerId = nextCustomerIdTask.Result;
-			string subscriptionNameToDisplay = subscriptionNameToDisplayTask.Result;
-
-			int orgID = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			var NextCustomerId = await AppService.GetNextCustId(subscriptionId);
+			string subscriptionNameToDisplay = await AppService.GetSubscriptionName(subscriptionId);
 			return View(new EditCustomerInfoViewModel
 			{
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
 				IsCreating = true,
-				CustomerCode = nextCustomerId,
+				CustomerCode = NextCustomerId,
 				SubscriptionId = subscriptionId,
-				OrganizationId = orgID,
+				OrganizationId = orgId,
 				UserId = AppService.UserContext.UserId,
+				IsActiveOptions = statusOptions,
 				SubscriptionName = subscriptionNameToDisplay,
 			});
 		}
@@ -96,9 +105,10 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				}
 				if (customerId == -2)
 				{
-					Notifications.Add(new BootstrapAlert("Could Not Create Customer", Variety.Danger));
+					Notifications.Add(new BootstrapAlert("Failed To Create Customer", Variety.Danger));
 					return View(model);
 				}
+
 				Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerCreatedNotification, Variety.Success));
 
 				// Redirect to the user details page

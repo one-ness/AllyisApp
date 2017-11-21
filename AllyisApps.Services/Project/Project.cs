@@ -52,7 +52,7 @@ namespace AllyisApps.Services.Project
 		/// <summary>
 		/// Returns the bool value indicating if this project is currently active.
 		/// </summary>
-		public bool IsActive =>
+		public bool IsCurrentlyActive =>
 			(StartDate == null || StartDate <= DateTime.Now) && (EndDate == null || EndDate >= DateTime.Now);
 
 		public Customer OwningCustomer { get; set; }
