@@ -116,10 +116,10 @@ a#homelink:hover, a#homelink:focus
 	width: inherit;
 }
 
-.footer-bar a
-{
-	margin-right: 10px;
-}
+	.footer-bar a
+	{
+		margin-right: 10px;
+	}
 
 .header-bar
 {
@@ -201,10 +201,6 @@ input.members-checkbox
 	border-bottom: 1px solid transparent;
 	border-top-right-radius: 3px;
 	border-top-left-radius: 3px;
-}
-
-.panel-heading
-{
 	background-color: #f5f5f5;
 }
 
@@ -241,7 +237,6 @@ table
 {
 	display: inline;
 	margin-right: 10px;
-	/*margin-bottom: 10px;*/
 }
 
 input.members-checkbox

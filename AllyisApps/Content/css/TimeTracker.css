@@ -1,34 +1,10 @@
 
 .header-bar {
-	position: relative;
-	min-height: 50px;
-	margin-bottom: 0px;
-	margin-top: 15px;
 	border: 1px solid #72a8d7;
-	border-width: 1px 5px;
 }
 
 a {
 	color: #595959;
-}
-
-.footer-bar {
-	background-color: #efefef;
-	bottom: 0;
-	font-size: smaller;
-	height: 40px;
-	padding-bottom: 5px;
-	padding-top: 5px;
-	margin-top: 85px;
-	width: inherit;
-}
-
-	.footer-bar a {
-		margin-right: 10px;
-	}
-
-.min300 {
-	min-width: 300px;
 }
 
 .link-zone {
@@ -185,13 +161,6 @@ a {
 	margin-bottom: 15px;
 }
 
-.container .slim {
-	margin-right: auto;
-	margin-left: auto;
-	padding-left: 15px;
-	padding-right: 15px;
-}
-
 .flexbox-row {
 	margin-left: -15px;
 	margin-right: -15px;
@@ -248,25 +217,6 @@ a {
 .very-inline-form.edit .button-anim-wrap {
 	width: 80px;
 }
-
-.very-inline-form {
-	-webkit-transition: opacity 0.5s ease;
-	-o-transition: opacity 0.5s ease;
-	transition: opacity 0.5s ease;
-	position: relative;
-	display: table !important;
-	table-layout: fixed;
-	width: 100%;
-	height: 34px;
-	box-sizing: border-box;
-}
-
-	.very-inline-form .button-anim-wrap {
-		-webkit-transition: all 1s ease;
-		-o-transition: all 1s ease;
-		transition: all 1s ease;
-		overflow: hidden;
-	}
 
 .timesheet-grouping{
 	margin-bottom:10px;
@@ -350,10 +300,6 @@ a {
 	right: 0px;
 }
 
-.sm-control-width {
-	width: 420px;
-}
-
 .very-inline-form.edit .allyisicon-delete {
 	display: inline-block;
 	font: normal normal normal 14px/1 FontAwesome;
@@ -421,9 +367,6 @@ a {
 	background-color: #f2dede;
 }
 
-/*
-	margin-fixes
-*/
 #resultPartialForm .panel{
 	margin-bottom:10px;
 }
@@ -435,43 +378,7 @@ a {
 .settings-margin .panel, .settings-margin .form-group, .settings-margin .table{
 	margin-bottom: 10px;
 }
-	
-
 
 .ml-1 {
 	margin-left: 5px;
-}
-
-.body .panel,
-.body .form-group,
-.body .form-grouping,
-.body .table,
-.body .h4,
-.body .h3,
-.body .h2,
-.body .h1 {
-	margin-bottom: 10px;
-}
-
-.alert {
-	margin-bottom: 0px;
-}
-
-#title .title-headers h1 {
-	margin-bottom: 10px;
-	margin-top: 5px;
-}
-
-.pannel-heading {
-	margin-top: 0px;
-	margin-bottom: 0px;
-}
-
-.panel-body .index-details p label {
-	margin-top: 0px;
-	margin-bottom: 0px;
-}
-
-body {
-	margin-bottom: 85px;
 }
