@@ -1,3 +1,37 @@
+
+.panel,
+.form-group,
+.table,
+.h4,
+.h3,
+.h2,
+.h1 {
+	margin-bottom: 10px;
+}
+
+.alert {
+	margin-bottom: 0px;
+}
+
+#title .title-headers h1 {
+	margin-bottom: 10px;
+	margin-top: 5px;
+}
+
+.form-grouping .form-group {
+	margin-bottom: 10px;
+}
+
+.pannel-heading {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.panel-body .index-details p label {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
 body
 {
 	margin-bottom: 85px;
@@ -129,7 +163,7 @@ a#homelink:hover, a#homelink:focus
 {
 	position: relative;
 	min-height: 50px;
-	margin-bottom: 0px;
+	margin-bottom: 10px;
 	margin-top: 15px;
 	border: 1px solid rgb(160, 160, 160);
 	border-width: 1px 5px;

@@ -6,7 +6,7 @@
 
 				foreach (AllyisApps.Core.Alert.BootstrapAlert a in ViewBag.Alerts)
 				{
-					<div class="alert alert-dismissable fade in @a.Type.Classes text-center margin-alert">
+					<div class="alert alert-dismissable fade in @a.Type.Classes text-center">
 						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 						@if (a.IsHtmlString)
 						{
