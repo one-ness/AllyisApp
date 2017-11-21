@@ -72,6 +72,11 @@ a:hover, a:focus
 	color: #333333;
 }
 
+.btn-primary:hover, .btn-primary:focus{
+	background-color: #333333;
+	border-color: #333333;
+}
+
 a#homelink:hover, a#homelink:focus
 {
 	color: #595959;
@@ -155,7 +160,7 @@ a#homelink:hover, a#homelink:focus
 {
 	display: inline;
 	margin-right: 10px;
-	margin-bottom: 10px;
+	/*margin-bottom: 10px;*/
 }
 
 input.members-checkbox
@@ -240,7 +245,7 @@ table
 {
 	display: inline;
 	margin-right: 10px;
-	margin-bottom: 10px;
+	/*margin-bottom: 10px;*/
 }
 
 input.members-checkbox
