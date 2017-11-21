@@ -120,7 +120,8 @@
 							{
 								@Html.Partial("_AjaxTimeEntryBody2", entry)
 							}
-							if (theEntries.Count == 0 || !theSample.IsLocked) {
+							if (theEntries.Count == 0 || !theSample.IsLocked)
+							{
 								@Html.Partial("_AjaxTimeEntryBody2", theSample)
 							}
 							if (theSample.IsManager || !theSample.IsLocked) //if the date is not locked because of lock date or logged in user is manager
@@ -136,9 +137,9 @@
 					</div>
 				</div>
 			</div>
-		}
+							}
 	</div>
-}
+							}
 
 <div class="pull-right">
 	<a href="@Context.Request.RawUrl" class="btn btn-default" style="margin-right: 10px;">@Strings.Cancel</a>

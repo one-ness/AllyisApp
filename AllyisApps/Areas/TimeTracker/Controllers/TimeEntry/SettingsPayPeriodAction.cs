@@ -42,7 +42,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			model.OrganizationId = organizationId;
 			model.SubscriptionName = subName;
 			model.UserId = AppService.UserContext.UserId;
-			model.PayPeriodTypeId = payPeriodInfo.type == PayPeriodType.Duration.ToString() ? (int)PayPeriodType.Duration : (int)PayPeriodType.Dates;
+			model.PayPeriodTypeId = payPeriodInfo.type == PayPeriodType.Duration.GetEnumName() ? (int)PayPeriodType.Duration : (int)PayPeriodType.Dates;
 			model.Duration = payPeriodInfo.duration ?? 14;
 			model.StartDate = (DateTime?)payPeriodInfo.startDate;
 			model.Dates = payPeriodInfo.dates == null ? "" : string.Join(",", payPeriodInfo.dates);
@@ -67,9 +67,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				case PayPeriodType.Duration:
 					await AppService.UpdateDurationPayPeriod(model.Duration.Value, model.StartDate.Value, model.OrganizationId);
 					break;
+
 				case PayPeriodType.Dates:
 					await AppService.UpdateDatesPayPeriod(model.Dates.Trim(' ').Split(',').Select(int.Parse).ToList(), model.OrganizationId);
 					break;
+
 				default:
 					throw new InvalidEnumArgumentException(nameof(model.PayPeriodTypeId));
 			}

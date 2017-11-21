@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.ViewModels.Auth;
+using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels;
 
 namespace AllyisApps.Controllers.Auth
@@ -34,7 +35,7 @@ namespace AllyisApps.Controllers.Auth
 				data.InvitationId = item.InvitationId;
 				data.InvitedOn = item.InvitationCreatedUtc;
 				//data.ProductAndRoleNames = item.ProductRolesJson; TODO: parse the json to get the product names and roles
-				data.Status = item.InvitationStatus.ToString();
+				data.Status = item.InvitationStatus.GetEnumName();
 				if (item.InvitationStatus == Services.Auth.InvitationStatusEnum.Pending)
 				{
 					model.PendingInvitationCount++;
