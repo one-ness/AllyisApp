@@ -25,7 +25,7 @@
 	<link href="@Url.Content(DisplayHints.LayoutThemeBundle.Replace("Content/", "Content/css/") + ".css")" rel="stylesheet" type="text/css" />
 	<meta name="description" content="@Strings.MetaDescription" />
 </head>
-<body id="@DisplayHints.PageBodyId" class="@DisplayHints.PageBodyClasses">
+<body id="@DisplayHints.PageBodyId" class="body @DisplayHints.PageBodyClasses">
 	@Html.Partial("_Header")
 	<!-- breadcrumbs partial should be rendered here -->
 	@Html.Partial("_NotificationPartial")

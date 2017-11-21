@@ -441,3 +441,37 @@ a {
 .ml-1 {
 	margin-left: 5px;
 }
+
+.body .panel,
+.body .form-group,
+.body .form-grouping,
+.body .table,
+.body .h4,
+.body .h3,
+.body .h2,
+.body .h1 {
+	margin-bottom: 10px;
+}
+
+.alert {
+	margin-bottom: 0px;
+}
+
+#title .title-headers h1 {
+	margin-bottom: 10px;
+	margin-top: 5px;
+}
+
+.pannel-heading {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.panel-body .index-details p label {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+body {
+	margin-bottom: 85px;
+}
