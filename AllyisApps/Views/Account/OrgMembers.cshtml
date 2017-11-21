@@ -33,7 +33,7 @@
 					</tr>
 				</thead>
 				@foreach (var item in Model.Users)
-	{
+				{
 					<tr>
 						@if (Model.CanEditUser)
 						{
@@ -56,7 +56,7 @@
 							<td class="col-md-1"><a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account, new { @id = Model.OrganizationId, @userId = item.UserId })" title="@Strings.EditUser"><i class="fa fa-fw fa-television"></i></a></td>
 						}
 					</tr>
-	}
+				}
 			</table>
 		</div>
 	</div>
