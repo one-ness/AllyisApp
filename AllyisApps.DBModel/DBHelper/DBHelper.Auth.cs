@@ -72,28 +72,26 @@ namespace AllyisApps.DBModel
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var result = await connection.QueryAsync<UserDBEntity>("[Auth].[GetUserFromEmail]", new { email });
+				var result = await connection.QueryAsync<UserDBEntity>("[Auth].[GetUserFromEmail]", new { email }, commandType: CommandType.StoredProcedure);
 				return result.FirstOrDefault();
 			}
 		}
 
 		/// <summary>
-		/// Gets the product role for a user for a product.
+		/// Gets the product role for a user.
 		/// </summary>
-		/// <param name="productName">The name of the product.</param>
-		/// <param name="organizationId">The organization.</param>
-		/// <param name="userId">The user.</param>
-		/// <returns>The product rold for the user.</returns>
-		public string GetProductRoleForUser(string productName, int organizationId, int userId)
+		/// <param name="subscriptionId">The subscription that the user belongs to.</param>
+		/// <param name="userId">User Id.</param>
+		/// <returns>The product role id for the user in the subscription. Returns null if user is not in the subscription or the subscription is inactive.</returns>
+		public async Task<int?> GetSubscriptionRoleForUser(int subscriptionId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@productName", productName);
-			parameters.Add("@organizationId", organizationId);
+			parameters.Add("@subscriptionId", subscriptionId);
 			parameters.Add("@userId", userId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<string>("[Auth].[GetActiveProductRoleForUser]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault() ?? "None";
+				return (await connection.QueryAsync<int>("[Auth].[GetSubscriptionRoleForUser]", parameters, commandType: CommandType.StoredProcedure)).SingleOrDefault();
 			}
 		}
 

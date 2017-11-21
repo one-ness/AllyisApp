@@ -14,6 +14,7 @@ using AllyisApps.Controllers;
 using AllyisApps.Lib;
 using AllyisApps.Resources;
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -182,7 +183,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Date = Utility.GetDaysFromDateTime(entry.Date),
 				Duration = string.Format("{0:D2}:{1:D2}", (int)entry.Duration, (int)Math.Round((entry.Duration - (int)entry.Duration) * MinutesInHour, 0)),
 				Description = entry.Description,
-				IsManager = AppService.GetProductRoleForUser(ProductNameConstants.TimeTracker, entry.UserId, AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId) == "Manager"
+				IsManager = await AppService.GetSubscriptionRoleForUser(subscriptionId, entry.UserId) == (int)TimeTrackerRole.Manager
 			};
 		}
 

@@ -309,7 +309,7 @@ namespace AllyisApps.Services
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
 			CheckOrgAction(OrgAction.ReadInvitationsList, orgId);
-			
+
 
 			return await this.DBHelper.GetOrganizationInvitationCountAsync(orgId, (int)statusMask);
 		}
@@ -411,21 +411,19 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets the product role for a user.
 		/// </summary>
-		/// <param name="productName">Product name.</param>
+		/// <param name="subscriptionId">The subscription that the user belongs to.</param>
 		/// <param name="userId">User Id.</param>
-		/// <param name="orgId"> The Organization Id.</param>
-		/// <returns>The product role.</returns>
-		public string GetProductRoleForUser(string productName, int userId, int orgId)
+		/// <returns>The product role id for the user in the subscription. Returns null if user is not in the subscription or the subscription is inactive.</returns>
+		public Task<int?> GetSubscriptionRoleForUser(int subscriptionId, int userId)
 		{
 			#region Validation
 
-			if (string.IsNullOrEmpty(productName)) throw new ArgumentNullException(nameof(productName), "Product name must have a value.");
-			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId), "User Id cannot be 0 or negative.");
-			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId), "Organization Id cannot be 0 or negative.");
+			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId), "User Id must be greater than 0.");
+			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException(nameof(subscriptionId), "Subscription Id must be greater than 0.");
 
 			#endregion Validation
 
-			return DBHelper.GetProductRoleForUser(productName, orgId, userId);
+			return DBHelper.GetSubscriptionRoleForUser(subscriptionId, userId);
 		}
 
 		#region Info-DBEntity Conversions

@@ -487,9 +487,9 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// delete the given subscription
+		/// Sets the given subscription IsActive column to false
 		/// </summary>
-		public async Task<int> DeleteSubscription(int subscriptionId)
+		public async Task<int> DeactivateSubscription(int subscriptionId)
 		{
 			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException(nameof(subscriptionId));
 
@@ -500,7 +500,7 @@ namespace AllyisApps.Services
 			 */
 			Subscription sub = await GetSubscription(subscriptionId);
 			CheckOrgAction(OrgAction.DeleteSubscritpion, sub.OrganizationId);
-			DBHelper.DeleteSubscription(subscriptionId);
+			DBHelper.DeactivateSubscription(subscriptionId);
 			return sub.OrganizationId;
 		}
 

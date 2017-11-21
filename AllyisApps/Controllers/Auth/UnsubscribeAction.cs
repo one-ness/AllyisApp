@@ -21,7 +21,7 @@ namespace AllyisApps.Controllers.Auth
 		[HttpGet]
 		public async Task<ActionResult> Unsubscribe(int id)
 		{
-			int orgId = await AppService.DeleteSubscription(id);
+			int orgId = await AppService.DeactivateSubscription(id);
 			Notifications.Add(new BootstrapAlert("Your subscription was deleted successfully.", Variety.Success));
 			return RedirectToAction(ActionConstants.OrganizationSubscriptions, new { id = orgId });
 		}

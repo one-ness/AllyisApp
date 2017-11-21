@@ -118,7 +118,7 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		
+
 
 		/// <summary>Deletes the given users in the given organization's subscription</summary>
 		/// <param name="userIds">List of user Ids.</param>
@@ -479,13 +479,13 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Deletes a subscription.
+		/// Sets subscription IsActive to false.
 		/// </summary>
-		public async void DeleteSubscription(int subscriptionid)
+		public async void DeactivateSubscription(int subscriptionid)
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				await con.ExecuteAsync("Billing.DeleteSubscription @a", new { a = subscriptionid });
+				await con.ExecuteAsync("[Billing].[DeactivateSubscription]", new { subscriptionid }, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -577,22 +577,6 @@ namespace AllyisApps.DBModel
 			{
 				// default empty list
 				return await connection.QueryAsync<SubscriptionDisplayDBEntity>("[Billing].[GetSubscriptionsDisplayByOrg]", parameters, commandType: CommandType.StoredProcedure);
-			}
-		}
-
-		/// <summary>
-		/// Executes Billing.GetProductRolesFromSubscription.
-		/// </summary>
-		/// <param name="subscriptionId">Sets SubscriptionId.</param>
-		/// <returns>List of SubscriptionRole.</returns>
-		public IEnumerable<SubscriptionRoleDBEntity> GetProductRolesFromSubscription(int subscriptionId)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@subscriptionId", subscriptionId);
-			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
-			{
-				// default null
-				return connection.Query<SubscriptionRoleDBEntity>("[Billing].[GetProductRolesFromSubscription]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
