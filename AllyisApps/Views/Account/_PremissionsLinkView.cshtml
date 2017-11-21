@@ -1,16 +1,15 @@
 ﻿@model PermissionsViewModel
 
-<ul class="nav allyis-tabs">
-
-	<li @(Model.SubscriptionId == null ? "class = selected" : "") id="OrganizationTab">
-		<a style="display: inline" href="@Url.Action(ActionConstants.ManageOrgPermissions, new { id = Model.OrganizationId })">
+<ul class="nav nav-tabs" style="margin-bottom: 10px;">
+	<li @(Model.SubscriptionId == null ? "class = active" : "") id="OrganizationTab">
+		<a href="@Url.Action(ActionConstants.ManageOrgPermissions, new { id = Model.OrganizationId })">
 			@Strings.Organization
 		</a>
 	</li>
 	@foreach (var sub in Model.CurrentSubscriptions)
 	{
-		<li class="@(Model.SubscriptionId != null && sub.SubscriptionId == Model.SubscriptionId ?  "selected" : "") SubscriptionTab">
-			<a style="display: inline" href="@sub.ManagePermissionsUrl">
+		<li class="@(Model.SubscriptionId != null && sub.SubscriptionId == Model.SubscriptionId ?  "active" : "") SubscriptionTab">
+			<a href="@sub.ManagePermissionsUrl">
 				@sub.ProductName
 			</a>
 		</li>
