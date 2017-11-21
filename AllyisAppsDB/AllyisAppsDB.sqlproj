@@ -115,6 +115,7 @@
     <Build Include="Auth\Tables\Organization.sql" />
     <Build Include="Auth\Tables\OrganizationUser.sql" />
     <Build Include="Auth\Tables\OrganizationRole.sql" />
+    <Build Include="Auth\Tables\ProductRole.sql" />
     <Build Include="Auth\Tables\User.sql" />
     <Build Include="Security\aaUser.sql" />
     <Build Include="Security\RoleMemberships.sql" />
@@ -408,5 +409,6 @@
   <ItemGroup>
     <None Include="TestData\ExpenseTracker.Expenses.Table.sql" />
     <None Include="UpgradeScripts\AddSkuIconUrl.sql" />
+    <None Include="DefaultData\Role.sql" />
   </ItemGroup>
 </Project>
