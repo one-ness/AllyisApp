@@ -14,11 +14,13 @@ using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
+using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.Project;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
+	/// <inheritdoc />
 	/// <summary>
 	/// Class which manages Time Entry objects.
 	/// </summary>
@@ -46,7 +48,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else
 			{
-				reportVM = ConstructReportViewModel(AppService.UserContext.UserId, subInfo.OrganizationId, true, infos.Customers, infos.CompleteProject);
+				reportVM = await ConstructReportViewModel(AppService.UserContext.UserId, subInfo.OrganizationId, true, infos.Customers, infos.CompleteProject);
 				reportVM.SubscriptionName = subInfo.SubscriptionName;
 			}
 
@@ -69,7 +71,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="showExport">Variable to show or hide export button.</param>
 		/// <param name="previousSelections">An object holding previous report selection data.</param>
 		/// <returns>The ReportViewModel.</returns>
-		public ReportViewModel ConstructReportViewModel(int userId, int organizationId, bool canManage, List<Customer> customers, List<CompleteProject> projects, bool showExport = true, ReportSelectionModel previousSelections = null)
+		public async Task<ReportViewModel> ConstructReportViewModel(int userId, int organizationId, bool canManage, List<Customer> customers, List<CompleteProject> projects, bool showExport = true, ReportSelectionModel previousSelections = null)
 		{
 			projects.Insert(
 				0,
@@ -82,6 +84,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						CustomerId = 0
 					}
 				});
+
+			PayPeriodRanges payPeriods = await AppService.GetPayPeriodRanges(organizationId);
 
 			return new ReportViewModel
 			{
@@ -96,14 +100,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				PreviewMessage = Resources.Strings.NoDataPreview,
 				PreviewPageTotal = 1,
 				PreviewPageNum = 1,
+				PayPeriodRanges = payPeriods,
 				Selection = previousSelections ?? new ReportSelectionModel
 				{
+					Users = new List<int>(),
 					CustomerId = 0,
-					EndDate = DateTime.Today,
-					Page = 1,
 					ProjectId = 0,
-					StartDate = DateTime.Today,
-					Users = new List<int>()
+					StartDate = payPeriods.Previous.StartDate,
+					EndDate = payPeriods.Previous.EndDate,
+					Page = 1
 				}
 			};
 		}
