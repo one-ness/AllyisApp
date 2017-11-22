@@ -36,21 +36,26 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public async Task<ActionResult> Review(int subscriptionId, DateTime? startDate = null, DateTime? endDate = null)
 		{
 			int organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+
+			// if no start or end date specified, use default start and end dates.  Redirect for proper url route.
 			if (!startDate.HasValue || !endDate.HasValue)
 			{
-				var payperiodred = await AppService.GetPayPeriodRanges(organizationId);
-				startDate = startDate ?? payperiodred.Current.StartDate;
-				endDate = endDate ?? payperiodred.Current.EndDate;
+				var payPeriods = await AppService.GetPayPeriodRanges(organizationId);
+				startDate = payPeriods.Previous.StartDate;
+				endDate = payPeriods.Previous.EndDate;
 				return RedirectToAction(ActionConstants.Review, new { subscriptionId, startDate, endDate });
 			}
 
-			var payperiod = await AppService.GetPayPeriodRanges(organizationId);
+			var model = await ConstructReviewViewModel(organizationId, subscriptionId, startDate.Value, endDate.Value);
 
+			return View(model);
+		}
 
-
+		private async Task<ReviewViewModel> ConstructReviewViewModel(int organizationId, int subscriptionId, DateTime startDate, DateTime endDate)
+		{
 			var payClasses = (await AppService.GetPayClassesByOrganizationId(organizationId)).Select(x => new PayClassInfoViewModel(x)).ToList();
 			var subscription = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
-			var allTimeEntries = (await AppService.GetTimeEntriesOverDateRange(organizationId, startDate.Value, endDate.Value))
+			var allTimeEntries = (await AppService.GetTimeEntriesOverDateRange(organizationId, startDate, endDate))
 				.Select(entry =>
 				{
 					CompleteProject project = AppService.GetProject(entry.ProjectId);
@@ -85,13 +90,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				TimeEntriesByUser = timeEntriesByUser,
 				TimeEntryTotalsByUserByPayClass = timeEntryTotalsByUserByPayClass,
 				TimeEntryIdsJSON = JsonConvert.SerializeObject(allTimeEntries.Select(entry => entry.TimeEntryId).ToArray()),
-				StartDate = startDate.Value,
-				EndDate = endDate.Value,
+				StartDate = startDate,
+				EndDate = endDate,
 				TimeEntryStatusOptions = ModelHelper.GetLocalizedTimeEntryStatuses(AppService),
 				PayPeriodRanges = payperiodRanges
 			};
 
-			return View(model);
+			return model;
 		}
 
 		/// <summary>

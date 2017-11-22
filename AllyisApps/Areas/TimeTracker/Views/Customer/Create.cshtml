@@ -12,11 +12,9 @@
 }
 
 <div class="container">
-	<div class="row">
-		<div class="col-xs-12">
-			<div>
-				@{Html.RenderPartial("_CustomerEdit", Model, ViewData);}
-			</div>
+	<div class="shrink-wrap-center">
+		<div style="width: 80%">
+			@{ Html.RenderPartial("_CustomerEdit", Model, ViewData); }
 		</div>
 	</div>
 </div>
