@@ -35,7 +35,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			var idAndUsers = await AppService.GetNextProjectId(orgId, subscriptionId);
 			var customers = (await AppService.GetCustomersByOrganizationId(orgId)).Where(x => x.IsActive);
-			var subUsers = AppService.GetSubscriptionUsers(subscriptionId).AsEnumerable();
+			var subUsers = (await AppService.GetSubscriptionUsers(subscriptionId)).AsEnumerable();
 			var customersActive = customers.Select(x => new SelectListItem
 			{
 				Text = x.CustomerName,

@@ -8,21 +8,4 @@
     CONSTRAINT [FK_SubscriptionUser_User] FOREIGN KEY ([UserId]) REFERENCES [Auth].[User] ([UserId]) ON DELETE CASCADE
 );
 
-
-
-
-
-
-GO
-
-
-
-GO
-
-
-
-GO
-
-
-
 GO

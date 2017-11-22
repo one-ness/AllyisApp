@@ -69,7 +69,8 @@ namespace AllyisApps.Controllers.Auth
 			var sub = await AppService.GetSubscription(id);
 			var orgSubs = await AppService.GetSubscriptionsAsync(sub.OrganizationId);
 
-			var subUsers = AppService.GetSubscriptionUsers(id);
+
+			var subUsers = await AppService.GetSubscriptionUsers(id);
 			var organizationMembers = AppService.GetOrganizationMemberList(sub.OrganizationId);
 
 			//Get Strings speffic to Product for page
@@ -129,7 +130,7 @@ namespace AllyisApps.Controllers.Auth
 			var sub = await AppService.GetSubscription(id);
 			var orgSubs = await AppService.GetSubscriptionsAsync(sub.OrganizationId);
 
-			var subUsers = AppService.GetSubscriptionUsers(id);
+			var subUsers = await AppService.GetSubscriptionUsers(id);
 			var organizationMembers = AppService.GetOrganizationMemberList(sub.OrganizationId);
 
 			//Get Strings speffic to Product for page
@@ -189,7 +190,7 @@ namespace AllyisApps.Controllers.Auth
 			var sub = await AppService.GetSubscription(id);
 			var orgSubs = await AppService.GetSubscriptionsAsync(sub.OrganizationId);
 
-			var subUsers = AppService.GetSubscriptionUsers(id);
+			var subUsers = await AppService.GetSubscriptionUsers(id);
 			var organizationMembers = AppService.GetOrganizationMemberList(sub.OrganizationId);
 
 			//Get Strings speffic to Product for page

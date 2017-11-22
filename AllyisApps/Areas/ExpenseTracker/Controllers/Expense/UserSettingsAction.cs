@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
@@ -9,6 +8,7 @@ using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
+	/// <inheritdoc />
 	/// <summary>
 	/// Expense controller.
 	/// </summary>
@@ -25,38 +25,30 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.UserSettings, subscriptionId);
 
-			int userId = AppService.UserContext.UserId;
+			int organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 
-			UserContext.SubscriptionAndRole subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+			var users = (await AppService.GetOrganizationManagementInfo(organizationId)).Users;
 
-			var productNameTask = AppService.GetProductNameBySubscriptionId(subInfo.SubscriptionId);
-			var allInfosTask = AppService.GetOrganizationManagementInfo(subInfo.OrganizationId);
-
-			await Task.WhenAll(new Task[] { productNameTask, allInfosTask });
-
-			string productName = productNameTask.Result;
-			var allInfos = allInfosTask.Result;
-
-			IEnumerable<OrganizationUser> userInfos = allInfos.Users.Where(u =>
-				AppService.GetProductRoleForUser("Expense Tracker", u.UserId, subInfo.OrganizationId) == "Manager"
-				|| AppService.GetProductRoleForUser("Expense Tracker", u.UserId, subInfo.OrganizationId) == "SuperUser");
-
-			List<UserMaxAmountViewModel> userViewModels = new List<UserMaxAmountViewModel>();
-			foreach (OrganizationUser user in userInfos)
+			var userInfos = new List<UserMaxAmountViewModel>();
+			foreach (OrganizationUser user in users)
 			{
-				userViewModels.Add(InitializeUserMaxAmount(user));
+				int? userSubRole = await AppService.GetSubscriptionRoleForUser(subscriptionId, user.UserId);
+				if (userSubRole == (int)ExpenseTrackerRole.Manager || userSubRole == (int)ExpenseTrackerRole.Manager)
+				{
+					userInfos.Add(InitializeUserMaxAmount(user));
+				}
 			}
 
-			UserSettingsViewModel model = new UserSettingsViewModel
+			var model = new UserSettingsViewModel
 			{
 				SubscriptionId = subscriptionId,
-				Users = userViewModels
+				Users = userInfos
 			};
 
 			return View(model);
 		}
 
-		private UserMaxAmountViewModel InitializeUserMaxAmount(OrganizationUser user)
+		private static UserMaxAmountViewModel InitializeUserMaxAmount(OrganizationUser user)
 		{
 			return new UserMaxAmountViewModel
 			{

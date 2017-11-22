@@ -194,9 +194,9 @@ a {
 	}
 
 .btn-sharp {
-	display: inline-block;
+	
 	border-radius: 0px;
-	/*float: right;*/
+	float: right;
 	overflow: visible;
 }
 

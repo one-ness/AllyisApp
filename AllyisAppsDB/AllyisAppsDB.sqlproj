@@ -160,14 +160,13 @@
     <Build Include="Billing\Stored Procedures\CreateSubscriptionPlan.sql" />
     <Build Include="Billing\Stored Procedures\DeleteBillingInformation.sql" />
     <Build Include="Billing\Stored Procedures\DeleteCustomerSubscription.sql" />
-    <Build Include="Billing\Stored Procedures\DeleteSubscription.sql" />
+    <Build Include="Billing\Stored Procedures\DeactivateSubscription.sql" />
     <Build Include="Billing\Stored Procedures\DeleteSubscriptionUser.sql" />
     <Build Include="Billing\Stored Procedures\GetOrgSkus.sql" />
     <Build Include="Billing\Stored Procedures\GetProductAreaBySubscription.sql" />
     <Build Include="Billing\Stored Procedures\GetProductById.sql" />
     <Build Include="Billing\Stored Procedures\GetProductIdByName.sql" />
     <Build Include="Billing\Stored Procedures\GetProductList.sql" />
-    <Build Include="Billing\Stored Procedures\GetProductRolesFromSubscription.sql" />
     <Build Include="Billing\Stored Procedures\GetSkuById.sql" />
     <Build Include="Billing\Stored Procedures\GetStripeOrgCustomer.sql" />
     <Build Include="Billing\Stored Procedures\GetSubscriptionDetailsById.sql" />
@@ -179,20 +178,11 @@
     <Build Include="Billing\Stored Procedures\UpdateSubscriptionUserProductRole.sql" />
     <Build Include="Billing\Stored Procedures\CreateBillingHistory.sql" />
     <Build Include="Auth\Stored Procedures\GetOrgManagementInfo.sql" />
-    <Build Include="Auth\Stored Procedures\GetOrgIdBySubdomain.sql" />
-    <Build Include="Auth\Stored Procedures\GetOrgUserByEmail.sql" />
-    <Build Include="Auth\Stored Procedures\GetOrgUserEmployeeId.sql" />
     <Build Include="Auth\Stored Procedures\GetOrgUserList.sql" />
-    <Build Include="Auth\Stored Procedures\GetOrgUserRole.sql" />
-    <Build Include="Auth\Stored Procedures\GetRolesAndPermissions.sql" />
-    <Build Include="Auth\Stored Procedures\GetSubdomainByOrgId.sql" />
     <Build Include="Auth\Stored Procedures\GetUserFromEmail.sql" />
-    <Build Include="Auth\Stored Procedures\GetUserInfo.sql" />
     <Build Include="Auth\Stored Procedures\GetInvitations.sql" />
-    <Build Include="Auth\Stored Procedures\GetUserInvitationsByEmail.sql" />
     <Build Include="Auth\Stored Procedures\GetUsersWithSubscriptionToProductInOrganization.sql" />
     <Build Include="Auth\Stored Procedures\UpdateOrganization.sql" />
-    <Build Include="Auth\Stored Procedures\UpdateUserActiveSub.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserInfo.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserPassword.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserPasswordResetCode.sql" />
@@ -200,19 +190,14 @@
     <Build Include="Auth\Stored Procedures\DeleteOrg.sql" />
     <Build Include="Auth\Stored Procedures\DeleteOrgUser.sql" />
     <Build Include="Auth\Stored Procedures\RejectInvitation.sql" />
-    <Build Include="Auth\Stored Procedures\GetActiveProductRoleForUser.sql" />
     <Build Include="Auth\Stored Procedures\GetOrg.sql" />
     <Build Include="Auth\Stored Procedures\GetOrganizationsByUserId.sql" />
-    <Build Include="Auth\Stored Procedures\GetOrgWithCountriesAndEmployeeId.sql" />
-    <Build Include="Auth\Stored Procedures\GetAddMemberInfo.sql" />
-    <Build Include="Auth\Stored Procedures\GetOrgAndSubRoles.sql" />
     <Build Include="Auth\Stored Procedures\AcceptInvitation.sql" />
     <Build Include="Auth\Stored Procedures\DeleteInvitation.sql" />
     <Build Include="Auth\Stored Procedures\GetPasswordHashFromUserId.sql" />
     <Build Include="Auth\Stored Procedures\CreateInvitation.sql" />
     <Build Include="Auth\Stored Procedures\UpdateEmailConfirmed.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserLanguagePreference.sql" />
-    <Build Include="Auth\Stored Procedures\GetUserContextInfo.sql" />
     <Build Include="Auth\Stored Procedures\GetUserOrgsAndInvitationInfo.sql" />
     <Build Include="Auth\User Defined Types\UserTable.sql" />
     <Build Include="Security\TimeTracker.sql" />
@@ -223,7 +208,6 @@
     <None Include="DefaultData\CountryStates.sql" />
     <None Include="DefaultData\Languages.sql" />
     <None Include="DefaultData\Products.sql" />
-    <None Include="DefaultData\Role.sql" />
     <None Include="DefaultData\Sku.sql" />
     <None Include="TestData\Auth.Organization.Table.sql" />
     <None Include="TestData\Auth.OrganizationUser.Table.sql" />
@@ -414,6 +398,7 @@
     <Build Include="TimeTracker\Stored Procedures\GetTimeEntriesByProjectId.sql" />
     <Build Include="Auth\Stored Procedures\GetOrgUserCount.sql" />
     <Build Include="Auth\Stored Procedures\GetOrgInvitationCount.sql" />
+    <Build Include="Billing\Stored Procedures\GetSubscriptionRoleForUser.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
@@ -424,5 +409,6 @@
   <ItemGroup>
     <None Include="TestData\ExpenseTracker.Expenses.Table.sql" />
     <None Include="UpgradeScripts\AddSkuIconUrl.sql" />
+    <None Include="DefaultData\Role.sql" />
   </ItemGroup>
 </Project>

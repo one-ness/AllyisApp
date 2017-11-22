@@ -1,10 +1,12 @@
-﻿create procedure Auth.GetProductRoles
-	@orgId int,
-	@productId int
-as
-begin
-	set nocount on
+﻿CREATE PROCEDURE [Auth].[GetProductRoles]
+	@orgId INT,
+	@productId INT
+AS
+BEGIN
+	SET NOCOUNT ON
 	-- NOTE: IGNORE orgId for now, but later we need to use it
-	select * from ProductRole with (nolock)
-	where ProductId = @productId
-end
+
+	SELECT *
+	FROM [ProductRole] WITH (NOLOCK)
+	WHERE ProductId = @productId
+END

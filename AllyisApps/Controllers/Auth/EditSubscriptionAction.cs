@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
-using AllyisApps.ViewModels.Auth;
+using AllyisApps.Services;
 using AllyisApps.ViewModels.Billing;
 
 namespace AllyisApps.Controllers.Auth
@@ -19,6 +19,7 @@ namespace AllyisApps.Controllers.Auth
 		[HttpGet]
 		public async Task<ActionResult> EditSubscription(int id)
 		{
+			await AppService.CheckSubscriptionAction(AppService.OrgAction.EditSubscription, id);
 			var sub = await AppService.GetSubscription(id);
 			var model = new EditSubscriptionViewModel();
 			model.OrganizationId = sub.OrganizationId;
