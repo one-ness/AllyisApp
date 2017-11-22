@@ -69,7 +69,7 @@ a:hover, a:focus
 	color: #333333;
 }
 
-.btn-primary:hover, .btn-primary:focus {
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active:focus {
 	background-color: #404040;
 	border-color: #2e2e2e;
 }
