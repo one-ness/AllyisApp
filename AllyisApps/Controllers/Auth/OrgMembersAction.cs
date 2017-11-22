@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Services;
@@ -34,10 +33,8 @@ namespace AllyisApps.Controllers.Auth
 			var collection = await AppService.GetOrganizationUsersAsync(id);
 			foreach (var item in collection)
 			{
-				var roles = await AppService.GetProductRolesAsync(id, Services.Billing.ProductIdEnum.AllyisApps);
 				OrganizationRoleEnum orgRole = (OrganizationRoleEnum)item.OrganizationRoleId;
 
-				var role = roles.FirstOrDefault(x => x.ProductRoleId == item.OrganizationRoleId);
 				var data = new OrganizationMembersViewModel.ViewModelItem
 				{
 					Email = item.Email,

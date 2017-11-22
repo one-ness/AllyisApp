@@ -99,7 +99,7 @@ namespace AllyisApps.Services
 			{
 				var roles = new List<InvitationPermissionsJson>();
 				try
-				{ 
+				{
 					roles = Newtonsoft.Json.JsonConvert.DeserializeObject<List<InvitationPermissionsJson>>(invite.ProductRolesJson);
 				}
 				catch
@@ -779,7 +779,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// get the list of roles for the given product, for the given organization
 		/// </summary>
-		public async Task<List<ProductRole>> GetProductRolesAsync(int orgId, ProductIdEnum pid)
+		public async Task<List<ProductRole>> GetProductRoles(int orgId, ProductIdEnum pid)
 		{
 			// NOTE: orgid is ignored for now
 			if (pid < 0) throw new ArgumentOutOfRangeException(nameof(pid));

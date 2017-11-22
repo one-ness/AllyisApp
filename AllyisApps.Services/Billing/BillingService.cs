@@ -413,8 +413,9 @@ namespace AllyisApps.Services
 			return result;
 		}
 
-		public List<SubscriptionUser> GetSubscriptionUsers(int subscriptionId)
+		public async Task<List<SubscriptionUser>> GetSubscriptionUsers(int subscriptionId)
 		{
+			await CheckSubscriptionAction(OrgAction.EditSubscriptionUser, subscriptionId);
 			var subUsers = DBHelper.GetSubscriptionUsersBySubscriptionId(subscriptionId);
 			return subUsers.Select(InitializeSubscriptionUser).ToList();
 		}
@@ -617,8 +618,7 @@ namespace AllyisApps.Services
 			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException(nameof(subscriptionId));
 			if (string.IsNullOrWhiteSpace(subscriptionName)) throw new ArgumentNullException(nameof(subscriptionName));
 
-			Subscription sub = await GetSubscription(subscriptionId);
-			CheckOrgAction(OrgAction.EditSubscription, sub.OrganizationId);
+			await CheckSubscriptionAction(OrgAction.EditSubscription, subscriptionId);
 			DBHelper.UpdateSubscriptionName(subscriptionId, subscriptionName);
 		}
 

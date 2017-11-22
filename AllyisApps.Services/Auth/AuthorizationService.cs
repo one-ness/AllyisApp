@@ -125,12 +125,9 @@ namespace AllyisApps.Services
 						switch (action)
 						{
 							case OrgAction.ReadOrganization:
-								// all members can read organization details
-								result = true;
-								break;
-
+							case OrgAction.ReadSubscription:
 							case OrgAction.ReadUsersList:
-								// all members can read other user list
+								// all members can read organization details
 								result = true;
 								break;
 						}

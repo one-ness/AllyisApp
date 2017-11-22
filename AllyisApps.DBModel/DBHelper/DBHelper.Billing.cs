@@ -212,8 +212,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@subscriptionId", subscriptionId);
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var results = await connection.QueryAsync<string>("[Billing].[GetSubscriptionName]", parameters, commandType: CommandType.StoredProcedure);
-				return results.SingleOrDefault();
+				return await connection.QuerySingleOrDefaultAsync<string>("[Billing].[GetSubscriptionName]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -228,7 +227,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@productId", productId);
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<ProductDBEntity>("[Billing].[GetProductById]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				return connection.QuerySingleOrDefault<ProductDBEntity>("[Billing].[GetProductById]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 

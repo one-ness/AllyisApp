@@ -69,7 +69,7 @@ namespace AllyisApps.Controllers.Auth
 			var orgSubs = await AppService.GetSubscriptionsAsync(sub.OrganizationId);
 
 
-			var subUsers = AppService.GetSubscriptionUsers(id);
+			var subUsers = await AppService.GetSubscriptionUsers(id);
 			var organizationMembers = AppService.GetOrganizationMemberList(sub.OrganizationId);
 
 			//Get Strings speffic to Product for page
@@ -129,7 +129,7 @@ namespace AllyisApps.Controllers.Auth
 			var sub = await AppService.GetSubscription(id);
 			var orgSubs = await AppService.GetSubscriptionsAsync(sub.OrganizationId);
 
-			var subUsers = AppService.GetSubscriptionUsers(id);
+			var subUsers = await AppService.GetSubscriptionUsers(id);
 			var organizationMembers = AppService.GetOrganizationMemberList(sub.OrganizationId);
 
 			//Get Strings speffic to Product for page
@@ -190,7 +190,7 @@ namespace AllyisApps.Controllers.Auth
 			var sub = await AppService.GetSubscription(id);
 			var orgSubs = await AppService.GetSubscriptionsAsync(sub.OrganizationId);
 
-			var subUsers = AppService.GetSubscriptionUsers(id);
+			var subUsers = await AppService.GetSubscriptionUsers(id);
 			var organizationMembers = AppService.GetOrganizationMemberList(sub.OrganizationId);
 
 			//Get Strings speffic to Product for page
@@ -229,7 +229,7 @@ namespace AllyisApps.Controllers.Auth
 					ProductName = cursub.ProductName,
 					SubscriptionId = cursub.SubscriptionId,
 					SubscriptionName = cursub.SubscriptionName,
-					ManagePermissionsUrl= GetPermissionsUrl(cursub.ProductId, cursub.SubscriptionId),
+					ManagePermissionsUrl = GetPermissionsUrl(cursub.ProductId, cursub.SubscriptionId),
 				}).OrderBy(cursub => cursub.ProductId).ToList(),
 				SubscriptionId = id,
 				RoleHeader = roleHeader,

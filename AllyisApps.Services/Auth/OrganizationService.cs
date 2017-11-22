@@ -50,28 +50,26 @@ namespace AllyisApps.Services
 
 		public async Task<List<Invitation>> GetInvitationsAsync(int orgId)
 		{
-			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
+			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId), "Organization Id must be greater than 0.");
 
 			CheckOrgAction(OrgAction.ReadInvitationsList, orgId);
-			var collection = await DBHelper.GetInvitationsAsync(orgId, (int)InvitationStatusEnum.Any);
-			var result = new List<Invitation>();
-			foreach (var item in collection)
-			{
-				var data = new Invitation();
-				data.DecisionDateUtc = item.DecisionDateUtc;
-				data.Email = item.Email;
-				data.EmployeeId = item.EmployeeId;
-				data.FirstName = item.FirstName;
-				data.InvitationCreatedUtc = item.InvitationCreatedUtc;
-				data.InvitationId = item.InvitationId;
-				data.InvitationStatus = (InvitationStatusEnum)item.InvitationStatus;
-				data.LastName = item.LastName;
-				data.OrganizationId = orgId;
-				data.ProductRolesJson = item.ProductRolesJson;
-				result.Add(data);
-			}
 
-			return result;
+			var collection = await DBHelper.GetInvitationsAsync(orgId, (int)InvitationStatusEnum.Any);
+
+			return collection.Select(item => new Invitation
+			{
+				DecisionDateUtc = item.DecisionDateUtc,
+				Email = item.Email,
+				EmployeeId = item.EmployeeId,
+				FirstName = item.FirstName,
+				InvitationCreatedUtc = item.InvitationCreatedUtc,
+				InvitationId = item.InvitationId,
+				InvitationStatus = (InvitationStatusEnum)item.InvitationStatus,
+				LastName = item.LastName,
+				OrganizationId = orgId,
+				ProductRolesJson = item.ProductRolesJson
+			})
+				.ToList();
 		}
 
 		/// <summary>
