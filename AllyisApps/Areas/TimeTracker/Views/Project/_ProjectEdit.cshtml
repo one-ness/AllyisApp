@@ -3,118 +3,98 @@
 @using AllyisApps.ViewModels.TimeTracker.Project
 @model EditProjectViewModel
 
-@{
-	AjaxOptions ao = new AjaxOptions
+@using (Html.BeginForm((string)ViewBag.Action, ControllerConstants.Project, FormMethod.Post, new { @class = "row", id = "ProjectForm", role = "form", name = "EditForm", onsubmit = "return selectAll()" }))
+{
+	@Html.AntiForgeryToken()
+	@Html.ValidationSummary(true)
+	@Html.HiddenFor(m => m.ParentCustomerId)
+	@Html.HiddenFor(m => m.ProjectId)
+	@Html.HiddenFor(m => m.IsCreating)
+	@Html.HiddenFor(m => m.OrganizationId)
+	@Html.HiddenFor(m => m.SubscriptionId)
+	@Html.HiddenFor(m => m.SubscriptionName)
+	@Html.HiddenForEnumerable(m => m.Customers, true)
+	@Html.HiddenForEnumerable(m => m.SubscriptionUsers, true)
+	@Html.HiddenForEnumerable(m => m.ProjectUsers, true)
+	<div class="col-xs-12 col-sm-6 form-group">
+		@Html.ReqLabelFor(m => m.ProjectName, Strings.Name)
+		@Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control" })
+		@Html.ValidationMessageFor(x => x.ProjectName, "", new { @class = "text-danger" })
+	</div>
+	<div class="col-xs-12 col-sm-6 form-group">
+		@Html.ReqLabelFor(m => m.ProjectCode, Strings.ProjectCode)
+		@Html.TextBoxFor(m => m.ProjectCode, new { @class = "form-control", maxlength = "16", placeholder = Model.ProjectCode })
+		@Html.ValidationMessageFor(x => x.ProjectCode, "", new { @class = "text-danger" })
+	</div>
+	if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)
 	{
-		UpdateTargetId = "OrgEditWrap"
-	};
-	//Layout = "~/Views/Shared/_LayoutModal.cshtml";
-	string action = ViewBag.Action;
+		<div class="col-xs-12 col-sm-6 form-group">
+			<label>@Strings.Customer</label>
+			@Html.DropDownListFor(m => m.CustomerId, Model.Customers.AsEnumerable(), new { @class = "form-control" })
+			@Html.ValidationMessageFor(m => m.CustomerId, "", new { @class = "text-danger" })
+		</div>
+	}
+	<div class="col-xs-12 swapper-ui" id="swapper-ui">
+		<div class="left">
+			<label>@Strings.OffProj</label>
+			@*<input type="text" placeholder=@AllyisApps.Resources.TimeTracker.Views.Project.Strings.SearchPlaceholder class="form-control" />*@
+			@*
+				Create a multi-select list that is populated from SubscriptionUsers
+				Uses Javascript and the add/remove buttons to add and remove items from this listbox
+			*@
+			@Html.ListBoxFor(m => m.SubscriptionUsers, new MultiSelectList(Model.SubscriptionUsers, "UserId", "Name"), new { name = "Excluded", id = "excluded-users", @class = "filter-list", Multiple = "multiple" })
+		</div>
+		<div class="actions">
+			<a href="javascript: moveSelectedProjectEditModal('in')" class="btn btn-default move-in">
+				<i class="fa fa-lg fa-arrow-right"></i>
+			</a>
+			<a href="javascript: moveSelectedProjectEditModal('out')" class="btn btn-default move-out">
+				<i class="fa fa-lg fa-arrow-left"></i>
+			</a>
+		</div>
+		<div class="right">
+			<label>@Strings.OnProj</label>
+			@*<input type="text" placeholder="@AllyisApps.Resources.TimeTracker.Views.Project.Strings.SearchPlaceholder" class="form-control" />*@
+			@*
+				Create a multi-select list that is populated from ProjectUsers and binds all selected items to SelectedProjectUserIds
+				On Submit, all items in this list become selected, so the whole list is bound to the model
+				Items are added and removed from this list via Javascript and the add / remove buttons
+			*@
+			@Html.ListBoxFor(m => m.SelectedProjectUserIds, new MultiSelectList(Model.ProjectUsers, "UserId", "Name"), new { name = "Included", id = "included-users", @class = "filter-list", Multiple = "multiple" })
+		</div>
+	</div>
+	<div class="col-xs-12 col-sm-5 form-group">
+		<label>@Strings.StartDate</label>
+		<div class="input-group">
+			<input type="text"
+					class="form-control"
+					id="StartDate"
+					name="StartDate"
+					value="@(Model.StartDate != null
+						? Model.StartDate.Value.ToString("d", CultureInfo.InvariantCulture)
+						: "")">
+			<div class="input-group-addon" style="cursor: pointer">
+				<span class="glyphicon glyphicon-calendar"></span>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-12 col-sm-offset-2 col-sm-5 form-group">
+		<label>@Strings.EndDate</label>
+		<div class="input-group">
+			<input type="text"
+					class="form-control"
+					id="EndDate"
+					name="EndDate"
+					value="@(Model.EndDate != null
+						? Model.EndDate.Value.Date.ToString("d", CultureInfo.InvariantCulture)
+						: "")">
+			<div class="input-group-addon" style="cursor: pointer">
+				<span class="glyphicon glyphicon-calendar"></span>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-12 text-right">
+		<input type="button" class="btn btn-default" value=@Strings.Cancel onclick="location = '@Url.Action(ActionConstants.Index, ControllerConstants.Project, new {subscriptionId = Model.SubscriptionId})'"/>
+		<input type="submit" value=@Strings.Save class="btn btn-primary" id="submitProject"/>
+	</div>
 }
-
-<div class="shrink-wrap-center">
-	<div>
-		@using (Html.BeginForm(action, ControllerConstants.Project, FormMethod.Post, new { @class = "", id = "ProjectForm", role = "form", name = "EditForm", onsubmit = "return selectAll()" }))
-		{
-			<div>
-				@Html.AntiForgeryToken()
-				@Html.ValidationSummary(true)
-				<div class="form-group">
-					@Html.ReqLabelFor(m => m.ProjectName, Strings.Name)
-					@Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control" })
-					@Html.ValidationMessageFor(x => x.ProjectName, "", new { @class = "text-danger" })
-				</div>
-				<div class="form-group">
-					@Html.ReqLabelFor(m => m.ProjectCode, Strings.ProjectCode)
-					@Html.TextBoxFor(m => m.ProjectCode, new { @class = "form-control", maxlength = "16", placeholder = Model.ProjectCode })
-					@Html.ValidationMessageFor(x => x.ProjectCode, "", new { @class = "text-danger" })
-				</div>
-				<div id="swapper-ui" class="swapper-ui">
-					<div class="left">
-						<label>@Strings.OffProj</label>
-						@*<input type="text" placeholder=@AllyisApps.Resources.TimeTracker.Views.Project.Strings.SearchPlaceholder class="form-control" />*@
-						@*
-							Create a multi-select list that is populated from SubscriptionUsers
-							Uses Javascript and the add/remove buttons to add and remove items from this listbox
-						*@
-						@Html.ListBoxFor(m => m.SubscriptionUsers, new MultiSelectList(Model.SubscriptionUsers, "UserId", "Name"), new { name = "Excluded", id = "excluded-users", @class = "filter-list", Multiple = "multiple" })
-					</div>
-					<div class="actions">
-						<a href="javascript: moveSelectedProjectEditModal('in')" class="btn btn-default move-in">
-							<i class="fa fa-lg fa-arrow-right"></i>
-						</a>
-						<a href="javascript: moveSelectedProjectEditModal('out')" class="btn btn-default move-out">
-							<i class="fa fa-lg fa-arrow-left"></i>
-						</a>
-					</div>
-					<div class="right">
-						<label>@Strings.OnProj</label>
-						@*<input type="text" placeholder="@AllyisApps.Resources.TimeTracker.Views.Project.Strings.SearchPlaceholder" class="form-control" />*@
-						@*
-							Create a multi-select list that is populated from ProjectUsers and binds all selected items to SelectedProjectUserIds
-							On Submit, all items in this list become selected, so the whole list is bound to the model
-							Items are added and removed from this list via Javascript and the add / remove buttons
-						*@
-						@Html.ListBoxFor(m => m.SelectedProjectUserIds, new MultiSelectList(Model.ProjectUsers, "UserId", "Name"), new { name = "Included", id = "included-users", @class = "filter-list", Multiple = "multiple" })
-					</div>
-				</div>
-				@if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)
-				{
-					<div class="form-group row" style="margin-bottom:0;margin-top: 15px;">
-						<div class=" form-group col-xs-12 col-sm-5">
-							<label>@Strings.Customer</label>
-							@Html.DropDownListFor(m => m.CustomerId, Model.Customers.AsEnumerable(), new { @class = "form-control" })
-							@Html.ValidationMessageFor(m => m.CustomerId, "", new { @class = "text-danger" })
-						</div>
-					</div>
-				}
-				<div class="form-group row" style="margin-bottom: 0; margin-top: 15px;">
-					<div class="form-group col-xs-12 col-sm-5">
-						<label>@Strings.StartDate</label>
-						<div class="input-group">
-							<input type="text"
-								   class="form-control"
-								   id="StartDate"
-								   name="StartDate"
-								   value="@(Model.StartDate != null
-								        ? Model.StartDate.Value.ToString("d", CultureInfo.InvariantCulture)
-								        : "")">
-							<div class="input-group-addon" style="cursor: pointer">
-								<span class="glyphicon glyphicon-calendar"></span>
-							</div>
-						</div>
-					</div>
-					<div class="form-group col-xs-12 col-sm-offset-2 col-sm-5">
-						<label>@Strings.EndDate</label>
-						<div class="input-group">
-							<input type="text"
-								   class="form-control"
-								   id="EndDate"
-								   name="EndDate"
-								   value="@(Model.EndDate != null
-								        ? Model.EndDate.Value.Date.ToString("d", CultureInfo.InvariantCulture)
-								        : "")">
-							<div class="input-group-addon" style="cursor: pointer">
-								<span class="glyphicon glyphicon-calendar"></span>
-							</div>
-						</div>
-					</div>
-				</div>
-				@Html.HiddenFor(m => m.ParentCustomerId)
-				@Html.HiddenFor(m => m.ProjectId)
-				@Html.HiddenFor(m => m.IsCreating)
-				@Html.HiddenFor(m => m.OrganizationId)
-				@Html.HiddenFor(m => m.SubscriptionId)
-				@Html.HiddenFor(m => m.SubscriptionName)
-				@Html.HiddenForEnumerable(m => m.Customers, true)
-				@Html.HiddenForEnumerable(m => m.SubscriptionUsers, true)
-				@Html.HiddenForEnumerable(m => m.ProjectUsers, true)
-			</div>
-
-			<div class="pull-right" style="padding-top: 15px; padding-bottom: 15px;">
-				<input type="button" class="btn btn-default" value=@Strings.Cancel onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Project, new { subscriptionId = Model.SubscriptionId })'" />
-				<input type="submit" value=@Strings.Save class="btn btn-primary" id="submitProject" />
-			</div>
-		}
-	</div><!-- /.modal-content -->
-</div><!-- /.modal-dialog -->
