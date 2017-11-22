@@ -41,9 +41,10 @@ namespace AllyisApps.Controllers.Auth
 					ProductAndRoleNames = new List<Tuple<string, string>>()
 				};
 
-				var productRoleNames = JsonConvert.DeserializeObject<List<InvitationPermissionsJson>>(item.ProductRolesJson);
+				var productRoleNames = JsonConvert.DeserializeObject<List<InvitationPermissionsJson>>(item.ProductRolesJson) ?? new List<InvitationPermissionsJson>();
 				foreach (var invitation in productRoleNames)
 				{
+					
 					var productInfo = await AppService.GetSubscription(invitation.SubscriptionId);
 
 					data.ProductAndRoleNames.Add(new Tuple<string, string>(
