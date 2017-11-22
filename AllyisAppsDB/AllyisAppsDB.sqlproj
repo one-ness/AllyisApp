@@ -93,6 +93,7 @@
     <Folder Include="StaffingManager\Tables" />
     <Folder Include="Lookup\User Defined Types" />
     <Folder Include="StaffingManager\User Defined Types" />
+    <Folder Include="Auth\Functions" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TimeTracker\Tables\Holiday.sql" />
@@ -399,6 +400,7 @@
     <Build Include="Auth\Stored Procedures\GetOrgUserCount.sql" />
     <Build Include="Auth\Stored Procedures\GetOrgInvitationCount.sql" />
     <Build Include="Billing\Stored Procedures\GetSubscriptionRoleForUser.sql" />
+    <Build Include="Auth\Functions\GetUserCount.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

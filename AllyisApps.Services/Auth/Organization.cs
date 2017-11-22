@@ -97,6 +97,11 @@ namespace AllyisApps.Services.Auth
 		/// </summary>
 		public bool IsInvitationsLoaded { get; set; }
 
+		/// <summary>
+		/// Gets or sets the count of users in the organization.
+		/// </summary>
+		public int UserCount { get; set; }
+
 		public Organization()
 		{
 			Address = new Address();
