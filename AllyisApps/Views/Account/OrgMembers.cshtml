@@ -37,23 +37,23 @@
 					<tr>
 						@if (Model.CanEditUser)
 						{
-							<td class="col-md-1"><input class="checkbox-inline members-checkbox" type="checkbox" value="@item.UserId" /></td>
+							<td><input class="checkbox-inline members-checkbox" type="checkbox" value="@item.UserId" /></td>
 						}
 						@if (!Model.CanEditUser)
 						{
-							<td class="col-md-1"></td> }
-						<td class="col-md-2">@item.Username</td>
-						<td class="col-md-3">@item.Email</td>
-						<td class="col-md-2">@item.EmployeeId</td>
-						<td class="col-md-2">@item.FormattedJoinedDate</td>
-						<td class="col-md-1">@item.RoleName</td>
+							<td></td> }
+						<td>@item.Username</td>
+						<td>@item.Email</td>
+						<td>@item.EmployeeId</td>
+						<td>@item.FormattedJoinedDate</td>
+						<td>@item.RoleName</td>
 						@if (Model.CanEditUser)
 						{
-							<td class="col-md-1"><a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account, new { @id = Model.OrganizationId, @userId = item.UserId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a></td>
+							<td><a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account, new { @id = Model.OrganizationId, @userId = item.UserId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a></td>
 						}
 						@if (!Model.CanEditUser)
 						{
-							<td class="col-md-1"><a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account, new { @id = Model.OrganizationId, @userId = item.UserId })" title="@Strings.EditUser"><i class="fa fa-fw fa-television"></i></a></td>
+							<td><a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account, new { @id = Model.OrganizationId, @userId = item.UserId })" title="@Strings.EditUser"><i class="fa fa-fw fa-television"></i></a></td>
 						}
 					</tr>
 				}

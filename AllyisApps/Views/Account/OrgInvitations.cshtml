@@ -11,13 +11,10 @@
 		<div class="row">
 			<div class="col-xs-12">
 				@Html.Partial("_MembersAndInvitationsTab", Model.TabInfo)
-				<div class="row" style="margin-bottom: 20px;">
-					<div class="col-xs-12">
-						<p><i>You have not sent any invitations. Click on Add Members to invite users to your organization</i>
-						</p>
-					</div>
-				</div><br/>
 				<div class="row">
+					<div class="col-xs-12" style="margin-bottom: 20px;">
+						<p><i>You have not sent any invitations. Click on Add Members to invite users to your organization</i></p>
+					</div>
 					<div class="col-xs-12">
 						<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)"
 						   class="btn btn-default pull-left" title="@Strings.Back"><i class="fa fa-caret-left"></i>&nbsp;@Strings.Back</a>
@@ -48,16 +45,15 @@ else
 					@foreach (var item in Model.Invitations)
 					{
 						<tr>
-							<td class="col-md-1"><input class="checkbox-inline invitations-checkbox" name="checkbox" id="checkbox" type="checkbox" value="@item.InvitationId"/></td>
-							<td class="col-md-3">@item.Username</td>
-							<td class="col-md-2">@item.Email</td>
-							<td class="col-md-1">@item.EmployeeId</td>
-							<td class="col-md-2">@item.FormattedInvitedOnDate</td>
-							<td class="col-md-2">
+							<td><input class="checkbox-inline invitations-checkbox" name="checkbox" id="checkbox" type="checkbox" value="@item.InvitationId"/></td>
+							<td>@item.Username</td>
+							<td>@item.Email</td>
+							<td>@item.EmployeeId</td>
+							<td>@item.FormattedInvitedOnDate</td>
+							<td>
 								@foreach (var role in item.ProductAndRoleNames)
 								{
-									var data = string.Format("{0}: {1}", role.Item1, role.Item2);
-									<div>@data</div>
+									<div><strong>@role.Item1:</strong> @role.Item2</div>
 								}
 							</td>
 							<td>@item.Status</td>

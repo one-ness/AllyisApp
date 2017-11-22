@@ -50,28 +50,26 @@ namespace AllyisApps.Services
 
 		public async Task<List<Invitation>> GetInvitationsAsync(int orgId)
 		{
-			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
+			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId), "Organization Id must be greater than 0.");
 
 			CheckOrgAction(OrgAction.ReadInvitationsList, orgId);
-			var collection = await DBHelper.GetInvitationsAsync(orgId, (int)InvitationStatusEnum.Any);
-			var result = new List<Invitation>();
-			foreach (var item in collection)
-			{
-				var data = new Invitation();
-				data.DecisionDateUtc = item.DecisionDateUtc;
-				data.Email = item.Email;
-				data.EmployeeId = item.EmployeeId;
-				data.FirstName = item.FirstName;
-				data.InvitationCreatedUtc = item.InvitationCreatedUtc;
-				data.InvitationId = item.InvitationId;
-				data.InvitationStatus = (InvitationStatusEnum)item.InvitationStatus;
-				data.LastName = item.LastName;
-				data.OrganizationId = orgId;
-				data.ProductRolesJson = item.ProductRolesJson;
-				result.Add(data);
-			}
 
-			return result;
+			var collection = await DBHelper.GetInvitationsAsync(orgId, (int)InvitationStatusEnum.Any);
+
+			return collection.Select(item => new Invitation
+			{
+				DecisionDateUtc = item.DecisionDateUtc,
+				Email = item.Email,
+				EmployeeId = item.EmployeeId,
+				FirstName = item.FirstName,
+				InvitationCreatedUtc = item.InvitationCreatedUtc,
+				InvitationId = item.InvitationId,
+				InvitationStatus = (InvitationStatusEnum)item.InvitationStatus,
+				LastName = item.LastName,
+				OrganizationId = orgId,
+				ProductRolesJson = item.ProductRolesJson
+			})
+				.ToList();
 		}
 
 		/// <summary>
@@ -161,7 +159,7 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(employeedId)) throw new ArgumentNullException(nameof(employeedId));
 
 			// Creation of invitation
-			var result = await DBHelper.CreateInvitation(email, firstName, lastName, organizationId, organizationName, (int)organizationRoleId, employeedId, prodJson);
+			var result = await DBHelper.CreateInvitation(email, firstName, lastName, organizationId, (int)organizationRoleId, employeedId, prodJson);
 
 			switch (result)
 			{
@@ -309,7 +307,7 @@ namespace AllyisApps.Services
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
 			CheckOrgAction(OrgAction.ReadInvitationsList, orgId);
-			
+
 
 			return await this.DBHelper.GetOrganizationInvitationCountAsync(orgId, (int)statusMask);
 		}
@@ -411,21 +409,19 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets the product role for a user.
 		/// </summary>
-		/// <param name="productName">Product name.</param>
+		/// <param name="subscriptionId">The subscription that the user belongs to.</param>
 		/// <param name="userId">User Id.</param>
-		/// <param name="orgId"> The Organization Id.</param>
-		/// <returns>The product role.</returns>
-		public string GetProductRoleForUser(string productName, int userId, int orgId)
+		/// <returns>The product role id for the user in the subscription. Returns null if user is not in the subscription or the subscription is inactive.</returns>
+		public Task<int?> GetSubscriptionRoleForUser(int subscriptionId, int userId)
 		{
 			#region Validation
 
-			if (string.IsNullOrEmpty(productName)) throw new ArgumentNullException(nameof(productName), "Product name must have a value.");
-			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId), "User Id cannot be 0 or negative.");
-			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId), "Organization Id cannot be 0 or negative.");
+			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId), "User Id must be greater than 0.");
+			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException(nameof(subscriptionId), "Subscription Id must be greater than 0.");
 
 			#endregion Validation
 
-			return DBHelper.GetProductRoleForUser(productName, orgId, userId);
+			return DBHelper.GetSubscriptionRoleForUser(subscriptionId, userId);
 		}
 
 		#region Info-DBEntity Conversions
