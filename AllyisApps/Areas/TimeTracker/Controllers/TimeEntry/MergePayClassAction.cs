@@ -37,7 +37,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			string sourcePayClassName = allPayClasses.Where(pc => pc.PayClassId == userId).ElementAt(0).PayClassName;
 
 			// Built-in, non-editable pay classes cannot be merged
-			if (sourcePayClassName == "Regular" || sourcePayClassName == "Overtime" || sourcePayClassName == "Holiday" || sourcePayClassName == "Paid Time Off" || sourcePayClassName == "Unpaid Time Off")
+			if (sourcePayClassName == PayClassId.Regular.GetEnumName() ||
+				sourcePayClassName == PayClassId.OverTime.GetEnumName() ||
+				sourcePayClassName == PayClassId.Holiday.GetEnumName() ||
+				sourcePayClassName == PayClassId.PaidTimeOff.GetEnumName() ||
+				sourcePayClassName == PayClassId.UnpaidTimeOff.GetEnumName())
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.CannotMergePayClass, Variety.Warning));
 				return RedirectToAction(ActionConstants.SettingsPayClass, new { subscriptionId = subscriptionId });

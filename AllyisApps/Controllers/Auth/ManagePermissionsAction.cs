@@ -40,100 +40,19 @@ namespace AllyisApps.Controllers.Auth
 			{ Strings.SetOwner, (int)OrganizationRoleEnum.Owner }
 		};
 
-		/*
-		/// <summary>
-		/// Get page to edit SubscriptionPermissions
-		/// </summary>
-		/// <param name="id">Subscription ID</param>
-		/// <returns></returns>
-		[HttpGet]
-		public async Task<ActionResult> ManageSubPermissions(int id)
-		{
-			var sub = await AppService.GetSubscription(id);
-			var orgSubs = await AppService.GetSubscriptionsAsync(sub.OrganizationId);
-
-			var subUsers = AppService.GetSubscriptionUsers(id);
-			var organizationMembers = AppService.GetOrganizationMemberList(sub.OrganizationId);
-
-			//Get Strings speffic to Product for page
-			Dictionary<int, string> roles = null;
-			Dictionary<string, int> actions = null;
-			string roleHeader = null;
-			string actionGroup = null;
-			switch (sub.ProductId)
-			{
-				case ProductIdEnum.TimeTracker:
-					roles = ttRoles;
-					actions = setTTRoles;
-					roleHeader = Strings.TimeTrackerRole;
-					actionGroup = Strings.TimeTracker;
-					break;
-
-				case ProductIdEnum.ExpenseTracker:
-					roles = etRoles;
-					actions = setETRoles;
-					roleHeader = Strings.ExpenseTrackerRole;
-					actionGroup = Strings.ExpenseTracker;
-					break;
-
-				case ProductIdEnum.StaffingManager:
-					throw new NotImplementedException("StaffingManager permissions not implmented");
-			}
-
-			List<UserPermssionViewModel> orgUsers = organizationMembers.Select(orgU => new UserPermssionViewModel
-			{
-				CurrentRole = ProductRole.NotInProduct,
-				CurrentRoleName = Strings.Unassigned,
-				FullName = $"{orgU.FirstName} {orgU.LastName}",
-				Email = orgU.Email,
-				IsChecked = false,
-				UserId = orgU.UserId
-			}).OrderBy(orgU => orgU.FullName).ToList();
-
-			foreach (var subU in subUsers)
-			{
-				var orgUserWithSub = orgUsers.First(orgU => orgU.UserId == subU.UserId);
-				orgUserWithSub.CurrentRole = subU.ProductRoleId;
-				orgUserWithSub.CurrentRoleName = roles[subU.ProductRoleId];
-			}
-
-			PermissionsViewModel model = new PermissionsViewModel
-			{
-				Actions = actions,
-				OrganizationId = sub.OrganizationId,
-				ActionGroup = actionGroup,
-				PossibleRoles = roles,
-				ProductId = (int)sub.ProductId,
-				CurrentSubscriptions = orgSubs.Select(cursub => new PermissionsViewModel.OrganizaionSubscriptionsViewModel
-				{
-					ProductId = (int)cursub.ProductId,
-					ProductName = cursub.ProductName,
-					SubscriptionId = cursub.SubscriptionId,
-					SubscriptionName = cursub.SubscriptionName,
-					ManagePermissionsUrl = getPermissionsUrl(cursub.ProductId,cursub.SubscriptionId)
-				}).OrderBy(cursub => cursub.ProductId).ToList(),
-				SubscriptionId = id,
-				RoleHeader = roleHeader,
-				RemoveUserMessage = "Are you sure you want to remove selcted Users from Subscription",
-				Users = orgUsers
-			};
-
-			await Task.Delay(1);
-			return View("PermissionsOrg", model);
-		}
-		*/
-
 		private string GetPermissionsUrl(ProductIdEnum productId, int subscripitonId)
 		{
 			switch (productId)
 			{
 				case ProductIdEnum.TimeTracker:
 					return Url.Action("ManageTimeTrackerPermissions", new { id = subscripitonId });
+
 				case ProductIdEnum.ExpenseTracker:
 					return Url.Action("ManageExpensetrackerPermissions", new { id = subscripitonId });
 
 				case ProductIdEnum.StaffingManager:
 					return Url.Action("ManageStaffingManagerPermissions", new { id = subscripitonId });
+
 				default:
 					throw new ArgumentOutOfRangeException(nameof(productId), "Product id is not in system");
 			}

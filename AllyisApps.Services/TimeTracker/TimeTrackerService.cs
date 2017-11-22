@@ -153,7 +153,7 @@ namespace AllyisApps.Services
 
 			var jsonDic = new Dictionary<string, string>
 			{
-				{"type", PayPeriodType.Duration.ToString()},
+				{"type", PayPeriodType.Duration.GetEnumName()},
 				{"duration", duration.ToString()},
 				{"startDate", startDate.ToString("d")}
 			};

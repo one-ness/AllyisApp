@@ -10,9 +10,6 @@
 <div class="container">
 	<div class="row">
 		<div class="col-xs-12" style="margin-bottom:5px;">
-			<span class="pull-right">
-				<a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default" title="Add/Upgrade Subscriptions">Add Subscriptions</a>
-			</span>
 		</div>
 		<div class="col-xs-12" style="margin-bottom:5px;">
 			@if (Model.Subscriptions.Count > 0)
@@ -47,9 +44,6 @@
 						</tr>
 					}
 					<tr>
-						<td>
-							<a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { id = Model.OrganizationId })" title="Add/Upgrade Subscriptions" style="text-decoration: underline"><em>Add Subscriptions</em></a>
-						</td>
 						<td></td><td></td><td></td><td></td>
 					</tr>
 				</table>
@@ -61,9 +55,9 @@
 				<p><i>Please click on add subscriptions button to subscribe to our products.</i></p>
 			}
 		</div>
-		<div class="col-xs-12" style="margin-bottom:5px;">
-			<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)"
-				class="btn btn-default pull-left" title="@Strings.Back"><i class="fa fa-caret-left"></i>@Strings.Back</a>
+		<div class="form-group allyis-action-buttons">
+			<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)" class="btn btn-default" title="@Strings.Back"><i class="fa fa-caret-left"></i> @Strings.Back</a>
+			<a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-primary btn-gray" title="Add/Upgrade Subscriptions">Add Subscriptions</a>
 		</div>
 	</div>
 </div>

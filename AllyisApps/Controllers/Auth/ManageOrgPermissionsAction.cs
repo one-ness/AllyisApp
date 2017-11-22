@@ -4,15 +4,16 @@ using System.Web.Mvc;
 using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
+
 namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public partial class AccountController : BaseController
 	{
 		/// <summary>
-		/// Manage Organizaion 
+		/// Manage Organizaion
 		/// </summary>
 		/// <param name="id">Organizaion Id.</param>
 		/// <returns></returns>
@@ -56,9 +57,7 @@ namespace AllyisApps.Controllers.Auth
 				}).OrderBy(orgU => orgU.FullName).ToList()
 			};
 			foreach (var user in perModel.Users) if (user.UserId == perModel.UserId) user.IsCurrentUser = true;
-			await Task.Delay(1);
 			return View("PermissionsOrg", perModel);
 		}
-
 	}
 }

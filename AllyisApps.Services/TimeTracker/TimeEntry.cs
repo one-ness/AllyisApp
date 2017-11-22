@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using AllyisApps.Services;
 
 namespace AllyisApps.Services.TimeTracker
 {
@@ -98,7 +99,8 @@ namespace AllyisApps.Services.TimeTracker
 		/// </summary>
 		public string getTimeEntryStatusName()
 		{
-			return ((TimeEntryStatus)TimeEntryStatusId).ToString();
+			TimeEntryStatus status = ((TimeEntryStatus)TimeEntryStatusId);
+			return status.GetEnumName();
 		}
 
 		/// <summary>

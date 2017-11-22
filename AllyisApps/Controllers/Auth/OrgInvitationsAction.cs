@@ -12,7 +12,6 @@ using System.Web.Mvc;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.Auth;
 using Newtonsoft.Json;
-
 namespace AllyisApps.Controllers.Auth
 {
 	/// <summary>
@@ -37,11 +36,11 @@ namespace AllyisApps.Controllers.Auth
 					EmployeeId = item.EmployeeId,
 					InvitationId = item.InvitationId,
 					InvitedOn = item.InvitationCreatedUtc,
-					Status = item.InvitationStatus.ToString(),
-					Username = $"{item.FirstName} {item.LastName}"
+					Status = item.InvitationStatus.GetEnumName(),
+					Username = $"{item.FirstName} {item.LastName}",
+					ProductAndRoleNames = new List<Tuple<string, string>>()
 				};
 
-				data.ProductAndRoleNames = new List<Tuple<string, string>>();
 				var productRoleNames = JsonConvert.DeserializeObject<List<InvitationPermissionsJson>>(item.ProductRolesJson);
 				foreach (var invitation in productRoleNames)
 				{

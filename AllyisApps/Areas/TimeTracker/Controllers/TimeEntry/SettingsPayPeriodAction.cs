@@ -42,7 +42,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			model.OrganizationId = organizationId;
 			model.SubscriptionName = subName;
 			model.UserId = AppService.UserContext.UserId;
-			model.PayPeriodTypeId = payPeriodInfo.type == PayPeriodType.Duration.ToString() ? (int)PayPeriodType.Duration : (int)PayPeriodType.Dates;
+			model.PayPeriodTypeId = payPeriodInfo.type == PayPeriodType.Duration.GetEnumName() ? (int)PayPeriodType.Duration : (int)PayPeriodType.Dates;
 			model.Duration = payPeriodInfo.duration ?? 14;
 			model.StartDate = (DateTime?)payPeriodInfo.startDate;
 			model.Dates = payPeriodInfo.dates == null ? "" : string.Join(",", payPeriodInfo.dates);
@@ -62,18 +62,37 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return View(model);
 			}
 
-			switch ((PayPeriodType)model.PayPeriodTypeId)
+			try
 			{
-				case PayPeriodType.Duration:
-					await AppService.UpdateDurationPayPeriod(model.Duration.Value, model.StartDate.Value, model.OrganizationId);
-					break;
-				case PayPeriodType.Dates:
-					await AppService.UpdateDatesPayPeriod(model.Dates.Trim(' ').Split(',').Select(int.Parse).ToList(), model.OrganizationId);
-					break;
-				default:
-					throw new InvalidEnumArgumentException(nameof(model.PayPeriodTypeId));
-			}
+				switch ((PayPeriodType)model.PayPeriodTypeId)
+				{
+					case PayPeriodType.Duration:
+						await AppService.UpdateDurationPayPeriod(model.Duration.Value, model.StartDate.Value, model.OrganizationId);
+						break;
 
+					case PayPeriodType.Dates:
+						await AppService.UpdateDatesPayPeriod(model.Dates.Trim(' ').Split(',').Select(int.Parse).ToList(), model.OrganizationId);
+						break;
+
+					default:
+						throw new InvalidEnumArgumentException(nameof(model.PayPeriodTypeId));
+				}
+			}
+			catch (ArgumentOutOfRangeException)
+			{
+				Notifications.Add(new BootstrapAlert("Invalid days entered, values must be comma seperated, and between 1 and 28.", Variety.Warning));
+				return RedirectToAction(ActionConstants.SettingsPayPeriod, new { subscriptionId = model.SubscriptionId });
+			}
+			catch (ArgumentNullException)
+			{
+				Notifications.Add(new BootstrapAlert("Start date can't be empty, please enter a values between 1-28.", Variety.Warning));
+				return RedirectToAction(ActionConstants.SettingsPayPeriod, new { subscriptionId = model.SubscriptionId });
+			}
+			catch (NullReferenceException)
+			{
+				Notifications.Add(new BootstrapAlert("Start date can't be empty, please enter a values between 1-28.", Variety.Warning));
+				return RedirectToAction(ActionConstants.SettingsPayPeriod, new { subscriptionId = model.SubscriptionId });
+			}
 			Notifications.Add(new BootstrapAlert(Strings.UpdatePayPeriodSuccess, Variety.Success));
 			return RedirectToAction(ActionConstants.SettingsPayPeriod, new { subscriptionId = model.SubscriptionId });
 		}

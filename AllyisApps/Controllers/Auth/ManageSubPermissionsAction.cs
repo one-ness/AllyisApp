@@ -20,6 +20,7 @@ namespace AllyisApps.Controllers.Auth
 			{ (int)TimeTrackerRole.Manager, Strings.Manager },
 			{ (int)TimeTrackerRole.NotInProduct, Strings.Unassigned }
 		};
+
 		private Dictionary<string, int> setTTRoles = new Dictionary<string, int>
 		{
 			{ Strings.RemoveFromSubscription, -1 },
@@ -27,12 +28,11 @@ namespace AllyisApps.Controllers.Auth
 			{ Strings.SetManager, (int)TimeTrackerRole.Manager }
 		};
 
-
 		private Dictionary<int, string> etRoles = new Dictionary<int, string>
 		{
 			{ (int)ExpenseTrackerRole.User, Strings.User },
 			{ (int)ExpenseTrackerRole.Manager, Strings.Manager },
-			{ (int)ExpenseTrackerRole.SuperUser, "Super User" },
+			{ (int)ExpenseTrackerRole.SuperUser, ExpenseTrackerRole.SuperUser.GetEnumName() },
 			{ (int)ExpenseTrackerRole.NotInProduct, Strings.Unassigned }
 		};
 
@@ -57,6 +57,7 @@ namespace AllyisApps.Controllers.Auth
 			{ Strings.SetUser, (int)StaffingManagerRole.User },
 			{ Strings.SetManager, (int)StaffingManagerRole.Manager },
 		};
+
 		/// <summary>
 		/// ManageTimeTrackerPermissions
 		/// </summary>
@@ -119,7 +120,7 @@ namespace AllyisApps.Controllers.Auth
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
@@ -169,7 +170,6 @@ namespace AllyisApps.Controllers.Auth
 					SubscriptionId = cursub.SubscriptionId,
 					SubscriptionName = cursub.SubscriptionName,
 					ManagePermissionsUrl = GetPermissionsUrl(cursub.ProductId, cursub.SubscriptionId)
-
 				}).OrderBy(cursub => cursub.ProductId).ToList(),
 				SubscriptionId = id,
 				RoleHeader = roleHeader,
@@ -180,7 +180,7 @@ namespace AllyisApps.Controllers.Auth
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
@@ -253,9 +253,9 @@ namespace AllyisApps.Controllers.Auth
 				Notifications.Add(new BootstrapAlert(string.Format(UsersAddedMessage, updatedAndAdded.UsersAddedToSubscription), Variety.Success));
 			}
 		}
-		bool Validate(UserPermissionsAction model, ProductIdEnum product)
-		{
 
+		private bool Validate(UserPermissionsAction model, ProductIdEnum product)
+		{
 			if (model.SelectedUsers == null || model.SelectedUsers.Count() == 0)
 			{
 				Notifications.Add(new BootstrapAlert(Strings.NoUsersSelected, Variety.Danger));
@@ -275,6 +275,4 @@ namespace AllyisApps.Controllers.Auth
 			return true;
 		}
 	}
-
-
 }

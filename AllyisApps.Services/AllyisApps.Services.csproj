@@ -96,6 +96,7 @@
     <Compile Include="Billing\UnitTypeEnum.cs" />
     <Compile Include="Billing\UpdateSubscriptionUserRolesResuts.cs" />
     <Compile Include="Cache\CacheContainer.cs" />
+    <Compile Include="EnumExtensionMethods.cs" />
     <Compile Include="Expense\ExpenseHistory.cs" />
     <Compile Include="Expense\ExpenseFile.cs" />
     <Compile Include="Expense\ExpenseItem.cs" />
