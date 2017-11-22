@@ -51,5 +51,10 @@ namespace AllyisApps.DBModel.Auth
 		/// Gets or sets DateCreated.
 		/// </summary>
 		public DateTime? CreatedUtc { get; set; }
+
+		/// <summary>
+		/// Gets or sets the count of users in the organization.
+		/// </summary>
+		public int UserCount { get; set; }
 	}
 }

@@ -8,6 +8,7 @@ CREATE TABLE [Auth].[Organization] (
     [PhoneNumber]		VARCHAR (16)   NULL,
     [FaxNumber]			VARCHAR (16)   NULL,
     [Subdomain]			NVARCHAR (32)  NULL,
+    [UserCount]			AS ([Auth].[GetUserCount]([OrganizationId])), 
     CONSTRAINT [PK_Organization] PRIMARY KEY CLUSTERED ([OrganizationId] ASC),
 );
 
