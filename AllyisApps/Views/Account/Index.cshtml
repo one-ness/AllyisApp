@@ -34,6 +34,10 @@
 							<span class="address-row">@Model.UserInfo.Address1</span>
 							<span class="address-row">@cityState @Model.UserInfo.PostalCode</span>
 						</p>
+						<p>
+							<label>@Strings.Country:</label>
+							<span class="country-row">@Model.UserInfo.Country</span>
+						</p>
 					</div>
 					<div class="col-sm-3 vertically-stacked-buttons text-right" style="padding-right:5px">
 						<a href="@Url.Action(ActionConstants.ChangePassword, ControllerConstants.Account)" class="btn btn-default btn-full">@Strings.ChangePassword <i class="fa fa-user-secret"></i></a><br/>
