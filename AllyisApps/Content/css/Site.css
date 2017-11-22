@@ -1,42 +1,4 @@
 
-.panel,
-.form-group,
-.table,
-.h4,
-.h3,
-.h2,
-.h1 {
-	margin-bottom: 10px;
-}
-
-.alert {
-	margin-bottom: 0px;
-}
-
-#title .title-headers h1 {
-	margin-bottom: 10px;
-	margin-top: 5px;
-}
-
-.form-grouping .form-group {
-	margin-bottom: 10px;
-}
-
-.pannel-heading {
-	margin-top: 0px;
-	margin-bottom: 0px;
-}
-
-.panel-body .index-details p label {
-	margin-top: 0px;
-	margin-bottom: 0px;
-}
-
-body
-{
-	margin-bottom: 85px;
-}
-
 .shrink-wrap-center
 {
 	text-align: center;
@@ -154,10 +116,10 @@ a#homelink:hover, a#homelink:focus
 	width: inherit;
 }
 
-.footer-bar a
-{
-	margin-right: 10px;
-}
+	.footer-bar a
+	{
+		margin-right: 10px;
+	}
 
 .header-bar
 {
@@ -239,10 +201,6 @@ input.members-checkbox
 	border-bottom: 1px solid transparent;
 	border-top-right-radius: 3px;
 	border-top-left-radius: 3px;
-}
-
-.panel-heading
-{
 	background-color: #f5f5f5;
 }
 
@@ -279,7 +237,6 @@ table
 {
 	display: inline;
 	margin-right: 10px;
-	/*margin-bottom: 10px;*/
 }
 
 input.members-checkbox
@@ -341,4 +298,39 @@ input.members-checkbox
 h1
 {
 	margin-top: 5px;
+}
+
+
+.body .panel,
+.body .form-group,
+.body .form-grouping,
+.body .table,
+.body .h4,
+.body .h3,
+.body .h2,
+.body .h1 {
+	margin-bottom: 10px;
+}
+
+.alert {
+	margin-bottom: 0px;
+}
+
+#title .title-headers h1 {
+	margin-bottom: 10px;
+	margin-top: 5px;
+}
+
+.pannel-heading {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.panel-body .index-details p label {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+body {
+	margin-bottom: 85px;
 }
