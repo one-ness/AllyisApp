@@ -20,6 +20,11 @@
 		/// <summary>
 		/// Holiday.
 		/// </summary>
-		Holiday = 4
+		Holiday = 4,
+
+		/// <summary>
+		/// Overtime.
+		/// </summary>
+		OverTime = 5
 	}
 }

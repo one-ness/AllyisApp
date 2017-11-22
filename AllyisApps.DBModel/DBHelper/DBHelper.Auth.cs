@@ -622,7 +622,6 @@ namespace AllyisApps.DBModel
 			parameters.Add("@firstName", firstName);
 			parameters.Add("@lastName", lastName);
 			parameters.Add("@organizationId", organizationId);
-			parameters.Add("@organizationName", organizationName);
 			parameters.Add("@organizationRole", organizationRoleId);
 			parameters.Add("@employeeId", employeedId);
 			parameters.Add("@prodJson", prodJson);

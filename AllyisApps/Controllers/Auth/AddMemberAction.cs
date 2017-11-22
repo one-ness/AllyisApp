@@ -50,13 +50,12 @@ namespace AllyisApps.Controllers.Auth
 					SubscriptionName = sub.SubscriptionName,
 					SelectList = GetSubRoles(sub.SkuId),
 					SubscriptionId = sub.SubscriptionId,
-
 				}).ToList(),
 				OrgRole = new SelectList(
 					new List<SelectListItem>
 					{
-						new SelectListItem { Text = OrganizationRoleEnum.Member.ToString(), Value = "1"},
-						new SelectListItem { Text = OrganizationRoleEnum.Owner.ToString(), Value = "2" }
+						new SelectListItem { Text = OrganizationRoleEnum.Member.GetEnumName(), Value = ((int)OrganizationRoleEnum.Member).ToString()},
+						new SelectListItem { Text = OrganizationRoleEnum.Owner.GetEnumName(), Value = ((int)OrganizationRoleEnum.Member).ToString()}
 					},
 					"Value",
 					"Text",
@@ -79,10 +78,8 @@ namespace AllyisApps.Controllers.Auth
 			return model;
 		}
 
-
 		private async Task<AddMemberViewModel> reconstuctViewModel(AddMemberViewModel previous)
 		{
-			
 			var subs = await AppService.GetSubscriptionsAsync(previous.OrganizationId);
 			previous.SubscriptionRoles = subs.Select(sub => new RoleItem
 			{
@@ -90,19 +87,19 @@ namespace AllyisApps.Controllers.Auth
 				SubscriptionName = sub.SubscriptionName,
 				SelectList = GetSubRoles(sub.SkuId),
 				SubscriptionId = sub.SubscriptionId,
-
 			}).ToList();
 			previous.OrgRole = new SelectList(
 					new List<SelectListItem>
 					{
-						new SelectListItem { Text = OrganizationRoleEnum.Member.ToString(), Value = "1"},
-						new SelectListItem { Text = OrganizationRoleEnum.Owner.ToString(), Value = "2" }
+						new SelectListItem { Text = OrganizationRoleEnum.Member.GetEnumName(), Value = ((int)OrganizationRoleEnum.Member).ToString()},
+						new SelectListItem { Text = OrganizationRoleEnum.Owner.GetEnumName(), Value = ((int)OrganizationRoleEnum.Member).ToString()}
 					},
 					"Value",
 					"Text",
 					"1");
 			return previous;
 		}
+
 		private static List<SelectListItem> GetSubRoles(SkuIdEnum skuId)
 		{
 			switch (skuId)
@@ -110,26 +107,26 @@ namespace AllyisApps.Controllers.Auth
 				case SkuIdEnum.TimeTrackerBasic:
 					return new List<SelectListItem>
 					{
-						new SelectListItem { Text = Strings.Unassigned, Value = "0"},
-						new SelectListItem { Text = Strings.User, Value = "1"},
-						new SelectListItem { Text = Strings.Manager, Value = "2"}
+						new SelectListItem { Text = TimeTrackerRole.NotInProduct.GetEnumName(), Value = ((int)TimeTrackerRole.NotInProduct).ToString() },
+						new SelectListItem { Text = TimeTrackerRole.User.GetEnumName(), Value = ((int)TimeTrackerRole.User).ToString()},
+						new SelectListItem { Text = TimeTrackerRole.Manager.GetEnumName(), Value = ((int)TimeTrackerRole.Manager).ToString()}
 					};
 
 				case SkuIdEnum.ExpenseTrackerBasic:
 					return new List<SelectListItem>
 					{
-						new SelectListItem { Text = Strings.Unassigned, Value = "0"},
-						new SelectListItem { Text = Strings.User, Value = "1"},
-						new SelectListItem { Text = Strings.Manager, Value = "2"},
-						new SelectListItem { Text = Strings.SuperUser, Value = "4"},
+						new SelectListItem { Text = ExpenseTrackerRole.NotInProduct.GetEnumName(), Value = ((int)ExpenseTrackerRole.NotInProduct).ToString()},
+						new SelectListItem { Text = ExpenseTrackerRole.User.GetEnumName(), Value = ((int)ExpenseTrackerRole.User).ToString()},
+						new SelectListItem { Text = ExpenseTrackerRole.Manager.GetEnumName(), Value = ((int)ExpenseTrackerRole.Manager).ToString()},
+						new SelectListItem { Text = ExpenseTrackerRole.SuperUser.GetEnumName(), Value = ((int)ExpenseTrackerRole.SuperUser).ToString()},
 					};
 
 				case SkuIdEnum.StaffingManagerBasic:
 					return new List<SelectListItem>
 					{
-						new SelectListItem { Text = Strings.Unassigned, Value = "0"},
-						new SelectListItem { Text = Strings.User, Value = "1"},
-						new SelectListItem { Text = Strings.Manager, Value = "2"}
+						new SelectListItem { Text = StaffingManagerRole.NotInProduct.GetEnumName(), Value = ((int)StaffingManagerRole.NotInProduct).ToString()},
+						new SelectListItem { Text = StaffingManagerRole.User.GetEnumName(), Value = ((int)StaffingManagerRole.User).ToString()},
+						new SelectListItem { Text = StaffingManagerRole.Manager.GetEnumName(), Value = ((int)StaffingManagerRole.Manager).ToString()}
 					};
 			}
 			return null;
@@ -194,10 +191,12 @@ namespace AllyisApps.Controllers.Auth
 			}
 			catch (System.Data.DuplicateNameException)
 			{
-				if (AppService.UserContext.Email.Equals(model.Email, StringComparison.CurrentCultureIgnoreCase)){
+				if (AppService.UserContext.Email.Equals(model.Email, StringComparison.CurrentCultureIgnoreCase))
+				{
 					Notifications.Add(new BootstrapAlert(Strings.CannotInviteSelf, Variety.Warning));
 				}
-				else {
+				else
+				{
 					Notifications.Add(new BootstrapAlert(string.Format(Strings.UserAlreadyExists, model.FirstName, model.LastName), Variety.Warning));
 				}
 				return View(reModel);

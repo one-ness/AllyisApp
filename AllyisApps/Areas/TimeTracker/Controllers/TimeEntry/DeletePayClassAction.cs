@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
+using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -32,7 +33,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			// Built-in, non-editable pay classes cannot be deleted
 			// Used pay classes cannot be deleted, suggest manager to merge it with another payclass instead
-			if (sourcePayClassName == "Regular" || sourcePayClassName == "Overtime" || sourcePayClassName == "Holiday" || sourcePayClassName == "Paid Time Off" || sourcePayClassName == "Unpaid Time Off" || AppService.GetTimeEntriesThatUseAPayClass(userId).Count() > 0)
+			if (sourcePayClassName == PayClassId.Regular.GetEnumName() ||
+				sourcePayClassName == PayClassId.OverTime.GetEnumName() ||
+				sourcePayClassName == PayClassId.Holiday.GetEnumName() ||
+				sourcePayClassName == PayClassId.PaidTimeOff.GetEnumName() ||
+				sourcePayClassName == PayClassId.UnpaidTimeOff.GetEnumName() ||
+				AppService.GetTimeEntriesThatUseAPayClass(userId).Count() > 0)
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.CannotDeletePayClass, Variety.Warning));
 			}

@@ -8,10 +8,12 @@ SELECT
 	[Email], 
 	[FirstName], 
 	[LastName], 
-	[OrganizationId],
-	[OrganizationName]
+	[INV].[OrganizationId],
+	[ORG].[OrganizationName],
 	[EmployeeId],
 	[ProductRolesJson]
-FROM [Auth].[Invitation]
-WITH (NOLOCK)
+FROM 
+([Auth].[Invitation] AS [INV] WITH (NOLOCK)
+JOIN [Auth].[Organization] AS [ORG] ON [ORG].[OrganizationId] = [INV].[OrganizationId]) 
+
 WHERE [Email] = @email
