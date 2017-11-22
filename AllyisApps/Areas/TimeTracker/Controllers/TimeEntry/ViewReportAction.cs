@@ -86,7 +86,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			string subName = subNameTask.Result;
 
 			bool canEditOthers = AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId, false);
-			ReportViewModel reportVM = ConstructReportViewModel(AppService.UserContext.UserId, organizationId, canEditOthers, infos.Customers, infos.CompleteProject, showExport, reportVMselect);
+			ReportViewModel reportVM = await ConstructReportViewModel(AppService.UserContext.UserId, organizationId, canEditOthers, infos.Customers, infos.CompleteProject, showExport, reportVMselect);
 			reportVM.SubscriptionName = subName;
 
 			DataExportViewModel dataVM;

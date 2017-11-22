@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.Project;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
@@ -127,10 +128,11 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// </summary>
 		public bool CanManage { get; set; }
 
+
 		/// <summary>
-		/// Gets or sets the start of week.
+		/// Gets or sets the pay period ranges for use with the date range picker.
 		/// </summary>
-		public int StartOfWeek { get; set; }
+		public PayPeriodRanges PayPeriodRanges { get; set; }
 	}
 
 	/// <summary>
