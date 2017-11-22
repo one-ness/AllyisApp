@@ -23,7 +23,7 @@
 	@Scripts.Render("~/bundles/underscore")
 	@RenderSection("css", required: false)
 	<link href="@Url.Content("~/Content/css/Site.css")" rel="stylesheet" type="text/css" />
-	@if (DisplayHints.LayoutThemeBundle != "~/Content.Site")
+	@if (DisplayHints.LayoutThemeBundle != "~/Content/Site")
 	{
 		<link href="@Url.Content(DisplayHints.LayoutThemeBundle.Replace("Content/", "Content/css/") + ".css")" rel="stylesheet" type="text/css" />
 	}

@@ -1,6 +1,7 @@
 
 .header-bar {
 	border: 1px solid #72a8d7;
+	border-width: 1px 5px;
 }
 
 a {
@@ -213,6 +214,12 @@ a {
 		width: 1.28571429em !important;
 		text-align: center !important;
 	}
+
+.btn-primary:hover, .btn-primary:focus {
+	color: #fff;
+	background-color: #286090;
+	border-color: #204d74;
+}
 
 .very-inline-form.edit .button-anim-wrap {
 	width: 80px;
