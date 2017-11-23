@@ -23,6 +23,7 @@ using static AllyisApps.ViewModels.TimeTracker.TimeEntry.TimeEntryOverDateRangeV
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
+	/// <inheritdoc />
 	/// <summary>
 	/// Class which manages Time Entry objects.
 	/// </summary>
