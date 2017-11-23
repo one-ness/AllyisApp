@@ -54,8 +54,13 @@
 								@{
 									var adressCityDispaly = (customer.Address.City != null) ? customer.Address.City + ", " + customer.Address.StateName : customer.Address.StateName;
 								}
-								<p>@customer.Address.Address1</p>
-								<p>@customer.Address.Address2</p>
+								@if(customer.Address.Address1 != null) { 
+									<p>@customer.Address.Address1</p>
+								}
+								@if (customer.Address.Address2 != null)
+								{
+									<p>@customer.Address.Address2</p>
+								}
 								<p>@adressCityDispaly  @customer.Address.PostalCode</p>
 							</td>
 							<td>@customer.EIN</td>
