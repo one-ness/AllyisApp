@@ -401,7 +401,7 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
 				$('.all-check').change(function () {
 					$('.' + rowClass).each(function () {
 						var ele = $(this);
-						if (!ele.hasClass("no-match")) {
+						if (!ele.hasClass("no-match") && !ele.hasClass("currUser")) {
 							ele.find(checkBoxSelector).prop('checked', $('.all-check')[0].checked);
 						}
 					});
