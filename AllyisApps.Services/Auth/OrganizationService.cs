@@ -503,7 +503,8 @@ namespace AllyisApps.Services
 				PhoneNumber = entity.PhoneNumber,
 				SiteUrl = entity.SiteUrl,
 				Subdomain = entity.Subdomain,
-				Address = loadAddress ? getAddress(entity.AddressId) : null
+				Address = loadAddress ? getAddress(entity.AddressId) : null,
+				UserCount = entity.UserCount
 			};
 		}
 
@@ -534,7 +535,8 @@ namespace AllyisApps.Services
 				PhoneNumber = organizationInfo.PhoneNumber,
 				SiteUrl = organizationInfo.SiteUrl,
 				Subdomain = organizationInfo.Subdomain,
-				Address = address
+				Address = address,
+				UserCount = organizationInfo.UserCount
 			};
 		}
 
