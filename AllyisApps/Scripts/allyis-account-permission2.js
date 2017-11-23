@@ -6,7 +6,7 @@ gatherData = function () {
 	// Go through each row and add it to the data if it's checked
 	$('.userRow').each(function () {
 		var userEle = $(this);
-		if (userEle.find("#check")[0].checked) {
+		if (userEle.find("#check")[0].checked && !userEle.find("#check")[0].disabled) {
 			var userResult = {};
 			userResult.userid = userEle.attr("data-id");
 			userResult.name = userEle.attr("data-name");

@@ -308,7 +308,6 @@ namespace AllyisApps.Services
 			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
 			CheckOrgAction(OrgAction.ReadInvitationsList, orgId);
 
-
 			return await this.DBHelper.GetOrganizationInvitationCountAsync(orgId, (int)statusMask);
 		}
 
@@ -394,7 +393,7 @@ namespace AllyisApps.Services
 
 			if (userIds == null || userIds.Count == 0)
 			{
-				throw new ArgumentException("No user ids provided.", nameof(userIds));
+				throw new ArgumentNullException("No user ids provided.", nameof(userIds));
 			}
 			foreach (int id in userIds)
 			{
