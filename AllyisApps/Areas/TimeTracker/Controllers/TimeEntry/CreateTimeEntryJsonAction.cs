@@ -66,20 +66,20 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				DateTime? lockDate = (await AppService.GetSettingsByOrganizationId(AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId)).LockDate;
 				if (durationResult + durationOther > 24.00)
 				{
-					throw new ArgumentException(Strings.CannotExceed24 + " For time entry on date " + Utility.GetDateTimeFromDays(model.Date).ToString());
+					throw new ArgumentException(Strings.CannotExceed24 + " For time entry on date " + Utility.GetDateTimeFromDays(model.Date).ToShortDateString());
 				}
 
 				if (model.ProjectId <= 0)
 				{
-					throw new ArgumentException(Strings.MustSelectProject + " For time entry on date " + Utility.GetDateTimeFromDays(model.Date).ToString());
+					throw new ArgumentException(Strings.MustSelectProject + " For time entry on date " + Utility.GetDateTimeFromDays(model.Date).ToShortDateString());
 				}
 
 				if (model.PayClassId < 1)
 				{
-					throw new ArgumentException(Strings.MustSelectPayClass + " For time entry on date " + Utility.GetDateTimeFromDays(model.Date).ToString());
+					throw new ArgumentException(Strings.MustSelectPayClass + " For time entry on date " + Utility.GetDateTimeFromDays(model.Date).ToShortDateString());
 				}
 
-				if (subInfo.ProductRoleId != (int)TimeTrackerRole.Manager && model.Date <= (lockDate == null ? -1 : Utility.GetDaysFromDateTime(lockDate.Value)))
+				if (model.Date <= (lockDate == null ? -1 : Utility.GetDaysFromDateTime(lockDate.Value)))
 				{
 					throw new ArgumentException(Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
 				}

@@ -331,6 +331,13 @@ function ajaxHandleOverridingResponses(response, relevant_objects) {
         ajaxUpdateValues(relevant_objects.form_element, response.values);
     }
 }
+function setDefalutProject(form_child) {
+	var form_element = $(form_child).parents("form:first");
+	if (form_element[0].ProjectIdDdl.value == -1 && form_element[0].ProjectIdDdl.options.length == 2) {
+		form_element[0].ProjectIdDdl.selectedIndex = 1;
+	}
+}
+
 
 function changeOccur(form_child) {
     var form_element = $(form_child).parents("form:first");
@@ -344,7 +351,7 @@ function changeOccur(form_child) {
     form_element.removeClass("create");
     var edited = form_element.find("[name='IsEdited']")[0]
     edited.setAttribute("value", "True");
-
+	setDefalutProject(form_child)
     form_element[0].ProjectId.value = form_element[0].ProjectIdDdl.value;
 
     form_element[0].PayClassId.value = form_element[0].PayClassNameDdl.value;
