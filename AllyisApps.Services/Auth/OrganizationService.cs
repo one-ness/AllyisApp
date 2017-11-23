@@ -393,11 +393,11 @@ namespace AllyisApps.Services
 
 			if (userIds == null || userIds.Count == 0)
 			{
-				throw new ArgumentNullException("No user ids provided.", nameof(userIds));
+				throw new ArgumentNullException(nameof(userIds), "No user ids provided.");
 			}
-			foreach (int id in userIds)
+			if (userIds.Any(id => id == UserContext.UserId))
 			{
-				if (id == UserContext.UserId) throw new ArgumentException("Can't delete self from the organization.", nameof(userIds));
+				throw new ArgumentException("Cannot delete self from the organization.", nameof(userIds));
 			}
 
 			#endregion Validation

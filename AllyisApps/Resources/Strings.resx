@@ -1646,7 +1646,7 @@
     <value>Cannot update time entries status, there are no statuses selected.</value>
   </data>
   <data name="LockTimeEntriesInvalidLockDate" xml:space="preserve">
-    <value>Cannot set new lock date to {0} because the date is on or before the previous lock or payroll processed date</value>
+    <value>Cannot set new lock date to {0} because the date is on or before the previous payroll processed date</value>
   </data>
   <data name="PayrollProcessConfirm" xml:space="preserve">
     <value>Are you sure you want to payroll process all approved time entries at and before {0}?</value>
@@ -1767,5 +1767,8 @@
   </data>
   <data name="MustBeAssignedToProject" xml:space="preserve">
     <value>User must be assigned to project.</value>
+  </data>
+	<data name="LockTimeEntriesNoChange" xml:space="preserve">
+    <value>Lock date was not changed, it is already set to {0}</value>
   </data>
 </root>
