@@ -34,11 +34,6 @@ namespace AllyisApps.Services.TimeTracker
 		public string OvertimePeriod { get; set; }
 
 		/// <summary>
-		/// Gets or sets the OvertimeMultiplier.
-		/// </summary>
-		public decimal OvertimeMultiplier { get; set; }
-
-		/// <summary>
 		/// Gets or sets the payroll processed date.
 		/// All time entries before this date are completely processed
 		/// </summary>

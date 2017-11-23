@@ -1,4 +1,4 @@
-CREATE PROCEDURE [Auth].[GetOrg]
+CREATE PROCEDURE [Auth].[GetOrganization]
 	@organizationId INT
 AS
 BEGIN
@@ -19,7 +19,8 @@ BEGIN
 		[PhoneNumber], 
 		[FaxNumber], 
 		[Subdomain],
-		[OrganizationCreatedUtc]
+		[OrganizationCreatedUtc],
+		[UserCount]
 	FROM [Auth].[Organization] WITH (NOLOCK)
 		LEFT JOIN [Lookup].[Address]	WITH (NOLOCK) ON [Address].[AddressId] = [Organization].[AddressId]
 		LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryCode] = [Address].[CountryCode]

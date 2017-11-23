@@ -191,7 +191,7 @@
     <Build Include="Auth\Stored Procedures\DeleteOrg.sql" />
     <Build Include="Auth\Stored Procedures\DeleteOrgUser.sql" />
     <Build Include="Auth\Stored Procedures\RejectInvitation.sql" />
-    <Build Include="Auth\Stored Procedures\GetOrg.sql" />
+    <Build Include="Auth\Stored Procedures\GetOrganization.sql" />
     <Build Include="Auth\Stored Procedures\GetOrganizationsByUserId.sql" />
     <Build Include="Auth\Stored Procedures\AcceptInvitation.sql" />
     <Build Include="Auth\Stored Procedures\DeleteInvitation.sql" />

@@ -416,7 +416,6 @@ namespace AllyisApps.Services
 				StartOfWeek = settings.StartOfWeek,
 				OvertimeHours = settings.OvertimeHours,
 				OvertimePeriod = settings.OvertimePeriod,
-				OvertimeMultiplier = settings.OvertimeMultiplier,
 				PayrollProcessedDate = settings.PayrollProcessedDate,
 				LockDate = settings.LockDate,
 				PayPeriod = settings.PayPeriod,

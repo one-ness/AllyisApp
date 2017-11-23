@@ -50,7 +50,7 @@
 			{ // Note: To change the color of offdays/offday entries, edit TimeTracker.css rules for '.table-row .offDay'/'.offDay .form-control', respectively.
 				offDayClass = "offDay";
 			}
-			if (theSample.IsHoliday && !theSample.IsOffDay)
+			else if (theSample.IsHoliday)
 			{
 				holidayClass = "holiday";
 			}

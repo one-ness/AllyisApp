@@ -374,6 +374,14 @@ a {
 	background-color: #f2dede;
 }
 
+.table-row .holiday {
+	background-color: #def2de;
+}
+
+.holiday .form-control {
+	background-color: #def2de;
+}
+
 #resultPartialForm .panel{
 	margin-bottom:10px;
 }

@@ -41,10 +41,6 @@
 									<option value="Month" @(Model.OvertimePeriod == "Month" ? " selected=true" : string.Empty)>@Strings.Month</option>
 								</select><br />
 							</div>
-							<div style="margin:10px">
-								@Strings.WithAMultiplierOf
-								<input type="text" id="mult" name="mult" value='@Model.OvertimeMultiplier.ToString("G10")' class="form-control" style="width: 50px; text-align: center; display: inline-block;" />
-							</div>
 						</div>
 						<div>
 							<input class="btn btn-primary tt-bottom-right" type="submit" value=@Strings.Save />

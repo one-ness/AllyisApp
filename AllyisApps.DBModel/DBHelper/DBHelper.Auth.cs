@@ -495,8 +495,7 @@ namespace AllyisApps.DBModel
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var queryResults = await connection.QueryAsync<dynamic>("[Auth].[GetOrg]", new { organizationId }, commandType: CommandType.StoredProcedure);
-				return queryResults.FirstOrDefault();
+				return await connection.QueryFirstOrDefaultAsync<dynamic>("[Auth].[GetOrganization]", new { organizationId }, commandType: CommandType.StoredProcedure);
 			}
 		}
 
