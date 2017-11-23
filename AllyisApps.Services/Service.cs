@@ -377,9 +377,8 @@ namespace AllyisApps.Services
 		/// <param name="organizationId">The organization's Id.</param>
 		/// <param name="overtimeHours">Hours until overtime.</param>
 		/// <param name="overtimePeriod">Time period for hours until overtime.</param>
-		/// <param name="overtimeMultiplier">Overtime pay multiplier.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public async Task<bool> UpdateOvertime(int subscriptionId, int organizationId, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
+		public async Task<bool> UpdateOvertime(int subscriptionId, int organizationId, int overtimeHours, string overtimePeriod)
 		{
 			#region Validation
 
@@ -393,15 +392,10 @@ namespace AllyisApps.Services
 				throw new ArgumentException(string.Format("{0} is not a valid value for lock date period.", overtimePeriod));
 			}
 
-			if (overtimeMultiplier < 1.0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(overtimeMultiplier), "Overtime rate cannot be less than regular rate (i.e. overtimeMultiplier less than one).");
-			}
-
 			#endregion Validation
 
 			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
-			DBHelper.UpdateOvertime(organizationId, overtimeHours, overtimePeriod, overtimeMultiplier);
+			DBHelper.UpdateOvertime(organizationId, overtimeHours, overtimePeriod);
 			await Task.Yield();
 			return true;
 		}

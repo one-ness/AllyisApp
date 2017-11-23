@@ -17,8 +17,8 @@ BEGIN
 		[PhoneNumber], 
 		[FaxNumber], 
 		[Subdomain],
-		[OrganizationCreatedUtc]
-
+		[OrganizationCreatedUtc],
+		[UserCount]
 	FROM [Auth].[Organization] WITH (NOLOCK)
 		LEFT JOIN [Lookup].[Address]	WITH (NOLOCK) ON [Address].[AddressId] = [Organization].[AddressId]
 		LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryCode] = [Address].[CountryCode]
@@ -26,7 +26,7 @@ BEGIN
 	WHERE OrganizationId = @organizationId
 
 	SELECT [OU].[OrganizationId],
-	    [OU].[UserId],
+		[OU].[UserId],
 		[OU].[OrganizationRoleId],
 		[O].[OrganizationName] AS [OrganizationName],
 		[OU].[EmployeeId],
@@ -34,13 +34,13 @@ BEGIN
 		[U].[FirstName],
 		[U].[LastName],
 		[OU].[MaxAmount]
-    FROM [Auth].[OrganizationUser]	AS [OU]
+	FROM [Auth].[OrganizationUser]	AS [OU]
 	WITH (NOLOCK)
-    INNER JOIN [Auth].[User]		AS [U] WITH (NOLOCK) 
+	INNER JOIN [Auth].[User]		AS [U] WITH (NOLOCK) 
 		ON [U].[UserId] = [OU].[UserId]
 	INNER JOIN [Auth].[Organization] AS [O] WITH (NOLOCK)
 		ON [O].[OrganizationId] = [OU].[OrganizationId]
-    WHERE [OU].[OrganizationId] = @organizationId
+	WHERE [OU].[OrganizationId] = @organizationId
 	ORDER BY [U].[LastName]
 
 	SELECT	[Product].[ProductId],
