@@ -94,6 +94,7 @@
     <Folder Include="Lookup\User Defined Types" />
     <Folder Include="StaffingManager\User Defined Types" />
     <Folder Include="Auth\Functions" />
+    <Folder Include="Crm\Functions" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TimeTracker\Tables\Holiday.sql" />
@@ -401,6 +402,8 @@
     <Build Include="Auth\Stored Procedures\GetOrgInvitationCount.sql" />
     <Build Include="Billing\Stored Procedures\GetSubscriptionRoleForUser.sql" />
     <Build Include="Auth\Functions\GetUserCount.sql" />
+    <Build Include="Crm\Functions\GetProjectCount.sql" />
+    <Build Include="Crm\Functions\GetActiveProjectCount.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
