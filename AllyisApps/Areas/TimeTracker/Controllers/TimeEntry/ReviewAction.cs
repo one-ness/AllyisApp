@@ -79,6 +79,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			PayPeriodRanges payperiodRanges = await AppService.GetPayPeriodRanges(organizationId);
+			var settings = await AppService.GetSettingsByOrganizationId(organizationId);
 
 			var model = new ReviewViewModel
 			{
@@ -93,7 +94,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				StartDate = startDate,
 				EndDate = endDate,
 				TimeEntryStatusOptions = ModelHelper.GetLocalizedTimeEntryStatuses(AppService),
-				PayPeriodRanges = payperiodRanges
+				PayPeriodRanges = payperiodRanges,
+				LockDate = settings.LockDate,
+				PayrollProcessedDate = settings.PayrollProcessedDate
 			};
 
 			return model;
@@ -149,11 +152,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				case LockEntriesResult.InvalidLockDate:
 					Notifications.Add(new BootstrapAlert(string.Format(Strings.LockTimeEntriesInvalidLockDate, lockDate.ToShortDateString()), Variety.Danger));
 					break;
+				case LockEntriesResult.NoChange:
+					Notifications.Add(new BootstrapAlert(string.Format(Strings.LockTimeEntriesNoChange, lockDate.ToShortDateString()), Variety.Warning));
+					break;
 				default:
 					throw new ArgumentOutOfRangeException(string.Format(Strings.InvalidEnum, nameof(result), nameof(LockEntriesResult)));
 			}
 
-			return RedirectToAction(ActionConstants.Review, new { subscriptionId, startDate, endDate = lockDate });
+			return RedirectToAction(ActionConstants.Review, new { subscriptionId, startDate = startDate.ToString("yyy-MM-dd"), endDate = lockDate.ToString("yyy-MM-dd") });
 		}
 
 		/// <summary>
