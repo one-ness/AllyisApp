@@ -110,8 +110,19 @@ namespace AllyisApps.Controllers.Auth
 
 				if (model.SelectedAction == -1 && model.SubscriptionId == null)
 				{
-					int numberChanged = AppService.DeleteOrganizationUsers(modelSelectedUsers.Select(tu => tu.UserId).ToList(), model.OrganizationId);
-					Notifications.Add(new BootstrapAlert(string.Format(Strings.UsersRemovedFromOrg, numberChanged), Variety.Success));
+					try
+					{
+						int numberChanged = AppService.DeleteOrganizationUsers(modelSelectedUsers.Select(tu => tu.UserId).ToList(), model.OrganizationId);
+						Notifications.Add(new BootstrapAlert(string.Format(Strings.UsersRemovedFromOrg, numberChanged), Variety.Success));
+					}
+					catch (ArgumentNullException)
+					{
+						Notifications.Add(new BootstrapAlert("You must select users to remove from the organization.", Variety.Warning));
+					}
+					catch (ArgumentException)
+					{
+						Notifications.Add(new BootstrapAlert("Cannot delete yourself from an organization.", Variety.Danger));
+					}
 				}
 				else
 				{
