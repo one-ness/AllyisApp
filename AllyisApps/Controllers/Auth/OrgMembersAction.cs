@@ -23,13 +23,18 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		public async Task<ActionResult> OrgMembers(int id)
 		{
-			var model = new OrganizationMembersViewModel();
-			model.CanAddUser = AppService.CheckOrgAction(AppService.OrgAction.AddUserToOrganization, id, false);
-			model.CanDeleteUser = AppService.CheckOrgAction(AppService.OrgAction.DeleteUserFromOrganization, id, false);
-			model.CanEditUser = AppService.CheckOrgAction(AppService.OrgAction.EditUser, id, false);
-			model.CanManagePermissions = AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id, false);
-			model.OrganizationId = id;
+
+			var model = new OrganizationMembersViewModel
+			{
+				CanAddUser = AppService.CheckOrgAction(AppService.OrgAction.AddUserToOrganization, id, false),
+				CanDeleteUser = AppService.CheckOrgAction(AppService.OrgAction.DeleteUserFromOrganization, id, false),
+				CanEditUser = AppService.CheckOrgAction(AppService.OrgAction.EditUser, id, false),
+				CanManagePermissions = AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id, false),
+				OrganizationId = id,
+				PossibleRoles = organizationRoles
+			};
 			model.TabInfo.OrganizationId = id;
+			
 			var collection = await AppService.GetOrganizationUsersAsync(id);
 			foreach (var item in collection)
 			{

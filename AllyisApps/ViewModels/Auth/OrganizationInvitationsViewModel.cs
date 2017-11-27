@@ -49,6 +49,10 @@ namespace AllyisApps.ViewModels.Auth
 		public int PendingInvitationCount { get; set; }
 
 		/// <summary>
+		/// Possible Organization roles 
+		/// </summary>
+		public Dictionary<int, string> PossibleRoles { get; set; }
+		/// <summary>
 		/// constructor
 		/// </summary>
 		public OrganizationInvitationsViewModel()
@@ -56,6 +60,7 @@ namespace AllyisApps.ViewModels.Auth
 			Invitations = new List<ViewModelItem>();
 			TabInfo = new MembersAndInvitationsTabViewModel();
 			TabInfo.InvitationsTabActive = "active";
+			
 		}
 
 		/// <summary>
@@ -67,6 +72,11 @@ namespace AllyisApps.ViewModels.Auth
 			/// invitation id
 			/// </summary>
 			public int InvitationId { get; set; }
+
+			/// <summary>
+			/// Organization Role Name
+			/// </summary>
+			public string OrgRoleName { get; set; }
 
 			/// <summary>
 			/// invited user name

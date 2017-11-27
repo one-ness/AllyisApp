@@ -67,7 +67,8 @@ namespace AllyisApps.Services
 				InvitationStatus = (InvitationStatusEnum)item.InvitationStatus,
 				LastName = item.LastName,
 				OrganizationId = orgId,
-				ProductRolesJson = item.ProductRolesJson
+				ProductRolesJson = item.ProductRolesJson,
+				OrganizaionRole = (OrganizationRoleEnum)item.OrganizationRoleId
 			})
 				.ToList();
 		}

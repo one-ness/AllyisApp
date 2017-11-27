@@ -25,7 +25,7 @@ namespace AllyisApps.Controllers.Auth
 		public async Task<ActionResult> OrgInvitations(int id)
 		{
 			var model = new OrganizationInvitationsViewModel();
-
+			model.PossibleRoles = organizationRoles;
 			var collection = await AppService.GetInvitationsAsync(id);
 			foreach (var item in collection)
 			{
@@ -37,7 +37,9 @@ namespace AllyisApps.Controllers.Auth
 					InvitationId = item.InvitationId,
 					InvitedOn = item.InvitationCreatedUtc,
 					Status = item.InvitationStatus.GetEnumName(),
+					OrgRoleName = item.OrganizaionRole.GetEnumName(),
 					Username = $"{item.FirstName} {item.LastName}",
+					
 					ProductAndRoleNames = new List<Tuple<string, string>>()
 				};
 
