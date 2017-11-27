@@ -11,6 +11,7 @@ BEGIN
 	FROM [Pjm].[Project]
 	WHERE [customerId] = @customerId
 	AND GETUTCDATE() <= [EndUtc]
+	AND GETUTCDATE() >= [StartUtc]
 
 	RETURN @count
 END
