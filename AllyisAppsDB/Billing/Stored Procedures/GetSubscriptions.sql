@@ -1,11 +1,11 @@
 ﻿CREATE PROCEDURE [Billing].[GetSubscriptions]
-    @orgId INT
+    @organizationId INT
 AS
 BEGIN
     SET NOCOUNT ON
     SELECT [s].*,
            [sk].[SkuName],
-		   [sk].[IconUrl],
+           [sk].[IconUrl],
            [p].[ProductId],
            [p].[ProductName],
            [p].[AreaUrl],
@@ -13,7 +13,7 @@ BEGIN
       FROM [Subscription] [s] WITH (NOLOCK)
       JOIN [Sku]         [sk] WITH (NOLOCK) ON [sk].[SkuId] = [s].[SkuId]
       JOIN [Product]      [p] WITH (NOLOCK) ON [p].[ProductId] = [sk].[ProductId]
-     WHERE [s].[OrganizationId] = @orgId
+     WHERE [s].[OrganizationId] = @organizationId
        AND [s].[IsActive] = 1
        AND [sk].[IsActive] = 1
        AND [p].[IsActive] = 1

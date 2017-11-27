@@ -77,8 +77,16 @@ namespace AllyisApps.Services
 		/// </summary>
 		public async Task<List<Subscription>> GetSubscriptionsAsync(int orgId, bool readingList = false)
 		{
-			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
-			if (!readingList) CheckOrgAction(OrgAction.ReadSubscriptions, orgId);
+			if (orgId <= 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(orgId), $"{nameof(orgId)} must be greater than 0.");
+			}
+
+			if (!readingList)
+			{
+				CheckOrgAction(OrgAction.ReadSubscriptions, orgId);
+			}
+
 			var result = new List<Subscription>();
 			dynamic entities = await DBHelper.GetSubscriptionsAsync(orgId);
 			foreach (var item in entities)

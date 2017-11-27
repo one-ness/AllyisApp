@@ -515,22 +515,22 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// get the list of users in the given organization
 		/// </summary>
-		public async Task<List<dynamic>> GetOrganizationUsersAsync(int orgId)
+		public async Task<List<dynamic>> GetOrganizationUsersAsync(int organizationId)
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return (await con.QueryAsync<dynamic>("[Auth].[GetOrganizationUsers]", new { orgId }, commandType: CommandType.StoredProcedure)).ToList();
+				return (await con.QueryAsync<dynamic>("[Auth].[GetOrganizationUsers]", new { organizationId }, commandType: CommandType.StoredProcedure)).ToList();
 			}
 		}
 
 		/// <summary>
 		/// get the count of organization users
 		/// </summary>
-		public async Task<int> GetOrganizationUserCountAsync(int orgId)
+		public async Task<int> GetOrganizationUserCountAsync(int organizationId)
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return await con.QueryFirstOrDefaultAsync<int>("[Auth].[GetOrgUserCount]", new { orgId }, commandType: CommandType.StoredProcedure);
+				return await con.QueryFirstOrDefaultAsync<int>("[Auth].[GetOrgUserCount]", new { organizationId }, commandType: CommandType.StoredProcedure);
 			}
 		}
 
