@@ -13,6 +13,7 @@ using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
+	/// <inheritdoc />
 	/// <summary>
 	/// Class which manages Time Entry objects.
 	/// </summary>
@@ -32,7 +33,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var model = new SettingsOvertimeViewModel
 			{
 				OvertimeHours = settings.OvertimeHours,
-				OvertimeMultiplier = settings.OvertimeMultiplier,
 				OvertimePeriod = settings.OvertimePeriod,
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subName,
@@ -49,14 +49,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="setting">Overtime available setting.</param>
 		/// <param name="hours">Hours until overtime.</param>
 		/// <param name="period">Time period for hours until overtime.</param>
-		/// <param name="mult">Overtime pay multiplier.</param>
 		/// <returns>Redirects to the settings view.</returns>
 		[HttpPost]
-		public async Task<ActionResult> UpdateOvertime(int subscriptionId, string setting, int hours = -1, string period = "", float mult = 1)
+		public async Task<ActionResult> UpdateOvertime(int subscriptionId, string setting, int hours = -1, string period = "")
 		{
 			int actualHours = string.Equals(setting, "No") ? -1 : hours;
 
-			if (await AppService.UpdateOvertime(subscriptionId, AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId, actualHours, period, mult))
+			if (await AppService.UpdateOvertime(subscriptionId, AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId, actualHours, period))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.OvertimeUpdate, Variety.Success));
 			}

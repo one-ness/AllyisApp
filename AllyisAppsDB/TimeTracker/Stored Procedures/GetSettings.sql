@@ -6,7 +6,6 @@ AS
 			[StartOfWeek],
 			[OvertimeHours],
 			[OvertimePeriod],
-			[OvertimeMultiplier],
 			[IsLockDateUsed],
 			[LockDatePeriod],
 			[LockDateQuantity],

@@ -182,7 +182,7 @@ namespace AllyisApps.Controllers.Auth
 					jsonString);
 
 				Notifications.Add(new BootstrapAlert(string.Format(Strings.UserEmailed, model.FirstName, model.LastName), Variety.Success));
-				return RedirectToAction(ActionConstants.OrganizationMembers, new { id = model.OrganizationId });
+				return RedirectToAction(ActionConstants.OrganizationInvitations, new { id = model.OrganizationId });
 			}
 			catch (InvalidOperationException)
 			{

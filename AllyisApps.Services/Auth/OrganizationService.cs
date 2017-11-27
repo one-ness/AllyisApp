@@ -308,7 +308,6 @@ namespace AllyisApps.Services
 			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
 			CheckOrgAction(OrgAction.ReadInvitationsList, orgId);
 
-
 			return await this.DBHelper.GetOrganizationInvitationCountAsync(orgId, (int)statusMask);
 		}
 
@@ -394,11 +393,11 @@ namespace AllyisApps.Services
 
 			if (userIds == null || userIds.Count == 0)
 			{
-				throw new ArgumentException("No user ids provided.", nameof(userIds));
+				throw new ArgumentNullException(nameof(userIds), "No user ids provided.");
 			}
-			foreach (int id in userIds)
+			if (userIds.Any(id => id == UserContext.UserId))
 			{
-				if (id == UserContext.UserId) throw new ArgumentException("Can't delete self from the organization.", nameof(userIds));
+				throw new ArgumentException("Cannot delete self from the organization.", nameof(userIds));
 			}
 
 			#endregion Validation

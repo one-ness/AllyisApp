@@ -7,11 +7,13 @@
 }
 
 <style>
-	.no-match {
+	.no-match
+	{
 		display: none;
 	}
 
-	.pageContainer {
+	.pageContainer
+	{
 		width: 20px;
 		margin: 0 auto;
 	}
@@ -50,25 +52,30 @@
 						</thead>
 
 						@foreach (var user in Model.Users)
-			{
-
-							<tr class="userRow" data-id="@user.UserId" data-name="@user.Email">
-								@if (!user.IsCurrentUser)
-								{
+						{
+							if (!user.IsCurrentUser)
+							{
+								<tr class="userRow" data-id="@user.UserId" data-name="@user.Email">
 									<td class="checked">
 										<input type="checkbox" id="check" />
 									</td>
-								}
-								else
-								{
-									<td class="checked">
+									<td id="name">@user.FullName</td>
+									<td id="Role" class="tab-OrganizationTab">@user.CurrentRoleName</td>
+								</tr>
+
+							}
+							else
+							{
+								<tr class="userRow currUser" data-id="@user.UserId" data-name="@user.Email">
+									<td>
 										<input type="checkbox" id="check" disabled />
 									</td>
-								}
-								<td id="name">@user.FullName</td>
-								<td id="Role" class="tab-OrganizationTab">@user.CurrentRoleName</td>
-							</tr>
-			}
+									<td id="name">@user.FullName</td>
+									<td id="Role" class="tab-OrganizationTab">@user.CurrentRoleName</td>
+								</tr>
+							}
+
+						}
 
 						@*This last blank row is just an easy way to have a border at the bottom of the table content*@
 						<tr id="tableEnd" class="nohover">
@@ -78,12 +85,9 @@
 						</tr>
 					</table>
 
-
 					<div class="pageContainer">
 						@*This container is populated by javascript in allyis-account-permission2.js*@
 					</div>
-
-
 				</div>
 				<div class="panel-footer" style="height: 54px; position: relative;">
 					<div class="col-xs-6 col-sm-6 col-md-5" style="text-align: right; vertical-align: middle; line-height: 33px; padding-right: 0px;">

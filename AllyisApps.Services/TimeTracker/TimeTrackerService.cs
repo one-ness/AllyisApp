@@ -45,15 +45,25 @@ namespace AllyisApps.Services
 			}
 
 			int organizationId = UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-			Setting timeTrackerSettings = await GetSettingsByOrganizationId(organizationId);
-			DateTime startDate = timeTrackerSettings.LockDate ?? timeTrackerSettings.PayrollProcessedDate ?? System.Data.SqlTypes.SqlDateTime.MinValue.Value;
-			startDate = startDate.AddDays(1);
+			Setting settings = await GetSettingsByOrganizationId(organizationId);
 
-			if (startDate > lockDate)
+			if (lockDate <= settings?.PayrollProcessedDate)
 			{
 				return LockEntriesResult.InvalidLockDate;
 			}
 
+			if (lockDate < settings?.LockDate)
+			{
+				return UpdateLockDate(organizationId, lockDate) == 1 ? LockEntriesResult.Success : LockEntriesResult.DBError;
+			}
+
+			if (lockDate == settings?.LockDate)
+			{
+				return LockEntriesResult.NoChange;
+			}
+
+			DateTime startDate = settings.LockDate ?? settings.PayrollProcessedDate ?? SqlDateTime.MinValue.Value;
+			startDate = startDate.AddDays(1);
 			var timeEntries = await GetTimeEntriesOverDateRange(organizationId, startDate, lockDate);
 			if (timeEntries.Any(entry =>
 				entry.TimeEntryStatusId == (int)TimeEntryStatus.Pending ||
@@ -105,7 +115,7 @@ namespace AllyisApps.Services
 			}
 
 			// Validate that all statuses in the affected date range are correct (!Pending)
-			DateTime startDate = timeTrackerSettings.PayrollProcessedDate ?? System.Data.SqlTypes.SqlDateTime.MinValue.Value;
+			DateTime startDate = timeTrackerSettings.PayrollProcessedDate ?? SqlDateTime.MinValue.Value;
 			startDate = startDate.AddDays(1);
 			var timeEntries = await DBHelper.GetTimeEntriesOverDateRange(organizationId, startDate, timeTrackerSettings.LockDate.Value);
 			if (timeEntries.Any(entry =>
@@ -416,10 +426,9 @@ namespace AllyisApps.Services
 				StartOfWeek = settings.StartOfWeek,
 				OvertimeHours = settings.OvertimeHours,
 				OvertimePeriod = settings.OvertimePeriod,
-				OvertimeMultiplier = settings.OvertimeMultiplier,
 				PayrollProcessedDate = settings.PayrollProcessedDate,
 				LockDate = settings.LockDate,
-				PayPeriod = settings.PayPeriod,
+				PayPeriod = settings.PayPeriod
 			};
 		}
 

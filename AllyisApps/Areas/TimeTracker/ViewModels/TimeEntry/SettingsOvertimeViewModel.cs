@@ -34,11 +34,6 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public string OvertimePeriod { get; set; }
 
 		/// <summary>
-		/// Gets or sets the OvertimeMultiplier.
-		/// </summary>
-		public decimal OvertimeMultiplier { get; set; }
-
-		/// <summary>
 		/// Get or sets todays date for holiday datepicker
 		/// </summary>
 		public DateTime Today { get; set; }

@@ -327,14 +327,12 @@ namespace AllyisApps.DBModel
 		/// <param name="orgId">The Id of the time entry to be updated.</param>
 		/// <param name="overtimeHours">Hours until overtime.</param>
 		/// <param name="overtimePeriod">Time period for hours until overtime.</param>
-		/// <param name="overtimeMultiplier">Overtime pay multiplier.</param>
-		public async void UpdateOvertime(int orgId, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
+		public async void UpdateOvertime(int orgId, int overtimeHours, string overtimePeriod)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
 			parameters.Add("@overtimeHours", overtimeHours);
 			parameters.Add("@overtimePeriod", overtimePeriod);
-			parameters.Add("@overtimeMultiplier", overtimeMultiplier);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
@@ -381,7 +379,6 @@ namespace AllyisApps.DBModel
 				parameters.Add("@startOfWeek", 1);
 				parameters.Add("@overTimeHours", 40);
 				parameters.Add("@overTimePeriod", "Week");
-				parameters.Add("@overTimeMultiplier", 1.5);
 				using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 				{
 					await connection.ExecuteAsync("[TimeTracker].[UpdateSettings]", parameters, commandType: CommandType.StoredProcedure);

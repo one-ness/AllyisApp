@@ -19,7 +19,7 @@ namespace AllyisApps.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Strings {
@@ -2230,7 +2230,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot set new lock date to {0} because the date is on or before the previous lock or payroll processed date.
+        ///   Looks up a localized string similar to Cannot set new lock date to {0} because the date is on or before the previous payroll processed date.
         /// </summary>
         public static string LockTimeEntriesInvalidLockDate {
             get {
@@ -2244,6 +2244,15 @@ namespace AllyisApps.Resources {
         public static string LockTimeEntriesInvalidStatuses {
             get {
                 return ResourceManager.GetString("LockTimeEntriesInvalidStatuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lock date was not changed, it is already set to {0}.
+        /// </summary>
+        public static string LockTimeEntriesNoChange {
+            get {
+                return ResourceManager.GetString("LockTimeEntriesNoChange", resourceCulture);
             }
         }
         
