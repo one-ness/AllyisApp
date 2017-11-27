@@ -1,0 +1,34 @@
+﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+@model  SettingsEmployeeTypeViewModel
+
+@{
+	ViewBag.Title = "SettingsEmployeeType";
+}
+
+<div class="container">
+	<div class="row slim">
+		<div class="col-sm-2">
+			@Html.Partial("_ManageSettingSideBar")
+		</div>
+		<div class="col-sm-10">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h1 class="panel-title">@Strings.EmployeeType</h1>
+				</div>
+			</div>
+			<table class="table table-condensed">
+				<thead>
+					<tr>Id</tr>
+					<tr>Name</tr>
+					<tr>Edit</tr>
+				</thead>
+				<tbody>
+					@foreach (var types in Model.EmployeeTypes)
+					{
+
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

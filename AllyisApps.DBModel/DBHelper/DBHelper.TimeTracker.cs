@@ -452,7 +452,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<SettingDBEntity, List<PayClassDBEntity>, List<HolidayDBEntity>> GetAllSettings(int orgId)
+		public Tuple<SettingDBEntity, List<PayClassDBEntity>, List<HolidayDBEntity>, List<EmployeeTypeDBEntity>> GetAllSettings(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
@@ -466,7 +466,8 @@ namespace AllyisApps.DBModel
 				return Tuple.Create(
 					results.Read<SettingDBEntity>().SingleOrDefault(),
 					results.Read<PayClassDBEntity>().ToList(),
-					results.Read<HolidayDBEntity>().ToList());
+					results.Read<HolidayDBEntity>().ToList(),
+					results.Read<EmployeeTypeDBEntity>().ToList());
 			}
 		}
 

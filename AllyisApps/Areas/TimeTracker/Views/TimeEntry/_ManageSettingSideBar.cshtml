@@ -5,6 +5,9 @@
 	<li @Html.Raw(ViewBag.Title == Strings.PayPeriod ? "style=background-color: #d1d1d1" : "")>
 		@Html.ActionLink(Strings.PayPeriod, ActionConstants.SettingsPayPeriod, ControllerConstants.TimeEntry)
 	</li>
+	<li @Html.Raw(ViewBag.Title == Strings.EmployeeType ? "style=background-color: #d1d1d1" : "")>
+		@Html.ActionLink(Strings.EmployeeType, ActionConstants.SettingsEmployeeType, ControllerConstants.TimeEntry)
+	</li>
 	<li @Html.Raw(ViewBag.Title == Strings.Overtime ? "style=background-color: #d1d1d1" : "")>
 		@Html.ActionLink(Strings.Overtime, ActionConstants.SettingsOvertime, ControllerConstants.TimeEntry)
 	</li>
