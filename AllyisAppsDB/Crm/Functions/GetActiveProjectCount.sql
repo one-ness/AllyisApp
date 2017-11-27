@@ -10,8 +10,8 @@ BEGIN
 	SELECT @count = COUNT(*)
 	FROM [Pjm].[Project]
 	WHERE [customerId] = @customerId
-	AND GETUTCDATE() <= [EndUtc]
-	AND GETUTCDATE() >= [StartUtc]
+	AND ([EndUtc] IS NULL OR GETUTCDATE() <= [EndUtc])
+	AND ([StartUtc] IS NULL OR GETUTCDATE() >= [StartUtc])
 
 	RETURN @count
 END

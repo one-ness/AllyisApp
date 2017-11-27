@@ -17,7 +17,9 @@ BEGIN
 		   [Customer].[CustomerCreatedUtc],
 		   [Customer].[OrganizationId],
 		   [Customer].[CustomerCode],
-		   [Customer].[IsActive]
+		   [Customer].[IsActive],
+		   [Customer].[ActiveProjectCount],
+		   [Customer].[ProjectCount]
 	FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK) 
 	WHERE [CustomerId] = @customerId
 
