@@ -27,7 +27,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <summary>
 		/// Dictionaries of Strings resource used for view Maybe: Move to view Model
 		/// </summary>
-		private readonly Dictionary<int, string> organizationRoles = new Dictionary<int, string>
+		private  readonly Dictionary<int, string> organizationRoles = new Dictionary<int, string>
 		{
 			{ (int)OrganizationRoleEnum.Member, Strings.Member },
 			{ (int)OrganizationRoleEnum.Owner, Strings.Owner }

@@ -74,7 +74,8 @@ namespace AllyisApps.Services.Auth
         /// invitation status
         /// </summary>
         public InvitationStatusEnum InvitationStatus { get; set; }
-    }
+		public OrganizationRoleEnum OrganizaionRole { get;  set; }
+	}
 
     public class InvitationPermissionsJson
     {

@@ -67,5 +67,9 @@ namespace AllyisApps.DBModel.Auth
         /// Get or set the Role Json string.
         /// </summary>
         public string ProductRolesJson { get; set; }
+		/// <summary>
+		/// Get or set the organizaion role id
+		/// </summary>
+		public int OrganizationRoleId { get; set; }
     }
 }

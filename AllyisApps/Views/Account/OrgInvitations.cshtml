@@ -34,22 +34,35 @@ else
 					<thead>
 					<tr>
 						<th><input class="checkbox-inline invitations-checkbox" type="checkbox" id="checkAll" onclick="CheckAllToggle()"/></th>
-						<th>Name</th>
-						<th>Email</th>
-						<th>Employee ID</th>
-						<th>Invite Date</th>
-						<th>Role(s)</th>
-						<th>Status</th>
+						<th class="col-xs-2">Name<input type="search" placeholder="@Strings.UserSearchPlaceholder" id="userSearch" class="form-control fa-filter" /></th>
+						<th class="col-xs-2">Email</th>
+						<th class="col-xs-1">Employee ID</th>
+						<th class="col-xs-1">Invite Date</th>
+						<th class="col-xs-2">Organizaion Role
+							<select id="RoleFilter" class="form-control">
+								<option>@Strings.Any</option>
+								@foreach (var role in Model.PossibleRoles.Values)
+								{
+									<option>@role</option>
+								}
+							</select>
+						</th>
+						<th class="col-xs-2">Role(s)
+							
+						</th>
+						<th class="col-xs-2">Status</th>
 					</tr>
+					
 					</thead>
 					@foreach (var item in Model.Invitations)
 					{
-						<tr>
+						<tr class="userRow">
 							<td><input class="checkbox-inline invitations-checkbox" name="checkbox" id="checkbox" type="checkbox" value="@item.InvitationId"/></td>
-							<td>@item.Username</td>
+							<td class="name">@item.Username</td>
 							<td>@item.Email</td>
 							<td>@item.EmployeeId</td>
 							<td>@item.FormattedInvitedOnDate</td>
+							<td class="Role">@item.OrgRoleName</td>
 							<td>
 								@foreach (var role in item.ProductAndRoleNames)
 								{
@@ -60,6 +73,13 @@ else
 						</tr>
 					}
 				</table>
+			</div>
+		</div>
+		<div class="row" style="padding-top:15px;">
+			<div class="col-xs-12">
+				<div class="pageContainer">
+					@*This container is populated by javascript in allyis-account-permission2.js*@
+				</div>
 			</div>
 		</div>
 		<div class="row">
@@ -93,7 +113,8 @@ else
 		</div>
 	</div>
 }
-
+@section scripts
+{
 <script type="text/javascript">
 	function CheckAllToggle()
 	{
@@ -101,7 +122,9 @@ else
 		var checking = document.getElementById("checkAll").checked;
 		checkboxes = document.getElementsByName("checkbox");
 		for (var i = 0, n = checkboxes.length; i < n; i++) {
-			checkboxes[i].checked = checking;
+			if (!$(checkboxes[i]).parents('.userRow').hasClass('no-match')) {
+				checkboxes[i].checked = checking;
+			}
 		}
 		console.log("check all toggle, updated " + checkboxes.length + " to: " + checking);
 	}
@@ -112,7 +135,8 @@ else
 		checkboxes = document.getElementsByName("checkbox");
 		var k = 0;
 		for (var i = 0, n = checkboxes.length; i < n; i++) {
-			if (checkboxes[i].checked) {
+			if (checkboxes[i].checked && !$(checkboxes[i]).hasClass('no-match'))
+			{
 				ids[k] = checkboxes[i].value;
 				k++;
 			}
@@ -160,3 +184,14 @@ else
 		return;
 	}
 </script>
+
+<script src="~/Scripts/allyis-pages-with-filter.js" type="text/javascript"></script>
+<script type="text/javascript">
+		@*Filters can only be set up after the above script is loaded*@
+		pwf.setPageLimit(10);
+		pwf.setRowClass("userRow");
+		pwf.setCheckBoxSelector("#checkbox");
+		pwf.addFilter("#userSearch", "search", ".name");
+		pwf.addFilter('#RoleFilter', 'dropDown', ".Role", "@Strings.Any");
+</script>
+}
