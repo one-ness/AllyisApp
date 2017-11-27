@@ -303,14 +303,6 @@ namespace AllyisApps.Services
 			return collection.Select(InitializeOrganizationUser).ToList();
 		}
 
-		public async Task<int> GetOrganizationUserCountAsync(int orgId)
-		{
-			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
-			CheckOrgAction(OrgAction.ReadUsersList, orgId);
-
-			return await this.DBHelper.GetOrganizationUserCountAsync(orgId);
-		}
-
 		public async Task<int> GetOrganizationInvitationCountAsync(int orgId, InvitationStatusEnum statusMask)
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));

@@ -524,17 +524,6 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// get the count of organization users
-		/// </summary>
-		public async Task<int> GetOrganizationUserCountAsync(int organizationId)
-		{
-			using (var con = new SqlConnection(SqlConnectionString))
-			{
-				return await con.QueryFirstOrDefaultAsync<int>("[Auth].[GetOrgUserCount]", new { organizationId }, commandType: CommandType.StoredProcedure);
-			}
-		}
-
-		/// <summary>
 		/// get the count of organization invitations
 		/// </summary>
 		public async Task<int> GetOrganizationInvitationCountAsync(int orgId, int statusMask)

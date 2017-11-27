@@ -397,7 +397,6 @@
     <Build Include="Pjm\Stored Procedures\GetProjectByProjectCode.sql" />
     <None Include="DefaultData\Accounts.sql" />
     <Build Include="TimeTracker\Stored Procedures\GetTimeEntriesByProjectId.sql" />
-    <Build Include="Auth\Stored Procedures\GetOrgUserCount.sql" />
     <Build Include="Auth\Stored Procedures\GetOrgInvitationCount.sql" />
     <Build Include="Billing\Stored Procedures\GetSubscriptionRoleForUser.sql" />
     <Build Include="Auth\Functions\GetUserCount.sql" />

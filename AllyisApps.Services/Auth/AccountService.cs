@@ -109,7 +109,7 @@ namespace AllyisApps.Services
 				}
 
 				// add the new user roles.  If not specified, user is added as unassigned
-				var subscriptions = await GetSubscriptionsAsync(invite.OrganizationId);
+				var subscriptions = await GetSubscriptionsAsync(invite.OrganizationId, true);
 				foreach (var subscription in subscriptions)
 				{
 					var role = roles.FirstOrDefault(r => r.SubscriptionId == subscription.SubscriptionId);
