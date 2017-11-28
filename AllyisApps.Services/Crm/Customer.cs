@@ -73,6 +73,16 @@ namespace AllyisApps.Services.Crm
 		/// </summary>
 		public bool IsActive { get; set; }
 
+		/// <summary>
+		/// Gets or sets the active projects for a customer.
+		/// </summary>
+		public int ActiveProjects { get; set; }
+
+		/// <summary>
+		/// Gets or sets the inactive projects for a customer.
+		/// </summary>
+		public int InactiveProjects { get; set; }
+
 		public Customer()
 		{
 			//Address = new Address();

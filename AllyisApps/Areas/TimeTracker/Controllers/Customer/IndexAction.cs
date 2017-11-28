@@ -57,6 +57,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					EIN = x.EIN,
 					FaxNumber = x.FaxNumber,
 					IsActive = x.IsActive,
+					ActiveProjects = x.ActiveProjects,
+					InactiveProjects = x.InactiveProjects,
 					OrganizationId = x.OrganizationId,
 					Website = x.Website
 				}).ToList()

@@ -260,7 +260,7 @@ input.members-checkbox
 .pageContainer .page-btn,
 .pageContainer .chevron-btn
 {
-	margin: -20px 5px 5px 5px;
+	/*margin: -20px 5px 5px 5px;*/
 	width: 25px;
 	padding: 2px;
 }

@@ -94,6 +94,7 @@
     <Folder Include="Lookup\User Defined Types" />
     <Folder Include="StaffingManager\User Defined Types" />
     <Folder Include="Auth\Functions" />
+    <Folder Include="Crm\Functions" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TimeTracker\Tables\Holiday.sql" />
@@ -189,7 +190,6 @@
     <Build Include="Auth\Stored Procedures\UpdateUserPasswordResetCode.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserPasswordUsingCode.sql" />
     <Build Include="Auth\Stored Procedures\DeleteOrg.sql" />
-    <Build Include="Auth\Stored Procedures\DeleteOrgUser.sql" />
     <Build Include="Auth\Stored Procedures\RejectInvitation.sql" />
     <Build Include="Auth\Stored Procedures\GetOrganization.sql" />
     <Build Include="Auth\Stored Procedures\GetOrganizationsByUserId.sql" />
@@ -400,6 +400,8 @@
     <Build Include="Auth\Stored Procedures\GetOrgInvitationCount.sql" />
     <Build Include="Billing\Stored Procedures\GetSubscriptionRoleForUser.sql" />
     <Build Include="Auth\Functions\GetUserCount.sql" />
+    <Build Include="Crm\Functions\GetProjectCount.sql" />
+    <Build Include="Crm\Functions\GetActiveProjectCount.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

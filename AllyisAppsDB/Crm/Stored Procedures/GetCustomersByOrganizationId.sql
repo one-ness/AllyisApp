@@ -21,7 +21,9 @@ AS
 		   [Customer].[OrganizationId],
 		   [Customer].[CustomerCode],
 		   [Customer].[AddressId],
-		   [Customer].[IsActive]
+		   [Customer].[IsActive],
+		   [Customer].[ActiveProjectCount],
+		   [Customer].[ProjectCount]
 	FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK) 
 	LEFT JOIN [Lookup].[Address] WITH (NOLOCK) ON [Address].[AddressId] = [Customer].[AddressId]
 	LEFT JOIN [Lookup].[Country] WITH (NOLOCK) ON [Country].[CountryCode] = [Address].[CountryCode]

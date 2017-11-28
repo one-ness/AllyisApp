@@ -67,7 +67,8 @@ namespace AllyisApps.Services
 				InvitationStatus = (InvitationStatusEnum)item.InvitationStatus,
 				LastName = item.LastName,
 				OrganizationId = orgId,
-				ProductRolesJson = item.ProductRolesJson
+				ProductRolesJson = item.ProductRolesJson,
+				OrganizaionRole = (OrganizationRoleEnum)item.OrganizationRoleId
 			})
 				.ToList();
 		}
@@ -311,30 +312,7 @@ namespace AllyisApps.Services
 			return await this.DBHelper.GetOrganizationInvitationCountAsync(orgId, (int)statusMask);
 		}
 
-		/// <summary>
-		/// Removes an organization user.
-		/// </summary>
-		/// <param name="orgId">Organization Id.</param>
-		/// <param name="userId">User Id to be DELETED.</param>
-		public async Task RemoveOrganizationUser(int orgId, int userId)
-		{
-			if (orgId < 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(orgId), "Organization Id cannot be negative.");
-			}
-
-			if (userId <= 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(userId), "User Id cannot be 0 or negative.");
-			}
-
-			if (userId == UserContext.UserId)
-			{
-				throw new Exception("Cannot remove Self from the organization.");
-			}
-
-			await DBHelper.RemoveOrganizationUser(orgId, userId);
-		}
+		
 
 		/// <summary>
 		/// Gets all the projects in an organization.
@@ -387,7 +365,7 @@ namespace AllyisApps.Services
 		/// <param name="userIds">List of user Ids.</param>
 		/// <param name="organizationId">The organization Id.</param>
 		/// <returns>The number of affected users.</returns>
-		public int DeleteOrganizationUsers(List<int> userIds, int organizationId)
+		public async Task<int> DeleteOrganizationUsers(List<int> userIds, int organizationId)
 		{
 			#region Validation
 
@@ -401,8 +379,8 @@ namespace AllyisApps.Services
 			}
 
 			#endregion Validation
-
-			return DBHelper.DeleteOrganizationUsers(userIds, organizationId);
+			
+			return await DBHelper.DeleteOrganizationUsers(userIds,organizationId);
 		}
 
 		/// <summary>

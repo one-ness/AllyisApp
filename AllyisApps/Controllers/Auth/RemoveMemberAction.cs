@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using System.Linq;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -35,17 +36,10 @@ namespace AllyisApps.Controllers.Auth
 
             this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
 
-            string[] userIds = csvUserIds.Split(',');
-            List<Task> userRemoveTask = new List<Task>();
+			List<int> userIds = csvUserIds.Split(',').Select(userIdString => Convert.ToInt32(userIdString)).ToList();
 
-            foreach (var userIdString in userIds)
-            {
-                int userId = Convert.ToInt32(userIdString);
-                userRemoveTask.Add(AppService.RemoveOrganizationUser(id, userId));
-            }
-
-            await Task.WhenAll(userRemoveTask);
-
+			await AppService.DeleteOrganizationUsers(userIds, id);
+           
             Notifications.Add(new BootstrapAlert(Resources.Strings.UserDeletedSuccessfully, Variety.Success));
 
             return this.RedirectToAction(ActionConstants.OrganizationMembers, new { id = id });

@@ -40,6 +40,12 @@
 							Status
 						</th>
 						<th>
+							Active Projects
+						</th>
+						<th>
+							Inactive Projects
+						</th>
+						<th>
 							Edit
 						</th>
 					</tr>
@@ -74,6 +80,12 @@
 								{
 									<p>Disabled</p>
 								}
+							</td>
+							<td>
+								<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Project, new { customerId = customer.CustomerId, isActive = true })">@customer.ActiveProjects</a>
+							</td>
+							<td>
+								<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Project, new { customerId = customer.CustomerId, isActive = false })">@customer.InactiveProjects</a>
 							</td>
 							<td>
 								<a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Customer, new {userId = customer.CustomerId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a>
