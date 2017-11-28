@@ -79,6 +79,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have successfully joined {0}.
+        /// </summary>
+        public static string AcceptInvitationSuccess {
+            get {
+                return ResourceManager.GetString("AcceptInvitationSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Actions.
         /// </summary>
         public static string Actions {

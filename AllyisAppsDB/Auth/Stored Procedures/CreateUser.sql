@@ -5,7 +5,7 @@ CREATE PROCEDURE [Auth].[CreateUser]
 	@firstName nvarchar(32),
 	@lastName nvarchar(32),
 	@emailConfirmationCode uniqueidentifier,
-	@dateOfBirth date = null,
+	@dateOfBirth date,
 	@phoneNumber varchar(16) = null,
 	@preferredLanguageId varchar(16) = null,
 	@address1 nvarchar(64) = null,

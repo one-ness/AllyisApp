@@ -46,7 +46,7 @@ namespace AllyisApps.Controllers.Auth
 				var productRoleNames = JsonConvert.DeserializeObject<List<InvitationPermissionsJson>>(item.ProductRolesJson) ?? new List<InvitationPermissionsJson>();
 				foreach (var invitation in productRoleNames)
 				{
-					
+
 					var productInfo = await AppService.GetSubscription(invitation.SubscriptionId);
 
 					data.ProductAndRoleNames.Add(new Tuple<string, string>(
@@ -67,7 +67,7 @@ namespace AllyisApps.Controllers.Auth
 			model.OrganizationName = org.OrganizationName;
 			model.OrganizationId = id;
 			model.TabInfo.OrganizationId = id;
-			model.TabInfo.MemberCount = await this.AppService.GetOrganizationUserCountAsync(id);
+			model.TabInfo.MemberCount = org.UserCount;
 			model.TabInfo.PendingInvitationCount = model.PendingInvitationCount;
 			model.CanDeleteInvitations = AppService.CheckOrgAction(Services.AppService.OrgAction.DeleteInvitation, id, false);
 			model.CanResendInvitations = AppService.CheckOrgAction(Services.AppService.OrgAction.AddUserToOrganization, id, false);

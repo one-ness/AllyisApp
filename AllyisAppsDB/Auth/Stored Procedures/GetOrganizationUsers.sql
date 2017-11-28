@@ -1,5 +1,5 @@
-﻿create procedure Auth.GetOrganizationUsers
-	@orgId int
+﻿create procedure [Auth].[GetOrganizationUsers]
+	@organizationId int
 as
 begin
 	set nocount on
@@ -10,5 +10,5 @@ begin
 	left join [Lookup].[Address] a with (nolock) on a.AddressId = u.AddressId
 	left join [Lookup].[State] s with (nolock) on s.StateId = a.StateId
 	left join [Lookup].[Country] c with (nolock) on c.CountryCode = a.CountryCode
-	where ou.OrganizationId = @orgId and o.IsActive = 1
+	where ou.OrganizationId = @organizationId and o.IsActive = 1
 end

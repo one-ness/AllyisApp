@@ -31,7 +31,7 @@ namespace AllyisApps.DBModel
 			string firstName,
 			string lastName,
 			Guid emailConfirmationCode,
-			DateTime? dateOfBirth,
+			DateTime dateOfBirth,
 			string phoneNumber,
 			string preferredLanguageId,
 			string address1,
@@ -397,6 +397,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@userId", organizationUser.UserId);
 			parameters.Add("@roleId", organizationUser.OrganizationRoleId);
 			parameters.Add("@employeeId", organizationUser.EmployeeId);
+			parameters.Add("@maxAmount", organizationUser.MaxAmount);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
@@ -420,23 +421,6 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return await connection.QueryFirstOrDefaultAsync<int>("[Auth].[UpdateMember]", parameters, commandType: CommandType.StoredProcedure);
-			}
-		}
-
-		/// <summary>
-		/// Removes the specified user from the organization.
-		/// </summary>
-		/// <param name="organizationId">The organization's Id.</param>
-		/// <param name="userId">The user's Id.</param>
-		public async Task RemoveOrganizationUser(int organizationId, int userId)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", organizationId);
-			parameters.Add("@userId", userId);
-
-			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
-			{
-				await connection.ExecuteAsync("[Auth].[DeleteOrgUser]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -470,7 +454,7 @@ namespace AllyisApps.DBModel
 		/// <param name="userIds">List of user Ids.</param>
 		/// <param name="organizationId">The Organization Id.</param>
 		/// <returns>The number of affected users.</returns>
-		public int DeleteOrganizationUsers(List<int> userIds, int organizationId)
+		public async Task<int> DeleteOrganizationUsers(List<int> userIds, int organizationId)
 		{
 			DataTable userIdsTable = new DataTable();
 			userIdsTable.Columns.Add("userId", typeof(int));
@@ -482,7 +466,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Execute("[Auth].[DeleteOrganizationUsers]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.QueryFirstAsync<int>("[Auth].[DeleteOrganizationUsers]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -515,22 +499,11 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// get the list of users in the given organization
 		/// </summary>
-		public async Task<List<dynamic>> GetOrganizationUsersAsync(int orgId)
+		public async Task<List<dynamic>> GetOrganizationUsersAsync(int organizationId)
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return (await con.QueryAsync<dynamic>("[Auth].[GetOrganizationUsers]", new { orgId }, commandType: CommandType.StoredProcedure)).ToList();
-			}
-		}
-
-		/// <summary>
-		/// get the count of organization users
-		/// </summary>
-		public async Task<int> GetOrganizationUserCountAsync(int orgId)
-		{
-			using (var con = new SqlConnection(SqlConnectionString))
-			{
-				return await con.QueryFirstOrDefaultAsync<int>("[Auth].[GetOrgUserCount]", new { orgId }, commandType: CommandType.StoredProcedure);
+				return (await con.QueryAsync<dynamic>("[Auth].[GetOrganizationUsers]", new { organizationId }, commandType: CommandType.StoredProcedure)).ToList();
 			}
 		}
 
