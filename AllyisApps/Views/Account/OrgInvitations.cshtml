@@ -1,6 +1,7 @@
-﻿@model OrganizationInvitationsViewModel
+﻿@using System.Text
+@model OrganizationInvitationsViewModel
 @{
-	var sb = new System.Text.StringBuilder();
+	var sb = new StringBuilder();
 	sb.AppendFormat("{0}: {1}", Strings.Invitations, Model.OrganizationName);
 	ViewBag.TitleBar = sb.ToString();
 }
@@ -68,7 +69,7 @@ else
 					class="btn btn-default pull-left" title="@Strings.Back"><i class="fa fa-caret-left"></i>&nbsp;@Strings.Back</a>
 				@if (Model.CanResendInvitations)
 				{
-					using (Html.BeginForm(ActionConstants.ResendInvite, ControllerConstants.Account, new { @resendIds = Model.CheckedInvitations, @orgId = Model.OrganizationId }, FormMethod.Get))
+					using (Html.BeginForm(ActionConstants.ResendInvite, ControllerConstants.Account, new { resendIds = Model.CheckedInvitations, orgId = Model.OrganizationId }, FormMethod.Get))
 					{
 						@Html.Hidden("checkedResendIds", Model.CheckedInvitations)
 						@Html.Hidden("orgId", Model.OrganizationId)
@@ -80,7 +81,7 @@ else
 				}
 				@if (Model.CanDeleteInvitations)
 				{
-					using (Html.BeginForm(ActionConstants.RemoveInvitation, ControllerConstants.Account, new { @checkedIds = Model.CheckedInvitations, @orgId = Model.OrganizationId }, FormMethod.Post))
+					using (Html.BeginForm(ActionConstants.RemoveInvitation, ControllerConstants.Account, new { checkedIds = Model.CheckedInvitations, orgId = Model.OrganizationId }, FormMethod.Post))
 					{
 						@Html.Hidden("checkedIds", Model.CheckedInvitations)
 						@Html.Hidden("orgId", Model.OrganizationId)
@@ -97,19 +98,16 @@ else
 <script type="text/javascript">
 	function CheckAllToggle()
 	{
-		var checkboxes = [];
 		var checking = document.getElementById("checkAll").checked;
-		checkboxes = document.getElementsByName("checkbox");
+		var checkboxes = document.getElementsByName("checkbox");
 		for (var i = 0, n = checkboxes.length; i < n; i++) {
 			checkboxes[i].checked = checking;
 		}
-		console.log("check all toggle, updated " + checkboxes.length + " to: " + checking);
 	}
 
 	function getInvitationIdsAndResend() {
 		var ids = [];
-		var checkboxes = [];
-		checkboxes = document.getElementsByName("checkbox");
+		var checkboxes = document.getElementsByName("checkbox");
 		var k = 0;
 		for (var i = 0, n = checkboxes.length; i < n; i++) {
 			if (checkboxes[i].checked) {
@@ -117,29 +115,25 @@ else
 				k++;
 			}
 		}
-		if (ids.length == 0) {
+		if (ids.length === 0) {
 			alert("You have not chosen an invitation to delete");
 			return false;
 		}
 		else {
 			document.getElementById('checkedResendIds').value = ids;
-			document.getElementById('ResendOrgId').value =  @Model.OrganizationId;
+			document.getElementById('orgId').value =  @Model.OrganizationId;
 		}
-		console.log("updated checkedIds: " + document.getElementById('checkedResendIds').value);
-		console.log("updated orgId: " + document.getElementById('ResendOrgId').value);
-		return;
+		return true;
 	}
 
 	function getInvitationIdsAndSubmit() {
-		var ids = [];
-		var checkboxes = [];
-
 		if (!confirm("Delete invitation for user(s)?"))
 		{
 			return false;
 		}
 
-		checkboxes = document.getElementsByName("checkbox");
+		var ids = [];
+		var checkboxes = document.getElementsByName("checkbox");
 		var k = 0;
 		for (var i = 0, n = checkboxes.length; i < n; i++) {
 			if (checkboxes[i].checked) {
@@ -147,7 +141,7 @@ else
 				k++;
 			}
 		}
-		if (ids.length == 0) {
+		if (ids.length === 0) {
 			alert("You have not chosen an invitation to delete");
 			return false;
 		}
@@ -155,8 +149,6 @@ else
 			document.getElementById('checkedIds').value = ids;
 			document.getElementById('orgId').value =  @Model.OrganizationId;
 		}
-		console.log("updated checkedIds: " + document.getElementById('checkedIds').value);
-		console.log("updated orgId: " + document.getElementById('orgId').value);
-		return;
+		return true;
 	}
 </script>
