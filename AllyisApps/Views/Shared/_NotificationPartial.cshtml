@@ -1,24 +1,20 @@
 ﻿<div class="container">
-	<div class="row">
-		<div class="col-xs-12">
-			@if (ViewBag.Alerts != null)
-			{
+	@if (ViewBag.Alerts != null)
+	{
 
-				foreach (AllyisApps.Core.Alert.BootstrapAlert a in ViewBag.Alerts)
+		foreach (AllyisApps.Core.Alert.BootstrapAlert a in ViewBag.Alerts)
+		{
+			<div class="alert alert-dismissable fade in @a.Type.Classes text-center">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				@if (a.IsHtmlString)
 				{
-					<div class="alert alert-dismissable fade in @a.Type.Classes text-center">
-						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-						@if (a.IsHtmlString)
-						{
-							@(new HtmlString(a.Text))
-						}
-						else
-						{
-							@a.Text
-						}
-					</div>
+					@(new HtmlString(a.Text))
 				}
-			}
-		</div>
-	</div>
+				else
+				{
+					@a.Text
+				}
+			</div>
+		}
+	}
 </div>

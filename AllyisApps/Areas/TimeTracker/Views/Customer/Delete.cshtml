@@ -7,23 +7,19 @@
 }
 
 <div class="container">
-	<div class="row">
-		<div class="col-xs-12">
-			<h2>@Strings.Delete</h2>
+	<h2>@Strings.Delete</h2>
 
-			<h3>@Strings.DeleteHeader</h3>
-			<div>
+	<h3>@Strings.DeleteHeader</h3>
+	<div>
 
-				@using (Html.BeginForm())
-				{
-					@Html.AntiForgeryToken()
+		@using (Html.BeginForm())
+		{
+			@Html.AntiForgeryToken()
 
-					<div class="form-actions no-color">
-						<input type="submit" value=@Strings.Delete class="btn btn-default" /> |
-						@Html.ActionLink(Strings.BackToList, "Index")
-					</div>
-				}
+			<div class="form-actions no-color">
+				<input type="submit" value=@Strings.Delete class="btn btn-default" /> |
+				@Html.ActionLink(Strings.BackToList, "Index")
 			</div>
-		</div>
+		}
 	</div>
 </div>
