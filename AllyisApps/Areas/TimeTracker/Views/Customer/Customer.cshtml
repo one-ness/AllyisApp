@@ -82,10 +82,10 @@
 								}
 							</td>
 							<td>
-								<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Project, new { customerId = customer.CustomerId, isActive = 2 })" title="@Strings.CustomerProjects">@customer.ActiveProjects</a>
+								<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Project + string.Format("/{0}/2", customer.CustomerId)@*, new { customerId = customer.CustomerId, isActive = 2 }*@)" title="@Strings.CustomerProjects">@customer.ActiveProjects</a>
 							</td>
 							<td>
-								<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Project, new { customerId = customer.CustomerId, isActive = 1 })" title="@Strings.CustomerProjects">@customer.InactiveProjects</a>
+								<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Project + string.Format("/{0}/1", customer.CustomerId)@*, new { customerId = customer.CustomerId, isActive = 1 }*@)" title="@Strings.CustomerProjects">@customer.InactiveProjects</a>
 							</td>
 							<td>
 								<a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Customer, new {userId = customer.CustomerId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a>
