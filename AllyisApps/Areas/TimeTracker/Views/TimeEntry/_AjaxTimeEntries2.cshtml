@@ -137,11 +137,11 @@
 					</div>
 				</div>
 			</div>
-							}
+		}
 	</div>
-							}
+}
 
 <div class="pull-right">
-	<a href="@Context.Request.RawUrl" class="btn btn-default" style="margin-right: 10px;">@Strings.Cancel</a>
+	<a href="@Context.Request.RawUrl" class="btn btn-default" onclick ="return confirm('@HttpUtility.JavaScriptStringEncode(Strings.CancelConfirm)')" style="margin-right: 10px;">@Strings.Cancel</a>
 	<span class="btn btn-primary" onclick="saveForm()">@Strings.Save</span>
 </div>

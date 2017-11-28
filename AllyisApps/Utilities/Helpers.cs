@@ -228,7 +228,7 @@ namespace AllyisApps.Utilities
 			else if (input.Body.NodeType == ExpressionType.Convert)
 				memberExp = ((UnaryExpression)input.Body).Operand as MemberExpression;
 
-			return memberExp != null ? memberExp.Member.Name : null;
+			return memberExp?.Member.Name;
 		}
 	}
 
