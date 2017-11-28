@@ -1775,7 +1775,6 @@
     <value>You have successfully joined {0}</value>
   </data>
 	<data name="CancelConfirm" xml:space="preserve">
-    <value>Are you sure you want to cancel?
-All unsaved changes will be lost.</value>
+    <value>Are you sure you want to cancel?\nAll unsaved changes will be lost.</value>
   </data>
 </root>
