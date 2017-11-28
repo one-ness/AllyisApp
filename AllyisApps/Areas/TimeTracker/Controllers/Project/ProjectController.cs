@@ -26,7 +26,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subscriptionId">The current subscription id.</param>
 		/// <param name="isActive"></param>
 		/// <returns></returns>
-		public async Task<ActionResult> Index(int subscriptionId, bool? isActive = null)
+		public async Task<ActionResult> Index(int subscriptionId, int isActive = 0)
 		{
 			DateTime currentTime = DateTime.UtcNow;
 			ViewData["IsManager"] = AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
@@ -36,11 +36,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			var projects = (await AppService.GetProjectsByOrganization(orgId, false)).Select(x => new CompleteProjectViewModel(x)).ToList();
 
-			if (isActive == true)
+			if (isActive == 2)
 			{
 				projects = projects.Where(p => (p.StartDate == null || (DateTime)p.StartDate >= currentTime) && (p.EndDate == null || (DateTime)p.EndDate <= currentTime)).ToList();
 			}
-			else if (isActive == false)
+			else if (isActive == 1)
 			{
 				projects = projects.Where(p => (p.StartDate != null && p.StartDate > currentTime) || (p.EndDate != null && p.EndDate < currentTime)).ToList();
 			}
@@ -48,7 +48,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			ProjectsViewModel model = new ProjectsViewModel()
 			{
 				Projects = projects,
-				ForCustomer = isActive == null
+				ForCustomer = isActive == 0
 			};
 
 			return View("Projects", model);
