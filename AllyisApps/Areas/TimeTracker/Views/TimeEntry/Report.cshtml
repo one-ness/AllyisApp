@@ -117,12 +117,13 @@
 
 <div class="col-xs-12">
 	<div class="panel panel-default">
-		<div class="panel-body" style="padding: 0px">
+		<div class="panel-body" style="padding: 0">
 			@if (Model.PreviewMessage == "")
 			{
 				<table class="table table-hover table-condensed">
 					<thead class="panel-heading">
 						<tr class="double-bottom-border">
+							<th>@Strings.EmployeeId</th>
 							<th>@Strings.LastName</th>
 							<th>@Strings.FirstName</th>
 							<th>@Strings.Date</th>
@@ -138,6 +139,7 @@
 						@foreach (TablePreviewEntry pe in Model.PreviewEntries)
 						{
 							<tr class="previewRow">
+								<td>@pe.TimeEntry.EmployeeId</td>
 								<td>@pe.TimeEntry.LastName</td>
 								<td>@pe.TimeEntry.FirstName</td>
 								<td>@pe.TimeEntry.Date.ToShortDateString()</td>
@@ -151,6 +153,7 @@
 						}
 
 						<tr id="tableEnd" class="nohover">
+							<td></td>
 							<td></td>
 							<td></td>
 							<td></td>

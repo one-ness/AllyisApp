@@ -98,16 +98,8 @@ namespace AllyisApps.Controllers.Auth
 					foreach (EditMemberViewModel.RoleItem item in model.SubscriptionRoles)
 					{
 						// note: selectedRoleId = 0 means Unassigned or NotInProduct
-						if (item.SelectedRoleId > 0)
-						{
-							//role changed
-							changedsubRoles.Add(item.SubscriptionId, item.SelectedRoleId);
-						}
-						else
-						{
-							//removed from subscription 
-							removedSubRole.Add(item.SubscriptionId);
-						}
+						//role changed
+						changedsubRoles.Add(item.SubscriptionId, item.SelectedRoleId);
 					}
 
 					// update the subscription roles

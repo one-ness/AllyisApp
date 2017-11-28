@@ -16,7 +16,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		/// <summary>
 		/// Gets or sets a value indicating whether or not the project is active.
 		/// </summary>
-		public bool IsActive { get; set; }
+		public bool IsCurrentlyActive { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Customer Id that the project belongs to.
@@ -111,7 +111,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 			CustomerName = proj.OwningCustomer?.CustomerName;
 			CustomerCode = proj.OwningCustomer?.CustomerCode;
 			EndDate = proj.EndDate;
-			IsActive = proj.IsCurrentlyActive;
+			IsCurrentlyActive = proj.IsCurrentlyActive;
 			IsCustomerActive = proj.IsCustomerActive;
 			IsProjectUser = proj.IsProjectUser;
 			IsUserActive = proj.IsUserActive;
