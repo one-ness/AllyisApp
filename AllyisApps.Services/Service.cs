@@ -419,12 +419,12 @@ namespace AllyisApps.Services
 
 			if (userIds == null || userIds.Count == 0 || userIds[0] == -1)
 			{
-				data = await GetTimeEntriesOverDateRange(orgId, startingDate ?? DateTime.MinValue.AddYears(1754),
+				data = await GetTimeEntriesOverDateRange(orgId, startingDate ?? SqlDateTime.MinValue.Value,
 					endingDate ?? DateTime.MaxValue.AddYears(-1));
 			}
 			else
 			{
-				data = await GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754),
+				data = await GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? SqlDateTime.MinValue.Value,
 					endingDate ?? DateTime.MaxValue.AddYears(-1), orgId);
 			}
 
@@ -432,14 +432,12 @@ namespace AllyisApps.Services
 			{
 				data = data.Where(t => t.ProjectId == projectId);
 			}
-			else
+			else if (customerId > 0)
 			{
-				if (customerId > 0)
-				{
-					var proj = await GetProjectsByCustomerAsync(customerId);
-					data = data.Where(t => proj.Select(p => p.ProjectId).Contains(t.ProjectId));
-				}
+				var projectIds = (await GetProjectsByCustomerAsync(customerId)).AsParallel().Select(p => p.ProjectId);
+				data = data.AsParallel().Join(projectIds, entry => entry.ProjectId, pId => pId, (entry, pId) => entry);
 			}
+			data = data.OrderBy(entry => entry.EmployeeId).ThenBy(entry => entry.Date);
 
 			if (userIds != null && userIds.Count == 1 && userIds[0] > 0)
 			{
@@ -455,9 +453,9 @@ namespace AllyisApps.Services
 
 			var output = new StreamWriter(new MemoryStream());
 			var columns = new[] {
+				ColumnHeaders.EmployeeId,
 				ColumnHeaders.UserLastName,
 				ColumnHeaders.UserFirstName,
-				ColumnHeaders.EmployeeId,
 				ColumnHeaders.UserEmail,
 				ColumnHeaders.Date,
 				ColumnHeaders.Duration,
@@ -479,9 +477,9 @@ namespace AllyisApps.Services
 					if (project.ProjectId == 0) project = null;
 					var rowData = new[]
 					{
+						entry.EmployeeId,
 						entry.LastName,
 						entry.FirstName,
-						entry.EmployeeId,
 						entry.Email,
 						entry.Date.ToShortDateString(),
 						entry.Duration.ToString(CultureInfo.CurrentCulture),

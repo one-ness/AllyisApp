@@ -661,7 +661,7 @@ namespace AllyisApps.Services
 		/// Initializes a <see cref="Customer"/> from a query"/>.
 		/// </summary>
 		/// <returns>A Customer object.</returns>
-		public Customer InitializeCustomer(dynamic customer)
+		public static Customer InitializeCustomer(dynamic customer)
 		{
 			if (customer == null)
 			{
@@ -684,7 +684,8 @@ namespace AllyisApps.Services
 					CountryName = customer.CountryName
 				};
 			}
-			return new Customer
+
+			var newCustomer = new Customer
 			{
 				Address = address,
 				ContactEmail = customer.ContactEmail,
@@ -701,6 +702,8 @@ namespace AllyisApps.Services
 				ActiveProjects = customer.ActiveProjectCount,
 				InactiveProjects = customer.ProjectCount - customer.ActiveProjectCount
 			};
+
+			return newCustomer;
 		}
 
 		public static Tuple<CustomerDBEntity, AddressDBEntity> GetDBEntitiesFromCustomerInfo(Customer customer)
