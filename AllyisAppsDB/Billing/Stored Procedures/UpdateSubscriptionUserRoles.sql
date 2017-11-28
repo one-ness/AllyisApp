@@ -21,7 +21,8 @@ BEGIN TRANSACTION
 
 	-- return updated users count
 	SELECT @@ROWCOUNT
-
+	
+	/*This should now only return 0 as users are no longer not added to subscription users
 	-- Select users from @userIds that are not already subscribed
 	DECLARE @addingUsers TABLE ([userId] INT);
 	INSERT INTO @addingUsers ([userId])
@@ -43,4 +44,5 @@ BEGIN TRANSACTION
 
 	-- return added users count
 	SELECT COUNT(*) FROM @addingUsers
+	*/
 COMMIT TRANSACTION

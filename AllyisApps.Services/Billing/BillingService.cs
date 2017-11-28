@@ -323,34 +323,12 @@ namespace AllyisApps.Services
 			}
 		}
 
-		public async Task<UpdateSubscriptionUserRolesResuts> UpdateSubscriptionUsersRoles(List<int> userIds, int organizationId, int productRoleId, int productId)
+		public async Task<int> UpdateSubscriptionUsersRoles(List<int> userIds, int organizationId, int productRoleId, int productId)
 		{
-			var result = await DBHelper.UpdateSubscriptionUserRoles(userIds, organizationId, productRoleId, productId);
-			return new UpdateSubscriptionUserRolesResuts()
-			{
-				UsersChanged = result.Item1,
-				UsersAddedToSubscription = result.Item2
-			};
+			return  await DBHelper.UpdateSubscriptionUserRoles(userIds, organizationId, productRoleId, productId);
 		}
 
-		/// <summary>Deletes the given users in the given organization's subscription</summary>
-		/// <param name="userIds">List of user Ids.</param>
-		/// <param name="orgId">The Organization Id.</param>
-		/// <param name="productId">The subscribed Product Id.</param>
-		/// <returns>count of deleted users.</returns>
-		public void DeleteSubscriptionUsers(List<int> userIds, int orgId, int productId)
-		{
-			#region Validation
-
-			if (userIds == null || userIds.Count == 0)
-			{
-				throw new ArgumentException("userIds", "No user ids provided.");
-			}
-
-			#endregion Validation
-
-			DBHelper.DeleteSubscriptionUsers(userIds, orgId, productId);
-		}
+		
 
 		/// <summary>
 		/// Gets a <see cref="Product"/>.
