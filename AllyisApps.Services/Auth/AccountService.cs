@@ -95,6 +95,7 @@ namespace AllyisApps.Services
 
 			bool result = DBHelper.AcceptInvitation(invitationId, UserContext.UserId) == 1;
 			Invitation invite = InitializeInvitationInfo(await DBHelper.GetInvitation(invitationId));
+
 			if (result && !string.IsNullOrWhiteSpace(invite.ProductRolesJson))
 			{
 				var roles = new List<InvitationPermissionsJson>();
@@ -104,12 +105,23 @@ namespace AllyisApps.Services
 				}
 				catch
 				{
-					// if roleString does not convert then assume that it is using old spfication resets to empty json list.
+					// if roleString does not convert then assume that it is using old specification resets to empty json list.
 				}
 
-				foreach (var item in roles)
+				// add the new user roles.  If not specified, user is added as unassigned
+				var subscriptions = await GetSubscriptionsAsync(invite.OrganizationId, true);
+				foreach (var subscription in subscriptions)
 				{
-					await DBHelper.UpdateSubscriptionUserProductRole(item.ProductRoleId, item.SubscriptionId, UserContext.UserId);
+					var role = roles.FirstOrDefault(r => r.SubscriptionId == subscription.SubscriptionId);
+					if (role != null)
+					{
+						await DBHelper.MergeSubscriptionUserProductRole(role.ProductRoleId, role.SubscriptionId, UserContext.UserId);
+					}
+					else
+					{
+						int unassignedProductRoleId = GetUnassignedProductRoleId(subscription.ProductId);
+						await DBHelper.MergeSubscriptionUserProductRole(unassignedProductRoleId, subscription.SubscriptionId, UserContext.UserId);
+					}
 				}
 			}
 
@@ -724,6 +736,21 @@ namespace AllyisApps.Services
 				ProductRoleId = subUser.ProductRoleId,
 				Email = subUser.Email
 			};
+		}
+
+		public static int GetUnassignedProductRoleId(ProductIdEnum productId)
+		{
+			switch (productId)
+			{
+				case ProductIdEnum.ExpenseTracker:
+					return (int)ExpenseTrackerRole.NotInProduct;
+				case ProductIdEnum.StaffingManager:
+					return (int)StaffingManagerRole.NotInProduct;
+				case ProductIdEnum.TimeTracker:
+					return (int)TimeTrackerRole.NotInProduct;
+				default:
+					throw new InvalidOperationException("You selected an invalid product to subscribe to.");
+			}
 		}
 
 		public async Task UpdateUserOrgMaxAmount(OrganizationUser userInfo)

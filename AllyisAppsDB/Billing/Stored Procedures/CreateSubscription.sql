@@ -3,11 +3,11 @@
 	@skuId INT,
 	@subscriptionName NVARCHAR(50),
 	@userId INT,
-	@productRoleId int
+	@managerProductRoleId INT,
+	@unassignedProductRoleId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
-	DECLARE @subscriptionId INT
 
 	--Create the new subscription
 	INSERT INTO [Billing].[Subscription]
@@ -19,12 +19,30 @@ BEGIN
 		@skuId,
 		@subscriptionName);
 
-	select @subscriptionId = SCOPE_IDENTITY()
+	DECLARE @subscriptionId INT = SCOPE_IDENTITY();
 	
-	-- create a new subscription user
-	INSERT INTO [Billing].[SubscriptionUser] ([UserId], [SubscriptionId], [ProductRoleId])
-		values(@userId, @subscriptionId, @productRoleId)
+	-- Add all org users to the subscription.  Current user is manager, other users are unassigned
+	WITH #organizationUsers AS (
+		SELECT  [UserId],
+				[SubscriptionId] = @subscriptionId,
+				[ProductRoleId] = @unassignedProductRoleId
+		FROM [Auth].[OrganizationUser]
+		WHERE [OrganizationId] = @organizationId
+		AND [UserId] != @userId
+		UNION ALL
+		SELECT  [UserId] = @userId,
+				[SubscriptionId] = @subscriptionId,
+				[ProductRoleId] = @managerProductRoleId
+	)
+	INSERT INTO [Billing].[SubscriptionUser] (
+		[UserId],
+		[SubscriptionId],
+		[ProductRoleId])
+	SELECT
+		[UserId],
+		[SubscriptionId],
+		[ProductRoleId]
+	FROM #organizationUsers
 
-	select @subscriptionId
-
+	SELECT @subscriptionId
 END

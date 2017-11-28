@@ -22,33 +22,42 @@ BEGIN
 	BEGIN -- Invitation found
 
 		-- Retrieve invited user
-		DECLARE @userId INT;
-		SET @userId = (
+		DECLARE @userId INT = (
 			SELECT [UserId]
 			FROM [Auth].[User] WITH (NOLOCK)
-			WHERE [User].[Email] = @email
+			WHERE [Email] = @email
+			AND [UserId] = @callingUserId
 		)
 
-		IF @userId IS NOT NULL AND @userId = @callingUserId
+		IF @userId IS NOT NULL
 		BEGIN -- Invited user found and matches calling user id
-			BEGIN TRANSACTION
+			BEGIN TRANSACTION;
 
-			-- Add user to organization
-			IF EXISTS (
-				SELECT * FROM [Auth].[OrganizationUser] WITH (NOLOCK)
-				WHERE [OrganizationUser].[UserId] = @userId AND [OrganizationUser].[OrganizationId] = @organizationId
+			WITH [NewUser] AS (SELECT
+				[UserId] = @userId,
+				[OrganizationId] = @organizationId,
+				[OrganizationRoleId] = @organizationRole,
+				[EmployeeId] = @employeeId
 			)
-			BEGIN -- User already in organization
-				UPDATE [Auth].[OrganizationUser]
-				SET [OrganizationRoleId] = @organizationRole,
-					[EmployeeId] = @employeeId
-				WHERE [UserId] = @userId AND 
-					[OrganizationId] = @organizationId;
-			END
-			ELSE
-			BEGIN -- User not in organization
-				EXECUTE [Auth].CreateOrganizationUser @userId, @organizationId, @organizationRole, @employeeId;
-			END
+			MERGE [Auth].[OrganizationUser] WITH (HOLDLOCK) AS [T]
+			USING [NewUser] AS [S]
+			ON [T].[OrganizationId] = [S].[OrganizationId]
+			AND [T].[UserId] = [S].[UserId]
+			WHEN MATCHED THEN UPDATE SET
+				[T].[OrganizationRoleId] = [S].[OrganizationRoleId],
+				[T].[EmployeeId] = [S].[EmployeeId]
+			WHEN NOT MATCHED THEN
+				INSERT (
+					[UserId],
+					[OrganizationId],
+					[OrganizationRoleId],
+					[EmployeeId])
+				VALUES (
+					[S].[UserId],
+					[S].[OrganizationId],
+					[S].[OrganizationRoleId],
+					[S].[EmployeeId]
+				);
 
 			UPDATE [Auth].[Invitation]
 			SET InvitationStatus = 2, DecisionDateUtc = GETUTCDATE()

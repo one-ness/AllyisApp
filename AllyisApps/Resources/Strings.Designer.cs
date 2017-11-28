@@ -79,6 +79,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have successfully joined {0}.
+        /// </summary>
+        public static string AcceptInvitationSuccess {
+            get {
+                return ResourceManager.GetString("AcceptInvitationSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Actions.
         /// </summary>
         public static string Actions {
@@ -408,6 +417,16 @@ namespace AllyisApps.Resources {
         public static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to cancel?
+        ///All unsaved changes will be lost..
+        /// </summary>
+        public static string CancelConfirm {
+            get {
+                return ResourceManager.GetString("CancelConfirm", resourceCulture);
             }
         }
         
@@ -1022,6 +1041,17 @@ namespace AllyisApps.Resources {
                 return ResourceManager.GetString("CustomerNameWarning", resourceCulture);
             }
         }
+
+		/// <summary>
+		///   Looks up a localized string similar to Customer Projects.
+		/// </summary>
+		public static string CustomerProjects
+		{
+			get
+			{
+				return ResourceManager.GetString("CustomerProjects", resourceCulture);
+			}
+		}
         
         /// <summary>
         ///   Looks up a localized string similar to You have successfully reactivated the customer.

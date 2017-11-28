@@ -1,6 +1,6 @@
 ﻿<li class="dropdown link-zone">
 	@{
-		bool manager = false;
+		bool manager;
 		try
 		{
 			manager = (bool)ViewData["IsManager"];
@@ -11,22 +11,22 @@
 		{
 			manager = true;
 		}
-		var userId = ViewData["UserId"];
-		var subId = ViewData["SubscriptionId"];
+
+		var subscriptionId = ViewData["SubscriptionId"];
 	}
 	<a class="dropdown-toggle" id="TheDropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-		@String.Format("{0}", ViewData["SubscriptionName"]) <span class="caret"></span>
+		@ViewData["SubscriptionName"] <span class="caret"></span>
 	</a>
 
 	<ul class="dropdown-menu dropdown-menu-right" id="TheDropdown2">
-		<li>@Html.ActionLink(Strings.TimeEntry, ActionConstants.Index, ControllerConstants.TimeEntry, new { subscriptionId = subId, startDate = ViewBag.WeekStart, endDate = ViewBag.WeekEnd }, "TimeTracker")</li>
+		<li>@Html.ActionLink(Strings.TimeEntry, ActionConstants.Index, ControllerConstants.TimeEntry, new { subscriptionId, startDate = ViewBag.WeekStart, endDate = ViewBag.WeekEnd }, "TimeTracker")</li>
 		@if (manager)
 		{
-			<li>@Html.ActionLink(Strings.Reports, ActionConstants.Report, ControllerConstants.TimeEntry, new { subscriptionId = subId }, "TimeTracker")</li>
-			<li>@Html.ActionLink(Strings.Customers, ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = subId }, "TimeTracker")</li>
-			<li>@Html.ActionLink(Strings.Projects, ActionConstants.Index, ControllerConstants.Project, new { subscriptionId = subId }, "TimeTracker")</li>
-			<li>@Html.ActionLink(Strings.Review, ActionConstants.Review, ControllerConstants.TimeEntry, new { subscriptionId = subId }, "TimeTracker")</li>
-			<li>@Html.ActionLink(Strings.Settings, ActionConstants.SettingsPayClass, ControllerConstants.TimeEntry, new { subscriptionId = subId }, "TimeTracker")</li>
+			<li>@Html.ActionLink(Strings.Reports, ActionConstants.Report, ControllerConstants.TimeEntry, new { subscriptionId }, "TimeTracker")</li>
+			<li>@Html.ActionLink(Strings.Customers, ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId }, "TimeTracker")</li>
+			<li>@Html.ActionLink(Strings.Projects, ActionConstants.Index, ControllerConstants.Project, new { subscriptionId }, "TimeTracker")</li>
+			<li>@Html.ActionLink(Strings.Review, ActionConstants.Review, ControllerConstants.TimeEntry, new { subscriptionId }, "TimeTracker")</li>
+			<li>@Html.ActionLink(Strings.Settings, ActionConstants.SettingsPayClass, ControllerConstants.TimeEntry, new { subscriptionId }, "TimeTracker")</li>
 		}
 	</ul>
 </li>

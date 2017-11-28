@@ -78,8 +78,16 @@ namespace AllyisApps.Services
 		/// </summary>
 		public async Task<List<Subscription>> GetSubscriptionsAsync(int orgId, bool readingList = false)
 		{
-			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
-			if (!readingList) CheckOrgAction(OrgAction.ReadSubscriptions, orgId);
+			if (orgId <= 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(orgId), $"{nameof(orgId)} must be greater than 0.");
+			}
+
+			if (!readingList)
+			{
+				CheckOrgAction(OrgAction.ReadSubscriptions, orgId);
+			}
+
 			var result = new List<Subscription>();
 			dynamic entities = await DBHelper.GetSubscriptionsAsync(orgId);
 			foreach (var item in entities)
@@ -294,14 +302,6 @@ namespace AllyisApps.Services
 			var collection = await DBHelper.GetOrganizationUsersAsync(orgId);
 
 			return collection.Select(InitializeOrganizationUser).ToList();
-		}
-
-		public async Task<int> GetOrganizationUserCountAsync(int orgId)
-		{
-			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
-			CheckOrgAction(OrgAction.ReadUsersList, orgId);
-
-			return await this.DBHelper.GetOrganizationUserCountAsync(orgId);
 		}
 
 		public async Task<int> GetOrganizationInvitationCountAsync(int orgId, InvitationStatusEnum statusMask)
