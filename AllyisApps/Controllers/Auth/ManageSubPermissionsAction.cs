@@ -241,17 +241,14 @@ namespace AllyisApps.Controllers.Auth
 
 		private async Task UpdateSubRoles(UserPermissionsAction model, string UsersModifiedMessage, string UsersAddedMessage)
 		{
-			var updatedAndAdded = await AppService.UpdateSubscriptionUsersRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(),
+			var usersUpdated = await AppService.UpdateSubscriptionUsersRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(),
 								model.SelectedAction.Value, model.OrganizationId, model.ProductId.Value);
-			if (updatedAndAdded.UsersChanged > 0)
+			if (usersUpdated > 0)
 			{
-				Notifications.Add(new BootstrapAlert(string.Format(UsersModifiedMessage, updatedAndAdded.UsersChanged), Variety.Success));
+				Notifications.Add(new BootstrapAlert(string.Format(UsersModifiedMessage, usersUpdated), Variety.Success));
 			}
 
-			if (updatedAndAdded.UsersAddedToSubscription > 0)
-			{
-				Notifications.Add(new BootstrapAlert(string.Format(UsersAddedMessage, updatedAndAdded.UsersAddedToSubscription), Variety.Success));
-			}
+			
 		}
 
 		private bool Validate(UserPermissionsAction model, ProductIdEnum product)

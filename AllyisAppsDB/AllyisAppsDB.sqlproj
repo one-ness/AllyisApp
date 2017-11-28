@@ -285,7 +285,6 @@
     <Build Include="Auth\Stored Procedures\DeleteOrganizationUsers.sql" />
     <Build Include="Auth\Stored Procedures\CreateUser.sql" />
     <Build Include="Billing\Stored Procedures\UpdateSubscriptionUserRoles.sql" />
-    <Build Include="Billing\Stored Procedures\DeleteSubscriptionUsers.sql" />
     <Build Include="Billing\Stored Procedures\GetNumberSubscriptionUsers.sql" />
     <Build Include="Billing\Stored Procedures\CreateSubscription.sql" />
     <None Include="UpgradeScripts\Upgrade_AllyisAppsDB_1.0_to_1.1.sql" />

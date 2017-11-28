@@ -94,7 +94,7 @@ namespace AllyisApps.DBModel
 		/// <param name="productRoleId">Product role to assign (or -1 to remove from organization).</param>
 		/// <param name="productId">ID of Product in question.</param>
 		/// <returns>The number of updated and number of added users.</returns>
-		public async Task<Tuple<int, int>> UpdateSubscriptionUserRoles(List<int> userIds, int organizationId, int productRoleId, int productId)
+		public async Task<int> UpdateSubscriptionUserRoles(List<int> userIds, int organizationId, int productRoleId, int productId)
 		{
 			DataTable userIdsTable = new DataTable();
 			userIdsTable.Columns.Add("userId", typeof(int));
@@ -113,37 +113,13 @@ namespace AllyisApps.DBModel
 				// TODO: split updating user roles and creating new sub users
 				var results = await connection.QueryMultipleAsync("[Billing].[UpdateSubscriptionUserRoles]", parameters, commandType: CommandType.StoredProcedure);
 				int usersUpdated = results.Read<int>().SingleOrDefault();
-				int usersAdded = results.Read<int>().SingleOrDefault();
-				return Tuple.Create(usersUpdated, usersAdded);
+				return usersUpdated;
 			}
 		}
 
 
 
-		/// <summary>Deletes the given users in the given organization's subscription</summary>
-		/// <param name="userIds">List of user Ids.</param>
-		/// <param name="organizationId">The Organization Id.</param>
-		/// <param name="productId">ID of Product in question.</param>
-		/// <returns>count of deleted users.</returns>
-		public void DeleteSubscriptionUsers(List<int> userIds, int organizationId, int productId)
-		{
-			DataTable userIdsTable = new DataTable();
-			userIdsTable.Columns.Add("userId", typeof(int));
-			foreach (int userId in userIds) { userIdsTable.Rows.Add(userId); }
-
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@userIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
-			parameters.Add("@organizationId", organizationId);
-
-			// TODO: instead of providing product id, provide subscription id of the subscription to be modified
-			parameters.Add("@productId", productId);
-
-			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
-			{
-				connection.Execute("[Billing].[DeleteSubscriptionUsers]", parameters, commandType: CommandType.StoredProcedure);
-			}
-		}
-
+		
 		/// <summary>
 		/// Unsubscribe method.
 		/// </summary>
