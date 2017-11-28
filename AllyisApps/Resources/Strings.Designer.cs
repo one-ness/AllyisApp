@@ -1041,6 +1041,17 @@ namespace AllyisApps.Resources {
                 return ResourceManager.GetString("CustomerNameWarning", resourceCulture);
             }
         }
+
+		/// <summary>
+		///   Looks up a localized string similar to Customer Projects.
+		/// </summary>
+		public static string CustomerProjects
+		{
+			get
+			{
+				return ResourceManager.GetString("CustomerProjects", resourceCulture);
+			}
+		}
         
         /// <summary>
         ///   Looks up a localized string similar to You have successfully reactivated the customer.
