@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
+using AllyisApps.Resources;
 using AllyisApps.Services;
+using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -29,7 +31,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			string subName = await AppService.GetSubscriptionName(subscriptionId);
 			int organizaionId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-			Services.TimeTracker.Setting settings = AppService.GetAllSettings(organizaionId).Item1;
+			Setting settings = AppService.GetAllSettings(organizaionId).Item1;
 
 			var model = new SettingsWeekStartViewModel
 			{
@@ -50,22 +52,21 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>Action result.</returns>
 		public async Task<ActionResult> UpdateStartOfWeek(int subscriptionId, int startOfWeek)
 		{
-			System.Diagnostics.Debug.WriteLine("New Start Date: " + startOfWeek);
-			var upWeek = await AppService.UpdateStartOfWeek(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId, subscriptionId, startOfWeek);
 			if (startOfWeek < 0 || startOfWeek > 6)
 			{
-				Notifications.Add(new BootstrapAlert(Resources.Strings.InvalidSOW, Variety.Warning));
-			}
-			else if (!upWeek)
-			{
-				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Strings.InvalidSOW, Variety.Warning));
 			}
 			else
 			{
-				Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulSOW, Variety.Success));
+				int organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+				var success = await AppService.UpdateStartOfWeek(organizationId, subscriptionId, startOfWeek);
+
+				Notifications.Add(success
+					? new BootstrapAlert(Strings.SuccessfulSOW, Variety.Success)
+					: new BootstrapAlert(Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
 
-			return RedirectToAction(ActionConstants.SettingsStartOfWeek, new { subscriptionid = subscriptionId, id = AppService.UserContext.UserId });
+			return RedirectToAction(ActionConstants.SettingsStartOfWeek, new { subscriptionId });
 		}
 	}
 }
