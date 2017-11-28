@@ -106,6 +106,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Active Projects.
+        /// </summary>
+        public static string ActiveProjects {
+            get {
+                return ResourceManager.GetString("ActiveProjects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
         public static string Add {
@@ -1915,6 +1924,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Inactive Projects.
+        /// </summary>
+        public static string InactiveProjects {
+            get {
+                return ResourceManager.GetString("InactiveProjects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Incorrect Password.
         /// </summary>
         public static string IncorrectPassword {
@@ -3495,6 +3513,15 @@ namespace AllyisApps.Resources {
         public static string ProjectCodeNotUnique {
             get {
                 return ResourceManager.GetString("ProjectCodeNotUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot create a new project because there are no active customers..
+        /// </summary>
+        public static string ProjectCreateNoCustomers {
+            get {
+                return ResourceManager.GetString("ProjectCreateNoCustomers", resourceCulture);
             }
         }
         
