@@ -421,6 +421,16 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to cancel?
+        ///All unsaved changes will be lost..
+        /// </summary>
+        public static string CancelConfirm {
+            get {
+                return ResourceManager.GetString("CancelConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to In order to add a new member to your organization,.
         /// </summary>
         public static string CannotAddMessage {
