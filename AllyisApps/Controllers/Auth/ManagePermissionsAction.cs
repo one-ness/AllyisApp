@@ -96,11 +96,11 @@ namespace AllyisApps.Controllers.Auth
 
 				if (modelSelectedUsers.Any(tu => tu.UserId == AppService.UserContext.UserId))
 				{
-					/*
+					
 					Notifications.Add(model.SelectedAction == -1
 						? new BootstrapAlert(Strings.YouAreUnableToRemoveYourself, Variety.Danger)
 						: new BootstrapAlert(Strings.YouAreUnableToChangeYourOwnRole, Variety.Danger));
-					*/
+					
 					model.SelectedUsers = model.SelectedUsers.Where(tu => tu.UserId != AppService.UserContext.UserId);
 					if (!modelSelectedUsers.Any())
 					{
@@ -112,7 +112,7 @@ namespace AllyisApps.Controllers.Auth
 				{
 					try
 					{
-						int numberChanged = AppService.DeleteOrganizationUsers(modelSelectedUsers.Select(tu => tu.UserId).ToList(), model.OrganizationId);
+						int numberChanged = await AppService.DeleteOrganizationUsers(modelSelectedUsers.Select(tu => tu.UserId).ToList(), model.OrganizationId);
 						Notifications.Add(new BootstrapAlert(string.Format(Strings.UsersRemovedFromOrg, numberChanged), Variety.Success));
 					}
 					catch (ArgumentNullException)

@@ -47,18 +47,7 @@ BEGIN
 			END
 			ELSE
 			BEGIN -- User not in organization
-				INSERT INTO [Auth].[OrganizationUser]  (
-					[UserId], 
-					[OrganizationId], 
-					[OrganizationRoleId], 
-					[EmployeeId]
-				)
-				VALUES (
-					@userId, 
-					@organizationId,
-					@organizationRole, 
-					@employeeId
-				);
+				EXECUTE [Auth].CreateOrganizationUser @userId, @organizationId, @organizationRole, @employeeId;
 			END
 
 			UPDATE [Auth].[Invitation]

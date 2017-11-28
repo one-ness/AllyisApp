@@ -190,7 +190,6 @@
     <Build Include="Auth\Stored Procedures\UpdateUserPasswordResetCode.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserPasswordUsingCode.sql" />
     <Build Include="Auth\Stored Procedures\DeleteOrg.sql" />
-    <Build Include="Auth\Stored Procedures\DeleteOrgUser.sql" />
     <Build Include="Auth\Stored Procedures\RejectInvitation.sql" />
     <Build Include="Auth\Stored Procedures\GetOrganization.sql" />
     <Build Include="Auth\Stored Procedures\GetOrganizationsByUserId.sql" />

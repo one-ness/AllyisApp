@@ -728,6 +728,7 @@ namespace AllyisApps.Services
 									}
 								}
 							}//Remove logic only email matters.
+							/* This will lead to bad times. First Name last name are not unique 
 							if (userTuple == null)
 							{
 								string readLastName = null;
@@ -736,6 +737,7 @@ namespace AllyisApps.Services
 									userTuple = users.FirstOrDefault(tup => tup.Item2.FirstName.Equals(readValue) && tup.Item2.LastName.Equals(readLastName));
 								}
 							}
+							*/
 						}
 						userInOrg = userTuple?.Item2;
 
@@ -827,7 +829,8 @@ namespace AllyisApps.Services
 
 								try
 								{
-									await InviteUser(inviteUrl, fields[0].Trim(), names[0], names[1], orgId, UserContext.OrganizationsAndRoles[orgId].OrganizationName, OrganizationRoleEnum.Member, fields[1], ""); //We need to update this with values from the excel sheet.
+									AddUserToOrganizaion(fields[0].Trim(), names[0], names[1],orgId,OrganizationRoleEnum.Member,fields[1]);
+
 									result.UsersImported += 1;
 								}
 								catch (DuplicateNameException)
