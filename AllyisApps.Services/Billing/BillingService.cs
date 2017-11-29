@@ -610,6 +610,18 @@ namespace AllyisApps.Services
 
 			// create new subscription
 			int subId = await DBHelper.CreateSubscription(organizationId, (int)skuId, subscriptionName, UserContext.UserId, productRoleId);
+
+			// Add default EmployeeType and payclasses to time tracker.
+			if (selectedSku.ProductId == ProductIdEnum.TimeTracker)
+			{
+				int employeeTypeId = await CreateEmployeeType(organizationId, "Full Time Employee");
+
+				for (int i = 1; i < 9; i++)
+				{
+					await AddPayClassToEmployeeType(employeeTypeId, i);
+				}
+			}
+
 			if (selectedSku.ProductId == ProductIdEnum.StaffingManager) await InitializeSettingsForProduct(selectedSku.ProductId, organizationId, subId);
 		}
 

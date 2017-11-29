@@ -396,6 +396,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@organizationId", organizationUser.OrganizationId);
 			parameters.Add("@userId", organizationUser.UserId);
 			parameters.Add("@roleId", organizationUser.OrganizationRoleId);
+			parameters.Add("@employeeTypeId", organizationUser.EmployeeTypeId);
 			parameters.Add("@employeeId", organizationUser.EmployeeId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))

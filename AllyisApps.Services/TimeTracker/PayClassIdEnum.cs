@@ -25,6 +25,11 @@
 		/// <summary>
 		/// Overtime.
 		/// </summary>
-		OverTime = 5
+		OverTime = 5,
+
+		/// <summary>
+		///Custom
+		/// </summary>
+		Custom = 6
 	}
 }

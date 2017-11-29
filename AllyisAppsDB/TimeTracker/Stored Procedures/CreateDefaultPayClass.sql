@@ -3,12 +3,12 @@
 AS
 BEGIN
 	SET NOCOUNT ON;
-	INSERT INTO [Hrm].[PayClass] ([PayClassName], [OrganizationId]) VALUES ('Regular',           @organizationId);
-	INSERT INTO [Hrm].[PayClass] ([PayClassName], [OrganizationId]) VALUES ('Paid Time Off',     @organizationId);
-	INSERT INTO [Hrm].[PayClass] ([PayClassName], [OrganizationId]) VALUES ('Unpaid Time Off',   @organizationId);
-	INSERT INTO [Hrm].[PayClass] ([PayClassName], [OrganizationId]) VALUES ('Holiday',           @organizationId);
-	INSERT INTO [Hrm].[PayClass] ([PayClassName], [OrganizationId]) VALUES ('Bereavement Leave', @organizationId);
-	INSERT INTO [Hrm].[PayClass] ([PayClassName], [OrganizationId]) VALUES ('Jury Duty',         @organizationId);
-	INSERT INTO [Hrm].[PayClass] ([PayClassName], [OrganizationId]) VALUES ('Overtime',          @organizationId);
-	INSERT INTO [Hrm].[PayClass] ([PayClassName], [OrganizationId]) VALUES ('Other Leave',       @organizationId);
+	INSERT INTO [Hrm].[PayClass] ([PayClassName], [OrganizationId], [BuiltInPayClassId]) VALUES ('Regular',           @organizationId, 1);
+	INSERT INTO [Hrm].[PayClass] ([PayClassName], [OrganizationId], [BuiltInPayClassId]) VALUES ('Paid Time Off',     @organizationId, 2);
+	INSERT INTO [Hrm].[PayClass] ([PayClassName], [OrganizationId], [BuiltInPayClassId]) VALUES ('Unpaid Time Off',   @organizationId, 3);
+	INSERT INTO [Hrm].[PayClass] ([PayClassName], [OrganizationId], [BuiltInPayClassId]) VALUES ('Holiday',           @organizationId, 4);
+	INSERT INTO [Hrm].[PayClass] ([PayClassName], [OrganizationId], [BuiltInPayClassId]) VALUES ('Bereavement Leave', @organizationId, 6);
+	INSERT INTO [Hrm].[PayClass] ([PayClassName], [OrganizationId], [BuiltInPayClassId]) VALUES ('Jury Duty',         @organizationId, 6);
+	INSERT INTO [Hrm].[PayClass] ([PayClassName], [OrganizationId], [BuiltInPayClassId]) VALUES ('Overtime',          @organizationId, 5);
+	INSERT INTO [Hrm].[PayClass] ([PayClassName], [OrganizationId], [BuiltInPayClassId]) VALUES ('Other Leave',       @organizationId, 6);
 END

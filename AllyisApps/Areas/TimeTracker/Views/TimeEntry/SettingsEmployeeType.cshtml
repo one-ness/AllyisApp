@@ -5,6 +5,10 @@
 	ViewBag.Title = "SettingsEmployeeType";
 }
 
+@section css {
+	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+}
+
 <div class="container">
 	<div class="row slim">
 		<div class="col-sm-2">
@@ -18,15 +22,31 @@
 			</div>
 			<table class="table table-condensed">
 				<thead>
-					<tr>Id</tr>
-					<tr>Name</tr>
-					<tr>Edit</tr>
+					<tr>
+						<td width="25%">Id</td>
+						<td width="70%">Name</td>
+						<td width="5%">Edit</td>
+					</tr>
 				</thead>
 				<tbody>
 					@foreach (var types in Model.EmployeeTypes)
 					{
-
+						<tr>
+							<td>@types.EmployeeTypeId</td>
+							<td>@types.EmployeeTypeName</td>
+							<td><a href="@Url.Action("EditEmployeeType", ControllerConstants.TimeEntry, new {orgId = types.OrganizationId, employeeTypeId = types.EmployeeTypeId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a></td>
+						</tr>
 					}
+					<tr>
+						@using (Html.BeginForm(ActionConstants.CreateSettingsEmployeeType, ControllerConstants.TimeEntry, FormMethod.Get))
+						{
+							@Html.AntiForgeryToken();
+							@Html.HiddenFor(m => m.SubscriptionId)
+							<td></td>
+							<td></td>
+							<td><input class="btn btn-primary pull-right" type="submit" value="@Strings.Add" /></td>
+						}
+					</tr>
 				</tbody>
 			</table>
 		</div>

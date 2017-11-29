@@ -49,6 +49,11 @@ namespace AllyisApps.DBModel.Auth
 		public DateTime CreatedUtc { get; set; }
 
 		/// <summary>
+		///
+		/// </summary>
+		public int EmployeeTypeId { get; set; }
+
+		/// <summary>
 		/// Gets or sets the employee id for this user.
 		/// </summary>
 		public string EmployeeId { get; set; }

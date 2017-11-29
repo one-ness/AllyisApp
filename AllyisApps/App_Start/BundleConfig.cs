@@ -45,6 +45,9 @@ namespace AllyisApps
 			bundles.Add(new ScriptBundle("~/bundles/TTTimeEntryUserEdit").Include(
 				"~/Areas/TimeTracker/Scripts/allyis-timeentry-useredit.js"));
 
+			bundles.Add(new ScriptBundle("~/bundles/TTEmployeeTypeEdit").Include(
+				"~/Areas/TimeTracker/Scripts/allyis-employeetype-edit.js"));
+
 			// General AllyisApps scripts
 			bundles.Add(new ScriptBundle("~/bundles/pageswithsearch").Include(
 				"~/Scripts/allyis-list-group-search.js",

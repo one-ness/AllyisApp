@@ -452,7 +452,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<SettingDBEntity, List<PayClassDBEntity>, List<HolidayDBEntity>, List<EmployeeTypeDBEntity>> GetAllSettings(int orgId)
+		public Tuple<SettingDBEntity, List<PayClassDBEntity>, List<HolidayDBEntity>/*, List<EmployeeTypeDBEntity>*/> GetAllSettings(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
@@ -466,8 +466,9 @@ namespace AllyisApps.DBModel
 				return Tuple.Create(
 					results.Read<SettingDBEntity>().SingleOrDefault(),
 					results.Read<PayClassDBEntity>().ToList(),
-					results.Read<HolidayDBEntity>().ToList(),
-					results.Read<EmployeeTypeDBEntity>().ToList());
+					results.Read<HolidayDBEntity>().ToList());
+				//,
+				//results.Read<EmployeeTypeDBEntity>().ToList());
 			}
 		}
 
@@ -580,6 +581,152 @@ namespace AllyisApps.DBModel
 					"[TimeTracker].[GetTimeEntriesByProjectId]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		///
+		/// </summary>
+		/// <returns></returns>
+		public async Task<int> CreateEmployeeType(int orgId, string employeeName)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@orgId", orgId);
+			parameters.Add("@employeeName", employeeName);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				var results = await connection.QueryAsync<int>(
+					"[Hrm].[CreateEmployeeType]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+				return results.FirstOrDefault();
+			}
+		}
+
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="employeeTypeId"></param>
+		/// <returns></returns>
+		public async Task DeleteEmployeeType(int employeeTypeId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@employeeTypeId", employeeTypeId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				await connection.ExecuteAsync(
+				   "[Hrm].[DeleteEmployeeType]",
+				   parameters,
+				   commandType: CommandType.StoredProcedure);
+
+				return;
+			}
+		}
+
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="employeeTypeId"></param>
+		/// <returns></returns>
+		public async Task<List<int>> GetAssignedPayClasses(int employeeTypeId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@employeeTypeId", employeeTypeId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				var results = await connection.QueryAsync<int>(
+					"[Hrm].[GetAssingedPayClasses]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+
+				return results.ToList();
+			}
+		}
+
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="employeeTypeId"></param>
+		/// <param name="payClassId"></param>
+		/// <returns></returns>
+		public async Task AddPayClassToEmployeeType(int employeeTypeId, int payClassId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@employeeTypeId", employeeTypeId);
+			parameters.Add("@payclassId", payClassId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				var results = await connection.ExecuteAsync(
+					"[Hrm].[AddPayClassToEmployeeType]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="employeeTypeId"></param>
+		/// <param name="payClassId"></param>
+		/// <returns></returns>
+		public async Task RemovePayClassFromEmployeeType(int employeeTypeId, int payClassId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@employeeTypeId", employeeTypeId);
+			parameters.Add("@payclassId", payClassId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				var results = await connection.ExecuteAsync(
+					"[Hrm].[RemovePayClassFromEmployeeType]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="employeeTypeId"></param>
+		/// <returns></returns>
+		public async Task<EmployeeTypeDBEntity> GetEmployeeType(int employeeTypeId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@employeeTypeId", employeeTypeId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				var results = await connection.QueryAsync<EmployeeTypeDBEntity>(
+					"[Hrm].[GetEmployeeType]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+
+				return results.FirstOrDefault();
+			}
+		}
+
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="organizationId"></param>
+		/// <returns></returns>
+		public async Task<List<EmployeeTypeDBEntity>> GetEmployeeTypesByOrganization(int organizationId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationId", organizationId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				var results = await connection.QueryAsync<EmployeeTypeDBEntity>(
+					"[Hrm].[GetEmployeeTypesByOrganization]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+
+				return results.ToList();
 			}
 		}
 	}

@@ -307,6 +307,7 @@
     <Compile Include="Areas\TimeTracker\ViewModels\Customer\MultiCustomerInfoViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\Project\CompleteProjectViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\Project\ProjectsViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsEditEmployeeTypeViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\ReviewViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\MergePayClassViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsEmployeeTypeViewModel.cs" />
@@ -470,6 +471,7 @@
     <Compile Include="ViewModels\Shared\LanguageViewModel.cs" />
     <Compile Include="ViewModels\Shared\LogOnPartialViewModel.cs" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-drp-init.js" />
+    <Content Include="Areas\TimeTracker\Scripts\allyis-employeetype-edit.js" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-index2.js" />
     <Content Include="Content\bootstrap\css\bootstrap.min.css" />
     <Content Include="Content\css\bootstrap-select.min.css" />
@@ -585,6 +587,7 @@
     <Content Include="Areas\StaffingManager\Views\Customer\Delete.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Customer\Details.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsEmployeeType.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsEditEmployeeType.cshtml" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>

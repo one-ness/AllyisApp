@@ -201,6 +201,65 @@ namespace AllyisApps.Services
 			return await DBHelper.UpdatePayPeriod(payPeriodJson, organizationId);
 		}
 
+		public async Task<int> CreateEmployeeType(int orgId, string employeeName)
+		{
+			if (!(orgId >= 0)) throw new ArgumentNullException("OrgId");
+			if (string.IsNullOrEmpty(employeeName)) throw new ArgumentNullException("employeeName");
+
+			var result = await DBHelper.CreateEmployeeType(orgId, employeeName);
+
+			return result;
+		}
+
+		public async Task DeleteEmployeeType(int employeeTypeId)
+		{
+			if (employeeTypeId <= 0) throw new ArgumentNullException("EmployeeTypeId");
+
+			await DBHelper.DeleteEmployeeType(employeeTypeId);
+
+			return;
+		}
+
+		public async Task<EmployeeType> GetEmployeeType(int employeeTypeId)
+		{
+			if (employeeTypeId <= 0) throw new ArgumentNullException("EmployeeTypeId");
+			var results = await DBHelper.GetEmployeeType(employeeTypeId);
+			EmployeeType employee = new EmployeeType() { EmployeeTypeId = results.EmployeeTypeId, EmployeeTypeName = results.EmployeeTypeName, OrganizationId = results.OrganizationId };
+			return employee;
+		}
+
+		public async Task<List<int>> GetAssignedPayClasses(int employeeTypeId)
+		{
+			if (employeeTypeId <= 0) throw new ArgumentNullException("EmployeeTypeId");
+
+			return await DBHelper.GetAssignedPayClasses(employeeTypeId);
+		}
+
+		public async Task AddPayClassToEmployeeType(int employeeTypeId, int payClassId)
+		{
+			if (employeeTypeId <= 0) throw new ArgumentNullException("EmployeeTypeId");
+			if (payClassId <= 0) throw new ArgumentNullException("payClassId");
+
+			await DBHelper.AddPayClassToEmployeeType(employeeTypeId, payClassId);
+		}
+
+		public async Task RemovePayClassFromEmployeeType(int employeeTypeId, int payClassId)
+		{
+			if (employeeTypeId <= 0) throw new ArgumentNullException("EmployeeTypeId");
+			if (payClassId <= 0) throw new ArgumentNullException("payClassId");
+
+			await DBHelper.RemovePayClassFromEmployeeType(employeeTypeId, payClassId);
+		}
+
+		public async Task<List<EmployeeType>> GetEmployeeTypeByOrganization(int organizationId)
+		{
+			if (organizationId <= 0) throw new ArgumentNullException("OrgId");
+
+			var results = (await DBHelper.GetEmployeeTypesByOrganization(organizationId)).Select(x => new EmployeeType { EmployeeTypeId = x.EmployeeTypeId, EmployeeTypeName = x.EmployeeTypeName, OrganizationId = x.OrganizationId });
+
+			return results.ToList();
+		}
+
 		public async Task<PayPeriodRanges> GetPayPeriodRanges(int organizationId)
 		{
 			if (organizationId <= 0)
