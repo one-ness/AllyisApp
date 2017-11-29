@@ -8,109 +8,105 @@
 }
 
 <div class="container">
-	<div class="row">
-		<div class="col-xs-12">
-			<div class="form-group pull-right">
-				<a href="@Url.Action("CustomerImport")">
-					<span class="btn btn-primary">Customer Import</span>
-				</a>
-				<a href="@Url.Action("Create")">
-					<span class="btn btn-primary">Create Customer</span>
-				</a>
+	<div class="form-group pull-right">
+		<a href="@Url.Action("CustomerImport")">
+			<span class="btn btn-primary">Customer Import</span>
+		</a>
+		<a href="@Url.Action("Create")">
+			<span class="btn btn-primary">Create Customer</span>
+		</a>
+	</div>
+	<table class="table table-hover table-xtra-condensed">
+		<thead>
+			<tr class="double-bottom-border">
+				<th>
+					<input type="checkbox" id="select-all" onclick="CheckAllToggle()" />
+				</th>
+				<th>
+					Name
+				</th>
+				<th>
+					Address
+				</th>
+				<th>
+					EIN
+				</th>
+				<th>
+					Customer Code
+				</th>
+				<th>
+					Status
+				</th>
+				<th>
+					Active Projects
+				</th>
+				<th>
+					Inactive Projects
+				</th>
+				<th>
+					Edit
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var customer in Model.CustomerList)
+			{
+				<tr>
+					<td><input type="checkbox" class="customer-select" value="@customer.CustomerId" /></td>
+					<td>@customer.CustomerName</td>
+					<td>
+						@{
+							var adressCityDispaly = (customer.Address.City != null) ? customer.Address.City + ", " + customer.Address.StateName : customer.Address.StateName;
+						}
+						@if(customer.Address.Address1 != null) { 
+							<p>@customer.Address.Address1</p>
+						}
+						@if (customer.Address.Address2 != null)
+						{
+							<p>@customer.Address.Address2</p>
+						}
+						<p>@adressCityDispaly  @customer.Address.PostalCode</p>
+					</td>
+					<td>@customer.EIN</td>
+					<td>@customer.CustomerCode</td>
+					<td>
+						@if (customer.IsActive.Value)
+						{
+							<p>Active</p>
+						}
+						else
+						{
+							<p>Disabled</p>
+						}
+					</td>
+					<td>
+						<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Project, new { isActive = 2 })" title="@Strings.ActiveProjects">@customer.ActiveProjects</a>
+					</td>
+					<td>
+						<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Project, new { isActive = 1 })" title="@Strings.InactiveProjects">@customer.InactiveProjects</a>
+					</td>
+					<td>
+						<a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Customer, new {userId = customer.CustomerId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a>
+					</td>
+				</tr>
+							}
+		</tbody>
+	</table>
+	<div class="pull-right btn">
+		@using (Html.BeginForm(Strings.Delete, Strings.Customer, new { }, FormMethod.Get, new { @onsubmit = "return getUserIdsAndSubmit();" }))
+		{
+			<div>
+				<input type="hidden" name="userIds" id="deleteIds" value="" />
+				<button type="submit" class="btn btn-danger  pull-right">Delete</button>
 			</div>
-			<table class="table table-hover table-xtra-condensed">
-				<thead>
-					<tr class="double-bottom-border">
-						<th>
-							<input type="checkbox" id="select-all" onclick="CheckAllToggle()" />
-						</th>
-						<th>
-							Name
-						</th>
-						<th>
-							Address
-						</th>
-						<th>
-							EIN
-						</th>
-						<th>
-							Customer Code
-						</th>
-						<th>
-							Status
-						</th>
-						<th>
-							Active Projects
-						</th>
-						<th>
-							Inactive Projects
-						</th>
-						<th>
-							Edit
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach (var customer in Model.CustomerList)
-					{
-						<tr>
-							<td><input type="checkbox" class="customer-select" value="@customer.CustomerId" /></td>
-							<td>@customer.CustomerName</td>
-							<td>
-								@{
-									var adressCityDispaly = (customer.Address.City != null) ? customer.Address.City + ", " + customer.Address.StateName : customer.Address.StateName;
-								}
-								@if(customer.Address.Address1 != null) { 
-									<p>@customer.Address.Address1</p>
-								}
-								@if (customer.Address.Address2 != null)
-								{
-									<p>@customer.Address.Address2</p>
-								}
-								<p>@adressCityDispaly  @customer.Address.PostalCode</p>
-							</td>
-							<td>@customer.EIN</td>
-							<td>@customer.CustomerCode</td>
-							<td>
-								@if (customer.IsActive.Value)
-								{
-									<p>Active</p>
-								}
-								else
-								{
-									<p>Disabled</p>
-								}
-							</td>
-							<td>
-								<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Project, new { customerId = customer.CustomerId, isActive = 2 })" title="@Strings.CustomerProjects">@customer.ActiveProjects</a>
-							</td>
-							<td>
-								<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Project, new { customerId = customer.CustomerId, isActive = 1 })" title="@Strings.CustomerProjects">@customer.InactiveProjects</a>
-							</td>
-							<td>
-								<a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Customer, new {userId = customer.CustomerId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a>
-							</td>
-						</tr>
-									}
-				</tbody>
-			</table>
-			<div class="pull-right btn">
-				@using (Html.BeginForm(Strings.Delete, Strings.Customer, new { }, FormMethod.Get, new { @onsubmit = "return getUserIdsAndSubmit();" }))
-				{
-					<div>
-						<input type="hidden" name="userIds" id="deleteIds" value="" />
-						<button type="submit" class="btn btn-danger  pull-right">Delete</button>
-					</div>
-				}
-			</div>
-			<div class="pull-left btn">
-				@using (Html.BeginForm("ToggleStatus", Strings.Customer, new { }, FormMethod.Get, new { @onsubmit = "return getUserIdsAndSubmit();" }))
-				{
-					<input type="hidden" name="userIds" id="userIds" value="" />
-					<button type="submit" class="btn btn-primary  pull-right">Toggle Status</button>
-				}
-			</div>
-		</div>
+		}
+	</div>
+	<div class="pull-left btn">
+		@using (Html.BeginForm("ToggleStatus", Strings.Customer, new { }, FormMethod.Get, new { @onsubmit = "return getUserIdsAndSubmit();" }))
+		{
+			<input type="hidden" name="userIds" id="userIds" value="" />
+			<button type="submit" class="btn btn-primary  pull-right">Toggle Status</button>
+		}
 	</div>
 </div>
 

@@ -107,6 +107,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			reportVM.PreviewTotal = $"{dataVM.Data.Select(d => d.Duration).Sum()} {Strings.HoursTotal}";
 			reportVM.PreviewEntries = dataVM.PreviewData.Any()
 				? dataVM.PreviewData
+					.AsParallel()
 					.Select(data => new
 					{
 						data,
@@ -118,6 +119,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						ProjectName = t.orgProj.ProjectName,
 						TimeEntry = t.data
 					})
+					.OrderBy(t => t.TimeEntry.EmployeeId)
+					.ThenBy(t => t.TimeEntry.Date)
 					.ToList()
 				: null;
 			reportVM.PreviewMessage = dataVM.PreviewData.Any() ? string.Empty : Strings.NoDataPreview;

@@ -106,6 +106,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Active Projects.
+        /// </summary>
+        public static string ActiveProjects {
+            get {
+                return ResourceManager.GetString("ActiveProjects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
         public static string Add {
@@ -421,8 +430,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to cancel?
-        ///All unsaved changes will be lost..
+        ///   Looks up a localized string similar to Are you sure you want to cancel?\nAll unsaved changes will be lost..
         /// </summary>
         public static string CancelConfirm {
             get {
@@ -1041,17 +1049,6 @@ namespace AllyisApps.Resources {
                 return ResourceManager.GetString("CustomerNameWarning", resourceCulture);
             }
         }
-
-		/// <summary>
-		///   Looks up a localized string similar to Customer Projects.
-		/// </summary>
-		public static string CustomerProjects
-		{
-			get
-			{
-				return ResourceManager.GetString("CustomerProjects", resourceCulture);
-			}
-		}
         
         /// <summary>
         ///   Looks up a localized string similar to You have successfully reactivated the customer.
@@ -1923,6 +1920,15 @@ namespace AllyisApps.Resources {
         public static string ImportCustomersTitle {
             get {
                 return ResourceManager.GetString("ImportCustomersTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inactive Projects.
+        /// </summary>
+        public static string InactiveProjects {
+            get {
+                return ResourceManager.GetString("InactiveProjects", resourceCulture);
             }
         }
         
@@ -3507,6 +3513,15 @@ namespace AllyisApps.Resources {
         public static string ProjectCodeNotUnique {
             get {
                 return ResourceManager.GetString("ProjectCodeNotUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot create a new project because there are no active customers..
+        /// </summary>
+        public static string ProjectCreateNoCustomers {
+            get {
+                return ResourceManager.GetString("ProjectCreateNoCustomers", resourceCulture);
             }
         }
         
