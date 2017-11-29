@@ -319,38 +319,16 @@ namespace AllyisApps.Services
 				int roleId = item.Value;
 
 				await CheckSubscriptionAction(OrgAction.EditSubscriptionUser, subId);
-				await DBHelper.UpdateSubscriptionUserProductRole(roleId, subId, userId);
+				await DBHelper.MergeSubscriptionUserProductRole(roleId, subId, userId);
 			}
 		}
 
-		public async Task<UpdateSubscriptionUserRolesResuts> UpdateSubscriptionUsersRoles(List<int> userIds, int organizationId, int productRoleId, int productId)
+		public async Task<int> UpdateSubscriptionUsersRoles(List<int> userIds, int organizationId, int productRoleId, int productId)
 		{
-			var result = await DBHelper.UpdateSubscriptionUserRoles(userIds, organizationId, productRoleId, productId);
-			return new UpdateSubscriptionUserRolesResuts()
-			{
-				UsersChanged = result.Item1,
-				UsersAddedToSubscription = result.Item2
-			};
+			return  await DBHelper.UpdateSubscriptionUserRoles(userIds, organizationId, productRoleId, productId);
 		}
 
-		/// <summary>Deletes the given users in the given organization's subscription</summary>
-		/// <param name="userIds">List of user Ids.</param>
-		/// <param name="orgId">The Organization Id.</param>
-		/// <param name="productId">The subscribed Product Id.</param>
-		/// <returns>count of deleted users.</returns>
-		public void DeleteSubscriptionUsers(List<int> userIds, int orgId, int productId)
-		{
-			#region Validation
-
-			if (userIds == null || userIds.Count == 0)
-			{
-				throw new ArgumentException("userIds", "No user ids provided.");
-			}
-
-			#endregion Validation
-
-			DBHelper.DeleteSubscriptionUsers(userIds, orgId, productId);
-		}
+		
 
 		/// <summary>
 		/// Gets a <see cref="Product"/>.
@@ -537,22 +515,29 @@ namespace AllyisApps.Services
 		/// </summary>
 		public async Task Subscribe(int organizationId, SkuIdEnum skuId, string subscriptionName)
 		{
-			if (organizationId <= 0) throw new ArgumentOutOfRangeException();
-			if (string.IsNullOrWhiteSpace(subscriptionName)) throw new ArgumentNullException();
+			if (organizationId <= 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(organizationId), $"{nameof(organizationId)} must be greater than 0.");
+			}
+
+			if (string.IsNullOrWhiteSpace(subscriptionName))
+			{
+				throw new ArgumentNullException(nameof(subscriptionName));
+			}
 
 			// get all subscriptions of the given organization
-			var collection = await GetSubscriptionsAsync(organizationId);
-			foreach (Subscription item in collection)
+			var subscriptions = await GetSubscriptionsAsync(organizationId);
+			foreach (Subscription subscription in subscriptions)
 			{
 				// is it an existing sku?
-				if (item.SkuId == skuId)
+				if (subscription.SkuId == skuId)
 				{
 					// yes, already subscribed
 					return;
 				}
 
 				// no, get the product of this subscription
-				ProductIdEnum pid = item.ProductId;
+				ProductIdEnum pid = subscription.ProductId;
 				if (!CacheContainer.ProductsCache.TryGetValue(pid, out Product product) || !product.IsActive)
 				{
 					// inactive or invalid product
@@ -560,13 +545,12 @@ namespace AllyisApps.Services
 				}
 
 				// is it a sku of this product?
-				if (!CacheContainer.SkusCache.TryGetValue(pid, out List<Sku> skus)) continue;
-
+				if (!CacheContainer.SkusCache.TryGetValue(pid, out var skus)) continue;
 				Sku sku = skus.FirstOrDefault(x => x.IsActive && x.SkuId == skuId);
 				if (sku == null) continue;
 
 				// yes, user is subscribing to another sku of an existing subscription (i.e., product)
-				UpdateSubscriptionSkuAndName(organizationId, item.SubscriptionId, subscriptionName, skuId);
+				UpdateSubscriptionSkuAndName(organizationId, subscription.SubscriptionId, subscriptionName, skuId);
 				return;
 			}
 
@@ -585,20 +569,24 @@ namespace AllyisApps.Services
 				throw new InvalidOperationException("You selected an invalid product to subscribe to.");
 			}
 
-			// set the creating user as highest level
-			int productRoleId;
+			// set the creating user as highest level, and all other users as unassigned
+			int managerProductRoleId;
+			int unassignedProductRoleId;
 			switch (selectedSku.ProductId)
 			{
 				case ProductIdEnum.ExpenseTracker:
-					productRoleId = (int)ExpenseTrackerRole.Manager;
+					managerProductRoleId = (int)ExpenseTrackerRole.Manager;
+					unassignedProductRoleId = (int)ExpenseTrackerRole.NotInProduct;
 					break;
 
 				case ProductIdEnum.StaffingManager:
-					productRoleId = (int)StaffingManagerRole.Manager;
+					managerProductRoleId = (int)StaffingManagerRole.Manager;
+					unassignedProductRoleId = (int)StaffingManagerRole.NotInProduct;
 					break;
 
 				case ProductIdEnum.TimeTracker:
-					productRoleId = (int)TimeTrackerRole.Manager;
+					managerProductRoleId = (int)TimeTrackerRole.Manager;
+					unassignedProductRoleId = (int)TimeTrackerRole.NotInProduct;
 					break;
 
 				default:
@@ -606,23 +594,11 @@ namespace AllyisApps.Services
 					throw new InvalidOperationException("You selected an invalid product to subscribe to.");
 			}
 
-			if (selectedSku.ProductId != ProductIdEnum.StaffingManager) await InitializeSettingsForProduct(selectedSku.ProductId, organizationId);
-
 			// create new subscription
-			int subId = await DBHelper.CreateSubscription(organizationId, (int)skuId, subscriptionName, UserContext.UserId, productRoleId);
+			int subId = await DBHelper.CreateSubscription(organizationId, (int)skuId, subscriptionName, UserContext.UserId, managerProductRoleId, unassignedProductRoleId);
 
-			// Add default EmployeeType and payclasses to time tracker.
-			if (selectedSku.ProductId == ProductIdEnum.TimeTracker)
-			{
-				int employeeTypeId = await CreateEmployeeType(organizationId, "Full Time Employee");
-
-				for (int i = 1; i < 9; i++)
-				{
-					await AddPayClassToEmployeeType(employeeTypeId, i);
-				}
-			}
-
-			if (selectedSku.ProductId == ProductIdEnum.StaffingManager) await InitializeSettingsForProduct(selectedSku.ProductId, organizationId, subId);
+			// initialize default settings
+			await MergeDefaultSettingsForProduct(selectedSku.ProductId, organizationId, subId);
 		}
 
 		public async Task UpdateSubscriptionName(int subscriptionId, string subscriptionName)
@@ -721,7 +697,7 @@ namespace AllyisApps.Services
 		/// <param name="productId">Product Id.</param>
 		/// <param name="orgId">.</param>
 		/// <param name="subId">.</param>
-		public async Task InitializeSettingsForProduct(ProductIdEnum productId, int orgId, int subId = 0)
+		public async Task MergeDefaultSettingsForProduct(ProductIdEnum productId, int orgId, int subId = 0)
 		{
 			if (productId <= 0)
 			{
@@ -730,7 +706,7 @@ namespace AllyisApps.Services
 
 			if (productId == ProductIdEnum.TimeTracker)
 			{
-				await DBHelper.InitializeTimeTrackerSettings(orgId);
+				await DBHelper.MergeDefaultTimeTrackerSettings(orgId);
 			}
 
 			if (productId == ProductIdEnum.StaffingManager)

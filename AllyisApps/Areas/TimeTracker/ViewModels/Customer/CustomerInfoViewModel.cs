@@ -78,6 +78,16 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		public bool? IsActive { get; set; }
 
 		/// <summary>
+		/// Gets or sets the number of active projects for a customer.
+		/// </summary>
+		public int ActiveProjects { get; set; }
+
+		/// <summary>
+		/// Gets or sets the number of inactive projects for a customer.
+		/// </summary>
+		public int InactiveProjects { get; set; }
+
+		/// <summary>
 		/// Address View Model.
 		/// </summary>
 		public class AddessViewModel

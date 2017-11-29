@@ -661,7 +661,7 @@ namespace AllyisApps.Services
 		/// Initializes a <see cref="Customer"/> from a query"/>.
 		/// </summary>
 		/// <returns>A Customer object.</returns>
-		public Customer InitializeCustomer(dynamic customer)
+		public static Customer InitializeCustomer(dynamic customer)
 		{
 			if (customer == null)
 			{
@@ -684,7 +684,8 @@ namespace AllyisApps.Services
 					CountryName = customer.CountryName
 				};
 			}
-			return new Customer
+
+			var newCustomer = new Customer
 			{
 				Address = address,
 				ContactEmail = customer.ContactEmail,
@@ -697,48 +698,13 @@ namespace AllyisApps.Services
 				CustomerName = customer.CustomerName,
 				OrganizationId = customer.OrganizationId,
 				Website = customer.Website,
-				IsActive = customer.IsActive
+				IsActive = customer.IsActive,
+				ActiveProjects = customer.ActiveProjectCount,
+				InactiveProjects = customer.ProjectCount - customer.ActiveProjectCount
 			};
+
+			return newCustomer;
 		}
-
-		///// <summary>
-		///// Initializes a <see cref="CustomerDBEntity"/> from a <see cref="Customer"/>.
-		///// </summary>
-		///// <param name="customer">The Customer to use.</param>
-		///// <returns>A CustomerDBEntity object.</returns>
-		//public CustomerDBEntity GetDBEntityFromCustomer(Customer customer)
-		//{
-		//    if (customer == null)
-		//    {
-		//        return null;
-		//    }
-
-		//    //Ensure that customer buisneess object does not attempt to set CountryName without ID
-		//    //Should not happen but can from import service.
-		//    customer.Address?.EnsureDBRef(this);
-		//    return new CustomerDBEntity()
-		//    {
-		//        ContactEmail = customer.ContactEmail,
-		//        ContactPhoneNumber = customer.ContactPhoneNumber,
-		//        CreatedUtc = customer.CreatedUtc,
-		//        CustomerId = customer.CustomerId,
-		//        CustomerCode = customer.CustomerCode,
-		//        EIN = customer.EIN,
-		//        FaxNumber = customer.FaxNumber,
-		//        CustomerName = customer.CustomerName,
-		//        OrganizationId = customer.OrganizationId,
-		//        Website = customer.Website,
-		//        IsActive = customer.IsActive,
-		//        AddressId = customer.Address?.AddressId,
-		//        Address = customer.Address?.Address1,
-		//        City = customer.Address?.City,
-		//        CountryCode = customer.Address?.CountryCode,
-		//        CountryName = customer.Address?.CountryName,
-		//        StateId = customer.Address?.StateId,
-		//        PostalCode = customer.Address?.PostalCode,
-		//        StateName = customer.Address?.StateName
-		//    };
-		//}
 
 		public static Tuple<CustomerDBEntity, AddressDBEntity> GetDBEntitiesFromCustomerInfo(Customer customer)
 		{

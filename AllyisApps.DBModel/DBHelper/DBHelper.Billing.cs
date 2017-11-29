@@ -45,6 +45,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@productName", productName);
+
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<int>("[Billing].[GetProductIdByName]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
@@ -58,15 +59,16 @@ namespace AllyisApps.DBModel
 		/// <param name="productRoleId">The id of the product role the user will get.</param>
 		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <param name="userId">The User's Id.</param>
-		public async Task UpdateSubscriptionUserProductRole(int productRoleId, int subscriptionId, int userId)
+		public async Task MergeSubscriptionUserProductRole(int productRoleId, int subscriptionId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@productRoleId", productRoleId);
 			parameters.Add("@subscriptionId", subscriptionId);
 			parameters.Add("@userId", userId);
+
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				await connection.ExecuteAsync("[Billing].[UpdateSubscriptionUserProductRole]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[Billing].[MergeSubscriptionUserProductRole]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -80,6 +82,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@subscriptionId", subscriptionId);
 			parameters.Add("@userId", userId);
+
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				await connection.ExecuteAsync("[Billing].[DeleteSubscriptionUser]", parameters, commandType: CommandType.StoredProcedure);
@@ -94,7 +97,7 @@ namespace AllyisApps.DBModel
 		/// <param name="productRoleId">Product role to assign (or -1 to remove from organization).</param>
 		/// <param name="productId">ID of Product in question.</param>
 		/// <returns>The number of updated and number of added users.</returns>
-		public async Task<Tuple<int, int>> UpdateSubscriptionUserRoles(List<int> userIds, int organizationId, int productRoleId, int productId)
+		public async Task<int> UpdateSubscriptionUserRoles(List<int> userIds, int organizationId, int productRoleId, int productId)
 		{
 			DataTable userIdsTable = new DataTable();
 			userIdsTable.Columns.Add("userId", typeof(int));
@@ -113,37 +116,13 @@ namespace AllyisApps.DBModel
 				// TODO: split updating user roles and creating new sub users
 				var results = await connection.QueryMultipleAsync("[Billing].[UpdateSubscriptionUserRoles]", parameters, commandType: CommandType.StoredProcedure);
 				int usersUpdated = results.Read<int>().SingleOrDefault();
-				int usersAdded = results.Read<int>().SingleOrDefault();
-				return Tuple.Create(usersUpdated, usersAdded);
+				return usersUpdated;
 			}
 		}
 
 
 
-		/// <summary>Deletes the given users in the given organization's subscription</summary>
-		/// <param name="userIds">List of user Ids.</param>
-		/// <param name="organizationId">The Organization Id.</param>
-		/// <param name="productId">ID of Product in question.</param>
-		/// <returns>count of deleted users.</returns>
-		public void DeleteSubscriptionUsers(List<int> userIds, int organizationId, int productId)
-		{
-			DataTable userIdsTable = new DataTable();
-			userIdsTable.Columns.Add("userId", typeof(int));
-			foreach (int userId in userIds) { userIdsTable.Rows.Add(userId); }
-
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@userIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
-			parameters.Add("@organizationId", organizationId);
-
-			// TODO: instead of providing product id, provide subscription id of the subscription to be modified
-			parameters.Add("@productId", productId);
-
-			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
-			{
-				connection.Execute("[Billing].[DeleteSubscriptionUsers]", parameters, commandType: CommandType.StoredProcedure);
-			}
-		}
-
+		
 		/// <summary>
 		/// Unsubscribe method.
 		/// </summary>
@@ -177,11 +156,11 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// get the list of subscriptions for the given organization
 		/// </summary>
-		public async Task<dynamic> GetSubscriptionsAsync(int orgId)
+		public async Task<dynamic> GetSubscriptionsAsync(int organizationId)
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return (await con.QueryAsync<dynamic>("Billing.GetSubscriptions @a", new { a = orgId })).ToList();
+				return (await con.QueryAsync<dynamic>("[Billing].[GetSubscriptions]", new { organizationId }, commandType: CommandType.StoredProcedure)).ToList();
 			}
 		}
 
@@ -265,21 +244,22 @@ namespace AllyisApps.DBModel
 		/// <param name="skuId">Sku -- the subscription item you're subscribing to.</param>
 		/// <param name="subscriptionName">The subscription name.</param>
 		/// <param name="userId">The user who is subscribing -- we need to make them manager.</param>
-		/// <param name="productRoleId">product role</param>
+		/// <param name="managerProductRoleId">product role for the manager.</param>
+		/// <param name="unassignedProductRoleId">The product role id for an unassigned user.</param>
 		/// <returns>The new subscription id.</returns>
-		public async Task<int> CreateSubscription(int organizationId, int skuId, string subscriptionName, int userId, int productRoleId)
+		public async Task<int> CreateSubscription(int organizationId, int skuId, string subscriptionName, int userId, int managerProductRoleId, int unassignedProductRoleId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@skuId", skuId);
 			parameters.Add("@subscriptionName", subscriptionName);
 			parameters.Add("@userId", userId);
-			parameters.Add("@productRoleId", productRoleId);
+			parameters.Add("@managerProductRoleId", managerProductRoleId);
+			parameters.Add("@unassignedProductRoleId", unassignedProductRoleId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var results = await connection.QueryAsync<int>("[Billing].[CreateSubscription]", parameters, commandType: CommandType.StoredProcedure);
-				return results.SingleOrDefault();
+				return await connection.QuerySingleAsync<int>("[Billing].[CreateSubscription]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 

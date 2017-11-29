@@ -8,6 +8,9 @@
 	<li @Html.Raw(ViewBag.Title == Strings.EmployeeType ? "style=background-color: #d1d1d1" : "")>
 		@Html.ActionLink(Strings.EmployeeType, ActionConstants.SettingsEmployeeType, ControllerConstants.TimeEntry)
 	</li>
+	<li @Html.Raw(ViewBag.Title == Strings.OrgSOW ? "style=background-color: #d1d1d1" : "")>
+		@Html.ActionLink(Strings.WeekStart, ActionConstants.SettingsStartOfWeek, ControllerConstants.TimeEntry)
+	</li>
 	<li @Html.Raw(ViewBag.Title == Strings.Overtime ? "style=background-color: #d1d1d1" : "")>
 		@Html.ActionLink(Strings.Overtime, ActionConstants.SettingsOvertime, ControllerConstants.TimeEntry)
 	</li>

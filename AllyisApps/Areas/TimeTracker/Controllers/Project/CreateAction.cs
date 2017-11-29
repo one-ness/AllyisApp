@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
+using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.Services.Crm;
 using AllyisApps.ViewModels.TimeTracker.Project;
@@ -32,9 +33,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public async Task<ActionResult> Create(int subscriptionId)
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
-			var orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+
+			int orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			var customers = (await AppService.GetCustomersByOrganizationId(orgId)).Where(x => x.IsActive).ToList();
+
+			if (!customers.Any())
+			{
+				Notifications.Add(new BootstrapAlert(Strings.ProjectCreateNoCustomers, Variety.Warning));
+				return RedirectToAction(ActionConstants.Index, ControllerConstants.Project, new { subscriptionId });
+			}
+
 			var idAndUsers = await AppService.GetNextProjectId(orgId, subscriptionId);
-			var customers = (await AppService.GetCustomersByOrganizationId(orgId)).Where(x => x.IsActive);
 			var subUsers = (await AppService.GetSubscriptionUsers(subscriptionId)).AsEnumerable();
 			var customersActive = customers.Select(x => new SelectListItem
 			{

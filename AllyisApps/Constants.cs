@@ -63,6 +63,7 @@ namespace AllyisApps
 		public const string OrganizationBilling = "orgbilling";
 		public const string Pending = "pending";
 		public const string PrivacyPolicy = "privacypolicy";
+		public const string Projects = "projects";
 		public const string Reactivate = "reactivate";
 		public const string ReactivateCustomer = "reactivatecustomer";
 		public const string RedirectToSubdomainAction = "redirecttosubdomainaction";

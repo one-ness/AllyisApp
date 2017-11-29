@@ -11,6 +11,8 @@ CREATE TABLE [Crm].[Customer] (
     [FaxNumber]          VARCHAR (16)   NULL,
     [Website]            NVARCHAR (128) NULL,
     [EIN]                NVARCHAR (16)  NULL,
+	[ProjectCount]		 AS ([Crm].[GetProjectCount]([CustomerId])),
+	[ActiveProjectCount] AS ([Crm].[GetActiveProjectCount]([CustomerId])),
     CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED ([CustomerId] ASC),
     CONSTRAINT [FK_Customer_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId]),
 	CONSTRAINT [UQ_OrganizaionId_CustomerCode] UNIQUE (OrganizationId,[CustomerCode])

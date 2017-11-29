@@ -1771,4 +1771,19 @@
 	<data name="LockTimeEntriesNoChange" xml:space="preserve">
     <value>Lock date was not changed, it is already set to {0}</value>
   </data>
+	<data name="AcceptInvitationSuccess" xml:space="preserve">
+    <value>You have successfully joined {0}</value>
+  </data>
+	<data name="CancelConfirm" xml:space="preserve">
+    <value>Are you sure you want to cancel?\nAll unsaved changes will be lost.</value>
+  </data>
+	<data name="ProjectCreateNoCustomers" xml:space="preserve">
+    <value>You cannot create a new project because there are no active customers.</value>
+  </data>
+	<data name="ActiveProjects" xml:space="preserve">
+    <value>Active Projects</value>
+  </data>
+	<data name="InactiveProjects" xml:space="preserve">
+    <value>Inactive Projects</value>
+  </data>
 </root>

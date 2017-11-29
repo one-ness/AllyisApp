@@ -70,6 +70,10 @@ namespace AllyisApps.ViewModels.Auth
 		public MembersAndInvitationsTabViewModel TabInfo { get; set; }
 
 		/// <summary>
+		/// Possible Organization Roles
+		/// </summary>
+		public Dictionary<int, string> PossibleRoles { get; set; }
+		/// <summary>
 		/// constructor
 		/// </summary>
 		public OrganizationMembersViewModel()

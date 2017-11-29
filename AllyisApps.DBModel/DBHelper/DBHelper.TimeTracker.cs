@@ -347,42 +347,27 @@ namespace AllyisApps.DBModel
 		/// <returns>Settings for an organization.</returns>
 		public async Task<SettingDBEntity> GetSettingsByOrganizationId(int organizationId)
 		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", organizationId);
-
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var result = await connection.QueryAsync<SettingDBEntity>(
-					"[TimeTracker].[GetSettings]",
-					parameters,
-					commandType: CommandType.StoredProcedure);
-				return result.Single();
+				return await connection.QuerySingleAsync<SettingDBEntity>("[TimeTracker].[GetSettings]", new { organizationId }, commandType: CommandType.StoredProcedure);
 			}
 		}
 
 		/// <summary>
 		/// Initializes time tracker settings.
 		/// </summary>
-		/// <param name="orgId">The organization Id.</param>
-		public async Task InitializeTimeTrackerSettings(int orgId)
+		/// <param name="organizationId">The organization that the time tracker settings belong to.</param>
+		public async Task MergeDefaultTimeTrackerSettings(int organizationId)
 		{
-			try
-			{
-				await GetSettingsByOrganizationId(orgId);
-			}
-			catch
-			{
-				DynamicParameters parameters = new DynamicParameters();
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationId", organizationId);
+			parameters.Add("@startOfWeek", 1);
+			parameters.Add("@overTimeHours", 40);
+			parameters.Add("@overTimePeriod", "Week");
 
-				// Init the actaul settings
-				parameters.Add("@organizationId", orgId);
-				parameters.Add("@startOfWeek", 1);
-				parameters.Add("@overTimeHours", 40);
-				parameters.Add("@overTimePeriod", "Week");
-				using (SqlConnection connection = new SqlConnection(SqlConnectionString))
-				{
-					await connection.ExecuteAsync("[TimeTracker].[UpdateSettings]", parameters, commandType: CommandType.StoredProcedure);
-				}
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				await connection.ExecuteAsync("[TimeTracker].[MergeSettings]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 

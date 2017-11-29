@@ -96,11 +96,11 @@ namespace AllyisApps.Controllers.Auth
 
 				if (modelSelectedUsers.Any(tu => tu.UserId == AppService.UserContext.UserId))
 				{
-					/*
+
 					Notifications.Add(model.SelectedAction == -1
 						? new BootstrapAlert(Strings.YouAreUnableToRemoveYourself, Variety.Danger)
 						: new BootstrapAlert(Strings.YouAreUnableToChangeYourOwnRole, Variety.Danger));
-					*/
+
 					model.SelectedUsers = model.SelectedUsers.Where(tu => tu.UserId != AppService.UserContext.UserId);
 					if (!modelSelectedUsers.Any())
 					{
@@ -112,7 +112,7 @@ namespace AllyisApps.Controllers.Auth
 				{
 					try
 					{
-						int numberChanged = AppService.DeleteOrganizationUsers(modelSelectedUsers.Select(tu => tu.UserId).ToList(), model.OrganizationId);
+						int numberChanged = await AppService.DeleteOrganizationUsers(modelSelectedUsers.Select(tu => tu.UserId).ToList(), model.OrganizationId);
 						Notifications.Add(new BootstrapAlert(string.Format(Strings.UsersRemovedFromOrg, numberChanged), Variety.Success));
 					}
 					catch (ArgumentNullException)
@@ -132,6 +132,7 @@ namespace AllyisApps.Controllers.Auth
 			}
 			else if (model.SelectedAction != 0 && model.SubscriptionId != null && model.ProductId != null)
 			{
+				//Manage Subscription Page 
 				string usersModifiedMessage;
 				string usersAddedMessage;
 				//Varify that roleId is correct
@@ -178,29 +179,25 @@ namespace AllyisApps.Controllers.Auth
 						throw new ArgumentOutOfRangeException(nameof(model.ProductId), $"Failed to find product for produtId: {model.ProductId.Value}");
 				}
 
-				if (model.SelectedAction.Value != -1)
-				{
-					// TODO: instead of providing product id, provide subscription id of the subscription to be modified
-					// TODO: split updating user roles and creating new sub users
-					var updatedAndAdded = await AppService.UpdateSubscriptionUsersRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.OrganizationId, model.SelectedAction.Value, model.ProductId.Value);
-					if (updatedAndAdded.UsersChanged > 0)
-					{
-						Notifications.Add(new BootstrapAlert(string.Format(usersModifiedMessage, updatedAndAdded.UsersChanged), Variety.Success));
-					}
+				int productRole = 0;
 
-					if (updatedAndAdded.UsersAddedToSubscription > 0)
-					{
-						Notifications.Add(new BootstrapAlert(string.Format(usersAddedMessage, updatedAndAdded.UsersAddedToSubscription), Variety.Success));
-					}
+				if (model.SelectedAction.Value == -1)
+				{
+					productRole = 0;
 				}
 				else
 				{
-					// TODO: instead of providing product id, provide subscription id of the subscription to be modified
-					AppService.DeleteSubscriptionUsers(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.OrganizationId, model.ProductId.Value);
-					Notifications.Add(new BootstrapAlert(Strings.UserDeletedSuccessfully, Variety.Success));
+					productRole = model.SelectedAction.Value;
+				}
+
+				// TODO: instead of providing product id, provide subscription id of the subscription to be modified
+				// TODO: split updating user roles and creating new sub users
+				var usersUpdated = await AppService.UpdateSubscriptionUsersRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.OrganizationId, productRole, model.ProductId.Value);
+				if (usersUpdated > 0)
+				{
+					Notifications.Add(new BootstrapAlert(string.Format(usersModifiedMessage, usersUpdated), Variety.Success));
 				}
 			}
-
 			return Redirect(model.FromUrl);
 		}
 	}
