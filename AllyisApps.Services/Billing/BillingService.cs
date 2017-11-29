@@ -513,7 +513,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Subscribes the current organization to a product or updates the organization's subscription to the product.
 		/// </summary>
-		public async Task Subscribe(int organizationId, SkuIdEnum skuId, string subscriptionName)
+		public async Task<int> Subscribe(int organizationId, SkuIdEnum skuId, string subscriptionName)
 		{
 			if (organizationId <= 0)
 			{
@@ -533,7 +533,7 @@ namespace AllyisApps.Services
 				if (subscription.SkuId == skuId)
 				{
 					// yes, already subscribed
-					return;
+					return subscription.SubscriptionId;
 				}
 
 				// no, get the product of this subscription
@@ -551,7 +551,7 @@ namespace AllyisApps.Services
 
 				// yes, user is subscribing to another sku of an existing subscription (i.e., product)
 				UpdateSubscriptionSkuAndName(organizationId, subscription.SubscriptionId, subscriptionName, skuId);
-				return;
+				return subscription.SubscriptionId;
 			}
 
 			// reached here indicates user is subscribing to a new product with a new sku
@@ -599,6 +599,7 @@ namespace AllyisApps.Services
 
 			// initialize default settings
 			await MergeDefaultSettingsForProduct(selectedSku.ProductId, organizationId, subId);
+			return subId;
 		}
 
 		public async Task UpdateSubscriptionName(int subscriptionId, string subscriptionName)

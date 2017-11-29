@@ -829,7 +829,10 @@ namespace AllyisApps.Services
 
 								try
 								{
-									AddUserToOrganizaion(fields[0].Trim(), names[0], names[1],orgId,OrganizationRoleEnum.Member,fields[1]);
+									
+										//AddUserToOrganizaion(fields[0].Trim(), names[0], names[1],orgId,OrganizationRoleEnum.Member,fields[1]);
+
+										await InviteUser(inviteUrl, fields[0].Trim(), names[0], names[1], orgId, UserContext.OrganizationsAndRoles[orgId].OrganizationName, OrganizationRoleEnum.Member, fields[1], ""); 
 
 									result.UsersImported += 1;
 								}

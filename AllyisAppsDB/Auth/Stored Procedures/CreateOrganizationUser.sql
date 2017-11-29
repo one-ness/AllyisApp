@@ -30,7 +30,8 @@ BEGIN
 	;
 
 	Insert Into [Billing].[SubscriptionUser]([ProductRoleId],[SubscriptionId],[UserId]) 
-	SELECT 0, SubscriptionId,@userId
-	FROM @subs;
+	SELECT 0, SubscriptionId,@userId 
+	FROM [Billing].[Subscription] 
+	where Subscription.OrganizationId = @organizationId
 
 END

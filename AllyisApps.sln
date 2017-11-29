@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{99597E3F-6EA0-4082-BF89-C0595919615D}"
 	ProjectSection(SolutionItems) = preProject
@@ -21,6 +21,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllyisApps.Lib", "AllyisApps.Lib\AllyisApps.Lib.csproj", "{448FFC61-ECF1-4312-A35B-C221F98A895C}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "AllyisAppsDB", "AllyisAppsDB\AllyisAppsDB.sqlproj", "{CF9DDCD6-C80C-47EB-8D72-87FBFB5400D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UploadDataDirect", "UploadDataDirect\UploadDataDirect.csproj", "{37D5D69A-E81C-472D-B0C0-5AA28D28B38C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,8 +60,15 @@ Global
 		{CF9DDCD6-C80C-47EB-8D72-87FBFB5400D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF9DDCD6-C80C-47EB-8D72-87FBFB5400D9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CF9DDCD6-C80C-47EB-8D72-87FBFB5400D9}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{37D5D69A-E81C-472D-B0C0-5AA28D28B38C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37D5D69A-E81C-472D-B0C0-5AA28D28B38C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37D5D69A-E81C-472D-B0C0-5AA28D28B38C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37D5D69A-E81C-472D-B0C0-5AA28D28B38C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9509924D-F925-4D65-A2D8-33925F392D21}
 	EndGlobalSection
 EndGlobal

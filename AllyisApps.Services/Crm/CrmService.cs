@@ -69,7 +69,7 @@ namespace AllyisApps.Services
 		/// <param name="customer">Customer.</param>
 		/// <param name="subscriptionId">.</param>
 		/// <returns>Customer id.</returns>
-		public async Task<int?> CreateCustomerAsync(Customer customer, int subscriptionId)
+		public async Task<int> CreateCustomerAsync(Customer customer, int subscriptionId)
 		{
 			// Permission validation
 			if (!CheckStaffingManagerAction(StaffingManagerAction.EditCustomer, subscriptionId, false) && !CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId, false))

@@ -79,14 +79,14 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="payClassName">The name of the pay class to add.</param>
 		/// <param name="organizationId">The organization to add the pay class to.</param>
-		public void CreatePayClass(string payClassName, int organizationId)
+		public int CreatePayClass(string payClassName, int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@payClassName", payClassName);
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				connection.Execute("[Hrm].[CreatePayClass]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.QueryFirst<int>("[Hrm].[CreatePayClass]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 

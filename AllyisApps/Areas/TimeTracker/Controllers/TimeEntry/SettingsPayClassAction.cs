@@ -61,7 +61,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				// should put try catch in 'else'. Creating a blank pay class results in Two alerts: "Cannot create blank pay class" and "pay class already exists"
 				try
 				{
-					if (await AppService.CreatePayClass(newPayClass, orgId, subscriptionId))
+					if (await AppService.CreatePayClass(newPayClass, orgId, subscriptionId) != 0 )
 					{
 						Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulCreatePayClass, Variety.Success));
 					}

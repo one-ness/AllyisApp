@@ -285,12 +285,12 @@ namespace AllyisApps.Services
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public async Task<bool> CreatePayClass(string payClassName, int orgId, int subscriptionId)
+		public async Task<int> CreatePayClass(string payClassName, int orgId, int subscriptionId)
 		{
 			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
-			DBHelper.CreatePayClass(payClassName, orgId);
+			int createPayclass = DBHelper.CreatePayClass(payClassName, orgId);
 			await Task.Yield();
-			return true;
+			return createPayclass;
 		}
 
 		/// <summary>
