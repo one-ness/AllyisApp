@@ -397,7 +397,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@userId", organizationUser.UserId);
 			parameters.Add("@roleId", organizationUser.OrganizationRoleId);
 			parameters.Add("@employeeId", organizationUser.EmployeeId);
-			parameters.Add("@maxAmount", organizationUser.MaxAmount);
+			
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{

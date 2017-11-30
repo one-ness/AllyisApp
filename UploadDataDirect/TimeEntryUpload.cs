@@ -33,7 +33,21 @@ namespace UploadDataDirect
 		{
 			var orgUsers = await appService.GetOrganizationUsersAsync(orgId);
 			var payclasses = await appService.GetPayClassesByOrganizationId(orgId);
+			
+			var gotPayClasses = new Dictionary<string, int>();
+			var gotProjects = new Dictionary<string, Project>();
 			IEnumerable<Project> projects = await appService.GetAllProjectsForOrganizationAsync(orgId);
+
+			foreach(var proj in projects)
+			{
+				gotProjects.Add(proj.ProjectCode, proj);
+			}
+
+			foreach(var pc in payclasses)
+			{
+				gotPayClasses.Add(pc.PayClassName.ToUpper(), pc.PayClassId);
+			}
+
 			foreach (DataRow row in hoursData.Rows)
 			{
 				try
@@ -47,32 +61,29 @@ namespace UploadDataDirect
 					}
 					string projectCode = row[ColumnConstants.ProjectCode].ToString();
 
-					var project = projects.FirstOrDefault(p => p.ProjectCode.Equals(projectCode));
-					if (project == null)
-					{
-						//Project Not found
+					
+					if(!gotProjects.TryGetValue(projectCode, out Project project)){
+						//Project not found 
 						continue;
 					}
-
 					var payClassName = row[ColumnConstants.PayClassCode].ToString();
+
 					if (payClassName.Equals("REGSAL"))
 					{
 						//hard code regsal to regular as per instuctions 
 						payClassName = "REGULAR";
 					}
-					var Payclass = payclasses.FirstOrDefault(pc => pc.PayClassName.Equals(payClassName, StringComparison.CurrentCultureIgnoreCase));
-					int payclassId = 0;
-					if (Payclass == null)
+
+			
+					if (!gotPayClasses.TryGetValue(payClassName.ToUpper(),out int payclassId))
 					{
 						payclassId = await appService.CreatePayClass(payClassName, orgId, subId);
+						gotPayClasses.Add(payClassName.ToUpper(), payclassId);
 					}
-					else
-					{
-						payclassId = Payclass.PayClassId;
-					}
+					
 
 					string dateStr = row[ColumnConstants.Date].ToString();
-					DateTime Date = DateTime.ParseExact(dateStr, "M/dd/yyyy", CultureInfo.InvariantCulture);
+					DateTime Date = DateTime.Parse(dateStr);
 
 
 					string dur = row[ColumnConstants.Duration].ToString();
@@ -95,11 +106,13 @@ namespace UploadDataDirect
 						UserId = user.UserId,
 						ProjectId = project.ProjectId,
 						Duration = duration.Value,
-						PayClassId = payclassId
+						PayClassId = payclassId,
+						TimeEntryStatusId = (int) TimeEntryStatus.Pending
 					};
 					//Create Time Entry
 
 					await appService.CreateTimeEntry(timeentry);
+					Console.WriteLine("Uplaoded TimeEntyr for date  " + timeentry.Date + ". For person " + user.FirstName + " " + user.LastName);
 
 				}
 				catch(Exception e)

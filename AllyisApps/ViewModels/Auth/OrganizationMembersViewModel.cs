@@ -78,7 +78,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public OrganizationMembersViewModel()
 		{
-			PageSize = 25; // default page number
+			PageSize = 20; // default page number
 			CurrentPageNumber = 1; // default page
 			TabInfo = new MembersAndInvitationsTabViewModel();
 			TabInfo.MembersTabActive = "active";

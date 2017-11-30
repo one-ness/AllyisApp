@@ -24,6 +24,7 @@ namespace UploadDataDirect
 			{
 				CustomerCode = "TESTIMPORT",
 				OrganizationId = orgId,
+				IsActive = true,
 				CustomerName = "TEST TEST",
 			};
 			int custId = await appService.CreateCustomerAsync(customer, subId);

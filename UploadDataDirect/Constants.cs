@@ -11,7 +11,7 @@ namespace UploadDataDirect
 		public const  string LastName = "Payroll Last Name";
 		public const string FirstName = "Payroll First Name";
 		public const string Employee = "Employee";
-		public const string ProjectCode = "ProjectCode";
+		public const string ProjectCode = "Project Code";
 		public const string Duration = "Hours";
 		public const string PayClassCode = "Earning Code";
 		public const string ProjectName = "Project Name";

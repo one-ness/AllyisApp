@@ -392,6 +392,7 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
 	}
 
 	$(document).ready(function () {
+		$('#loading').hide();
 		if ($(checkBoxSelector).length > 0) {
 			hasCheckBoxes = true;
 		}
@@ -413,5 +414,6 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
 		if (previouslySelectedPage != 0) {
 			_goToPage(previouslySelectedPage);
 		}
+		$('#loading').show();
 	});
 })(this.pwf = {});

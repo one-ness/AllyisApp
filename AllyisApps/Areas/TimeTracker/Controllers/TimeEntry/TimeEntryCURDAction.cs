@@ -24,7 +24,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 
 			var items = JsonConvert.DeserializeObject<TimeEntryCRUDModel>(data);
-
+			int? userID = items.Entries?[0]?.UserId;
 			//var list = ConvertToEditTimeEntry(items);
 
 
@@ -58,6 +58,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
+			
 			return RedirectToRoute(
 				RouteNameConstants.TimeEntryIndexUserTimeSheet,
 				new
@@ -66,7 +67,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					action = ActionConstants.Index,
 					subscriptionId = items.SubscriptionId,
 					startDate = items.StartingDate,
-					endDate = items.EndingDate
+					endDate = items.EndingDate,
+					userId = userID
 				});
 		}
 	}

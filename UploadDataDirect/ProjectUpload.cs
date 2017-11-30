@@ -27,17 +27,23 @@ namespace UploadDataDirect
 		{
 			foreach(DataRow row in projects.Rows)
 			{
-				string projectCode = row[ColumnConstants.ProjectCode].ToString();
-				string projectName = row[ColumnConstants.ProjectName].ToString();
-
+				string projectCode = row[0].ToString();
+				string projectName = row[1].ToString();
+				if (string.IsNullOrEmpty(projectCode))
+				{
+					//reahed end of table?
+					continue;
+				}
 				AllyisApps.Services.Project.Project project = new AllyisApps.Services.Project.Project()
 				{
 					ProjectName = projectName,
 					IsHourly = true,
+					ProjectCode = projectCode,
 					OrganizationId = orgId,
 					OwningCustomer = customer
 				};
 				await appService.CreateProject(project);
+				Console.WriteLine("Created project " + projectCode + " " + projectName);
 			}
 
 		}

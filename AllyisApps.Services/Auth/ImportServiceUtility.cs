@@ -14,6 +14,7 @@ namespace AllyisApps.Services
 	{
 		public async Task AddUserToOrganizaion(string email, string firstName, string lastName, int organizaionId, OrganizationRoleEnum roleType, string empolyeeId)
 		{
+			//Assume user is not in organizaion 
 			User user = await GetUserByEmail(email);
 			if(user == null)
 			{
@@ -24,6 +25,8 @@ namespace AllyisApps.Services
 				int userid = await DBHelper.CreateUserAsync(email, Crypto.GetPasswordHash("Welcome1"), firstName, lastName, Guid.NewGuid(), years18, null, null, null, null, null, null, null,null);
 				user = await GetUserByEmail(email);
 			}
+
+			
 			OrganizationUserDBEntity orgUser = new OrganizationUserDBEntity()
 			{
 				CreatedUtc = DateTime.Now,

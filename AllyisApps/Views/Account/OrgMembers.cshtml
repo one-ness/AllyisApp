@@ -22,7 +22,7 @@
 		@Html.Partial("_MembersAndInvitationsTab", Model.TabInfo)
 	}
 
-	<table class="table table-striped table-condensed">
+	<table class="table table-striped table-condensed" id="loading" hidden>
 		<thead>
 			<tr>
 				<th><input class="checkbox-inline members-checkbox" type="checkbox" id="checkAll" onclick="CheckAllToggle()" /></th>

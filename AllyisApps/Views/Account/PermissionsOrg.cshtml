@@ -14,7 +14,7 @@
 
 	.pageContainer
 	{
-		width: 20px;
+		
 		margin: 0 auto;
 	}
 </style>
@@ -23,7 +23,7 @@
 	@Html.Partial("_PremissionsLinkView", Model)
 	<div class="panel panel-default">
 		<div class="panel-body" style="padding: 0px;">
-			<table class="table table-hover table-condensed">
+			<table id="loading" class="table table-hover table-condensed" hidden>
 				<thead class="panel-heading">
 					<tr class="no-border">
 						<th style="width: 6%;"></th>
@@ -120,6 +120,7 @@
 	@*@Scripts.Render("~/bundles/AccountPermission2");*@
 	<script type="text/javascript">
 		@*Filters can only be set up after the above script is loaded*@
+		
 		pwf.setPageLimit(10);
 		pwf.setRowClass("userRow");
 		pwf.setCheckBoxSelector("#check");
@@ -129,5 +130,6 @@
 		{
 			pwf.setPreviouslySelectedPage(sessionStorage.getItem("/ManagePermissionsPage"))
 		}
+		
 	</script>
 }
