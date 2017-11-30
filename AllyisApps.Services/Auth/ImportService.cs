@@ -68,15 +68,19 @@ namespace AllyisApps.Services
 					case "Customers":
 						customerImports.Add(table);
 						break;
+
 					case "Projects":
 						projectImports.Add(table);
 						break;
+
 					case "Users":
 						userImports.Add(table);
 						break;
+
 					case "Time Entries":
 						timeEntryImports.Add(table);
 						break;
+
 					default:
 						break;
 				}
@@ -150,7 +154,6 @@ namespace AllyisApps.Services
 				bool hasCustomerEin = table.Columns.Contains(ColumnHeaders.CustomerEIN);
 				bool hasNonRequiredCustomerInfo = hasCustomerStreetAddress || hasCustomerCity || hasCustomerCountry || hasCustomerState ||
 						 hasCustomerPostalCode || hasCustomerEmail || hasCustomerPhoneNumber || hasCustomerFaxNumber || hasCustomerEin;
-
 
 				// Do we have rows/data to import?
 				if (table.Rows.Count == 0
@@ -243,7 +246,6 @@ namespace AllyisApps.Services
 
 								if (newCustomer != null)
 								{
-
 									int? newCustomerId = await CreateCustomerAsync(newCustomer, subscriptionId);
 									if (newCustomerId == -1) // Customer exists, but has been deactivated
 									{
@@ -589,7 +591,6 @@ namespace AllyisApps.Services
 									{
 										project.ProjectId = await CreateProject(project);
 
-
 										if (project.ProjectId == -1)
 										{
 											result.ProjectFailures.Add(string.Format("Database error while creating project {0}", project.ProjectName));
@@ -687,6 +688,7 @@ namespace AllyisApps.Services
 				bool hasUserPhoneNumber = table.Columns.Contains(ColumnHeaders.UserPhoneNumber);
 				bool hasUserPostalCode = table.Columns.Contains(ColumnHeaders.UserPostalCode);
 				bool hasUserState = table.Columns.Contains(ColumnHeaders.UserState);
+				bool hasEmployeeTypeId = table.Columns.Contains(ColumnHeaders.EmployeeTypeId);
 				bool hasNonRequiredUserInfo = hasUserAddress || hasUserCity || hasUserCountry || hasUserDateOfBirth || hasUserUsername ||
 					hasUserPhoneExtension || hasUserPhoneNumber || hasUserPostalCode || hasUserState;
 
@@ -728,16 +730,16 @@ namespace AllyisApps.Services
 									}
 								}
 							}//Remove logic only email matters.
-							/* This will lead to bad times. First Name last name are not unique 
-							if (userTuple == null)
-							{
-								string readLastName = null;
-								if (ReadColumn(row, ColumnHeaders.UserFirstName, e => readValue = e) && ReadColumn(row, ColumnHeaders.UserLastName, e => readLastName = e))
-								{
-									userTuple = users.FirstOrDefault(tup => tup.Item2.FirstName.Equals(readValue) && tup.Item2.LastName.Equals(readLastName));
-								}
-							}
-							*/
+							 /* This will lead to bad times. First Name last name are not unique
+							 if (userTuple == null)
+							 {
+								 string readLastName = null;
+								 if (ReadColumn(row, ColumnHeaders.UserFirstName, e => readValue = e) && ReadColumn(row, ColumnHeaders.UserLastName, e => readLastName = e))
+								 {
+									 userTuple = users.FirstOrDefault(tup => tup.Item2.FirstName.Equals(readValue) && tup.Item2.LastName.Equals(readLastName));
+								 }
+							 }
+							 */
 						}
 						userInOrg = userTuple?.Item2;
 
@@ -832,7 +834,17 @@ namespace AllyisApps.Services
 									
 										//AddUserToOrganizaion(fields[0].Trim(), names[0], names[1],orgId,OrganizationRoleEnum.Member,fields[1]);
 
-										await InviteUser(inviteUrl, fields[0].Trim(), names[0], names[1], orgId, UserContext.OrganizationsAndRoles[orgId].OrganizationName, OrganizationRoleEnum.Member, fields[1], ""); 
+									string employeeType = "";
+									int? employeeTypeId = null;
+									ReadColumn(row, ColumnHeaders.EmployeeTypeId, e => employeeType = e);
+
+									if (!string.IsNullOrEmpty(employeeType))
+									{
+										employeeTypeId = int.Parse(employeeType);
+									}
+
+									await InviteUser(inviteUrl, fields[0].Trim(), names[0], names[1], orgId, UserContext.OrganizationsAndRoles[orgId].OrganizationName, OrganizationRoleEnum.Member, fields[1], "",employeeTypeId);
+
 
 									result.UsersImported += 1;
 								}

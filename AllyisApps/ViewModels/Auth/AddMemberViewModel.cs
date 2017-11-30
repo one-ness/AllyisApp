@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
+using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -34,6 +35,16 @@ namespace AllyisApps.ViewModels.Auth
 		[Required(ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "EmailValidation")]
 		[EmailAddress]
 		public string Email { get; set; }
+
+		/// <summary>
+		/// Gets or sets the employee type list.
+		/// </summary>
+		public List<EmployeeType> EmployeeTypeList { get; set; }
+
+		/// <summary>
+		/// Gets or sets the employee type id.
+		/// </summary>
+		public int EmployeeTypeId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Employee Id.
@@ -89,7 +100,7 @@ namespace AllyisApps.ViewModels.Auth
 		public int ProductId { get; set; }
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public int SubscriptionId { get; set; }
 

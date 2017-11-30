@@ -32,6 +32,10 @@ namespace UploadDataDirect
 		internal async Task uploadTimeEntries()
 		{
 			var orgUsers = await appService.GetOrganizationUsersAsync(orgId);
+			
+			
+			
+
 			var payclasses = await appService.GetPayClassesByOrganizationId(orgId);
 			
 			var gotPayClasses = new Dictionary<string, int>();
@@ -62,6 +66,7 @@ namespace UploadDataDirect
 					string projectCode = row[ColumnConstants.ProjectCode].ToString();
 
 					
+					
 					if(!gotProjects.TryGetValue(projectCode, out Project project)){
 						//Project not found 
 						continue;
@@ -74,13 +79,20 @@ namespace UploadDataDirect
 						payClassName = "REGULAR";
 					}
 
+
 			
-					if (!gotPayClasses.TryGetValue(payClassName.ToUpper(),out int payclassId))
+					if (!gotPayClasses.TryGetValue(payClassName.ToUpper(),out int inputedPayClassId))
 					{
-						payclassId = await appService.CreatePayClass(payClassName, orgId, subId);
-						gotPayClasses.Add(payClassName.ToUpper(), payclassId);
+						inputedPayClassId = await appService.CreatePayClass(payClassName, orgId, subId);
+						gotPayClasses.Add(payClassName.ToUpper(), inputedPayClassId);
 					}
+					var possiblePayClassIds = await appService.GetAssignedPayClasses(user.EmployeeTypeId);
 					
+					//If pay class about ot be imported is not assinged to user then assign it to user
+					if(!possiblePayClassIds.Exists(pcId => pcId == inputedPayClassId))
+					{
+						await appService.AddPayClassToEmployeeType(user.EmployeeTypeId, inputedPayClassId);
+					}
 
 					string dateStr = row[ColumnConstants.Date].ToString();
 					DateTime Date = DateTime.Parse(dateStr);
@@ -106,7 +118,7 @@ namespace UploadDataDirect
 						UserId = user.UserId,
 						ProjectId = project.ProjectId,
 						Duration = duration.Value,
-						PayClassId = payclassId,
+						PayClassId = inputedPayClassId,
 						TimeEntryStatusId = (int) TimeEntryStatus.Pending
 					};
 					//Create Time Entry

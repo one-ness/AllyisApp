@@ -396,6 +396,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@organizationId", organizationUser.OrganizationId);
 			parameters.Add("@userId", organizationUser.UserId);
 			parameters.Add("@roleId", organizationUser.OrganizationRoleId);
+			parameters.Add("@employeeTypeId", organizationUser.EmployeeTypeId);
 			parameters.Add("@employeeId", organizationUser.EmployeeId);
 			
 
@@ -540,6 +541,7 @@ namespace AllyisApps.DBModel
 			string lastName,
 			int organizationId,
 			int organizationRoleId,
+			int employeeTypeId,
 			string employeedId,
 			string prodJson)
 		{
@@ -549,6 +551,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@lastName", lastName);
 			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@organizationRole", organizationRoleId);
+			parameters.Add("@employeeTypeId", employeeTypeId);
 			parameters.Add("@employeeId", employeedId);
 			parameters.Add("@prodJson", prodJson);
 			using (var con = new SqlConnection(SqlConnectionString))

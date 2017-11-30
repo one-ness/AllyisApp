@@ -1,0 +1,59 @@
+﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry
+@model SettingsEditEmployeeTypeViewModel
+@{
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
+	ViewBag.Title = Model.IsEdit ? "Edit Employee Type" : "Create Employee Type";
+}
+<div class="container">
+	<div class="shrink-wrap-center">
+		<div style="width:80%">
+			@using (Html.BeginForm("EditEmployeeType", ControllerConstants.TimeEntry, new { employeeTypeId = Model.EmployeeTypeId }, FormMethod.Post, new { @class = "row", id = "PayClassForm", role = "form", name = "EditForm", onsubmit = "return selectAll()" }))
+			{
+				<div class="col-xs-12 col-sm-6 form-group">
+					@Html.ReqLabelFor(m => m.EmployeeTypeName, Strings.Name)
+					@Html.TextBoxFor(m => m.EmployeeTypeName, new { @class = "form-control" })
+				</div>
+				<div class="col-xs-12">@Html.ReqLabelFor(m => m.PayClasses, Strings.Projects)</div>
+				<div class="col-xs-12 swapper-ui" id="swapper-ui">
+
+					<div class="left">
+						<label>Unassigned</label>
+
+						@Html.ListBoxFor(m => m.PayClasses, new MultiSelectList(Model.PayClasses, "PayClassId", "PayClassName"), new { name = "Excluded", id = "excluded-payclasses", @class = "filter-list", Multiple = "multiple" })
+					</div>
+					<div class="actions">
+						<a href="javascript: moveSelectedProject('in')" class="btn btn-default move-in">
+							<i class="fa fa-lg fa-arrow-right"></i>
+						</a>
+						<a href="javascript: moveSelectedProject('out')" class="btn btn-default move-out">
+							<i class="fa fa-lg fa-arrow-left"></i>
+						</a>
+					</div>
+					<div class="right">
+						<label>Assigned</label>
+						@Html.ListBoxFor(m => m.SelectedPayClass, new MultiSelectList(Model.CurrentPayClasses, "PayClassId", "PayClassName"), new { name = "Included", id = "included-payclasses", @class = "filter-list", Multiple = "multiple" })
+					</div>
+				</div>
+				<div class="col-xs-12 text-right">
+					@if (Model.IsEdit)
+					{
+						<input type="button" class="btn btn-danger pull-left" value=@Strings.Delete onclick="location = '@Url.Action("deleteemployeetype", ControllerConstants.TimeEntry, new { employeeTypeId = Model.EmployeeTypeId })'" />
+					}
+					<input type="button" class="btn btn-default" value=@Strings.Cancel onclick="location = '@Url.Action(ActionConstants.SettingsEmployeeType, ControllerConstants.TimeEntry)'" />
+					<input type="submit" value=@Strings.Save class="btn btn-primary" id="submitProject" />
+
+				</div>
+				
+			}
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	@*Date range picker dependencies*@
+	@Scripts.Render("~/bundles/jqueryui")
+	@Scripts.Render("~/bundles/moment")
+	@Scripts.Render("~/bundles/daterangepicker")
+	@Scripts.Render("~/Areas/TimeTracker/Scripts/allyis-employeetype-edit.js")
+}

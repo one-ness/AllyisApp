@@ -4,6 +4,7 @@
 	@lastName NVARCHAR(40),
 	@organizationId INT,
 	@organizationRole INT,
+	@employeeTypeId INT,
 	@employeeId NVARCHAR(16),
 	@prodJson NVARCHAR(384)
 AS
@@ -39,6 +40,7 @@ BEGIN
 				[LastName], 
 				[OrganizationId],
 				[OrganizationRoleId],
+				[EmployeeTypeId],
 				[EmployeeId],
 				[ProductRolesJson]
 				)
@@ -48,6 +50,7 @@ BEGIN
 				@lastName, 
 				@organizationId,
 				@organizationRole,
+				@employeeTypeId,
 				@employeeId,
 				@prodJson
 				);

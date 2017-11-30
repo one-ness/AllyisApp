@@ -89,6 +89,11 @@ namespace AllyisApps.ViewModels.Auth
 			public string Email { get; set; }
 
 			/// <summary>
+			/// Employee Type id.
+			/// </summary>
+			public int EmployeeTypeId { get; set; }
+
+			/// <summary>
 			/// employee id to be assigned to user
 			/// </summary>
 			public string EmployeeId { get; set; }
@@ -102,7 +107,7 @@ namespace AllyisApps.ViewModels.Auth
 			/// status of the invitation, accepted/rejected/pending
 			/// </summary>
 			public string Status { get; set; }
- 
+
 			/// <summary>
 			/// invitation date
 			/// </summary>
@@ -120,7 +125,7 @@ namespace AllyisApps.ViewModels.Auth
 			}
 
 			/// <summary>
-			/// date on which the status 
+			/// date on which the status
 			/// </summary>
 			public DateTime? DecisionDate { get; set; }
 

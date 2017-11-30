@@ -43,12 +43,14 @@ namespace UploadDataDirect
 				string firstname = row[ColumnConstants.FirstName].ToString();
 				string lastName = row[ColumnConstants.LastName].ToString();
 				string testEmail = String.Format(emailFormat, i);
-				if(!beforeorgUsers.Exists(user => user.EmployeeId.Equals(employeeId)) && !createdEmployyeeIds.Contains(employeeId))
+				if(!createdEmployyeeIds.Contains(employeeId) && !beforeorgUsers.Exists(user => user.EmployeeId.Equals(employeeId)) )
 				{
 					await appService.AddUserToOrganizaion(testEmail, firstname, lastName, organizaionID, 
-						AllyisApps.Services.Auth.OrganizationRoleEnum.Member, employeeId);
+						AllyisApps.Services.Auth.OrganizationRoleEnum.Member, employeeId,null);
 					createdEmployyeeIds.Add(employeeId);
+					Console.WriteLine("Added usser " + firstname + " " + lastName);
 				}
+				
 				i++;
 			}
 		}

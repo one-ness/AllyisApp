@@ -9,11 +9,13 @@ BEGIN
 	DECLARE @organizationId INT;
 	DECLARE @organizationRole INT;
 	DECLARE @email NVARCHAR(384);
+	DECLARE @employeeTypeId INT;
 	DECLARE @employeeId NVARCHAR(16);
 	SELECT
 		@organizationId = [OrganizationId],
 		@organizationRole = [OrganizationRoleId],
 		@email = [Email],
+		@employeeTypeId = [EmployeeTypeId],
 		@employeeId = [EmployeeId]
 	FROM [Auth].[Invitation] WITH (NOLOCK)
 	WHERE [Invitation].[InvitationId] = @invitationId AND [Invitation].InvitationStatus = 1;
@@ -37,6 +39,7 @@ BEGIN
 				[UserId] = @userId,
 				[OrganizationId] = @organizationId,
 				[OrganizationRoleId] = @organizationRole,
+				[EmployeeTypeId] = @employeeTypeId,
 				[EmployeeId] = @employeeId
 			)
 			MERGE [Auth].[OrganizationUser] WITH (HOLDLOCK) AS [T]
@@ -45,17 +48,20 @@ BEGIN
 			AND [T].[UserId] = [S].[UserId]
 			WHEN MATCHED THEN UPDATE SET
 				[T].[OrganizationRoleId] = [S].[OrganizationRoleId],
+				[T].[EmployeeTypeId] = [S].[EmployeeTypeId],
 				[T].[EmployeeId] = [S].[EmployeeId]
 			WHEN NOT MATCHED THEN
 				INSERT (
 					[UserId],
 					[OrganizationId],
 					[OrganizationRoleId],
+					[EmployeeTypeId],
 					[EmployeeId])
 				VALUES (
 					[S].[UserId],
 					[S].[OrganizationId],
 					[S].[OrganizationRoleId],
+					[S].[EmployeeTypeId],
 					[S].[EmployeeId]
 				);
 

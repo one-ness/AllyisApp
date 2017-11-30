@@ -32,7 +32,9 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException(nameof(employeeId));
 			if (string.IsNullOrWhiteSpace(organizationName)) throw new ArgumentNullException(nameof(organizationName));
 
-			return await DBHelper.SetupOrganization(UserContext.UserId, (int)OrganizationRoleEnum.Owner, employeeId, organizationName, phoneNumber, faxNumber, siteUrl, subDomainName, address1, city, stateId, postalCode, countryCode);
+			var results = await DBHelper.SetupOrganization(UserContext.UserId, (int)OrganizationRoleEnum.Owner, employeeId, organizationName, phoneNumber, faxNumber, siteUrl, subDomainName, address1, city, stateId, postalCode, countryCode);
+
+			return results;
 		}
 
 		/// <summary>
@@ -157,7 +159,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Creates an invitation for a new user in the database, and also sends an email to the new user with their access code.
 		/// </summary>
-		public async Task<int> InviteUser(string url, string email, string firstName, string lastName, int organizationId, string organizationName, OrganizationRoleEnum organizationRoleId, string employeedId, string prodJson)
+		public async Task<int> InviteUser(string url, string email, string firstName, string lastName, int organizationId, string organizationName, OrganizationRoleEnum organizationRoleId, string employeedId, string prodJson, int? employeetypeId)
 		{
 			if (organizationId <= 0) throw new ArgumentOutOfRangeException(nameof(organizationId));
 			CheckOrgAction(OrgAction.AddUserToOrganization, organizationId);
@@ -167,8 +169,18 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException(nameof(lastName));
 			if (string.IsNullOrWhiteSpace(employeedId)) throw new ArgumentNullException(nameof(employeedId));
 
+			int empTypeId = 0;
+			if (employeetypeId == null)
+			{
+				var employeeType = (await GetEmployeeTypeByOrganization(organizationId)).First();
+				empTypeId = employeeType.EmployeeTypeId;
+			}
+			else
+			{
+				empTypeId = employeetypeId.Value;
+			}
 			// Creation of invitation
-			var result = await DBHelper.CreateInvitation(email, firstName, lastName, organizationId, (int)organizationRoleId, employeedId, prodJson);
+			var result = await DBHelper.CreateInvitation(email, firstName, lastName, organizationId, (int)organizationRoleId, empTypeId, employeedId, prodJson);
 
 			switch (result)
 			{
@@ -312,8 +324,6 @@ namespace AllyisApps.Services
 			return await this.DBHelper.GetOrganizationInvitationCountAsync(orgId, (int)statusMask);
 		}
 
-		
-
 		/// <summary>
 		/// Gets all the projects in an organization.
 		/// </summary>
@@ -379,8 +389,8 @@ namespace AllyisApps.Services
 			}
 
 			#endregion Validation
-			
-			return await DBHelper.DeleteOrganizationUsers(userIds,organizationId);
+
+			return await DBHelper.DeleteOrganizationUsers(userIds, organizationId);
 		}
 
 		/// <summary>
@@ -461,6 +471,8 @@ namespace AllyisApps.Services
 			//result.Subscriptions =
 			result.UserCreatedUtc = entity.UserCreatedUtc;
 			result.UserId = entity.UserId;
+
+			result.EmployeeTypeId = entity.EmployeeTypeId;
 			return result;
 		}
 
