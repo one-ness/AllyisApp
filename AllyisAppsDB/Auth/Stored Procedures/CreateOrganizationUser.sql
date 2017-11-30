@@ -2,6 +2,7 @@
 	@userId INT,
 	@organizationId INT,
 	@roleId INT,
+	@employeeTypeId INT,
 	@employeeId NVARCHAR(128) = NULL
 AS
 BEGIN
@@ -10,6 +11,7 @@ BEGIN
 		([UserId],
 		[OrganizationId],
 		[OrganizationRoleId],
+		[EmployeeTypeId],
 		[EmployeeId],
 		[MaxAmount]
 		)
@@ -17,6 +19,7 @@ BEGIN
 		(@userId,
 		@organizationId,
 		@roleId,
+		@employeeTypeId,
 		@employeeId,
 		0);
 	Declare @subs Table (SubscriptionId INT)

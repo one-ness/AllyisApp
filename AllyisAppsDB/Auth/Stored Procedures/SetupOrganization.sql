@@ -23,12 +23,28 @@ BEGIN
 
 		-- get the new organization id
 		DECLARE @organizationId INT = IDENT_CURRENT('[Auth].[Organization]');
-
-		-- Add user to the org
-		EXEC [Auth].[CreateOrganizationUser] @userId, @organizationId, @roleId, @employeeId;
-
+		
 		-- Init default pay classes for org
 		EXEC [Hrm].[CreateDefaultPayClass] @organizationId;
+
+
+		EXEC [Hrm].[CreateEmployeeType] @organizationId, 'Full Time Employee';
+
+		DECLARE @employeeTypeId INT = IDENT_CURRENT('[Hrm].[EmployeeType]');
+
+		EXEC [Hrm].[AddPayClassToEmployeeType] @employeeTypeId, 1;
+		EXEC [Hrm].[AddPayClassToEmployeeType] @employeeTypeId, 2;
+		EXEC [Hrm].[AddPayClassToEmployeeType] @employeeTypeId, 3;
+		EXEC [Hrm].[AddPayClassToEmployeeType] @employeeTypeId, 4;
+		EXEC [Hrm].[AddPayClassToEmployeeType] @employeeTypeId, 5;
+		EXEC [Hrm].[AddPayClassToEmployeeType] @employeeTypeId, 6;
+		EXEC [Hrm].[AddPayClassToEmployeeType] @employeeTypeId, 7;
+		EXEC [Hrm].[AddPayClassToEmployeeType] @employeeTypeId, 8;
+
+		-- Add user to the org
+		EXEC [Auth].[CreateOrganizationUser] @userId, @organizationId, @roleId, @employeeTypeId, @employeeId;
+
+
 	COMMIT TRANSACTION
 
 	-- return the new organization id

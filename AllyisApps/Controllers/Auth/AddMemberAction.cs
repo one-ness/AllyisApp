@@ -42,6 +42,7 @@ namespace AllyisApps.Controllers.Auth
 			var model = new AddMemberViewModel
 			{
 				OrganizationId = id,
+				EmployeeTypeList = await AppService.GetEmployeeTypeByOrganization(id),
 				EmployeeId = await AppService.GetNextEmployeeId(id),
 				OrganizationName = "Organization", //AppService.GetOrganization(id).Result.OrganizationName;
 				SubscriptionRoles = subs.Select(sub => new RoleItem
@@ -179,7 +180,9 @@ namespace AllyisApps.Controllers.Auth
 					orgName,
 					model.OrgRoleSelection == 2 ? OrganizationRoleEnum.Owner : OrganizationRoleEnum.Member,
 					model.EmployeeId,
-					jsonString);
+					jsonString,
+					model.EmployeeTypeId
+					);
 
 				Notifications.Add(new BootstrapAlert(string.Format(Strings.UserEmailed, model.FirstName, model.LastName), Variety.Success));
 				return RedirectToAction(ActionConstants.OrganizationInvitations, new { id = model.OrganizationId });

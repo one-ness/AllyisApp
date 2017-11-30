@@ -10,24 +10,37 @@ using System.Threading.Tasks;
 
 namespace AllyisApps.Services
 {
-	public partial class AppService : BaseService 
+	public partial class AppService : BaseService
 	{
-		public async void AddUserToOrganizaion(string email, string firstName, string lastName, int organizaionId, OrganizationRoleEnum roleType, string empolyeeId)
+		public async void AddUserToOrganizaion(string email, string firstName, string lastName, int organizaionId, OrganizationRoleEnum roleType, string empolyeeId, int? employeeTypeId)
 		{
 			User user = await GetUserByEmail(email);
-			if(user == null)
+			int employeeType = 0;
+
+			if (employeeTypeId == null)
+			{
+				var orgEmployeeTypes = (await GetEmployeeTypeByOrganization(organizaionId)).FirstOrDefault();
+				employeeType = orgEmployeeTypes.EmployeeTypeId;
+			}
+			else
+			{
+				employeeType = employeeTypeId.Value;
+			}
+
+			if (user == null)
 			{
 				//User is completly new does not exist in any fashion
 				DateTime now = DateTime.Now;
 				DateTime years18 = now.AddYears(-18);
 
-				int userid = await DBHelper.CreateUserAsync(email, Crypto.GetPasswordHash("Welcome1"), firstName, lastName, Guid.NewGuid(), years18, null, null, null, null, null, null, null,null);
+				int userid = await DBHelper.CreateUserAsync(email, Crypto.GetPasswordHash("Welcome1"), firstName, lastName, Guid.NewGuid(), years18, null, null, null, null, null, null, null, null);
 				user = await GetUserByEmail(email);
 			}
 			OrganizationUserDBEntity orgUser = new OrganizationUserDBEntity()
 			{
 				CreatedUtc = DateTime.Now,
 				Email = email,
+				EmployeeTypeId = employeeType,
 				EmployeeId = empolyeeId,
 				FirstName = firstName,
 				LastName = lastName,

@@ -56,6 +56,14 @@
 								</div>
 							</div>
 						}
+						<div class="form-group row">
+							<div class="form-group col-md-6">
+								@Html.ReqLabelFor(x => Model.EmployeeTypeId, "Employee Type")
+							</div>
+							<div class="form-group col-md-6">
+								@Html.DropDownListFor(x => Model.EmployeeTypeId, new SelectList(Model.EmployeeTypeList, "EmployeeTypeId", "EmployeeTypeName"), new { @class = "form-control" })
+							</div>
+						</div>
 						<div class="form-group allyis-action-buttons pull-right">
 							<a href="@Url.Action(ActionConstants.OrganizationInvitations, ControllerConstants.Account, new { @id = Model.OrganizationId })" class="btn btn-default">@Strings.Cancel</a>&nbsp;
 							<input type="submit" id="addMember" value="@Strings.Add" class="btn btn-primary" />
@@ -76,9 +84,9 @@
 						@Html.AntiForgeryToken()
 						<div>
 							<input type="file" id="upload-box" name="upload" style="display:none;"
-									onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+								   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
 							<input id="upload-file-name-display" class="form-control"
-									onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+								   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
 						</div>
 
 						<div style="margin-top: 10px; margin-bottom: 15px; float:right;">
