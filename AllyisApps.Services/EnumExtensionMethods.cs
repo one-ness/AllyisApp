@@ -1,4 +1,6 @@
-﻿namespace AllyisApps.Services.TimeTracker
+﻿using System;
+
+namespace AllyisApps.Services.TimeTracker
 {
 	/// <summary>
 	///
@@ -12,27 +14,19 @@
 		/// <returns></returns>
 		public static string GetEnumName(this TimeEntryStatus value)
 		{
-			string name = "";
 			switch (value)
 			{
 				case TimeEntryStatus.Approved:
-					name = "Approved";
-					break;
-
+					return "Approved";
 				case TimeEntryStatus.PayrollProcessed:
-					name = "Payroll Processed";
-					break;
-
+					return "Payroll Processed";
 				case TimeEntryStatus.Pending:
-					name = "Pending";
-					break;
-
+					return "Pending";
 				case TimeEntryStatus.Rejected:
-					name = "Rejected";
-					break;
+					return "Rejected";
+				default:
+					throw new ArgumentOutOfRangeException(nameof(value), value, null);
 			}
-
-			return name;
 		}
 
 		/// <summary>
@@ -42,19 +36,15 @@
 		/// <returns></returns>
 		public static string GetEnumName(this PayPeriodType value)
 		{
-			string name = "";
 			switch (value)
 			{
 				case PayPeriodType.Dates:
-					name = "Dates";
-					break;
-
+					return "Dates";
 				case PayPeriodType.Duration:
-					name = "Duration";
-					break;
+					return "Duration";
+				default:
+					throw new ArgumentOutOfRangeException(nameof(value), value, null);
 			}
-
-			return name;
 		}
 	}
 }

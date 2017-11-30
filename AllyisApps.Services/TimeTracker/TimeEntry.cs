@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 
 using System;
-using AllyisApps.Services;
 
 namespace AllyisApps.Services.TimeTracker
 {
@@ -75,21 +74,6 @@ namespace AllyisApps.Services.TimeTracker
 		public string Description { get; set; }
 
 		/// <summary>
-		/// Gets or sets the approval state.
-		/// </summary>
-		public int ApprovalState { get; set; }
-
-		/// <summary>
-		/// Gets or sets a value indicating whether the saved approval lock.
-		/// </summary>
-		public bool IsLockSaved { get; set; }
-
-		/// <summary>
-		/// Gets or sets a value indicating whether the data has changed since being approved or dissaproved.
-		/// </summary>
-		public bool ModSinceApproval { get; set; }
-
-		/// <summary>
 		/// Gets or sets the status of the time entry, e.g. "Pending", "Approved", "Rejected", "Payroll Processed".
 		/// </summary>
 		public int TimeEntryStatusId { get; set; }
@@ -97,9 +81,9 @@ namespace AllyisApps.Services.TimeTracker
 		/// <summary>
 		/// Gets the status name of the time entry, e.g. "Pending", "Approved", "Rejected", "Payroll Processed".
 		/// </summary>
-		public string getTimeEntryStatusName()
+		public string GetTimeEntryStatusName()
 		{
-			TimeEntryStatus status = ((TimeEntryStatus)TimeEntryStatusId);
+			var status = (TimeEntryStatus)TimeEntryStatusId;
 			return status.GetEnumName();
 		}
 

@@ -264,7 +264,6 @@ namespace AllyisApps.DBModel
 			parameters.Add("@payClassId", entry.PayClassId);
 			parameters.Add("@duration", entry.Duration);
 			parameters.Add("@description", entry.Description);
-			parameters.Add("@isLockSaved", entry.IsLockSaved);
 			parameters.Add("@timeEntryStatusId", entry.TimeEntryStatusId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))

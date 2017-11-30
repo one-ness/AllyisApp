@@ -6,7 +6,6 @@
 
 using System.Collections.Generic;
 using System.Web.Mvc;
-using AllyisApps.ViewModels.TimeTracker.Project;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
@@ -89,11 +88,6 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public string Duration { get; set; }
 
 		/// <summary>
-		/// Gets or sets the state of approval for this entry.
-		/// </summary>
-		public int ApprovalState { get; set; }
-
-		/// <summary>
 		/// Gets or sets a value indicating whether this entry has changed data since being approved/disapproved.
 		/// </summary>
 		public bool ModSinceApproval { get; set; }
@@ -114,11 +108,6 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public string Description { get; set; }
 
 		/// <summary>
-		/// Gets or sets the list of projects available to select from.
-		/// </summary>
-		public IEnumerable<CompleteProjectViewModel> Projects { get; set; }
-
-		/// <summary>
 		/// Gets or sets the list of projects available to select from, including inactive projects.
 		/// </summary>
 		public IEnumerable<SelectListItem> ProjectsWithInactive { get; set; }
@@ -129,53 +118,33 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public bool IsManager { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating that the current user can manange this time entry determined at the view
-		/// </summary>
-		public bool CanManage { get; set; }
-
-		/// <summary>
 		/// Has the user clicked the deleted Button and thus we should delete the record.
 		/// </summary>
-		public bool IsDeleted { get; set; } = false;
+		public bool IsDeleted { get; set; }
 
 		/// <summary>
 		/// Bool if the element is updated
 		/// </summary>
-		public bool IsEdited { get; set; } = false;
+		public bool IsEdited { get; set; }
 
 		/// <summary>
 		/// On Create of new record.
 		/// </summary>
-		public bool IsCreated { get; set; } = false;
+		public bool IsCreated { get; set; }
 
 		/// <summary>
-		/// Gets or sets value for whether the time entry is locked or not
+		/// Bool for whether or not this time entry can be edited.
 		/// </summary>
-		public bool IsLocked { get; set; }
-		/// <summary>
-		/// Selected Project Id 
-		/// </summary>
-		public int SelectedProjectId { get; set; }
-	}
-
-	/// <summary>
-	/// Representation of a change in the approval status of a Time entry object.
-	/// </summary>
-	public class ApprovalDataModel
-	{
-		/// <summary>
-		/// Gets or sets the id of the Time Entry.
-		/// </summary>
-		public int TimeEntryId { get; set; }
+		public bool IsEditable { get; set; }
 
 		/// <summary>
-		/// Gets or sets the id of the organization associated with the time entry.
+		/// Bool for whether or not this time entry can be created (for use in new forms).
 		/// </summary>
-		public int OrganizationId { get; set; }
+		public bool IsCreatable { get; set; }
 
 		/// <summary>
-		/// Gets or sets the new approval state of the time entry.
+		/// Bool for whether or not this time entry can be deleted.
 		/// </summary>
-		public int ApprovalState { get; set; }
+		public bool IsDeletable { get; set; }
 	}
 }

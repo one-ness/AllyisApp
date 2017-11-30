@@ -7,13 +7,13 @@
 using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using AllyisApps.Areas.TimeTracker.Core;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
+	/// <inheritdoc />
 	/// <summary>
 	/// Class which manages Time Entry objects.
 	/// </summary>
@@ -43,21 +43,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			// Authorized to delete the time entry
-			if (entry.ApprovalState == (int)ApprovalState.Approved)
-			{
-				return Json(new
-				{
-					status = "error",
-					message = Resources.Strings.AlreadyApprovedCannotEdit,
-					e = new ArgumentException(Resources.Strings.AlreadyApprovedCannotEdit),
-					reason = "ALREADY_APPROVED"
-				});
-			}
-
 			// Time entry is locked
 			DateTime? lockDate = (await AppService.GetSettingsByOrganizationId(AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId)).LockDate;
-			if (!AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, model.SubscriptionId) && entry.Date <= (lockDate == null ? DateTime.MinValue : lockDate.Value))
+			if (!AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, model.SubscriptionId) && entry.Date <= (lockDate ?? DateTime.MinValue))
 			{
 				string errorMessage = Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture);
 				return Json(new
@@ -78,7 +66,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="model"></param>
 		/// <returns></returns>
-		protected async Task<ActionResult> DeleteTimeEntryJson(EditTimeEntryViewModel model)
+		private async Task<ActionResult> DeleteTimeEntryJson(EditTimeEntryViewModel model)
 		{
 			if (!model.IsDeleted)
 			{
@@ -87,7 +75,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			return await DeleteTimeEntryJson(new DeleteTimeEntryViewModel
 			{
-				ApprovalState = model.ApprovalState,
 				Duration = model.Duration,
 				SubscriptionId = model.SubscriptionId,
 				TimeEntryId = model.TimeEntryId.Value

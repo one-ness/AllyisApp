@@ -1,4 +1,10 @@
-﻿namespace AllyisApps.Services.TimeTracker
+﻿//------------------------------------------------------------------------------
+// <copyright file="PayClassIdEnum.cs" company="Allyis, Inc.">
+//     Copyright (c) Allyis, Inc.  All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
+
+namespace AllyisApps.Services.TimeTracker
 {
 	public enum PayClassId
 	{

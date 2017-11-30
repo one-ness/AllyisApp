@@ -9,28 +9,23 @@ using Newtonsoft.Json;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
+	/// <inheritdoc />
 	/// <summary>
 	/// Contains actions for new TimeTracker Index Design
 	/// </summary>
 	public partial class TimeEntryController : BaseController
 	{
-		JsonResult jsonResult = new JsonResult();
 		/// <summary>
-		/// 
+		/// Receives a json list of time entries to either create, update, or delete for each entry.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>Redirect to time entry page</returns>
 		[HttpPost]
 		public async Task<ActionResult> TimeEntryCURD(string data)
 		{
-
 			var items = JsonConvert.DeserializeObject<TimeEntryCRUDModel>(data);
-
-			//var list = ConvertToEditTimeEntry(items);
-
 
 			foreach (EditTimeEntryViewModel entry in items.Entries.OrderBy(item => item.Date))
 			{
-
 				JsonResult res = null;
 				if (entry.TimeEntryId.HasValue)
 				{

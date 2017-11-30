@@ -7,13 +7,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
 using AllyisApps.Resources;
 using AllyisApps.Services;
-using AllyisApps.Services.Auth;
+using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -38,93 +39,137 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			// Authorized to edit this entry
 			try
 			{
-				float? durationResult;
-				if (!(durationResult = ParseDuration(model.Duration)).HasValue)
-				{
-					throw new ArgumentException(Strings.DurationFormat);
-				}
+				// DateTime dateGet = model.Date != 0 ? modelDate : DateTime.Now; // do we need this??
+				DateTime modelDate = Utility.GetDateTimeFromDays(model.Date);
+				float modelDuration = ParseDuration(model.Duration) ?? throw new ArgumentException(Strings.DurationFormat);
+				int organizationId = AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId;
 
-				if (ParseDuration(model.Duration) == 0)
+				var newEntry = new TimeEntry
 				{
-					throw new ArgumentException(Strings.EnterATimeLongerThanZero);
-				}
+					UserId = model.UserId,
+					ProjectId = model.ProjectId,
+					PayClassId = model.PayClassId,
+					Date = modelDate,
+					Duration = modelDuration,
+					Description = model.Description
+				};
 
-				IEnumerable<Services.TimeTracker.TimeEntry> otherEntriesToday = await AppService.GetTimeEntriesByUserOverDateRange(
-					new List<int> { model.UserId },
-					Utility.GetDateTimeFromDays(model.Date),
-					Utility.GetDateTimeFromDays(model.Date),
-					AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId);
-				float durationOther = 0.0f;
-				foreach (Services.TimeTracker.TimeEntry otherEntry in otherEntriesToday)
+				CreateUpdateTimeEntryResult validationResult = await AppService.ValidateTimeEntryCreateUpdate(newEntry, organizationId);
+
+				switch (validationResult)
 				{
-					durationOther += otherEntry.Duration;
-				}
-
-				UserContext.SubscriptionAndRole subInfo = null;
-				AppService.UserContext.SubscriptionsAndRoles.TryGetValue(model.SubscriptionId, out subInfo);
-
-				DateTime? lockDate = (await AppService.GetSettingsByOrganizationId(AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId)).LockDate;
-				if (durationResult + durationOther > 24.00)
-				{
-					throw new ArgumentException(Strings.CannotExceed24 + " For time entry on date " + Utility.GetDateTimeFromDays(model.Date).ToShortDateString());
-				}
-
-				if (model.ProjectId <= 0)
-				{
-					throw new ArgumentException(Strings.MustSelectProject + " For time entry on date " + Utility.GetDateTimeFromDays(model.Date).ToShortDateString());
-				}
-
-				if (model.PayClassId < 1)
-				{
-					throw new ArgumentException(Strings.MustSelectPayClass + " For time entry on date " + Utility.GetDateTimeFromDays(model.Date).ToShortDateString());
-				}
-
-				if (model.Date <= (lockDate == null ? -1 : Utility.GetDaysFromDateTime(lockDate.Value)))
-				{
-					throw new ArgumentException(Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
+					case CreateUpdateTimeEntryResult.OvertimePayClass:
+						return Json(new
+						{
+							status = "error",
+							message = "Cannot create overtime hours. These are automatically calculated."
+						});
+					case CreateUpdateTimeEntryResult.InvalidPayClass:
+						return Json(new
+						{
+							status = "error",
+							message = Strings.MustSelectPayClass + " For time entry on date " + modelDate.ToShortDateString()
+						});
+					case CreateUpdateTimeEntryResult.InvalidProject:
+						return Json(new
+						{
+							status = "error",
+							message = Strings.MustSelectProject + " For time entry on date " + modelDate.ToShortDateString()
+						});
+					case CreateUpdateTimeEntryResult.ZeroDuration:
+						return Json(new
+						{
+							status = "error",
+							message = Strings.EnterATimeLongerThanZero
+						});
+					case CreateUpdateTimeEntryResult.Over24Hours:
+						return Json(new
+						{
+							status = "error",
+							message = Strings.CannotExceed24 + " For time entry on date " + modelDate.ToShortDateString()
+						});
+					case CreateUpdateTimeEntryResult.EntryIsLocked:
+						DateTime? lockDate = (await AppService.GetSettingsByOrganizationId(organizationId)).LockDate;
+						return Json(new
+						{
+							status = "error",
+							message = Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", Thread.CurrentThread.CurrentCulture)
+						});
+					case CreateUpdateTimeEntryResult.Success:
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
 				}
 
 				//validate correct project
-				int organizationId = AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId;
-				var projects = await AppService.GetProjectsByUserAndOrganization(model.UserId, organizationId);
-				var project = projects.SingleOrDefault(p => model.ProjectId == p.ProjectId);
+				var projects = await AppService.GetProjectsByUserAndOrganization(newEntry.UserId, organizationId);
+				var project = projects.SingleOrDefault(p => newEntry.ProjectId == p.ProjectId);
 				if (project == null || !project.IsUserActive)
 				{
 					throw new ArgumentException(Strings.MustBeAssignedToProject);
 				}
 
-				if (project.StartDate != null && Utility.GetDateTimeFromDays(model.Date) < project.StartDate
-					|| project.EndDate != null && Utility.GetDateTimeFromDays(model.Date) > project.EndDate)
+				if (project.StartDate != null && modelDate < project.StartDate
+					|| project.EndDate != null && modelDate > project.EndDate)
 				{
 					throw new ArgumentException(Strings.ProjectIsNotActive);
 				}
 
-
-
-				DateTime dateGet = model.Date != 0 ? Utility.GetDateTimeFromDays(model.Date) : DateTime.Now;
-
-				int id = await AppService.CreateTimeEntry(new Services.TimeTracker.TimeEntry
+				//Calculate overtime
+				if (newEntry.PayClassId == 1) // Pay class id 1 is regular
 				{
-					UserId = model.UserId,
-					ProjectId = model.ProjectId,
-					PayClassId = model.PayClassId,
-					Date = dateGet,
-					Duration = durationResult.Value,
-					Description = model.Description
-				});
+					float amountAboveOvertimeLimit = await AppService.GetNewHoursAboveOvertimeLimit(organizationId, newEntry.UserId, modelDuration, modelDate);
 
-				return Json(new
-				{
-					status = "success",
-					values = new
+					//if we need to have more overtime hours, either add to existing, or create a new overtime entry
+					if (amountAboveOvertimeLimit > 0)
 					{
-						duration = GetDurationDisplay(model.Duration),
-						description = model.Description,
-						projectId = model.ProjectId,
-						id = id,
-						projectName = AppService.GetProject(model.ProjectId).ProjectName
+						TimeEntry overtimeEntry = (await AppService.GetTimeEntriesByUserOverDateRange(new List<int> { newEntry.UserId }, modelDate, modelDate, organizationId))
+							.FirstOrDefault(entry => entry.ProjectId == newEntry.ProjectId && entry.PayClassName == "Overtime");
+
+						modelDuration -= amountAboveOvertimeLimit;
+
+						if (overtimeEntry != null)
+						{
+							overtimeEntry.Duration += amountAboveOvertimeLimit;
+							AppService.UpdateTimeEntry(overtimeEntry);
+						}
+						else
+						{
+							overtimeEntry = new TimeEntry
+							{
+								UserId = newEntry.UserId,
+								ProjectId = newEntry.ProjectId,
+								PayClassId = 7,
+								Date = modelDate,
+								Duration = amountAboveOvertimeLimit,
+								Description = string.Empty
+							};
+							await AppService.CreateTimeEntry(overtimeEntry);
+						}
 					}
-				});
+				}
+
+				//modelDuration is 0 if all the hours went to overtime
+				if (modelDuration > 0)
+				{
+
+					int newTimeEntryId = await AppService.CreateTimeEntry(newEntry);
+
+					return Json(new
+					{
+						status = "success",
+						values = new
+						{
+							duration = GetDurationDisplay(model.Duration),
+							description = newEntry.Description,
+							projectId = newEntry.ProjectId,
+							id = newTimeEntryId,
+							projectName = AppService.GetProject(newEntry.ProjectId).ProjectName
+						}
+					});
+				}
+
+				return Json(new { status = "success" });
 			}
 			catch (ArgumentException e)
 			{

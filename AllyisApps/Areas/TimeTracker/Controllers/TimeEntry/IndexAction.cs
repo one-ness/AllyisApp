@@ -220,6 +220,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 							hours[iter.Current.ProjectId] = temp;
 						}
 
+						//exclude overtime if it is not the time entry's pay class -- this is a calculated column
+						bool isOvertime = iter.Current.PayClassName == "Overtime";
+						var filteredPayClasses = isOvertime
+							? payClasses.Where(pc => pc.PayClassName == "Overtime")
+							: payClasses.Where(pc => pc.PayClassName != "Overtime");
+
 						result.GrandTotal.Hours += iter.Current.Duration;
 
 						// And add its entry to Entries.
@@ -251,9 +257,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 									//Disabled = !p.IsUserActive && !Model.Sample
 								}).ToList(),
 							ProjectName = allProjects.FirstOrDefault(x => x.ProjectId == iter.Current.ProjectId)?.ProjectName ?? "",
-							ApprovalState = iter.Current.ApprovalState,
-							ModSinceApproval = iter.Current.ModSinceApproval,
-							PayClasses = payClasses
+							PayClasses = filteredPayClasses
 								.Select(c => new SelectListItem
 								{
 									Selected = payClasses.Count == 1 || iter.Current.PayClassId == c.PayClassId,
@@ -261,7 +265,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 									Value = c.PayClassId.ToString()
 								})
 								.ToList(),
-							IsLocked = iter.Current.TimeEntryStatusId != (int)TimeEntryStatus.Pending //can't edit
+							IsEditable = iter.Current.TimeEntryStatusId == (int)TimeEntryStatus.Pending && !isOvertime,
+							IsCreatable = iter.Current.TimeEntryStatusId == (int)TimeEntryStatus.Pending,
+							IsDeletable = iter.Current.TimeEntryStatusId == (int)TimeEntryStatus.Pending
 						});
 
 						if (holidays.FirstOrDefault(x => x.Date == iter.Current.Date) != null)
@@ -312,7 +318,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 								})
 								.ToList(),
 							IsManager = result.CanManage,
-							IsLocked = date <= (result.LockDate ?? result.PayrollProcessedDate ?? DateTime.MinValue) //can't add
+							IsEditable = date > (result.LockDate ?? result.PayrollProcessedDate ?? DateTime.MinValue),
+							IsCreatable = date > (result.LockDate ?? result.PayrollProcessedDate ?? DateTime.MinValue),
+							IsDeletable = date > (result.LockDate ?? result.PayrollProcessedDate ?? DateTime.MinValue)
 						});
 
 						// Go to the next day.

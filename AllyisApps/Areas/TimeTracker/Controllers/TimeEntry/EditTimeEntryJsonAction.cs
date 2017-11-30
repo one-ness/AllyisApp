@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using AllyisApps.Areas.TimeTracker.Core;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
 using AllyisApps.Resources;
@@ -35,21 +34,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The edited version of Time Entry.</returns>
 		public async Task<ActionResult> EditTimeEntryJson(EditTimeEntryViewModel model)
 		{
-			if (model.ApprovalState == -1)
-			{
-				EditTimeEntryViewModel defaults = await ConstructEditTimeEntryViewModel(model.TimeEntryId.Value, model.SubscriptionId);
-				return Json(new
-				{
-					status = "error",
-					message = Strings.InvalidApprovalState,
-					reason = "UNDEFINED_APPROVAL",
-					action = "REVERT",
-					values = new { duration = GetDurationDisplay(defaults.Duration), description = defaults.Description, id = model.TimeEntryId }
-				});
-			}
-
-			int organizationId = AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId;
-
 			// Check permissions
 			if (model.UserId != AppService.UserContext.UserId)
 			{
@@ -67,34 +51,33 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			// Authorized for editing
-			var timeGet = await AppService.GetTimeEntry(model.TimeEntryId.Value);
-			if (timeGet.ApprovalState == (int)ApprovalState.Approved)
-			{
-				EditTimeEntryViewModel defaults = await ConstructEditTimeEntryViewModel(model.TimeEntryId.Value, model.SubscriptionId);
-				return Json(new
-				{
-					status = "error",
-					message = Strings.AlreadyApprovedCannotEdit,
-					action = "REVERT",
-					values = new { duration = GetDurationDisplay(defaults.Duration), description = defaults.Description, id = model.TimeEntryId }
-				});
-			}
-
 			try
 			{
 				EditTimeEntry(model, true);
 
-				return Json(new { status = "success", values = new { duration = GetDurationDisplay(model.Duration), description = model.Description, id = model.TimeEntryId, projectId = model.ProjectId } });
+				var result = new
+				{
+					status = "success",
+					values = new
+					{
+						duration = GetDurationDisplay(model.Duration),
+						description = model.Description,
+						id = model.TimeEntryId,
+						projectId = model.ProjectId
+					}
+				};
+
+				return Json(result);
 			}
 			catch (ArgumentException e)
 			{
-				var temp = new
+				var result = new
 				{
 					status = "error",
 					message = e.Message
 				};
 
-				return Json(temp);
+				return Json(result);
 			}
 		}
 
@@ -153,6 +136,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new ArgumentException(Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
 			}
 
+			//TODO: Any project validation must also take into account editing past entries where the user used to be assigned to the project but now is not
+
 			AppService.UpdateTimeEntry(new Services.TimeTracker.TimeEntry
 			{
 				TimeEntryId = model.TimeEntryId.Value,
@@ -160,7 +145,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				PayClassId = model.PayClassId,
 				Duration = durationResult.Value,
 				Description = model.Description,
-				ApprovalState = (int)ApprovalState.NoApprovalState,
 			});
 		}
 

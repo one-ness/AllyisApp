@@ -31,6 +31,31 @@ namespace AllyisApps.Services
 			return DBEntityToServiceObject(await DBHelper.GetSettingsByOrganizationId(organizationId));
 		}
 
+		public async Task CheckUpdateProjectStartEndDate(int projectId, DateTime? newStartDate, DateTime? newEndDate)
+		{
+			// Get all time entries for selected project
+			var project = DBHelper.GetProjectById(projectId);
+			var oldStartDate = project.StartDate ?? (DateTime)SqlDateTime.MinValue;
+			var oldEndDate = project.EndDate ?? (DateTime)SqlDateTime.MaxValue;
+			var entries = await DBHelper.GetTimeEntriesOverDateRange(project.OrganizationId, oldStartDate, oldEndDate);
+
+			// Check new End Date, see if time entries are outside of new project date range
+			foreach (var entry in entries)
+			{
+				//only check for the specific project
+				if (entry.ProjectId != projectId) continue;
+
+				if (newEndDate != null && entry.Date > newEndDate)
+				{
+					throw new ArgumentOutOfRangeException(nameof(newEndDate), $"Cannot change Project End Date to the specified new date, there are currently time entries outside of the project's new date range: ({entry.Date.ToShortDateString()}).");
+				}
+				if (newStartDate != null && entry.Date < newStartDate)
+				{
+					throw new ArgumentOutOfRangeException(nameof(newStartDate), $"Cannot change Project Start Date to the specified new date, there are currently time entries outside of the project's new date range: ({entry.Date.ToShortDateString()}).");
+				}
+			}
+		}
+
 		/// <summary>
 		/// Locks all time entries with date that is less than or equal to lockDate
 		/// </summary>
@@ -201,6 +226,11 @@ namespace AllyisApps.Services
 			return await DBHelper.UpdatePayPeriod(payPeriodJson, organizationId);
 		}
 
+		/// <summary>
+		/// Returns a pay period range object containing previous, current, and next pay period ranges for the given organization.
+		/// </summary>
+		/// <param name="organizationId">The organization that contains the pay period settings.</param>
+		/// <returns>Pay period range object containing previous, current, and next pay period ranges for the given organization.</returns>
 		public async Task<PayPeriodRanges> GetPayPeriodRanges(int organizationId)
 		{
 			if (organizationId <= 0)
@@ -241,48 +271,123 @@ namespace AllyisApps.Services
 			}
 		}
 
-		#region public static
-
-		public async Task<bool> CheckUpdateProjectStartEndDate(int projectId, DateTime? newStartDate, DateTime? newEndDate)
+		/// <summary>
+		/// Returns the overtime period that the inputted date is contained in, according to the given organization's settings
+		/// </summary>
+		/// <param name="organizationId">The organization that contains the overtime period settings.</param>
+		/// <param name="date">The date from which to get the overtime period</param>
+		/// <returns>Returns the overtime period that the inputted date is contained in.</returns>
+		public async Task<DateRange> GetOvertimePeriodByDate(int organizationId, DateTime date)
 		{
-			// Get all time entries for selected project
-			var project = DBHelper.GetProjectById(projectId);
-			var oldStartDate = project.StartDate ?? (DateTime)SqlDateTime.MinValue;
-			var oldEndDate = project.EndDate ?? (DateTime)SqlDateTime.MaxValue;
-			var entries = await DBHelper.GetTimeEntriesOverDateRange(project.OrganizationId, oldStartDate, oldEndDate);
+			var settings = await GetSettingsByOrganizationId(organizationId);
 
-			// Check new End Date, see if time entries are outside of new project date range
-			bool outsideNewDateRange = false;
-			foreach (var entry in entries)
+			switch (settings.OvertimePeriod)
 			{
-				if (entry.ProjectId == projectId) //only check for the specific project
-				{
-					if (newEndDate != null && entry.Date > newEndDate)
-					{
-						outsideNewDateRange = true;
-						throw new ArgumentOutOfRangeException(nameof(newEndDate), String.Format("{0}{1}{2}", "Cannot change Project End Date to the specified new date, there are currently time entries outside of the project's new date range: (", entry.Date.ToShortDateString(), "). "));
-					}
-					if (newStartDate != null && entry.Date < newStartDate)
-					{
-						outsideNewDateRange = true;
-						throw new ArgumentOutOfRangeException(nameof(newStartDate), String.Format("{0}{1}{2}", "Cannot change Project Start Date to the specified new date, there are currently time entries outside of the project's new date range: (", entry.Date.ToShortDateString(), "). "));
-					}
-				}
+				case "Week":
+					return GetWeeklyOvertimePeriod(settings.StartOfWeek, date);
+				case "Month":
+					return GetMonthlyOvertimePeriod(date);
+				case "Day":
+					return new DateRange(date, date);
+				default:
+					throw new ArgumentOutOfRangeException(nameof(settings.OvertimePeriod), settings.OvertimePeriod, "Overtime period must be either 'Week', 'Month', or 'Day'.");
+			}
+		}
+
+		/// <summary>
+		/// Returns the amount of new overtime hours that the new time entry info would add if it was added to the user's time entry sheet.
+		/// </summary>
+		/// <param name="organizationId">The organization that contains the overtime settings.</param>
+		/// <param name="userId">The user that the new entry info belongs to</param>
+		/// <param name="newEntryDuration">The duration of the new entry that would be added.</param>
+		/// <param name="newEntryDate">The date of the new entry that would be added.</param>
+		/// <returns>The amount of new overtime hours that the new time entry info would add if it was added to the user's time entry sheet.</returns>
+		public async Task<float> GetNewHoursAboveOvertimeLimit(int organizationId, int userId, float newEntryDuration, DateTime newEntryDate)
+		{
+			DateRange overtimePeriod = await GetOvertimePeriodByDate(organizationId, newEntryDate);
+			var entriesInOvertimePeriod = (await GetTimeEntriesByUserOverDateRange(new List<int> { userId }, overtimePeriod.StartDate, overtimePeriod.EndDate, organizationId)).ToList();
+			int overtimeLimit = (await GetSettingsByOrganizationId(organizationId)).OvertimeHours;
+			float regularHoursSum = entriesInOvertimePeriod.Where(entry => entry.PayClassName == "Regular").Sum(entry => entry.Duration);
+
+			return regularHoursSum + newEntryDuration - overtimeLimit;
+		}
+
+		public async Task<CreateUpdateTimeEntryResult> ValidateTimeEntryCreateUpdate(TimeEntry model, int organizationId)
+		{
+			// 7 is the payclassid for Overtime
+			if (model.PayClassId == 7)
+			{
+				return CreateUpdateTimeEntryResult.OvertimePayClass;
 			}
 
-			return outsideNewDateRange;
+			if (model.PayClassId < 1)
+			{
+				return CreateUpdateTimeEntryResult.InvalidPayClass;
+			}
+
+			if (model.ProjectId <= 0)
+			{
+				return CreateUpdateTimeEntryResult.InvalidProject;
+			}
+
+			if (model.Duration == 0)
+			{
+				return CreateUpdateTimeEntryResult.ZeroDuration;
+			}
+
+			var otherEntriesToday = await GetTimeEntriesByUserOverDateRange(
+				new List<int> { model.UserId },
+				model.Date,
+				model.Date,
+				organizationId);
+
+			float durationOther = otherEntriesToday.Sum(otherEntry => otherEntry.Duration);
+			if (model.Duration + durationOther > 24.00)
+			{
+				return CreateUpdateTimeEntryResult.Over24Hours;
+			}
+
+			DateTime? lockDate = (await GetSettingsByOrganizationId(organizationId)).LockDate;
+			if (lockDate != null && model.Date <= lockDate.Value)
+			{
+				return CreateUpdateTimeEntryResult.EntryIsLocked;
+			}
+
+			return CreateUpdateTimeEntryResult.Success;
+		}
+
+		#region public static
+
+		public static DateRange GetWeeklyOvertimePeriod(int startOfWeek, DateTime date)
+		{
+			int dateDayOfWeek = (int)date.DayOfWeek;
+			int endDateAdd = Mod(6 + startOfWeek - dateDayOfWeek, 7);
+			int startDateAdd = -1 * Mod(dateDayOfWeek - startOfWeek - 7, 7);
+
+			return new DateRange(date.AddDays(startDateAdd), date.AddDays(endDateAdd));
+		}
+
+		public static DateRange GetMonthlyOvertimePeriod(DateTime date)
+		{
+			var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+			var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddTicks(-1);
+
+			return new DateRange(firstDayOfMonth, lastDayOfMonth);
 		}
 
 		public static DateTime SetStartingDate(DateTime? date, int startOfWeek)
 		{
 			if (date != null) return date.Value.Date;
 
-			DateTime today = DateTime.Now;
-			int daysIntoTheWeek = (int)today.DayOfWeek < startOfWeek
-				? (int)today.DayOfWeek + (7 - startOfWeek)
-				: (int)today.DayOfWeek - startOfWeek;
+			int todayDayOfWeek = (int)DateTime.Now.DayOfWeek;
+			int daysIntoTheWeek = todayDayOfWeek - startOfWeek;
 
-			return today.AddDays(-daysIntoTheWeek).Date;
+			if (todayDayOfWeek < startOfWeek)
+			{
+				daysIntoTheWeek += 7;
+			}
+
+			return DateTime.Now.AddDays(-daysIntoTheWeek).Date;
 		}
 
 		/// <summary>
@@ -295,7 +400,7 @@ namespace AllyisApps.Services
 		/// -1 is 1 pay period before the current.
 		/// </param>
 		/// <returns></returns>
-		public static PayPeriodRanges.PayPeriodRange GetNthPayPeriodByDates(List<int> dates, int n)
+		public static DateRange GetNthPayPeriodByDates(List<int> dates, int n)
 		{
 			dates.Sort();
 			int startIndex = 0;
@@ -358,7 +463,7 @@ namespace AllyisApps.Services
 					: new DateTime(year, month + 1, dates[0]))
 				: new DateTime(year, month, dates[Mod(startIndex + 1, dates.Count)]);
 
-			var range = new PayPeriodRanges.PayPeriodRange();
+			var range = new DateRange();
 			range.StartDate = new DateTime(year, month, dates[startIndex]);
 			range.EndDate = endDate.AddDays(-1);
 			return range;
@@ -370,7 +475,7 @@ namespace AllyisApps.Services
 		/// <param name="duration">The duration of the pay period.</param>
 		/// <param name="startDate">The start date from which to base the pay period dates on.</param>
 		/// <returns>The current pay period range.</returns>
-		public static PayPeriodRanges.PayPeriodRange GetCurrentPayPeriodByDuration(int duration, DateTime startDate)
+		public static DateRange GetCurrentPayPeriodByDuration(int duration, DateTime startDate)
 		{
 			DateTime endDate = startDate;
 
@@ -391,7 +496,7 @@ namespace AllyisApps.Services
 				}
 			}
 
-			return new PayPeriodRanges.PayPeriodRange
+			return new DateRange
 			{
 				StartDate = startDate,
 				EndDate = startDate == DateTime.Now ? startDate.AddDays(duration - 1) : endDate.AddDays(-1) //end date is one day before the next start date
@@ -409,9 +514,9 @@ namespace AllyisApps.Services
 		/// -1 is 1 pay period before the current.
 		/// </param>
 		/// <returns>The nth pay period away from the current one.</returns>
-		public static PayPeriodRanges.PayPeriodRange GetNthPayPeriodByDuration(PayPeriodRanges.PayPeriodRange currentPayPeriod, int numberOfPayPeriodsAway)
+		public static DateRange GetNthPayPeriodByDuration(DateRange currentPayPeriod, int numberOfPayPeriodsAway)
 		{
-			return new PayPeriodRanges.PayPeriodRange
+			return new DateRange
 			{
 				StartDate = currentPayPeriod.StartDate.AddDays(numberOfPayPeriodsAway * ((currentPayPeriod.EndDate - currentPayPeriod.StartDate).TotalDays + 1)),
 				EndDate = currentPayPeriod.EndDate.AddDays(numberOfPayPeriodsAway * ((currentPayPeriod.EndDate - currentPayPeriod.StartDate).TotalDays + 1))

@@ -268,7 +268,7 @@ namespace AllyisApps.Services
 			if (subscriptionId <= 0) throw new ArgumentException("subscriptionId");
 			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 
-			HolidayDBEntity deletedHoliday = DBHelper.GetHolidays(orgId).Where(h => h.HolidayId == holidayId).SingleOrDefault();
+			HolidayDBEntity deletedHoliday = DBHelper.GetHolidays(orgId).SingleOrDefault(h => h.HolidayId == holidayId);
 			if (deletedHoliday != null)
 			{
 				DBHelper.DeleteHoliday(deletedHoliday.HolidayName, deletedHoliday.Date, orgId);
@@ -334,7 +334,7 @@ namespace AllyisApps.Services
 		public async Task<IEnumerable<PayClass>> GetPayClassesBySubscriptionId(int subscriptionId)
 		{
 			var getClass = await DBHelper.GetPayClasses(UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
-			return getClass.Select(pc => InitializePayClassInfo(pc));
+			return getClass.Select(InitializePayClassInfo);
 		}
 
 		/// <summary>
@@ -343,7 +343,7 @@ namespace AllyisApps.Services
 		public async Task<IEnumerable<PayClass>> GetPayClassesByOrganizationId(int organizationId)
 		{
 			var getClass = await DBHelper.GetPayClasses(organizationId);
-			return getClass.Select(pc => InitializePayClassInfo(pc));
+			return getClass.Select(InitializePayClassInfo);
 		}
 
 		/// <summary>
@@ -389,7 +389,7 @@ namespace AllyisApps.Services
 
 			if (!new[] { "Day", "Week", "Month" }.Contains(overtimePeriod))
 			{
-				throw new ArgumentException(string.Format("{0} is not a valid value for lock date period.", overtimePeriod));
+				throw new ArgumentException($"{overtimePeriod} is not a valid value for lock date period.");
 			}
 
 			#endregion Validation
@@ -660,14 +660,11 @@ namespace AllyisApps.Services
 		{
 			return new TimeEntry
 			{
-				ApprovalState = entity.ApprovalState,
 				Date = entity.Date,
 				Description = entity.Description,
 				Duration = entity.Duration,
 				FirstName = entity.FirstName,
 				LastName = entity.LastName,
-				IsLockSaved = entity.IsLockSaved,
-				ModSinceApproval = entity.ModSinceApproval,
 				PayClassId = entity.PayClassId,
 				PayClassName = entity.PayClassName,
 				ProjectId = entity.ProjectId,
@@ -689,14 +686,11 @@ namespace AllyisApps.Services
 		{
 			return new TimeEntryDBEntity
 			{
-				ApprovalState = info.ApprovalState,
 				Date = info.Date,
 				Description = info.Description,
 				Duration = info.Duration,
 				FirstName = info.FirstName,
 				LastName = info.LastName,
-				IsLockSaved = info.IsLockSaved,
-				ModSinceApproval = info.ModSinceApproval,
 				PayClassId = info.PayClassId,
 				ProjectId = info.ProjectId,
 				TimeEntryId = info.TimeEntryId,
