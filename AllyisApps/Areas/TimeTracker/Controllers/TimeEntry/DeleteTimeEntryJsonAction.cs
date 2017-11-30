@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
-using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -23,62 +23,33 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Deletes a Time Entry.
 		/// </summary>
-		/// <param name="model">The model representing the time entry to be deleted.</param>
+		/// <param name="subscriptionId">The subscription that the user belongs to.</param>
+		/// <param name="entry">The model representing the time entry to be deleted.</param>
 		/// <returns>JSON Status. {status: 'success|error', message: 'a string'}.</returns>
 		[HttpPost]
-		public async Task<ActionResult> DeleteTimeEntryJson(DeleteTimeEntryViewModel model)
+		public async Task<CreateUpdateTimeEntryResult> DeleteTimeEntry(int subscriptionId, TimeEntry entry)
 		{
 			// Check for permissions
-			Services.TimeTracker.TimeEntry entry = await AppService.GetTimeEntry(model.TimeEntryId);
-			if (entry.UserId != AppService.UserContext.UserId)
+			if (entry.UserId != AppService.UserContext.UserId && !AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId))
 			{
-				if (!AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId))
-				{
-					return Json(new
-					{
-						status = "error",
-						message = Resources.Strings.NotAuthZTimeEntryOtherUserDelete,
-						e = new UnauthorizedAccessException(Resources.Strings.NotAuthZTimeEntryOtherUserDelete)
-					});
-				}
+				return CreateUpdateTimeEntryResult.NotAuthZTimeEntryOtherUserEdit;
 			}
 
-			// Time entry is locked
-			DateTime? lockDate = (await AppService.GetSettingsByOrganizationId(AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId)).LockDate;
-			if (!AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, model.SubscriptionId) && entry.Date <= (lockDate ?? DateTime.MinValue))
+			// Is time entry locked
+			int organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			DateTime? lockDate = (await AppService.GetSettingsByOrganizationId(organizationId)).LockDate;
+			if (!AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId) && entry.Date <= (lockDate ?? DateTime.MinValue))
 			{
-				string errorMessage = Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture);
-				return Json(new
-				{
-					status = "error",
-					message = errorMessage,
-					e = new ArgumentException(errorMessage),
-					reason = "DATE_LOCKED"
-				});
+				return CreateUpdateTimeEntryResult.EntryIsLocked;
 			}
 
-			AppService.DeleteTimeEntry(model.TimeEntryId);
-			return Json(new { status = "success", values = new { duration = GetDurationDisplay(model.Duration).Insert(0, "-"), projectId = entry.ProjectId } });
-		}
+			//Update overtime
+			entry.Duration = 0;
+			await AppService.GenerateOvertimeFromTimeEntry(organizationId, entry);
 
-		/// <summary>
-		/// Delete Time Entry from Save button.
-		/// </summary>
-		/// <param name="model"></param>
-		/// <returns></returns>
-		private async Task<ActionResult> DeleteTimeEntryJson(EditTimeEntryViewModel model)
-		{
-			if (!model.IsDeleted)
-			{
-				throw new Exception("Attempt to delete edited view that was not marked for deletion");
-			}
+			await AppService.DeleteTimeEntry(entry.TimeEntryId);
 
-			return await DeleteTimeEntryJson(new DeleteTimeEntryViewModel
-			{
-				Duration = model.Duration,
-				SubscriptionId = model.SubscriptionId,
-				TimeEntryId = model.TimeEntryId.Value
-			});
+			return CreateUpdateTimeEntryResult.Success;
 		}
 	}
 }

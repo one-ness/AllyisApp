@@ -295,21 +295,22 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Returns the amount of new overtime hours that the new time entry info would add if it was added to the user's time entry sheet.
+		/// Returns the amount of new overtime hours that the given duration would add if it was added to the user's time entry sheet.
 		/// </summary>
 		/// <param name="organizationId">The organization that contains the overtime settings.</param>
 		/// <param name="userId">The user that the new entry info belongs to</param>
-		/// <param name="newEntryDuration">The duration of the new entry that would be added.</param>
-		/// <param name="newEntryDate">The date of the new entry that would be added.</param>
-		/// <returns>The amount of new overtime hours that the new time entry info would add if it was added to the user's time entry sheet.</returns>
-		public async Task<float> GetNewHoursAboveOvertimeLimit(int organizationId, int userId, float newEntryDuration, DateTime newEntryDate)
+		/// <param name="duration">The duration that would be added.</param>
+		/// <param name="date">The date that the new hours would be added to.</param>
+		/// <param name="existingEntryId">The id of the entry -- used if the entry is being updated or deleted</param>
+		/// <returns>The amount of new overtime hours that the given duration would add if it was added to the user's time entry sheet.</returns>
+		public async Task<float> GetNewHoursAboveOvertimeLimit(int organizationId, int userId, float duration, DateTime date, int? existingEntryId)
 		{
-			DateRange overtimePeriod = await GetOvertimePeriodByDate(organizationId, newEntryDate);
+			DateRange overtimePeriod = await GetOvertimePeriodByDate(organizationId, date);
 			var entriesInOvertimePeriod = (await GetTimeEntriesByUserOverDateRange(new List<int> { userId }, overtimePeriod.StartDate, overtimePeriod.EndDate, organizationId)).ToList();
 			int overtimeLimit = (await GetSettingsByOrganizationId(organizationId)).OvertimeHours;
-			float regularHoursSum = entriesInOvertimePeriod.Where(entry => entry.PayClassName == "Regular").Sum(entry => entry.Duration);
+			float regularHoursSum = entriesInOvertimePeriod.Where(entry => entry.PayClassName == "Regular" && entry.TimeEntryId != existingEntryId).Sum(entry => entry.Duration);
 
-			return regularHoursSum + newEntryDuration - overtimeLimit;
+			return regularHoursSum + duration - overtimeLimit;
 		}
 
 		public async Task<CreateUpdateTimeEntryResult> ValidateTimeEntryCreateUpdate(TimeEntry model, int organizationId)
@@ -354,6 +355,73 @@ namespace AllyisApps.Services
 			}
 
 			return CreateUpdateTimeEntryResult.Success;
+		}
+
+		/// <summary>
+		/// Generates the calculated overtime entry based on the entry provided.
+		/// Updates the DB with the new generated overtime.
+		/// Returns the new duration value for the inputted time entry.
+		/// </summary>
+		/// <param name="organizationId"></param>
+		/// <param name="entry">
+		///		The new entry info (either updating, creating, or deleting).
+		///		If creating, TimeEntryId must be a negative value.
+		///		If deleting, Duration must be 0.
+		/// </param>
+		/// <returns>The new duration value for the inputted time entry</returns>
+		/// TODO: make this method private by moving all references to service layer.
+		public async Task<float> GenerateOvertimeFromTimeEntry(int organizationId, TimeEntry entry)
+		{
+			//overtime is only calculated from regular hours
+			if (entry.PayClassId != 1) return entry.Duration;
+
+			float amountAboveOvertimeLimit = await GetNewHoursAboveOvertimeLimit(organizationId, entry.UserId, entry.Duration, entry.Date, entry.TimeEntryId);
+			TimeEntry overtimeEntry = (await GetTimeEntriesByUserOverDateRange(new List<int> { entry.UserId }, entry.Date, entry.Date, organizationId))
+				.FirstOrDefault(e => e.ProjectId == entry.ProjectId && e.PayClassName == "Overtime");
+
+			//if we need to have more overtime hours, either add to existing, or create a new overtime entry
+			if (amountAboveOvertimeLimit > 0)
+			{
+				if (overtimeEntry != null)
+				{
+					overtimeEntry.Duration += amountAboveOvertimeLimit;
+					UpdateTimeEntry(overtimeEntry);
+				}
+				else
+				{
+					overtimeEntry = new TimeEntry
+					{
+						UserId = entry.UserId,
+						ProjectId = entry.ProjectId,
+						PayClassId = 7,
+						Date = entry.Date,
+						Duration = amountAboveOvertimeLimit,
+						Description = string.Empty
+					};
+					await CreateTimeEntry(overtimeEntry);
+				}
+				return entry.Duration - amountAboveOvertimeLimit;
+			}
+
+			//If we're reducing the amount of hours, and have existing overtime that needs to be reduced
+			if (amountAboveOvertimeLimit < 0 && overtimeEntry != null)
+			{
+				float remainingOvertime =
+					amountAboveOvertimeLimit +
+					overtimeEntry.Duration; //after factoring in existing overtime and the new entry duration
+				if (remainingOvertime < 0) //the new entry duration eliminates the need for overtime
+				{
+					await DeleteTimeEntry(overtimeEntry.TimeEntryId);
+				}
+				else
+				{
+					overtimeEntry.Duration = remainingOvertime;
+					UpdateTimeEntry(overtimeEntry);
+				}
+				return entry.Duration - remainingOvertime;
+			}
+
+			return entry.Duration;
 		}
 
 		#region public static

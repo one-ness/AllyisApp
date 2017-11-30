@@ -82,7 +82,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					continue; // A user can't delete entries from before/on the lock date.
 				}
 
-				AppService.DeleteTimeEntry(entry.TimeEntryId);
+				await AppService.DeleteTimeEntry(entry.TimeEntryId);
 			}
 
 			// Add copied entries

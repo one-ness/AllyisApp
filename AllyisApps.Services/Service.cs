@@ -130,7 +130,7 @@ namespace AllyisApps.Services
 		/// Deletes a time entry.
 		/// </summary>
 		/// <param name="timeEntryId">Time entry Id.</param>
-		public async void DeleteTimeEntry(int timeEntryId)
+		public async Task DeleteTimeEntry(int timeEntryId)
 		{
 			#region Validation
 

@@ -14,6 +14,10 @@ namespace AllyisApps.Services.TimeTracker
 		ZeroDuration,
 		Over24Hours,
 		EntryIsLocked,
-		Success
+		Success,
+		MustBeAssignedToProject,
+		ProjectIsNotActive,
+		NotAuthZTimeEntryOtherUserEdit,
+		InvalidAction
 	}
 }
