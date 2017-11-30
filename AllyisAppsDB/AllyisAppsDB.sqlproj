@@ -410,6 +410,7 @@
     <Build Include="TimeTracker\Stored Procedures\GetEmployeeTypesByOrganization.sql" />
     <Build Include="TimeTracker\Stored Procedures\GetEmployeeType.sql" />
     <Build Include="TimeTracker\Stored Procedures\DeleteEmployeeType.sql" />
+    <Build Include="TimeTracker\Stored Procedures\AddOrgPayClassesToEmployeeType.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

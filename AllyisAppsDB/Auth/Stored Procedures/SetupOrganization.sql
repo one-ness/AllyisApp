@@ -32,14 +32,8 @@ BEGIN
 
 		DECLARE @employeeTypeId INT = IDENT_CURRENT('[Hrm].[EmployeeType]');
 
-		EXEC [Hrm].[AddPayClassToEmployeeType] @employeeTypeId, 1, @organizationId, 1;
-		EXEC [Hrm].[AddPayClassToEmployeeType] @employeeTypeId, 2, @organizationId, 1;
-		EXEC [Hrm].[AddPayClassToEmployeeType] @employeeTypeId, 3, @organizationId, 1;
-		EXEC [Hrm].[AddPayClassToEmployeeType] @employeeTypeId, 4, @organizationId, 1;
-		EXEC [Hrm].[AddPayClassToEmployeeType] @employeeTypeId, 5, @organizationId, 1;
-		EXEC [Hrm].[AddPayClassToEmployeeType] @employeeTypeId, 6 ,@organizationId, 1;
-		EXEC [Hrm].[AddPayClassToEmployeeType] @employeeTypeId, 7, @organizationId, 1;
-		EXEC [Hrm].[AddPayClassToEmployeeType] @employeeTypeId, 8 ,@organizationId, 1;
+		EXEC [Hrm].[AddOrgPayClassesToEmployeeType] @employeeTypeId, @organizationId
+		
 
 		-- Add user to the org
 		EXEC [Auth].[CreateOrganizationUser] @userId, @organizationId, @roleId, @employeeTypeId, @employeeId;

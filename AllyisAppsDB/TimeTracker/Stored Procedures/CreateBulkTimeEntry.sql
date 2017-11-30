@@ -37,8 +37,8 @@ BEGIN
 	--^^^ Sets the column that contains the first project id for each user for the specified org
 
 	if (@firstProject is null)
-	begin
-		set @firstProject = 0
+	begin;
+		throw 50001,'The organizaion has no projects no body to take holiday time from',1;
 	end
 
 	UPDATE #OrgTmp SET [FirstProject] = @firstProject
@@ -53,7 +53,7 @@ BEGIN
 		AND [UserId] IN (SELECT [UserId] FROM #OrgTmp)
 	END
 
-	DELETE FROM #OrgTmp WHERE [UserId] IN (SELECT [UserId] FROM [TimeTracker].[TimeEntry] WHERE [Date] = @date);
+	
 
 	INSERT INTO [TimeTracker].[TimeEntry] ([UserId], [Date], [Duration], [Description], [PayClassId], [ProjectId])SELECT [UserId], [Date], [Duration], [Description], [PayClassId], [FirstProject] AS 'ProjectId' FROM #OrgTmp;
 	DROP TABLE #OrgTmp;

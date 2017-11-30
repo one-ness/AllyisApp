@@ -32,22 +32,24 @@ namespace UploadDataDirect
 		internal async Task uploadTimeEntries()
 		{
 			var orgUsers = await appService.GetOrganizationUsersAsync(orgId);
-			
-			
-			
+
+
+
 
 			var payclasses = await appService.GetPayClassesByOrganizationId(orgId);
-			
+
 			var gotPayClasses = new Dictionary<string, int>();
 			var gotProjects = new Dictionary<string, Project>();
+
+			var gotEmployeePayClasses = new Dictionary<int, List<int>>();
 			IEnumerable<Project> projects = await appService.GetAllProjectsForOrganizationAsync(orgId);
 
-			foreach(var proj in projects)
+			foreach (var proj in projects)
 			{
 				gotProjects.Add(proj.ProjectCode, proj);
 			}
 
-			foreach(var pc in payclasses)
+			foreach (var pc in payclasses)
 			{
 				gotPayClasses.Add(pc.PayClassName.ToUpper(), pc.PayClassId);
 			}
@@ -65,9 +67,10 @@ namespace UploadDataDirect
 					}
 					string projectCode = row[ColumnConstants.ProjectCode].ToString();
 
-					
-					
-					if(!gotProjects.TryGetValue(projectCode, out Project project)){
+
+
+					if (!gotProjects.TryGetValue(projectCode, out Project project))
+					{
 						//Project not found 
 						continue;
 					}
@@ -80,18 +83,24 @@ namespace UploadDataDirect
 					}
 
 
-			
-					if (!gotPayClasses.TryGetValue(payClassName.ToUpper(),out int inputedPayClassId))
+
+					if (!gotPayClasses.TryGetValue(payClassName.ToUpper(), out int inputedPayClassId))
 					{
 						inputedPayClassId = await appService.CreatePayClass(payClassName, orgId, subId);
 						gotPayClasses.Add(payClassName.ToUpper(), inputedPayClassId);
 					}
-					var possiblePayClassIds = await appService.GetAssignedPayClasses(user.EmployeeTypeId);
-					
+
+					if (!gotEmployeePayClasses.TryGetValue(user.EmployeeTypeId, out List<int> possiblepayClassIds))
+					{
+						possiblepayClassIds = await appService.GetAssignedPayClasses(user.EmployeeTypeId);
+						gotEmployeePayClasses.Add(user.EmployeeTypeId, possiblepayClassIds);
+					}
+
 					//If pay class about ot be imported is not assinged to user then assign it to user
-					if(!possiblePayClassIds.Exists(pcId => pcId == inputedPayClassId))
+					if (!possiblepayClassIds.Exists(pcId => pcId == inputedPayClassId))
 					{
 						await appService.AddPayClassToEmployeeType(user.EmployeeTypeId, inputedPayClassId);
+						gotEmployeePayClasses[user.EmployeeTypeId].Add(inputedPayClassId);
 					}
 
 					string dateStr = row[ColumnConstants.Date].ToString();
@@ -119,7 +128,7 @@ namespace UploadDataDirect
 						ProjectId = project.ProjectId,
 						Duration = duration.Value,
 						PayClassId = inputedPayClassId,
-						TimeEntryStatusId = (int) TimeEntryStatus.Pending
+						TimeEntryStatusId = (int)TimeEntryStatus.Pending
 					};
 					//Create Time Entry
 
@@ -127,7 +136,7 @@ namespace UploadDataDirect
 					Console.WriteLine("Uplaoded TimeEntyr for date  " + timeentry.Date + ". For person " + user.FirstName + " " + user.LastName);
 
 				}
-				catch(Exception e)
+				catch (Exception e)
 				{
 					Console.WriteLine("Failed to upload Time Entry due to " + e.Message);
 				}

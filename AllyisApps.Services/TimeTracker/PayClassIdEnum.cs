@@ -3,6 +3,10 @@
 	public enum PayClassId
 	{
 		/// <summary>
+		/// Indentify custome created ids
+		/// </summary>
+		Custom = 0, 
+		/// <summary>
 		/// Regular.
 		/// </summary>
 		Regular = 1,
@@ -27,9 +31,9 @@
 		/// </summary>
 		OverTime = 5,
 
-		/// <summary>
-		///Custom
-		/// </summary>
-		Custom = 6
+		BeahvmentLeave = 6,
+
+		OtherLeave =7,
+		
 	}
 }

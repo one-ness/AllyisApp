@@ -33,7 +33,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				SubscriptionName = subName,
 				UserId = AppService.UserContext.UserId
 			};
-
+			
 			return View(model);
 		}
 
