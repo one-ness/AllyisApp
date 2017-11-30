@@ -26,6 +26,7 @@ namespace UploadDataDirect
 		{
 			GlobalSettings.Init();
 			settings = new ServiceSettings(GlobalSettings.SqlConnectionString, GlobalSettings.SupportEmail, GlobalSettings.SendGridApiKey);
+			Console.WriteLine(GlobalSettings.SqlConnectionString);
 			if (args.Length < 3)
 			{
 				throw new ArgumentException($"Expected email, password, upload_file_path, " +
@@ -35,9 +36,23 @@ namespace UploadDataDirect
 			appService = new AppService(settings);
 			CacheContainer.Init(settings.SqlConnectionString);
 			
-			//Expected Args  email, passwordfile, organizationId=optional, subscriptionId optional 
+			//Expected Args  email, password, file, organizationId=optional, subscriptionId optional 
 
 			User user = appService.ValidateLogin(args[0],args[1]).Result;
+
+			DateTime today = DateTime.Now;
+			
+			if(user == null)
+			{
+				var emailCode = Guid.NewGuid();
+				int userId = appService.SetupNewUser
+					(args[0], args[1], "Uploader", "Owner", emailCode, today.AddYears(-18), 
+					null, null, null, null, null, null, null,
+					"Added Manually", "You ran the manual uploader please go to allyis.com to sign in")
+					.Result;
+				user = appService.ValidateLogin(args[0], args[1]).Result;
+			}
+
 			appService.PopulateUserContext(user.UserId);
 			int orgID = 0;
 			if(args.Length < 4)
