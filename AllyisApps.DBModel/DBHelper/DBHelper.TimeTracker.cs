@@ -714,5 +714,26 @@ namespace AllyisApps.DBModel
 				return results.ToList();
 			}
 		}
+
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="userId"></param>
+		/// <param name="employeeType"></param>
+		/// <returns></returns>
+		public async Task UpdateUserOrgEmployeeType(int userId, int employeeType)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@userId", userId);
+			parameters.Add("@employeeType", employeeType);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				await connection.ExecuteAsync(
+					"[TimeTracker].[UpdateUserOrgEmployeeType]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+			}
+		}
 	}
 }

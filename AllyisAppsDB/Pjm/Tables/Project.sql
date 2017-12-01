@@ -4,6 +4,7 @@
 	[ProjectName]         NVARCHAR (64) NOT NULL,
 	[ProjectCode] NVARCHAR (16) NOT NULL,
 	[IsHourly]     BIT			 CONSTRAINT [DF_Project_IsHourly] DEFAULT ((0)) NOT NULL,
+	[IsDefault]	   BIT	  DEFAULT(0),
 	[ProjectCreatedUtc]   DATETIME2 (0) CONSTRAINT [DF_Project_CreatedUtc] DEFAULT (getutcdate()) NOT NULL,
 	[StartUtc]     DATETIME2(0) NULL,
 	[EndUtc]       DATETIME2(0) NULL,

@@ -325,10 +325,8 @@ namespace AllyisApps.Services
 
 		public async Task<int> UpdateSubscriptionUsersRoles(List<int> userIds, int organizationId, int productRoleId, int productId)
 		{
-			return  await DBHelper.UpdateSubscriptionUserRoles(userIds, organizationId, productRoleId, productId);
+			return await DBHelper.UpdateSubscriptionUserRoles(userIds, organizationId, productRoleId, productId);
 		}
-
-		
 
 		/// <summary>
 		/// Gets a <see cref="Product"/>.
@@ -707,7 +705,14 @@ namespace AllyisApps.Services
 
 			if (productId == ProductIdEnum.TimeTracker)
 			{
+				this.PopulateUserContext(this.UserContext.UserId);
 				await DBHelper.MergeDefaultTimeTrackerSettings(orgId);
+				var newCustId = await CreateCustomerAsync(new Crm.Customer() { CustomerName = "Default Customer", IsActive = true, OrganizationId = orgId, CustomerCode = "000000000001" }, subId);
+				var ownCust = GetCustomer(newCustId);
+
+				var users = (await GetOrganizationUsersAsync(orgId)).Select(x => x.UserId);
+
+				await CreateProjectAndUpdateItsUserList(new Project.Project() { OwningCustomer = ownCust, ProjectName = "Default Project", OrganizationId = orgId, ProjectCode = "00000000001", IsDefault = true }, users, subId);
 			}
 
 			if (productId == ProductIdEnum.StaffingManager)
