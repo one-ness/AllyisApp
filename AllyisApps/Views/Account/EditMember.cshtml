@@ -80,7 +80,7 @@
 					<tr>
 						<td>
 							<div>
-								@Html.ReqLabelFor(m => m.EmployeeType, string.Format("Employee Type"))
+								@Html.ReqLabelFor(m => m.EmployeeType, Strings.EmployeeType)
 							</div>
 						</td>
 						<td>
@@ -129,6 +129,11 @@
 						<td><label>@Strings.EmployeeId</label></td>
 						<td>@Html.DisplayFor(m => m.EmployeeId)</td>
 					</tr>
+					<tr>
+						<td><label>@Strings.EmployeeType</label></td>
+						<td>@Html.DisplayFor(m => m.EmployeeTypes.FirstOrDefault(t => t.EmployeeTypeId == m.EmployeeType).EmployeeTypeName)</td>
+					</tr>
+
 
 					<tr>
 						<td>
