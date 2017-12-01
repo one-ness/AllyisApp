@@ -77,6 +77,15 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the subscription roles for the user.
 		/// </summary>
 		public List<RoleItem> SubscriptionRoles { get; set; }
+
+		/// <summary>
+		/// Defalut constuctor for view model
+		/// </summary>
+		public AddMemberViewModel()
+		{
+			SubscriptionRoles = new List<RoleItem>();
+			EmployeeTypeList = new List<EmployeeType>();
+		}
 	}
 
 	/// <summary>
