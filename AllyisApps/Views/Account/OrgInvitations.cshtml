@@ -5,11 +5,20 @@
 	sb.AppendFormat("{0}: {1}", Strings.Invitations, Model.OrganizationName);
 	ViewBag.TitleBar = sb.ToString();
 }
+<style>
+	.filter-row {
+		padding-top: 5px;
+	}
 
+		.filter-row label {
+			padding-top: 5px;
+		}
+</style>
 @if (Model.Invitations.Count <= 0)
 {
 	<div class="container">
 		@Html.Partial("_MembersAndInvitationsTab", Model.TabInfo)
+
 		<div class="row">
 			<div class="col-xs-12" style="margin-bottom: 20px;">
 				<p><i>You have not sent any invitations. Click on Add Members to invite users to your organization</i></p>
@@ -25,22 +34,35 @@ else
 {
 	<div class="container">
 		@Html.Partial("_MembersAndInvitationsTab", Model.TabInfo)
+		<div class="row" style="padding-bottom:5px">
+
+			<div class="col-xs-6 filter-row" style="display:flex">
+
+				<label class="col-xs-4">Name Filter:&nbsp;</label>
+				<input class="col-xs-8 form-control fa-filter" type="search" placeholder="@Strings.UserSearchPlaceholder" id="userSearch" />
+
+			</div>
+			<div class="col-xs-5 filter-row" style="display:flex">
+				<label class="col-xs-4">Role Filter: &nbsp; &nbsp;</label>
+				<select id="RoleFilter" class="form-control col-xs-8">
+					<option>@Strings.Any</option>
+					@foreach (var role in Model.PossibleRoles.Values)
+				{
+						<option>@role</option>
+				}
+				</select>
+
+			</div>
+		</div>
 		<table class="table table-striped table-condensed" id="loading">
 			<thead>
 			<tr>
 				<th><input class="checkbox-inline invitations-checkbox" type="checkbox" id="checkAll" onclick="CheckAllToggle()"/></th>
-				<th class="col-xs-2">Name<input type="search" placeholder="@Strings.UserSearchPlaceholder" id="userSearch" class="form-control fa-filter" /></th>
+				<th class="col-xs-2">Name</th>
 				<th class="col-xs-2">Email</th>
 				<th class="col-xs-1">Employee ID</th>
 				<th class="col-xs-1">Invite Date</th>
 				<th class="col-xs-2">Organizaion Role
-					<select id="RoleFilter" class="form-control">
-						<option>@Strings.Any</option>
-						@foreach (var role in Model.PossibleRoles.Values)
-						{
-							<option>@role</option>
-						}
-					</select>
 				</th>
 				<th class="col-xs-2">Role(s)
 							
