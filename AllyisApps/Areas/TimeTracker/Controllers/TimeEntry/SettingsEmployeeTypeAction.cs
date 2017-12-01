@@ -33,7 +33,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				SubscriptionName = subName,
 				UserId = AppService.UserContext.UserId
 			};
-			
+
 			return View(model);
 		}
 
@@ -70,12 +70,25 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var assignedPayClasses = await AppService.GetAssignedPayClasses(employeeTypeId);
 			var employeeTypes = await AppService.GetEmployeeTypeByOrganization(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
 
-			if (assignedPayClasses.Count > 0 || employeeTypes.Count == 1)
+			if (assignedPayClasses.Count > 0)
 			{
-				RedirectToAction(ActionConstants.EditSettingsEmployeeType, new { employeeTypeId = employeeTypeId });
+				Notifications.Add(new BootstrapAlert("Cannot Delete Employee Type. There are assigned pay class.", Variety.Warning));
+				return RedirectToAction(ActionConstants.EditSettingsEmployeeType, new { employeeTypeId = employeeTypeId });
+			}
+			if (employeeTypes.Count == 1)
+			{
+				Notifications.Add(new BootstrapAlert("Cannot Delete Employee Type. You cannot delete the last employee type.", Variety.Warning));
+				return RedirectToAction(ActionConstants.EditSettingsEmployeeType, new { employeeTypeId = employeeTypeId });
 			}
 
-			await AppService.DeleteEmployeeType(employeeTypeId);
+			try
+			{
+				await AppService.DeleteEmployeeType(employeeTypeId);
+			}
+			catch
+			{
+				Notifications.Add(new BootstrapAlert("Cannot Delete Employee Type. Users are still assigned to the employee type.", Variety.Warning));
+			}
 
 			return RedirectToAction(ActionConstants.SettingsEmployeeType);
 		}
@@ -151,7 +164,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else //Creating a new Employee Type
 			{
-				var selected = model.SelectedPayClass.ToList();
+				var selected = model.SelectedPayClass != null ? model.SelectedPayClass.ToList() : new List<int>();
 				var orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 
 				int newEmployeeTypeId = await AppService.CreateEmployeeType(orgId, model.EmployeeTypeName);

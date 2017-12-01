@@ -1,16 +1,16 @@
 ﻿@model EditMemberViewModel
 @{
-    ViewBag.Title = string.Format("{0}: {1}", Strings.EditMember, Model.OrganizationName);
+	ViewBag.Title = string.Format("{0}: {1}", Strings.EditMember, Model.OrganizationName);
 }
 
 @if (Model.CanEditMember)
 {
-        @:<form action="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account)" method="post">
-	@Html.AntiForgeryToken()
-	@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
-	@Html.HiddenFor(m => m.OrganizationId)
-	@Html.HiddenFor(m => m.UserId)
-	@Html.HiddenFor(m => m.CanEditMember)
+	@:<form action="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account)" method="post">
+		@Html.AntiForgeryToken()
+		@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
+		@Html.HiddenFor(m => m.OrganizationId)
+		@Html.HiddenFor(m => m.UserId)
+		@Html.HiddenFor(m => m.CanEditMember)
 }
 
 <div class="container">
@@ -63,7 +63,7 @@
 					@Html.HiddenFor(m => m.CountryName)
 				</tr>
 				@if (Model.CanEditMember)
-	{
+				{
 					<tr>
 						<td>
 							<div>
@@ -74,6 +74,18 @@
 							<div>
 								@Html.TextBoxFor(m => m.EmployeeId, new { @class = "form-control" })
 								@Html.ValidationMessageFor(m => m.EmployeeId)
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div>
+								@Html.ReqLabelFor(m => m.EmployeeType, string.Format("Employee Type"))
+							</div>
+						</td>
+						<td>
+							<div>
+								@Html.DropDownListFor(m => m.EmployeeType, new SelectList(Model.EmployeeTypes, "EmployeeTypeId", "EmployeeTypeName"), new { @class = "form-control" })
 							</div>
 						</td>
 					</tr>
@@ -91,9 +103,9 @@
 						</td>
 					</tr>
 
-		int count = 0;
-		foreach (var item in Model.SubscriptionRoles)
-		{
+					int count = 0;
+					foreach (var item in Model.SubscriptionRoles)
+					{
 						<tr>
 							<td>
 								<div>
@@ -108,11 +120,11 @@
 								</div>
 							</td>
 						</tr>
-			count++;
-		}
-	}
-	else
-	{
+						count++;
+					}
+				}
+				else
+				{
 					<tr>
 						<td><label>@Strings.EmployeeId</label></td>
 						<td>@Html.DisplayFor(m => m.EmployeeId)</td>
@@ -129,7 +141,6 @@
 								@Model.OrgRolesList[Model.SelectedOrganizationRoleId]
 							</div>
 						</td>
-
 					</tr>
 					int count = 0;
 					foreach (var item in Model.SubscriptionRoles)
@@ -156,7 +167,7 @@
 	<div class="row">
 		<div class="col-xs-12">
 			<a href="@Url.Action(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { @id = Model.OrganizationId })"
-				class="btn btn-default pull-left" title="@Strings.Back"><i class="fa fa-caret-left"></i>&nbsp;@Strings.Back</a>
+			   class="btn btn-default pull-left" title="@Strings.Back"><i class="fa fa-caret-left"></i>&nbsp;@Strings.Back</a>
 			@if (Model.CanEditMember)
 			{
 				<button type="submit" value="@Strings.Save" class="btn btn-default pull-right" id="saveMemeber">@Strings.Save</button>

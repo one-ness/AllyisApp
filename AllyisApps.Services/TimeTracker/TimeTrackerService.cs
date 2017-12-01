@@ -228,6 +228,11 @@ namespace AllyisApps.Services
 			return employee;
 		}
 
+		public async Task UpdateUserOrgEmployeeType(int userId, int employeeType)
+		{
+			await DBHelper.UpdateUserOrgEmployeeType(userId, employeeType);
+		}
+
 		public async Task<List<int>> GetAssignedPayClasses(int employeeTypeId)
 		{
 			if (employeeTypeId <= 0) throw new ArgumentNullException("EmployeeTypeId");
