@@ -2,7 +2,7 @@
 @model  SettingsEmployeeTypeViewModel
 
 @{
-	ViewBag.Title = "SettingsEmployeeType";
+	ViewBag.Title = "Employee Type";
 	ViewData["SubscriptionName"] = Model.SubscriptionName;
 }
 
@@ -20,36 +20,37 @@
 				<div class="panel-heading">
 					<h1 class="panel-title">@Strings.EmployeeType</h1>
 				</div>
-			</div>
-			<table class="table table-condensed">
-				<thead>
-					<tr>
-						<td width="25%">Id</td>
-						<td width="70%">Name</td>
-						<td width="5%">Edit</td>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach (var types in Model.EmployeeTypes)
-					{
+				<table class="table table-condensed panel-body">
+					<thead>
 						<tr>
-							<td>@types.EmployeeTypeId</td>
-							<td>@types.EmployeeTypeName</td>
-							<td><a href="@Url.Action("EditEmployeeType", ControllerConstants.TimeEntry, new {orgId = types.OrganizationId, employeeTypeId = types.EmployeeTypeId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a></td>
+							<td width="25%">Id</td>
+							<td width="70%">Name</td>
+							<td width="5%">Edit</td>
 						</tr>
-					}
-					<tr>
-						@using (Html.BeginForm(ActionConstants.CreateSettingsEmployeeType, ControllerConstants.TimeEntry, FormMethod.Get))
+					</thead>
+					<tbody>
+						@foreach (var types in Model.EmployeeTypes)
 						{
-							@Html.AntiForgeryToken();
-							@Html.HiddenFor(m => m.SubscriptionId)
-							<td></td>
-							<td></td>
-							<td><input class="btn btn-primary pull-right" type="submit" value="@Strings.Add" /></td>
+							<tr>
+								<td>@types.EmployeeTypeId</td>
+								<td>@types.EmployeeTypeName</td>
+								<td><a href="@Url.Action("EditEmployeeType", ControllerConstants.TimeEntry, new {orgId = types.OrganizationId, employeeTypeId = types.EmployeeTypeId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a></td>
+							</tr>
 						}
-					</tr>
-				</tbody>
-			</table>
+						<tr>
+							
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			@using (Html.BeginForm(ActionConstants.CreateSettingsEmployeeType, ControllerConstants.TimeEntry, FormMethod.Get))
+			{
+				@Html.AntiForgeryToken();
+				@Html.HiddenFor(m => m.SubscriptionId)
+				<div class="pull-right">
+					<input class="btn btn-primary pull-right" type="submit" value="@Strings.Add" />
+				</div>
+			}
 		</div>
 	</div>
 </div>
