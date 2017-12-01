@@ -42,6 +42,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 							$"Project \"{projectName}\" cannot be deleted because time entries have already been made for this project",
 							Variety.Danger));
 					}
+					else if (result == -2)
+					{
+						Notifications.Add(new BootstrapAlert(
+							$"Project \"{projectName}\" cannot be deleted because it is a default project.",
+							Variety.Danger));
+					}
 					else
 					{
 						Notifications.Add(new BootstrapAlert($"Project {projectName} successfully deleted", Variety.Success));

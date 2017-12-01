@@ -46,6 +46,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@customerId", project.CustomerId);
 			parameters.Add("@projectName", project.ProjectName);
+			parameters.Add("@isDefault", project.IsDefault);
 			parameters.Add("@isHourly", project.IsHourly);
 			parameters.Add("@projectCode", project.ProjectCode);
 			parameters.Add("@startingDate", project.StartingDate?.ToShortDateString());
@@ -80,6 +81,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@customerId", project.CustomerId);
 			parameters.Add("@projectName", project.ProjectName);
 			parameters.Add("@isHourly", project.IsHourly);
+			parameters.Add("@isDefault", project.IsDefault);
 			parameters.Add("@projectCode", project.ProjectCode);
 			parameters.Add("@startingDate", project.StartingDate?.ToShortDateString());
 			parameters.Add("@endingDate", project.EndingDate?.ToShortDateString());
@@ -136,6 +138,25 @@ namespace AllyisApps.DBModel
 					"[Pjm].[UpdateProject]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="orgId"></param>
+		/// <returns></returns>
+		public async Task<int> GetDefaultProject(int orgId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@orgId", orgId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				return (await connection.QueryAsync<int>(
+					"[Pjm].[GetDefaultProject]",
+					parameters,
+					commandType: CommandType.StoredProcedure)).FirstOrDefault();
 			}
 		}
 
