@@ -1,6 +1,13 @@
 ﻿@model EditMemberViewModel
 @{
-	ViewBag.Title = string.Format("{0}: {1}", Strings.EditMember, Model.OrganizationName);
+	if (Model.CanEditMember)
+	{
+		ViewBag.Title = string.Format("{0}: {1}", Strings.EditMember, Model.OrganizationName);
+	}
+	else
+	{
+		ViewBag.Title = string.Format("{0}: {1}", Strings.ViewMemberInfo, Model.OrganizationName);
+	}
 }
 
 @if (Model.CanEditMember)
