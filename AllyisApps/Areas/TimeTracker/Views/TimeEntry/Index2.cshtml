@@ -124,22 +124,6 @@
 			</tr>
 		</table>
 	</div>
-	@*@if (Model.CanManage)
-		{
-			<div class="panel panel-info" id="TimeSheet-LockDate">
-				<div class="panel-heading">
-					<h1 class="panel-title">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.LockDate</h1>
-				</div>
-				@using (Html.BeginForm(ActionConstants.SetLockDate, ControllerConstants.TimeEntry, FormMethod.Post))
-				{
-					<input id="UserId" name="UserId" type="hidden" value="@Model.EntryRange.UserId" />
-					<input id="StartDate" name="StartDate" type="hidden" value="@Model.EntryRange.StartDate" />
-					<input id="EndDate" name="EndDate" type="hidden" value="@Model.EntryRange.EndDate" />
-					@Html.TextBoxFor(m => m.LockDate, new { name = "LockDate", id = "LockDate", @class = "form-control" })
-					//<input type="text" name="LockDate" id="LockDate" class="form-control" value="" onSubmit="alert(LockDate.value);" />
-				}
-			</div>
-		}*@
 
 	@if (Model.CanManage)
 	{
