@@ -76,12 +76,16 @@
 		@Html.ValidationMessageFor(model => model.PostalCode, string.Empty, new { @class = "text-danger" })
 	</div>
 
-	if ((string)ViewData[ActionConstants.Action] == ActionConstants.Edit)
+	if ((string) ViewData[ActionConstants.Action] == ActionConstants.Edit)
 	{
 		<div class="col-sm-6 form-group">
 			@Html.ReqLabelFor(m => m.IsActiveOptions, "Status")
-			@Html.DropDownListFor(x => x.IsActive, Model.IsActiveOptions, new { @class = "form-control" })
+			@Html.DropDownListFor(x => x.IsActive, Model.IsActiveOptions, new {@class = "form-control"})
 		</div>
+	}
+	else
+	{
+		@Html.HiddenFor(m => m.IsActive)
 	}
 
 	<div class="col-xs-12 form-group allyis-action-buttons">
