@@ -235,9 +235,10 @@ namespace AllyisApps.Services
 			return result;
 		}
 
-		public async Task DeleteEmployeeType(int employeeTypeId)
+		public async Task DeleteEmployeeType(int subscriptionId, int employeeTypeId)
 		{
 			if (employeeTypeId <= 0) throw new ArgumentNullException("EmployeeTypeId");
+			CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 
 			await DBHelper.DeleteEmployeeType(employeeTypeId);
 
@@ -264,18 +265,21 @@ namespace AllyisApps.Services
 			return await DBHelper.GetAssignedPayClasses(employeeTypeId);
 		}
 
-		public async Task AddPayClassToEmployeeType(int employeeTypeId, int payClassId)
+		public async Task AddPayClassToEmployeeType(int subscriptionId, int employeeTypeId, int payClassId)
 		{
 			if (employeeTypeId <= 0) throw new ArgumentNullException("EmployeeTypeId");
 			if (payClassId <= 0) throw new ArgumentNullException("payClassId");
+
+			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 
 			await DBHelper.AddPayClassToEmployeeType(employeeTypeId, payClassId);
 		}
 
-		public async Task RemovePayClassFromEmployeeType(int employeeTypeId, int payClassId)
+		public async Task RemovePayClassFromEmployeeType(int subscriptionId, int employeeTypeId, int payClassId)
 		{
 			if (employeeTypeId <= 0) throw new ArgumentNullException("EmployeeTypeId");
 			if (payClassId <= 0) throw new ArgumentNullException("payClassId");
+			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 
 			await DBHelper.RemovePayClassFromEmployeeType(employeeTypeId, payClassId);
 		}

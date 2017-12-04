@@ -4,6 +4,9 @@
 @{
 	ViewBag.Title = "Employee Type";
 	ViewData["SubscriptionName"] = Model.SubscriptionName;
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
+	Layout = "~/Areas/TimeTracker/Views/Shared/_TimeTrackerSidebar.cshtml";
 }
 
 @section css {
@@ -34,12 +37,10 @@
 							<tr>
 								<td>@types.EmployeeTypeId</td>
 								<td>@types.EmployeeTypeName</td>
-								<td><a href="@Url.Action("EditEmployeeType", ControllerConstants.TimeEntry, new {orgId = types.OrganizationId, employeeTypeId = types.EmployeeTypeId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a></td>
+								<td><a href="@Url.Action(ActionConstants.EditSettingsEmployeeType, ControllerConstants.TimeEntry, new { userId = types.EmployeeTypeId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a></td>
 							</tr>
 						}
-						<tr>
-							
-						</tr>
+						<tr></tr>
 					</tbody>
 				</table>
 			</div>

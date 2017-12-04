@@ -761,11 +761,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\TimeTracker\ViewModels\Manage\" />
-    <Folder Include="Areas\TimeTracker\Views\DeactivateAction\" />
-    <Folder Include="Areas\TimeTracker\Views\ImportAction\" />
-    <Folder Include="Areas\TimeTracker\Views\Setting2Action\" />
-    <Folder Include="Areas\TimeTracker\Views\SettingsEmployeeTypeAction\" />
-    <Folder Include="Areas\TimeTracker\Views\ToggleStatusAction\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
