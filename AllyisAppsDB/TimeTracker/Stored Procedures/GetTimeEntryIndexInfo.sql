@@ -49,7 +49,12 @@ AS
 	SELECT * FROM #settings
 
 	
-	SELECT [PayClassId], [PayClassName], [OrganizationId] FROM [Hrm].[PayClass] WITH (NOLOCK) WHERE [OrganizationId] = @organizationId;
+	SELECT  [PayClassId],
+			[PayClassName],
+			[OrganizationId],
+			[BuiltInPayClassId]
+	FROM [Hrm].[PayClass] WITH (NOLOCK)
+	WHERE [OrganizationId] = @organizationId;
 
 
 	SELECT [HolidayId], [HolidayName], [Date], [OrganizationId] FROM [Hrm].[Holiday] WITH (NOLOCK) WHERE [OrganizationId] = @organizationId ORDER BY [Date];
@@ -106,6 +111,7 @@ AS
 		,[TimeEntry].[ProjectId]
 		,[TimeEntry].[PayClassId]
 		,[PayClass].[PayClassName] AS [PayClassName]
+		,[PayClass].[BuiltInPayClassId]
 		,[Date]
 		,[Duration]
 		,[Description]

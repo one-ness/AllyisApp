@@ -91,5 +91,10 @@ namespace AllyisApps.Services.TimeTracker
 		/// Gets or sets the bool for whether or not the time entry is locked
 		/// </summary>
 		public bool IsLocked { get; set; }
+
+		/// <summary>
+		/// Gets or sets the built in pay class id.
+		/// </summary>
+		public int BuiltInPayClassId { get; set; }
 	}
 }

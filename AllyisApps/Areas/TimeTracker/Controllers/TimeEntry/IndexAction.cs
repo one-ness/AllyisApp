@@ -222,10 +222,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						}
 
 						//exclude overtime if it is not the time entry's pay class -- this is a calculated column
-						bool isOvertime = iter.Current.PayClassName == "Overtime";
+						bool isOvertime = iter.Current.BuiltInPayClassId == (int)PayClassId.OverTime;
 						var filteredPayClasses = isOvertime
-							? tempPayClasses.Where(pc => pc.PayClassName == "Overtime")
-							: tempPayClasses.Where(pc => pc.PayClassName != "Overtime");
+							? tempPayClasses.Where(pc => pc.BuiltInPayClassId == (int)PayClassId.OverTime)
+							: tempPayClasses.Where(pc => pc.BuiltInPayClassId != (int)PayClassId.OverTime);
 
 						// Update its project's hours
 						if (hours.ContainsKey(iter.Current.ProjectId))

@@ -910,15 +910,15 @@ namespace AllyisApps.Services
 			var payClasses = classGet.Select(InitializePayClassInfo).ToList();
 			var employeeTypes = await GetEmployeeTypeByOrganization(orgId);
 			var assignedPayClasses = new Dictionary<int, List<int>>();
-			foreach(EmployeeType e in employeeTypes)
+			foreach (EmployeeType e in employeeTypes)
 			{
-				var aPC = await  GetAssignedPayClasses(e.EmployeeTypeId);
+				var aPC = await GetAssignedPayClasses(e.EmployeeTypeId);
 				assignedPayClasses.Add(e.EmployeeTypeId, aPC);
 			}
-			
 
 
-			
+
+
 			foreach (DataTable table in timeEntryImports)
 			{
 				bool hasCustomerCode = table.Columns.Contains(ColumnHeaders.CustomerCode);
@@ -967,7 +967,7 @@ namespace AllyisApps.Services
 
 				User userGet = await GetUserAsync(UserContext.UserId);
 				var users = GetOrganizationMemberList(orgId).Select(o => new Tuple<string, OrganizationUser>(o.EmployeeId, o)).ToList();
-				
+
 				foreach (DataRow row in table.Rows)
 				{
 					bool thisRowHasProjectName = table.Columns.Contains(ColumnHeaders.ProjectName);
@@ -1035,7 +1035,7 @@ namespace AllyisApps.Services
 					ReadColumn(row, ColumnHeaders.PayClass, val => payclass = val);
 
 					PayClass payClass = payClasses.SingleOrDefault(p => string.Equals(p.PayClassName, payclass, StringComparison.OrdinalIgnoreCase));
-					
+
 					DateTime theDate;
 					float? theDuration;
 
@@ -1045,7 +1045,8 @@ namespace AllyisApps.Services
 						continue;
 					}
 					//EmployeeType Validation 
-					if (!(assignedPayClasses[userInOrg.EmployeeTypeId].Contains(payClass.PayClassId)) && !(payClass.BuiltInPayClassid == (int)PayClassId.OverTime)){
+					if (!(assignedPayClasses[userInOrg.EmployeeTypeId].Contains(payClass.PayClassId)) && !(payClass.BuiltInPayClassId == (int)PayClassId.OverTime))
+					{
 						result.TimeEntryFailures.Add($"Error importing time entry on sheet {table.TableName}, row {table.Rows.IndexOf(row) + 2}: employee is  Not Assignedable To Pay Class");
 						continue;
 					}

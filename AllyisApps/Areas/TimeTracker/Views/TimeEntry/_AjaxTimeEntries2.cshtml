@@ -1,5 +1,4 @@
 ﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-@using AllyisApps.Areas.TimeTracker.Core;
 @using AllyisApps.Lib;
 @using System.Globalization;
 @model TimeEntryRangeForUserViewModel
@@ -16,7 +15,7 @@
 
 @foreach (var weekGroup in weekQuery)
 {
-	var dateQuery = from entry in weekGroup orderby entry.Date group entry by entry.Date;
+	var dateQuery = weekGroup.OrderBy(entry => entry.Date).GroupBy(entry => entry.Date);
 	<div class="panel panel-default timesheet-grouping">
 		@foreach (var dateGroup in dateQuery)
 		{

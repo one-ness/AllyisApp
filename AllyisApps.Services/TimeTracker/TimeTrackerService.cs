@@ -367,7 +367,7 @@ namespace AllyisApps.Services
 		public async Task<CreateUpdateTimeEntryResult> ValidateTimeEntryCreateUpdate(TimeEntry entry, int organizationId)
 		{
 			// 7 is the payclassid for Overtime
-			if (entry.PayClassId == (int)PayClassId.OverTime)
+			if (entry.BuiltInPayClassId == (int)PayClassId.OverTime)
 			{
 				return CreateUpdateTimeEntryResult.OvertimePayClass;
 			}
@@ -419,8 +419,8 @@ namespace AllyisApps.Services
 			var entriesInOvertimePeriod = (await GetTimeEntriesByUserOverDateRange(userId, overtimePeriod.StartDate, overtimePeriod.EndDate, organizationId)).ToList();
 			int overtimeLimit = (await GetSettingsByOrganizationId(organizationId)).OvertimeHours;
 
-			var overtimeEntries = entriesInOvertimePeriod.Where(e => e.PayClassId == (int)PayClassId.OverTime).OrderBy(e => e.Date).ToList();
-			var regularEntries = entriesInOvertimePeriod.Where(e => e.PayClassId == (int)PayClassId.Regular).OrderByDescending(e => e.Date).ToList();
+			var overtimeEntries = entriesInOvertimePeriod.Where(e => e.BuiltInPayClassId == (int)PayClassId.OverTime).OrderBy(e => e.Date).ToList();
+			var regularEntries = entriesInOvertimePeriod.Where(e => e.BuiltInPayClassId == (int)PayClassId.Regular).OrderByDescending(e => e.Date).ToList();
 			float regularHoursSum = regularEntries.Sum(e => e.Duration);
 			float overtimeHoursSum = overtimeEntries.Sum(e => e.Duration);
 
@@ -442,7 +442,7 @@ namespace AllyisApps.Services
 					}
 
 					// split the merged entry into the correct amount of regular + overtime
-					newOvertime = await SplitTimeEntryIntoOvertime(e, newOvertime);
+					newOvertime = await SplitTimeEntryIntoOvertime(e, newOvertime, organizationId);
 
 					//new overtime has been completely handled
 					if (newOvertime == 0) break;
@@ -463,19 +463,20 @@ namespace AllyisApps.Services
 					}
 
 					// split the merged entry into the correct amount of regular + overtime
-					float remainingOvertime = newOvertime + amountBelowLimit;
+					float remainingOvertime = amountBelowLimit > 0 ? newOvertime + amountBelowLimit : newOvertime;
+
 					if (remainingOvertime < 0)
 					{
-						newOvertime = await SplitOvertimeIntoTimeEntry(o, remainingOvertime);
 						if (regularEntry != null)
 						{
 							await DeleteTimeEntry(regularEntry.TimeEntryId);
 						}
+						newOvertime = await SplitOvertimeIntoTimeEntry(o, remainingOvertime, organizationId);
 					}
 					else if (remainingOvertime >= 0)
 					{
-						newOvertime = await SplitTimeEntryIntoOvertime(regularEntry, remainingOvertime);
 						await DeleteTimeEntry(o.TimeEntryId);
+						newOvertime = await SplitTimeEntryIntoOvertime(regularEntry, remainingOvertime, organizationId);
 					}
 
 					//new overtime has been completely handled
@@ -489,16 +490,20 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="entry">The entry to split into entry + overtime</param>
 		/// <param name="overtime">The amount of overtime to add</param>
+		/// <param name="organizationId">Organization the the time entry belongs to.</param>
 		/// <returns>The amount of overtime left over after splitting.</returns>
-		public async Task<float> SplitTimeEntryIntoOvertime(TimeEntry entry, float overtime)
+		public async Task<float> SplitTimeEntryIntoOvertime(TimeEntry entry, float overtime, int organizationId)
 		{
-			if (entry.PayClassId != (int)PayClassId.Regular) throw new ArgumentException("Cannot make overtime for any pay class except regular.");
+			if (entry.BuiltInPayClassId != (int)PayClassId.Regular) throw new ArgumentException("Cannot make overtime for any pay class except regular.");
 
 			if (overtime < 0) return overtime;
 
+			var payClasses = await GetPayClassesByOrganizationId(organizationId);
+			int overtimePayClassId = payClasses.Single(pc => pc.BuiltInPayClassId == (int)PayClassId.OverTime).PayClassId;
+
 			if (overtime >= entry.Duration)
 			{
-				entry.PayClassId = (int)PayClassId.OverTime;
+				entry.PayClassId = overtimePayClassId;
 				UpdateTimeEntry(entry);
 				return overtime - entry.Duration;
 			}
@@ -516,7 +521,7 @@ namespace AllyisApps.Services
 					Description = entry.Description,
 					ProjectId = entry.ProjectId,
 					EmployeeId = entry.EmployeeId,
-					PayClassId = (int)PayClassId.OverTime
+					PayClassId = overtimePayClassId
 				});
 			}
 
@@ -528,22 +533,32 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="overtimeEntry">The entry to split into entry + overtime</param>
 		/// <param name="overtime">The amount of overtime to take away and split</param>
+		/// <param name="organizationId">Organization the the time entry belongs to.</param>
 		/// <returns>The amount of overtime left over after splitting.</returns>
-		public async Task<float> SplitOvertimeIntoTimeEntry(TimeEntry overtimeEntry, float overtime)
+		public async Task<float> SplitOvertimeIntoTimeEntry(TimeEntry overtimeEntry, float overtime, int organizationId)
 		{
 			if (overtimeEntry.PayClassId != (int)PayClassId.OverTime) throw new ArgumentException("Cannot split overtime, the time entry provided is not overtime.");
 
 			if (overtime > 0) return overtime;
 
+
+			var payClasses = await GetPayClassesByOrganizationId(organizationId);
+			int regularPayClassId = payClasses.Single(pc => pc.BuiltInPayClassId == (int)PayClassId.Regular).PayClassId;
+
+			//if we need to make more regular hours than this overtime entry has
 			if (overtime + overtimeEntry.Duration <= 0)
 			{
-				overtimeEntry.PayClassId = (int)PayClassId.Regular;
+				overtimeEntry.PayClassId = regularPayClassId;
 				UpdateTimeEntry(overtimeEntry);
 				return overtime + overtimeEntry.Duration;
 			}
 
+			//if we need to create some regular and some overtime
 			overtimeEntry.Duration += overtime;
 			UpdateTimeEntry(overtimeEntry);
+
+			overtime = Math.Abs(overtime);
+
 			if (overtime > 0)
 			{
 				await CreateTimeEntry(new TimeEntry
@@ -554,7 +569,7 @@ namespace AllyisApps.Services
 					Description = overtimeEntry.Description,
 					ProjectId = overtimeEntry.ProjectId,
 					EmployeeId = overtimeEntry.EmployeeId,
-					PayClassId = (int)PayClassId.Regular
+					PayClassId = regularPayClassId
 				});
 			}
 

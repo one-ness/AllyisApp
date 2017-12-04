@@ -665,7 +665,7 @@ namespace AllyisApps.Services
 				OrganizationId = pc.OrganizationId,
 				PayClassId = pc.PayClassId,
 				CreatedUtc = pc.CreatedUtc,
-				BuiltInPayClassid = pc.BuiltInPayClassId
+				BuiltInPayClassId = pc.BuiltInPayClassId
 			};
 		}
 
@@ -708,7 +708,8 @@ namespace AllyisApps.Services
 				EmployeeId = entity.EmployeeId,
 				Email = entity.Email,
 				TimeEntryStatusId = entity.TimeEntryStatusId,
-				IsLocked = entity.IsLocked
+				IsLocked = entity.IsLocked,
+				BuiltInPayClassId = entity.BuiltInPayClassId
 			};
 		}
 
