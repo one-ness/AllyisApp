@@ -28,19 +28,19 @@ namespace AllyisApps.Areas.TimeTracker
 		public override void RegisterArea(AreaRegistrationContext context)
 		{
 			context.Routes.MapSubdomainRoute(
-				name: "Customer_Projects",
-				url: "timetracker/{subscriptionId}/{controller}/{action}/{isActive}",
-				area: AreaName,
-				defaults: new { controller = "Home", action = "Index", isActive = "0"},
-				constraints: new { isActive = @"\d+"},
-				namespaces: new[] { "AllyisApps.Areas.TimeTracker.Controllers" });
-
-			context.Routes.MapSubdomainRoute(
 				name: "TimeEntry_Index_User_TimeSheet",
 				url: "timetracker/{subscriptionId}/{controller}/{startDate}/{endDate}/{userId}",
 				area: AreaName,
 				defaults: new { controller = "Home", action = "Index", userId = UrlParameter.Optional },
 				constraints: new { subscriptionId = @"\d+", userId = @"(\d+)?", startDate = @"\d+", endDate = @"\d+" },
+				namespaces: new[] { "AllyisApps.Areas.TimeTracker.Controllers" });
+
+			context.Routes.MapSubdomainRoute(
+				name: "Customer_Projects",
+				url: "timetracker/{subscriptionId}/{controller}/{action}/{isActive}",
+				area: AreaName,
+				defaults: new { controller = "Home", action = "Index", isActive = "0" },
+				constraints: new { isActive = @"\d+" },
 				namespaces: new[] { "AllyisApps.Areas.TimeTracker.Controllers" });
 
 			context.Routes.MapSubdomainRoute(
