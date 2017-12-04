@@ -334,7 +334,8 @@ function ajaxHandleOverridingResponses(response, relevant_objects) {
 function setDefalutProject(form_child) {
 	var form_element = $(form_child).parents("form:first");
 	if (form_element[0].ProjectIdDdl.value == -1 && form_element[0].ProjectIdDdl.options.length == 2) {
-		form_element[0].ProjectIdDdl.selectedIndex = 1;
+		form_element[0].ProjectIdDdl.selectedIndex = 0;
+		form_element[0].ProjectIdDdl.value = form_element[0].ProjectIdDdl.options[0].value;
 	}
 }
 
@@ -351,11 +352,11 @@ function changeOccur(form_child) {
     form_element.removeClass("create");
     var edited = form_element.find("[name='IsEdited']")[0]
     edited.setAttribute("value", "True");
-	setDefalutProject(form_child)
+	
     form_element[0].ProjectId.value = form_element[0].ProjectIdDdl.value;
 
     form_element[0].PayClassId.value = form_element[0].PayClassNameDdl.value;
-
+	setDefalutProject(form_child)
     //form_submit_element = form_element.find("button");
     //form_submit_element.removeAttr("disabled");
 

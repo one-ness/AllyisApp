@@ -339,3 +339,7 @@ body {
 a.template_link {
 	color: #337ab7;
 }
+
+.panel-heading > a, .panel-heading > div > a, .col-sm-6 > div > a {
+	text-decoration: underline;
+}

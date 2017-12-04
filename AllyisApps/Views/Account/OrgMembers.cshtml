@@ -8,6 +8,13 @@
 	.no-match {
 		display: none;
 	}
+
+	.filter-row{
+		padding-top:5px;
+	}
+	.filter-row label{
+		padding-top:5px;
+	}
 	/*
 	.pageContainer {
 		width: 20px;
@@ -17,73 +24,85 @@
 </style>
 
 <div class="container">
+	
 	@if (Model.CanAddUser)
 	{
 		@Html.Partial("_MembersAndInvitationsTab", Model.TabInfo)
 	}
+	<div class="row" style="padding-bottom:5px">
+		
+		<div class="col-xs-6 filter-row" style="display:flex">
 
-	<table class="table table-striped table-condensed" id="loading" hidden>
-		<thead>
-			<tr>
-				<th><input class="checkbox-inline members-checkbox" type="checkbox" id="checkAll" onclick="CheckAllToggle()" /></th>
-				<th class="col-xs-2">
-					Name
-					<input type="search" placeholder="@Strings.UserSearchPlaceholder" id="userSearch" class="form-control fa-filter" />
-				</th>
-				<th class="col-xs-2">Email</th>
-				<th class="col-xs-2">Employee ID</th>
-				<th class="col-xs-2">Joined Date</th>
-				<th class="col-xs-2">
-					Role
-					<select id="RoleFilter" class="form-control">
-						<option>@Strings.Any</option>
-						@foreach (var role in Model.PossibleRoles.Values)
-						{
-							<option>@role</option>
-						}
-					</select>
-				</th>
+			<label class="col-xs-4" >Name Filter:&nbsp;</label>
+			<input class="col-xs-8 form-control fa-filter" type="search" placeholder="@Strings.UserSearchPlaceholder" id="userSearch" />
 
-
-				@if (Model.CanEditUser)
+		</div>
+		<div class="col-xs-5 filter-row" style="display:flex">
+			<label class="col-xs-4">Role Filter: &nbsp; &nbsp;</label>
+			<select id="RoleFilter" class="form-control col-xs-8">
+				<option>@Strings.Any</option>
+				@foreach (var role in Model.PossibleRoles.Values)
 				{
-					<th class="col-xs-2"><i class="fa fa-edit"> </i>&nbsp;Edit</th>
+					<option>@role</option>
+				}
+			</select>
+
+		</div>
+	</div>
+	<div class="row">
+		<table class="table table-striped table-condensed" id="loading" hidden>
+			<thead>
+				<tr>
+					<th><input class="checkbox-inline members-checkbox" type="checkbox" id="checkAll" onclick="CheckAllToggle()" /></th>
+					<th class="col-xs-3">
+						Name
+
+					</th>
+					<th class="col-xs-3">Email</th>
+					<th class="col-xs-2">Employee ID</th>
+					<th class="col-xs-2">Joined Date</th>
+					<th class="col-xs-1">
+						Role
+					</th>
+					@if (Model.CanEditUser)
+					{
+						<th class="col-xs-1"><i class="fa fa-edit"> </i>&nbsp;Edit</th>
+					}
+					else
+					{
+						<th class="col-xs-1"><i class="fa fa-television"> </i>&nbsp;View</th>
+					}
+				</tr>
+
+			</thead>
+			@foreach (var item in Model.Users)
+			{
+				<tr class="userRow">
+					@if (Model.CanEditUser)
+				{
+						<td><input class="checkbox-inline members-checkbox" type="checkbox" value="@item.UserId" /></td>
 				}
 				else
 				{
-					<th class="col-xs-2"><i class="fa fa-television"> </i>&nbsp;View</th>
+						<td></td>
 				}
-			</tr>
-					
-		</thead>
-		@foreach (var item in Model.Users)
-		{
-			<tr class="userRow">
-				@if (Model.CanEditUser)
+					<td class="name">@item.Username</td>
+					<td>@item.Email</td>
+					<td>@item.EmployeeId</td>
+					<td>@item.FormattedJoinedDate</td>
+					<td class="Role">@item.RoleName</td>
+					@if (Model.CanEditUser)
 				{
-					<td><input class="checkbox-inline members-checkbox" type="checkbox" value="@item.UserId" /></td>
+						<td><a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account, new { @id = Model.OrganizationId, @userId = item.UserId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a></td>
 				}
 				else
 				{
-					<td></td>
+						<td><a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account, new { @id = Model.OrganizationId, @userId = item.UserId })" title="@Strings.EditUser"><i class="fa fa-fw fa-television"></i></a></td>
 				}
-				<td class="name">@item.Username</td>
-				<td>@item.Email</td>
-				<td>@item.EmployeeId</td>
-				<td>@item.FormattedJoinedDate</td>
-				<td class="Role">@item.RoleName</td>
-				@if (Model.CanEditUser)
-				{
-					<td><a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account, new { @id = Model.OrganizationId, @userId = item.UserId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a></td>
-				}
-				else
-				{
-					<td><a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account, new { @id = Model.OrganizationId, @userId = item.UserId })" title="@Strings.EditUser"><i class="fa fa-fw fa-television"></i></a></td>
-				}
-			</tr>
-		}
-	</table>
-
+				</tr>
+			}
+		</table>
+	</div>
 	<div class="row" style="padding-top:20px;">
 		<div class="col-xs-12">
 			<div class="pageContainer">
@@ -92,8 +111,8 @@
 		</div>
 	</div>
 	<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)"
-		class="btn btn-default pull-left" title="@Strings.Back"><i class="fa fa-caret-left"></i>&nbsp;@Strings.Back</a>
-			
+	   class="btn btn-default pull-left" title="@Strings.Back"><i class="fa fa-caret-left"></i>&nbsp;@Strings.Back</a>
+
 	@if (Model.CanDeleteUser)
 	{
 		using (Html.BeginForm(ActionConstants.RemoveMember, ControllerConstants.Account, new { @id = Model.OrganizationId }, FormMethod.Post, new { @onsubmit = "return getUserIdsAndSubmit();" }))
@@ -143,7 +162,7 @@
 					checkboxes = document.getElementsByClassName("members-checkbox");
 					var count = 0;
 					for (var i = 0, n = checkboxes.length; i < n; i++) {
-						if (!$(checkboxes[i]).parents('.userRow').hasClass('no-match')) { 
+						if (!$(checkboxes[i]).parents('.userRow').hasClass('no-match')) {
 							checkboxes[i].checked = checking;
 							count++;
 						}
@@ -159,7 +178,11 @@
 	<script type="text/javascript">
 		pwf.setPageLimit(@Model.PageSize);
 		pwf.setRowClass("userRow");
-		pwf.setCheckBoxSelector(".members-checkbox");
+		
+		@if (Model.CanDeleteUser)
+		{
+			@:pwf.setCheckBoxSelector(".members-checkbox");
+		}
 		pwf.addFilter("#userSearch", "search", ".name");
 		pwf.addFilter('#RoleFilter', 'dropDown', ".Role", "@Strings.Any");
 	</script>

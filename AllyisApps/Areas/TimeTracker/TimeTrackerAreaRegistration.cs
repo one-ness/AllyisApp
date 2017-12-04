@@ -36,6 +36,14 @@ namespace AllyisApps.Areas.TimeTracker
 				namespaces: new[] { "AllyisApps.Areas.TimeTracker.Controllers" });
 
 			context.Routes.MapSubdomainRoute(
+				name: "Customer_Projects",
+				url: "timetracker/{subscriptionId}/{controller}/{action}/{isActive}",
+				area: AreaName,
+				defaults: new { controller = "Home", action = "Index", isActive = "0" },
+				constraints: new { isActive = @"\d+" },
+				namespaces: new[] { "AllyisApps.Areas.TimeTracker.Controllers" });
+
+			context.Routes.MapSubdomainRoute(
 				name: "TimeEntry_Export",
 				url: "timetracker/{subscriptionId}/{controller}/{action}/{userId}/{startingDate}-{endingDate}",
 				area: AreaName,
@@ -57,14 +65,6 @@ namespace AllyisApps.Areas.TimeTracker
 				area: AreaName,
 				defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
 				constraints: new { subscriptionId = @"\d+" },
-				namespaces: new[] { "AllyisApps.Areas.TimeTracker.Controllers" });
-
-			context.Routes.MapSubdomainRoute(
-				name: "Customer_Projects",
-				url: "timetracker/{subscriptionId}/{controller}/{action}/{isActive}",
-				area: AreaName,
-				defaults: new { controller = "Home", action = "Index", isActive = "0"},
-				constraints: new { isActive = @"\d+"},
 				namespaces: new[] { "AllyisApps.Areas.TimeTracker.Controllers" });
 		}
 	}

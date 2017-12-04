@@ -67,7 +67,7 @@
 						</div>
 						<div class="form-group allyis-action-buttons pull-right">
 							<a href="@Url.Action(ActionConstants.OrganizationInvitations, ControllerConstants.Account, new { @id = Model.OrganizationId })" class="btn btn-default">@Strings.Cancel</a>&nbsp;
-							<input type="submit" id="addMember" value="@Strings.Add" class="btn btn-primary" />
+							<input type="submit" id="addMember" value="@Strings.Add" class="btn btn-primary btn-gray" />
 						</div>
 					</div>
 				</div>
@@ -91,14 +91,14 @@
 						</div>
 
 						<div style="margin-top: 10px; margin-bottom: 15px; float:right;">
-							<a class="btn btn-primary" onclick="$('input[id=upload-box]').click();">@Strings.ChooseFile</a>
-							<input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" />
+							<a class="btn btn-primary btn-gray" onclick="$('input[id=upload-box]').click();">@Strings.ChooseFile</a>
+							<input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary btn-gray" />
 						</div>
 					}
 					@using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Account, null, FormMethod.Get, new { id = "template-form" }))
 					{
 						<div style="margin-top: 10px; margin-bottom: 15px; float:left">
-							<input type="submit" form="template-form" id="template-button" value="@Strings.Template" class="btn btn-primary" />
+							<input type="submit" form="template-form" id="template-button" value="@Strings.Template" class="btn btn-primary btn-gray" />
 						</div>
 					}
 				</div>
