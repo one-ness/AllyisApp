@@ -129,6 +129,8 @@
     <Compile Include="StaffingManager\PositionStatus.cs" />
     <Compile Include="Lookup\Tags.cs" />
     <Compile Include="Lookup\Tag.cs" />
+    <Compile Include="TimeTracker\CreateUpdateTimeEntryResultEnum.cs" />
+    <Compile Include="TimeTracker\DateRange.cs" />
     <Compile Include="TimeTracker\EmployeeType.cs" />
     <Compile Include="TimeTracker\Holiday.cs" />
     <Compile Include="Auth\Invitation.cs" />

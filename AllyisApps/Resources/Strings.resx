@@ -364,7 +364,7 @@
     <value>You cannot edit this date.</value>
   </data>
   <data name="CannotExceed24" xml:space="preserve">
-    <value>Duration cannot exceed 24 hours in a day.</value>
+    <value>Duration cannot exceed 24 hours in a day for time entry on date {0}.</value>
   </data>
   <data name="CannotMergePayClass" xml:space="preserve">
     <value>The specified pay class cannot be merged into another pay class.</value>
@@ -610,7 +610,7 @@
     <value>English (United States)</value>
   </data>
   <data name="EnterATimeLongerThanZero" xml:space="preserve">
-    <value>You must enter a time longer than 00:00.</value>
+    <value>You must enter a time longer than 0 for time entry on date {0}.</value>
   </data>
   <data name="EnterYourEmail" xml:space="preserve">
     <value>Enter your email.</value>
@@ -832,10 +832,10 @@
     <value>Multiple Members</value>
   </data>
   <data name="MustSelectPayClass" xml:space="preserve">
-    <value>You must select a pay class.</value>
+    <value>You must select a pay class for time entry on date {0}.</value>
   </data>
   <data name="MustSelectProject" xml:space="preserve">
-    <value>You must select a project.</value>
+    <value>You must select a project for time entry on date {0}.</value>
   </data>
   <data name="MyAccount" xml:space="preserve">
     <value>My Account</value>
@@ -1785,5 +1785,14 @@
   </data>
 	<data name="InactiveProjects" xml:space="preserve">
     <value>Inactive Projects</value>
+  </data>
+	<data name="TimeEntryResultOvertimePayClass" xml:space="preserve">
+    <value>Cannot create or edit overtime hours. These are automatically calculated.</value>
+  </data>
+	<data name="TimeEntryResultLocked" xml:space="preserve">
+    <value>Cannot create or edit time entries with dates on or before lock date.</value>
+  </data>
+	<data name="TimeEntryResultInvalidAction" xml:space="preserve">
+    <value>Invalid action for time entry on date {0}</value>
   </data>
 </root>

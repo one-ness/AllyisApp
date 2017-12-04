@@ -158,7 +158,7 @@ namespace AllyisApps.DBModel
 		/// <param name="startingDate">The beginning date of the date range.</param>
 		/// <param name="endingDate">The ending date of the date range.</param>
 		/// <returns>A collection of time entries.</returns>
-		public async Task<IEnumerable<TimeEntryDBEntity>> GetTimeEntriesByUserOverDateRange(List<int> userId, int orgId, DateTime startingDate, DateTime endingDate)
+		public async Task<IEnumerable<TimeEntryDBEntity>> GetTimeEntriesByUsersOverDateRange(List<int> userId, int orgId, DateTime startingDate, DateTime endingDate)
 		{
 			DataTable users = new DataTable();
 			users.Columns.Add("userId", typeof(string));
@@ -264,7 +264,6 @@ namespace AllyisApps.DBModel
 			parameters.Add("@payClassId", entry.PayClassId);
 			parameters.Add("@duration", entry.Duration);
 			parameters.Add("@description", entry.Description);
-			parameters.Add("@isLockSaved", entry.IsLockSaved);
 			parameters.Add("@timeEntryStatusId", entry.TimeEntryStatusId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))

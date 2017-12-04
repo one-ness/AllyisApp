@@ -1,64 +1,77 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
+using AllyisApps.Lib;
+using AllyisApps.Resources;
+using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using Newtonsoft.Json;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
+	/// <inheritdoc />
 	/// <summary>
 	/// Contains actions for new TimeTracker Index Design
 	/// </summary>
 	public partial class TimeEntryController : BaseController
 	{
-		JsonResult jsonResult = new JsonResult();
 		/// <summary>
-		/// 
+		/// Receives a json list of time entries to either create, update, or delete for each entry.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>Redirect to time entry page</returns>
 		[HttpPost]
 		public async Task<ActionResult> TimeEntryCURD(string data)
 		{
-
 			var items = JsonConvert.DeserializeObject<TimeEntryCRUDModel>(data);
-			int? userID = items.Entries?[0]?.UserId;
-			//var list = ConvertToEditTimeEntry(items);
 
-
-			foreach (EditTimeEntryViewModel entry in items.Entries.OrderBy(item => item.Date))
+			foreach (EditTimeEntryViewModel model in items.Entries.OrderBy(item => item.Date))
 			{
+				if (!model.IsCreated && !model.IsDeleted && !model.IsEdited) continue;
 
-				JsonResult res = null;
-				if (entry.TimeEntryId.HasValue)
+				// DateTime dateGet = model.Date != 0 ? modelDate : DateTime.Now; // do we need this??
+				DateTime modelDate = Utility.GetDateTimeFromDays(model.Date);
+				float modelDuration = ParseDuration(model.Duration) ?? throw new ArgumentException(Strings.DurationFormat);
+
+				var entry = new TimeEntry
 				{
-					if (entry.IsDeleted)
+					TimeEntryId = model.TimeEntryId ?? -1, //-1 for if time entry is being created
+					UserId = model.UserId,
+					ProjectId = model.ProjectId,
+					PayClassId = model.PayClassId,
+					Date = modelDate,
+					Duration = modelDuration,
+					Description = model.Description
+				};
+
+				var result = CreateUpdateTimeEntryResult.InvalidAction;
+				if (model.TimeEntryId.HasValue)
+				{
+					if (model.IsDeleted)
 					{
-						res = (JsonResult)await DeleteTimeEntryJson(entry);
+						result = await DeleteTimeEntry(model.SubscriptionId, entry);
 					}
-					else if (entry.IsEdited)
+					else if (model.IsEdited)
 					{
-						res = (JsonResult)await EditTimeEntryJson(entry);
+						result = await EditTimeEntry(model.SubscriptionId, entry);
 					}
 				}
-				else if (entry.IsCreated && !entry.IsDeleted)
+				else if (model.IsCreated && !model.IsDeleted)
 				{
-					res = (JsonResult)await CreateTimeEntryJson(entry);
+					result = await CreateTimeEntry(model.SubscriptionId, entry);
 				}
 
-				if (res == null) continue;
-
-				var results = (dynamic)res.Data;
-
-				if (results.status == "error")
+				if (result != CreateUpdateTimeEntryResult.Success)
 				{
-					Notifications.Add(new BootstrapAlert(results.message, Variety.Danger));
+					Notifications.Add(new BootstrapAlert(result.GetResultMessage(entry.Date), Variety.Danger));
 				}
 			}
 
-			
+
 			return RedirectToRoute(
 				RouteNameConstants.TimeEntryIndexUserTimeSheet,
 				new
@@ -68,8 +81,32 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					subscriptionId = items.SubscriptionId,
 					startDate = items.StartingDate,
 					endDate = items.EndingDate,
-					userId = userID
+					userId = items.Entries?[0]?.UserId
 				});
+		}
+
+		/// <summary>
+		/// Parses the input duration for either HH.HH or HH:MM format.
+		/// </summary>
+		/// <param name="duration">Duration in either format.</param>
+		/// <returns>Parsed duration or null.</returns>
+		public float? ParseDuration(string duration)
+		{
+			if (string.IsNullOrWhiteSpace(duration)) return null;
+
+			float? durationOut = null;
+			Match theMatch;
+			if ((theMatch = Regex.Match(duration, HourMinutePattern)).Success)
+			{
+				float minutes = int.Parse(theMatch.Groups[2].Value) / MinutesInHour;
+				durationOut = float.Parse(theMatch.Groups[1].Value) + minutes;
+			}
+			else if (Regex.Match(duration, DecimalPattern).Success)
+			{
+				durationOut = float.Parse(duration);
+			}
+
+			return durationOut;
 		}
 	}
 

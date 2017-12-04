@@ -14,10 +14,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DeleteTimeEntryViewModel" /> class.
 		/// </summary>
-		public DeleteTimeEntryViewModel()
-		{
-			ApprovalState = -1;
-		}
+		public DeleteTimeEntryViewModel() { }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DeleteTimeEntryViewModel" /> class.
@@ -26,7 +23,6 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public DeleteTimeEntryViewModel(int timeEntryId)
 		{
 			TimeEntryId = timeEntryId;
-			ApprovalState = -1;
 		}
 
 		/// <summary>
@@ -38,11 +34,6 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Gets or sets the duration of the time entry.
 		/// </summary>
 		public string Duration { get; set; }
-
-		/// <summary>
-		/// Gets or sets the approval state of the time entry.
-		/// </summary>
-		public int ApprovalState { get; set; }
 
 		/// <summary>
 		/// Gets or sets the subscription's Id.

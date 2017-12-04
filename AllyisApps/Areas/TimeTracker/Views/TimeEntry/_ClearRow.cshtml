@@ -1,9 +1,0 @@
-﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-@model DeleteTimeEntryViewModel
-
-@using (Html.BeginForm(ActionConstants.DeleteTimeEntryJson, ControllerConstants.TimeEntry, FormMethod.Post))
-{
-	@Html.HiddenFor(m => m.TimeEntryId)
-
-	<td><input type="submit" value=@Strings.Delete /></td>
-}

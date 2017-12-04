@@ -130,7 +130,7 @@ namespace AllyisApps.Services
 		/// Deletes a time entry.
 		/// </summary>
 		/// <param name="timeEntryId">Time entry Id.</param>
-		public async void DeleteTimeEntry(int timeEntryId)
+		public async Task DeleteTimeEntry(int timeEntryId)
 		{
 			#region Validation
 
@@ -182,7 +182,7 @@ namespace AllyisApps.Services
 		/// <param name="start">Starting. <see cref="DateTime"/>.</param>
 		/// <param name="end">Ending. <see cref="DateTime"/>.</param>
 		/// <returns><see cref="IEnumerable{TimeEntryInfo}"/>.</returns>
-		public async Task<IEnumerable<TimeEntry>> GetTimeEntriesByUserOverDateRange(List<int> userIds, DateTime? start, DateTime? end, int organizationId)
+		public async Task<IEnumerable<TimeEntry>> GetTimeEntriesByUsersOverDateRange(List<int> userIds, DateTime? start, DateTime? end, int organizationId)
 		{
 			#region Validation
 
@@ -209,7 +209,41 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return (await DBHelper.GetTimeEntriesByUserOverDateRange(userIds, organizationId, start.Value, end.Value)).Select(InitializeTimeEntryInfo);
+			return (await DBHelper.GetTimeEntriesByUsersOverDateRange(userIds, organizationId, start.Value, end.Value)).Select(InitializeTimeEntryInfo);
+		}
+
+		/// <summary>
+		/// Gets a list of <see cref="TimeEntry"/>'s for a given set of users, organization, and start/end times.
+		/// </summary>
+		/// <param name="organizationId">The organization's Id.</param>
+		/// <param name="userId">The user that the time entries belong to.</param>
+		/// <param name="start">Starting. <see cref="DateTime"/>.</param>
+		/// <param name="end">Ending. <see cref="DateTime"/>.</param>
+		/// <returns><see cref="IEnumerable{TimeEntryInfo}"/>.</returns>
+		public async Task<IEnumerable<TimeEntry>> GetTimeEntriesByUserOverDateRange(int userId, DateTime? start, DateTime? end, int organizationId)
+		{
+			#region Validation
+
+			if (userId <= 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(userId), "User id cannot be 0 or negative.");
+			}
+			if (start == null)
+			{
+				throw new ArgumentNullException(nameof(start), "Date range must have a start date.");
+			}
+			if (end == null)
+			{
+				throw new ArgumentNullException(nameof(end), "Date range must have an end date.");
+			}
+			if (DateTime.Compare(start.Value, end.Value) > 0)
+			{
+				throw new ArgumentException("Date range cannot end before it starts.");
+			}
+
+			#endregion Validation
+
+			return (await DBHelper.GetTimeEntriesByUsersOverDateRange(new List<int> { userId }, organizationId, start.Value, end.Value)).Select(InitializeTimeEntryInfo);
 		}
 
 		/// <summary>
@@ -268,7 +302,7 @@ namespace AllyisApps.Services
 			if (subscriptionId <= 0) throw new ArgumentException("subscriptionId");
 			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 
-			HolidayDBEntity deletedHoliday = DBHelper.GetHolidays(orgId).Where(h => h.HolidayId == holidayId).SingleOrDefault();
+			HolidayDBEntity deletedHoliday = DBHelper.GetHolidays(orgId).SingleOrDefault(h => h.HolidayId == holidayId);
 			if (deletedHoliday != null)
 			{
 				DBHelper.DeleteHoliday(deletedHoliday.HolidayName, deletedHoliday.Date, orgId);
@@ -335,7 +369,7 @@ namespace AllyisApps.Services
 		{
 			CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			var getClass = await DBHelper.GetPayClasses(UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
-			return getClass.Select(pc => InitializePayClassInfo(pc));
+			return getClass.Select(InitializePayClassInfo);
 		}
 
 		/// <summary>
@@ -344,7 +378,7 @@ namespace AllyisApps.Services
 		public async Task<IEnumerable<PayClass>> GetPayClassesByOrganizationId(int organizationId)
 		{
 			var getClass = await DBHelper.GetPayClasses(organizationId);
-			return getClass.Select(pc => InitializePayClassInfo(pc));
+			return getClass.Select(InitializePayClassInfo);
 		}
 
 		/// <summary>
@@ -390,7 +424,7 @@ namespace AllyisApps.Services
 
 			if (!new[] { "Day", "Week", "Month" }.Contains(overtimePeriod))
 			{
-				throw new ArgumentException(string.Format("{0} is not a valid value for lock date period.", overtimePeriod));
+				throw new ArgumentException($"{overtimePeriod} is not a valid value for lock date period.");
 			}
 
 			#endregion Validation
@@ -425,7 +459,7 @@ namespace AllyisApps.Services
 			}
 			else
 			{
-				data = await GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? SqlDateTime.MinValue.Value,
+				data = await GetTimeEntriesByUsersOverDateRange(userIds, startingDate ?? SqlDateTime.MinValue.Value,
 					endingDate ?? DateTime.MaxValue.AddYears(-1), orgId);
 			}
 
@@ -632,7 +666,7 @@ namespace AllyisApps.Services
 				OrganizationId = pc.OrganizationId,
 				PayClassId = pc.PayClassId,
 				CreatedUtc = pc.CreatedUtc,
-				BuiltInPayClassid = pc.BuiltInPayClassId
+				BuiltInPayClassId = pc.BuiltInPayClassId
 			};
 		}
 
@@ -662,14 +696,11 @@ namespace AllyisApps.Services
 		{
 			return new TimeEntry
 			{
-				ApprovalState = entity.ApprovalState,
 				Date = entity.Date,
 				Description = entity.Description,
 				Duration = entity.Duration,
 				FirstName = entity.FirstName,
 				LastName = entity.LastName,
-				IsLockSaved = entity.IsLockSaved,
-				ModSinceApproval = entity.ModSinceApproval,
 				PayClassId = entity.PayClassId,
 				PayClassName = entity.PayClassName,
 				ProjectId = entity.ProjectId,
@@ -678,7 +709,8 @@ namespace AllyisApps.Services
 				EmployeeId = entity.EmployeeId,
 				Email = entity.Email,
 				TimeEntryStatusId = entity.TimeEntryStatusId,
-				IsLocked = entity.IsLocked
+				IsLocked = entity.IsLocked,
+				BuiltInPayClassId = entity.BuiltInPayClassId
 			};
 		}
 
@@ -691,14 +723,11 @@ namespace AllyisApps.Services
 		{
 			return new TimeEntryDBEntity
 			{
-				ApprovalState = info.ApprovalState,
 				Date = info.Date,
 				Description = info.Description,
 				Duration = info.Duration,
 				FirstName = info.FirstName,
 				LastName = info.LastName,
-				IsLockSaved = info.IsLockSaved,
-				ModSinceApproval = info.ModSinceApproval,
 				PayClassId = info.PayClassId,
 				ProjectId = info.ProjectId,
 				TimeEntryId = info.TimeEntryId,

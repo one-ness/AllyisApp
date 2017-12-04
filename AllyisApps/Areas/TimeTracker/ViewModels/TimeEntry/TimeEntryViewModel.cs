@@ -18,23 +18,20 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <param name="timeEntry">The time entry service object to convert</param>
 		public TimeEntryViewModel(Services.TimeTracker.TimeEntry timeEntry)
 		{
-			ApprovalState = timeEntry.ApprovalState;
 			Date = timeEntry.Date;
 			Description = timeEntry.Description;
 			Duration = timeEntry.Duration;
 			Email = timeEntry.Email;
 			EmployeeId = timeEntry.EmployeeId;
 			FirstName = timeEntry.FirstName;
-			IsLockSaved = timeEntry.IsLockSaved;
 			LastName = timeEntry.LastName;
-			ModSinceApproval = timeEntry.ModSinceApproval;
 			PayClassId = timeEntry.PayClassId;
 			PayClassName = timeEntry.PayClassName;
 			ProjectId = timeEntry.ProjectId;
 			TimeEntryId = timeEntry.TimeEntryId;
 			UserId = timeEntry.UserId;
 			TimeEntryStatusId = timeEntry.TimeEntryStatusId;
-			TimeEntryStatusName = timeEntry.getTimeEntryStatusName();
+			TimeEntryStatusName = timeEntry.GetTimeEntryStatusName();
 			IsLocked = timeEntry.IsLocked;
 		}
 
@@ -97,21 +94,6 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Gets or sets the Description.
 		/// </summary>
 		public string Description { get; set; }
-
-		/// <summary>
-		/// Gets or sets the approval state.
-		/// </summary>
-		public int ApprovalState { get; set; }
-
-		/// <summary>
-		/// Gets or sets a value indicating whether the saved approval lock.
-		/// </summary>
-		public bool IsLockSaved { get; set; }
-
-		/// <summary>
-		/// Gets or sets a value indicating whether the data has changed since being approved or dissaproved.
-		/// </summary>
-		public bool ModSinceApproval { get; set; }
 
 		/// <summary>
 		/// Gets or sets the customer name for the time entry

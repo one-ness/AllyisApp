@@ -67,7 +67,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			// Authorized to edit this entry
 			// Remove existing entries in target range
 			DateTime endDateTarget = startDateTarget.AddDays(endDateCopy.Subtract(startDateCopy).Days);
-			IEnumerable<Services.TimeTracker.TimeEntry> entriesRemove = await AppService.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDateTarget, endDateTarget, organizationId);
+			IEnumerable<Services.TimeTracker.TimeEntry> entriesRemove = await AppService.GetTimeEntriesByUsersOverDateRange(new List<int> { userId }, startDateTarget, endDateTarget, organizationId);
 			foreach (Services.TimeTracker.TimeEntry entry in entriesRemove)
 			{
 				// If the copying user isn't a manager, some checks are required before we let them delete/copy entries
@@ -82,11 +82,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					continue; // A user can't delete entries from before/on the lock date.
 				}
 
-				AppService.DeleteTimeEntry(entry.TimeEntryId);
+				await AppService.DeleteTimeEntry(entry.TimeEntryId);
 			}
 
 			// Add copied entries
-			IEnumerable<Services.TimeTracker.TimeEntry> entriesCopy = await AppService.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDateCopy, endDateCopy, organizationId);
+			IEnumerable<Services.TimeTracker.TimeEntry> entriesCopy = await AppService.GetTimeEntriesByUsersOverDateRange(new List<int> { userId }, startDateCopy, endDateCopy, organizationId);
 			for (int i = 0; startDateCopy.Date.AddDays(i) <= endDateCopy.Date; ++i)
 			{
 				// Cover all entries for that day

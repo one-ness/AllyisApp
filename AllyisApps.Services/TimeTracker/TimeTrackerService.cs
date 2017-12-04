@@ -31,6 +31,31 @@ namespace AllyisApps.Services
 			return DBEntityToServiceObject(await DBHelper.GetSettingsByOrganizationId(organizationId));
 		}
 
+		public async Task CheckUpdateProjectStartEndDate(int projectId, DateTime? newStartDate, DateTime? newEndDate)
+		{
+			// Get all time entries for selected project
+			var project = DBHelper.GetProjectById(projectId);
+			var oldStartDate = project.StartDate ?? (DateTime)SqlDateTime.MinValue;
+			var oldEndDate = project.EndDate ?? (DateTime)SqlDateTime.MaxValue;
+			var entries = await DBHelper.GetTimeEntriesOverDateRange(project.OrganizationId, oldStartDate, oldEndDate);
+
+			// Check new End Date, see if time entries are outside of new project date range
+			foreach (var entry in entries)
+			{
+				//only check for the specific project
+				if (entry.ProjectId != projectId) continue;
+
+				if (newEndDate != null && entry.Date > newEndDate)
+				{
+					throw new ArgumentOutOfRangeException(nameof(newEndDate), $"Cannot change Project End Date to the specified new date, there are currently time entries outside of the project's new date range: ({entry.Date.ToShortDateString()}).");
+				}
+				if (newStartDate != null && entry.Date < newStartDate)
+				{
+					throw new ArgumentOutOfRangeException(nameof(newStartDate), $"Cannot change Project Start Date to the specified new date, there are currently time entries outside of the project's new date range: ({entry.Date.ToShortDateString()}).");
+				}
+			}
+		}
+
 		/// <summary>
 		/// Locks all time entries with date that is less than or equal to lockDate
 		/// </summary>
@@ -200,7 +225,6 @@ namespace AllyisApps.Services
 
 			return await DBHelper.UpdatePayPeriod(payPeriodJson, organizationId);
 		}
-
 		public async Task<int> CreateEmployeeType(int orgId, string employeeName)
 		{
 			if (!(orgId >= 0)) throw new ArgumentNullException("OrgId");
@@ -269,6 +293,12 @@ namespace AllyisApps.Services
 			return results.ToList();
 		}
 
+
+		/// <summary>
+		/// Returns a pay period range object containing previous, current, and next pay period ranges for the given organization.
+		/// </summary>
+		/// <param name="organizationId">The organization that contains the pay period settings.</param>
+		/// <returns>Pay period range object containing previous, current, and next pay period ranges for the given organization.</returns>
 		public async Task<PayPeriodRanges> GetPayPeriodRanges(int organizationId)
 		{
 			if (organizationId <= 0)
@@ -309,48 +339,291 @@ namespace AllyisApps.Services
 			}
 		}
 
-		#region public static
-
-		public async Task<bool> CheckUpdateProjectStartEndDate(int projectId, DateTime? newStartDate, DateTime? newEndDate)
+		/// <summary>
+		/// Returns the overtime period that the inputted date is contained in, according to the given organization's settings
+		/// </summary>
+		/// <param name="organizationId">The organization that contains the overtime period settings.</param>
+		/// <param name="date">The date from which to get the overtime period</param>
+		/// <returns>Returns the overtime period that the inputted date is contained in.</returns>
+		public async Task<DateRange> GetOvertimePeriodByDate(int organizationId, DateTime date)
 		{
-			// Get all time entries for selected project
-			var project = DBHelper.GetProjectById(projectId);
-			var oldStartDate = project.StartDate ?? (DateTime)SqlDateTime.MinValue;
-			var oldEndDate = project.EndDate ?? (DateTime)SqlDateTime.MaxValue;
-			var entries = await DBHelper.GetTimeEntriesOverDateRange(project.OrganizationId, oldStartDate, oldEndDate);
+			var settings = await GetSettingsByOrganizationId(organizationId);
 
-			// Check new End Date, see if time entries are outside of new project date range
-			bool outsideNewDateRange = false;
-			foreach (var entry in entries)
+			switch (settings.OvertimePeriod)
 			{
-				if (entry.ProjectId == projectId) //only check for the specific project
-				{
-					if (newEndDate != null && entry.Date > newEndDate)
-					{
-						outsideNewDateRange = true;
-						throw new ArgumentOutOfRangeException(nameof(newEndDate), String.Format("{0}{1}{2}", "Cannot change Project End Date to the specified new date, there are currently time entries outside of the project's new date range: (", entry.Date.ToShortDateString(), "). "));
-					}
-					if (newStartDate != null && entry.Date < newStartDate)
-					{
-						outsideNewDateRange = true;
-						throw new ArgumentOutOfRangeException(nameof(newStartDate), String.Format("{0}{1}{2}", "Cannot change Project Start Date to the specified new date, there are currently time entries outside of the project's new date range: (", entry.Date.ToShortDateString(), "). "));
-					}
-				}
+				case "Week":
+					return GetWeeklyOvertimePeriod(settings.StartOfWeek, date);
+				case "Month":
+					return GetMonthlyOvertimePeriod(date);
+				case "Day":
+					return new DateRange(date, date);
+				default:
+					throw new ArgumentOutOfRangeException(nameof(settings.OvertimePeriod), settings.OvertimePeriod, "Overtime period must be either 'Week', 'Month', or 'Day'.");
+			}
+		}
+
+		/// <summary>
+		/// Validates a time entry for either create or update.
+		/// </summary>
+		/// <param name="entry">The entry to be validated.</param>
+		/// <param name="organizationId">The organization that the entry belongs to.</param>
+		/// <returns>Result enum with specific error or success.</returns>
+		public async Task<CreateUpdateTimeEntryResult> ValidateTimeEntryCreateUpdate(TimeEntry entry, int organizationId)
+		{
+			// 7 is the payclassid for Overtime
+			if (entry.BuiltInPayClassId == (int)PayClassId.OverTime)
+			{
+				return CreateUpdateTimeEntryResult.OvertimePayClass;
 			}
 
-			return outsideNewDateRange;
+			if (entry.PayClassId < 1)
+			{
+				return CreateUpdateTimeEntryResult.InvalidPayClass;
+			}
+
+			if (entry.ProjectId <= 0)
+			{
+				return CreateUpdateTimeEntryResult.InvalidProject;
+			}
+
+			if (entry.Duration == 0)
+			{
+				return CreateUpdateTimeEntryResult.ZeroDuration;
+			}
+
+			var otherEntriesToday = (await GetTimeEntriesByUserOverDateRange(entry.UserId, entry.Date, entry.Date, organizationId))
+				.Where(e => e.TimeEntryId != entry.TimeEntryId);
+
+			float durationOther = otherEntriesToday.Sum(otherEntry => otherEntry.Duration);
+			if (entry.Duration + durationOther > 24.00)
+			{
+				return CreateUpdateTimeEntryResult.Over24Hours;
+			}
+
+			DateTime? lockDate = (await GetSettingsByOrganizationId(organizationId)).LockDate;
+			if (lockDate != null && entry.Date <= lockDate.Value)
+			{
+				return CreateUpdateTimeEntryResult.EntryIsLocked;
+			}
+
+			return CreateUpdateTimeEntryResult.Success;
+		}
+
+		/// <summary>
+		/// Recalculates the overtime hours for a given overtime period indicated by date, by user/org
+		/// </summary>
+		/// <param name="organizationId">The organization that the time entries belong to</param>
+		/// <param name="date">The date indicating which overtime period to recalculate.</param>
+		/// <param name="userId">The user that the time entries belong to.</param>
+		/// <returns>The new duration value for the inputted time entry</returns>
+		/// TODO: make this method private by moving all references to service layer.
+		public async Task RecalculateOvertime(int organizationId, DateTime date, int userId)
+		{
+			DateRange overtimePeriod = await GetOvertimePeriodByDate(organizationId, date);
+			var entriesInOvertimePeriod = (await GetTimeEntriesByUserOverDateRange(userId, overtimePeriod.StartDate, overtimePeriod.EndDate, organizationId)).ToList();
+			int overtimeLimit = (await GetSettingsByOrganizationId(organizationId)).OvertimeHours;
+
+			var overtimeEntries = entriesInOvertimePeriod.Where(e => e.BuiltInPayClassId == (int)PayClassId.OverTime).OrderBy(e => e.Date).ToList();
+			var regularEntries = entriesInOvertimePeriod.Where(e => e.BuiltInPayClassId == (int)PayClassId.Regular).OrderByDescending(e => e.Date).ToList();
+			float regularHoursSum = regularEntries.Sum(e => e.Duration);
+			float overtimeHoursSum = overtimeEntries.Sum(e => e.Duration);
+
+			float newOvertime = regularHoursSum - overtimeLimit;
+			float amountBelowLimit = overtimeLimit - overtimeHoursSum - regularHoursSum;
+
+			//if we need to add overtime hours
+			if (newOvertime > 0)
+			{
+				foreach (var e in regularEntries)
+				{
+					//merge any overtime into entry
+					var overtimeEntry = overtimeEntries.SingleOrDefault(o => o.Date == e.Date && o.ProjectId == e.ProjectId);
+					if (overtimeEntry != null)
+					{
+						await DeleteTimeEntry(overtimeEntry.TimeEntryId);
+						newOvertime += overtimeEntry.Duration;
+						e.Duration += overtimeEntry.Duration;
+					}
+
+					// split the merged entry into the correct amount of regular + overtime
+					newOvertime = await SplitTimeEntryIntoOvertime(e, newOvertime, organizationId);
+
+					//new overtime has been completely handled
+					if (newOvertime == 0) break;
+				}
+				if (newOvertime != 0) throw new Exception("Unable to properly recalculate overtime.");
+			}
+			else if (newOvertime < 0) //if we need to subtract overtime hours
+			{
+				foreach (var o in overtimeEntries)
+				{
+					//merge any regular entries into overtime
+					var regularEntry = regularEntries.SingleOrDefault(e => e.Date == o.Date && e.ProjectId == o.ProjectId);
+					if (regularEntry != null)
+					{
+						newOvertime += o.Duration;
+						o.Duration += regularEntry.Duration;
+						regularEntry.Duration = o.Duration;
+					}
+
+					// split the merged entry into the correct amount of regular + overtime
+					float remainingOvertime = amountBelowLimit > 0 ? newOvertime + amountBelowLimit : newOvertime;
+
+					if (remainingOvertime < 0)
+					{
+						if (regularEntry != null)
+						{
+							await DeleteTimeEntry(regularEntry.TimeEntryId);
+						}
+						newOvertime = await SplitOvertimeIntoTimeEntry(o, remainingOvertime, organizationId);
+					}
+					else if (remainingOvertime >= 0)
+					{
+						await DeleteTimeEntry(o.TimeEntryId);
+						newOvertime = await SplitTimeEntryIntoOvertime(regularEntry, remainingOvertime, organizationId);
+					}
+
+					//new overtime has been completely handled
+					if (newOvertime == 0 || regularHoursSum - newOvertime <= overtimeLimit) break;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Splits a time entry into a given number of overtime hours, and keeps whatever's remaining.
+		/// </summary>
+		/// <param name="entry">The entry to split into entry + overtime</param>
+		/// <param name="overtime">The amount of overtime to add</param>
+		/// <param name="organizationId">Organization the the time entry belongs to.</param>
+		/// <returns>The amount of overtime left over after splitting.</returns>
+		public async Task<float> SplitTimeEntryIntoOvertime(TimeEntry entry, float overtime, int organizationId)
+		{
+			if (entry.BuiltInPayClassId != (int)PayClassId.Regular) throw new ArgumentException("Cannot make overtime for any pay class except regular.");
+
+			if (overtime < 0) return overtime;
+
+			var payClasses = await GetPayClassesByOrganizationId(organizationId);
+			int overtimePayClassId = payClasses.Single(pc => pc.BuiltInPayClassId == (int)PayClassId.OverTime).PayClassId;
+
+			if (overtime >= entry.Duration)
+			{
+				entry.PayClassId = overtimePayClassId;
+				UpdateTimeEntry(entry);
+				return overtime - entry.Duration;
+			}
+
+			entry.Duration -= overtime;
+			UpdateTimeEntry(entry);
+
+			if (overtime > 0)
+			{
+				await CreateTimeEntry(new TimeEntry
+				{
+					UserId = entry.UserId,
+					Date = entry.Date,
+					Duration = overtime,
+					Description = entry.Description,
+					ProjectId = entry.ProjectId,
+					EmployeeId = entry.EmployeeId,
+					PayClassId = overtimePayClassId
+				});
+			}
+
+			return 0;
+		}
+
+		/// <summary>
+		/// Splits an overtime entry into a given number of regular hours, and keeps whatever's remaining.
+		/// </summary>
+		/// <param name="overtimeEntry">The entry to split into entry + overtime</param>
+		/// <param name="overtime">The amount of overtime to take away and split</param>
+		/// <param name="organizationId">Organization the the time entry belongs to.</param>
+		/// <returns>The amount of overtime left over after splitting.</returns>
+		public async Task<float> SplitOvertimeIntoTimeEntry(TimeEntry overtimeEntry, float overtime, int organizationId)
+		{
+			if (overtimeEntry.PayClassId != (int)PayClassId.OverTime) throw new ArgumentException("Cannot split overtime, the time entry provided is not overtime.");
+
+			if (overtime > 0) return overtime;
+
+
+			var payClasses = await GetPayClassesByOrganizationId(organizationId);
+			int regularPayClassId = payClasses.Single(pc => pc.BuiltInPayClassId == (int)PayClassId.Regular).PayClassId;
+
+			//if we need to make more regular hours than this overtime entry has
+			if (overtime + overtimeEntry.Duration <= 0)
+			{
+				overtimeEntry.PayClassId = regularPayClassId;
+				UpdateTimeEntry(overtimeEntry);
+				return overtime + overtimeEntry.Duration;
+			}
+
+			//if we need to create some regular and some overtime
+			overtimeEntry.Duration += overtime;
+			UpdateTimeEntry(overtimeEntry);
+
+			overtime = Math.Abs(overtime);
+
+			if (overtime > 0)
+			{
+				await CreateTimeEntry(new TimeEntry
+				{
+					UserId = overtimeEntry.UserId,
+					Date = overtimeEntry.Date,
+					Duration = overtime,
+					Description = overtimeEntry.Description,
+					ProjectId = overtimeEntry.ProjectId,
+					EmployeeId = overtimeEntry.EmployeeId,
+					PayClassId = regularPayClassId
+				});
+			}
+
+			return 0;
+		}
+
+		public async Task UpdateOvertimePeriodToPending(int organizationId, int userId, DateTime date)
+		{
+			DateRange overtimePeriod = await GetOvertimePeriodByDate(organizationId, date);
+			var entriesInOvertimePeriod = await GetTimeEntriesByUserOverDateRange(userId, overtimePeriod.StartDate, overtimePeriod.EndDate, organizationId);
+			var settings = await GetSettingsByOrganizationId(organizationId);
+			var entriesAfterLockDate = entriesInOvertimePeriod.Where(e => e.Date > (settings.LockDate ?? settings.PayrollProcessedDate ?? DateTime.MinValue));
+			foreach (TimeEntry entry in entriesAfterLockDate)
+			{
+				await UpdateTimeEntryStatusById(entry.TimeEntryId, (int)TimeEntryStatus.Pending);
+			}
+		}
+
+		#region public static
+
+		public static DateRange GetWeeklyOvertimePeriod(int startOfWeek, DateTime date)
+		{
+			int dateDayOfWeek = (int)date.DayOfWeek;
+			int endDateAdd = Mod(6 + startOfWeek - dateDayOfWeek, 7);
+			int startDateAdd = -1 * Mod(dateDayOfWeek - startOfWeek - 7, 7);
+
+			return new DateRange(date.AddDays(startDateAdd), date.AddDays(endDateAdd));
+		}
+
+		public static DateRange GetMonthlyOvertimePeriod(DateTime date)
+		{
+			var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+			var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddTicks(-1);
+
+			return new DateRange(firstDayOfMonth, lastDayOfMonth);
 		}
 
 		public static DateTime SetStartingDate(DateTime? date, int startOfWeek)
 		{
 			if (date != null) return date.Value.Date;
 
-			DateTime today = DateTime.Now;
-			int daysIntoTheWeek = (int)today.DayOfWeek < startOfWeek
-				? (int)today.DayOfWeek + (7 - startOfWeek)
-				: (int)today.DayOfWeek - startOfWeek;
+			int todayDayOfWeek = (int)DateTime.Now.DayOfWeek;
+			int daysIntoTheWeek = todayDayOfWeek - startOfWeek;
 
-			return today.AddDays(-daysIntoTheWeek).Date;
+			if (todayDayOfWeek < startOfWeek)
+			{
+				daysIntoTheWeek += 7;
+			}
+
+			return DateTime.Now.AddDays(-daysIntoTheWeek).Date;
 		}
 
 		/// <summary>
@@ -363,7 +636,7 @@ namespace AllyisApps.Services
 		/// -1 is 1 pay period before the current.
 		/// </param>
 		/// <returns></returns>
-		public static PayPeriodRanges.PayPeriodRange GetNthPayPeriodByDates(List<int> dates, int n)
+		public static DateRange GetNthPayPeriodByDates(List<int> dates, int n)
 		{
 			dates.Sort();
 			int startIndex = 0;
@@ -426,7 +699,7 @@ namespace AllyisApps.Services
 					: new DateTime(year, month + 1, dates[0]))
 				: new DateTime(year, month, dates[Mod(startIndex + 1, dates.Count)]);
 
-			var range = new PayPeriodRanges.PayPeriodRange();
+			var range = new DateRange();
 			range.StartDate = new DateTime(year, month, dates[startIndex]);
 			range.EndDate = endDate.AddDays(-1);
 			return range;
@@ -438,7 +711,7 @@ namespace AllyisApps.Services
 		/// <param name="duration">The duration of the pay period.</param>
 		/// <param name="startDate">The start date from which to base the pay period dates on.</param>
 		/// <returns>The current pay period range.</returns>
-		public static PayPeriodRanges.PayPeriodRange GetCurrentPayPeriodByDuration(int duration, DateTime startDate)
+		public static DateRange GetCurrentPayPeriodByDuration(int duration, DateTime startDate)
 		{
 			DateTime endDate = startDate;
 
@@ -459,7 +732,7 @@ namespace AllyisApps.Services
 				}
 			}
 
-			return new PayPeriodRanges.PayPeriodRange
+			return new DateRange
 			{
 				StartDate = startDate,
 				EndDate = startDate == DateTime.Now ? startDate.AddDays(duration - 1) : endDate.AddDays(-1) //end date is one day before the next start date
@@ -477,9 +750,9 @@ namespace AllyisApps.Services
 		/// -1 is 1 pay period before the current.
 		/// </param>
 		/// <returns>The nth pay period away from the current one.</returns>
-		public static PayPeriodRanges.PayPeriodRange GetNthPayPeriodByDuration(PayPeriodRanges.PayPeriodRange currentPayPeriod, int numberOfPayPeriodsAway)
+		public static DateRange GetNthPayPeriodByDuration(DateRange currentPayPeriod, int numberOfPayPeriodsAway)
 		{
-			return new PayPeriodRanges.PayPeriodRange
+			return new DateRange
 			{
 				StartDate = currentPayPeriod.StartDate.AddDays(numberOfPayPeriodsAway * ((currentPayPeriod.EndDate - currentPayPeriod.StartDate).TotalDays + 1)),
 				EndDate = currentPayPeriod.EndDate.AddDays(numberOfPayPeriodsAway * ((currentPayPeriod.EndDate - currentPayPeriod.StartDate).TotalDays + 1))

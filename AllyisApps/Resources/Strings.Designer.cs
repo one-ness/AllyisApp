@@ -547,7 +547,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Duration cannot exceed 24 hours in a day..
+        ///   Looks up a localized string similar to Duration cannot exceed 24 hours in a day for time entry on date {0}..
         /// </summary>
         public static string CannotExceed24 {
             get {
@@ -1546,7 +1546,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must enter a time longer than 00:00..
+        ///   Looks up a localized string similar to You must enter a time longer than 0 for time entry on date {0}..
         /// </summary>
         public static string EnterATimeLongerThanZero {
             get {
@@ -2527,7 +2527,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must select a pay class..
+        ///   Looks up a localized string similar to You must select a pay class for time entry on date {0}..
         /// </summary>
         public static string MustSelectPayClass {
             get {
@@ -2536,7 +2536,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must select a project..
+        ///   Looks up a localized string similar to You must select a project for time entry on date {0}..
         /// </summary>
         public static string MustSelectProject {
             get {
@@ -4386,6 +4386,33 @@ namespace AllyisApps.Resources {
         public static string TimeEntry {
             get {
                 return ResourceManager.GetString("TimeEntry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid action for time entry on date {0}.
+        /// </summary>
+        public static string TimeEntryResultInvalidAction {
+            get {
+                return ResourceManager.GetString("TimeEntryResultInvalidAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot create or edit time entries with dates on or before lock date..
+        /// </summary>
+        public static string TimeEntryResultLocked {
+            get {
+                return ResourceManager.GetString("TimeEntryResultLocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot create or edit overtime hours. These are automatically calculated..
+        /// </summary>
+        public static string TimeEntryResultOvertimePayClass {
+            get {
+                return ResourceManager.GetString("TimeEntryResultOvertimePayClass", resourceCulture);
             }
         }
         

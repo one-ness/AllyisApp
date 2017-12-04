@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Data;
-using AllyisApps.Services;
-using AllyisApps.Services.Crm;
-using AllyisApps.Services.Auth;
-using System.Linq;
-using AllyisApps.Services.Project;
 using System.Collections.Generic;
-using AllyisApps.Services.TimeTracker;
-using System.Globalization;
+using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Crm;
+using AllyisApps.Services.Project;
+using AllyisApps.Services.TimeTracker;
 
 namespace UploadDataDirect
 {
@@ -97,7 +95,7 @@ namespace UploadDataDirect
 						{
 							var userList = new List<int>();
 							userList.Add(user.UserId);
-							var timeEntries = (await appService.GetTimeEntriesByUserOverDateRange(userList, timeEntryDate, timeEntryDate, orgId)).ToList();
+							var timeEntries = (await appService.GetTimeEntriesByUsersOverDateRange(userList, timeEntryDate, timeEntryDate, orgId)).ToList();
 							timeEntryTime = 0.0F;
 							timeEntries.Select(te => timeEntryTime += te.Duration);
 							gotTimeEntryTotalDuration.Add(new Tuple<DateTime, int>(timeEntryDate, user.UserId), timeEntryTime);

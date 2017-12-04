@@ -9,17 +9,10 @@
 	//string submitFunction = "ProjectId.value=ProjectIdDdl.value;PayClassId.value=PayClassNameDdl.value;return ajaxEditOrCreate(this, \"" + createUrl + "\", \"" + editUrl + "\")";
 	string extrastyle = Model.ProjectId < 0 ? "create" : string.Empty;
 	string hiddensample = Model.Hidden ? "hidden-sample" : string.Empty;
-	string approvalClass = Model.ModSinceApproval
-		? "pending"
-		: Model.ApprovalState == (int)ApprovalState.NotApproved
-			? "rejected"
-			: Model.ApprovalState == (int)ApprovalState.Approved
-				? "approved"
-				: string.Empty;
 }
 
 <div class="inline-form-anim-wrap @(hiddensample)">
-	@using (Html.BeginForm(ActionConstants.TimeEntryCURD, ControllerConstants.TimeEntry, FormMethod.Get, new { @class = string.Format("very-inline-form TimeEntryForm edit {0} {1}", extrastyle, approvalClass) }))
+	@using (Html.BeginForm(ActionConstants.TimeEntryCURD, ControllerConstants.TimeEntry, FormMethod.Get, new { @class = string.Format("very-inline-form TimeEntryForm edit {0}", extrastyle) }))
 	{
 		@Html.Hidden("CanManage", (bool)ViewBag.CanManage)
 		@Html.HiddenFor(m => m.IsCreated).RemoveIdAttribute()
@@ -32,10 +25,9 @@
 		@Html.HiddenFor(m => m.StartingDate).RemoveIdAttribute()
 		@Html.HiddenFor(m => m.EndingDate).RemoveIdAttribute()
 		@Html.HiddenFor(m => m.SubscriptionId).RemoveIdAttribute()
-		@Html.HiddenFor(m => m.IsLocked).RemoveIdAttribute()
 		<!--Duration box-->
 		<div class="group left" style="width: 70px;" name="entry-@Model.ProjectId">
-			@Html.TextBoxDisabledFor(m => Model.Duration, Model.IsLocked, new { @class = "form-control", @onchange = "changeOccur(this)", @onkeypress = "keyDown(event, this)", @size = 5, @maxlength = 5, @placeholder = "HH:MM", @id = "entry-" + Model.ProjectId }).RemoveIdAttribute()
+			@Html.TextBoxDisabledFor(m => Model.Duration, !Model.IsEditable, new { @class = "form-control", @onchange = "changeOccur(this)", @onkeypress = "keyDown(event, this)", @size = 5, @maxlength = 5, @placeholder = "HH:MM", @id = "entry-" + Model.ProjectId }).RemoveIdAttribute()
 		</div>
 		<!--Project Selector-->
 		<div class="group left" style="width: 250px;">
@@ -43,7 +35,7 @@
 			@Html.DropDownListDisabled(
 				"ProjectIdDdl",
 				Model.ProjectsWithInactive,
-				Model.IsLocked,
+				!Model.IsEditable,
 				new
 				{
 					@class = "form-control",
@@ -57,7 +49,7 @@
 			@Html.DropDownListDisabled(
 				"PayClassNameDdl",
 				Model.PayClasses,
-				Model.IsLocked,
+				!Model.IsEditable,
 				new
 				{
 					@class = "form-control",
@@ -71,32 +63,44 @@
 		<div class="group left">
 			@(
 				//? Html.TextBox("BeforeLockDateDesc", "Description", new {@class = "ovrd-form-control form-control", @style = "width: 100%", @onkeypress = "changeOccur(this)", @onchange = "changeOccur(this)", @placeholder = Strings.Description }).RemoveIdAttribute()
-				 Html.TextBoxDisabledFor(m => Model.Description, Model.IsLocked, new {@class = "ovrd-form-control form-control stretch", @onkeypress = "changeOccur(this)", @onchange = "changeOccur(this)", @placeholder = Strings.Description}).RemoveIdAttribute())
+				 Html.TextBoxDisabledFor(m => Model.Description, !Model.IsEditable, new {@class = "ovrd-form-control form-control stretch", @onkeypress = "changeOccur(this)", @onchange = "changeOccur(this)", @placeholder = Strings.Description}).RemoveIdAttribute())
 		</div>
-		if (Model.IsLocked)
-		{
-			<i class="glyphicon glyphicon-lock" style="padding-top: 9px; padding-left: 12px" title="This date is locked"></i>
-		}
-		else { 
-			<div class="button-anim-wrap btn-group group right">
-				<div>
-					<button 
-							type="button"
-							value="Save"
-							class="btn btn-fa btn-primary btn-sharp"
-							title="@Strings.Add"
-							onclick= '@("addRow(this)")'
-						>
+		<div class="button-anim-wrap btn-group group right">
+			<div>
+				@if (Model.IsCreatable)
+				{
+					<button
+						type="button"
+						value="Save"
+						class="btn btn-fa btn-primary btn-sharp"
+						title="@Strings.Add"
+						onclick='@("addRow(this)")'>
 						@*Formerally "Submit"; changed to match value and because "Save" was in resources already*@
 						<i class="allyisicon-submit"></i>
 					</button>
+				}
+				else
+				{
+					<button type="button" value="Save" class="btn btn-fa btn-secondary btn-sharp">
+						<i class="glyphicon glyphicon-lock"></i>
+					</button>
+				}
+
+				@if (Model.IsDeletable)
+				{
 					<a class="btn btn-danger btn-fa hidden-create btn-sharp"
-					   href="javascript:void(0)"
-					   onclick="nonajaxDelete(this, '@(Url.Action(ActionConstants.DeleteTimeEntryJson))')">
+						href="javascript:void(0)"
+						onclick="nonajaxDelete(this)">
 						<i class="allyisicon-delete"></i>
 					</a>
-				</div>
+				}
+				else
+				{
+					<a class="btn btn-secondary btn-fa hidden-create btn-sharp" href="javascript:void(0)">
+						<i class="glyphicon glyphicon-lock"></i>
+					</a>
+				}
 			</div>
-		}
+		</div>
 	}
 </div>

@@ -1,4 +1,5 @@
-﻿using AllyisApps.Resources;
+﻿using System;
+using AllyisApps.Resources;
 
 #region service
 
@@ -882,6 +883,43 @@ namespace AllyisApps.Services.TimeTracker
 			}
 
 			return name;
+		}
+
+		/// <summary>
+		/// Gets the corresponding localized result message based on the result enum.
+		/// </summary>
+		/// <param name="value">The result enum</param>
+		/// <param name="modelDate">Date of the time entry being created/updated.</param>
+		/// <returns>Localized result message based on the result enum.</returns>
+		public static string GetResultMessage(this CreateUpdateTimeEntryResult value, DateTime modelDate)
+		{
+			switch (value)
+			{
+				case CreateUpdateTimeEntryResult.OvertimePayClass:
+					return Strings.TimeEntryResultOvertimePayClass;
+				case CreateUpdateTimeEntryResult.InvalidPayClass:
+					return string.Format(Strings.MustSelectPayClass, modelDate.ToShortDateString());
+				case CreateUpdateTimeEntryResult.InvalidProject:
+					return string.Format(Strings.MustSelectProject, modelDate.ToShortDateString());
+				case CreateUpdateTimeEntryResult.ZeroDuration:
+					return string.Format(Strings.EnterATimeLongerThanZero, modelDate.ToShortDateString());
+				case CreateUpdateTimeEntryResult.Over24Hours:
+					return string.Format(Strings.CannotExceed24, modelDate.ToShortDateString());
+				case CreateUpdateTimeEntryResult.EntryIsLocked:
+					return Strings.TimeEntryResultLocked;
+				case CreateUpdateTimeEntryResult.Success:
+					return string.Empty;
+				case CreateUpdateTimeEntryResult.MustBeAssignedToProject:
+					return Strings.MustBeAssignedToProject;
+				case CreateUpdateTimeEntryResult.ProjectIsNotActive:
+					return Strings.ProjectIsNotActive;
+				case CreateUpdateTimeEntryResult.NotAuthZTimeEntryOtherUserEdit:
+					return Strings.NotAuthZTimeEntryOtherUserEdit;
+				case CreateUpdateTimeEntryResult.InvalidAction:
+					return string.Format(Strings.TimeEntryResultInvalidAction, modelDate.ToShortDateString());
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 		}
 	}
 }
