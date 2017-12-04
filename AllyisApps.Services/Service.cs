@@ -333,6 +333,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		public async Task<IEnumerable<PayClass>> GetPayClassesBySubscriptionId(int subscriptionId)
 		{
+			CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			var getClass = await DBHelper.GetPayClasses(UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
 			return getClass.Select(pc => InitializePayClassInfo(pc));
 		}

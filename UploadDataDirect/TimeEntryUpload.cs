@@ -20,7 +20,7 @@ namespace UploadDataDirect
 		private int subId;
 		private Customer customerId;
 		private bool isNew;
-		
+
 		public TimeEntryUpload(DataTable hoursData, AllyisApps.Services.AppService appService, int orgId, int subId, Customer customerId, bool isNew = true)
 		{
 			this.hoursData = hoursData;
@@ -68,8 +68,6 @@ namespace UploadDataDirect
 					}
 					string projectCode = row[ColumnConstants.ProjectCode].ToString();
 
-
-
 					if (!gotProjects.TryGetValue(projectCode, out Project project))
 					{
 						throw new Exception("No project exists for projectCode" + projectCode);
@@ -78,21 +76,19 @@ namespace UploadDataDirect
 
 					if (payClassName.Equals("REGSAL"))
 					{
-						//hard code regsal to regular as per instuctions 
+						//hard code regsal to regular as per instuctions
 						payClassName = "REGULAR";
 					}
 
-					int inputedPayClassId = await InitializePayClasses(gotPayClasses, gotEmployeePayClasses, user, payClassName);
+					int inputedPayClassId = await InitializePayClasses(gotPayClasses, gotEmployeePayClasses, user, payClassName, subId);
 
 					string dateStr = row[ColumnConstants.Date].ToString();
 					DateTime timeEntryDate = DateTime.Parse(dateStr);
 
-
-
 					var timeentryIdentify = new Tuple<DateTime, int>(timeEntryDate, user.UserId);
 					if (!gotTimeEntryTotalDuration.TryGetValue(timeentryIdentify, out float timeEntryTime))
 					{
-						//if we know that no results will come then skip this query 
+						//if we know that no results will come then skip this query
 						if (isNew)
 						{
 							timeEntryTime = 0.0F;
@@ -106,7 +102,6 @@ namespace UploadDataDirect
 							timeEntries.Select(te => timeEntryTime += te.Duration);
 							gotTimeEntryTotalDuration.Add(new Tuple<DateTime, int>(timeEntryDate, user.UserId), timeEntryTime);
 						}
-
 					}
 
 					string dur = row[ColumnConstants.Duration].ToString();
@@ -118,11 +113,11 @@ namespace UploadDataDirect
 						continue;
 					}
 
-					if(timeEntryTime + duration >= 24.0F)
+					if (timeEntryTime + duration >= 24.0F)
 					{
 						throw new Exception("Cannot add more then 24 hours to a day");
 					}
-					//Ensure user is assigned to project 
+					//Ensure user is assigned to project
 					appService.CreateProjectUser(project.ProjectId, user.UserId);
 
 					TimeEntry timeentry = new TimeEntry()
@@ -148,7 +143,7 @@ namespace UploadDataDirect
 			}
 		}
 
-		private async Task<int> InitializePayClasses(Dictionary<string, int> gotPayClasses, Dictionary<int, List<int>> gotEmployeePayClasses, OrganizationUser user, string payClassName)
+		private async Task<int> InitializePayClasses(Dictionary<string, int> gotPayClasses, Dictionary<int, List<int>> gotEmployeePayClasses, OrganizationUser user, string payClassName, int subId)
 		{
 			if (!gotPayClasses.TryGetValue(payClassName.ToUpper(), out int inputedPayClassId))
 			{
@@ -165,7 +160,7 @@ namespace UploadDataDirect
 			//If pay class about ot be imported is not assinged to user then assign it to user
 			if (!possiblepayClassIds.Exists(pcId => pcId == inputedPayClassId))
 			{
-				await appService.AddPayClassToEmployeeType(user.EmployeeTypeId, inputedPayClassId);
+				await appService.AddPayClassToEmployeeType(subId, user.EmployeeTypeId, inputedPayClassId);
 				gotEmployeePayClasses[user.EmployeeTypeId].Add(inputedPayClassId);
 			}
 
