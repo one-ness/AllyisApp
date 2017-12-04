@@ -17,10 +17,8 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44326</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>
-    </IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>
-    </IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <NuGetPackageImportStamp>
@@ -764,11 +762,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\TimeTracker\ViewModels\Manage\" />
-    <Folder Include="Areas\TimeTracker\Views\DeactivateAction\" />
-    <Folder Include="Areas\TimeTracker\Views\ImportAction\" />
-    <Folder Include="Areas\TimeTracker\Views\Setting2Action\" />
-    <Folder Include="Areas\TimeTracker\Views\SettingsEmployeeTypeAction\" />
-    <Folder Include="Areas\TimeTracker\Views\ToggleStatusAction\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

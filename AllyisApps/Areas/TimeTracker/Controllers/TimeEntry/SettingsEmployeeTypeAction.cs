@@ -6,7 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services.TimeTracker;
+using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -26,6 +26,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			var subName = await AppService.GetSubscriptionName(subscriptionId);
 			var employeeTypes = await AppService.GetEmployeeTypeByOrganization(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
+
+			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
+
 			SettingsEmployeeTypeViewModel model = new SettingsEmployeeTypeViewModel()
 			{
 				EmployeeTypes = employeeTypes.ToList(),
@@ -46,6 +49,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public async Task<ActionResult> CreateEmployeeType(int subscriptionId)
 		{
 			var payclasses = (await AppService.GetPayClassesBySubscriptionId(subscriptionId)).Select(x => new PayClassInfo() { PayClassId = x.PayClassId, PayClassName = x.PayClassName });
+
+			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 
 			SettingsEditEmployeeTypeViewModel model = new SettingsEditEmployeeTypeViewModel()
 			{
@@ -69,6 +74,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			var assignedPayClasses = await AppService.GetAssignedPayClasses(employeeTypeId);
 			var employeeTypes = await AppService.GetEmployeeTypeByOrganization(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
+			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
+			if (!employeeTypes.Exists(x => x.EmployeeTypeId == employeeTypeId))
+			{
+				Notifications.Add(new BootstrapAlert("You don't have permission to delete this Employee Type.", Variety.Warning));
+				return RedirectToAction(ActionConstants.SettingsEmployeeType);
+			}
 
 			if (assignedPayClasses.Count > 0)
 			{
@@ -97,20 +108,33 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		///
 		/// </summary>
 		/// <param name="subscriptionId"></param>
-		/// <param name="employeetypeId"></param>
+		/// <param name="userId"></param>
 		/// <returns></returns>
 		[HttpGet]
-		public async Task<ActionResult> EditEmployeeType(int subscriptionId, int employeetypeId = 0)
+		public async Task<ActionResult> EditEmployeeType(int subscriptionId, int userId = 0)
 		{
-			var employeeType = await AppService.GetEmployeeType(employeetypeId);
-			var assignedPayClassesIds = await AppService.GetAssignedPayClasses(employeetypeId);
+			ViewData["SubscriptionName"] = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName;
+			ViewData["SubscriptioId"] = subscriptionId;
+
+			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
+
+			var employeeTypes = await AppService.GetEmployeeTypeByOrganization(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
+			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
+			if (!employeeTypes.Exists(x => x.EmployeeTypeId == userId))
+			{
+				Notifications.Add(new BootstrapAlert("You don't have permission to edit this Employee Type.", Variety.Warning));
+				return RedirectToAction(ActionConstants.SettingsEmployeeType);
+			}
+
+			var employeeType = employeeTypes.Where(x => x.EmployeeTypeId == userId).FirstOrDefault();
+			var assignedPayClassesIds = await AppService.GetAssignedPayClasses(userId);
 			var payClasses = (await AppService.GetPayClassesByOrganizationId(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId));
 
 			var unassignedPayClasses = payClasses.Where(x => !assignedPayClassesIds.Contains(x.PayClassId)).Select(x => new PayClassInfo() { PayClassId = x.PayClassId, PayClassName = x.PayClassName });
 			var assignedPayClasses = payClasses.Where(x => assignedPayClassesIds.Contains(x.PayClassId)).Select(x => new PayClassInfo() { PayClassId = x.PayClassId, PayClassName = x.PayClassName });
 			SettingsEditEmployeeTypeViewModel model = new SettingsEditEmployeeTypeViewModel()
 			{
-				EmployeeTypeId = employeetypeId,
+				EmployeeTypeId = userId,
 				EmployeeTypeName = employeeType.EmployeeTypeName,
 				PayClasses = unassignedPayClasses.ToList(),
 				CurrentPayClasses = assignedPayClasses.ToList(),
@@ -129,6 +153,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpPost]
 		public async Task<ActionResult> EditEmployeeType(int subscriptionId, SettingsEditEmployeeTypeViewModel model)
 		{
+			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
+
 			if (string.IsNullOrEmpty(model.EmployeeTypeName))
 			{
 				Notifications.Add(new BootstrapAlert("Employee Type Requires a name."));
