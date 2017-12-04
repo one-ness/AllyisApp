@@ -182,7 +182,7 @@ namespace AllyisApps.Services
 		/// <param name="start">Starting. <see cref="DateTime"/>.</param>
 		/// <param name="end">Ending. <see cref="DateTime"/>.</param>
 		/// <returns><see cref="IEnumerable{TimeEntryInfo}"/>.</returns>
-		public async Task<IEnumerable<TimeEntry>> GetTimeEntriesByUsersOverDateRange(List<int> userIds, DateTime? start, DateTime? end, int organizationId = -1)
+		public async Task<IEnumerable<TimeEntry>> GetTimeEntriesByUsersOverDateRange(List<int> userIds, DateTime? start, DateTime? end, int organizationId)
 		{
 			#region Validation
 
@@ -220,7 +220,7 @@ namespace AllyisApps.Services
 		/// <param name="start">Starting. <see cref="DateTime"/>.</param>
 		/// <param name="end">Ending. <see cref="DateTime"/>.</param>
 		/// <returns><see cref="IEnumerable{TimeEntryInfo}"/>.</returns>
-		public async Task<IEnumerable<TimeEntry>> GetTimeEntriesByUserOverDateRange(int userId, DateTime? start, DateTime? end, int organizationId = -1)
+		public async Task<IEnumerable<TimeEntry>> GetTimeEntriesByUserOverDateRange(int userId, DateTime? start, DateTime? end, int organizationId)
 		{
 			#region Validation
 
@@ -319,12 +319,12 @@ namespace AllyisApps.Services
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public async Task<bool> CreatePayClass(string payClassName, int orgId, int subscriptionId)
+		public async Task<int> CreatePayClass(string payClassName, int orgId, int subscriptionId)
 		{
 			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
-			DBHelper.CreatePayClass(payClassName, orgId);
+			int createPayclass = DBHelper.CreatePayClass(payClassName, orgId);
 			await Task.Yield();
-			return true;
+			return createPayclass;
 		}
 
 		/// <summary>

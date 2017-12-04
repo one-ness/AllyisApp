@@ -37,6 +37,8 @@ namespace AllyisApps.Controllers.Auth
 			// get all subscriptions of this organization, get a list of roles for each subscription and user's role in each subscription
 			var subs = await AppService.GetSubscriptionsAsync(orgId, true);
 			User user = await AppService.GetUserAsync(userId, orgId, OrgAction.ReadOrganization); // this call makes sure that both logged in user and userId have at least one common org
+			var employeeTypeList = (await AppService.GetEmployeeTypeByOrganization(orgId));
+			var employee = (await AppService.GetOrganizationUsersAsync(orgId)).Where(x => x.UserId == userId).FirstOrDefault();
 			UserOrganization org = user.Organizations.FirstOrDefault(x => x.OrganizationId == orgId);
 
 			var model = new EditMemberViewModel
@@ -48,6 +50,8 @@ namespace AllyisApps.Controllers.Auth
 				DateOfBirth = user.DateOfBirth.ToString("d"),
 				Email = user.Email,
 				EmployeeId = org.EmployeeId,
+				EmployeeType = employee.EmployeeTypeId,
+				EmployeeTypes = employeeTypeList,
 				FirstName = user.FirstName,
 				LastName = user.LastName,
 				OrganizationId = orgId,
@@ -80,17 +84,20 @@ namespace AllyisApps.Controllers.Auth
 		{
 			if (!ModelState.IsValid) return RedirectToAction(ActionConstants.EditMember, new { id = model.OrganizationId, userid = model.UserId });
 			// TODO: do this in a transaction
-
-			// update employee id 
+			// update employee type
+			await AppService.UpdateUserOrgEmployeeType(model.UserId, model.EmployeeType);
+			// update employee id
 			UpdateEmployeeIdAndOrgRoleResult result = await AppService.UpdateEmployeeIdAndOrgRole(model.OrganizationId, model.UserId, model.EmployeeId, (OrganizationRoleEnum)model.SelectedOrganizationRoleId);
 			switch (result)
 			{
 				case UpdateEmployeeIdAndOrgRoleResult.CannotSelfUpdateOrgRole:
 					Notifications.Add(new BootstrapAlert(Strings.CannotSelfUpdateOrgRole, Variety.Danger));
 					break;
+
 				case UpdateEmployeeIdAndOrgRoleResult.EmployeeIdNotUnique:
 					Notifications.Add(new BootstrapAlert(Strings.EmployeeIdNotUniqueError, Variety.Danger));
 					break;
+
 				case UpdateEmployeeIdAndOrgRoleResult.Success:
 					// get the subscription roles in to a dictionary
 					var changedsubRoles = new Dictionary<int, int>();
@@ -114,12 +121,12 @@ namespace AllyisApps.Controllers.Auth
 					}
 
 					return RedirectToAction(ActionConstants.OrganizationMembers, ControllerConstants.Account, new { id = model.OrganizationId });
+
 				default:
 					throw new ArgumentOutOfRangeException(nameof(result));
 			}
 
 			return RedirectToAction("EditMember", new { id = model.OrganizationId, userid = model.UserId });
-
 		}
 	}
 }

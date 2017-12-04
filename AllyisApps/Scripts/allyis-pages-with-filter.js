@@ -49,7 +49,7 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
 (function (exports) {
 	// Paging variables
 	var pageLimit = 16; // Rows per page
-	var pageButtonLimit = 10; // Max page buttons to display at once
+	var pageButtonLimit = 5; // Max page buttons to display at once
 	var currentPageButtonStart = 1; // The first displayed page button
 	var pageContainer = $('.pageContainer'); // Place a div on your page with the class pageContainer - it will auto-populate with page buttons
 	var totalPages = 1; // Page count, recalculated on each filter
@@ -382,6 +382,13 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
 		}
 
 		$('.scrollBuffer').toggleClass('off-page', true);
+		if (!findFirstRow()) {
+			pageContainer.hide();
+			console.log("Test");
+			
+		} else {
+			pageContainer.show();
+		}
 	}
 
 	generateFillerRow = function (height, page, isScrollBuffer) {
@@ -392,6 +399,7 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
 	}
 
 	$(document).ready(function () {
+		$('#loading').hide();
 		if ($(checkBoxSelector).length > 0) {
 			hasCheckBoxes = true;
 		}
@@ -413,5 +421,6 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
 		if (previouslySelectedPage != 0) {
 			_goToPage(previouslySelectedPage);
 		}
+		$('#loading').show();
 	});
 })(this.pwf = {});

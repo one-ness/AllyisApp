@@ -401,6 +401,18 @@
     <Build Include="Auth\Functions\GetUserCount.sql" />
     <Build Include="Crm\Functions\GetProjectCount.sql" />
     <Build Include="Crm\Functions\GetActiveProjectCount.sql" />
+    <Build Include="TimeTracker\Tables\EmployeeType.sql" />
+    <Build Include="TimeTracker\Tables\EmployeeTypePayClass.sql" />
+    <Build Include="TimeTracker\Stored Procedures\CreateEmployeeType.sql" />
+    <Build Include="TimeTracker\Stored Procedures\GetAssingedPayClasses.sql" />
+    <Build Include="TimeTracker\Stored Procedures\AddPayClassToEmployeeType.sql" />
+    <Build Include="TimeTracker\Stored Procedures\RemovePayClassFromEmployeeType.sql" />
+    <Build Include="TimeTracker\Stored Procedures\GetEmployeeTypesByOrganization.sql" />
+    <Build Include="TimeTracker\Stored Procedures\GetEmployeeType.sql" />
+    <Build Include="TimeTracker\Stored Procedures\DeleteEmployeeType.sql" />
+    <Build Include="TimeTracker\Stored Procedures\AddOrgPayClassesToEmployeeType.sql" />
+    <Build Include="Pjm\Stored Procedures\GetDefaultProject.sql" />
+    <Build Include="TimeTracker\Stored Procedures\UpdateUserOrgEmployeeType.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

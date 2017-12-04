@@ -2,6 +2,7 @@ CREATE PROCEDURE [Pjm].[CreateProjectAndUpdateItsUserList]
 	@customerId INT,
 	@projectName NVARCHAR(MAX),
 	@isHourly BIT,
+	@isDefault INT = 0,
 	@projectCode NVARCHAR(16),
 	@startingDate DATETIME2(0),
 	@endingDate DATETIME2(0),
@@ -26,6 +27,7 @@ BEGIN
 				INSERT INTO [Pjm].[Project] (
 					[CustomerId],
 					[ProjectName],
+					[IsDefault],
 					[IsHourly],
 					[ProjectCode],
 					[StartUtc],
@@ -33,6 +35,7 @@ BEGIN
 				VALUES	(
 					@customerId,
 					@projectName,
+					@isDefault,
 					@isHourly,
 					@projectCode,
 					@startingDate,

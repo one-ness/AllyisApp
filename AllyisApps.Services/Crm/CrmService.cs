@@ -69,7 +69,7 @@ namespace AllyisApps.Services
 		/// <param name="customer">Customer.</param>
 		/// <param name="subscriptionId">.</param>
 		/// <returns>Customer id.</returns>
-		public async Task<int?> CreateCustomerAsync(Customer customer, int subscriptionId)
+		public async Task<int> CreateCustomerAsync(Customer customer, int subscriptionId)
 		{
 			// Permission validation
 			if (!CheckStaffingManagerAction(StaffingManagerAction.EditCustomer, subscriptionId, false) && !CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId, false))
@@ -151,7 +151,6 @@ namespace AllyisApps.Services
 				.Where(dbe => dbe != null)
 				.Select(dbe => (Customer)InitializeCustomer(dbe))
 				.ToList();
-
 		}
 
 		/// <summary>
@@ -306,6 +305,25 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		///
+		/// </summary>
+		/// <param name="orgId"></param>
+		/// <returns></returns>
+		public async Task<int> GetDefaultProject(int orgId)
+		{
+			#region Validation
+
+			if (orgId <= 0)
+			{
+				throw new ArgumentOutOfRangeException("orgId", "Org Id cannot be 0 or negative.");
+			}
+
+			#endregion Validation
+
+			return await DBHelper.GetDefaultProject(orgId);
+		}
+
+		/// <summary>
 		/// Updates a project's properties and user list.
 		/// </summary>
 		/// <param name="projectId">Project Id.</param>
@@ -365,10 +383,15 @@ namespace AllyisApps.Services
 			CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
 
 			var timeEntries = await DBHelper.GetTimeEntriesByProjectId(projectId);
+			var project = DBHelper.GetProjectById(projectId);
 
 			if (timeEntries.Any())
 			{
 				return -1;
+			}
+			if (project.IsDefault)
+			{
+				return -2;
 			}
 
 			return await DBHelper.DeleteProject(projectId);
@@ -788,7 +811,8 @@ namespace AllyisApps.Services
 				ProjectId = project.ProjectId,
 				ProjectCode = project.ProjectCode,
 				StartingDate = project.StartDate,
-				IsHourly = project.IsHourly
+				IsHourly = project.IsHourly,
+				IsDefault = project.IsDefault
 			};
 		}
 
@@ -816,6 +840,7 @@ namespace AllyisApps.Services
 				EndDate = completeProject.EndDate,
 				IsCustomerActive = completeProject.IsCustomerActive,
 				IsUserActive = completeProject.IsUserActive,
+				IsDefault = completeProject.IsDefault,
 				OrganizationId = completeProject.OrganizationId,
 				OrganizationName = completeProject.OrganizationName,
 				PriceType = completeProject.PriceType,

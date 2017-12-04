@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -81,6 +82,16 @@ namespace AllyisApps.ViewModels.Auth
 		public string EmployeeId { get; set; }
 
 		/// <summary>
+		/// Gets or sets list of organization employee types.
+		/// </summary>
+		public List<EmployeeType> EmployeeTypes { get; set; }
+
+		/// <summary>
+		/// Gets or sets the employee type.
+		/// </summary>
+		public int EmployeeType { get; set; }
+
+		/// <summary>
 		/// can edit member?
 		/// </summary>
 		public bool CanEditMember { get; set; }
@@ -93,8 +104,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// list of org roles
 		/// </summary>
-		[Display(Name ="Organization Role")]
-		
+		[Display(Name = "Organization Role")]
 		public Dictionary<int, string> OrgRolesList { get; set; }
 
 		/// <summary>

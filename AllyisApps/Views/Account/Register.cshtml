@@ -6,91 +6,87 @@
 }
 
 <div class="container">
-	<div class="row">
-		<div class="col-xs-12">
-			<div class="shrink-wrap-center">
-				<div class="min300">
-					@using (Html.BeginForm(ActionConstants.Register, ControllerConstants.Account, new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "form" }))
-					{
-						@Html.AntiForgeryToken()
-						@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
-						<div class="row">
-							<div class="col-md-6 sm-control-width">
-								<div class="form-group">
-									@Html.ReqLabelFor(m => m.Email, Strings.Email)
-									@Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-									@Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-								</div>
-								<div class="form-group">
-									@Html.ReqLabelFor(m => m.FirstName, Strings.FirstName)
-									@Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
-									@Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
-								</div>
-								<div class="form-group">
-									@Html.ReqLabelFor(m => m.LastName, Strings.LastName)
-									@Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
-									@Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
-								</div>
-								<div class="form-group">
-									@Html.ReqLabelFor(m => m.Password, Strings.Password)
-									@Html.PasswordFor(m => m.Password, new { @class = "form-control", @CssClass = "alert" })
-									@Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-								</div>
-								<div class="form-group">
-									@Html.ReqLabelFor(m => m.ConfirmPassword, Strings.ConfirmPassword)
-									@Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
-									@Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
-								</div>
-								<div class="form-group">
-									@Html.ReqLabelFor(m => m.DateOfBirth, Strings.DateOfBirth)
-									<div class="input-group" style="width: 100%;">
-										<input type="text" class="form-control" id="DateOfBirth" name="DateOfBirth" value="@(Model.DateOfBirth.ToString("d", CultureInfo.InvariantCulture))">
-										<div class="input-group-addon" style="cursor: pointer"><span class="glyphicon glyphicon-calendar"></span></div>
-									</div>
-									@Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @class = "text-danger" })
-								</div>
-								<div class="field-validation-error" id="capsWarningDiv" style="visibility:hidden; height:0px"><span>@Strings.CapsLock</span></div>
-							</div>
-							<div class="col-md-6 sm-control-width">
-								<div class="form-group">
-									@Html.LabelFor(m => m.PhoneNumber, Strings.PhoneNumber)
-									@Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
-									@Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
-								</div>
-								<div class="form-group">
-									@Html.LabelFor(m => m.Address, Strings.Address)
-									@Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
-								</div>
-								<div class="form-group">
-									@Html.LabelFor(m => m.LocalizedCountries, Strings.Country)
-									@Html.DropDownListFor(m => m.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new { @id = @ViewConstants.DdlCountriesId, @class = "form-control" })
-								</div>
-								<div class="form-group">
-									@Html.LabelFor(m => m.LocalizedStates, Strings.State)
-									@Html.DropDownListFor(m => m.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @id = ViewConstants.DdlStatesId, @class = "form-control" })
-								</div>
-								<div class="form-group">
-									@Html.LabelFor(m => m.City, Strings.City)
-									@Html.TextBoxFor(m => m.City, new { @class = "form-control" })
-								</div>
-								<div class="form-group">
-									@Html.LabelFor(m => m.PostalCode, Strings.PostalCode)
-									@Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control" })
-								</div>
-							</div>
+	<div class="shrink-wrap-center">
+		<div class="min300">
+			@using (Html.BeginForm(ActionConstants.Register, ControllerConstants.Account, new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "form" }))
+			{
+				@Html.AntiForgeryToken()
+				@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
+				<div class="row">
+					<div class="col-md-6 sm-control-width">
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.Email, Strings.Email)
+							@Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
 						</div>
-						<div class="form-group allyis-action-buttons">
-							<span class="requiredStar">*</span>
-							<input type="checkbox" name="terms" value=@Strings.Accept onchange="document.getElementById('registerSubmit').disabled = !this.checked;">
-							@Strings.IAgree @Html.ActionLink(Strings.TOS, ActionConstants.PrivacyPolicy, ControllerConstants.Home, null, new { @style = "color:#0000FF;" }).
-							<br /><br />
-							<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)" class="btn btn-default"> @Strings.Cancel </a>
-							<button type="submit" value=@Strings.Register class="btn btn-primary btn-gray" id="registerSubmit" disabled="disabled">@Strings.Register</button>
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.FirstName, Strings.FirstName)
+							@Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
 						</div>
-
-					}
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.LastName, Strings.LastName)
+							@Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+						</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.Password, Strings.Password)
+							@Html.PasswordFor(m => m.Password, new { @class = "form-control", @CssClass = "alert" })
+							@Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+						</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.ConfirmPassword, Strings.ConfirmPassword)
+							@Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+						</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.DateOfBirth, Strings.DateOfBirth)
+							<div class="input-group" style="width: 100%;">
+								<input type="text" class="form-control" id="DateOfBirth" name="DateOfBirth" value="@(Model.DateOfBirth.ToString("d", CultureInfo.InvariantCulture))">
+								<div class="input-group-addon" style="cursor: pointer"><span class="glyphicon glyphicon-calendar"></span></div>
+							</div>
+							@Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @class = "text-danger" })
+						</div>
+						<div class="field-validation-error" id="capsWarningDiv" style="visibility:hidden; height:0px"><span>@Strings.CapsLock</span></div>
+					</div>
+					<div class="col-md-6 sm-control-width">
+						<div class="form-group">
+							@Html.LabelFor(m => m.PhoneNumber, Strings.PhoneNumber)
+							@Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
+						</div>
+						<div class="form-group">
+							@Html.LabelFor(m => m.Address, Strings.Address)
+							@Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+						</div>
+						<div class="form-group">
+							@Html.LabelFor(m => m.LocalizedCountries, Strings.Country)
+							@Html.DropDownListFor(m => m.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new { @id = @ViewConstants.DdlCountriesId, @class = "form-control" })
+						</div>
+						<div class="form-group">
+							@Html.LabelFor(m => m.LocalizedStates, Strings.State)
+							@Html.DropDownListFor(m => m.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @id = ViewConstants.DdlStatesId, @class = "form-control" })
+						</div>
+						<div class="form-group">
+							@Html.LabelFor(m => m.City, Strings.City)
+							@Html.TextBoxFor(m => m.City, new { @class = "form-control" })
+						</div>
+						<div class="form-group">
+							@Html.LabelFor(m => m.PostalCode, Strings.PostalCode)
+							@Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control" })
+						</div>
+					</div>
 				</div>
-			</div>
+				<div class="form-group allyis-action-buttons">
+					<span class="requiredStar">*</span>
+					<input type="checkbox" name="terms" value=@Strings.Accept onchange="document.getElementById('registerSubmit').disabled = !this.checked;">
+					@Strings.IAgree @Html.ActionLink(Strings.TOS, ActionConstants.PrivacyPolicy, ControllerConstants.Home, null, new { @style = "color:#0000FF;" }).
+					<br /><br />
+					<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)" class="btn btn-default"> @Strings.Cancel </a>
+					<button type="submit" value=@Strings.Register class="btn btn-primary btn-gray" id="registerSubmit" disabled="disabled">@Strings.Register</button>
+				</div>
+
+			}
 		</div>
 	</div>
 </div>

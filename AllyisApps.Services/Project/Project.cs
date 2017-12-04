@@ -30,6 +30,12 @@ namespace AllyisApps.Services.Project
 		public string ProjectName { get; set; }
 
 		/// <summary>
+		/// Gets or sets is default.
+		///
+		/// </summary>
+		public bool IsDefault { get; set; }
+
+		/// <summary>
 		/// Gets or sets the project type -- true == hourly, false == fixed.
 		/// </summary>
 		public bool IsHourly { get; set; }

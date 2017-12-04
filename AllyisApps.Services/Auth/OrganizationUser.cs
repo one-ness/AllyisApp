@@ -37,5 +37,7 @@ namespace AllyisApps.Services.Auth
 		/// approval limit for this user in expense tracker
 		/// </summary>
 		public decimal MaxApprovalAmount { get; set; }
+
+		public int EmployeeTypeId { get; set; }
 	}
 }

@@ -158,9 +158,11 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		public async Task<dynamic> GetSubscriptionsAsync(int organizationId)
 		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationId", organizationId);
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return (await con.QueryAsync<dynamic>("[Billing].[GetSubscriptions]", new { organizationId }, commandType: CommandType.StoredProcedure)).ToList();
+				return (await con.QueryAsync<dynamic>("[Billing].[GetSubscriptions]", parameters , commandType: CommandType.StoredProcedure)).ToList();
 			}
 		}
 

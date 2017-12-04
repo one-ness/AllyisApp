@@ -141,11 +141,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>A list of time entry info objects.</returns>
 		public IEnumerable<TimeEntryViewModel> SetPreviewData(List<TimeEntryViewModel> data, int pageSize = 0, int page = 1)
 		{
-			int skipNum = pageSize * (page - 1);
-			int limit = pageSize == 0 ? data.Count : pageSize;
-
+			//int skipNum = pageSize * (page - 1);
+			//int limit = pageSize == 0 ? data.Count : pageSize;
+			int limit = 1000;//Previow page should show 1000 maxx entries
 			// only process data values for current page
-			IEnumerable<TimeEntryViewModel> previewData = data.Select(p => p).Skip(skipNum).Take(limit);
+			IEnumerable<TimeEntryViewModel> previewData = data.Select(p => p).Take(limit);
 
 			return previewData;
 		}

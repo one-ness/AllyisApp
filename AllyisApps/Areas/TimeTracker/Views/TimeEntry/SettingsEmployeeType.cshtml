@@ -1,0 +1,56 @@
+﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+@model  SettingsEmployeeTypeViewModel
+
+@{
+	ViewBag.Title = "Employee Type";
+	ViewData["SubscriptionName"] = Model.SubscriptionName;
+}
+
+@section css {
+	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+}
+
+<div class="container">
+	<div class="row slim">
+		<div class="col-sm-2">
+			@Html.Partial("_ManageSettingSideBar")
+		</div>
+		<div class="col-sm-10">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h1 class="panel-title">@Strings.EmployeeType</h1>
+				</div>
+				<table class="table table-condensed panel-body">
+					<thead>
+						<tr>
+							<td width="25%">Id</td>
+							<td width="70%">Name</td>
+							<td width="5%">Edit</td>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var types in Model.EmployeeTypes)
+						{
+							<tr>
+								<td>@types.EmployeeTypeId</td>
+								<td>@types.EmployeeTypeName</td>
+								<td><a href="@Url.Action("EditEmployeeType", ControllerConstants.TimeEntry, new {orgId = types.OrganizationId, employeeTypeId = types.EmployeeTypeId })" title="@Strings.EditUser"><i class="fa fa-fw fa-edit"></i></a></td>
+							</tr>
+						}
+						<tr>
+							
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			@using (Html.BeginForm(ActionConstants.CreateSettingsEmployeeType, ControllerConstants.TimeEntry, FormMethod.Get))
+			{
+				@Html.AntiForgeryToken();
+				@Html.HiddenFor(m => m.SubscriptionId)
+				<div class="pull-right">
+					<input class="btn btn-primary pull-right" type="submit" value="@Strings.Add" />
+				</div>
+			}
+		</div>
+	</div>
+</div>

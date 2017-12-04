@@ -122,6 +122,12 @@ namespace AllyisApps.Services
 						int unassignedProductRoleId = GetUnassignedProductRoleId(subscription.ProductId);
 						await DBHelper.MergeSubscriptionUserProductRole(unassignedProductRoleId, subscription.SubscriptionId, UserContext.UserId);
 					}
+
+					if (subscription.ProductId == ProductIdEnum.TimeTracker)
+					{
+						var projId = await GetDefaultProject(invite.OrganizationId);
+						CreateProjectUser(projId, UserContext.UserId);
+					}
 				}
 			}
 
@@ -744,10 +750,13 @@ namespace AllyisApps.Services
 			{
 				case ProductIdEnum.ExpenseTracker:
 					return (int)ExpenseTrackerRole.NotInProduct;
+
 				case ProductIdEnum.StaffingManager:
 					return (int)StaffingManagerRole.NotInProduct;
+
 				case ProductIdEnum.TimeTracker:
 					return (int)TimeTrackerRole.NotInProduct;
+
 				default:
 					throw new InvalidOperationException("You selected an invalid product to subscribe to.");
 			}

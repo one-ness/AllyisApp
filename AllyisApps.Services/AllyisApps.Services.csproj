@@ -131,6 +131,7 @@
     <Compile Include="Lookup\Tag.cs" />
     <Compile Include="TimeTracker\CreateUpdateTimeEntryResultEnum.cs" />
     <Compile Include="TimeTracker\DateRange.cs" />
+    <Compile Include="TimeTracker\EmployeeType.cs" />
     <Compile Include="TimeTracker\Holiday.cs" />
     <Compile Include="Auth\Invitation.cs" />
     <Compile Include="Lookup\Language.cs" />

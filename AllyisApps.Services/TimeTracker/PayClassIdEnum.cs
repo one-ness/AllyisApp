@@ -9,6 +9,10 @@ namespace AllyisApps.Services.TimeTracker
 	public enum PayClassId
 	{
 		/// <summary>
+		/// Indentify custome created ids
+		/// </summary>
+		Custom = 0, 
+		/// <summary>
 		/// Regular.
 		/// </summary>
 		Regular = 1,
@@ -31,6 +35,11 @@ namespace AllyisApps.Services.TimeTracker
 		/// <summary>
 		/// Overtime.
 		/// </summary>
-		OverTime = 5
+		OverTime = 5,
+
+		BeahvmentLeave = 6,
+
+		OtherLeave =7,
+		
 	}
 }

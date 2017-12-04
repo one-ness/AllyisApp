@@ -4,6 +4,7 @@ AS
 	SET NOCOUNT ON;
 	SELECT	[Project].[ProjectId],
 			[Project].[CustomerId],
+			[Project].[IsDefault],
 			[Project].[IsHourly] AS [PriceType],
 			[Project].[StartUtc] AS [StartDate],
 			[Project].[EndUtc] AS [EndDate],

@@ -71,6 +71,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
+
 			return RedirectToRoute(
 				RouteNameConstants.TimeEntryIndexUserTimeSheet,
 				new
@@ -79,7 +80,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					action = ActionConstants.Index,
 					subscriptionId = items.SubscriptionId,
 					startDate = items.StartingDate,
-					endDate = items.EndingDate
+					endDate = items.EndingDate,
+					userId = items.Entries?[0]?.UserId
 				});
 		}
 

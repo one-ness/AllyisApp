@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
+using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -36,6 +37,16 @@ namespace AllyisApps.ViewModels.Auth
 		public string Email { get; set; }
 
 		/// <summary>
+		/// Gets or sets the employee type list.
+		/// </summary>
+		public List<EmployeeType> EmployeeTypeList { get; set; }
+
+		/// <summary>
+		/// Gets or sets the employee type id.
+		/// </summary>
+		public int EmployeeTypeId { get; set; }
+
+		/// <summary>
 		/// Gets or sets the Employee Id.
 		/// </summary>
 		[Required]
@@ -66,6 +77,15 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the subscription roles for the user.
 		/// </summary>
 		public List<RoleItem> SubscriptionRoles { get; set; }
+
+		/// <summary>
+		/// Defalut constuctor for view model
+		/// </summary>
+		public AddMemberViewModel()
+		{
+			SubscriptionRoles = new List<RoleItem>();
+			EmployeeTypeList = new List<EmployeeType>();
+		}
 	}
 
 	/// <summary>
@@ -89,7 +109,7 @@ namespace AllyisApps.ViewModels.Auth
 		public int ProductId { get; set; }
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public int SubscriptionId { get; set; }
 

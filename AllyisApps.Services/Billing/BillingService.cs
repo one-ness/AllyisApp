@@ -325,10 +325,8 @@ namespace AllyisApps.Services
 
 		public async Task<int> UpdateSubscriptionUsersRoles(List<int> userIds, int organizationId, int productRoleId, int productId)
 		{
-			return  await DBHelper.UpdateSubscriptionUserRoles(userIds, organizationId, productRoleId, productId);
+			return await DBHelper.UpdateSubscriptionUserRoles(userIds, organizationId, productRoleId, productId);
 		}
-
-		
 
 		/// <summary>
 		/// Gets a <see cref="Product"/>.
@@ -513,7 +511,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Subscribes the current organization to a product or updates the organization's subscription to the product.
 		/// </summary>
-		public async Task Subscribe(int organizationId, SkuIdEnum skuId, string subscriptionName)
+		public async Task<int> Subscribe(int organizationId, SkuIdEnum skuId, string subscriptionName)
 		{
 			if (organizationId <= 0)
 			{
@@ -533,7 +531,7 @@ namespace AllyisApps.Services
 				if (subscription.SkuId == skuId)
 				{
 					// yes, already subscribed
-					return;
+					return subscription.SubscriptionId;
 				}
 
 				// no, get the product of this subscription
@@ -551,7 +549,7 @@ namespace AllyisApps.Services
 
 				// yes, user is subscribing to another sku of an existing subscription (i.e., product)
 				UpdateSubscriptionSkuAndName(organizationId, subscription.SubscriptionId, subscriptionName, skuId);
-				return;
+				return subscription.SubscriptionId;
 			}
 
 			// reached here indicates user is subscribing to a new product with a new sku
@@ -599,6 +597,7 @@ namespace AllyisApps.Services
 
 			// initialize default settings
 			await MergeDefaultSettingsForProduct(selectedSku.ProductId, organizationId, subId);
+			return subId;
 		}
 
 		public async Task UpdateSubscriptionName(int subscriptionId, string subscriptionName)
@@ -706,7 +705,14 @@ namespace AllyisApps.Services
 
 			if (productId == ProductIdEnum.TimeTracker)
 			{
+				this.PopulateUserContext(this.UserContext.UserId);
 				await DBHelper.MergeDefaultTimeTrackerSettings(orgId);
+				var newCustId = await CreateCustomerAsync(new Crm.Customer() { CustomerName = "Default Customer", IsActive = true, OrganizationId = orgId, CustomerCode = "000000000001" }, subId);
+				var ownCust = GetCustomer(newCustId);
+
+				var users = (await GetOrganizationUsersAsync(orgId)).Select(x => x.UserId);
+
+				await CreateProjectAndUpdateItsUserList(new Project.Project() { OwningCustomer = ownCust, ProjectName = "Default Project", OrganizationId = orgId, ProjectCode = "00000000001", IsDefault = true }, users, subId);
 			}
 
 			if (productId == ProductIdEnum.StaffingManager)

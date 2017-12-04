@@ -78,6 +78,7 @@
     <Compile Include="Finance\ExpenseHistoryDBEntity.cs" />
     <Compile Include="Finance\ExpenseReportDBEntity.cs" />
     <Compile Include="Finance\ExpenseItemDBEntity.cs" />
+    <Compile Include="Hrm\EmployeeTypeDBEntity.cs" />
     <Compile Include="Lookup\AddressDBEntity.cs" />
     <Compile Include="Lookup\CountryDBEntity.cs" />
     <Compile Include="Lookup\StateDBEntity.cs" />

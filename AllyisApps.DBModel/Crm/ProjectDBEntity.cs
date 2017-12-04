@@ -40,6 +40,11 @@ namespace AllyisApps.DBModel.Crm
 		public string ProjectName { get; set; }
 
 		/// <summary>
+		/// Gets or sets is default.
+		/// </summary>
+		public bool IsDefault { get; set; }
+
+		/// <summary>
 		/// Gets or sets the project type.
 		/// </summary>
 		public bool IsHourly { get; set; }

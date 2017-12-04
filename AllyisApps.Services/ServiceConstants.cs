@@ -199,6 +199,8 @@
 		/// </summary>
 		public const string Status = "Status";
 
+		public const string EmployeeTypeId = "Employee Type Id";
+
 		#endregion Time Entry
 	}
 }

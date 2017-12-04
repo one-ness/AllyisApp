@@ -60,7 +60,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			int productRoleId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductRoleId;
 			bool isManager = productRoleId == (int)TimeTrackerRole.Manager;
 
-
 			ViewBag.GetDateTimeFromDays = new Func<int?, DateTime?>(Utility.GetNullableDateTimeFromDays);
 			ViewBag.SignedInUserID = AppService.UserContext.UserId;
 			ViewBag.SelectedUserId = actualUserId;
@@ -164,6 +163,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			users = users.OrderBy(o => o.LastName + o.FirstName).ToList();
 
 			var payClasses = infos.Item2;
+			var employeeTypeId = (await AppService.GetOrganizationUsersAsync(orgId)).Where(x => x.UserId == userId).FirstOrDefault().EmployeeTypeId;
+			var assignedPayClassesIds = (await AppService.GetAssignedPayClasses(employeeTypeId));
+			var assignedPayClasses = payClasses.Where(x => assignedPayClassesIds.Contains(x.PayClassId)).ToList();
 
 			var result = new TimeEntryOverDateRangeViewModel
 			{
@@ -212,6 +214,19 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					// If has time entry data for this date,
 					if (iter.Current != null && iter.Current.Date == date.Date)
 					{
+						List<PayClass> tempPayClasses = new List<PayClass>(assignedPayClasses);
+						var curPayClass = payClasses.First(x => x.PayClassId == iter.Current.PayClassId);
+						if (!tempPayClasses.Exists(x => x.PayClassId == curPayClass.PayClassId))
+						{
+							tempPayClasses.Add(curPayClass);
+						}
+
+						//exclude overtime if it is not the time entry's pay class -- this is a calculated column
+						bool isOvertime = iter.Current.PayClassName == "Overtime";
+						var filteredPayClasses = isOvertime
+							? tempPayClasses.Where(pc => pc.PayClassName == "Overtime")
+							: tempPayClasses.Where(pc => pc.PayClassName != "Overtime");
+
 						// Update its project's hours
 						if (hours.ContainsKey(iter.Current.ProjectId))
 						{
@@ -220,15 +235,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 							hours[iter.Current.ProjectId] = temp;
 						}
 
-						//exclude overtime if it is not the time entry's pay class -- this is a calculated column
-						bool isOvertime = iter.Current.PayClassName == "Overtime";
-						var filteredPayClasses = isOvertime
-							? payClasses.Where(pc => pc.PayClassName == "Overtime")
-							: payClasses.Where(pc => pc.PayClassName != "Overtime");
-
 						result.GrandTotal.Hours += iter.Current.Duration;
 
 						// And add its entry to Entries.
+
 						result.EntryRange.Entries.Add(new EditTimeEntryViewModel
 						{
 							TimeEntryId = iter.Current.TimeEntryId,
@@ -260,7 +270,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 							PayClasses = filteredPayClasses
 								.Select(c => new SelectListItem
 								{
-									Selected = payClasses.Count == 1 || iter.Current.PayClassId == c.PayClassId,
+									Selected = tempPayClasses.Count == 1 || iter.Current.PayClassId == c.PayClassId,
 									Text = Strings.ResourceManager.GetString(c.PayClassName.Replace(" ", "")) ?? c.PayClassName,
 									Value = c.PayClassId.ToString()
 								})
@@ -309,7 +319,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 									//Disabled = !p.IsUserActive && !Model.Sample
 								}).ToList(),
 							PayClassId = payClassId,
-							PayClasses = payClasses
+							PayClasses = assignedPayClasses
 								.Select(c => new SelectListItem
 								{
 									Selected = payClasses.Count == 1 || payClassId == c.PayClassId,
@@ -328,7 +338,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 						// holidayPopulated = false;
 					}
-
 				}
 			}
 

@@ -14,100 +14,96 @@
 
 	.pageContainer
 	{
-		width: 20px;
+		
 		margin: 0 auto;
 	}
 </style>
 @Html.AntiForgeryToken()
 <div class="container">
-	<div class="row">
-		<div class="col-xs-12">
-			@Html.Partial("_PremissionsLinkView", Model)
-			<div class="panel panel-default">
-				<div class="panel-body" style="padding: 0px;">
-					<table class="table table-hover table-condensed">
-						<thead class="panel-heading">
-							<tr class="no-border">
-								<th style="width: 6%;"></th>
-								<th style="width: 47%;">@Strings.User</th>
-								<th style="width: 47%;" class="tab-OrganizationTab">@Model.RoleHeader</th>
-							</tr>
-							<tr class="double-bottom-border">
-								<td class="checked">
-									<input type="checkbox" class="all-check" />
-								</td>
-								<td>
-									<input type="search" placeholder="@Strings.UserSearchPlaceholder" id="userSearch" class="form-control fa-filter" />
-								</td>
-								<td class="tab-OrganizationTab">
-									<select id="RoleFilter" class="form-control">
-										<option>@Strings.Any</option>
-										@foreach (var role in Model.PossibleRoles.Values)
-										{
-											<option>@role</option>
-										}
-									</select>
-								</td>
-							</tr>
-						</thead>
-
-						@foreach (var user in Model.Users)
-						{
-							if (!user.IsCurrentUser)
-							{
-								<tr class="userRow" data-id="@user.UserId" data-name="@user.Email">
-									<td class="checked">
-										<input type="checkbox" id="check" />
-									</td>
-									<td id="name">@user.FullName</td>
-									<td id="Role" class="tab-OrganizationTab">@user.CurrentRoleName</td>
-								</tr>
-
-							}
-							else
-							{
-								<tr class="userRow currUser" data-id="@user.UserId" data-name="@user.Email">
-									<td>
-										<input type="checkbox" id="check" disabled />
-									</td>
-									<td id="name">@user.FullName</td>
-									<td id="Role" class="tab-OrganizationTab">@user.CurrentRoleName</td>
-								</tr>
-							}
-
-						}
-
-						@*This last blank row is just an easy way to have a border at the bottom of the table content*@
-						<tr id="tableEnd" class="nohover">
-							<td></td>
-							<td></td>
-							<td class="tab-OrganizationTab"></td>
-						</tr>
-					</table>
-
-					<div class="pageContainer">
-						@*This container is populated by javascript in allyis-account-permission2.js*@
-					</div>
-				</div>
-				<div class="panel-footer" style="height: 54px; position: relative;">
-					<div class="col-xs-6 col-sm-6 col-md-5" style="text-align: right; vertical-align: middle; line-height: 33px; padding-right: 0px;">
-						Please select user(s), choose an action, then click Save
-					</div>
-					<div class="col-xs-6 col-sm-6 col-md-5 col-lg-4">
-						<select class="form-control tab-OrganizationTab" id="ActionSelect">
-							<optgroup label="@Model.ActionGroup">
-								@foreach (var setActions in Model.Actions)
+	@Html.Partial("_PremissionsLinkView", Model)
+	<div class="panel panel-default">
+		<div class="panel-body" style="padding: 0px;">
+			<table id="loading" class="table table-hover table-condensed" hidden>
+				<thead class="panel-heading">
+					<tr class="no-border">
+						<th style="width: 6%;"></th>
+						<th style="width: 47%;">@Strings.User</th>
+						<th style="width: 47%;" class="tab-OrganizationTab">@Model.RoleHeader</th>
+					</tr>
+					<tr class="double-bottom-border">
+						<td class="checked">
+							<input type="checkbox" class="all-check" />
+						</td>
+						<td>
+							<input type="search" placeholder="@Strings.UserSearchPlaceholder" id="userSearch" class="form-control fa-filter" />
+						</td>
+						<td class="tab-OrganizationTab">
+							<select id="RoleFilter" class="form-control">
+								<option>@Strings.Any</option>
+								@foreach (var role in Model.PossibleRoles.Values)
 								{
-									<option value="@setActions.Value">@setActions.Key</option>
+									<option>@role</option>
 								}
-							</optgroup>
-						</select>
-					</div>
-					<div class="bottom-right">
-						<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)" class="btn btn-default"> @Strings.Cancel </a>
-						<input type="submit" class="btn btn-primary" id="do-it" value="@Strings.Save" />
-					</div>
-				</div>
+							</select>
+						</td>
+					</tr>
+				</thead>
+
+				@foreach (var user in Model.Users)
+				{
+					if (!user.IsCurrentUser)
+					{
+						<tr class="userRow" data-id="@user.UserId" data-name="@user.Email">
+							<td class="checked">
+								<input type="checkbox" id="check" />
+							</td>
+							<td id="name">@user.FullName</td>
+							<td id="Role" class="tab-OrganizationTab">@user.CurrentRoleName</td>
+						</tr>
+
+					}
+					else
+					{
+						<tr class="userRow currUser" data-id="@user.UserId" data-name="@user.Email">
+							<td>
+								<input type="checkbox" id="check" disabled />
+							</td>
+							<td id="name">@user.FullName</td>
+							<td id="Role" class="tab-OrganizationTab">@user.CurrentRoleName</td>
+						</tr>
+					}
+
+				}
+
+				@*This last blank row is just an easy way to have a border at the bottom of the table content*@
+				<tr id="tableEnd" class="nohover">
+					<td></td>
+					<td></td>
+					<td class="tab-OrganizationTab"></td>
+				</tr>
+			</table>
+
+			<div class="pageContainer">
+				@*This container is populated by javascript in allyis-account-permission2.js*@
+			</div>
+		</div>
+		<div class="panel-footer" style="height: 54px; position: relative;">
+			<div class="col-xs-6 col-sm-6 col-md-5" style="text-align: right; vertical-align: middle; line-height: 33px; padding-right: 0px;">
+				Please select user(s), choose an action, then click Save
+			</div>
+			<div class="col-xs-6 col-sm-6 col-md-5 col-lg-4">
+				<select class="form-control tab-OrganizationTab" id="ActionSelect">
+					<optgroup label="@Model.ActionGroup">
+						@foreach (var setActions in Model.Actions)
+						{
+							<option value="@setActions.Value">@setActions.Key</option>
+						}
+					</optgroup>
+				</select>
+			</div>
+			<div class="bottom-right">
+				<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)" class="btn btn-default"> @Strings.Cancel </a>
+				<input type="submit" class="btn btn-primary" id="do-it" value="@Strings.Save" />
 			</div>
 		</div>
 	</div>
@@ -124,6 +120,7 @@
 	@*@Scripts.Render("~/bundles/AccountPermission2");*@
 	<script type="text/javascript">
 		@*Filters can only be set up after the above script is loaded*@
+		
 		pwf.setPageLimit(10);
 		pwf.setRowClass("userRow");
 		pwf.setCheckBoxSelector("#check");
@@ -133,5 +130,6 @@
 		{
 			pwf.setPreviouslySelectedPage(sessionStorage.getItem("/ManagePermissionsPage"))
 		}
+		
 	</script>
 }
