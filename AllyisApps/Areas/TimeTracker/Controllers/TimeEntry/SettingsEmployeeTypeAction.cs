@@ -27,8 +27,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var subName = await AppService.GetSubscriptionName(subscriptionId);
 			var employeeTypes = await AppService.GetEmployeeTypeByOrganization(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
 
-			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
-
 			SettingsEmployeeTypeViewModel model = new SettingsEmployeeTypeViewModel()
 			{
 				EmployeeTypes = employeeTypes.ToList(),
@@ -112,7 +110,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public async Task<ActionResult> EditEmployeeType(int subscriptionId, int userId = 0)
 		{
 			ViewData["SubscriptionName"] = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName;
-			ViewData["SubscriptioId"] = subscriptionId;
+			ViewData["SubscriptionId"] = subscriptionId;
 
 			var employeeTypes = await AppService.GetEmployeeTypeByOrganization(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
 
