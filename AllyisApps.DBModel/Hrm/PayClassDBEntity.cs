@@ -17,6 +17,10 @@ namespace AllyisApps.DBModel.Hrm
 		/// Gets or sets.
 		/// </summary>
 		public int PayClassId { get; set; }
+		/// <summary>
+		/// Gets or sets int to identify the payclass if it is among the main entries.
+		/// </summary>
+		public int BuiltInPayClassId { get; set; }
 
 		/// <summary>
 		/// Gets or sets.

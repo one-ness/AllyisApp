@@ -12,6 +12,7 @@ BEGIN
 		   [U].[Email],
 		   [U].[FirstName],
 		   [U].[LastName],
+		   [OU].EmployeeTypeId,
 		   [OU].OrganizationUserCreatedUtc as 'CreatedUtc'
     FROM [Auth].[OrganizationUser]	AS [OU]
 	WITH (NOLOCK)

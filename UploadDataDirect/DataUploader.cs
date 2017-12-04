@@ -14,13 +14,14 @@ namespace UploadDataDirect
 		private AppService appService;
 		private int orgId;
 		private int subId;
-
-		public DataUploader(string file, AppService appService, int orgId, int subId)
+		private bool isNew;
+		public DataUploader(string file, AppService appService, int orgId, int subId, bool isNew)
 		{
 			this.file = file;
 			this.appService = appService;
 			this.orgId = orgId;
 			this.subId = subId;
+			this.isNew = isNew;
 		}
 
 		public async Task UploadData()
@@ -66,7 +67,8 @@ namespace UploadDataDirect
 			await projectUploader.projectUpload();
 
 			//Import TimeEntry
-			TimeEntryUpload timeEntryUploader = new TimeEntryUpload(hoursData, appService, orgId, subId, customerId);
+
+			TimeEntryUpload timeEntryUploader = new TimeEntryUpload(hoursData, appService, orgId, subId, customerId, isNew);
 			await timeEntryUploader.uploadTimeEntries();
 		}
 	}
