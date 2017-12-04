@@ -43,11 +43,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return CreateUpdateTimeEntryResult.EntryIsLocked;
 			}
 
-			//Update overtime
-			entry.Duration = 0;
-			await AppService.GenerateOvertimeFromTimeEntry(organizationId, entry);
-
 			await AppService.DeleteTimeEntry(entry.TimeEntryId);
+
+			await AppService.RecalculateOvertime(organizationId, entry.Date, entry.UserId);
 
 			return CreateUpdateTimeEntryResult.Success;
 		}

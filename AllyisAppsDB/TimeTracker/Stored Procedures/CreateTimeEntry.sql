@@ -9,8 +9,32 @@ CREATE PROCEDURE [TimeTracker].[CreateTimeEntry]
 AS
 BEGIN
 	SET NOCOUNT ON;
-	SET XACT_ABORT ON
-	INSERT INTO [TimeTracker].[TimeEntry]
+
+	DECLARE @id INT;
+
+	WITH [NewEntry] AS (
+		SELECT 
+			[UserId] = @userId,
+			[ProjectId] = @projectId,
+			[PayClassId] = @payClassId,
+			[Date] = @date,
+			[Duration] = @duration,
+			[Description] = @description,
+			[TimeEntryStatusId] = @timeEntryStatusId
+	)
+	MERGE [TimeTracker].[TimeEntry] as [T]
+	USING [NewEntry] AS [S]
+	ON [T].[UserId] = [S].[UserId]
+	AND [T].[ProjectId] = [S].[ProjectId]
+	AND [T].[Date] = [S].[Date]
+	AND [T].[PayClassId] = [S].[PayClassId]
+	WHEN MATCHED THEN
+		UPDATE SET
+			[T].[Duration] = [T].[Duration] + [S].[Duration],
+			[T].[TimeEntryStatusId] = 0,
+			@id = [T].[TimeEntryId]
+	WHEN NOT MATCHED THEN
+		INSERT 
 			   ([UserId]
 			   ,[ProjectId]
 			   ,[PayClassId]
@@ -25,5 +49,6 @@ BEGIN
 			   ,@duration
 			   ,@description
 			   ,@timeEntryStatusId);
-	SELECT SCOPE_IDENTITY();
+
+	SELECT ISNULL(@id, SCOPE_IDENTITY());
 END

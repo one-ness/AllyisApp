@@ -265,9 +265,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 									Value = c.PayClassId.ToString()
 								})
 								.ToList(),
-							IsEditable = iter.Current.TimeEntryStatusId == (int)TimeEntryStatus.Pending && !isOvertime,
-							IsCreatable = iter.Current.TimeEntryStatusId == (int)TimeEntryStatus.Pending,
-							IsDeletable = iter.Current.TimeEntryStatusId == (int)TimeEntryStatus.Pending
+							IsEditable = iter.Current.Date > (result.LockDate ?? result.PayrollProcessedDate ?? DateTime.MinValue) && !isOvertime,
+							IsCreatable = iter.Current.Date > (result.LockDate ?? result.PayrollProcessedDate ?? DateTime.MinValue),
+							IsDeletable = iter.Current.Date > (result.LockDate ?? result.PayrollProcessedDate ?? DateTime.MinValue)
 						});
 
 						if (holidays.FirstOrDefault(x => x.Date == iter.Current.Date) != null)

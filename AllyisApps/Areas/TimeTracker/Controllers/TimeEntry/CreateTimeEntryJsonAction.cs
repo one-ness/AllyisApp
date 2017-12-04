@@ -54,14 +54,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return CreateUpdateTimeEntryResult.ProjectIsNotActive;
 			}
 
-			//Update overtime
-			entry.Duration = await AppService.GenerateOvertimeFromTimeEntry(organizationId, entry);
+			await AppService.CreateTimeEntry(entry);
 
-			// if duration is 0 if all the hours went to overtime
-			if (entry.Duration > 0)
-			{
-				await AppService.CreateTimeEntry(entry);
-			}
+			await AppService.RecalculateOvertime(organizationId, entry.Date, entry.UserId);
 
 			return CreateUpdateTimeEntryResult.Success;
 		}

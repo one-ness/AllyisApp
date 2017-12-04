@@ -31,6 +31,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			foreach (EditTimeEntryViewModel model in items.Entries.OrderBy(item => item.Date))
 			{
+				if (!model.IsCreated && !model.IsDeleted && !model.IsEdited) continue;
+
 				// DateTime dateGet = model.Date != 0 ? modelDate : DateTime.Now; // do we need this??
 				DateTime modelDate = Utility.GetDateTimeFromDays(model.Date);
 				float modelDuration = ParseDuration(model.Duration) ?? throw new ArgumentException(Strings.DurationFormat);
@@ -86,7 +88,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="duration">Duration in either format.</param>
 		/// <returns>Parsed duration or null.</returns>
-		private static float? ParseDuration(string duration)
+		public float? ParseDuration(string duration)
 		{
 			if (string.IsNullOrWhiteSpace(duration)) return null;
 

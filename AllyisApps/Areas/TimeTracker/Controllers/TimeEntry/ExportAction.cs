@@ -71,7 +71,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else
 			{
-				var timeEntries = await AppService.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1), orgId);
+				var timeEntries = await AppService.GetTimeEntriesByUsersOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1), orgId);
 				result.Data = timeEntries.AsParallel().Select(timeEntry => new TimeEntryViewModel(timeEntry)).ToList();
 			}
 

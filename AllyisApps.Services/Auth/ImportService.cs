@@ -728,16 +728,16 @@ namespace AllyisApps.Services
 									}
 								}
 							}//Remove logic only email matters.
-							/* This will lead to bad times. First Name last name are not unique 
-							if (userTuple == null)
-							{
-								string readLastName = null;
-								if (ReadColumn(row, ColumnHeaders.UserFirstName, e => readValue = e) && ReadColumn(row, ColumnHeaders.UserLastName, e => readLastName = e))
-								{
-									userTuple = users.FirstOrDefault(tup => tup.Item2.FirstName.Equals(readValue) && tup.Item2.LastName.Equals(readLastName));
-								}
-							}
-							*/
+							 /* This will lead to bad times. First Name last name are not unique 
+							 if (userTuple == null)
+							 {
+								 string readLastName = null;
+								 if (ReadColumn(row, ColumnHeaders.UserFirstName, e => readValue = e) && ReadColumn(row, ColumnHeaders.UserLastName, e => readLastName = e))
+								 {
+									 userTuple = users.FirstOrDefault(tup => tup.Item2.FirstName.Equals(readValue) && tup.Item2.LastName.Equals(readLastName));
+								 }
+							 }
+							 */
 						}
 						userInOrg = userTuple?.Item2;
 
@@ -829,7 +829,7 @@ namespace AllyisApps.Services
 
 								try
 								{
-									AddUserToOrganizaion(fields[0].Trim(), names[0], names[1],orgId,OrganizationRoleEnum.Member,fields[1]);
+									AddUserToOrganizaion(fields[0].Trim(), names[0], names[1], orgId, OrganizationRoleEnum.Member, fields[1]);
 
 									result.UsersImported += 1;
 								}
@@ -1043,7 +1043,7 @@ namespace AllyisApps.Services
 					}
 
 					// Find existing entry. If none, create new one     TODO: See if there's a good way to populate this by sheet rather than by row, or once at the top
-					var entryGet = await DBHelper.GetTimeEntriesByUserOverDateRange(new List<int> { userInOrg.UserId }, orgId, theDate, theDate);
+					var entryGet = await DBHelper.GetTimeEntriesByUsersOverDateRange(new List<int> { userInOrg.UserId }, orgId, theDate, theDate);
 					var entries = entryGet.ToList();
 					if (entries.Any(e => (e.Description == null && description.Equals("") || description.Equals(e.Description))
 						&& e.Duration == theDuration

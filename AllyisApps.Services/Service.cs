@@ -182,7 +182,7 @@ namespace AllyisApps.Services
 		/// <param name="start">Starting. <see cref="DateTime"/>.</param>
 		/// <param name="end">Ending. <see cref="DateTime"/>.</param>
 		/// <returns><see cref="IEnumerable{TimeEntryInfo}"/>.</returns>
-		public async Task<IEnumerable<TimeEntry>> GetTimeEntriesByUserOverDateRange(List<int> userIds, DateTime? start, DateTime? end, int organizationId = -1)
+		public async Task<IEnumerable<TimeEntry>> GetTimeEntriesByUsersOverDateRange(List<int> userIds, DateTime? start, DateTime? end, int organizationId = -1)
 		{
 			#region Validation
 
@@ -209,7 +209,41 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return (await DBHelper.GetTimeEntriesByUserOverDateRange(userIds, organizationId, start.Value, end.Value)).Select(InitializeTimeEntryInfo);
+			return (await DBHelper.GetTimeEntriesByUsersOverDateRange(userIds, organizationId, start.Value, end.Value)).Select(InitializeTimeEntryInfo);
+		}
+
+		/// <summary>
+		/// Gets a list of <see cref="TimeEntry"/>'s for a given set of users, organization, and start/end times.
+		/// </summary>
+		/// <param name="organizationId">The organization's Id.</param>
+		/// <param name="userId">The user that the time entries belong to.</param>
+		/// <param name="start">Starting. <see cref="DateTime"/>.</param>
+		/// <param name="end">Ending. <see cref="DateTime"/>.</param>
+		/// <returns><see cref="IEnumerable{TimeEntryInfo}"/>.</returns>
+		public async Task<IEnumerable<TimeEntry>> GetTimeEntriesByUserOverDateRange(int userId, DateTime? start, DateTime? end, int organizationId = -1)
+		{
+			#region Validation
+
+			if (userId <= 0)
+			{
+				throw new ArgumentOutOfRangeException(nameof(userId), "User id cannot be 0 or negative.");
+			}
+			if (start == null)
+			{
+				throw new ArgumentNullException(nameof(start), "Date range must have a start date.");
+			}
+			if (end == null)
+			{
+				throw new ArgumentNullException(nameof(end), "Date range must have an end date.");
+			}
+			if (DateTime.Compare(start.Value, end.Value) > 0)
+			{
+				throw new ArgumentException("Date range cannot end before it starts.");
+			}
+
+			#endregion Validation
+
+			return (await DBHelper.GetTimeEntriesByUsersOverDateRange(new List<int> { userId }, organizationId, start.Value, end.Value)).Select(InitializeTimeEntryInfo);
 		}
 
 		/// <summary>
@@ -424,7 +458,7 @@ namespace AllyisApps.Services
 			}
 			else
 			{
-				data = await GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? SqlDateTime.MinValue.Value,
+				data = await GetTimeEntriesByUsersOverDateRange(userIds, startingDate ?? SqlDateTime.MinValue.Value,
 					endingDate ?? DateTime.MaxValue.AddYears(-1), orgId);
 			}
 

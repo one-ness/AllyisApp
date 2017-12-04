@@ -43,10 +43,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			//TODO: Any project validation must also take into account editing past entries where the user used to be assigned to the project but now is not
 
-			//Update overtime
-			entry.Duration = await AppService.GenerateOvertimeFromTimeEntry(organizationId, entry);
+			//Any edits made to an overtime period must be reset to pending
+			await AppService.UpdateOvertimePeriodToPending(organizationId, entry.UserId, entry.Date);
 
 			AppService.UpdateTimeEntry(entry);
+
+			await AppService.RecalculateOvertime(organizationId, entry.Date, entry.UserId);
 
 			return CreateUpdateTimeEntryResult.Success;
 		}
