@@ -39,11 +39,15 @@ namespace UploadDataDirect
 			//Expected Args  email, password, file, organizationId=optional, subscriptionId optional 
 
 			User user = appService.ValidateLogin(args[0],args[1]).Result;
-
+			User existingUser = appService.GetUserByEmail(args[0]).Result;
 			DateTime today = DateTime.Now;
 			
 			if(user == null)
 			{
+				if(existingUser != null)
+				{
+					throw new ArgumentException("Password is incorrect");
+				}
 				var emailCode = Guid.NewGuid();
 				int userId = appService.SetupNewUser
 					(args[0], args[1], "Uploader", "Owner", emailCode, today.AddYears(-18), 
@@ -66,12 +70,14 @@ namespace UploadDataDirect
 			{
 				orgID = int.Parse(args[3]);
 			}
+			bool isNew = false;
 			int subID = 0;
 			if(args.Length < 5)
 			{
 				SubscriptionCreate subscriptionCreater = new SubscriptionCreate(appService,orgID);
 				subID = subscriptionCreater.CreateTimeTrackerSubscription().Result;
 				appService.PopulateUserContext(user.UserId);
+				isNew = true;
 			}
 			else
 			{
@@ -79,7 +85,7 @@ namespace UploadDataDirect
 			};
 
 			//Begin reading Data
-			DataUploader data = new DataUploader(args[2], appService, orgID, subID);
+			DataUploader data = new DataUploader(args[2], appService, orgID, subID,isNew);
 			data.UploadData().Wait();
 		}
 	}

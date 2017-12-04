@@ -908,7 +908,17 @@ namespace AllyisApps.Services
 			// Retrieval of existing pay class data
 			var classGet = await DBHelper.GetPayClasses(orgId);
 			var payClasses = classGet.Select(InitializePayClassInfo).ToList();
+			var employeeTypes = await GetEmployeeTypeByOrganization(orgId);
+			var assignedPayClasses = new Dictionary<int, List<int>>();
+			foreach(EmployeeType e in employeeTypes)
+			{
+				var aPC = await  GetAssignedPayClasses(e.EmployeeTypeId);
+				assignedPayClasses.Add(e.EmployeeTypeId, aPC);
+			}
+			
 
+
+			
 			foreach (DataTable table in timeEntryImports)
 			{
 				bool hasCustomerCode = table.Columns.Contains(ColumnHeaders.CustomerCode);
@@ -956,8 +966,8 @@ namespace AllyisApps.Services
 				}
 
 				User userGet = await GetUserAsync(UserContext.UserId);
-				var users = GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, o)).ToList();
-
+				var users = GetOrganizationMemberList(orgId).Select(o => new Tuple<string, OrganizationUser>(o.EmployeeId, o)).ToList();
+				
 				foreach (DataRow row in table.Rows)
 				{
 					bool thisRowHasProjectName = table.Columns.Contains(ColumnHeaders.ProjectName);
@@ -994,7 +1004,7 @@ namespace AllyisApps.Services
 					string readValue = null;
 					ReadColumn(row, ColumnHeaders.EmployeeId, e => readValue = e);
 					var userTuple = users.FirstOrDefault(tup => tup.Item1.Equals(readValue));
-					User userInOrg = null;
+					OrganizationUser userInOrg = null;
 					try
 					{
 						userInOrg = userTuple.Item2;
@@ -1025,12 +1035,18 @@ namespace AllyisApps.Services
 					ReadColumn(row, ColumnHeaders.PayClass, val => payclass = val);
 
 					PayClass payClass = payClasses.SingleOrDefault(p => string.Equals(p.PayClassName, payclass, StringComparison.OrdinalIgnoreCase));
+					
 					DateTime theDate;
 					float? theDuration;
 
 					if (payClass == null)
 					{
 						result.TimeEntryFailures.Add($"Error importing time entry on sheet {table.TableName}, row {table.Rows.IndexOf(row) + 2}: unknown {ColumnHeaders.PayClass} ({payclass}).");
+						continue;
+					}
+					//EmployeeType Validation 
+					if (!(assignedPayClasses[userInOrg.EmployeeTypeId].Contains(payClass.PayClassId)) && !(payClass.BuiltInPayClassid == (int)PayClassId.OverTime)){
+						result.TimeEntryFailures.Add($"Error importing time entry on sheet {table.TableName}, row {table.Rows.IndexOf(row) + 2}: employee is  Not Assignedable To Pay Class");
 						continue;
 					}
 
@@ -1077,7 +1093,7 @@ namespace AllyisApps.Services
 					try
 					{
 						DBHelper.CreateProjectUser(project.ProjectId, userInOrg.UserId);
-
+						//Assume that imported time entries have the correct 
 						// All required information is present and valid
 						if (await CreateTimeEntry(new TimeEntry
 						{

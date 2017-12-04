@@ -32,5 +32,6 @@ namespace AllyisApps.Services.TimeTracker
 		/// Gets or sets the Created time.
 		/// </summary>
 		public DateTime CreatedUtc { get; set; }
+		public int BuiltInPayClassid { get;  set; }
 	}
 }
