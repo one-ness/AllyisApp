@@ -249,8 +249,13 @@ namespace AllyisApps.Services
 									int? newCustomerId = await CreateCustomerAsync(newCustomer, subscriptionId);
 									if (newCustomerId == -1) // Customer exists, but has been deactivated
 									{
-										int targetId = (await GetCustomersByOrganizationId(orgId)).FirstOrDefault(c => !c.IsActive && c.CustomerCode == newCustomer.CustomerCode).CustomerId;
-										await UpdateCustomerIsActive(targetId, subscriptionId, true);
+										var targetCust = (await GetCustomersByOrganizationId(orgId)).FirstOrDefault(c => !c.IsActive && c.CustomerCode == newCustomer.CustomerCode);
+										if (targetCust == null) // Customer Id is already in use
+										{
+											result.CustomerFailures.Add(string.Format("Could not create customer {0}: customer already exists in organization {1}", newCustomer.CustomerName, orgId));
+											continue;
+										}
+										await UpdateCustomerIsActive(targetCust.CustomerId, subscriptionId, true);
 									}
 									if (newCustomerId == null)
 									{

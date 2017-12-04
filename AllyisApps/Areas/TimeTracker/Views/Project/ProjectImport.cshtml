@@ -24,7 +24,7 @@
 			</div>
 			@using (Html.BeginForm(ActionConstants.CustomerImport, ControllerConstants.Customer, FormMethod.Post, new { enctype = "multipart/form-data" }))
 			{
-				Html.AntiForgeryToken();
+				@Html.AntiForgeryToken();
 				<div>
 					<input type="file" id="upload-box" name="file" style="display:none;"
 							onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
