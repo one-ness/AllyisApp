@@ -166,7 +166,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var employeeTypeId = (await AppService.GetOrganizationUsersAsync(orgId)).Where(x => x.UserId == userId).FirstOrDefault().EmployeeTypeId;
 			var assignedPayClassesIds = (await AppService.GetAssignedPayClasses(employeeTypeId));
 			var assignedPayClasses = payClasses.Where(x => assignedPayClassesIds.Contains(x.PayClassId)).ToList();
-
+			var withoutOverTimePayClasses = payClasses.Where(x => assignedPayClassesIds.Contains(x.PayClassId) && (x.BuiltInPayClassId != (int) PayClassId.OverTime)).ToList();
 			var result = new TimeEntryOverDateRangeViewModel
 			{
 				StartDateint = Utility.GetDaysFromDateTime(startDate),
@@ -207,7 +207,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				const int weekend = (int)StartOfWeekEnum.Saturday;
 
 				// bool holidayPopulated = false;
-
+				
 				// For each date in the date range
 				for (DateTime date = startDate; date <= endDate;)
 				{
@@ -319,7 +319,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 									//Disabled = !p.IsUserActive && !Model.Sample
 								}).ToList(),
 							PayClassId = payClassId,
-							PayClasses = assignedPayClasses
+							PayClasses = withoutOverTimePayClasses
 								.Select(c => new SelectListItem
 								{
 									Selected = payClasses.Count == 1 || payClassId == c.PayClassId,
