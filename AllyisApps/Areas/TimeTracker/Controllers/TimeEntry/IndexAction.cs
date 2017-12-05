@@ -264,8 +264,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 									Selected = iter.Current.ProjectId == p.ProjectId,
 									Text = p.ProjectId != -1 ? $"{p.CustomerName} - {p.ProjectName}" : p.ProjectName, //Only need customer - project text for project ids !=0
 									Value = p.ProjectId.ToString()
-									//Disabled = !p.IsUserActive && !Model.Sample
-								}).ToList(),
+								}).ToList().OrderBy(p => p.Value != "-1").ToList(),
 							ProjectName = allProjects.FirstOrDefault(x => x.ProjectId == iter.Current.ProjectId)?.ProjectName ?? "",
 							PayClasses = filteredPayClasses
 								.Select(c => new SelectListItem
@@ -316,8 +315,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 									Selected = p.ProjectId == -1,
 									Text = p.ProjectId != -1 ? $"{p.CustomerName} - {p.ProjectName}" : p.ProjectName, //Only need customer - project text for project ids !=0
 									Value = p.ProjectId.ToString()
-									//Disabled = !p.IsUserActive && !Model.Sample
-								}).ToList(),
+								}).ToList().OrderBy(p => p.Value != "-1").ToList(),
 							PayClassId = payClassId,
 							PayClasses = withoutOverTimePayClasses
 								.Select(c => new SelectListItem
