@@ -136,83 +136,85 @@
 				<div class="clearfix"></div>
 			</div>
 		</div>
-		<table class="table table-xtra-condensed table-responsive">
-			<thead>
-				<tr class="double-bottom-border">
-					<th><input type="checkbox" class="check-all" check-all-id="0"></th>
-					<th></th>
-					<th>Name</th>
-					@foreach (string payClassName in Model.PayClasses.Select(x => x.PayClassName))
-					{
-						<th>@payClassName</th>
-					}
-					<th>Total</th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach (var group in Model.TimeEntriesByUser)
-	{
-					<tr class="parent-row">
-						<td><input type="checkbox" class="check check-all" check-id="0" check-all-id="@group.Key"></td>
-						<td><i class="fa fa-chevron-down toggle-on-click child-row-controller" rowId=@group.Key style="cursor:pointer"></i></td>
-						<td>@group.First().FirstName @group.First().LastName</td>
-						@foreach (int payClassId in Model.PayClasses.Select(x => x.PayClassId))
+		<div style="overflow-x: auto;">
+			<table class="table table-xtra-condensed table-responsive">
+				<thead>
+					<tr class="double-bottom-border">
+						<th><input type="checkbox" class="check-all" check-all-id="0"></th>
+						<th></th>
+						<th>Name</th>
+						@foreach (string payClassName in Model.PayClasses.Select(x => x.PayClassName))
 						{
-							<td>@Model.TimeEntryTotalsByUserByPayClass[group.Key][payClassId]</td>
+							<th>@payClassName</th>
 						}
-						<td>
-							<div class="pull-left">@group.Sum(entry => entry.Duration)</div>
-							<div class="pull-right">
-								<div class="status-dots">
-									<i class="fa fa-circle status-dot color-code-Pending  @(group.All(entry => entry.TimeEntryStatusId != 0) ? "greyed-out" : "")" aria-hidden="true"></i>
-									<i class="fa fa-circle status-dot color-code-Rejected @(group.All(entry => entry.TimeEntryStatusId != 1) ? "greyed-out" : "")" aria-hidden="true"></i>
-									<i class="fa fa-circle status-dot color-code-Approved @(group.All(entry => entry.TimeEntryStatusId != 2) ? "greyed-out" : "")" aria-hidden="true"></i>
-									<i class="fa fa-circle status-dot color-code-PayrollProcessed @(group.All(entry => entry.TimeEntryStatusId != 3) ? "greyed-out" : "")" aria-hidden="true"></i>
-								</div>
-							</div>
-						</td>
+						<th>Total</th>
 					</tr>
-		foreach (var timeEntry in group)
-		{
-						<tr class="child-row hidden @(timeEntry.IsLocked ? "greyed-out" : "")" rowId=@group.Key data-time-entry-status-id="@timeEntry.TimeEntryStatusId">
-							<td></td>
-							<td><input type="checkbox" class="check time-entry-check" check-id="@group.Key" data-time-entry-id="@timeEntry.TimeEntryId" @(timeEntry.IsLocked ? "disabled" : "")></td>
-							<td>
-								<a class="details-modal-input" data-time-entry-object='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(timeEntry))' style="cursor:pointer">
-									@timeEntry.Date.ToShortDateString()
-								</a>
-							</td>
+				</thead>
+				<tbody>
+					@foreach (var group in Model.TimeEntriesByUser)
+					{
+						<tr class="parent-row">
+							<td><input type="checkbox" class="check check-all" check-id="0" check-all-id="@group.Key"></td>
+							<td><i class="fa fa-chevron-down toggle-on-click child-row-controller" rowId=@group.Key style="cursor:pointer"></i></td>
+							<td>@group.First().FirstName @group.First().LastName</td>
 							@foreach (int payClassId in Model.PayClasses.Select(x => x.PayClassId))
 							{
-								if (timeEntry.PayClassId == payClassId)
-								{
-									<td>@timeEntry.Duration</td>
-								}
-								else
-								{
-									<td>-</td>
-								}
+								<td>@Model.TimeEntryTotalsByUserByPayClass[group.Key][payClassId]</td>
 							}
 							<td>
-								<div class="pull-left">@timeEntry.Duration</div>
+								<div class="pull-left">@group.Sum(entry => entry.Duration)</div>
 								<div class="pull-right">
 									<div class="status-dots">
-										<i class="fa fa-circle status-dot color-code-Pending  @(timeEntry.TimeEntryStatusId != 0 ? "hidden" : "")" aria-hidden="true"></i>
-										<i class="fa fa-circle status-dot color-code-Rejected @(timeEntry.TimeEntryStatusId != 1 ? "hidden" : "")" aria-hidden="true"></i>
-										<i class="fa fa-circle status-dot color-code-Approved @(timeEntry.TimeEntryStatusId != 2 ? "hidden" : "")" aria-hidden="true"></i>
-										<i class="fa fa-circle status-dot color-code-PayrollProcessed @(timeEntry.TimeEntryStatusId != 3 ? "hidden" : "")" aria-hidden="true"></i>
+										<i class="fa fa-circle status-dot color-code-Pending  @(group.All(entry => entry.TimeEntryStatusId != 0) ? "greyed-out" : "")" aria-hidden="true"></i>
+										<i class="fa fa-circle status-dot color-code-Rejected @(group.All(entry => entry.TimeEntryStatusId != 1) ? "greyed-out" : "")" aria-hidden="true"></i>
+										<i class="fa fa-circle status-dot color-code-Approved @(group.All(entry => entry.TimeEntryStatusId != 2) ? "greyed-out" : "")" aria-hidden="true"></i>
+										<i class="fa fa-circle status-dot color-code-PayrollProcessed @(group.All(entry => entry.TimeEntryStatusId != 3) ? "greyed-out" : "")" aria-hidden="true"></i>
 									</div>
 								</div>
 							</td>
 						</tr>
-		}
-	}
-				@if (Model.TimeEntriesByUser.Count == 0)
-	{
-					<tr><td colspan="@(Model.PayClasses.Count + 3)">There are no time entries in this date range, please select a different date range.</td></tr>
-	}
-			</tbody>
-		</table>
+						foreach (var timeEntry in group)
+						{
+							<tr class="child-row hidden @(timeEntry.IsLocked ? "greyed-out" : "")" rowId=@group.Key data-time-entry-status-id="@timeEntry.TimeEntryStatusId">
+								<td></td>
+								<td><input type="checkbox" class="check time-entry-check" check-id="@group.Key" data-time-entry-id="@timeEntry.TimeEntryId" @(timeEntry.IsLocked ? "disabled" : "")></td>
+								<td>
+									<a class="details-modal-input" data-time-entry-object='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(timeEntry))' style="cursor:pointer">
+										@timeEntry.Date.ToShortDateString()
+									</a>
+								</td>
+								@foreach (int payClassId in Model.PayClasses.Select(x => x.PayClassId))
+								{
+									if (timeEntry.PayClassId == payClassId)
+									{
+										<td>@timeEntry.Duration</td>
+									}
+									else
+									{
+										<td>-</td>
+									}
+								}
+								<td>
+									<div class="pull-left">@timeEntry.Duration</div>
+									<div class="pull-right">
+										<div class="status-dots">
+											<i class="fa fa-circle status-dot color-code-Pending  @(timeEntry.TimeEntryStatusId != 0 ? "hidden" : "")" aria-hidden="true"></i>
+											<i class="fa fa-circle status-dot color-code-Rejected @(timeEntry.TimeEntryStatusId != 1 ? "hidden" : "")" aria-hidden="true"></i>
+											<i class="fa fa-circle status-dot color-code-Approved @(timeEntry.TimeEntryStatusId != 2 ? "hidden" : "")" aria-hidden="true"></i>
+											<i class="fa fa-circle status-dot color-code-PayrollProcessed @(timeEntry.TimeEntryStatusId != 3 ? "hidden" : "")" aria-hidden="true"></i>
+										</div>
+									</div>
+								</td>
+							</tr>
+						}
+					}
+					@if (Model.TimeEntriesByUser.Count == 0)
+					{
+						<tr><td colspan="@(Model.PayClasses.Count + 3)">There are no time entries in this date range, please select a different date range.</td></tr>
+					}
+				</tbody>
+			</table>
+		</div>
 		<div class="pageContainer"></div>
 	</div>
 
