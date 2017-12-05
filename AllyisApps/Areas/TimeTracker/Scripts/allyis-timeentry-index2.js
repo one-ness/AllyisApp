@@ -1,46 +1,5 @@
 ﻿document.getElementById("title-row").style.marginBottom = "1px"; //Don't want to mess with any other tables but this one
 
-// permission check and grab data
-//function ajaxUpdateUserSummary() {
-//    var data = {
-//        userId: "@(Model.EntryRange.UserId)",
-//        startingDate: "@(Model.EntryRange.StartDate)",
-//        endingDate: "@(Model.EntryRange.EndDate)"};
-
-//    $.ajax({
-//        type: "post",
-//        url: '@(Url.Action(ActionConstants.GetDetailsDataJson))',
-//        data: JSON.stringify(data),
-//        contentType: "application/json"})
-//    .done(function (res)
-//    {
-//        ajaxHandleOverridingResponses(res);
-//        if (res.status == "success")
-//        {
-//            ajaxUpdateUserSummary_populate(res.projects);
-//        }
-//    });
-//    return false;
-//}
-
-// build Summary box
-//function ajaxUpdateUserSummary_populate(data) {
-//    data = $(data);
-//    var the_table = $("#timesheet-summary table:first");
-//    var string_builder = []
-//    data.each(function(index, element) {
-//        var strong = (index == data.length - 1);
-//        var strong_pre = strong ? "<strong>" : "";
-//        var strong_post = strong ? "</strong>" : "";
-//        string_builder.push(
-//            "<tr>",
-//                "<td>", strong_pre, this.projectName, strong_post, "</td>",
-//                "<td>", strong_pre, this.hours, strong_post, "</td>",
-//            "</tr>")
-//    });
-//    the_table.html(string_builder.join(""));
-//}
-
 function nonajaxDelete(form_child) {
 	var form_element = $(form_child).parents('form:first');
 	if (form_element.is(".deleting, .locked")) return false; // do not resubmit the request until it returns, do not submit locked forms
@@ -254,14 +213,6 @@ function ajaxEdit(form_element, edit_action_url) {
 	return false;
 }
 
-//function ajaxApproveReject_markPendingIfSet(child_element) {
-//    var container_element = ajaxApproveRejectDay_container($(child_element));
-//    if (container_element.hasClass("approved") || container_element.hasClass("rejected"))
-//    {
-//        ajaxApproveRejectDay_switchDayClasses(container_element, "rejected approved", "pending", "");
-//    }
-//}
-
 function ajaxEditOrCreate(form_element, create_action_url, edit_action_url) {
 	form_element = $(form_element);
 	if (!form_element.hasClass("submitting")) {
@@ -273,46 +224,6 @@ function ajaxEditOrCreate(form_element, create_action_url, edit_action_url) {
 		}
 	}
 }
-
-//function ajaxApproveRejectDay_switchDayClasses(container_element, classes_to_remove, classes_to_add, classes_to_toggle) {
-//    var header_element = ajaxApproveRejectDay_header(container_element);
-//    var header_approval_element = ajaxApproveRejectDay_header_approval(header_element);
-//    container_element.removeClass(classes_to_remove).addClass(classes_to_add).toggleClass(classes_to_toggle);
-//    header_element.removeClass(classes_to_remove).addClass(classes_to_add).toggleClass(classes_to_toggle);
-//}
-
-//function ajaxApproveRejectDay_constructFormData(all_forms, approval_state) {
-//    var data = []
-//    $(all_forms).each(function() {
-//        var timeEntryId = $(this).find("[name='TimeEntryId']").val();
-//        var organizationId = $(this).find("[name='OrganizationId']").val();
-//        data.push( {
-//            TimeEntryId: timeEntryId,
-//            OrganizationId: organizationId,
-//            ApprovalState: approval_state});
-//    });
-//    return data;
-//}
-
-//function ajaxApproveRejectDay_container(child_button_element) {
-//    return child_button_element.parents(".table-container:first");
-//}
-
-//function ajaxApproveRejectDay_approval(container_element) {
-//    return container_element.find(".approval:first");
-//}
-
-//function ajaxApproveRejectDay_header(container_element) {
-//    return container_element.prev();
-//}
-
-//function ajaxApproveRejectDay_header_approval(header_element) {
-//    return header_element.parents(".approval:first");
-//}
-
-//function ajaxApproveRejectDay_allForms(container_element) {
-//    return container_element.find("div.inline-form-anim-wrap:not([id='timeentry_0']) form");
-//}
 
 function ajaxHandleOverridingResponses(response, relevant_objects) {
 	if (response.status === "error") {
@@ -334,8 +245,8 @@ function ajaxHandleOverridingResponses(response, relevant_objects) {
 function setDefalutProject(form_child) {
 	var form_element = $(form_child).parents("form:first");
 	if (form_element[0].ProjectIdDdl.value == -1 && form_element[0].ProjectIdDdl.options.length == 2) {
-		form_element[0].ProjectIdDdl.selectedIndex = 0;
-		form_element[0].ProjectIdDdl.value = form_element[0].ProjectIdDdl.options[0].value;
+		form_element[0].ProjectIdDdl.selectedIndex = 1;
+		form_element[0].ProjectIdDdl.value = form_element[0].ProjectIdDdl.options[1].value;
 	}
 }
 
@@ -358,8 +269,6 @@ function changeOccur(form_child) {
 
 	form_element[0].PayClassId.value = form_element[0].PayClassNameDdl.value;
 	setDefalutProject(form_child);
-	//form_submit_element = form_element.find("button");
-	//form_submit_element.removeAttr("disabled");
 
 	form_element.removeClass("error");
 	form_element.removeClass("error-submit");
@@ -408,9 +317,6 @@ $(document).ready(function () {
 		},
 		200
 	));
-	//$('ProjectId').each(function (e) {     //Used for model binding with custom ddl option selection
-	//	eval($(this).data('onload'));
-	//});
 
 	$("[name='ProjectId']").each(function (e) {
 		fillDLL(this);
@@ -460,64 +366,6 @@ function focusPreviousDuration(form_child) {
 		}
 	}
 }
-
-// Date range picker for main page
-//init_drp(
-//    "daterange",
-//    [{
-//        text: "Current Pay Period",
-//        dateStart: function () { return moment().startOf('week') },
-//        dateEnd: function () { return moment().endOf('week') }
-//    }, {
-//        text: "Next Pay Period",
-//        dateStart: function () { return moment().subtract(7, 'days').startOf('week') },
-//        dateEnd: function () { return moment().subtract(7, 'days').endOf('week') }
-//    }, {
-//        text: "Previous Pay Period",
-//        dateStart: function () { return moment().startOf('month') },
-//        dateEnd: function () { return moment().endOf('month') }
-//    }, {
-//        text: "Custom Pay Period",
-//        dateStart: function () { return moment().subtract(1, 'month').startOf('month') },
-//        dateEnd: function () { return moment().subtract(1, 'month').endOf('month') }
-//    }],
-//    "StartDate",
-//    "EndDate",
-//    2,
-//    function () {
-//        if (this.notFirstTime) {
-//            $('#daterange').parents("form:first").submit();
-//        }
-//        this.notFirstTime = true;
-//    },
-//    model_startdate,
-//    model_enddate
-//);
-
-// Date range picker for lock date
-//init_drp(
-//    "LockDate",
-//    [{
-//        text: "Today",
-//        dateStart: function() { return moment() },
-//        dateEnd: function() { return moment() }
-//    }, {
-//        text: "Two Weeks Ago",
-//        dateStart: function() { return moment().subtract(6, 'days') },
-//        dateEnd: function() { return moment().subtract(6, 'days') }
-//    }],
-//    "LockDate",
-//    null,
-//    1,
-//    function () {
-//        if (this.notFirstTimeLockDate) {
-//            $('#LockDate').parents("form:first").submit();
-//        }
-//        this.notFirstTimeLockDate = true;
-//    },
-//    model_lockdate,
-//    null
-//);
 
 function drp_nextWeek() {
 	var drp = $('#daterange');
