@@ -22,7 +22,7 @@ BEGIN
 			[Description] = @description,
 			[TimeEntryStatusId] = @timeEntryStatusId
 	)
-	MERGE [TimeTracker].[TimeEntry] as [T]
+	MERGE [TimeTracker].[TimeEntry] WITH (HOLDLOCK) AS [T]
 	USING [NewEntry] AS [S]
 	ON [T].[UserId] = [S].[UserId]
 	AND [T].[ProjectId] = [S].[ProjectId]

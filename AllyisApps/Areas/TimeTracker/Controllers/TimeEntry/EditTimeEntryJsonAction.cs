@@ -48,8 +48,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			AppService.UpdateTimeEntry(entry);
 
-			await AppService.RecalculateOvertime(organizationId, entry.Date, entry.UserId);
-
 			return CreateUpdateTimeEntryResult.Success;
 		}
 	}
