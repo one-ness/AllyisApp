@@ -284,7 +284,12 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentOutOfRangeException(nameof(holiday.Date), $"{nameof(holiday.Date)} must be within a normal date range.");
 			}
+			DateTime? lockDate = (await GetSettingsByOrganizationId(holiday.OrganizationId)).LockDate;
 
+			if (lockDate.HasValue && holiday.Date <= lockDate)
+			{
+				throw new ArgumentOutOfRangeException(nameof(holiday.Date), $"{nameof(holiday.Date)} must be after lock Date");
+			}
 			return await DBHelper.CreateHoliday(GetDBEntityFromHoliday(holiday));
 		}
 
