@@ -43,9 +43,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return CreateUpdateTimeEntryResult.EntryIsLocked;
 			}
 
-			await AppService.DeleteTimeEntry(entry.TimeEntryId);
+			//Any edits made to an overtime period must be reset to pending
+			await AppService.UpdateOvertimePeriodToPending(organizationId, entry.UserId, entry.Date);
 
-			await AppService.RecalculateOvertime(organizationId, entry.Date, entry.UserId);
+			await AppService.DeleteTimeEntry(entry.TimeEntryId);
 
 			return CreateUpdateTimeEntryResult.Success;
 		}

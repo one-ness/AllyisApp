@@ -54,9 +54,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return CreateUpdateTimeEntryResult.ProjectIsNotActive;
 			}
 
-			await AppService.CreateTimeEntry(entry);
+			//Any edits made to an overtime period must be reset to pending
+			await AppService.UpdateOvertimePeriodToPending(organizationId, entry.UserId, entry.Date);
 
-			await AppService.RecalculateOvertime(organizationId, entry.Date, entry.UserId);
+			await AppService.CreateTimeEntry(entry);
 
 			return CreateUpdateTimeEntryResult.Success;
 		}

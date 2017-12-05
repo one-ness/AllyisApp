@@ -921,9 +921,6 @@ namespace AllyisApps.Services
 				assignedPayClasses.Add(e.EmployeeTypeId, aPC);
 			}
 
-
-
-
 			foreach (DataTable table in timeEntryImports)
 			{
 				bool hasCustomerCode = table.Columns.Contains(ColumnHeaders.CustomerCode);
@@ -970,13 +967,12 @@ namespace AllyisApps.Services
 					result.GeneralFailures.Add($"There is no readable data to import from spreadsheet \"{table.TableName}\".");
 				}
 
-				User userGet = await GetUserAsync(UserContext.UserId);
 				var users = GetOrganizationMemberList(orgId).Select(o => new Tuple<string, OrganizationUser>(o.EmployeeId, o)).ToList();
 
 				foreach (DataRow row in table.Rows)
 				{
 					bool thisRowHasProjectName = table.Columns.Contains(ColumnHeaders.ProjectName);
-					String knownValue = null;
+					string knownValue = null;
 					ReadColumn(row, hasProjectName ? ColumnHeaders.ProjectName : ColumnHeaders.ProjectCode, p => knownValue = p);
 
 					var customersProjects = new List<Project.Project>();
@@ -1120,6 +1116,8 @@ namespace AllyisApps.Services
 						{
 							result.TimeEntriesImported += 1;
 						}
+
+						await RecalculateOvertime(orgId, theDate, userInOrg.UserId);
 					}
 					catch (ArgumentException)
 					{
