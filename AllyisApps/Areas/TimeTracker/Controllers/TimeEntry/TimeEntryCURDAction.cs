@@ -71,6 +71,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
+			//Recalcuate overtime after all changes have been made
+			if (items.Entries?[0]?.UserId != null)
+			{
+				int organizationId = AppService.UserContext.SubscriptionsAndRoles[items.SubscriptionId].OrganizationId;
+				var range = new DateRange(Utility.GetDateTimeFromDays(items.StartingDate), Utility.GetDateTimeFromDays(items.EndingDate));
+				await AppService.RecalculateOvertimeOverDateRange(organizationId, range, items.Entries[0].UserId);
+			}
 
 			return RedirectToRoute(
 				RouteNameConstants.TimeEntryIndexUserTimeSheet,
@@ -124,11 +131,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Start Date 
 		/// </summary>
-		public long StartingDate;
+		public int StartingDate;
 		/// <summary>
 		/// End Date 
 		/// </summary>
-		public long EndingDate;
+		public int EndingDate;
 
 		/// <summary>
 		/// Subscription ID 
