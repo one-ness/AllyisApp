@@ -8,12 +8,13 @@ AS
 	
 	declare @payClassIdForHoliday int;
 		
-	IF (SELECT COUNT([PayClassId]) FROM [Hrm].[PayClass] WITH (NOLOCK) WHERE [PayClassName] = 'Holiday') <= 0
+	IF (SELECT COUNT([PayClassId]) FROM [Hrm].[PayClass]  WITH (NOLOCK) 
+	WHERE [BuiltInPayClassId] = 4 AND [OrganizationId] = @organizationId) <= 0
 	BEGIN
 		EXEC [Hrm].[CreatePayClass] @payClassName = 'Holiday', @organizationId = @organizationId
 	END
 
-	SET @payClassIdForHoliday = (SELECT TOP 1 [PayClassId] FROM [Hrm].[PayClass] WITH (NOLOCK) WHERE [PayClassName] = 'Holiday');
+	SET @payClassIdForHoliday = (SELECT TOP 1 [PayClassId] FROM [Hrm].[PayClass] WITH (NOLOCK) WHERE [BuiltInPayClassId] = 4 and OrganizationId= @organizationId);
 
 	EXEC [TimeTracker].[CreateBulkTimeEntry]
 		@date = @date,
