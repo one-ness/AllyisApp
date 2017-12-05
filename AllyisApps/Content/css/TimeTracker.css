@@ -397,3 +397,9 @@ a {
 .ml-1 {
 	margin-left: 5px;
 }
+
+.scrollable {
+	padding: 1px;
+	overflow-x: auto;
+	white-space: nowrap;
+}
