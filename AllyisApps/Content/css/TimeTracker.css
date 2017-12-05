@@ -399,11 +399,7 @@ a {
 }
 
 .scrollable {
+	padding: 1px;
 	overflow-x: auto;
 	white-space: nowrap;
-}
-
-.table-xtra-condensed {
-	margin: auto;
-	width: 99.8%;
 }
