@@ -284,9 +284,10 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentOutOfRangeException(nameof(holiday.Date), $"{nameof(holiday.Date)} must be within a normal date range.");
 			}
-			DateTime? lockDate = (await GetSettingsByOrganizationId(holiday.OrganizationId)).LockDate;
-
-			if (lockDate.HasValue && holiday.Date <= lockDate)
+			var settings = (await GetSettingsByOrganizationId(holiday.OrganizationId));
+			DateTime? lockDate = settings.LockDate;
+			DateTime? payProcesssed = settings.PayrollProcessedDate;
+			if (lockDate.HasValue && holiday.Date <= lockDate || (payProcesssed.HasValue && holiday.Date <= payProcesssed))
 			{
 				throw new ArgumentOutOfRangeException(nameof(holiday.Date), $"{nameof(holiday.Date)} must be after lock Date");
 			}
