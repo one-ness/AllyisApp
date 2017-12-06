@@ -307,35 +307,36 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updatese only the start of week for an org.
 		/// </summary>
-		/// <param name="orgId">The organization Id.</param>
+		/// <param name="organizationId">The organization Id.</param>
 		/// <param name="startOfWeek">The value for which day should be the start of the week. 1-6 M-Sat, 0 Sun.</param>
-		public async void UpdateTimeTrackerStartOfWeek(int orgId, int startOfWeek)
+		public async Task<int> UpdateTimeTrackerStartOfWeek(int organizationId, int startOfWeek)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", orgId);
+			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@startOfWeek", startOfWeek);
+
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				await connection.ExecuteAsync("[TimeTracker].[UpdateStartOfWeek]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.ExecuteAsync("[TimeTracker].[UpdateStartOfWeek]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
 		/// <summary>
 		/// Update overtime settings for an Organization.
 		/// </summary>
-		/// <param name="orgId">The Id of the time entry to be updated.</param>
+		/// <param name="organizationId">The Id of the time entry to be updated.</param>
 		/// <param name="overtimeHours">Hours until overtime.</param>
 		/// <param name="overtimePeriod">Time period for hours until overtime.</param>
-		public async void UpdateOvertime(int orgId, int overtimeHours, string overtimePeriod)
+		public async Task<int> UpdateOvertime(int organizationId, int? overtimeHours, string overtimePeriod)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", orgId);
+			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@overtimeHours", overtimeHours);
 			parameters.Add("@overtimePeriod", overtimePeriod);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				await connection.ExecuteAsync("[TimeTracker].[UpdateOvertime]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.ExecuteAsync("[TimeTracker].[UpdateOvertime]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 

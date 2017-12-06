@@ -94,7 +94,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				TimeEntryIdsJSON = JsonConvert.SerializeObject(allTimeEntries.Select(entry => entry.TimeEntryId).ToArray()),
 				StartDate = startDate,
 				EndDate = endDate,
-				TimeEntryStatusOptions = ModelHelper.GetLocalizedTimeEntryStatuses(AppService),
+				TimeEntryStatusOptions = ModelHelper.GetLocalizedTimeEntryStatuses(),
 				PayPeriodRanges = payperiodRanges,
 				LockDate = settings.LockDate,
 				PayrollProcessedDate = settings.PayrollProcessedDate

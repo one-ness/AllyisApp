@@ -4,11 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
+using AllyisApps.Resources;
 using AllyisApps.Services;
+using AllyisApps.Services.TimeTracker;
+using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -28,7 +32,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			string subName = await AppService.GetSubscriptionName(subscriptionId);
 			int organizaionId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-			var settings = AppService.GetAllSettings(organizaionId).Item1;
+			var settings = await AppService.GetSettingsByOrganizationId(organizaionId);
 
 			var model = new SettingsOvertimeViewModel
 			{
@@ -36,7 +40,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				OvertimePeriod = settings.OvertimePeriod,
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subName,
-				UserId = AppService.UserContext.UserId
+				UserId = AppService.UserContext.UserId,
+				IsOvertimeUsed = settings.OvertimeHours != null,
+				OvertimePeriodOptions = ModelHelper.GetOvertimePeriodOptions()
 			};
 
 			return View(model);
@@ -45,26 +51,47 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Updates the Overtime setting for an Organization.
 		/// </summary>
-		/// <param name="subscriptionId">The subscription Id.</param>
-		/// <param name="setting">Overtime available setting.</param>
-		/// <param name="hours">Hours until overtime.</param>
-		/// <param name="period">Time period for hours until overtime.</param>
+		/// <param name="model">Data from the view form.</param>
 		/// <returns>Redirects to the settings view.</returns>
 		[HttpPost]
-		public async Task<ActionResult> UpdateOvertime(int subscriptionId, string setting, int hours = -1, string period = "")
+		public async Task<ActionResult> UpdateOvertime(SettingsOvertimeViewModel model)
 		{
-			int actualHours = string.Equals(setting, "No") ? -1 : hours;
-
-			if (await AppService.UpdateOvertime(subscriptionId, AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId, actualHours, period))
+			if (!ModelState.IsValid)
 			{
-				Notifications.Add(new BootstrapAlert(Resources.Strings.OvertimeUpdate, Variety.Success));
-			}
-			else
-			{
-				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
+				return RedirectToAction(ActionConstants.SettingsOvertime, new { subscriptionid = model.SubscriptionId, id = AppService.UserContext.UserId });
 			}
 
-			return RedirectToAction(ActionConstants.SettingsOvertime, new { subscriptionid = subscriptionId, id = AppService.UserContext.UserId });
+			int organizationId = AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId;
+			OvertimeResult result = await AppService.UpdateOvertime(model.SubscriptionId, organizationId, model.OvertimeHours, model.OvertimePeriod, model.IsOvertimeUsed);
+
+			switch (result)
+			{
+				case OvertimeResult.InvalidPeriodValue:
+					Notifications.Add(new BootstrapAlert(Strings.OvertimeResultInvalidPeriod, Variety.Warning));
+					break;
+				case OvertimeResult.Success:
+					Notifications.Add(new BootstrapAlert(Strings.OvertimeUpdate, Variety.Success));
+					break;
+				case OvertimeResult.NoHoursValue:
+					Notifications.Add(new BootstrapAlert(Strings.OvertimeResultNoHours, Variety.Warning));
+					break;
+				case OvertimeResult.InvalidHours:
+					Notifications.Add(new BootstrapAlert(Strings.OvertimeResultInvalidHours, Variety.Warning));
+					break;
+				case OvertimeResult.SettingsNotFound:
+					Notifications.Add(new BootstrapAlert(Strings.OvertimeResultSettingsNotFound, Variety.Danger));
+					break;
+				case OvertimeResult.SuccessAndRecalculatedOvertime:
+					Notifications.Add(new BootstrapAlert(Strings.OvertimeResultSuccessAndRecalculatedOvertime, Variety.Success));
+					break;
+				case OvertimeResult.SuccessAndDeletedOvertime:
+					Notifications.Add(new BootstrapAlert(Strings.OvertimeResultSuccessAndDeletedOvertime, Variety.Success));
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(result), result, "");
+			}
+
+			return RedirectToAction(ActionConstants.SettingsOvertime, new { subscriptionid = model.SubscriptionId, id = AppService.UserContext.UserId });
 		}
 	}
 }

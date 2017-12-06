@@ -1795,4 +1795,34 @@
 	<data name="TimeEntryResultInvalidAction" xml:space="preserve">
     <value>Invalid action for time entry on date {0}</value>
   </data>
+	<data name="ConfirmStartOfWeek" xml:space="preserve">
+    <value>Are you sure you want to change start of week?\nIf overtime settings is based on week, all overtime will be recalculated for dates past the lock date.</value>
+  </data>
+	<data name="StartOfWeekSuccessAndRecalculatedOvertime" xml:space="preserve">
+    <value>Successfully updated start of week settings, and recalculated all overtime periods after lock date.</value>
+  </data>
+	<data name="StartOfWeekSettingsNotFound" xml:space="preserve">
+    <value>No settings updated, settings not found.</value>
+  </data>
+	<data name="OvertimeResultInvalidPeriod" xml:space="preserve">
+    <value>Overtime period must be either 'Day', 'Week', or 'Month'.</value>
+  </data>
+	<data name="OvertimeResultNoHours" xml:space="preserve">
+    <value>Must input a value for hours.</value>
+  </data>
+	<data name="OvertimeResultInvalidHours" xml:space="preserve">
+    <value>Overtime hours must be greater than 0</value>
+  </data>
+	<data name="OvertimeResultSettingsNotFound" xml:space="preserve">
+    <value>Could not update settings, settings not found.</value>
+  </data>
+	<data name="OvertimeResultSuccessAndRecalculatedOvertime" xml:space="preserve">
+    <value>Successfully updated overtime and recalculated all overtime periods after lock date.</value>
+  </data>
+	<data name="OvertimeResultSuccessAndDeletedOvertime" xml:space="preserve">
+    <value>Successfully updated overtime and changed all overtime entries after lock date to regular hours.</value>
+  </data>
+	<data name="SkippedRecalculationOfOvertimePeriod" xml:space="preserve">
+    <value>Skipped recalculation of overtime for overtime period {0} - {1} because it contains locked dates.</value>
+  </data>
 </root>

@@ -39,13 +39,14 @@
 		{
 			<label>Set status for selected entries as: </label>
 			<div class="input-group">
-				@Html.DropDownList("timeEntryStatusId",
-		new SelectList(Model.TimeEntryStatusOptions.Where(keyVal => keyVal.Key != (int)TimeEntryStatus.PayrollProcessed), "Key", "Value"),
-		new
-		{
-			@class = "form-control selectpicker set-status-select",
-			data_width = "fit"
-		})
+				@Html.DropDownList(
+					"timeEntryStatusId",
+					new SelectList(Model.TimeEntryStatusOptions.Where(keyVal => keyVal.Key != (int)TimeEntryStatus.PayrollProcessed), "Key", "Value"),
+					new
+					{
+						@class = "form-control selectpicker set-status-select",
+						data_width = "fit"
+					})
 				<span class="input-group-btn">
 					<button id="submit-status" class="btn btn-primary" type="submit" tabindex="-1">Save</button>
 				</span>

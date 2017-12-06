@@ -140,9 +140,8 @@ namespace AllyisApps.ViewModels
 		/// <summary>
 		/// Gets a dictionary of all time entry statuses, localized.
 		/// </summary>
-		/// <param name="service">AppService object.</param>
 		/// <returns>A dictionary of all time entry statuses, localized.</returns>
-		public static Dictionary<int, string> GetLocalizedTimeEntryStatuses(AppService service)
+		public static Dictionary<int, string> GetLocalizedTimeEntryStatuses()
 		{
 			return Enum
 				.GetValues(typeof(TimeEntryStatus))
@@ -150,6 +149,20 @@ namespace AllyisApps.ViewModels
 				.ToDictionary(
 					enumValue => (int)enumValue,
 					enumValue => Strings.ResourceManager.GetString(enumValue.ToString()));
+		}
+
+		/// <summary>
+		/// Returns all the options available for overtime period.
+		/// </summary>
+		/// <returns>All the options available for overtime period.</returns>
+		public static Dictionary<string, string> GetOvertimePeriodOptions()
+		{
+			return new Dictionary<string, string>
+			{
+				{ "Day", "Day" },
+				{ "Week", "Week" },
+				{ "Month", "Month" }
+			};
 		}
 	}
 }

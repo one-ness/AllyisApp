@@ -23,4 +23,23 @@
 		Success,
 		InvalidStatuses
 	}
+
+	public enum StartOfWeekResult
+	{
+		StartOfWeekOutOfRange,
+		SuccessAndRecalculatedOvertime,
+		Success,
+		SettingsNotFound
+	}
+
+	public enum OvertimeResult
+	{
+		InvalidPeriodValue,
+		Success,
+		NoHoursValue,
+		InvalidHours,
+		SettingsNotFound,
+		SuccessAndRecalculatedOvertime,
+		SuccessAndDeletedOvertime
+	}
 }

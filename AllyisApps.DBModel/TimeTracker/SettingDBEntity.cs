@@ -26,7 +26,7 @@ namespace AllyisApps.DBModel.TimeTracker
 		/// <summary>
 		/// Gets or sets the OvertimeHours.
 		/// </summary>
-		public int OvertimeHours { get; set; }
+		public int? OvertimeHours { get; set; }
 
 		/// <summary>
 		/// Gets or sets the OvertimePeriod.
