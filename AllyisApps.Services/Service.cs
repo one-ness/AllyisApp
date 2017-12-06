@@ -390,25 +390,38 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Updates the Start of Week for an organization.
 		/// </summary>
-		/// <param name="organizationId">The organization's Id.</param>
 		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <param name="startOfWeek">Start of Week.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public async Task<bool> UpdateStartOfWeek(int organizationId, int subscriptionId, int startOfWeek)
+		public async Task<StartOfWeekResult> UpdateStartOfWeek(int subscriptionId, int startOfWeek)
 		{
 			#region Validation
 
 			if (!Enum.IsDefined(typeof(StartOfWeekEnum), startOfWeek))
 			{
-				throw new ArgumentException("Start of week must correspond to a value of StartOfWeekEnum.");
+				return StartOfWeekResult.StartOfWeekOutOfRange;
 			}
 
 			#endregion Validation
 
 			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
-			DBHelper.UpdateTimeTrackerStartOfWeek(organizationId, startOfWeek);
-			await Task.Yield();
-			return true;
+
+			int organizationId = UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+
+			int updated = await DBHelper.UpdateTimeTrackerStartOfWeek(organizationId, startOfWeek);
+			if (updated != 1) return StartOfWeekResult.SettingsNotFound;
+
+			// Recalculate overtime if necessary
+			var settings = await GetSettingsByOrganizationId(organizationId);
+			if (settings.OvertimeHours == null || settings.OvertimePeriod != "Week") return StartOfWeekResult.Success;
+
+			var users = await GetOrganizationUsersAsync(organizationId);
+			foreach (var user in users)
+			{
+				await RecalculateOvertimeForUserAfterLockDate(organizationId, user.UserId, settings);
+			}
+
+			return StartOfWeekResult.SuccessAndRecalculatedOvertime;
 		}
 
 		/// <summary>
@@ -416,29 +429,54 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <param name="organizationId">The organization's Id.</param>
-		/// <param name="overtimeHours">Hours until overtime.</param>
+		/// <param name="overtimeHours">Hours until overtime. Null means that the org isn't using overtime.</param>
 		/// <param name="overtimePeriod">Time period for hours until overtime.</param>
+		/// <param name="isOvertimeUsed">Whether or not overtime is turned on.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public async Task<bool> UpdateOvertime(int subscriptionId, int organizationId, int overtimeHours, string overtimePeriod)
+		public async Task<OvertimeResult> UpdateOvertime(int subscriptionId, int organizationId, int? overtimeHours, string overtimePeriod, bool isOvertimeUsed)
 		{
 			#region Validation
 
-			if (overtimeHours < -1)
+			if (overtimeHours != null && overtimeHours < 0)
 			{
-				throw new ArgumentOutOfRangeException(nameof(overtimeHours), "Overtime hours cannot be negative, unless it is -1 to indicate overtime unavailable.");
+				return OvertimeResult.InvalidHours;
 			}
 
 			if (!new[] { "Day", "Week", "Month" }.Contains(overtimePeriod))
 			{
-				throw new ArgumentException($"{overtimePeriod} is not a valid value for lock date period.");
+				return OvertimeResult.InvalidPeriodValue;
+			}
+
+			if (isOvertimeUsed && overtimeHours == null)
+			{
+				return OvertimeResult.NoHoursValue;
 			}
 
 			#endregion Validation
 
 			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
-			DBHelper.UpdateOvertime(organizationId, overtimeHours, overtimePeriod);
-			await Task.Yield();
-			return true;
+
+			int updated = await DBHelper.UpdateOvertime(organizationId, isOvertimeUsed ? overtimeHours : null, overtimePeriod);
+			if (updated != 1) return OvertimeResult.SettingsNotFound;
+
+			// Recalculate overtime for all users
+			var settings = await GetSettingsByOrganizationId(organizationId);
+			var users = await GetOrganizationUsersAsync(organizationId);
+			if (isOvertimeUsed)
+			{
+				foreach (var user in users)
+				{
+					await RecalculateOvertimeForUserAfterLockDate(organizationId, user.UserId, settings);
+				}
+				return OvertimeResult.SuccessAndRecalculatedOvertime;
+			}
+			else
+			{
+				DateTime startDate = settings.LockDate?.AddDays(1) ?? settings.PayrollProcessedDate?.AddDays(1) ?? SqlDateTime.MinValue.Value;
+				DateTime endDate = SqlDateTime.MaxValue.Value;
+				await DeleteOvertimeInDateRange(organizationId, new DateRange(startDate, endDate));
+				return OvertimeResult.SuccessAndDeletedOvertime;
+			}
 		}
 
 		/// <summary>

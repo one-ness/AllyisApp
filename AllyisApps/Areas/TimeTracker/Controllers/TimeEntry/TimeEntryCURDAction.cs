@@ -75,8 +75,36 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			if (items.Entries?[0]?.UserId != null)
 			{
 				int organizationId = AppService.UserContext.SubscriptionsAndRoles[items.SubscriptionId].OrganizationId;
-				var range = new DateRange(Utility.GetDateTimeFromDays(items.StartingDate), Utility.GetDateTimeFromDays(items.EndingDate));
-				await AppService.RecalculateOvertimeOverDateRange(organizationId, range, items.Entries[0].UserId);
+				var editedEntryDates = items.Entries.Where(e => e.IsCreated || e.IsDeleted || e.IsEdited).Select(e => e.Date).OrderBy(d => d).ToList();
+				var settings = await AppService.GetSettingsByOrganizationId(organizationId);
+				DateTime startDate = Utility.GetDateTimeFromDays(editedEntryDates.First());
+				DateTime endDate = Utility.GetDateTimeFromDays(editedEntryDates.Last());
+
+				//start at the next period after the lock date
+				DateTime? lockDatePlusOne = null;
+				DateRange skipPeriod = null;
+				if (settings.LockDate != null)
+				{
+					skipPeriod = await AppService.GetOvertimePeriodByDate(organizationId, settings.LockDate.Value);
+					lockDatePlusOne = skipPeriod.EndDate.AddDays(1);
+				}
+				else if (settings.PayrollProcessedDate != null)
+				{
+					skipPeriod = await AppService.GetOvertimePeriodByDate(organizationId, settings.PayrollProcessedDate.Value);
+					lockDatePlusOne = skipPeriod.EndDate.AddDays(1);
+				}
+
+				if (lockDatePlusOne != null && lockDatePlusOne.Value > startDate)
+				{
+					startDate = lockDatePlusOne.Value;
+					Notifications.Add(new BootstrapAlert(string.Format(Strings.SkippedRecalculationOfOvertimePeriod, skipPeriod.StartDate.ToShortDateString(), skipPeriod.EndDate.ToShortDateString()), Variety.Warning));
+				}
+
+				//start date is greater, that means all entries are within a period that needs to be skipped
+				if (startDate < endDate)
+				{
+					await AppService.RecalculateOvertimeOverDateRange(organizationId, new DateRange(startDate, endDate), items.Entries[0].UserId);
+				}
 			}
 
 			return RedirectToRoute(

@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [TimeTracker].[Setting] (
     [OrganizationId]     INT            NOT NULL,
     [StartOfWeek]        INT            CONSTRAINT [DF_Setting_StartOfWeek] DEFAULT ((1)) NOT NULL,
-    [OvertimeHours]      INT            CONSTRAINT [DF_Setting_OvertimeHours] DEFAULT ((40)) NOT NULL,
+    [OvertimeHours]      INT            CONSTRAINT [DF_Setting_OvertimeHours] DEFAULT ((40)) NULL,
     [OvertimePeriod]     VARCHAR (10)   CONSTRAINT [DF_Setting_OvertimePeriod] DEFAULT ('week') NOT NULL,
     [IsLockDateUsed]     BIT            CONSTRAINT [DF_Setting_LockDateUsed] DEFAULT ((0)) NOT NULL,
     [LockDatePeriod]     INT			CONSTRAINT [DF_Setting_LockDatePeriod] DEFAULT (1) NOT NULL,

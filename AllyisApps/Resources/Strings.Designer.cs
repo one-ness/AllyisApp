@@ -826,6 +826,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to change start of week?\nIf overtime settings is based on week, all overtime will be recalculated for dates past the lock date..
+        /// </summary>
+        public static string ConfirmStartOfWeek {
+            get {
+                return ResourceManager.GetString("ConfirmStartOfWeek", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to unsubscribe?.
         /// </summary>
         public static string ConfirmUnsubscribe {
@@ -3085,6 +3094,60 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overtime hours must be greater than 0.
+        /// </summary>
+        public static string OvertimeResultInvalidHours {
+            get {
+                return ResourceManager.GetString("OvertimeResultInvalidHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Overtime period must be either &apos;Day&apos;, &apos;Week&apos;, or &apos;Month&apos;..
+        /// </summary>
+        public static string OvertimeResultInvalidPeriod {
+            get {
+                return ResourceManager.GetString("OvertimeResultInvalidPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must input a value for hours..
+        /// </summary>
+        public static string OvertimeResultNoHours {
+            get {
+                return ResourceManager.GetString("OvertimeResultNoHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not update settings, settings not found..
+        /// </summary>
+        public static string OvertimeResultSettingsNotFound {
+            get {
+                return ResourceManager.GetString("OvertimeResultSettingsNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully updated overtime and changed all overtime entries after lock date to regular hours..
+        /// </summary>
+        public static string OvertimeResultSuccessAndDeletedOvertime {
+            get {
+                return ResourceManager.GetString("OvertimeResultSuccessAndDeletedOvertime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully updated overtime and recalculated all overtime periods after lock date..
+        /// </summary>
+        public static string OvertimeResultSuccessAndRecalculatedOvertime {
+            get {
+                return ResourceManager.GetString("OvertimeResultSuccessAndRecalculatedOvertime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Successfully updated overtime settings..
         /// </summary>
         public static string OvertimeUpdate {
@@ -4030,6 +4093,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Skipped recalculation of overtime for overtime period {0} - {1} because it contains locked dates..
+        /// </summary>
+        public static string SkippedRecalculationOfOvertimePeriod {
+            get {
+                return ResourceManager.GetString("SkippedRecalculationOfOvertimePeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Español (España) - Spanish (Spain).
         /// </summary>
         public static string SpanishSpain {
@@ -4062,6 +4134,24 @@ namespace AllyisApps.Resources {
         public static string StartDate {
             get {
                 return ResourceManager.GetString("StartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No settings updated, settings not found..
+        /// </summary>
+        public static string StartOfWeekSettingsNotFound {
+            get {
+                return ResourceManager.GetString("StartOfWeekSettingsNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully updated start of week settings, and recalculated all overtime periods after lock date..
+        /// </summary>
+        public static string StartOfWeekSuccessAndRecalculatedOvertime {
+            get {
+                return ResourceManager.GetString("StartOfWeekSuccessAndRecalculatedOvertime", resourceCulture);
             }
         }
         

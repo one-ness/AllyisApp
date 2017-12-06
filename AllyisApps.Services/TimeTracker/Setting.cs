@@ -24,9 +24,9 @@ namespace AllyisApps.Services.TimeTracker
 		public int StartOfWeek { get; set; }
 
 		/// <summary>
-		/// Gets or sets the OvertimeHours.
+		/// Gets or sets the OvertimeHours. Null means that the org isn't using overtime.
 		/// </summary>
-		public int OvertimeHours { get; set; }
+		public int? OvertimeHours { get; set; }
 
 		/// <summary>
 		/// Gets or sets the OvertimePeriod.

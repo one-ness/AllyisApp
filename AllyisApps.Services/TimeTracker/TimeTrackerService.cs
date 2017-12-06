@@ -349,6 +349,7 @@ namespace AllyisApps.Services
 		public async Task<DateRange> GetOvertimePeriodByDate(int organizationId, DateTime date)
 		{
 			var settings = await GetSettingsByOrganizationId(organizationId);
+			if (settings.OvertimeHours == null) return null; //organization doesn't have overtime period
 
 			switch (settings.OvertimePeriod)
 			{
@@ -410,6 +411,43 @@ namespace AllyisApps.Services
 			return CreateUpdateTimeEntryResult.Success;
 		}
 
+		public async Task RecalculateOvertimeForUserAfterLockDate(int organizationId, int userId, Setting setting = null)
+		{
+			var settings = setting ?? await GetSettingsByOrganizationId(organizationId);
+			var entries = (await GetTimeEntriesByUserOverDateRange(userId, SqlDateTime.MinValue.Value, SqlDateTime.MaxValue.Value, organizationId)).ToList();
+			if (!entries.Any()) return; // no entries to recalculate
+
+			var entryDates = entries.Select(entry => entry.Date).OrderBy(date => date).ToList();
+
+			//start at the next period after the lock date
+			DateTime? lockDatePlusOne = null;
+			if (settings.LockDate != null)
+			{
+				lockDatePlusOne = (await GetOvertimePeriodByDate(organizationId, settings.LockDate.Value)).EndDate.AddDays(1);
+			}
+			else if (settings.PayrollProcessedDate != null)
+			{
+				lockDatePlusOne = (await GetOvertimePeriodByDate(organizationId, settings.PayrollProcessedDate.Value)).EndDate.AddDays(1);
+			}
+
+			DateTime startDate;
+			if (lockDatePlusOne == null)
+			{
+				startDate = entryDates.First();
+			}
+			else
+			{
+				startDate = lockDatePlusOne.Value > entryDates.First() ? lockDatePlusOne.Value : entryDates.First();
+			}
+
+			DateTime endDate = entryDates.Last();
+
+			//all entries are less than lock date, no need to recalculate
+			if (startDate > endDate) return;
+
+			await RecalculateOvertimeOverDateRange(organizationId, new DateRange(startDate, endDate), userId);
+		}
+
 		public async Task RecalculateOvertimeOverDateRange(int organizationId, DateRange range, int userId)
 		{
 			DateTime cur = range.StartDate;
@@ -417,6 +455,8 @@ namespace AllyisApps.Services
 			{
 				await RecalculateOvertime(organizationId, cur, userId);
 				DateRange overtimePeriod = await GetOvertimePeriodByDate(organizationId, cur);
+				if (overtimePeriod == null) return; //org doesn't use overtime
+
 				cur = overtimePeriod.EndDate.AddDays(1);
 			}
 		}
@@ -431,10 +471,17 @@ namespace AllyisApps.Services
 		/// TODO: make this method private by moving all references to service layer.
 		public async Task RecalculateOvertime(int organizationId, DateTime date, int userId)
 		{
-			DateRange overtimePeriod = await GetOvertimePeriodByDate(organizationId, date);
-			var entriesInOvertimePeriod = (await GetTimeEntriesByUserOverDateRange(userId, overtimePeriod.StartDate, overtimePeriod.EndDate, organizationId)).ToList();
-			int overtimeLimit = (await GetSettingsByOrganizationId(organizationId)).OvertimeHours;
+			var settings = await GetSettingsByOrganizationId(organizationId);
+			if (settings.OvertimeHours == null) return; //don't need to recalculate overtime if org doesn't use it
 
+			DateRange overtimePeriod = await GetOvertimePeriodByDate(organizationId, date);
+			if (overtimePeriod.StartDate <= (settings.LockDate ?? settings.PayrollProcessedDate ?? DateTime.MinValue))
+			{
+				throw new ArgumentOutOfRangeException(nameof(overtimePeriod.StartDate), overtimePeriod.StartDate, "Cannot recalculate overtime for a period which includes locked dates");
+			}
+
+			var entriesInOvertimePeriod = (await GetTimeEntriesByUserOverDateRange(userId, overtimePeriod.StartDate, overtimePeriod.EndDate, organizationId)).ToList();
+			int overtimeLimit = settings.OvertimeHours.Value;
 			var overtimeEntries = entriesInOvertimePeriod.Where(e => e.BuiltInPayClassId == (int)PayClassId.OverTime).OrderBy(e => e.Date).ToList();
 			var regularEntries = entriesInOvertimePeriod.Where(e => e.BuiltInPayClassId == (int)PayClassId.Regular).OrderByDescending(e => e.Date).ToList();
 			float regularHoursSum = regularEntries.Sum(e => e.Duration);
@@ -451,7 +498,7 @@ namespace AllyisApps.Services
 				}
 				else
 				{
-					return;
+					return; // no change needs to occur
 				}
 			}
 			else
@@ -525,12 +572,40 @@ namespace AllyisApps.Services
 		public async Task UpdateOvertimePeriodToPending(int organizationId, int userId, DateTime date)
 		{
 			DateRange overtimePeriod = await GetOvertimePeriodByDate(organizationId, date);
+			if (overtimePeriod == null) return; //no overtime to handle
+
 			var entriesInOvertimePeriod = await GetTimeEntriesByUserOverDateRange(userId, overtimePeriod.StartDate, overtimePeriod.EndDate, organizationId);
 			var settings = await GetSettingsByOrganizationId(organizationId);
 			var entriesAfterLockDate = entriesInOvertimePeriod.Where(e => e.Date > (settings.LockDate ?? settings.PayrollProcessedDate ?? DateTime.MinValue));
 			foreach (TimeEntry entry in entriesAfterLockDate)
 			{
 				await UpdateTimeEntryStatusById(entry.TimeEntryId, (int)TimeEntryStatus.Pending);
+			}
+		}
+
+		/// <summary>
+		/// Changes all overtime time entries for all org users in the range to be regular hours.  Does not check for lock date.
+		/// </summary>
+		/// <param name="organizationId">The organization that the time entries belong to.</param>
+		/// <param name="range">The inclusive range from which to change the overtime.</param>
+		/// <returns></returns>
+		public async Task DeleteOvertimeInDateRange(int organizationId, DateRange range)
+		{
+			var payClasses = (await GetPayClassesByOrganizationId(organizationId)).ToList();
+			int regularPayClassId = payClasses.Single(pc => pc.BuiltInPayClassId == (int)PayClassId.Regular).PayClassId;
+
+			var entries = await GetTimeEntriesOverDateRange(organizationId, range.StartDate, range.EndDate);
+			var updatedOvertimeEntries = entries
+				.Where(e => e.BuiltInPayClassId == (int)PayClassId.OverTime)
+				.Select(e =>
+				{
+					e.PayClassId = regularPayClassId;
+					return e;
+				});
+
+			foreach (var entry in updatedOvertimeEntries)
+			{
+				UpdateTimeEntry(entry);
 			}
 		}
 
@@ -641,10 +716,7 @@ namespace AllyisApps.Services
 					: new DateTime(year, month + 1, dates[0]))
 				: new DateTime(year, month, dates[Mod(startIndex + 1, dates.Count)]);
 
-			var range = new DateRange();
-			range.StartDate = new DateTime(year, month, dates[startIndex]);
-			range.EndDate = endDate.AddDays(-1);
-			return range;
+			return new DateRange(new DateTime(year, month, dates[startIndex]), endDate.AddDays(-1));
 		}
 
 		/// <summary>
@@ -674,11 +746,11 @@ namespace AllyisApps.Services
 				}
 			}
 
-			return new DateRange
-			{
-				StartDate = startDate,
-				EndDate = startDate == DateTime.Now ? startDate.AddDays(duration - 1) : endDate.AddDays(-1) //end date is one day before the next start date
-			};
+			return new DateRange(
+				startDate,
+				startDate == DateTime.Now
+					? startDate.AddDays(duration - 1)
+					: endDate.AddDays(-1));
 		}
 
 		/// <summary>
@@ -695,10 +767,10 @@ namespace AllyisApps.Services
 		public static DateRange GetNthPayPeriodByDuration(DateRange currentPayPeriod, int numberOfPayPeriodsAway)
 		{
 			return new DateRange
-			{
-				StartDate = currentPayPeriod.StartDate.AddDays(numberOfPayPeriodsAway * ((currentPayPeriod.EndDate - currentPayPeriod.StartDate).TotalDays + 1)),
-				EndDate = currentPayPeriod.EndDate.AddDays(numberOfPayPeriodsAway * ((currentPayPeriod.EndDate - currentPayPeriod.StartDate).TotalDays + 1))
-			};
+			(
+				currentPayPeriod.StartDate.AddDays(numberOfPayPeriodsAway * ((currentPayPeriod.EndDate - currentPayPeriod.StartDate).TotalDays + 1)),
+				currentPayPeriod.EndDate.AddDays(numberOfPayPeriodsAway * ((currentPayPeriod.EndDate - currentPayPeriod.StartDate).TotalDays + 1))
+			);
 		}
 
 		public static Setting DBEntityToServiceObject(SettingDBEntity settings)

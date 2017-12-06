@@ -9,7 +9,6 @@
 	ViewData["UserId"] = Model.UserId;
 	ViewData["SubscriptionId"] = Model.SubscriptionId;
 	ViewData["SubscriptionName"] = Model.SubscriptionName;
-	bool overTimeUsed = Model.OvertimeHours > 0;
 }
 
 <div class="container">
@@ -25,21 +24,21 @@
 				<div id="Overtime" class="panel-body">
 					@using (Html.BeginForm(ActionConstants.UpdateOvertime, ControllerConstants.TimeEntry, FormMethod.Post, new { enctype = "multipart/form-data" }))
 					{
-						@Html.AntiForgeryToken();
+						@Html.AntiForgeryToken()
 						@Html.HiddenFor(m => m.SubscriptionId)
-						<div id="OTCheck" style="margin:10px">
-							<input type="radio" name="setting" id="setting" value="Yes" onclick="hideOT(false)" @(overTimeUsed ? " checked" : string.Empty) /><text> @Strings.Yes</text>
-							<input type="radio" name="setting" id="setting" value="No" onclick="hideOT(true)" @(!overTimeUsed ? " checked" : string.Empty) /><text> @Strings.No</text>
+						<div style="margin: 10px">
+							<label>
+								Use Overtime: 
+								@Html.CheckBoxFor(m => m.IsOvertimeUsed)
+							</label>
 						</div>
-						<div id="OTSettings" style="visibility: @(overTimeUsed ? "visible" : "hidden")">
+						<div id="OTSettings" style="visibility: @(Model.IsOvertimeUsed ? "visible" : "hidden")">
 							<div style="margin:10px">
 								@Strings.After
-								<input type="text" id="hours" name="hours" value='@(Model.OvertimeHours < 0 ? 40 : Model.OvertimeHours)' class="form-control" style="width: 45px; text-align: center; display: inline-block;" /> @Strings.HoursPer
-								<select id="period" name="period" class="form-control" value='@Model.OvertimePeriod' style="display: inline-block; width: 100px;">
-									<option value="Day" @(Model.OvertimePeriod == "Day" ? " selected=true" : string.Empty)>@Strings.Day</option>
-									<option value="Week" @(Model.OvertimePeriod == "Week" ? " selected=true" : string.Empty)>@Strings.Week</option>
-									<option value="Month" @(Model.OvertimePeriod == "Month" ? " selected=true" : string.Empty)>@Strings.Month</option>
-								</select><br />
+								@Html.TextBoxFor(m => m.OvertimeHours, new { @class = "form-control", style = "width: 45px; text-align: center; display: inline-block;" })
+								@Strings.HoursPer
+								@Html.DropDownListFor(m => m.OvertimePeriod, new SelectList(Model.OvertimePeriodOptions, "Key", "Value"), new { @class = "form-control", style = "display: inline-block; width: 100px;" })
+								<br />
 							</div>
 						</div>
 						<div>
@@ -55,8 +54,10 @@
 
 @section scripts{
 	<script>
-		function hideOT(hideIt) {
-			$('#OTSettings').css('visibility', hideIt ? 'hidden' : 'visible');
-		}
+		$(document).ready(function() {
+			$("#IsOvertimeUsed").change(function () {
+				$('#OTSettings').css('visibility', $(this).prop("checked") ? 'visible' : 'hidden');
+			});
+		});
 	</script>
 }

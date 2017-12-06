@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
@@ -52,18 +53,24 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>Action result.</returns>
 		public async Task<ActionResult> UpdateStartOfWeek(int subscriptionId, int startOfWeek)
 		{
-			if (startOfWeek < 0 || startOfWeek > 6)
-			{
-				Notifications.Add(new BootstrapAlert(Strings.InvalidSOW, Variety.Warning));
-			}
-			else
-			{
-				int organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-				var success = await AppService.UpdateStartOfWeek(organizationId, subscriptionId, startOfWeek);
+			var result = await AppService.UpdateStartOfWeek(subscriptionId, startOfWeek);
 
-				Notifications.Add(success
-					? new BootstrapAlert(Strings.SuccessfulSOW, Variety.Success)
-					: new BootstrapAlert(Strings.ActionUnauthorizedMessage, Variety.Warning));
+			switch (result)
+			{
+				case StartOfWeekResult.StartOfWeekOutOfRange:
+					Notifications.Add(new BootstrapAlert(Strings.InvalidSOW, Variety.Danger));
+					break;
+				case StartOfWeekResult.SuccessAndRecalculatedOvertime:
+					Notifications.Add(new BootstrapAlert(Strings.StartOfWeekSuccessAndRecalculatedOvertime, Variety.Success));
+					break;
+				case StartOfWeekResult.Success:
+					Notifications.Add(new BootstrapAlert(Strings.SuccessfulSOW, Variety.Success));
+					break;
+				case StartOfWeekResult.SettingsNotFound:
+					Notifications.Add(new BootstrapAlert(Strings.StartOfWeekSettingsNotFound, Variety.Danger));
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(result));
 			}
 
 			return RedirectToAction(ActionConstants.SettingsStartOfWeek, new { subscriptionId });
