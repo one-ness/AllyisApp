@@ -25,6 +25,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns>Redirects to the settings view.</returns>
 		public async Task<ActionResult> DeleteEmploymentType(int employmentTypeId, int userId, int subscriptionId)
 		{
+			
 			int orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			try
 			{

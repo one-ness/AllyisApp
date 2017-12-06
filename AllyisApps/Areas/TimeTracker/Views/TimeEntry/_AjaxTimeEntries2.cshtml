@@ -53,47 +53,6 @@
 						<div class="panel-right table-col @offDayClass @holidayClass" style="display: block; background-color:transparent;">
 							<table align="center">
 								<tr>
-									<!--@*
-									@if (currentDate.DayOfWeek == startOfWeek)
-									{
-										<td style="padding-right:5px; padding-bottom:5px;">
-											<a class="btn btn-primary weekcopier" name='@(theSample.Date <= theSample.LockDate && !theSample.IsManager ? "disabledButton" : "")'
-											   href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
-														{
-															startDateTarget=currentDate,
-															startDateCopy=currentDate.AddDays(-7),
-															endDateCopy = currentDate.AddDays(-1),
-															userId = Model.UserId,
-															subscriptionid = Model.SubscriptionId,
-															startDate = Model.StartDate,
-															endDate = Model.EndDate
-														}
-													)"
-											   style="width:100%; padding: 5px 7px;"
-											   title="@Strings.CopyWeek">
-												<i class="fa fa-files-o"></i> @Strings.WeekInitial
-											</a>
-										</td>
-									}
-									<td style="padding-bottom:5px;">
-										<a class="btn btn-primary daycopier" name='@(theSample.Date <= theSample.LockDate && !theSample.IsManager ? "disabledButton" : "")'
-										   href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
-													{
-														startDateTarget=currentDate,
-														startDateCopy=currentDate.AddDays(-1),
-														endDateCopy = currentDate.AddDays(-1),
-														userId = Model.UserId,
-														subscriptionId = Model.SubscriptionId,
-														startDate = Model.StartDate,
-														endDate = Model.EndDate
-													}
-												)"
-										   style="width:100%; padding: 5px 7px;"
-										   title="@Strings.CopyDay">
-											<i class="fa fa-files-o"></i> @Strings.DayInitial
-										</a>
-									</td>
-									*@-->
 								</tr>
 							</table>
 						</div>
@@ -104,12 +63,9 @@
 							{
 								@Html.Partial("_AjaxTimeEntryBody2", entry)
 							}
-							if (theEntries.Count == 0 || theSample.IsCreatable)
+							if (theSample.IsCreatable)
 							{
 								@Html.Partial("_AjaxTimeEntryBody2", theSample)
-							}
-							if (theSample.IsManager || theSample.IsCreatable) //if the date is not locked because of lock date or logged in user is manager
-							{
 								theSample.Hidden = true;
 								@Html.Partial("_AjaxTimeEntryBody2", theSample)
 							}

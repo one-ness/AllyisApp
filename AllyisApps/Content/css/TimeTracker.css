@@ -375,11 +375,11 @@ a {
 }
 
 .table-row .holiday {
-	background-color: #def2de;
+	background-color: #b6e2b6;
 }
 
 .holiday .form-control {
-	background-color: #def2de;
+	background-color: #b6e2b6;
 }
 
 #resultPartialForm .panel{
@@ -396,4 +396,10 @@ a {
 
 .ml-1 {
 	margin-left: 5px;
+}
+
+.scrollable {
+	padding: 1px;
+	overflow-x: auto;
+	white-space: nowrap;
 }

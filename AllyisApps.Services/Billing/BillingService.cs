@@ -702,17 +702,23 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentOutOfRangeException(nameof(productId), "Product Id cannot be 0 or negative.");
 			}
+			
 
 			if (productId == ProductIdEnum.TimeTracker)
 			{
 				this.PopulateUserContext(this.UserContext.UserId);
+				string orgNme = (await this.GetOrganization(orgId)).OrganizationName;
 				await DBHelper.MergeDefaultTimeTrackerSettings(orgId);
-				var newCustId = await CreateCustomerAsync(new Crm.Customer() { CustomerName = "Default Customer", IsActive = true, OrganizationId = orgId, CustomerCode = "000000000001" }, subId);
+				var newCustId = await CreateCustomerAsync(new Crm.Customer()
+				{ CustomerName = orgNme, IsActive = true, OrganizationId = orgId, CustomerCode = "000000000001" }, subId);
 				var ownCust = GetCustomer(newCustId);
 
 				var users = (await GetOrganizationUsersAsync(orgId)).Select(x => x.UserId);
 
-				await CreateProjectAndUpdateItsUserList(new Project.Project() { OwningCustomer = ownCust, ProjectName = "Default Project", OrganizationId = orgId, ProjectCode = "00000000001", IsDefault = true }, users, subId);
+				await CreateProjectAndUpdateItsUserList(new Project.Project() {
+					OwningCustomer = ownCust,
+					ProjectName = "General Hours",
+					OrganizationId = orgId, ProjectCode = "00000000001", IsDefault = true }, users, subId);
 			}
 
 			if (productId == ProductIdEnum.StaffingManager)
