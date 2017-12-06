@@ -8,6 +8,7 @@ using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -16,6 +17,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	/// </summary>
 	public partial class TimeEntryController : BaseController
 	{
+		
 		/// <summary>
 		/// Returns the settings holiday view.
 		/// </summary>
@@ -24,6 +26,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpGet]
 		public async Task<ActionResult> SettingsEmployeeType(int subscriptionId)
 		{
+			
+
 			var subName = await AppService.GetSubscriptionName(subscriptionId);
 			var employeeTypes = await AppService.GetEmployeeTypeByOrganization(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
 
@@ -46,7 +50,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpGet]
 		public async Task<ActionResult> CreateEmployeeType(int subscriptionId)
 		{
-			var payclasses = (await AppService.GetPayClassesBySubscriptionId(subscriptionId)).Select(x => new PayClassInfo() { PayClassId = x.PayClassId, PayClassName = x.PayClassName });
+			ViewData["SubscriptionName"] = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName;
+			ViewData["SubscriptionId"] = subscriptionId;
+			var payclasses = (await AppService.GetPayClassesBySubscriptionId(subscriptionId))
+				.Where(x => (x.BuiltInPayClassId != (int)PayClassId.OverTime))
+				.Select(x => new PayClassInfo() { PayClassId = x.PayClassId, PayClassName = x.PayClassName });
 
 			SettingsEditEmployeeTypeViewModel model = new SettingsEditEmployeeTypeViewModel()
 			{
@@ -55,7 +63,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				CurrentPayClasses = new List<PayClassInfo>() { },
 				IsEdit = false
 			};
-
+			ViewBag.SubscriptionName = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName;
 			return View("SettingsEditEmployeeType", model);
 		}
 
@@ -70,18 +78,22 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			var assignedPayClasses = await AppService.GetAssignedPayClasses(employeeTypeId);
 			var employeeTypes = await AppService.GetEmployeeTypeByOrganization(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
-
+			
+			
 			if (!employeeTypes.Exists(x => x.EmployeeTypeId == employeeTypeId))
 			{
 				Notifications.Add(new BootstrapAlert("You don't have permission to delete this Employee Type.", Variety.Warning));
 				return RedirectToAction(ActionConstants.SettingsEmployeeType);
 			}
-
+			//This logic no longer applies
+			/*
 			if (assignedPayClasses.Count > 0)
 			{
 				Notifications.Add(new BootstrapAlert("Cannot Delete Employee Type. There are assigned pay class.", Variety.Warning));
 				return RedirectToAction(ActionConstants.EditSettingsEmployeeType, new { employeeTypeId = employeeTypeId });
 			}
+			*/
+
 			if (employeeTypes.Count == 1)
 			{
 				Notifications.Add(new BootstrapAlert("Cannot Delete Employee Type. You cannot delete the last employee type.", Variety.Warning));
@@ -124,8 +136,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var assignedPayClassesIds = await AppService.GetAssignedPayClasses(userId);
 			var payClasses = (await AppService.GetPayClassesByOrganizationId(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId));
 
-			var unassignedPayClasses = payClasses.Where(x => !assignedPayClassesIds.Contains(x.PayClassId)).Select(x => new PayClassInfo() { PayClassId = x.PayClassId, PayClassName = x.PayClassName });
-			var assignedPayClasses = payClasses.Where(x => assignedPayClassesIds.Contains(x.PayClassId)).Select(x => new PayClassInfo() { PayClassId = x.PayClassId, PayClassName = x.PayClassName });
+			var unassignedPayClasses = payClasses
+				.Where(x => !assignedPayClassesIds.Contains(x.PayClassId) && (x.BuiltInPayClassId != (int)PayClassId.OverTime))
+				.Select(x => new PayClassInfo() { PayClassId = x.PayClassId, PayClassName = x.PayClassName });
+			var assignedPayClasses = payClasses
+				.Where(x => assignedPayClassesIds.Contains(x.PayClassId) && (x.BuiltInPayClassId != (int)PayClassId.OverTime))
+				.Select(x => new PayClassInfo() { PayClassId = x.PayClassId, PayClassName = x.PayClassName });
+
 			SettingsEditEmployeeTypeViewModel model = new SettingsEditEmployeeTypeViewModel()
 			{
 				EmployeeTypeId = userId,
@@ -147,6 +164,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpPost]
 		public async Task<ActionResult> EditEmployeeType(int subscriptionId, SettingsEditEmployeeTypeViewModel model)
 		{
+			int orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			var payclasses = await AppService.GetPayClassesByOrganizationId(orgId);
+			var overtimepayclass = payclasses.First(pc => (pc.BuiltInPayClassId == (int)PayClassId.OverTime));
 			if (string.IsNullOrEmpty(model.EmployeeTypeName))
 			{
 				Notifications.Add(new BootstrapAlert("Employee Type Requires a name."));
@@ -156,19 +176,26 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				var selected = model.SelectedPayClass != null ? model.SelectedPayClass.ToList() : new List<int>();
 				var assignedPayClass = (await AppService.GetAssignedPayClasses(model.EmployeeTypeId));
-
+				if (!(selected.Contains(overtimepayclass.PayClassId)))
+				{
+					selected.Add(overtimepayclass.PayClassId);
+				}
 				List<int> payClassesToRemove = new List<int>();
 				foreach (var payClass in assignedPayClass)
 				{
+						
 					if (selected.Contains(payClass)) // Don't want to add already assigned payclasses.
 					{
 						selected.Remove(payClass);
 					}
-					else if (!selected.Contains(payClass))
+					else if (!selected.Contains(payClass) && payClass != overtimepayclass.PayClassId)
 					{
 						payClassesToRemove.Add(payClass);
 					}
+					
 				}
+				
+				
 
 				foreach (var payClassId in selected)
 				{
@@ -183,13 +210,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			else //Creating a new Employee Type
 			{
 				var selected = model.SelectedPayClass != null ? model.SelectedPayClass.ToList() : new List<int>();
-				var orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+				
 
-				int newEmployeeTypeId = await AppService.CreateEmployeeType(orgId, model.EmployeeTypeName);
+				int newEmployeeTypeId = await AppService.CreateEmployeeType(orgId, model.EmployeeTypeName, overtimepayclass.PayClassId);
 				foreach (var payClassId in selected)
 				{
 					await AppService.AddPayClassToEmployeeType(subscriptionId, newEmployeeTypeId, payClassId);
 				}
+				
 			}
 
 			return RedirectToAction(ActionConstants.SettingsEmployeeType);

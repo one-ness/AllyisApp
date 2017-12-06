@@ -4,9 +4,7 @@
 AS
 BEGIN
 	INSERT INTO [Hrm].[EmployeeType] ([OrganizationId], [EmployeeTypeName]) 
-	VALUES (@orgId, @employeeName)
-END
-BEGIN
+	VALUES (@orgId, @employeeName);
 
-	SELECT [EmployeeTypeId] FROM [Hrm].[EmployeeType] WHERE [EmployeeTypeName] = @employeeName
+	SELECT SCOPE_IDENTITY(); 
 END

@@ -4,6 +4,7 @@
 	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
 	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
 	ViewBag.Title = Model.IsEdit ? "Edit Employee Type" : "Create Employee Type";
+	
 }
 <div class="container">
 	<div class="shrink-wrap-center">
@@ -14,7 +15,6 @@
 					@Html.ReqLabelFor(m => m.EmployeeTypeName, Strings.Name)
 					@Html.TextBoxFor(m => m.EmployeeTypeName, new { @class = "form-control" })
 				</div>
-				<div class="col-xs-12">@Html.ReqLabelFor(m => m.PayClasses, Strings.Projects)</div>
 				<div class="col-xs-12 swapper-ui" style="margin-bottom:10px" id="swapper-ui">
 
 					<div class="left">
@@ -56,4 +56,8 @@
 	@Scripts.Render("~/bundles/moment")
 	@Scripts.Render("~/bundles/daterangepicker")
 	@Scripts.Render("~/Areas/TimeTracker/Scripts/allyis-employeetype-edit.js")
+	<script>
+		//$('#included-payclasses').find(":contains('Overtime')").hide();
+		//$('#excluded-payclasses').find(":contains('Overtime')").hide();
+	</script>
 }

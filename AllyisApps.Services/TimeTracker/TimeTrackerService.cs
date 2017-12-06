@@ -225,13 +225,13 @@ namespace AllyisApps.Services
 
 			return await DBHelper.UpdatePayPeriod(payPeriodJson, organizationId);
 		}
-		public async Task<int> CreateEmployeeType(int orgId, string employeeName)
+		public async Task<int> CreateEmployeeType(int orgId, string employeeName,int overTimeId)
 		{
 			if (!(orgId >= 0)) throw new ArgumentNullException("OrgId");
 			if (string.IsNullOrEmpty(employeeName)) throw new ArgumentNullException("employeeName");
 
 			var result = await DBHelper.CreateEmployeeType(orgId, employeeName);
-
+			await DBHelper.AddPayClassToEmployeeType(result, overTimeId);
 			return result;
 		}
 
@@ -273,6 +273,7 @@ namespace AllyisApps.Services
 			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 
 			await DBHelper.AddPayClassToEmployeeType(employeeTypeId, payClassId);
+
 		}
 
 		public async Task RemovePayClassFromEmployeeType(int subscriptionId, int employeeTypeId, int payClassId)

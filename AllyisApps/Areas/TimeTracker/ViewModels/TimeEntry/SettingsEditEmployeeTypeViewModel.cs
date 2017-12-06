@@ -56,4 +56,5 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// </summary>
 		public string PayClassName { get; set; }
 	}
+
 }
