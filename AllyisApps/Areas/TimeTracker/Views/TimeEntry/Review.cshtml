@@ -35,7 +35,7 @@
 				</div>
 			</div>
 		</div>
-		@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "form-inline pull-right", role = "form" }))
+		@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "form-inline pull-right update-status-form", role = "form" }))
 		{
 			<label>Set status for selected entries as: </label>
 			<div class="input-group">
@@ -51,7 +51,7 @@
 					<button id="submit-status" class="btn btn-primary" type="submit" tabindex="-1">Save</button>
 				</span>
 			</div>
-			<input type="hidden" name="timeEntryIdsJSON" class="time-entries-input" value="[]" />
+			<input type="hidden" name="timeEntryIdsJSON" class="time-entries-input" value="" />
 			@Html.HiddenFor(m => m.StartDate)
 			@Html.HiddenFor(m => m.EndDate)
 		}
@@ -241,7 +241,7 @@
 				</div>
 			</div>
 		</div>
-		@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "form-inline pull-right", role = "form" }))
+		@using (Html.BeginForm(ActionConstants.UpdateTimeEntryStatus, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = "form-inline pull-right update-status-form", role = "form" }))
 		{
 			<label>Set status for selected entries as: </label>
 			<div class="input-group">
@@ -476,18 +476,6 @@
 			$(".check[check-id=" + $(this).attr("check-all-id") + "]:not(:disabled)").prop("checked", $(this).is(":checked")).change();
 		});
 
-		//updates form hidden input values with all selected time entries
-		$(".time-entry-check").change(function () {
-			var timeEntryId = $(this).data("time-entry-id");
-			var timeEntries = JSON.parse($(".time-entries-input").val());
-			if ($(this).is(":checked")) {
-				timeEntries.push(timeEntryId);
-			} else {
-				timeEntries.splice(timeEntries.indexOf(parseInt(timeEntryId, 10)), 1);
-			}
-			$(".time-entries-input").val(JSON.stringify(timeEntries));
-		});
-
 		//initialize date range picker
 		$(function () {
 			var start = moment(@(Model.StartDate.ToJavaScriptMilliseconds()));
@@ -542,12 +530,12 @@
 			newForm.appendTo(document.body).submit();
 		});
 
-		//html5 autofocus fix for model
+		//html5 autofocus fix for modle
 		$('#time-entry-details-modal').on('shown.bs.modal', function () {
 			$('.details-modal-input').focus();
 		});
 
-		//populates the details model with time entry data when the model needs to pop up
+		//populates the details modle with time entry data when the modle needs to pop up
 		$(".details-modal-input").click(function () {
 			var timeEntry = $(this).data("time-entry-object");
 			$("#modal-details-name").text(timeEntry.FirstName + " " + timeEntry.LastName);
@@ -579,6 +567,12 @@
 			$(".parent-row").filter(function () {
 				return !$(this).nextAll(":not(.filtered)").hasClass("child-row");
 			}).addClass("filtered");
+		});
+		
+		//updates form hidden input values with all selected time entries
+		$(".update-status-form").submit(function() {
+			var timeEntryIds = $(".time-entry-check:checked").map(function() {return $(this).data("time-entry-id")}).toArray();
+			$(".time-entries-input").val(JSON.stringify(timeEntryIds));
 		});
 	});
 	</script>

@@ -81,23 +81,19 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				DateTime endDate = Utility.GetDateTimeFromDays(editedEntryDates.Last());
 
 				//start at the next period after the lock date
-				DateTime? lockDatePlusOne = null;
-				DateRange skipPeriod = null;
-				if (settings.LockDate != null)
+				DateTime? lockDate = settings.LockDate ?? settings.PayrollProcessedDate;
+				if (lockDate != null)
 				{
-					skipPeriod = await AppService.GetOvertimePeriodByDate(organizationId, settings.LockDate.Value);
-					lockDatePlusOne = skipPeriod.EndDate.AddDays(1);
-				}
-				else if (settings.PayrollProcessedDate != null)
-				{
-					skipPeriod = await AppService.GetOvertimePeriodByDate(organizationId, settings.PayrollProcessedDate.Value);
-					lockDatePlusOne = skipPeriod.EndDate.AddDays(1);
-				}
-
-				if (lockDatePlusOne != null && lockDatePlusOne.Value > startDate)
-				{
-					startDate = lockDatePlusOne.Value;
-					Notifications.Add(new BootstrapAlert(string.Format(Strings.SkippedRecalculationOfOvertimePeriod, skipPeriod.StartDate.ToShortDateString(), skipPeriod.EndDate.ToShortDateString()), Variety.Warning));
+					DateRange skipPeriod = await AppService.GetOvertimePeriodByDate(organizationId, lockDate.Value, settings);
+					if (skipPeriod.EndDate >= startDate)
+					{
+						startDate = skipPeriod.EndDate.AddDays(1);
+						Notifications.Add(new BootstrapAlert(string.Format(
+							Strings.SkippedRecalculationOfOvertimePeriod,
+							skipPeriod.StartDate.ToShortDateString(),
+							skipPeriod.EndDate.ToShortDateString()),
+							Variety.Warning));
+					}
 				}
 
 				//start date is greater, that means all entries are within a period that needs to be skipped
