@@ -62,9 +62,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			int organizationId = AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId;
-			OvertimeResult result = await AppService.UpdateOvertime(model.SubscriptionId, organizationId, model.OvertimeHours, model.OvertimePeriod, model.IsOvertimeUsed);
+			var result = await AppService.UpdateOvertime(model.SubscriptionId, organizationId, model.OvertimeHours, model.OvertimePeriod, model.IsOvertimeUsed);
 
-			switch (result)
+			switch (result.Enum)
 			{
 				case OvertimeResult.InvalidPeriodValue:
 					Notifications.Add(new BootstrapAlert(Strings.OvertimeResultInvalidPeriod, Variety.Warning));
@@ -86,6 +86,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					break;
 				case OvertimeResult.SuccessAndDeletedOvertime:
 					Notifications.Add(new BootstrapAlert(Strings.OvertimeResultSuccessAndDeletedOvertime, Variety.Success));
+					break;
+				case OvertimeResult.InvalidLockDate:
+					Notifications.Add(new BootstrapAlert(string.Format(Strings.OvertimeResultInvalidLockDate, result.SuggestedLockDate.ToShortDateString()), Variety.Danger));
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(result), result, "");

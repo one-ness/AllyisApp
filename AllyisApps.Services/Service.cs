@@ -393,35 +393,48 @@ namespace AllyisApps.Services
 		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <param name="startOfWeek">Start of Week.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public async Task<StartOfWeekResult> UpdateStartOfWeek(int subscriptionId, int startOfWeek)
+		public async Task<StartOfWeekResultClass> UpdateStartOfWeek(int subscriptionId, int startOfWeek)
 		{
+			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
+
 			#region Validation
 
 			if (!Enum.IsDefined(typeof(StartOfWeekEnum), startOfWeek))
 			{
-				return StartOfWeekResult.StartOfWeekOutOfRange;
+				return new StartOfWeekResultClass(StartOfWeekResult.StartOfWeekOutOfRange);
 			}
 
 			#endregion Validation
 
-			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
-
 			int organizationId = UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-
-			int updated = await DBHelper.UpdateTimeTrackerStartOfWeek(organizationId, startOfWeek);
-			if (updated != 1) return StartOfWeekResult.SettingsNotFound;
 
 			// Recalculate overtime if necessary
 			var settings = await GetSettingsByOrganizationId(organizationId);
-			if (settings.OvertimeHours == null || settings.OvertimePeriod != "Week") return StartOfWeekResult.Success;
+			if (settings.OvertimeHours == null || settings.OvertimePeriod != "Week") return new StartOfWeekResultClass(StartOfWeekResult.Success);
 
-			var users = await GetOrganizationUsersAsync(organizationId);
-			foreach (var user in users)
+			//If the change will affect overtime calculation, validate
+			if (settings.OvertimePeriod == "Week")
 			{
-				await RecalculateOvertimeForUserAfterLockDate(organizationId, user.UserId, settings);
+				DateTime? suggestedLockDate = GetSuggestedLockDateForOvertimeSettingsModification(startOfWeek, settings);
+				if (suggestedLockDate != null)
+				{
+					return new StartOfWeekResultClass(StartOfWeekResult.InvalidLockDate, suggestedLockDate.Value);
+				}
 			}
 
-			return StartOfWeekResult.SuccessAndRecalculatedOvertime;
+			int updated = await DBHelper.UpdateTimeTrackerStartOfWeek(organizationId, startOfWeek);
+			if (updated != 1) return new StartOfWeekResultClass(StartOfWeekResult.SettingsNotFound);
+
+			var users = await GetOrganizationUsersAsync(organizationId);
+			settings = await GetSettingsByOrganizationId(organizationId);
+			var tasks = new List<Task>();
+			foreach (var user in users)
+			{
+				tasks.Add(RecalculateOvertimeForUserAfterLockDate(organizationId, user.UserId, settings));
+			}
+			await Task.WhenAll(tasks);
+
+			return new StartOfWeekResultClass(StartOfWeekResult.SuccessAndRecalculatedOvertime);
 		}
 
 		/// <summary>
@@ -433,49 +446,61 @@ namespace AllyisApps.Services
 		/// <param name="overtimePeriod">Time period for hours until overtime.</param>
 		/// <param name="isOvertimeUsed">Whether or not overtime is turned on.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public async Task<OvertimeResult> UpdateOvertime(int subscriptionId, int organizationId, int? overtimeHours, string overtimePeriod, bool isOvertimeUsed)
+		public async Task<OvertimeResultClass> UpdateOvertime(int subscriptionId, int organizationId, int? overtimeHours, string overtimePeriod, bool isOvertimeUsed)
 		{
+			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
+
 			#region Validation
 
 			if (overtimeHours != null && overtimeHours < 0)
 			{
-				return OvertimeResult.InvalidHours;
+				return new OvertimeResultClass(OvertimeResult.InvalidHours);
 			}
 
 			if (!new[] { "Day", "Week", "Month" }.Contains(overtimePeriod))
 			{
-				return OvertimeResult.InvalidPeriodValue;
+				return new OvertimeResultClass(OvertimeResult.InvalidPeriodValue);
 			}
 
 			if (isOvertimeUsed && overtimeHours == null)
 			{
-				return OvertimeResult.NoHoursValue;
+				return new OvertimeResultClass(OvertimeResult.NoHoursValue);
 			}
 
 			#endregion Validation
 
-			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
+			var settings = await GetSettingsByOrganizationId(organizationId);
 
+			DateTime? suggestedLockDate = GetSuggestedLockDateForOvertimeSettingsModification(settings.StartOfWeek, settings);
+			if (suggestedLockDate != null)
+			{
+				return new OvertimeResultClass(OvertimeResult.InvalidLockDate, suggestedLockDate.Value);
+			}
+
+			//all's good, update
 			int updated = await DBHelper.UpdateOvertime(organizationId, isOvertimeUsed ? overtimeHours : null, overtimePeriod);
-			if (updated != 1) return OvertimeResult.SettingsNotFound;
+			if (updated != 1) return new OvertimeResultClass(OvertimeResult.SettingsNotFound);
 
 			// Recalculate overtime for all users
-			var settings = await GetSettingsByOrganizationId(organizationId);
 			var users = await GetOrganizationUsersAsync(organizationId);
+			settings = await GetSettingsByOrganizationId(organizationId); //updated
 			if (isOvertimeUsed)
 			{
+				var tasks = new List<Task>();
 				foreach (var user in users)
 				{
-					await RecalculateOvertimeForUserAfterLockDate(organizationId, user.UserId, settings);
+					tasks.Add(RecalculateOvertimeForUserAfterLockDate(organizationId, user.UserId, settings));
 				}
-				return OvertimeResult.SuccessAndRecalculatedOvertime;
+				await Task.WhenAll(tasks);
+
+				return new OvertimeResultClass(OvertimeResult.SuccessAndRecalculatedOvertime);
 			}
 			else
 			{
 				DateTime startDate = settings.LockDate?.AddDays(1) ?? settings.PayrollProcessedDate?.AddDays(1) ?? SqlDateTime.MinValue.Value;
 				DateTime endDate = SqlDateTime.MaxValue.Value;
 				await DeleteOvertimeInDateRange(organizationId, new DateRange(startDate, endDate));
-				return OvertimeResult.SuccessAndDeletedOvertime;
+				return new OvertimeResultClass(OvertimeResult.SuccessAndDeletedOvertime);
 			}
 		}
 

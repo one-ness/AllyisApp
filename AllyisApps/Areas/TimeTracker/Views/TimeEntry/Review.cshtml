@@ -129,7 +129,7 @@
 								{
 									@class = "dropdown-item",
 									style = "color: #333",
-									onclick = "return confirm('" + string.Format(Strings.PayrollProcessConfirm, Model.EndDate.ToShortDateString()) + "');"
+									onclick = "return confirm('" + string.Format(Strings.PayrollProcessConfirm, Model.LockDate.Value.ToShortDateString()) + "');"
 								})
 						}
 					</div>

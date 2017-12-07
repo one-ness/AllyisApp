@@ -427,7 +427,7 @@ namespace AllyisApps.Services
 			if (lockDate != null)
 			{
 				DateTime lockPeriodPlusOne = (await GetOvertimePeriodByDate(organizationId, lockDate.Value, settings)).EndDate.AddDays(1);
-				if (lockPeriodPlusOne > entryDates.First())
+				if (lockPeriodPlusOne > startDate)
 				{
 					startDate = lockPeriodPlusOne;
 				}
@@ -444,7 +444,12 @@ namespace AllyisApps.Services
 			DateTime cur = range.StartDate;
 			while (cur <= range.EndDate)
 			{
-				await RecalculateOvertime(organizationId, cur, userId);
+				try
+				{
+					await RecalculateOvertime(organizationId, cur, userId);
+				}
+				catch (ArgumentOutOfRangeException) { }
+
 				DateRange overtimePeriod = await GetOvertimePeriodByDate(organizationId, cur);
 				if (overtimePeriod == null) return; //org doesn't use overtime
 
@@ -453,7 +458,7 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Recalculates the overtime hours for a given overtime period indicated by date, by user/org
+		/// Recalculates the overtime hours for a given overtime period indicated by date, by user/org.
 		/// </summary>
 		/// <param name="organizationId">The organization that the time entries belong to</param>
 		/// <param name="date">The date indicating which overtime period to recalculate.</param>
@@ -466,9 +471,9 @@ namespace AllyisApps.Services
 			if (settings.OvertimeHours == null) return; //don't need to recalculate overtime if org doesn't use it
 
 			DateRange overtimePeriod = await GetOvertimePeriodByDate(organizationId, date, settings);
-			if (overtimePeriod.StartDate <= (settings.LockDate ?? settings.PayrollProcessedDate ?? DateTime.MinValue))
+			if (overtimePeriod.EndDate <= (settings.LockDate ?? settings.PayrollProcessedDate ?? DateTime.MinValue))
 			{
-				throw new ArgumentOutOfRangeException(nameof(overtimePeriod.StartDate), overtimePeriod.StartDate, "Cannot recalculate overtime for a period which includes locked dates");
+				throw new ArgumentOutOfRangeException(nameof(overtimePeriod.StartDate), overtimePeriod.StartDate, "Cannot recalculate overtime for a period that is fully locked.");
 			}
 
 			var entriesInOvertimePeriod = (await GetTimeEntriesByUserOverDateRange(userId, overtimePeriod.StartDate, overtimePeriod.EndDate, organizationId)).ToList();
@@ -602,6 +607,13 @@ namespace AllyisApps.Services
 
 		#region public static
 
+		/// <summary>
+		/// Returns a date range that encompases the inputted date,
+		/// and starts on the closest previous weekday based on startOfWeek, lasting a week
+		/// </summary>
+		/// <param name="startOfWeek"></param>
+		/// <param name="date"></param>
+		/// <returns></returns>
 		public static DateRange GetWeeklyOvertimePeriod(int startOfWeek, DateTime date)
 		{
 			int dateDayOfWeek = (int)date.DayOfWeek;
@@ -617,6 +629,16 @@ namespace AllyisApps.Services
 			var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddTicks(-1);
 
 			return new DateRange(firstDayOfMonth, lastDayOfMonth);
+		}
+
+		public static DateTime? GetSuggestedLockDateForOvertimeSettingsModification(int startOfWeek, Setting settings)
+		{
+			DateTime? effectiveLockDate = settings.LockDate ?? settings.PayrollProcessedDate;
+			if ((effectiveLockDate != null && (int)effectiveLockDate.Value.DayOfWeek != Mod(startOfWeek - 2, 7) + 1) || settings.LockDate != null)
+			{
+				return GetWeeklyOvertimePeriod(startOfWeek, effectiveLockDate.Value).EndDate;
+			}
+			return null; //the current lock date is good, no suggestion
 		}
 
 		public static DateTime SetStartingDate(DateTime? date, int startOfWeek)

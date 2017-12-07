@@ -55,7 +55,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			var result = await AppService.UpdateStartOfWeek(subscriptionId, startOfWeek);
 
-			switch (result)
+			switch (result.Enum)
 			{
 				case StartOfWeekResult.StartOfWeekOutOfRange:
 					Notifications.Add(new BootstrapAlert(Strings.InvalidSOW, Variety.Danger));
@@ -68,6 +68,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					break;
 				case StartOfWeekResult.SettingsNotFound:
 					Notifications.Add(new BootstrapAlert(Strings.StartOfWeekSettingsNotFound, Variety.Danger));
+					break;
+				case StartOfWeekResult.InvalidLockDate:
+					Notifications.Add(
+						new BootstrapAlert(
+							string.Format(
+								Strings.StartOfWeekResultInvalidLockDate.Replace("\\n", "</br>"),
+								result.SuggestedLockDate.ToShortDateString()),
+							Variety.Danger)
+						{ IsHtmlString = true });
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(result));

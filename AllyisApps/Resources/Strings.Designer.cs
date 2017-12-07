@@ -3103,6 +3103,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot change overtime settings because there are un-processed time entries that would interfere with overtime re-calculation.\nThe following conditions must be met to change this setting:\n1. Payroll process date must be {0} (or the end of any overtime period).\n\n2. There must be no locked entries (from lock date)..
+        /// </summary>
+        public static string OvertimeResultInvalidLockDate {
+            get {
+                return ResourceManager.GetString("OvertimeResultInvalidLockDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Overtime period must be either &apos;Day&apos;, &apos;Week&apos;, or &apos;Month&apos;..
         /// </summary>
         public static string OvertimeResultInvalidPeriod {
@@ -4134,6 +4143,15 @@ namespace AllyisApps.Resources {
         public static string StartDate {
             get {
                 return ResourceManager.GetString("StartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot change start of week because there are un-processed time entries that would interfere with overtime re-calculation.\nThe following conditions must be met to change this setting:\n1. Payroll process date must be {0} (or the end of any overtime period).\n\n2. There must be no locked entries (from lock date)..
+        /// </summary>
+        public static string StartOfWeekResultInvalidLockDate {
+            get {
+                return ResourceManager.GetString("StartOfWeekResultInvalidLockDate", resourceCulture);
             }
         }
         

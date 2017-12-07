@@ -29,7 +29,8 @@
 		StartOfWeekOutOfRange,
 		SuccessAndRecalculatedOvertime,
 		Success,
-		SettingsNotFound
+		SettingsNotFound,
+		InvalidLockDate
 	}
 
 	public enum OvertimeResult
@@ -40,6 +41,7 @@
 		InvalidHours,
 		SettingsNotFound,
 		SuccessAndRecalculatedOvertime,
-		SuccessAndDeletedOvertime
+		SuccessAndDeletedOvertime,
+		InvalidLockDate
 	}
 }

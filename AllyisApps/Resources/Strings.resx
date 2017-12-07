@@ -1825,4 +1825,10 @@
 	<data name="SkippedRecalculationOfOvertimePeriod" xml:space="preserve">
     <value>Skipped recalculation of overtime for overtime period {0} - {1} because it contains locked dates.</value>
   </data>
+	<data name="StartOfWeekResultInvalidLockDate" xml:space="preserve">
+    <value>Cannot change start of week because there are un-processed time entries that would interfere with overtime re-calculation.\nThe following conditions must be met to change this setting:\n1. Payroll process date must be {0} (or the end of any overtime period).\n\n2. There must be no locked entries (from lock date).</value>
+  </data>
+	<data name="OvertimeResultInvalidLockDate" xml:space="preserve">
+    <value>Cannot change overtime settings because there are un-processed time entries that would interfere with overtime re-calculation.\nThe following conditions must be met to change this setting:\n1. Payroll process date must be {0} (or the end of any overtime period).\n\n2. There must be no locked entries (from lock date).</value>
+  </data>
 </root>
