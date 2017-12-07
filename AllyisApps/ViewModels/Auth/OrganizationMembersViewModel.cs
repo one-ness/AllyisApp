@@ -14,6 +14,10 @@ namespace AllyisApps.ViewModels.Auth
 		public int OrganizationId { get; set; }
 
 		/// <summary>
+		/// Current User
+		/// </summary>
+		public int CurrentUserId { get; set; }
+		/// <summary>
 		/// organization name
 		/// </summary>
 		public string OrganizationName { get; set; }

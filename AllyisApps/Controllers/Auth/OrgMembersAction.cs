@@ -31,7 +31,8 @@ namespace AllyisApps.Controllers.Auth
 				CanEditUser = AppService.CheckOrgAction(AppService.OrgAction.EditUser, id, false),
 				CanManagePermissions = AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id, false),
 				OrganizationId = id,
-				PossibleRoles = organizationRoles
+				PossibleRoles = organizationRoles,
+				CurrentUserId = AppService.UserContext.UserId
 			};
 			model.TabInfo.OrganizationId = id;
 			

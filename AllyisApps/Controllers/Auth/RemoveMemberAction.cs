@@ -37,10 +37,21 @@ namespace AllyisApps.Controllers.Auth
             this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
 
 			List<int> userIds = csvUserIds.Split(',').Select(userIdString => Convert.ToInt32(userIdString)).ToList();
+			try
+			{
+				await AppService.DeleteOrganizationUsers(userIds, id);
+				Notifications.Add(new BootstrapAlert(Resources.Strings.UserDeletedSuccessfully, Variety.Success));
+			}
+			catch (ArgumentNullException)
+			{
+				Notifications.Add(new BootstrapAlert("You must select users to remove from the organization.", Variety.Warning));
+			}
+			catch (ArgumentException)
+			{
+				Notifications.Add(new BootstrapAlert("Cannot delete yourself from an organization.", Variety.Danger));
+			}
 
-			await AppService.DeleteOrganizationUsers(userIds, id);
-           
-            Notifications.Add(new BootstrapAlert(Resources.Strings.UserDeletedSuccessfully, Variety.Success));
+			
 
             return this.RedirectToAction(ActionConstants.OrganizationMembers, new { id = id });
         }
