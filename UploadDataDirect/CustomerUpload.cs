@@ -21,13 +21,13 @@ namespace UploadDataDirect
 		internal async Task<Customer> uploadDefaltCustomer()
 		{
 			var org = await appService.GetOrganization(orgId);
-			
+		
 			Customer customer = new Customer()
 			{
-				CustomerCode = org.OrganizationName+"_Defalt",
+				CustomerCode = org.OrganizationName+"_Upload_Defalt",
 				OrganizationId = orgId,
 				IsActive = true,
-				CustomerName = org.OrganizationName,
+				CustomerName = org.OrganizationName +"_Upload_Defalt",
 			};
 			int custId = await appService.CreateCustomerAsync(customer, subId);
 			return appService.GetCustomer(custId);
