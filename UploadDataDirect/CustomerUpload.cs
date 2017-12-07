@@ -24,10 +24,10 @@ namespace UploadDataDirect
 		
 			Customer customer = new Customer()
 			{
-				CustomerCode = org.OrganizationName+"_Upload_Defalt",
+				CustomerCode = org.OrganizationName+"_Upload",
 				OrganizationId = orgId,
 				IsActive = true,
-				CustomerName = org.OrganizationName +"_Upload_Defalt",
+				CustomerName = org.OrganizationName +"_Upload",
 			};
 			int custId = await appService.CreateCustomerAsync(customer, subId);
 			return appService.GetCustomer(custId);
