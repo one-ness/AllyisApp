@@ -230,6 +230,22 @@ namespace AllyisApps.Utilities
 
 			return memberExp?.Member.Name;
 		}
+
+		/// <summary>
+		/// Returns one date for all datetimes within a week period starting at startOfWeek
+		/// </summary>
+		/// <param name="dt">DateTime that we're extending</param>
+		/// <param name="startOfWeek">The start of the week period to group by</param>
+		/// <returns></returns>
+		public static DateTime GroupByStartOfWeek(this DateTime dt, DayOfWeek startOfWeek)
+		{
+			int diff = dt.DayOfWeek - startOfWeek;
+			if (diff < 0)
+			{
+				diff += 7;
+			}
+			return dt.AddDays(-1 * diff).Date;
+		}
 	}
 
 	/// <summary>

@@ -799,6 +799,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to change overtime settings?\n\nTo change, the lock date must be set to be the end date of the updated overtime period.\n\nFor example, if you are changing the overtime period to be Monthly, the lock date must be set to the last day of any month..
+        /// </summary>
+        public static string ConfirmOvertime {
+            get {
+                return ResourceManager.GetString("ConfirmOvertime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm Password.
         /// </summary>
         public static string ConfirmPassword {
@@ -826,7 +835,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to change start of week?\nIf overtime settings is based on week, all overtime will be recalculated for dates past the lock date..
+        ///   Looks up a localized string similar to Are you sure you want to change start of week?\n\nIf overtime settings is based on week, the lock date must be set to be the day before what you are changing the start of week to be.\n\nFor example, if you are changing the start of week to be Monday, the lock date must be set to any Sunday..
         /// </summary>
         public static string ConfirmStartOfWeek {
             get {
@@ -2266,6 +2275,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Successfully locked all dates for time entries up to {0}, and updated overtime calculations to new overtime settings for the newly unlocked entries..
+        /// </summary>
+        public static string LockEntriesResultSuccessAndRecalculatedOvertime {
+            get {
+                return ResourceManager.GetString("LockEntriesResultSuccessAndRecalculatedOvertime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot lock time entries through {0} because of a db error..
         /// </summary>
         public static string LockTimeEntriesDBError {
@@ -2280,6 +2298,15 @@ namespace AllyisApps.Resources {
         public static string LockTimeEntriesInvalidLockDate {
             get {
                 return ResourceManager.GetString("LockTimeEntriesInvalidLockDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot reduce lock date to {0} because your overtime calculation settings were recently changed. You can either payroll process your locked entries, or set the lock date to any date that is the end of an overtime period..
+        /// </summary>
+        public static string LockTimeEntriesInvalidLockDateWithOvertimeChange {
+            get {
+                return ResourceManager.GetString("LockTimeEntriesInvalidLockDateWithOvertimeChange", resourceCulture);
             }
         }
         
@@ -3103,7 +3130,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot change overtime settings because there are un-processed time entries that would interfere with overtime re-calculation.\nThe following conditions must be met to change this setting:\n1. Payroll process date must be {0} (or the end of any overtime period).\n\n2. There must be no locked entries (from lock date)..
+        ///   Looks up a localized string similar to Cannot change overtime settings because there are un-processed time entries that would interfere with overtime re-calculation.\n\nAll entries before {0} (or the end of any overtime period) must be locked..
         /// </summary>
         public static string OvertimeResultInvalidLockDate {
             get {
@@ -4147,7 +4174,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot change start of week because there are un-processed time entries that would interfere with overtime re-calculation.\nThe following conditions must be met to change this setting:\n1. Payroll process date must be {0} (or the end of any overtime period).\n\n2. There must be no locked entries (from lock date)..
+        ///   Looks up a localized string similar to Cannot change start of week because there are un-processed time entries that would interfere with overtime re-calculation.\n\nAll entries before {0} (or the end date of any overtime period) must be locked..
         /// </summary>
         public static string StartOfWeekResultInvalidLockDate {
             get {
@@ -4723,11 +4750,29 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Successfully unlocked all locked time entries, and updated overtime calculations to the new overtime settings for the newly unlocked entries..
+        /// </summary>
+        public static string UnlockEntriesResultSuccessAndRecalculatedOvertime {
+            get {
+                return ResourceManager.GetString("UnlockEntriesResultSuccessAndRecalculatedOvertime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot unlock time entries because of a db error.
         /// </summary>
         public static string UnlockTimeEntriesDbError {
             get {
                 return ResourceManager.GetString("UnlockTimeEntriesDbError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot unlock time entries because your overtime calculation settings were recently changed. You can either payroll process your locked entries, or set the lock date to any date that is the end of an overtime period..
+        /// </summary>
+        public static string UnlockTimeEntriesInvalidLockDate {
+            get {
+                return ResourceManager.GetString("UnlockTimeEntriesInvalidLockDate", resourceCulture);
             }
         }
         

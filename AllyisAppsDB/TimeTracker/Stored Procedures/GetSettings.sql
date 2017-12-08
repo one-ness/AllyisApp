@@ -6,11 +6,9 @@ AS
 			[StartOfWeek],
 			[OvertimeHours],
 			[OvertimePeriod],
-			[IsLockDateUsed],
-			[LockDatePeriod],
-			[LockDateQuantity],
 			[PayrollProcessedDate],
 			[LockDate],
-			[PayPeriod]
+			[PayPeriod],
+			[OtSettingRecentlyChanged]
 	FROM [TimeTracker].[Setting] WITH (NOLOCK) 
 	WHERE [OrganizationId] = @organizationId;

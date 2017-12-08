@@ -1796,7 +1796,10 @@
     <value>Invalid action for time entry on date {0}</value>
   </data>
 	<data name="ConfirmStartOfWeek" xml:space="preserve">
-    <value>Are you sure you want to change start of week?\nIf overtime settings is based on week, all overtime will be recalculated for dates past the lock date.</value>
+    <value>Are you sure you want to change start of week?\n\nIf overtime settings is based on week, the lock date must be set to be the day before what you are changing the start of week to be.\n\nFor example, if you are changing the start of week to be Monday, the lock date must be set to any Sunday.</value>
+  </data>
+	<data name="ConfirmOvertime" xml:space="preserve">
+    <value>Are you sure you want to change overtime settings?\n\nTo change, the lock date must be set to be the end date of the updated overtime period.\n\nFor example, if you are changing the overtime period to be Monthly, the lock date must be set to the last day of any month.</value>
   </data>
 	<data name="StartOfWeekSuccessAndRecalculatedOvertime" xml:space="preserve">
     <value>Successfully updated start of week settings, and recalculated all overtime periods after lock date.</value>
@@ -1826,9 +1829,21 @@
     <value>Skipped recalculation of overtime for overtime period {0} - {1} because it contains locked dates.</value>
   </data>
 	<data name="StartOfWeekResultInvalidLockDate" xml:space="preserve">
-    <value>Cannot change start of week because there are un-processed time entries that would interfere with overtime re-calculation.\nThe following conditions must be met to change this setting:\n1. Payroll process date must be {0} (or the end of any overtime period).\n\n2. There must be no locked entries (from lock date).</value>
+    <value>Cannot change start of week because there are un-processed time entries that would interfere with overtime re-calculation.\n\nAll entries before {0} (or the end date of any overtime period) must be locked.</value>
   </data>
 	<data name="OvertimeResultInvalidLockDate" xml:space="preserve">
-    <value>Cannot change overtime settings because there are un-processed time entries that would interfere with overtime re-calculation.\nThe following conditions must be met to change this setting:\n1. Payroll process date must be {0} (or the end of any overtime period).\n\n2. There must be no locked entries (from lock date).</value>
+    <value>Cannot change overtime settings because there are un-processed time entries that would interfere with overtime re-calculation.\n\nAll entries before {0} (or the end of any overtime period) must be locked.</value>
+  </data>
+	<data name="UnlockTimeEntriesInvalidLockDate" xml:space="preserve">
+    <value>Cannot unlock time entries because your overtime calculation settings were recently changed. You can either payroll process your locked entries, or set the lock date to any date that is the end of an overtime period.</value>
+  </data>
+	<data name="LockTimeEntriesInvalidLockDateWithOvertimeChange" xml:space="preserve">
+    <value>Cannot reduce lock date to {0} because your overtime calculation settings were recently changed. You can either payroll process your locked entries, or set the lock date to any date that is the end of an overtime period.</value>
+  </data>
+	<data name="LockEntriesResultSuccessAndRecalculatedOvertime" xml:space="preserve">
+    <value>Successfully locked all dates for time entries up to {0}, and updated overtime calculations to new overtime settings for the newly unlocked entries.</value>
+  </data>
+	<data name="UnlockEntriesResultSuccessAndRecalculatedOvertime" xml:space="preserve">
+    <value>Successfully unlocked all locked time entries, and updated overtime calculations to the new overtime settings for the newly unlocked entries.</value>
   </data>
 </root>
