@@ -5,6 +5,7 @@ using System.IO;
 using System.Data;
 using System;
 using AllyisApps.Services.Crm;
+using System.Collections.Generic;
 
 namespace UploadDataDirect
 {
@@ -60,15 +61,16 @@ namespace UploadDataDirect
 			await userUploader.uploadUsers();
 			//Import Customer
 
-			CustomerUpload customerUpload = new CustomerUpload(appService, orgId, subId);
-			Customer customerId = await customerUpload.uploadDefaltCustomer();
+			CustomerUpload customerUpload = new CustomerUpload(appService, orgId, subId, projects);
+
+			var customers = await customerUpload.UploadCustomers();
 			//Import Projects
-			ProjectUpload projectUploader = new ProjectUpload(projects, appService ,orgId,subId, customerId);
+			ProjectUpload projectUploader = new ProjectUpload(projects, appService ,orgId,subId, customers);
 			await projectUploader.projectUpload();
 
 			//Import TimeEntry
 
-			TimeEntryUpload timeEntryUploader = new TimeEntryUpload(hoursData, appService, orgId, subId, customerId, isNew);
+			TimeEntryUpload timeEntryUploader = new TimeEntryUpload(hoursData, appService, orgId, subId, isNew);
 			await timeEntryUploader.uploadTimeEntries();
 		}
 	}
