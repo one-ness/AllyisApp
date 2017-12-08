@@ -9,6 +9,7 @@
     [PayrollProcessedDate] DATE NULL,
     [LockDate] DATE NULL,
     [PayPeriod] VARCHAR(MAX) NOT NULL DEFAULT '{"type":"Duration","duration":"14","startDate":"2017/10/16"}',
+    [OtSettingRecentlyChanged] BIT NOT NULL DEFAULT 0, 
     CONSTRAINT [PK_Setting] PRIMARY KEY CLUSTERED ([OrganizationId] ASC),
     CONSTRAINT [FK_Settings_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId])
 );

@@ -88,7 +88,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Notifications.Add(new BootstrapAlert(Strings.OvertimeResultSuccessAndDeletedOvertime, Variety.Success));
 					break;
 				case OvertimeResult.InvalidLockDate:
-					Notifications.Add(new BootstrapAlert(string.Format(Strings.OvertimeResultInvalidLockDate, result.SuggestedLockDate.ToShortDateString()), Variety.Danger));
+					Notifications.Add(new BootstrapAlert(string.Format(Strings.OvertimeResultInvalidLockDate.Replace("\\n", "</br>"), result.SuggestedLockDate.ToShortDateString()), Variety.Danger));
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(result), result, "");

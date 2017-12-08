@@ -11,9 +11,6 @@ AS
 	-- blocks lower in this same stored procedure, while also letting the settings table itself be returned
 	SELECT
 		[StartOfWeek],
-		[IsLockDateUsed],
-		[LockDatePeriod],
-		[LockDateQuantity],
 		[LockDate],
 		[PayrollProcessedDate]
 	INTO #settings

@@ -22,7 +22,15 @@
 					<h1 class="panel-title">@Strings.Overtime</h1>
 				</div>
 				<div id="Overtime" class="panel-body">
-					@using (Html.BeginForm(ActionConstants.UpdateOvertime, ControllerConstants.TimeEntry, FormMethod.Post, new { enctype = "multipart/form-data" }))
+					@using (Html.BeginForm(
+						ActionConstants.UpdateOvertime,
+						ControllerConstants.TimeEntry,
+						FormMethod.Post,
+						new
+						{
+							enctype = "multipart/form-data",
+							onsubmit = string.Format("return confirm(\"{0}\")", Html.Raw(Strings.ConfirmOvertime))
+						}))
 					{
 						@Html.AntiForgeryToken()
 						@Html.HiddenFor(m => m.SubscriptionId)

@@ -156,6 +156,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				case LockEntriesResult.NoChange:
 					Notifications.Add(new BootstrapAlert(string.Format(Strings.LockTimeEntriesNoChange, lockDate.ToShortDateString()), Variety.Warning));
 					break;
+				case LockEntriesResult.SuccessAndRecalculatedOvertime:
+					Notifications.Add(new BootstrapAlert(string.Format(Strings.LockEntriesResultSuccessAndRecalculatedOvertime, lockDate.ToShortDateString()), Variety.Success));
+					break;
+				case LockEntriesResult.InvalidLockDateWithOvertimeChange:
+					Notifications.Add(new BootstrapAlert(string.Format(Strings.LockTimeEntriesInvalidLockDateWithOvertimeChange, lockDate.ToShortDateString()), Variety.Danger));
+					break;
 				default:
 					throw new ArgumentOutOfRangeException(string.Format(Strings.InvalidEnum, nameof(result), nameof(LockEntriesResult)));
 			}
@@ -185,6 +191,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				case UnlockEntriesResult.Success:
 					Notifications.Add(new BootstrapAlert(Strings.UnlockTimeEntriesSuccess, Variety.Success));
 					break;
+				case UnlockEntriesResult.InvalidLockDate:
+					Notifications.Add(new BootstrapAlert(Strings.UnlockTimeEntriesInvalidLockDate, Variety.Danger));
+					break;
+				case UnlockEntriesResult.SuccessAndRecalculatedOvertime:
+					Notifications.Add(new BootstrapAlert(Strings.UnlockEntriesResultSuccessAndRecalculatedOvertime, Variety.Success));
+					break;
 				default:
 					throw new ArgumentOutOfRangeException(string.Format(Strings.InvalidEnum, nameof(result), nameof(UnlockEntriesResult)));
 			}
@@ -202,7 +214,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>Redirect to same page.</returns>
 		public async Task<ActionResult> PayrollProcessTimeEntries(int subscriptionId, DateTime startDate, DateTime endDate)
 		{
-			PayrollProcessEntriesResult result = await AppService.PayrollProcessTimeEntriesAsync(subscriptionId);
+			PayrollProcessEntriesResult result = await AppService.PayrollProcessTimeEntries(subscriptionId);
 			switch (result)
 			{
 				case PayrollProcessEntriesResult.NoLockDate:
