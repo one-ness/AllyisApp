@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.Project;
@@ -16,16 +17,15 @@ namespace UploadDataDirect
 		private AllyisApps.Services.AppService appService;
 		private int orgId;
 		private int subId;
-		private Customer customerId;
 		private bool isNew;
+		
 
-		public TimeEntryUpload(DataTable hoursData, AllyisApps.Services.AppService appService, int orgId, int subId, Customer customerId, bool isNew = true)
+		public TimeEntryUpload(DataTable hoursData, AllyisApps.Services.AppService appService, int orgId, int subId, bool isNew)
 		{
 			this.hoursData = hoursData;
 			this.appService = appService;
 			this.orgId = orgId;
 			this.subId = subId;
-			this.customerId = customerId;
 			this.isNew = isNew;
 		}
 
