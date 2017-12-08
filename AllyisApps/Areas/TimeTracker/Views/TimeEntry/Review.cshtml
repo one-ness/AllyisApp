@@ -156,7 +156,7 @@
 					{
 						<tr class="parent-row">
 							<td><input type="checkbox" class="check check-all" check-id="0" check-all-id="@group.Key"></td>
-							<td><i class="fa fa-chevron-down toggle-on-click child-row-controller" rowId=@group.Key style="cursor:pointer"></i></td>
+							<td><i class="fa fa-chevron-down toggle-on-click child-row-controller" rowId=@group.Key style="cursor:pointer" onclick="getUser(@group.Key)"></i></td>
 							<td>@group.First().FirstName @group.First().LastName</td>
 							@foreach (int payClassId in Model.PayClasses.Select(x => x.PayClassId))
 							{
@@ -176,6 +176,8 @@
 						</tr>
 						foreach (var timeEntry in group)
 						{
+							<tr class="timeEntryRow" replaceId="@group.Key"></tr>
+							@*
 							<tr class="child-row hidden @(timeEntry.IsLocked ? "greyed-out" : "")" rowId=@group.Key data-time-entry-status-id="@timeEntry.TimeEntryStatusId">
 								<td></td>
 								<td><input type="checkbox" class="check time-entry-check" check-id="@group.Key" data-time-entry-id="@timeEntry.TimeEntryId" @(timeEntry.IsLocked ? "disabled" : "")></td>
@@ -207,6 +209,7 @@
 									</div>
 								</td>
 							</tr>
+							*@
 						}
 					}
 					@if (Model.TimeEntriesByUser.Count == 0)

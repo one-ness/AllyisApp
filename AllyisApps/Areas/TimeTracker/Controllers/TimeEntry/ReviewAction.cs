@@ -235,5 +235,23 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			return RedirectToAction(ActionConstants.Review, new { subscriptionId, startDate, endDate });
 		}
+
+
+		/// <summary>
+		/// Gets the user time entires and returns the partial view with this data.
+		/// </summary>
+		/// <param name="userId"></param>
+		/// <param name="subscriptionId"></param>
+		/// <param name="startDate"></param>
+		/// <param name="endDate"></param>
+		/// <returns></returns>
+		[HttpGet]
+		public async Task<ActionResult> GetUserTimeEntries(int userId, int subscriptionId, DateTime startDate, DateTime endDate)
+		{
+			var orgid = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			var timeEntries = await AppService.GetTimeEntriesByUsersOverDateRange(new List<int> { userId }, startDate, endDate,orgid);
+			
+
+		}
 	}
 }

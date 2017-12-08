@@ -1,0 +1,41 @@
+﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+@using System.Linq;
+@model TimeEntryUserReviewViewModel
+
+
+@foreach (var timeEntry in Model.UserTimeEntries)
+{
+	<tr class="child-row hidden @(timeEntry.IsLocked ? "greyed-out" : "")" rowId=@timeEntry.UserId data-time-entry-status-id="@timeEntry.TimeEntryStatusId">
+		<td></td>
+		<td><input type="checkbox" class="check time-entry-check" check-id="@timeEntry.UserId" data-time-entry-id="@timeEntry.TimeEntryId" @(timeEntry.IsLocked ? "disabled" : "")></td>
+		<td>
+			<a class="details-modal-input" data-time-entry-object='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(timeEntry))' style="cursor:pointer">
+				@timeEntry.Date.ToShortDateString()
+			</a>
+		</td>
+		@foreach (int payClassId in Model.PayClasses.Select(x => x.PayClassId))
+		{
+			if (timeEntry.PayClassId == payClassId)
+			{
+				<td>@timeEntry.Duration</td>
+			}
+			else
+			{
+				<td>-</td>
+			}
+		}
+		<td>
+			<div class="pull-left">@timeEntry.Duration</div>
+			<div class="pull-right">
+				<div class="status-dots">
+					<i class="fa fa-circle status-dot color-code-Pending  @(timeEntry.TimeEntryStatusId != 0 ? "hidden" : "")" aria-hidden="true"></i>
+					<i class="fa fa-circle status-dot color-code-Rejected @(timeEntry.TimeEntryStatusId != 1 ? "hidden" : "")" aria-hidden="true"></i>
+					<i class="fa fa-circle status-dot color-code-Approved @(timeEntry.TimeEntryStatusId != 2 ? "hidden" : "")" aria-hidden="true"></i>
+					<i class="fa fa-circle status-dot color-code-PayrollProcessed @(timeEntry.TimeEntryStatusId != 3 ? "hidden" : "")" aria-hidden="true"></i>
+				</div>
+			</div>
+		</td>
+	</tr>
+
+}
+

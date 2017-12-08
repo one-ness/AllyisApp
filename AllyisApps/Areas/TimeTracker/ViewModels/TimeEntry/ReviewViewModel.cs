@@ -88,4 +88,36 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// </summary>
 		public PayPeriodRanges PayPeriodRanges { get; set; }
 	}
+
+	/// <summary>
+	/// T
+	/// </summary>
+	public class TimeEntryUserReviewViewModel
+	{
+		/// <summary>
+		/// Gets or sets UsersTimeEntries
+		/// </summary>
+		public IEnumerable<TimeEntryViewModel> UserTimeEntries { get; set; }
+		
+
+		/// <summary>
+		/// Gets for sets userId
+		/// </summary>
+		public int UserId { get; set; }
+
+		/// <summary>
+		/// Gets or sets Payclases for the organization
+		/// </summary>
+		public IEnumerable<PayClassInfoViewModel> PayClasses { get; set; }
+
+		/// <summary>
+		/// Constuct with empty lists.
+		/// </summary>
+		public TimeEntryUserReviewViewModel()
+		{
+			PayClasses = new List<PayClassInfoViewModel>
+			UserTimeEntries = new List<TimeEntryViewModel>();
+		}
+
+	}
 }

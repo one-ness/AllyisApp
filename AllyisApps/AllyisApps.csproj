@@ -588,6 +588,7 @@
     <Content Include="Areas\StaffingManager\Views\Customer\Details.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsEmployeeType.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\SettingsEditEmployeeType.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\_ReviewUserTimeEntries.cshtml" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
