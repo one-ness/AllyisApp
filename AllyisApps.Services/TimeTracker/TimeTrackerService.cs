@@ -477,7 +477,7 @@ namespace AllyisApps.Services
 
 			var entryDates = entries.Select(entry => entry.Date).OrderBy(date => date).ToList();
 
-			//start at the next period after the lock date
+			//start at the period containing the lock date
 			DateTime startDate = entryDates.First();
 			DateTime endDate = entryDates.Last();
 			DateTime? lockDate = settings.LockDate ?? settings.PayrollProcessedDate;
@@ -572,13 +572,34 @@ namespace AllyisApps.Services
 			var entriesInOvertimePeriod = (await GetTimeEntriesByUserOverDateRange(userId, overtimePeriod.StartDate, overtimePeriod.EndDate, organizationId)).ToList();
 			if (!entriesInOvertimePeriod.Any()) return; // no time entries to recalculate
 
-			int overtimeLimit = settings.OvertimeHours.Value;
 			var overtimeEntries = entriesInOvertimePeriod.Where(e => e.BuiltInPayClassId == (int)PayClassId.OverTime).OrderBy(e => e.Date).ToList();
 			var regularEntries = entriesInOvertimePeriod.Where(e => e.BuiltInPayClassId == (int)PayClassId.Regular).OrderByDescending(e => e.Date).ToList();
+
+			var payClasses = (await GetPayClassesByOrganizationId(organizationId)).ToList();
+			int regularPayClassId = payClasses.Single(pc => pc.BuiltInPayClassId == (int)PayClassId.Regular).PayClassId;
+			int overtimePayClassId = payClasses.Single(pc => pc.BuiltInPayClassId == (int)PayClassId.OverTime).PayClassId;
+
+			//edge case involving recently changed overtime periods -- makes sure all overtime entries are after all regular entries
+			foreach (var o in overtimeEntries.Where(e => e.Date < regularEntries.FirstOrDefault()?.Date))
+			{
+				o.PayClassId = regularPayClassId;
+				UpdateTimeEntry(o);
+				var regularEntry = regularEntries.SingleOrDefault(e => e.Date == o.Date && e.PayClassId == o.PayClassId && e.ProjectId == o.ProjectId);
+				if (regularEntry != null)
+				{
+					regularEntry.Duration += o.Duration;
+				}
+				else
+				{
+					regularEntries.Insert(~regularEntries.BinarySearch(o, new TimeEntryDateComparer()), o);
+				}
+			}
+
 			float regularHoursSum = regularEntries.Sum(e => e.Duration);
 			float overtimeHoursSum = overtimeEntries.Sum(e => e.Duration);
 
 			//calculate what needs to change
+			int overtimeLimit = settings.OvertimeHours.Value;
 			float needToAddToOvertime = -1;
 			float needToSubtractFromOvertime = -1;
 			if (regularHoursSum <= overtimeLimit)
@@ -596,10 +617,6 @@ namespace AllyisApps.Services
 			{
 				needToAddToOvertime = regularHoursSum - overtimeLimit;
 			}
-
-			var payClasses = (await GetPayClassesByOrganizationId(organizationId)).ToList();
-			int regularPayClassId = payClasses.Single(pc => pc.BuiltInPayClassId == (int)PayClassId.Regular).PayClassId;
-			int overtimePayClassId = payClasses.Single(pc => pc.BuiltInPayClassId == (int)PayClassId.OverTime).PayClassId;
 
 			//if we need to add overtime hours
 			if (needToAddToOvertime > 0)

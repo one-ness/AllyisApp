@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 
 namespace AllyisApps.Services.TimeTracker
 {
@@ -96,5 +97,23 @@ namespace AllyisApps.Services.TimeTracker
 		/// Gets or sets the built in pay class id.
 		/// </summary>
 		public int BuiltInPayClassId { get; set; }
+	}
+
+	/// <inheritdoc />
+	/// <summary>
+	/// Comparer for time entry to sort/search by date
+	/// </summary>
+	class TimeEntryDateComparer : IComparer<TimeEntry>
+	{
+		public int Compare(TimeEntry x, TimeEntry y)
+		{
+			if (ReferenceEquals(x, y)) return 0;
+			if (x == null) return -1;
+			if (y == null) return 1;
+
+			if (x.Date == y.Date) return 0;
+
+			return x.Date > y.Date ? 1 : -1;
+		}
 	}
 }
