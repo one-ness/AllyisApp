@@ -115,7 +115,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// </summary>
 		public TimeEntryUserReviewViewModel()
 		{
-			PayClasses = new List<PayClassInfoViewModel>
+			PayClasses = new List<PayClassInfoViewModel>();
 			UserTimeEntries = new List<TimeEntryViewModel>();
 		}
 

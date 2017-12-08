@@ -246,11 +246,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="endDate"></param>
 		/// <returns></returns>
 		[HttpGet]
-		public async Task<ActionResult> GetUserTimeEntries(int userId, int subscriptionId, DateTime startDate, DateTime endDate)
+		public async Task<ActionResult> GetUserReviewTimeEntries(int userId, int subscriptionId, DateTime startDate, DateTime endDate)
 		{
 			var orgid = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			var timeEntries = await AppService.GetTimeEntriesByUsersOverDateRange(new List<int> { userId }, startDate, endDate,orgid);
-			
+			var model = new TimeEntryUserReviewViewModel()
+			{
+				UserTimeEntries = timeEntries.Select(te => new TimeEntryViewModel(te)),
+				PayClasses = (await AppService.GetPayClassesByOrganizationId(orgid)).Select(b => new PayClassInfoViewModel(b)),
+				UserId = userId
+			};
+			return new View() 
 
 		}
 	}

@@ -18,7 +18,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 			OrganizationId = payClass.OrganizationId;
 			PayClassId = payClass.PayClassId;
 			PayClassName = payClass.PayClassName;
-			PayClassBuiltInId = payClass.BuiltInPayClassId
+			PayClassBuiltInId = payClass.BuiltInPayClassId;
 		}
 
 		/// <summary>
