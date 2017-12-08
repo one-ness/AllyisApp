@@ -397,14 +397,10 @@ namespace AllyisApps.Services
 		{
 			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 
-			#region Validation
-
 			if (!Enum.IsDefined(typeof(StartOfWeekEnum), startOfWeek))
 			{
 				return new StartOfWeekResultClass(StartOfWeekResult.StartOfWeekOutOfRange);
 			}
-
-			#endregion Validation
 
 			int organizationId = UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 
@@ -413,18 +409,25 @@ namespace AllyisApps.Services
 			if (settings.OvertimeHours == null || settings.OvertimePeriod != "Week") return new StartOfWeekResultClass(StartOfWeekResult.Success);
 
 			//If the change will affect overtime calculation, validate
+			//Make sure there will be no overtime periods that contain a mixture of old (locked entries) and new settings
 			if (settings.OvertimePeriod == "Week")
 			{
-				DateTime? suggestedLockDate = GetSuggestedLockDateForOvertimeSettingsModification(startOfWeek, settings);
-				if (suggestedLockDate != null)
+				DateTime? suggestedLockDate = GetSuggestedLockDateForOvertimeSettingsModificationWeekly(startOfWeek, settings.LockDate, settings.PayrollProcessedDate);
+				if (suggestedLockDate != null) //lock date is not where it should be
 				{
 					return new StartOfWeekResultClass(StartOfWeekResult.InvalidLockDate, suggestedLockDate.Value);
 				}
+				if (settings.LockDate != null) //lock date is where it should be, but check if we need to perform additional logic later on
+				{
+					await DBHelper.UpdateOvertimeChangedFlag(organizationId, true);
+				}
 			}
 
+			//validation over, update
 			int updated = await DBHelper.UpdateTimeTrackerStartOfWeek(organizationId, startOfWeek);
 			if (updated != 1) return new StartOfWeekResultClass(StartOfWeekResult.SettingsNotFound);
 
+			//recalculate overtime
 			var users = await GetOrganizationUsersAsync(organizationId);
 			settings = await GetSettingsByOrganizationId(organizationId);
 			var tasks = new List<Task>();
@@ -470,11 +473,26 @@ namespace AllyisApps.Services
 			#endregion Validation
 
 			var settings = await GetSettingsByOrganizationId(organizationId);
-
-			DateTime? suggestedLockDate = GetSuggestedLockDateForOvertimeSettingsModification(settings.StartOfWeek, settings);
-			if (suggestedLockDate != null)
+			var newSettings = new Setting
 			{
-				return new OvertimeResultClass(OvertimeResult.InvalidLockDate, suggestedLockDate.Value);
+				OrganizationId = settings.OrganizationId,
+				OvertimeHours = overtimeHours,
+				OvertimePeriod = overtimePeriod,
+				StartOfWeek = settings.StartOfWeek
+			};
+
+			//Make sure there will be no overtime periods that contain a mixture of old (locked entries) and new settings
+			if (isOvertimeUsed)
+			{
+				DateTime? suggestedLockDate = await GetSuggestedLockDateForOvertimeSettingsModification(newSettings, settings.LockDate, settings.PayrollProcessedDate);
+				if (suggestedLockDate != null) //lock date is not where it should be
+				{
+					return new OvertimeResultClass(OvertimeResult.InvalidLockDate, suggestedLockDate.Value);
+				}
+				if (settings.LockDate != null) //lock date is where it should be, but check if we need to perform additional logic later on
+				{
+					await DBHelper.UpdateOvertimeChangedFlag(organizationId, true);
+				}
 			}
 
 			//all's good, update
@@ -647,14 +665,14 @@ namespace AllyisApps.Services
 			return output;
 		}
 
-		public int UpdateLockDate(int organizationId, DateTime? lockDate)
+		public async Task<int> UpdateLockDate(int organizationId, DateTime? lockDate)
 		{
 			if (organizationId < 0)
 			{
 				throw new ArgumentOutOfRangeException(nameof(organizationId), $"{nameof(organizationId)} must be greater than 0.");
 			}
 
-			return DBHelper.UpdateLockDate(organizationId, lockDate);
+			return await DBHelper.UpdateLockDate(organizationId, lockDate);
 		}
 
 		/// <summary>

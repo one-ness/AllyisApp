@@ -6,14 +6,18 @@
 		DBError,
 		Success,
 		InvalidLockDate,
-		NoChange
+		NoChange,
+		SuccessAndRecalculatedOvertime,
+		InvalidLockDateWithOvertimeChange
 	}
 
 	public enum UnlockEntriesResult
 	{
 		NoLockDate,
 		DBError,
-		Success
+		Success,
+		InvalidLockDate,
+		SuccessAndRecalculatedOvertime
 	}
 
 	public enum PayrollProcessEntriesResult
