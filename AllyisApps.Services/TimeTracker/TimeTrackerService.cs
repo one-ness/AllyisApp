@@ -472,15 +472,29 @@ namespace AllyisApps.Services
 		public async Task RecalculateOvertimeForUserAfterLockDate(int organizationId, int userId, Setting setting = null)
 		{
 			var settings = setting ?? await GetSettingsByOrganizationId(organizationId);
-			var entries = (await GetTimeEntriesByUserOverDateRange(userId, SqlDateTime.MinValue.Value, SqlDateTime.MaxValue.Value, organizationId)).ToList();
+
+			DateTime? lockDate = settings.LockDate ?? settings.PayrollProcessedDate ?? SqlDateTime.MinValue.Value;
+			var entries = (await GetTimeEntriesByUserOverDateRange(userId, lockDate, SqlDateTime.MaxValue.Value, organizationId));
 			if (!entries.Any()) return; // no entries to recalculate
 
-			var entryDates = entries.Select(entry => entry.Date).OrderBy(date => date).ToList();
-
+			var entryDates = entries.Select(entry => entry.Date);
+			
 			//start at the period containing the lock date
 			DateTime startDate = entryDates.First();
 			DateTime endDate = entryDates.Last();
-			DateTime? lockDate = settings.LockDate ?? settings.PayrollProcessedDate;
+			foreach(var date in entryDates)
+			{
+				//change to O(n) instead of O(nlg(n))
+				if(startDate.Date > date)
+				{
+					startDate = date;
+				}
+				if(endDate.Date < date)
+				{
+					endDate = date;
+				}
+			}
+			lockDate = settings.LockDate ?? settings.PayrollProcessedDate;
 			if (lockDate != null)
 			{
 				DateTime lockPeriod = (await GetOvertimePeriodByDate(organizationId, lockDate.Value, settings)).StartDate;
@@ -492,7 +506,7 @@ namespace AllyisApps.Services
 
 			//all entries are less than lock date, no need to recalculate
 			if (startDate > endDate) return;
-
+			
 			await RecalculateOvertimeByUserOverDateRange(organizationId, new DateRange(startDate, endDate), userId);
 		}
 
