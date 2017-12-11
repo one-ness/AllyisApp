@@ -103,7 +103,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Gets or sets UsersTimeEntries
 		/// </summary>
 		public IEnumerable<TimeEntryViewModel> UserTimeEntries { get; set; }
-		
+
 
 		/// <summary>
 		/// Gets for sets userId
@@ -114,6 +114,11 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Gets or sets Payclases for the organization
 		/// </summary>
 		public IEnumerable<PayClassInfoViewModel> PayClasses { get; set; }
+
+		/// <summary>
+		/// Bool for whether or not the view rows should be checked
+		/// </summary>
+		public bool IsChecked { get; set; }
 
 		/// <summary>
 		/// Constuct with empty lists.

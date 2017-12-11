@@ -175,43 +175,6 @@
 								</div>
 							</td>
 						</tr>
-						foreach (var timeEntry in group)
-						{
-
-							@*
-							<tr class="child-row hidden @(timeEntry.IsLocked ? "greyed-out" : "")" rowId=@group.Key data-time-entry-status-id="@timeEntry.TimeEntryStatusId">
-								<td></td>
-								<td><input type="checkbox" class="check time-entry-check" check-id="@group.Key" data-time-entry-id="@timeEntry.TimeEntryId" @(timeEntry.IsLocked ? "disabled" : "")></td>
-								<td>
-									<a class="details-modal-input" data-time-entry-object='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(timeEntry))' style="cursor:pointer">
-										@timeEntry.Date.ToShortDateString()
-									</a>
-								</td>
-								@foreach (int payClassId in Model.PayClasses.Select(x => x.PayClassId))
-								{
-									if (timeEntry.PayClassId == payClassId)
-									{
-										<td>@timeEntry.Duration</td>
-									}
-									else
-									{
-										<td>-</td>
-									}
-								}
-								<td>
-									<div class="pull-left">@timeEntry.Duration</div>
-									<div class="pull-right">
-										<div class="status-dots">
-											<i class="fa fa-circle status-dot color-code-Pending  @(timeEntry.TimeEntryStatusId != 0 ? "hidden" : "")" aria-hidden="true"></i>
-											<i class="fa fa-circle status-dot color-code-Rejected @(timeEntry.TimeEntryStatusId != 1 ? "hidden" : "")" aria-hidden="true"></i>
-											<i class="fa fa-circle status-dot color-code-Approved @(timeEntry.TimeEntryStatusId != 2 ? "hidden" : "")" aria-hidden="true"></i>
-											<i class="fa fa-circle status-dot color-code-PayrollProcessed @(timeEntry.TimeEntryStatusId != 3 ? "hidden" : "")" aria-hidden="true"></i>
-										</div>
-									</div>
-								</td>
-							</tr>
-							*@
-						}
 					}
 					@if (Model.TimeEntriesByUser.Count == 0)
 					{
@@ -456,8 +419,8 @@
 
 	<script type="text/javascript">
 	$(document).ready(function () {
-		
-		
+
+
 		//toggles the expand row icon up or down
 		$(".toggle-on-click").click(function () {
 
@@ -475,12 +438,13 @@
 		$(".child-row-controller").click(function () {
 			var userId = parseInt($(this).attr('rowId'));
 			var subId = @Model.SubscriptionId;
-			var startDate = "@Model.StartDate";
-			var endDate = "@Model.EndDate";
+			var startDate = '@Model.StartDate.ToString("yyyy-MM-dd")';
+			var endDate = '@Model.EndDate.ToString("yyyy-MM-dd")';
+			var isChecked = $(this).parents(".parent-row").find(".check-all").prop("checked");
 			var curElement = $(this);
 
 			var rows = $(".child-row[rowId='" + $(this).attr("rowId") + "']");
-			if (rows.length != 0) {
+			if (rows.length !== 0) {
 				if (rows.hasClass("hidden")) {
 					rows.removeClass("hidden");
 				} else {
@@ -488,26 +452,25 @@
 				}
 			}
 			else {
-				$.ajax(
-					{
-						type: "POST",
-						url: "@Url.Action("GetUserReviewTimeEntries")",
-						data: {
-							userId: userId,
-							subscriptionId: subId,
-							startDate: startDate,
-							endDate: endDate
-						},
-						success: function (ret) {
+				$.ajax({
+					type: "POST",
+					url: "@Url.Action(ActionConstants.GetUserReviewTimeEntries)",
+					data: {
+						userId: userId,
+						subscriptionId: subId,
+						startDate: startDate,
+						endDate: endDate,
+						isChecked: isChecked
+					},
+					success: function (ret) {
 
-							//curElement.parents('.parent-row').siblings(".timeEntryRow[replaceId='" + userId + "']").first().html(ret);
-							curElement.parents('.parent-row').after(ret);
-							setup();
-						}
-					})
+						//curElement.parents('.parent-row').siblings(".timeEntryRow[replaceId='" + userId + "']").first().html(ret);
+						curElement.parents('.parent-row').after(ret);
+						setup();
+					}
+				});
 			}
 			//TODO
-			
 		});
 
 		//logic for check-all check boxes
@@ -611,24 +574,24 @@
 				return !$(this).nextAll(":not(.filtered)").hasClass("child-row");
 			}).addClass("filtered");
 		});
-		
+
 		//updates form hidden input values with all selected time entries
 		$(".update-status-form").submit(function () {
-			
-			var userIds = $('.check-all:checked').map(function () {
-				var userId = $(this).attr('check-all-id');
-				if ($(this).parents('.parent-row').siblings().find('.check[check-id=' + userId + ']').length != 0) {
-					return -1;
-				}
-				else {
-					return userId;
-				}
-			}).filter(function (index, element) {
-				return element !== -1;
+			var userIds = $('.check-all:checked')
+				.map(function () {
+					var userId = $(this).attr('check-all-id');
+					if ($(this).parents('.parent-row').siblings().find('.check[check-id=' + userId + ']').length != 0) {
+						return -1;
+					}
+					else {
+						return userId;
+					}
+				}).filter(function (index, element) {
+					return element !== -1;
 				}).toArray();
 
 			var timeEntryIds = $(".time-entry-check:checked").map(function () { return $(this).data("time-entry-id") }).toArray();
-			
+
 			$(".time-entries-input").val(JSON.stringify(timeEntryIds));
 			$(".time-userIds").val(JSON.stringify(userIds));
 		});
