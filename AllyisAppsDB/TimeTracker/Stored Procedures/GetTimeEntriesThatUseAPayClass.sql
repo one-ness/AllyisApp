@@ -3,12 +3,6 @@ CREATE PROCEDURE [TimeTracker].[GetTimeEntriesThatUseAPayClass]
 AS
 	SET NOCOUNT ON;
 SELECT DISTINCT
-	[TimeEntryId],
-	[ProjectId],
-	[PayClassId],
-	[Duration],
-	[Description],
-	[IsLockSaved],
-	[TimeEntryStatusId]
+	*
 FROM [TimeTracker].[TimeEntry] WITH (NOLOCK)
 WHERE [PayClassId] = @payClassId

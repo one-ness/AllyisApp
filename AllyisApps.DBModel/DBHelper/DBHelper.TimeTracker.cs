@@ -95,24 +95,44 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="payClassId">The id of the pay class to remove.</param>
 		/// <param name="destPayClass">The id of the payclass to move all old entries to (nullable).</param>
-		public async void DeletePayClass(int payClassId, int? destPayClass)
+		/// <param name="orgId"></param>
+		public async Task<bool> DeletePayClass(int payClassId, int? destPayClass, int orgId)
 		{
+			var settings = await GetSettingsByOrganizationId(orgId);
+			bool hastimeEntryLocked = false;
 			// TODO: move this part in the DeletePayClass stored procedure
 			if (destPayClass != null)
 			{
 				IEnumerable<TimeEntryDBEntity> allEntries = GetTimeEntriesThatUseAPayClass(payClassId);
 				// update the payClassId for all time entries that used the old pay class
+
+
 				foreach (TimeEntryDBEntity entry in allEntries)
 				{
 					entry.PayClassId = destPayClass.Value;
-					UpdateTimeEntry(entry);
+					if (entry.Date.Date > (settings.LockDate?.Date ?? settings.PayrollProcessedDate?.Date ?? DateTime.MinValue))
+					{
+						UpdateTimeEntry(entry);
+					}
+					else
+					{
+						hastimeEntryLocked = true;
+					}
 				}
 			}
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@id", payClassId);
-			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			if (!hastimeEntryLocked)
 			{
-				await connection.ExecuteAsync("[Hrm].[DeletePayClass]", parameters, commandType: CommandType.StoredProcedure);
+				using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+				{
+					await connection.ExecuteAsync("[Hrm].[DeletePayClass]", parameters, commandType: CommandType.StoredProcedure);
+					return true;
+				}
+			}
+			else
+			{
+				return false;
 			}
 		}
 

@@ -67,7 +67,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				SourcePayClassId = sourcePayClassId,
 				SourcePayClassName = sourcePayClassName,
 				SubscriptionId = subscriptionId,
-				DestinationPayClasses = destPayClasses.Select(payclass => new PayClassInfoViewModel(payclass))
+				SubscriptionName = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName,
+				DestinationPayClasses = destPayClasses.Where(payc => payc.BuiltInPayClassId != ((int)PayClassId.OverTime)).Select(payclass => new PayClassInfoViewModel(payclass))
 			};
 		}
 
@@ -82,14 +83,44 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[CLSCompliant(false)]
 		public async Task<ActionResult> MergePayClass(MergePayClassViewModel model, int destPayClass)
 		{
-			// change all of the entries with old payclass to destPayClass and delete the old payclass
-			if (await AppService.DeletePayClass(model.SourcePayClassId, AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId, model.SubscriptionId, destPayClass))
+			try
 			{
-				Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulMergePayClass, Variety.Success));
+				var paylcasses = (await AppService.GetPayClassesBySubscriptionId(model.SubscriptionId)).ToDictionary(pc => pc.PayClassId);
+
+				if (paylcasses[destPayClass].BuiltInPayClassId == (int)PayClassId.OverTime)
+				{
+					Notifications.Add(new BootstrapAlert("Cannont merge into overtime Over time has specail meaning suggest regular"));
+				}
+				// change all of the entries with old payclass to destPayClass and delete the old payclass
+				if (await AppService.DeletePayClass(model.SourcePayClassId, AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId, model.SubscriptionId, destPayClass))
+				{
+					Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulMergePayClass, Variety.Success));
+				}
+				else
+				{
+					// Should only be here because of permission failures
+					Notifications.Add(new BootstrapAlert("Succssfuly changd all editalbe records but payclass could not be deleted as it has locked Time entries"));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
+				}
+				if (paylcasses[destPayClass].BuiltInPayClassId == (int)PayClassId.Regular)
+				{
+					//upadate over time 
+					var orgId = AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId;
+					var users = await AppService.GetOrganizationUsersAsync(orgId);
+					var settings = await AppService.GetSettingsByOrganizationId(orgId); //updated
+					if (settings.OvertimeHours != null)
+					{
+						var tasks = new List<Task>();
+						foreach (var user in users)
+						{
+							tasks.Add(AppService.RecalculateOvertimeForUserAfterLockDate(orgId, user.UserId, settings));
+						}
+						await Task.WhenAll(tasks);
+					}
+				}
 			}
-			else
+			catch
 			{
-				// Should only be here because of permission failures
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
 

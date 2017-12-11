@@ -26,8 +26,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpGet]
 		public async Task<ActionResult> SettingsEmployeeType(int subscriptionId)
 		{
-			
 
+			ViewData["SubscriptionName"] = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName;
+			ViewData["SubscriptionId"] = subscriptionId;
 			var subName = await AppService.GetSubscriptionName(subscriptionId);
 			var employeeTypes = await AppService.GetEmployeeTypeByOrganization(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
 
@@ -78,8 +79,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			var assignedPayClasses = await AppService.GetAssignedPayClasses(employeeTypeId);
 			var employeeTypes = await AppService.GetEmployeeTypeByOrganization(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
-			
-			
+
+			ViewData["SubscriptionName"] = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName;
+			ViewData["SubscriptionId"] = subscriptionId;
 			if (!employeeTypes.Exists(x => x.EmployeeTypeId == employeeTypeId))
 			{
 				Notifications.Add(new BootstrapAlert("You don't have permission to delete this Employee Type.", Variety.Warning));
@@ -164,6 +166,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpPost]
 		public async Task<ActionResult> EditEmployeeType(int subscriptionId, SettingsEditEmployeeTypeViewModel model)
 		{
+			ViewData["SubscriptionName"] = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName;
+			ViewData["SubscriptionId"] = subscriptionId;
+
 			int orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			var payclasses = await AppService.GetPayClassesByOrganizationId(orgId);
 			var overtimepayclass = payclasses.First(pc => (pc.BuiltInPayClassId == (int)PayClassId.OverTime));

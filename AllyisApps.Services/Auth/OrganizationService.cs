@@ -311,10 +311,12 @@ namespace AllyisApps.Services
 			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
 
 			CheckOrgAction(OrgAction.ReadUsersList, orgId);
-			var collection = await DBHelper.GetOrganizationUsersAsync(orgId);
 
+
+			var collection = await DBHelper.GetOrganizationUsersAsync(orgId);
 			return collection.Select(InitializeOrganizationUser).ToList();
 		}
+
 
 		public async Task<int> GetOrganizationInvitationCountAsync(int orgId, InvitationStatusEnum statusMask)
 		{

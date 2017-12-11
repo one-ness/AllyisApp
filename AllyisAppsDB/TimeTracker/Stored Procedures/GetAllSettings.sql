@@ -2,7 +2,7 @@ CREATE PROCEDURE [TimeTracker].[GetAllSettings]
 	@organizationId INT
 AS
 	SET NOCOUNT ON;
-	SELECT [OrganizationId], [StartOfWeek], [OvertimeHours], [OvertimePeriod]
+	SELECT [OrganizationId], [StartOfWeek], [OvertimeHours], [OvertimePeriod], [Setting].LockDate, [Setting].PayrollProcessedDate
 	FROM [TimeTracker].[Setting] WITH (NOLOCK) 
 	WHERE [OrganizationId] = @organizationId;
 

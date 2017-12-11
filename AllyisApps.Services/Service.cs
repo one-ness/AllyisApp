@@ -344,9 +344,9 @@ namespace AllyisApps.Services
 		public async Task<bool> DeletePayClass(int payClassId, int orgId, int subscriptionId, int? destPayClass)
 		{
 			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
-			DBHelper.DeletePayClass(payClassId, destPayClass);
+			var success = await DBHelper.DeletePayClass(payClassId, destPayClass,orgId);
 			await Task.Yield();
-			return true;
+			return success;
 		}
 
 		/// <summary>

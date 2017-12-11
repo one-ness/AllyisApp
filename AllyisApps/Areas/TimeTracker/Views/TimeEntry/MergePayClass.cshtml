@@ -3,6 +3,9 @@
 
 @{
 	ViewBag.Title = Strings.Merge;
+	ViewData["SubscriptionName"] = Model.SubscriptionName;
+	ViewData["SubscriptionId"] = Model.SubscriptionId;
+	ViewBag.SubscriptionName = Model.SubscriptionName;
 	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
 	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
 	Layout = "~/Areas/TimeTracker/Views/Shared/_TimeTrackerSidebar.cshtml";
@@ -28,6 +31,7 @@
 						@Html.AntiForgeryToken();
 						@Html.HiddenFor(m => m.SourcePayClassId)
 						@Html.HiddenFor(m => m.SourcePayClassName)
+						@Html.HiddenFor(m =>  m.SubscriptionId)
 						foreach (var payClass in Model.DestinationPayClasses)
 						{
 							string _payClassName = Strings.ResourceManager.GetString(payClass.PayClassName.Replace(" ", string.Empty)) ?? payClass.PayClassName;
