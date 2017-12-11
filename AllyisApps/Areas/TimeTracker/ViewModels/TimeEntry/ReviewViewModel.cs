@@ -69,6 +69,11 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public string TimeEntryIdsJSON { get; set; }
 
 		/// <summary>
+		/// 
+		/// </summary>
+		public string TimeEntryUserIdsJson { get; set; }
+
+		/// <summary>
 		/// Gets or sets the dictionary of all time entry statuses, to be used for the view select
 		/// </summary>
 		public Dictionary<int, string> TimeEntryStatusOptions { get; set; }
