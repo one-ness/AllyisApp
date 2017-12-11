@@ -32,9 +32,10 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Gets or sets the pay classes that can be merged into.
 		/// </summary>
 		public IEnumerable<PayClassInfoViewModel> DestinationPayClasses { get; set; }
+
 		/// <summary>
-		/// 
+		/// Gets or sets the subscription name.
 		/// </summary>
-		public string SubscriptionName { get; internal set; }
+		public string SubscriptionName { get; set; }
 	}
 }

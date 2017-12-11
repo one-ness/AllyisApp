@@ -2,12 +2,17 @@
 @using System.Linq;
 @model TimeEntryUserReviewViewModel
 
-
 @foreach (var timeEntry in Model.UserTimeEntries)
 {
 	<tr class="child-row @(timeEntry.IsLocked ? "greyed-out" : "")" rowId=@timeEntry.UserId data-time-entry-status-id="@timeEntry.TimeEntryStatusId">
 		<td></td>
-		<td><input type="checkbox" class="check time-entry-check" check-id="@timeEntry.UserId" data-time-entry-id="@timeEntry.TimeEntryId" @(timeEntry.IsLocked ? "disabled" : "")></td>
+		<td>
+			<input type="checkbox" 
+			       class="check time-entry-check"
+			       check-id="@timeEntry.UserId"
+			       data-time-entry-id="@timeEntry.TimeEntryId"
+			       @(timeEntry.IsLocked ? "disabled" : Model.IsChecked ? "checked" : "")>
+		</td>
 		<td>
 			<a class="details-modal-input" data-time-entry-object='@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(timeEntry))' style="cursor:pointer">
 				@timeEntry.Date.ToShortDateString()
@@ -36,6 +41,4 @@
 			</div>
 		</td>
 	</tr>
-
 }
-

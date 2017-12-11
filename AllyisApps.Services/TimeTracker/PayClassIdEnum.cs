@@ -11,7 +11,7 @@ namespace AllyisApps.Services.TimeTracker
 		/// <summary>
 		/// Indentify custome created ids
 		/// </summary>
-		Custom = 0, 
+		Custom = 0,
 		/// <summary>
 		/// Regular.
 		/// </summary>
@@ -35,11 +35,6 @@ namespace AllyisApps.Services.TimeTracker
 		/// <summary>
 		/// Overtime.
 		/// </summary>
-		OverTime = 5,
-
-		BeahvmentLeave = 6,
-
-		OtherLeave =7,
-		
+		OverTime = 5
 	}
 }

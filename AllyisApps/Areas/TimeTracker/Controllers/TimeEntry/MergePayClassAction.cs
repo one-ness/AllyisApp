@@ -5,12 +5,12 @@
 //------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
+using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
@@ -32,44 +32,31 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public async Task<ActionResult> MergePayClass(int subscriptionId, int userId)
 		{
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
-			var allPayClasses = await AppService.GetPayClassesBySubscriptionId(subscriptionId);
-			var destPayClasses = allPayClasses.Where(pc => pc.PayClassId != userId);
-			string sourcePayClassName = allPayClasses.Where(pc => pc.PayClassId == userId).ElementAt(0).PayClassName;
+
+			int payClassId = userId; //TODO: poor name because of poor routing; rename route params
+			var allPayClasses = (await AppService.GetPayClassesBySubscriptionId(subscriptionId)).ToList();
+			var destPayClasses = allPayClasses.Where(pc => pc.PayClassId != payClassId);
+			var sourcePayClass = allPayClasses.First(pc => pc.PayClassId == payClassId);
+
+			string subscriptionName = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName;
 
 			// Built-in, non-editable pay classes cannot be merged
-			if (sourcePayClassName == PayClassId.Regular.GetEnumName() ||
-				sourcePayClassName == PayClassId.OverTime.GetEnumName() ||
-				sourcePayClassName == PayClassId.Holiday.GetEnumName() ||
-				sourcePayClassName == PayClassId.PaidTimeOff.GetEnumName() ||
-				sourcePayClassName == PayClassId.UnpaidTimeOff.GetEnumName())
+			if (sourcePayClass.BuiltInPayClassId != (int)PayClassId.Custom)
 			{
-				Notifications.Add(new BootstrapAlert(Resources.Strings.CannotMergePayClass, Variety.Warning));
-				return RedirectToAction(ActionConstants.SettingsPayClass, new { subscriptionId = subscriptionId });
+				Notifications.Add(new BootstrapAlert(Strings.CannotMergePayClass, Variety.Warning));
+				return RedirectToAction(ActionConstants.SettingsPayClass, new { subscriptionId });
 			}
 
-			MergePayClassViewModel model = ConstructMergePayClassViewModel(userId, sourcePayClassName, subscriptionId, destPayClasses);
-			return View(ViewConstants.MergePayClass, model);
-		}
-
-		/// <summary>
-		/// Uses services to populate a <see cref="MergePayClassViewModel"/> and returns it.
-		/// </summary>
-		/// <param name="sourcePayClassId">The id of the pay class being merged.</param>
-		/// <param name="sourcePayClassName">The name of the pay class being merged.</param>
-		/// <param name="subscriptionId">The subscription's Id.</param>
-		/// <param name="destPayClasses">List of all PayClass that can be merged into.</param>
-		/// <returns>The MergePayClassViewModel.</returns>
-		[CLSCompliant(false)]
-		public MergePayClassViewModel ConstructMergePayClassViewModel(int sourcePayClassId, string sourcePayClassName, int subscriptionId, IEnumerable<PayClass> destPayClasses)
-		{
-			return new MergePayClassViewModel
+			var model = new MergePayClassViewModel
 			{
-				SourcePayClassId = sourcePayClassId,
-				SourcePayClassName = sourcePayClassName,
+				SourcePayClassId = payClassId,
+				SourcePayClassName = sourcePayClass.PayClassName,
 				SubscriptionId = subscriptionId,
 				SubscriptionName = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName,
 				DestinationPayClasses = destPayClasses.Where(payc => payc.BuiltInPayClassId != ((int)PayClassId.OverTime)).Select(payclass => new PayClassInfoViewModel(payclass))
 			};
+
+			return View(ViewConstants.MergePayClass, model);
 		}
 
 		/// <summary>
