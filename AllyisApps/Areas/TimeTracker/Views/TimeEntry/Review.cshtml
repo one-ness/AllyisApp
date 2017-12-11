@@ -51,7 +51,8 @@
 					<button id="submit-status" class="btn btn-primary" type="submit" tabindex="-1">Save</button>
 				</span>
 			</div>
-			<input type="hidden" name="timeEntryIdsJSON" class="time-entries-input" value="" />
+			<input type="hidden" name="timeEntryIdsJSON" class="time-entries-input" value="[]" />
+			<input type="hidden" name="timeEntryUserJSON" class="time-userIds" value="[]" />
 			@Html.HiddenFor(m => m.StartDate)
 			@Html.HiddenFor(m => m.EndDate)
 		}
@@ -141,7 +142,7 @@
 			<table class="table table-xtra-condensed table-responsive">
 				<thead>
 					<tr class="double-bottom-border">
-						<th><input type="checkbox" class="check-all" check-all-id="0"></th>
+						<th><input type="checkbox" class="check-every" check-all-id="0"></th>
 						<th></th>
 						<th>Name</th>
 						@foreach (string payClassName in Model.PayClasses.Select(x => x.PayClassName))
@@ -176,6 +177,8 @@
 						</tr>
 						foreach (var timeEntry in group)
 						{
+
+							@*
 							<tr class="child-row hidden @(timeEntry.IsLocked ? "greyed-out" : "")" rowId=@group.Key data-time-entry-status-id="@timeEntry.TimeEntryStatusId">
 								<td></td>
 								<td><input type="checkbox" class="check time-entry-check" check-id="@group.Key" data-time-entry-id="@timeEntry.TimeEntryId" @(timeEntry.IsLocked ? "disabled" : "")></td>
@@ -207,6 +210,7 @@
 									</div>
 								</td>
 							</tr>
+							*@
 						}
 					}
 					@if (Model.TimeEntriesByUser.Count == 0)
@@ -257,6 +261,7 @@
 				</span>
 			</div>
 			<input type="hidden" name="timeEntryIdsJson" class="time-entries-input" value="[]" />
+			<input type="hidden" name="timeEntryUserIdsJson" class="time-userIds" value="[]" />
 			@Html.HiddenFor(m => m.StartDate)
 			@Html.HiddenFor(m => m.EndDate)
 		}
@@ -447,11 +452,16 @@
 	@Scripts.Render("~/bundles/moment")
 	@Scripts.Render("~/bundles/BootstrapSelect")
 	@Scripts.Render("~/bundles/DateRangePicker")
+	
 
 	<script type="text/javascript">
-	$(document).ready(function() {
+	$(document).ready(function () {
+		
+		
 		//toggles the expand row icon up or down
 		$(".toggle-on-click").click(function () {
+
+			///TODO:
 			if ($(this).hasClass("fa-chevron-down")) {
 				$(this).removeClass("fa-chevron-down");
 				$(this).addClass("fa-chevron-up");
@@ -463,18 +473,51 @@
 
 		//toggles the sub rows to be hidden or not
 		$(".child-row-controller").click(function () {
+			var userId = parseInt($(this).attr('rowId'));
+			var subId = @Model.SubscriptionId;
+			var startDate = "@Model.StartDate";
+			var endDate = "@Model.EndDate";
+			var curElement = $(this);
+
 			var rows = $(".child-row[rowId='" + $(this).attr("rowId") + "']");
-			if (rows.hasClass("hidden")) {
-				rows.removeClass("hidden");
-			} else {
-				rows.addClass("hidden");
+			if (rows.length != 0) {
+				if (rows.hasClass("hidden")) {
+					rows.removeClass("hidden");
+				} else {
+					rows.addClass("hidden");
+				}
 			}
+			else {
+				$.ajax(
+					{
+						type: "POST",
+						url: "@Url.Action("GetUserReviewTimeEntries")",
+						data: {
+							userId: userId,
+							subscriptionId: subId,
+							startDate: startDate,
+							endDate: endDate
+						},
+						success: function (ret) {
+
+							//curElement.parents('.parent-row').siblings(".timeEntryRow[replaceId='" + userId + "']").first().html(ret);
+							curElement.parents('.parent-row').after(ret);
+							setup();
+						}
+					})
+			}
+			//TODO
+			
 		});
 
 		//logic for check-all check boxes
 		$(".check-all").change(function () {
-			$(".check[check-id=" + $(this).attr("check-all-id") + "]:not(:disabled)").prop("checked", $(this).is(":checked")).change();
+			$(this).parents(".parent-row").siblings().find(".check[check-id=" + $(this).attr("check-all-id") + "]:not(:disabled)").prop("checked", $(this).is(":checked")).change();
 		});
+
+		$(".check-every").change(function () {
+			$(".check").prop("checked",$(this).prop("checked"));
+		})
 
 		//initialize date range picker
 		$(function () {
@@ -570,10 +613,48 @@
 		});
 		
 		//updates form hidden input values with all selected time entries
-		$(".update-status-form").submit(function() {
-			var timeEntryIds = $(".time-entry-check:checked").map(function() {return $(this).data("time-entry-id")}).toArray();
+		$(".update-status-form").submit(function () {
+			
+			var userIds = $('.check-all:checked').map(function () {
+				var userId = $(this).attr('check-all-id');
+				if ($(this).parents('.parent-row').siblings().find('.check[check-id=' + userId + ']').length != 0) {
+					return -1;
+				}
+				else {
+					return userId;
+				}
+			}).filter(function (index, element) {
+				return element !== -1;
+				}).toArray();
+
+			var timeEntryIds = $(".time-entry-check:checked").map(function () { return $(this).data("time-entry-id") }).toArray();
+			
 			$(".time-entries-input").val(JSON.stringify(timeEntryIds));
+			$(".time-userIds").val(JSON.stringify(userIds));
 		});
 	});
+	</script>
+
+	<script>
+		function setup() {
+			$('#time-entry-details-modal').on('shown.bs.modal', function () {
+				$('.details-modal-input').focus();
+			});
+			//populates the details modle with time entry data when the modle needs to pop up
+			$(".details-modal-input").click(function () {
+				var timeEntry = $(this).data("time-entry-object");
+				$("#modal-details-name").text(timeEntry.FirstName + " " + timeEntry.LastName);
+				$("#modal-details-customer").text(timeEntry.CustomerName);
+				$("#modal-details-project").text(timeEntry.ProjectName);
+				$("#modal-details-pay-type").text(timeEntry.PayClassName);
+				$("#modal-details-duration").text(timeEntry.Duration);
+				$("#modal-details-description").text(timeEntry.Description || "None");
+				$("#modal-details-status").text(timeEntry.TimeEntryStatusName);
+				$("#modal-details-locked").text(timeEntry.IsLocked ? "Yes" : "No");
+				$('#time-entry-details-modal').modal();
+			});
+
+
+		}
 	</script>
 }
