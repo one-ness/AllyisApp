@@ -153,7 +153,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					@foreach (var group in Model.TimeEntriesByUser)
+					@foreach (var group in Model.TimeEntriesByUser.OrderBy(g => g.First().FirstName+ " "+ g.First().LastName))
 					{
 						<tr class="parent-row">
 							<td><input type="checkbox" class="check check-all" check-id="0" check-all-id="@group.Key"></td>
