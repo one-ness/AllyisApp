@@ -134,6 +134,7 @@ namespace AllyisApps
 		public const string UpdatePayPeriod = "updatepayperiod";
 		public const string TimeEntryCURD = "TimeEntryCURD";
 		public const string Customer = "customer";
+		public const string GetUserReviewTimeEntries = "getuserreviewtimeentries";
 	}
 
 	/// <summary>
@@ -173,6 +174,7 @@ namespace AllyisApps
 		public const string DdlCountriesId = "ddlCountries";
 		public const string DdlStatesId = "ddlStates";
 		public const string DdlStatesOptionsId = DdlStatesId + " option";
+		public const string ReviewUserTimeEntries = "_reviewusertimeentries";
 	}
 
 	/// <summary>
