@@ -494,20 +494,11 @@ namespace AllyisApps.Services
 					endDate = date;
 				}
 			}
-			lockDate = settings.LockDate ?? settings.PayrollProcessedDate;
-			if (lockDate != null)
-			{
-				DateTime lockPeriod = (await GetOvertimePeriodByDate(organizationId, lockDate.Value, settings)).StartDate;
-				if (lockPeriod > startDate)
-				{
-					startDate = lockPeriod;
-				}
-			}
 
 			//all entries are less than lock date, no need to recalculate
 			if (startDate > endDate) return;
 			
-			await RecalculateOvertimeByUserOverDateRange(organizationId, new DateRange(startDate, endDate), userId);
+			await RecalculateOvertimeByUserOverDateRange(organizationId, new DateRange(startDate, endDate), userId,null,entries);
 		}
 
 		/// <summary>
@@ -540,20 +531,20 @@ namespace AllyisApps.Services
 		/// <param name="range">The start and end date to recalculate.</param>
 		/// <param name="userId">The user that the time entries belong to.</param>
 		/// <param name="setting">Optional settings object to save a db call.</param>
+		/// <param name="userTimeEntires"></param>
 		/// <returns>Awaitable task</returns>
-		public async Task RecalculateOvertimeByUserOverDateRange(int organizationId, DateRange range, int userId, Setting setting = null)
+		public async Task RecalculateOvertimeByUserOverDateRange(int organizationId, DateRange range, int userId, Setting setting = null, IEnumerable<TimeEntry> userTimeEntires = null)
 		{
 			DateTime cur = range.StartDate;
 			while (cur <= range.EndDate)
 			{
-				try
-				{
-					await RecalculateOvertime(organizationId, cur, userId, setting);
-				}
-				catch (ArgumentOutOfRangeException) { }
-
 				DateRange overtimePeriod = await GetOvertimePeriodByDate(organizationId, cur, setting);
 				if (overtimePeriod == null) return; //org doesn't use overtime
+				try
+				{
+					await RecalculateOvertime(organizationId, cur, userId, setting, userTimeEntires, overtimePeriod);
+				}
+				catch (ArgumentOutOfRangeException) { }
 
 				cur = overtimePeriod.EndDate.AddDays(1);
 			}
@@ -570,20 +561,33 @@ namespace AllyisApps.Services
 		/// <param name="date">The date indicating which overtime period to recalculate.</param>
 		/// <param name="userId">The user that the time entries belong to.</param>
 		/// <param name="setting">Optional settings object to save a db call.</param>
+		/// <param name="userTimeEntries">Save allready gotten time entires for next overtiem peroids</param>
+		/// <param name="overTimePeroid">only request overtiem peripod once </param>
 		/// <returns>Awaitable task</returns>
 		/// TODO: make this method private by moving all references to service layer.
-		public async Task RecalculateOvertime(int organizationId, DateTime date, int userId, Setting setting = null)
+		public async Task RecalculateOvertime(int organizationId, DateTime date, int userId,
+			Setting setting = null,
+			IEnumerable<TimeEntry> userTimeEntries =null,
+			DateRange overTimePeroid = null)
 		{
 			var settings = setting ?? await GetSettingsByOrganizationId(organizationId);
 			if (settings.OvertimeHours == null) return; //don't need to recalculate overtime if org doesn't use it
 
-			DateRange overtimePeriod = await GetOvertimePeriodByDate(organizationId, date, settings);
+			DateRange overtimePeriod = overTimePeroid ?? await GetOvertimePeriodByDate(organizationId, date, settings);
 			if (overtimePeriod.EndDate <= (settings.LockDate ?? settings.PayrollProcessedDate ?? DateTime.MinValue))
 			{
 				throw new ArgumentOutOfRangeException(nameof(overtimePeriod.StartDate), overtimePeriod.StartDate, "Cannot recalculate overtime for a period that is fully locked.");
 			}
-
-			var entriesInOvertimePeriod = (await GetTimeEntriesByUserOverDateRange(userId, overtimePeriod.StartDate, overtimePeriod.EndDate, organizationId)).ToList();
+			IEnumerable<TimeEntry> entriesInOvertimePeriod = null;
+			if (userTimeEntries == null)
+			{
+				entriesInOvertimePeriod = (await GetTimeEntriesByUserOverDateRange(userId, overtimePeriod.StartDate, overtimePeriod.EndDate, organizationId)).ToList();
+			}
+			else
+			{
+				entriesInOvertimePeriod.Where(tt => tt.Date.Date >= overtimePeriod.StartDate.Date
+										&& tt.Date.Date <= overtimePeriod.EndDate.Date);
+			}
 			if (!entriesInOvertimePeriod.Any()) return; // no time entries to recalculate
 
 			var overtimeEntries = entriesInOvertimePeriod.Where(e => e.BuiltInPayClassId == (int)PayClassId.OverTime).OrderBy(e => e.Date).ToList();
