@@ -77,6 +77,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					foreach (int proj_id in offUser)
 					{
+						var project = AppService.GetProject(proj_id);
+						if (project.IsDefault)
+						{
+							continue;
+						}
 						var update = await AppService.UpdateProjectUser(proj_id, userId, false);
 						if (update.Equals(0))
 						{
@@ -89,7 +94,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					foreach (int proj_id in onUser)
 					{
-						var update = await AppService.UpdateProjectUser(proj_id, userId, false);
+						var project = AppService.GetProject(proj_id);
+						var update = await AppService.UpdateProjectUser(proj_id, userId, true);
 						if (update.Equals(0))
 						{
 							AppService.CreateProjectUser(proj_id, userId);
