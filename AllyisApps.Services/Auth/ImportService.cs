@@ -915,6 +915,8 @@ namespace AllyisApps.Services
 			var payClasses = classGet.Select(InitializePayClassInfo).ToList();
 			var employeeTypes = await GetEmployeeTypeByOrganization(orgId);
 			var assignedPayClasses = new Dictionary<int, List<int>>();
+			DateTime importedStartDate = DateTime.MaxValue;
+			DateTime importedEndDate = DateTime.MinValue;
 			foreach (EmployeeType e in employeeTypes)
 			{
 				var aPC = await GetAssignedPayClasses(e.EmployeeTypeId);
@@ -1117,13 +1119,18 @@ namespace AllyisApps.Services
 							result.TimeEntriesImported += 1;
 						}
 
-						await RecalculateOvertime(orgId, theDate, userInOrg.UserId);
+						
 					}
 					catch (ArgumentException)
 					{
 						result.TimeEntryFailures.Add($"Could not import time entry on sheet {table.TableName}, row {table.Rows.IndexOf(row) + 2}.");
 					}
 				}
+			}
+			if (result.TimeEntriesImported > 0)
+			{
+				DateRange range = new DateRange(importedStartDate, importedEndDate);
+				await RecalculateOvertimeOverDateRange(orgId, range);
 			}
 
 			return result;

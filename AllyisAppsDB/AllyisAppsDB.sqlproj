@@ -129,7 +129,6 @@
     <Build Include="TimeTracker\Stored Procedures\CreateBulkTimeEntry.sql" />
     <Build Include="TimeTracker\Stored Procedures\DeleteTimeEntry.sql" />
     <Build Include="TimeTracker\Stored Procedures\GetHolidays.sql" />
-    <Build Include="TimeTracker\Stored Procedures\GetOldLockDate.sql" />
     <Build Include="TimeTracker\Stored Procedures\GetPayClasses.sql" />
     <Build Include="TimeTracker\Stored Procedures\GetSettings.sql" />
     <Build Include="TimeTracker\Stored Procedures\GetTimeEntriesByUserOverDateRange.sql" />
@@ -138,7 +137,6 @@
     <Build Include="TimeTracker\Stored Procedures\MergeSettings.sql" />
     <Build Include="TimeTracker\Stored Procedures\UpdateStartOfWeek.sql" />
     <Build Include="TimeTracker\Stored Procedures\UpdateTimeEntry.sql" />
-    <Build Include="TimeTracker\Stored Procedures\UpdateOldLockDate.sql" />
     <Build Include="TimeTracker\Stored Procedures\UpdateOvertime.sql" />
     <Build Include="TimeTracker\Stored Procedures\CreatePayClass.sql" />
     <Build Include="TimeTracker\Stored Procedures\CreateTimeEntry.sql" />
@@ -413,6 +411,7 @@
     <Build Include="TimeTracker\Stored Procedures\AddOrgPayClassesToEmployeeType.sql" />
     <Build Include="Pjm\Stored Procedures\GetDefaultProject.sql" />
     <Build Include="TimeTracker\Stored Procedures\UpdateUserOrgEmployeeType.sql" />
+    <Build Include="TimeTracker\Stored Procedures\UpdateOvertimeChangedFlag.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

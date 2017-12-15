@@ -24,9 +24,9 @@ namespace AllyisApps.Services.TimeTracker
 		public int StartOfWeek { get; set; }
 
 		/// <summary>
-		/// Gets or sets the OvertimeHours.
+		/// Gets or sets the OvertimeHours. Null means that the org isn't using overtime.
 		/// </summary>
-		public int OvertimeHours { get; set; }
+		public int? OvertimeHours { get; set; }
 
 		/// <summary>
 		/// Gets or sets the OvertimePeriod.
@@ -64,5 +64,20 @@ namespace AllyisApps.Services.TimeTracker
 		///  }'
 		/// </summary>
 		public string PayPeriod { get; set; }
+
+		/// <summary>
+		/// Bool for whether or not the overtime settings were recently changed
+		/// </summary>
+		/// <remarks>
+		/// If this property is true, that means that the org currently has time entries
+		/// inbetween its payroll process date and its lock date that have not been
+		/// updated to new overtime settings due to the fact that they are locked.
+		/// Any reduction of lock date therefore must endure additional validation to ensure
+		/// that no overtime periods contain a mixture of locked old ot setting entries and
+		/// new ot setting entries, which would make overtime calculation impossible.
+		/// 
+		/// If this property is false, no additional validation for reducing lock date is necessary.
+		/// </remarks>
+		public bool OtSettingRecentlyChanged { get; set; }
 	}
 }

@@ -95,24 +95,44 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="payClassId">The id of the pay class to remove.</param>
 		/// <param name="destPayClass">The id of the payclass to move all old entries to (nullable).</param>
-		public async void DeletePayClass(int payClassId, int? destPayClass)
+		/// <param name="orgId"></param>
+		public async Task<bool> DeletePayClass(int payClassId, int? destPayClass, int orgId)
 		{
+			var settings = await GetSettingsByOrganizationId(orgId);
+			bool hastimeEntryLocked = false;
 			// TODO: move this part in the DeletePayClass stored procedure
 			if (destPayClass != null)
 			{
 				IEnumerable<TimeEntryDBEntity> allEntries = GetTimeEntriesThatUseAPayClass(payClassId);
 				// update the payClassId for all time entries that used the old pay class
+
+
 				foreach (TimeEntryDBEntity entry in allEntries)
 				{
 					entry.PayClassId = destPayClass.Value;
-					UpdateTimeEntry(entry);
+					if (entry.Date.Date > (settings.LockDate?.Date ?? settings.PayrollProcessedDate?.Date ?? DateTime.MinValue))
+					{
+						UpdateTimeEntry(entry);
+					}
+					else
+					{
+						hastimeEntryLocked = true;
+					}
 				}
 			}
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@id", payClassId);
-			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			if (!hastimeEntryLocked)
 			{
-				await connection.ExecuteAsync("[Hrm].[DeletePayClass]", parameters, commandType: CommandType.StoredProcedure);
+				using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+				{
+					await connection.ExecuteAsync("[Hrm].[DeletePayClass]", parameters, commandType: CommandType.StoredProcedure);
+					return true;
+				}
+			}
+			else
+			{
+				return false;
 			}
 		}
 
@@ -307,35 +327,50 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updatese only the start of week for an org.
 		/// </summary>
-		/// <param name="orgId">The organization Id.</param>
+		/// <param name="organizationId">The organization Id.</param>
 		/// <param name="startOfWeek">The value for which day should be the start of the week. 1-6 M-Sat, 0 Sun.</param>
-		public async void UpdateTimeTrackerStartOfWeek(int orgId, int startOfWeek)
+		public async Task<int> UpdateTimeTrackerStartOfWeek(int organizationId, int startOfWeek)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", orgId);
+			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@startOfWeek", startOfWeek);
+
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				await connection.ExecuteAsync("[TimeTracker].[UpdateStartOfWeek]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.ExecuteAsync("[TimeTracker].[UpdateStartOfWeek]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
 		/// <summary>
 		/// Update overtime settings for an Organization.
 		/// </summary>
-		/// <param name="orgId">The Id of the time entry to be updated.</param>
+		/// <param name="organizationId">The Id of the time entry to be updated.</param>
 		/// <param name="overtimeHours">Hours until overtime.</param>
 		/// <param name="overtimePeriod">Time period for hours until overtime.</param>
-		public async void UpdateOvertime(int orgId, int overtimeHours, string overtimePeriod)
+		public async Task<int> UpdateOvertime(int organizationId, int? overtimeHours, string overtimePeriod)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", orgId);
+			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@overtimeHours", overtimeHours);
 			parameters.Add("@overtimePeriod", overtimePeriod);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				await connection.ExecuteAsync("[TimeTracker].[UpdateOvertime]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.ExecuteAsync("[TimeTracker].[UpdateOvertime]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Updates the time tracker settings [OtSettingRecentlyChanged] column.
+		/// </summary>
+		/// <param name="organizationId">The organization that the settings belong to.</param>
+		/// <param name="flag">The new value to change the column to.</param>
+		/// <returns>Number of rows updated -- should be 1.</returns>
+		public async Task<int> UpdateOvertimeChangedFlag(int organizationId, bool flag)
+		{
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				return await connection.ExecuteAsync("[TimeTracker].[UpdateOvertimeChangedFlag]", new { organizationId, flag }, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -371,36 +406,12 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Updates lock date settings.
-		/// </summary>
-		/// <param name="organizationId">.</param>
-		/// <param name="lockDateUsed">.</param>
-		/// <param name="lockDatePeriod">.</param>
-		/// <param name="lockDateQuantity">.</param>
-		/// <returns>.</returns>
-		public async Task<bool> UpdateOldLockDate(int organizationId, bool lockDateUsed, int lockDatePeriod, int lockDateQuantity)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", organizationId);
-			parameters.Add("@isLockDateUsed", lockDateUsed);
-			parameters.Add("@lockDatePeriod", lockDatePeriod);
-			parameters.Add("@lockDateQuantity", lockDateQuantity);
-
-			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
-			{
-				await connection.ExecuteAsync("[TimeTracker].[UpdateOldLockDate]", parameters, commandType: CommandType.StoredProcedure);
-			}
-
-			return true;
-		}
-
-		/// <summary>
 		/// Updates lock date in time tracker settings.
 		/// </summary>
 		/// <param name="organizationId">The organization that the settings belong to.</param>
 		/// <param name="lockDate">The new lock date.  Can be null, to set the lock date to null.</param>
 		/// <returns>.</returns>
-		public int UpdateLockDate(int organizationId, DateTime? lockDate)
+		public async Task<int> UpdateLockDate(int organizationId, DateTime? lockDate)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
@@ -408,7 +419,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Execute("[TimeTracker].[UpdateLockDate]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.ExecuteAsync("[TimeTracker].[UpdateLockDate]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -418,7 +429,7 @@ namespace AllyisApps.DBModel
 		/// <param name="organizationId">The organization that the settings belong to.</param>
 		/// <param name="payrollProcessedDate">The new lock date.</param>
 		/// <returns>.</returns>
-		public int UpdatePayrollProcessedDate(int organizationId, DateTime payrollProcessedDate)
+		public async Task<int> UpdatePayrollProcessedDate(int organizationId, DateTime payrollProcessedDate)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
@@ -426,7 +437,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Execute("[TimeTracker].[UpdatePayrollProcessedDate]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.ExecuteAsync("[TimeTracker].[UpdatePayrollProcessedDate]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 

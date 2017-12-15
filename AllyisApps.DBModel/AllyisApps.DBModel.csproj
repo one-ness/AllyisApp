@@ -107,7 +107,6 @@
     <Compile Include="StaffingManager\PositionStatusDBEntity.cs" />
     <Compile Include="Lookup\TagDBEntity.cs" />
     <Compile Include="StaffingManager\PositionTagDBEntity.cs" />
-    <Compile Include="TimeTracker\LockDateDBEntity.cs" />
     <Compile Include="Hrm\PayClassDBEntity.cs" />
     <Compile Include="TimeTracker\SettingDBEntity.cs" />
     <Compile Include="TimeTracker\TimeEntryDBEntity.cs" />

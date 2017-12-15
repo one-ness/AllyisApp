@@ -4,7 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
+
+using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
@@ -14,19 +15,9 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 	public class SettingsOvertimeViewModel : SettingsViewModel
 	{
 		/// <summary>
-		/// Gets or sets the OrganizationId.
-		/// </summary>
-		public int OrganizationId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the StartOfWeek.
-		/// </summary>
-		public int StartOfWeek { get; set; }
-
-		/// <summary>
 		/// Gets or sets the OvertimeHours.
 		/// </summary>
-		public int OvertimeHours { get; set; }
+		public int? OvertimeHours { get; set; }
 
 		/// <summary>
 		/// Gets or sets the OvertimePeriod.
@@ -34,8 +25,14 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public string OvertimePeriod { get; set; }
 
 		/// <summary>
-		/// Get or sets todays date for holiday datepicker
+		/// Bool for whether or not overtime is being used by the company.
+		/// Also equal to overtimeHours != null
 		/// </summary>
-		public DateTime Today { get; set; }
+		public bool IsOvertimeUsed { get; set; }
+
+		/// <summary>
+		/// Gets or sets a dictionary containing all the options + values for overtime period
+		/// </summary>
+		public Dictionary<string, string> OvertimePeriodOptions { get; set; }
 	}
 }

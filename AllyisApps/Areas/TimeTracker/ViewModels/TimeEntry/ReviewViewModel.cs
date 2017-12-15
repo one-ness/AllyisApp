@@ -69,6 +69,11 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public string TimeEntryIdsJSON { get; set; }
 
 		/// <summary>
+		/// 
+		/// </summary>
+		public string TimeEntryUserIdsJson { get; set; }
+
+		/// <summary>
 		/// Gets or sets the dictionary of all time entry statuses, to be used for the view select
 		/// </summary>
 		public Dictionary<int, string> TimeEntryStatusOptions { get; set; }
@@ -87,5 +92,42 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Gets or sets the pay period ranges for the time tracker subscription.  Includes current, previous, and next pay periods.
 		/// </summary>
 		public PayPeriodRanges PayPeriodRanges { get; set; }
+	}
+
+	/// <summary>
+	/// T
+	/// </summary>
+	public class TimeEntryUserReviewViewModel
+	{
+		/// <summary>
+		/// Gets or sets UsersTimeEntries
+		/// </summary>
+		public IEnumerable<TimeEntryViewModel> UserTimeEntries { get; set; }
+
+
+		/// <summary>
+		/// Gets for sets userId
+		/// </summary>
+		public int UserId { get; set; }
+
+		/// <summary>
+		/// Gets or sets Payclases for the organization
+		/// </summary>
+		public IEnumerable<PayClassInfoViewModel> PayClasses { get; set; }
+
+		/// <summary>
+		/// Bool for whether or not the view rows should be checked
+		/// </summary>
+		public bool IsChecked { get; set; }
+
+		/// <summary>
+		/// Constuct with empty lists.
+		/// </summary>
+		public TimeEntryUserReviewViewModel()
+		{
+			PayClasses = new List<PayClassInfoViewModel>();
+			UserTimeEntries = new List<TimeEntryViewModel>();
+		}
+
 	}
 }

@@ -12,7 +12,7 @@ namespace AllyisApps.Services
 {
 	public partial class AppService : BaseService
 	{
-		public async Task AddUserToOrganizaion(string email, string firstName, string lastName, int organizaionId, OrganizationRoleEnum roleType, string empolyeeId, int? employeeTypeId)
+		public async Task<User> AddUserToOrganizaion(string email, string firstName, string lastName, int organizaionId, OrganizationRoleEnum roleType, string empolyeeId, int? employeeTypeId)
 		{
 			User user = await GetUserByEmail(email);
 			int employeeType = 0;
@@ -50,6 +50,7 @@ namespace AllyisApps.Services
 				UserId = user.UserId
 			};
 			DBHelper.CreateOrganizationUser(orgUser);
+			return user;
 		}
 	}
 }

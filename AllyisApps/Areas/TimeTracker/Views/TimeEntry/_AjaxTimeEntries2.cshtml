@@ -1,16 +1,14 @@
 ﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 @using AllyisApps.Lib;
 @using System.Globalization;
+@using AllyisApps.Utilities
 @model TimeEntryRangeForUserViewModel
 
 @{
 	DayOfWeek startOfWeek = (DayOfWeek)ViewBag.startOfWeek;
-	Func<int, int> getYearWeekGroupNumber =
-		d => Utility.GetDateTimeFromDays(d).Year * 100 + CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(
-			Utility.GetDateTimeFromDays(d).Date,
-			CalendarWeekRule.FirstFourDayWeek,
-			startOfWeek);
-	var weekQuery = from entry in Model.Entries orderby entry.Date group entry by getYearWeekGroupNumber(entry.Date);
+	var weekQuery = Model.Entries
+		.OrderBy(entry => entry.Date)
+		.GroupBy(entry => Utility.GetDateTimeFromDays(entry.Date).GroupByStartOfWeek(startOfWeek));
 }
 
 @foreach (var weekGroup in weekQuery)

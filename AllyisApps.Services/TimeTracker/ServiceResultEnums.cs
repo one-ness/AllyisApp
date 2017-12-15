@@ -6,14 +6,18 @@
 		DBError,
 		Success,
 		InvalidLockDate,
-		NoChange
+		NoChange,
+		SuccessAndRecalculatedOvertime,
+		InvalidLockDateWithOvertimeChange
 	}
 
 	public enum UnlockEntriesResult
 	{
 		NoLockDate,
 		DBError,
-		Success
+		Success,
+		InvalidLockDate,
+		SuccessAndRecalculatedOvertime
 	}
 
 	public enum PayrollProcessEntriesResult
@@ -22,5 +26,26 @@
 		DBError,
 		Success,
 		InvalidStatuses
+	}
+
+	public enum StartOfWeekResult
+	{
+		StartOfWeekOutOfRange,
+		SuccessAndRecalculatedOvertime,
+		Success,
+		SettingsNotFound,
+		InvalidLockDate
+	}
+
+	public enum OvertimeResult
+	{
+		InvalidPeriodValue,
+		Success,
+		NoHoursValue,
+		InvalidHours,
+		SettingsNotFound,
+		SuccessAndRecalculatedOvertime,
+		SuccessAndDeletedOvertime,
+		InvalidLockDate
 	}
 }

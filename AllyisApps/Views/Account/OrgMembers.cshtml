@@ -78,13 +78,13 @@
 			@foreach (var item in Model.Users)
 			{
 				<tr class="userRow">
-					@if (Model.CanEditUser)
+					@if (Model.CanEditUser && Model.CurrentUserId != item.UserId)
 				{
 						<td><input class="checkbox-inline members-checkbox" type="checkbox" value="@item.UserId" /></td>
 				}
 				else
 				{
-						<td></td>
+						<td><input style="display:none" class="checkbox-inline members-checkbox checkbox-hide" type="checkbox" value="@item.UserId" /></td>
 				}
 					<td class="name">@item.Username</td>
 					<td>@item.Email</td>
@@ -124,9 +124,7 @@
 				function getUserIdsAndSubmit() {
 					var csvIds = "";
 
-					if (!confirm("Do you wish to delete the selected user(s)?")) {
-						return false;
-					}
+					
 
 					// gather all the ids to delete as a csv
 
@@ -138,7 +136,7 @@
 						var value = $(this).val();
 						var isChecked = $(this).is(":checked");
 
-						if (isChecked) {
+						if (isChecked && !$(this).hasClass("checkbox-hide")) {
 							csvIds += value + ",";
 						}
 					});
@@ -147,6 +145,9 @@
 
 					if (csvIds == "") {
 						alert("You have not chosen a user to delete");
+						return false;
+					}
+					if (!confirm("Do you wish to delete the selected user(s)?")) {
 						return false;
 					}
 					$("#csvUserIds").val(csvIds);

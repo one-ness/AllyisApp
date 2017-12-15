@@ -75,8 +75,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			if (items.Entries?[0]?.UserId != null)
 			{
 				int organizationId = AppService.UserContext.SubscriptionsAndRoles[items.SubscriptionId].OrganizationId;
-				var range = new DateRange(Utility.GetDateTimeFromDays(items.StartingDate), Utility.GetDateTimeFromDays(items.EndingDate));
-				await AppService.RecalculateOvertimeOverDateRange(organizationId, range, items.Entries[0].UserId);
+				var editedEntryDates = items.Entries.Where(e => e.IsCreated || e.IsDeleted || e.IsEdited).Select(e => e.Date).OrderBy(d => d).ToList();
+				if (editedEntryDates.Count != 0)
+				{
+					DateTime startDate = Utility.GetDateTimeFromDays(editedEntryDates.First());
+					DateTime endDate = Utility.GetDateTimeFromDays(editedEntryDates.Last());
+
+					await AppService.RecalculateOvertimeByUserOverDateRange(organizationId, new DateRange(startDate, endDate), items.Entries[0].UserId);
+				}
 			}
 
 			return RedirectToRoute(

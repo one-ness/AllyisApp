@@ -3,9 +3,13 @@
 
 @{
 	ViewBag.Title = Strings.Merge;
+	ViewData["SubscriptionName"] = Model.SubscriptionName;
+	ViewData["SubscriptionId"] = Model.SubscriptionId;
+	ViewBag.SubscriptionName = Model.SubscriptionName;
 	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
 	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
 	Layout = "~/Areas/TimeTracker/Views/Shared/_TimeTrackerSidebar.cshtml";
+	ViewData["SubscriptionName"] = Model.SubscriptionName;
 }
 
 @section css {
@@ -28,6 +32,7 @@
 						@Html.AntiForgeryToken();
 						@Html.HiddenFor(m => m.SourcePayClassId)
 						@Html.HiddenFor(m => m.SourcePayClassName)
+						@Html.HiddenFor(m =>  m.SubscriptionId)
 						foreach (var payClass in Model.DestinationPayClasses)
 						{
 							string _payClassName = Strings.ResourceManager.GetString(payClass.PayClassName.Replace(" ", string.Empty)) ?? payClass.PayClassName;
@@ -36,7 +41,7 @@
 						<br />
 						<div class="pull-right">
 							<a href="@Url.Action(ActionConstants.SettingsPayClass, ControllerConstants.TimeEntry)" class="btn btn-default">@Strings.Cancel</a>
-							<input type="submit" class="btn btn-primary" value=@Strings.Save onClick="this.form.submit(); this.disabled=true; this.value='Saving...';" />
+							<input type="submit" class="btn btn-primary" value=@Strings.Save onClick="this.form.submit(); this.disabled=true; this.value='Saving...'; return confirm('@("Are you sure you want to merge this pay class?  The old pay class will be removed from all employee types.")');" />
 						</div>
 					}
 				</div>

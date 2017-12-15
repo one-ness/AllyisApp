@@ -12,13 +12,6 @@ namespace AllyisApps.Services.TimeTracker
 	/// </summary>
 	public class PayPeriodRanges
 	{
-		public PayPeriodRanges()
-		{
-			Previous = new DateRange();
-			Current = new DateRange();
-			Next = new DateRange();
-		}
-
 		/// <summary>
 		/// Gets or sets the previous pay period range.
 		/// This is the pay period range right before the current range.

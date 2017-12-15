@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -14,7 +15,6 @@ using AllyisApps.Core.Alert;
 using AllyisApps.Resources;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.TimeTracker;
-using AllyisApps.Utilities;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using Newtonsoft.Json;
@@ -55,11 +55,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		private async Task<ReviewViewModel> ConstructReviewViewModel(int organizationId, int subscriptionId, DateTime startDate, DateTime endDate)
 		{
 			var payClasses = (await AppService.GetPayClassesByOrganizationId(organizationId)).Select(x => new PayClassInfoViewModel(x)).ToList();
+			var projects = (await AppService.GetProjectsByOrganization(organizationId, false)).ToDictionary(pro => pro.ProjectId);
+
 			var subscription = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			var allTimeEntries = (await AppService.GetTimeEntriesOverDateRange(organizationId, startDate, endDate))
 				.Select(entry =>
 				{
-					CompleteProject project = AppService.GetProject(entry.ProjectId);
+					CompleteProject project = projects[entry.ProjectId];
 					return new TimeEntryViewModel(entry)
 					{
 						ProjectName = project.ProjectName,
@@ -94,7 +96,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				TimeEntryIdsJSON = JsonConvert.SerializeObject(allTimeEntries.Select(entry => entry.TimeEntryId).ToArray()),
 				StartDate = startDate,
 				EndDate = endDate,
-				TimeEntryStatusOptions = ModelHelper.GetLocalizedTimeEntryStatuses(AppService),
+				TimeEntryStatusOptions = ModelHelper.GetLocalizedTimeEntryStatuses(),
 				PayPeriodRanges = payperiodRanges,
 				LockDate = settings.LockDate,
 				PayrollProcessedDate = settings.PayrollProcessedDate
@@ -108,20 +110,48 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">Subscription that the time entries belong to.</param>
 		/// <param name="timeEntryIdsJson">Int array of time entry ids to change, in JSON string format.</param>
+		/// <param name="timeEntryUserIdsJson"></param>
 		/// <param name="timeEntryStatusId">Status to change to.</param>
 		/// <param name="endDate">Date range for reloading the page.</param>
 		/// <param name="startDate">Date range for reloading the page.</param>
 		/// <returns>Redirect to same page.</returns>
-		public async Task<ActionResult> UpdateTimeEntryStatus(int subscriptionId, string timeEntryIdsJson, int timeEntryStatusId, DateTime startDate, DateTime endDate)
+		public async Task<ActionResult> UpdateTimeEntryStatus(int subscriptionId, string timeEntryIdsJson, string timeEntryUserIdsJson, int timeEntryStatusId, DateTime startDate, DateTime endDate)
 		{
+			int organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			var timeEntryIds = JsonConvert.DeserializeObject<List<int>>(timeEntryIdsJson);
-			if (timeEntryIds.Count == 0)
+			var userIds = JsonConvert.DeserializeObject<List<int>>(timeEntryUserIdsJson);
+			HashSet<int> timeEntries = new HashSet<int>(timeEntryIds);
+
+			if (timeEntryIds.Count == 0 && userIds.Count == 0)
 			{
 				Notifications.Add(new BootstrapAlert(Strings.UpdateTimeEntryStatusNoStatusSelected, Variety.Warning));
 				return RedirectToAction(ActionConstants.Review, new { subscriptionId, startDate, endDate });
 			}
 
-			await timeEntryIds.ForEachAsync(async id => await AppService.UpdateTimeEntryStatusById(id, timeEntryStatusId));
+			var settings = await AppService.GetSettingsByOrganizationId(organizationId);
+			var effectiveLockDate = settings.LockDate ?? settings.PayrollProcessedDate ?? SqlDateTime.MinValue.Value;
+			var startDateUnlocked = effectiveLockDate >= startDate ? effectiveLockDate.AddDays(1) : startDate;
+
+			var orgTimeEntries = (await AppService.GetTimeEntriesOverDateRange(organizationId, startDateUnlocked, endDate)).ToLookup(tt => tt.UserId);
+
+			foreach (int userId in userIds)
+			{
+				var userTimeentrys = orgTimeEntries[userId];
+				foreach (var userTimeEntry in userTimeentrys)
+				{
+					timeEntries.Add(userTimeEntry.TimeEntryId);
+				}
+			}
+
+			if (timeEntries.Count == 0)
+			{
+				Notifications.Add(new BootstrapAlert(Strings.UpdateTimeEntryStatusNoStatusSelected, Variety.Warning));
+				return RedirectToAction(ActionConstants.Review, new { subscriptionId, startDate, endDate });
+			}
+
+			var tasks = new List<Task>();
+			timeEntries.ToList().ForEach(id => tasks.Add(AppService.UpdateTimeEntryStatusById(id, timeEntryStatusId)));
+			await Task.WhenAll(tasks);
 
 			Notifications.Add(new BootstrapAlert(Strings.UpdateTimeEntryStatusSuccess, Variety.Success));
 
@@ -156,6 +186,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				case LockEntriesResult.NoChange:
 					Notifications.Add(new BootstrapAlert(string.Format(Strings.LockTimeEntriesNoChange, lockDate.ToShortDateString()), Variety.Warning));
 					break;
+				case LockEntriesResult.SuccessAndRecalculatedOvertime:
+					Notifications.Add(new BootstrapAlert(string.Format(Strings.LockEntriesResultSuccessAndRecalculatedOvertime, lockDate.ToShortDateString()), Variety.Success));
+					break;
+				case LockEntriesResult.InvalidLockDateWithOvertimeChange:
+					Notifications.Add(new BootstrapAlert(string.Format(Strings.LockTimeEntriesInvalidLockDateWithOvertimeChange, lockDate.ToShortDateString()), Variety.Danger));
+					break;
 				default:
 					throw new ArgumentOutOfRangeException(string.Format(Strings.InvalidEnum, nameof(result), nameof(LockEntriesResult)));
 			}
@@ -185,6 +221,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				case UnlockEntriesResult.Success:
 					Notifications.Add(new BootstrapAlert(Strings.UnlockTimeEntriesSuccess, Variety.Success));
 					break;
+				case UnlockEntriesResult.InvalidLockDate:
+					Notifications.Add(new BootstrapAlert(Strings.UnlockTimeEntriesInvalidLockDate, Variety.Danger));
+					break;
+				case UnlockEntriesResult.SuccessAndRecalculatedOvertime:
+					Notifications.Add(new BootstrapAlert(Strings.UnlockEntriesResultSuccessAndRecalculatedOvertime, Variety.Success));
+					break;
 				default:
 					throw new ArgumentOutOfRangeException(string.Format(Strings.InvalidEnum, nameof(result), nameof(UnlockEntriesResult)));
 			}
@@ -202,7 +244,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>Redirect to same page.</returns>
 		public async Task<ActionResult> PayrollProcessTimeEntries(int subscriptionId, DateTime startDate, DateTime endDate)
 		{
-			PayrollProcessEntriesResult result = await AppService.PayrollProcessTimeEntriesAsync(subscriptionId);
+			PayrollProcessEntriesResult result = await AppService.PayrollProcessTimeEntries(subscriptionId);
 			switch (result)
 			{
 				case PayrollProcessEntriesResult.NoLockDate:
@@ -222,6 +264,35 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			return RedirectToAction(ActionConstants.Review, new { subscriptionId, startDate, endDate });
+		}
+
+
+		/// <summary>
+		/// Gets the user time entires and returns the partial view with this data.
+		/// </summary>
+		/// <param name="userId"></param>
+		/// <param name="subscriptionId"></param>
+		/// <param name="startDate"></param>
+		/// <param name="endDate"></param>
+		/// <param name="isChecked">Bool for whether or not the row check boxes are checked.</param>
+		/// <returns>Partial view; time entry rows in the review page table.</returns>
+		[HttpPost]
+		public async Task<ActionResult> GetUserReviewTimeEntries(int userId, int subscriptionId, DateTime startDate, DateTime endDate, bool isChecked)
+		{
+			int organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
+			var timeEntries = await AppService.GetTimeEntriesByUsersOverDateRange(new List<int> { userId }, startDate, endDate, organizationId);
+			var payClasses = await AppService.GetPayClassesByOrganizationId(organizationId);
+
+			var model = new TimeEntryUserReviewViewModel
+			{
+				UserTimeEntries = timeEntries.Select(te => new TimeEntryViewModel(te)),
+				PayClasses = payClasses.Select(b => new PayClassInfoViewModel(b)),
+				UserId = userId,
+				IsChecked = isChecked
+			};
+
+			return PartialView(ViewConstants.ReviewUserTimeEntries, model);
+
 		}
 	}
 }
