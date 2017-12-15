@@ -8,7 +8,7 @@ function nonajaxDelete(form_child) {
 	form_element.addClass("deleting");
 	if (form_element[0].TimeEntryId.value === '' || form_element[0].TimeEntryId.value === 0) {
 		console.log("Delete of previous");
-		addRow(form_child);
+		//addRow(form_child);
 		//remove form as we no longer care about data
 		form_wrap.css({ 'z-index': -1000 }).transition({ 'max-height': 0, duration: 500, easing: 'linear' },
 			function () { form_wrap.remove(); });
@@ -164,9 +164,11 @@ function updateTimes(values) {
 	});
 }
 
-function addRow(form_chlid) {
+function addRow(form_child) {
 	//TODO:Validate
-	var form_element = $(form_chlid).parents('form:first');
+	var form_element = $(form_child).parents('form:first');
+	form_element.addClass("changed");
+	form_element.removeClass("create");
 	var container = form_element.parents(".table-col:first");
 	appendNewEntryForm(container);
 }
