@@ -167,7 +167,7 @@ function updateTimes(values) {
 function addRow(form_child) {
 	//TODO:Validate
 	var form_element = $(form_child).parents('form:first');
-	form_element.addClass("changed");
+	form_element.addClass("compounded");
 	form_element.removeClass("create");
 	var container = form_element.parents(".table-col:first");
 	appendNewEntryForm(container);
@@ -256,10 +256,13 @@ function setDefalutProject(form_child) {
 function changeOccur(form_child) {
 	var form_element = $(form_child).parents("form:first");
 	form_element.addClass("changed");
+	form_element.addClass("compounded");
 
 	if ($(form_element).hasClass("create")) {
 		var created = form_element.find("[name='IsCreated']")[0];
 		created.setAttribute("value", "True");
+
+		addRow(form_child);
 	}
 
 

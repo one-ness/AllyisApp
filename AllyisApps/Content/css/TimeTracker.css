@@ -102,7 +102,7 @@ a {
 	background-color: #f5f5f5;
 }
 
-.very-inline-form.create .hidden-create {
+.very-inline-form.create .hidden-create, .very-inline-form.compounded .btn-primary {
 	display: none;
 	visibility: hidden;
 }
