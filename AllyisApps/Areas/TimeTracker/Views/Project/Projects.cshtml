@@ -9,132 +9,155 @@
 }
 
 <div class="container">
-			<div class="form-group pull-right">
-				<a href="@Url.Action("ProjectImport")">
-					<span class="btn btn-primary">Project Import</span>
-				</a>
-				<a href="@Url.Action("Create")">
-					<span class="btn btn-primary">Create Project</span>
-				</a>
-			</div>
+	<div class="row">
+		<div class="form-group pull-right">
+			<a href="@Url.Action("ProjectImport")">
+				<span class="btn btn-primary">Project Import</span>
+			</a>
+			<a href="@Url.Action("Create")">
+				<span class="btn btn-primary">Create Project</span>
+			</a>
+		</div>
 
-			<table class="table table-hover table-xtra-condensed">
-				<thead>
-					<tr class="double-bottom-border">
-						<th>
-							<input type="checkbox" id="select-all" onclick="CheckAllToggle()" />
-						</th>
-						<th>
-							Name
-						</th>
-						<th>
-							Start Date
-						</th>
-						<th>
-							End Date
-						</th>
-						<th>
-							Customer
-						</th>
-						<th>
-							Project Code
-						</th>
-						<th>
-							Status
-						</th>
-						<th>
-							Edit
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach (var project in Model.Projects)
-					{
-						<tr>
-							<td><input type="checkbox" class="customer-select" value="@project.ProjectId" /></td>
-							<td>@project.ProjectName</td>
-							<td>
-								@if (project.StartDate != null)
-								{
-									@project.StartDate.Value.Date.ToString("d")
-								}
-							</td>
-							<td>
-								@if (project.EndDate != null)
-								{
-									@project.EndDate.Value.Date.ToString("d")
-								}
-							</td>
-							<td>@project.CustomerName</td>
-							<td>@project.ProjectCode</td>
-							<td>
-								@if ((project.EndDate == null || project.EndDate.Value.Date >= DateTime.UtcNow.Date) && (project.StartDate == null || project.StartDate.Value <= DateTime.UtcNow))
-								{
-									<p>Active</p>
-								}
-								else
-								{
-									<p>Disabled</p>
-								}
-							</td>
-							<td>
-								<a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Project, new {userId = project.ProjectId })" t title="@Strings.EditProject"><i class="fa fa-fw fa-edit"></i></a>
-							</td>
-						</tr>
-					}
-				</tbody>
-			</table>
-			<div class="pull-right btn">
-				@using (Html.BeginForm(Strings.Delete, Strings.Project, new { }, FormMethod.Get, new { @onsubmit = "return getUserIdsAndSubmit();" }))
+		<div class="col-xs-6 filter-row" style="display:flex">
+			<label class="col-xs-4">Name Filter:&nbsp;</label>
+			<input class="col-xs-8 form-control fa-filter" type="search" placeholder="@Strings.ProjectSearchPlaceholder" id="projectSearch" />
+		</div>
+
+		<table class="table table-hover table-xtra-condensed">
+			<thead>
+				<tr class="double-bottom-border">
+					<th>
+						<input type="checkbox" id="select-all" onclick="CheckAllToggle()" />
+					</th>
+					<th>
+						Name
+					</th>
+					<th>
+						Start Date
+					</th>
+					<th>
+						End Date
+					</th>
+					<th>
+						Customer
+					</th>
+					<th>
+						Project Code
+					</th>
+					<th>
+						Status
+					</th>
+					<th>
+						Edit
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var project in Model.Projects)
 				{
-					<input type="hidden" name="userIds" id="deleteIds" value="" />
-					<button type="submit" class="btn btn-danger  pull-right">Delete</button>
+					<tr class="projectRow">
+						<td><input type="checkbox" class="customer-select" value="@project.ProjectId" /></td>
+						<td class="name">@project.ProjectName</td>
+						<td>
+							@if (project.StartDate != null)
+							{
+								@project.StartDate.Value.Date.ToString("d")
+							}
+						</td>
+						<td>
+							@if (project.EndDate != null)
+							{
+								@project.EndDate.Value.Date.ToString("d")
+							}
+						</td>
+						<td>@project.CustomerName</td>
+						<td>@project.ProjectCode</td>
+						<td>
+							@if ((project.EndDate == null || project.EndDate.Value.Date >= DateTime.UtcNow.Date) && (project.StartDate == null || project.StartDate.Value <= DateTime.UtcNow))
+							{
+								<p>Active</p>
+							}
+							else
+							{
+								<p>Disabled</p>
+							}
+						</td>
+						<td>
+							<a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Project, new {userId = project.ProjectId })" t title="@Strings.EditProject"><i class="fa fa-fw fa-edit"></i></a>
+						</td>
+					</tr>
 				}
+			</tbody>
+		</table>
+		<div class="pull-right btn">
+			@using (Html.BeginForm(Strings.Delete, Strings.Project, new { }, FormMethod.Get, new { @onsubmit = "return getUserIdsAndSubmit();" }))
+			{
+				<input type="hidden" name="userIds" id="deleteIds" value="" />
+				<button type="submit" class="btn btn-danger  pull-right">Delete</button>
+			}
+		</div>
+	</div>
+	<div class="row" style="padding-top:20px;">
+		<div class="col-xs-12">
+			<div class="pageContainer">
+				@*This container is populated by javascript in allyis-account-permission2.js*@
 			</div>
+		</div>
+	</div>
 </div>
 
-<script>
-	function getUserIdsAndSubmit() {
-		var csvIds = "";
+@section scripts
+{
+	<script src="~/Scripts/allyis-account-permission2.js" type="text/javascript"></script>
+	<script src="~/Scripts/allyis-pages-with-filter.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		pwf.setPageLimit(10);
+		pwf.setRowClass("projectRow");
+		pwf.addFilter("#projectSearch", "search", ".name");
 
-		if (!confirm("Do you wish perform action on selected project(s)?")) {
-			return false;
-		}
+		function getUserIdsAndSubmit() {
+			var csvIds = "";
 
-		// gather all the ids to delete as a csv
-
-		var checkboxes = $(".customer-select");
-
-		//checkboxes = checkboxes.slice(1);   //We don't want to include the select all checkbox
-		checkboxes.each(function () {
-
-			var value = $(this).val();
-			var isChecked = $(this).is(":checked");
-
-			if (isChecked) {
-				csvIds += value + ",";
+			if (!confirm("Do you wish perform action on selected project(s)?")) {
+				return false;
 			}
-		});
 
-		csvIds = csvIds.replace(/(^,)|(,$)/g, "");
+			// gather all the ids to delete as a csv
 
-		if (csvIds == "") {
-			alert("You have not chosen any project(s).");
-			return false;
+			var checkboxes = $(".customer-select");
+
+			//checkboxes = checkboxes.slice(1);   //We don't want to include the select all checkbox
+			checkboxes.each(function () {
+
+				var value = $(this).val();
+				var isChecked = $(this).is(":checked");
+
+				if (isChecked) {
+					csvIds += value + ",";
+				}
+			});
+
+			csvIds = csvIds.replace(/(^,)|(,$)/g, "");
+
+			if (csvIds == "") {
+				alert("You have not chosen any project(s).");
+				return false;
+			}
+			$("#projIds").val(csvIds);
+			$("#deleteIds").val(csvIds);
+
+			// submit the form
+
+			return true; // for now, delete this line later
 		}
-		$("#projIds").val(csvIds);
-		$("#deleteIds").val(csvIds);
-
-		// submit the form
-
-		return true; // for now, delete this line later
-	}
-	function CheckAllToggle() {
-		var checkboxes = [];
-		var checking = document.getElementById("select-all").checked;
-		checkboxes = document.getElementsByClassName("customer-select");
-		for (var i = 0, n = checkboxes.length; i < n; i++) {
-			checkboxes[i].checked = checking;
+		function CheckAllToggle() {
+			var checkboxes = [];
+			var checking = document.getElementById("select-all").checked;
+			checkboxes = document.getElementsByClassName("customer-select");
+			for (var i = 0, n = checkboxes.length; i < n; i++) {
+				checkboxes[i].checked = checking;
+			}
 		}
-	}
-</script>
+	</script>
+}
