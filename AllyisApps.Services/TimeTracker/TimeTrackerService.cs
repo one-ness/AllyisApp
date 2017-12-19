@@ -585,7 +585,7 @@ namespace AllyisApps.Services
 			}
 			else
 			{
-				entriesInOvertimePeriod.Where(tt => tt.Date.Date >= overtimePeriod.StartDate.Date
+				entriesInOvertimePeriod = userTimeEntries.Where(tt => tt.Date.Date >= overtimePeriod.StartDate.Date
 										&& tt.Date.Date <= overtimePeriod.EndDate.Date);
 			}
 			if (!entriesInOvertimePeriod.Any()) return; // no time entries to recalculate
