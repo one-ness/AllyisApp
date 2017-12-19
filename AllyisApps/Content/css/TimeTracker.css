@@ -102,7 +102,7 @@ a {
 	background-color: #f5f5f5;
 }
 
-.very-inline-form.create .hidden-create {
+.very-inline-form.create .hidden-create, .very-inline-form.compounded .btn-primary {
 	display: none;
 	visibility: hidden;
 }
@@ -251,7 +251,7 @@ a {
 		overflow: hidden;
 	}
 
-	.very-inline-form.create {
+	.very-inline-form.create > .left {
 		opacity: 0.5;
 		background-color: transparent;
 	}
@@ -319,11 +319,6 @@ a {
 	.very-inline-form.edit .allyisicon-delete:before {
 		content: "\f00d";
 	}
-
-.very-inline-form.create {
-	opacity: 0.5;
-	background-color: transparent;
-}
 
 	.very-inline-form.create .button-anim-wrap {
 		width: 40px;

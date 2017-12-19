@@ -7,7 +7,7 @@
 	//string createUrl = Url.Action(ActionConstants.CreateTimeEntryJson);
 	//string editUrl = Url.Action(ActionConstants.EditTimeEntryJson);
 	//string submitFunction = "ProjectId.value=ProjectIdDdl.value;PayClassId.value=PayClassNameDdl.value;return ajaxEditOrCreate(this, \"" + createUrl + "\", \"" + editUrl + "\")";
-	string extrastyle = Model.ProjectId < 0 ? "create" : string.Empty;
+	string extrastyle = Model.ProjectId < 0 ? "create" : "compounded";
 	string hiddensample = Model.Hidden ? "hidden-sample" : string.Empty;
 }
 

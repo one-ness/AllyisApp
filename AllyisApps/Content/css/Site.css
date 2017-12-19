@@ -343,3 +343,11 @@ a.template_link {
 .panel-heading > a, .panel-heading > div > a, .col-sm-6 > div > a {
 	text-decoration: underline;
 }
+
+.filter-row {
+	padding-top: 5px;
+}
+
+	.filter-row label {
+		padding-top: 5px;
+	}

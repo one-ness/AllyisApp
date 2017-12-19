@@ -1085,11 +1085,22 @@ namespace AllyisApps.Resources {
                 return ResourceManager.GetString("Customers", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Customers File.
-        /// </summary>
-        public static string CustomersFile {
+		
+		/// <summary>
+		///   Looks up a localized string similar to Customer Search.
+		/// </summary>
+		public static string CustomerSearchPlaceholder
+		{
+			get
+			{
+				return ResourceManager.GetString("CustomerSearchPlaceholder", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to Customers File.
+		/// </summary>
+		public static string CustomersFile {
             get {
                 return ResourceManager.GetString("CustomersFile", resourceCulture);
             }
