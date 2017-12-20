@@ -15,7 +15,7 @@
 }
 
 <div class="row">
-	@using (Html.BeginForm("TimeTrackerDatePickerRedirect", ControllerConstants.TimeEntry, FormMethod.Get, new { @class = "form-inline col-xs-12"}))
+	@using (Html.BeginForm("TimeTrackerDatePickerRedirect", ControllerConstants.TimeEntry, FormMethod.Get, new { @class = "form-inline col-xs-12" }))
 	{
 		<div class="form-group pull-left">
 			<a href="@Url.Action(ActionConstants.Export, ControllerConstants.TimeEntry, new
@@ -94,59 +94,59 @@
 				<input id="viewasuser-search" type="text" class="form-control" placeholder=@Strings.SearchPlaceholder />
 			</div>
 			<div id="viewasuser-list" class="list-group allyis-search" style="max-height: 50vh; overflow-y: auto;">
-	@{
-		var userList = Model.Users.ToList();
-		for (int i = 0; i < userList.Count; i++)
-		{
-			var user = userList[i];
-
-			string active = "";
-			var resetBackground = "this.style.backgroundColor=\"#FFFFFF\"";
-			if (user.UserId == Model.EntryRange.UserId)
-			{
-				active = "list-group-item-info";
-				resetBackground = "this.style.backgroundColor=\"#d9edf7\"";
-			}
-			<div class="@(active) member"
-				 onmouseover='this.style.backgroundColor="#c4e3f3"'
-				 onmouseout="@resetBackground"
-				 style="width: 100%; justify-content: flex-end;">
-				<div style="display: flex">
-					@if (user.UserId == ViewBag.SignedInUserID)
+				@{
+					var userList = Model.Users.ToList();
+					for (int i = 0; i < userList.Count; i++)
 					{
-						<a class="col-xs-12 text-center"
-						   data-search="@user.Email"
-						   href="@Url.Action("TimeTrackerDatePickerRedirect", new
+						var user = userList[i];
+
+						string active = "";
+						var resetBackground = "this.style.backgroundColor=\"#FFFFFF\"";
+						if (user.UserId == Model.EntryRange.UserId)
+						{
+							active = "list-group-item-info";
+							resetBackground = "this.style.backgroundColor=\"#d9edf7\"";
+						}
+						<div class="@(active) member"
+							 onmouseover='this.style.backgroundColor="#c4e3f3"'
+							 onmouseout="@resetBackground"
+							 style="width: 100%; justify-content: flex-end;">
+							<div style="display: flex">
+								@if (user.UserId == ViewBag.SignedInUserID)
+								{
+									<a class="col-xs-12 text-center name"
+									   data-search="@user.Email"
+									   href="@Url.Action("TimeTrackerDatePickerRedirect", new
 										{
 										userId = ViewBag.SignedInUserID,
 										startDate = Model.EntryRange.StartDate,
 										endDate = Model.EntryRange.EndDate
 										})"
-						   style="color: #000000;">
-							@user.FirstName @user.LastName
-						</a>
-					}
-					else
-					{
-						<a class="col-xs-12 text-center" data-search="@user.Email"
-						   href="@Url.Action("TimeTrackerDatePickerRedirect", new
+									   style="color: #000000;">
+										@user.FirstName @user.LastName
+									</a>
+								}
+								else
+								{
+									<a class="col-xs-12 text-center name" data-search="@user.Email"
+									   href="@Url.Action("TimeTrackerDatePickerRedirect", new
 									{
 										userId = user.UserId,
 										startDate = Model.EntryRange.StartDate,
 										endDate = Model.EntryRange.EndDate
 										})"
-						   style="color: #000000;">
-							@user.FirstName @user.LastName
-						</a>
-					}
-					<a href="@Url.Action(ActionConstants.UserEdit, new {
+									   style="color: #000000;">
+										@user.FirstName @user.LastName
+									</a>
+								}
+								<a href="@Url.Action(ActionConstants.UserEdit, new {
 									subscriptionId = Model.SubscriptionId,
 									userId = user.UserId })"
-					   style="text-decoration: none; color: #0066AA; padding-right:5%" title="Assign Projects to User"><i class="fa fa-cog"></i></a>
-				</div>
-			</div>
-		}
-	}
+								   style="text-decoration: none; color: #0066AA; padding-right:5%" title="Assign Projects to User"><i class="fa fa-cog"></i></a>
+							</div>
+						</div>
+					}
+				}
 			</div>
 			<div id="footPager" class="panel-footer" style="display: flex; justify-content: space-around; flex-wrap: wrap">
 				<div class="pageContainer">
@@ -154,7 +154,7 @@
 				</div>
 			</div>
 		</div>
-					}
+	}
 	@if (Model.CanManage)
 	{
 		<div class="panel panel-info" style="background-color: #f5f5f5;">
@@ -163,24 +163,25 @@
 				<div class="pull-right">
 					@Html.ActionLink("Template", ActionConstants.Template, new { }, new { @class = "template_link" })
 				</div>
+				@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.TimeEntry, new { subscriptionid = Model.SubscriptionId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+				{
+					@Html.AntiForgeryToken();
+					<div style="text-align: center;">
+						<div>
+							<input type="file" id="upload-box" name="file" style="display:none;"
+								   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+							<input id="upload-file-name-display" name="file" class="form-control"
+								   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+						</div>
+						@*<div style="width:70%; margin:0 auto">*@
+						<div style="margin-top: 10px; margin-left: 3px; margin-bottom:10px;">
+							<a class="btn btn-primary" onclick="$('input[id=upload-box]').click();" title="Choose Excel file containing Time Tracker entries">@Strings.ChooseFile</a>
+							<input type="submit" style="margin-left: 3px; margin-right: 3px;" id="upload-button" value="@Strings.Upload" class="btn btn-primary" title="Upload Excel Time Tracker entries" />
+						</div>
+					</div>
+				}
 			</div>
-			@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.TimeEntry, new { subscriptionid = Model.SubscriptionId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
-			{
-				@Html.AntiForgeryToken();
-				<div style="text-align: center;">
-					<div>
-						<input type="file" id="upload-box" name="file" style="display:none;"
-							   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-						<input id="upload-file-name-display" name="file" class="form-control"
-							   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-					</div>
-					@*<div style="width:70%; margin:0 auto">*@
-					<div style="margin-top: 10px; margin-left: 3px; margin-bottom:10px;">
-						<a class="btn btn-primary" onclick="$('input[id=upload-box]').click();" title="Choose Excel file containing Time Tracker entries">@Strings.ChooseFile</a>
-						<input type="submit" style="margin-left: 3px; margin-right: 3px;" id="upload-button" value="@Strings.Upload" class="btn btn-primary" title="Upload Excel Time Tracker entries" />
-					</div>
-				</div>
-			}
+
 		</div>
 	}
 }
@@ -198,14 +199,15 @@
 	@Scripts.Render("~/bundles/moment")
 	@Scripts.Render("~/bundles/BootstrapSelect")
 	@Scripts.Render("~/bundles/DateRangePicker")
-	@Scripts.Render("~/bundles/pageswithsearch")
+	@*Scripts.Render("~/bundles/pageswithsearch")*@
 	@Scripts.Render("~/Areas/TimeTracker/Scripts/allyis-timeentry-index2.js");
 
-	<script src="~/Scripts/allyis-account-permission2.js" type="text/javascript"></script>
+	@*<script src="~/Scripts/allyis-account-permission2.js" type="text/javascript"></script>*@
 	<script src="~/Scripts/allyis-pages-with-filter.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		pwf.setPageLimit(10);
 		pwf.setRowClass("member");
+		pwf.addFilter("#viewasuser-search", "search", ".name");
 
 		$(document).ready(function () {
 			var disabledButtons = document.getElementsByName("disabledButton");
@@ -333,6 +335,6 @@
 		}
 	</script>
 	<script type="text/javascript">
-		showPage(1); // This is important to call at the very end; otherwise all pages will be shown until the user clicks a page button.
+		//showPage(1); // This is important to call at the very end; otherwise all pages will be shown until the user clicks a page button.
 	</script>
 }

@@ -304,25 +304,26 @@ function keyDown(e, form_child) {
 }
 
 $(document).ready(function () {
-	var MODULE = new ListGroupSearch();
-	MODULE.init({
-		$target: $("#viewasuser-list")
-	});
-	$("#viewasuser-search").keyup(_.debounce(
+	/*
+	//var MODULE = new ListGroupSearch();
+	//MODULE.init({
+	//	$target: $("#viewasuser-list")
+	//});
+	//$("#viewasuser-search").keyup(_.debounce(
 		function (key) {
 			//if (key.which === 13 || key.keyCode === 13) {
 				//alert("keypress val:" + this.value);
-				if (this.value === "")
-					MODULE.search(" "); //search on a value that is present in all entries
-				else
-					MODULE.search(this.value);
+				//if (this.value === "")
+				////	MODULE.search(" "); //search on a value that is present in all entries
+				//else
+				//	MODULE.search(this.value);
 				//after search, set new page numbers
-				paginate();
+				//paginate();
 			//}
-		},
-		200
-	));
-
+	//	},
+	//	200
+	//));
+	*/
 	$("[name='ProjectId']").each(function (e) {
 		fillDLL(this);
 	})
