@@ -29,7 +29,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
 			var model = await AppService.GetProjectAsUser(projectId);
 			model.CanEditProject = true;
-			return View(new CompleteProjectViewModel
+			return View(new ProjectCompleteProjectViewModel
 			{
 				IsCustomerActive = model.IsCustomerActive,
 				CreatedUtc = model.CreatedUtc,

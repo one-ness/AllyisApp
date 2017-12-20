@@ -10,7 +10,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		/// <summary>
 		/// Gets or sets a list of projects.
 		/// </summary>
-		public List<CompleteProjectViewModel> Projects { get; set; }
+		public List<ProjectCompleteProjectViewModel> Projects { get; set; }
 
 		/// <summary>
 		/// Gets or sets whether the projects are being displayed for a single customer.

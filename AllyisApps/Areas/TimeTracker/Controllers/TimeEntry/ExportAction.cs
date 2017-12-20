@@ -12,7 +12,6 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
 using AllyisApps.Services;
-using AllyisApps.ViewModels.TimeTracker.Project;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -91,20 +90,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				if (userIds.Count > 1 || userIds[0] == -1)
 				{
 					result.Projects = (await AppService.GetProjectsByOrganization(orgId)).AsParallel().Select(proj =>
-					new CompleteProjectViewModel(proj)).ToList();
+					new TimeEntryCompleteProjectViewModel(proj)).ToList();
 				}
 				else
 				{
 					// single user selected
 					var getProj = await AppService.GetProjectsByUserAndOrganization(userIds[0], orgId);
 					result.Projects = getProj.AsParallel().Select(proj =>
-					new CompleteProjectViewModel(proj)).ToList();
+					new TimeEntryCompleteProjectViewModel(proj)).ToList();
 				}
-
-				// Add default project in case there are holiday entries
-				//List<CompleteProjectViewModel> defaultProject = new List<CompleteProjectViewModel>();
-				////defaultProject.Add(new CompleteProjectViewModel(AppService.GetProject(0)));
-				//result.Projects = result.Projects.Concat(defaultProject);
 			}
 
 			return result;

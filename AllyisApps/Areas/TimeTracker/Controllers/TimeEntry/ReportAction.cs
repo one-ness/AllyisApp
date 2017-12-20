@@ -15,7 +15,6 @@ using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.TimeTracker;
-using AllyisApps.ViewModels.TimeTracker.Project;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -93,14 +92,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				CanManage = canManage,
 				OrganizationId = organizationId,
 				ShowExport = showExport,
-				Projects = projects.AsParallel().Select(proj => new CompleteProjectViewModel(proj)).ToList(),
+				Projects = projects.AsParallel().Select(proj => new TimeEntryCompleteProjectViewModel(proj)).ToList(),
 				PreviewPageSize = 20,
 				PreviewTotal = $"0 {Resources.Strings.HoursTotal}",
 				PreviewEntries = null,
 				PreviewMessage = Resources.Strings.NoDataPreview,
 				PreviewPageTotal = 1,
 				PreviewPageNum = 1,
-				PayPeriodRanges = payPeriods,
+				PayPeriodRanges = new PayPeriodRangesViewModel(payPeriods),
 				Selection = previousSelections ?? new ReportSelectionViewModel
 				{
 					Users = new List<int>(),

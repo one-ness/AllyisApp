@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using AllyisApps.Services.Billing;
 
 #pragma warning disable 1591
 
@@ -237,7 +236,7 @@ namespace AllyisApps.ViewModels.Auth
 				/// <summary>
 				/// Gets or sets the ProductId.
 				/// </summary>
-				public ProductIdEnum ProductId { get; set; }
+				public Services.Billing.ProductIdEnum ProductId { get; set; }
 
 				/// <summary>
 				/// Gets or sets the ProductGoToUrl.

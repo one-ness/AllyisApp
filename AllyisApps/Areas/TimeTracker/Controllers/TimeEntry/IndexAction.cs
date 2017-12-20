@@ -17,7 +17,6 @@ using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.TimeTracker;
-using AllyisApps.ViewModels.TimeTracker.Project;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using static AllyisApps.ViewModels.TimeTracker.TimeEntry.TimeEntryOverDateRangeViewModel;
 
@@ -124,12 +123,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			int startOfWeek = infos.Item1.StartOfWeek;
 			DateTime startDate = startingDateTime != null ? AppService.SetStartingDate(startingDateTime, startOfWeek) : payRanges.Current.StartDate;
 			DateTime endDate = endingDateTime ?? payRanges.Current.EndDate;
-			var payRangesViewModel = new PayPeriodRangesViewModel()
-			{
-				Current = new DateRangeViewModel(payRanges.Current),
-				Next = new DateRangeViewModel(payRanges.Next),
-				Previous = new DateRangeViewModel(payRanges.Previous)
-			};
+			var payRangesViewModel = new PayPeriodRangesViewModel(payRanges);
 
 			// Get all of the projects and initialize their total hours to 0.
 			IList<CompleteProject> allProjects = infos.Item4; // Must also grab inactive projects, or the app will crash if a user has an entry on a project he is no longer a part of
@@ -141,7 +135,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					proj =>
 						new ProjectHoursViewModel
 						{
-							Project = new CompleteProjectViewModel(proj),
+							Project = new TimeEntryCompleteProjectViewModel(proj),
 							Hours = 0.0f
 						});
 
@@ -160,7 +154,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var projects = allProjects
 				.AsParallel()
 				.Where(p => p.ProjectId != 0)
-				.Select(proj => new CompleteProjectViewModel(proj))
+				.Select(proj => new TimeEntryCompleteProjectViewModel(proj))
 				.OrderBy(p => p.CustomerName + p.ProjectName)
 				.ToList();
 
@@ -188,7 +182,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				},
 				CanManage = isManager,
 				StartOfWeek = (StartOfWeekEnum)startOfWeek,
-				GrandTotal = new ProjectHoursViewModel { Project = new CompleteProjectViewModel { ProjectName = Strings.Total }, Hours = 0.0f },
+				GrandTotal = new ProjectHoursViewModel { Project = new TimeEntryCompleteProjectViewModel { ProjectName = Strings.Total }, Hours = 0.0f },
 				ProjectHours = hours.Values.Where(x => x.Hours > 0),
 				Users = users,
 				TotalUsers = users.Count(),

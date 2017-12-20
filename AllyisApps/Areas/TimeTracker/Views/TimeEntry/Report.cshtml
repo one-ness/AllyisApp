@@ -52,7 +52,7 @@
 
 				<!-- A holder for all the projects, to draw from for populating the real selection list -->
 				<select id="allprojects" style="display: none;">
-					@foreach (CompleteProjectViewModel proj in Model.Projects)
+					@foreach (TimeEntryCompleteProjectViewModel proj in Model.Projects)
 					{
 						<option value="@proj.ProjectId" data-cust="@proj.CustomerId" class="projectSelectOption">@proj.ProjectName</option>
 					}
@@ -73,7 +73,7 @@
 					<div class="form-group col-xs-12 col-md-6">
 						<label for="projects-dropdown">@Strings.Projects</label>
 						<select name="ProjectSelect" class="form-control" id="projects-dropdown">
-							@foreach (CompleteProjectViewModel project in Model.Projects)
+							@foreach (TimeEntryCompleteProjectViewModel project in Model.Projects)
 							{
 								if (Model.Selection.CustomerId == project.CustomerId)
 								{
@@ -136,7 +136,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						@foreach (TablePreviewEntry pe in Model.PreviewEntries)
+						@foreach (TablePreviewEntryViewModel pe in Model.PreviewEntries)
 						{
 							<tr class="previewRow">
 								<td>@pe.TimeEntry.EmployeeId</td>

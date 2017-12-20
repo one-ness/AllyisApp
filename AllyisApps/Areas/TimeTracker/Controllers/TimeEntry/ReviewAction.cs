@@ -83,12 +83,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			PayPeriodRanges payperiodRanges = await AppService.GetPayPeriodRanges(organizationId);
 			var settings = await AppService.GetSettingsByOrganizationId(organizationId);
-			var payPeriodRangesViewModel = new PayPeriodRangesViewModel()
-			{
-				Current = new DateRangeViewModel(payperiodRanges.Current),
-				Next = new DateRangeViewModel(payperiodRanges.Next),
-				Previous = new DateRangeViewModel(payperiodRanges.Previous)
-			};
+			var payPeriodRangesViewModel = new PayPeriodRangesViewModel(payperiodRanges);
 
 			var model = new ReviewViewModel
 			{

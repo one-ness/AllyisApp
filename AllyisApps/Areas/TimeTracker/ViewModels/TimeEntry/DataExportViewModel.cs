@@ -25,7 +25,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets the list of projects associated with this query.
 		/// </summary>
-		public List<CompleteProjectViewModel> Projects { get; internal set; }
+		public List<TimeEntryCompleteProjectViewModel> Projects { get; internal set; }
 
 		/// <summary>
 		/// Gets the list of Time entry data.
@@ -56,7 +56,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 	/// <summary>
 	/// View Model for ProjectInfomation.
 	/// </summary>
-	public class CompleteProjectViewModel
+	public class TimeEntryCompleteProjectViewModel
 	{
 		/// <summary>
 		/// Gets or sets the Project Id.
@@ -144,16 +144,16 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public bool? IsProjectUser { get; set; }
 
 		/// <summary>
-		/// Initializes a instance of see <see cref="CompleteProjectViewModel"/>
+		/// Initializes a instance of see <see cref="TimeEntryCompleteProjectViewModel"/>
 		/// </summary>
-		public CompleteProjectViewModel()
+		public TimeEntryCompleteProjectViewModel()
 		{
 		}
 
 		/// <summary>
-		/// Initializes a instance of see <see cref="CompleteProjectViewModel"/>
+		/// Initializes a instance of see <see cref="TimeEntryCompleteProjectViewModel"/>
 		/// </summary>
-		public CompleteProjectViewModel(Services.Crm.CompleteProject proj)
+		public TimeEntryCompleteProjectViewModel(Services.Crm.CompleteProject proj)
 		{
 			CanEditProject = proj.CanEditProject;
 			CreatedUtc = proj.CreatedUtc;

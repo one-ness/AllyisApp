@@ -34,7 +34,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			ViewData["SubscriptionName"] = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName;
 			ViewData["UserId"] = AppService.UserContext.UserId;
 			var orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
-			var projects = (await AppService.GetProjectsByOrganization(orgId, false)).Select(x => new CompleteProjectViewModel(x)).ToList();
+			var projects = (await AppService.GetProjectsByOrganization(orgId, false)).Select(x => new ProjectCompleteProjectViewModel(x)).ToList();
 
 			if (isActive == 2)
 			{

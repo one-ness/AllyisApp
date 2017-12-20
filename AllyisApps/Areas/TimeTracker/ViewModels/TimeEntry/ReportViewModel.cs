@@ -74,7 +74,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets the list of Projects for this organization.
 		/// </summary>
-		public List<CompleteProjectViewModel> Projects { get; internal set; }
+		public List<TimeEntryCompleteProjectViewModel> Projects { get; internal set; }
 
 		/// <summary>
 		/// Gets the Select List of Projects for this organization.

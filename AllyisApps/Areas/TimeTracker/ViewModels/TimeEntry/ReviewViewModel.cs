@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
@@ -135,6 +136,20 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 	/// </summary>
 	public class PayPeriodRangesViewModel
 	{
+		private PayPeriodRanges payPeriods;
+
+		/// <summary>
+		/// Constructor for pay period ranges.
+		/// </summary>
+		/// <param name="payPeriods"></param>
+		public PayPeriodRangesViewModel(PayPeriodRanges payPeriods)
+		{
+			this.payPeriods = payPeriods;
+			Previous = new DateRangeViewModel(payPeriods.Previous);
+			Current = new DateRangeViewModel(payPeriods.Current);
+			Next = new DateRangeViewModel(payPeriods.Next);
+		}
+
 		/// <summary>
 		/// Gets or sets the previous pay period range.
 		/// This is the pay period range right before the current range.

@@ -140,7 +140,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets or sets the project in use.
 		/// </summary>
-		public CompleteProjectViewModel Project { get; set; }
+		public TimeEntryCompleteProjectViewModel Project { get; set; }
 
 		/// <summary>
 		/// Gets or sets the total amount of hours attributed to this project.

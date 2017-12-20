@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.ViewModels.Auth
 {

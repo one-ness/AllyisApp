@@ -5,7 +5,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 	/// <summary>
 	/// View Model for ProjectInfomation.
 	/// </summary>
-	public class CompleteProjectViewModel
+	public class ProjectCompleteProjectViewModel
 	{
 		/// <summary>
 		/// Gets or sets the Project Id.
@@ -93,16 +93,16 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		public bool? IsProjectUser { get; set; }
 
 		/// <summary>
-		/// Initializes a instance of see <see cref="CompleteProjectViewModel"/>
+		/// Initializes a instance of see <see cref="ProjectCompleteProjectViewModel"/>
 		/// </summary>
-		public CompleteProjectViewModel()
+		public ProjectCompleteProjectViewModel()
 		{
 		}
 
 		/// <summary>
-		/// Initializes a instance of see <see cref="CompleteProjectViewModel"/>
+		/// Initializes a instance of see <see cref="ProjectCompleteProjectViewModel"/>
 		/// </summary>
-		public CompleteProjectViewModel(Services.Crm.CompleteProject proj)
+		public ProjectCompleteProjectViewModel(Services.Crm.CompleteProject proj)
 		{
 			CanEditProject = proj.CanEditProject;
 			CreatedUtc = proj.CreatedUtc;

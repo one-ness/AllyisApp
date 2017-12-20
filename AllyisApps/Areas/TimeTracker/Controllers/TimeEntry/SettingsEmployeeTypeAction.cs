@@ -60,7 +60,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			ViewData["SubscriptionId"] = subscriptionId;
 			var payclasses = (await AppService.GetPayClassesBySubscriptionId(subscriptionId))
 				.Where(x => (x.BuiltInPayClassId != (int)PayClassId.OverTime))
-				.Select(x => new PayClassInfoViewModel() { PayClassId = x.PayClassId, PayClassName = x.PayClassName });
+				.Select(x => new PayClassInfoViewModel(x));
 
 			SettingsEditEmployeeTypeViewModel model = new SettingsEditEmployeeTypeViewModel()
 			{
@@ -145,10 +145,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			var unassignedPayClasses = payClasses
 				.Where(x => !assignedPayClassesIds.Contains(x.PayClassId) && (x.BuiltInPayClassId != (int)PayClassId.OverTime))
-				.Select(x => new PayClassInfoViewModel() { PayClassId = x.PayClassId, PayClassName = x.PayClassName });
+				.Select(x => new PayClassInfoViewModel(x));
 			var assignedPayClasses = payClasses
 				.Where(x => assignedPayClassesIds.Contains(x.PayClassId) && (x.BuiltInPayClassId != (int)PayClassId.OverTime))
-				.Select(x => new PayClassInfoViewModel() { PayClassId = x.PayClassId, PayClassName = x.PayClassName });
+				.Select(x => new PayClassInfoViewModel(x));
 
 			SettingsEditEmployeeTypeViewModel model = new SettingsEditEmployeeTypeViewModel()
 			{
