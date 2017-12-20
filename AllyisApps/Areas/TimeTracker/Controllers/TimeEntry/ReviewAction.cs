@@ -83,6 +83,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			PayPeriodRanges payperiodRanges = await AppService.GetPayPeriodRanges(organizationId);
 			var settings = await AppService.GetSettingsByOrganizationId(organizationId);
+			var payPeriodRangesViewModel = new PayPeriodRangesViewModel()
+			{
+				Current = new DateRangeViewModel(payperiodRanges.Current),
+				Next = new DateRangeViewModel(payperiodRanges.Next),
+				Previous = new DateRangeViewModel(payperiodRanges.Previous)
+			};
 
 			var model = new ReviewViewModel
 			{
@@ -97,7 +103,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				StartDate = startDate,
 				EndDate = endDate,
 				TimeEntryStatusOptions = ModelHelper.GetLocalizedTimeEntryStatuses(),
-				PayPeriodRanges = payperiodRanges,
+				PayPeriodRanges = payPeriodRangesViewModel,
 				LockDate = settings.LockDate,
 				PayrollProcessedDate = settings.PayrollProcessedDate
 			};

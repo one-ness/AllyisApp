@@ -40,7 +40,7 @@ namespace AllyisApps.Controllers.Auth
 			var employeeTypeList = (await AppService.GetEmployeeTypeByOrganization(orgId));
 			var employee = (await AppService.GetOrganizationUsersAsync(orgId)).Where(x => x.UserId == userId).FirstOrDefault();
 			UserOrganization org = user.Organizations.FirstOrDefault(x => x.OrganizationId == orgId);
-
+			
 			var model = new EditMemberViewModel
 			{
 				CanEditMember = AppService.CheckOrgAction(OrgAction.EditUser, orgId, false),
@@ -51,7 +51,12 @@ namespace AllyisApps.Controllers.Auth
 				Email = user.Email,
 				EmployeeId = org.EmployeeId,
 				EmployeeType = employee.EmployeeTypeId,
-				EmployeeTypes = employeeTypeList,
+				EmployeeTypes = employeeTypeList.Select(e => new EmployeeTypeViewModel()
+				{
+					EmployeeTypeId = e.EmployeeTypeId,
+					EmployeeTypeName = e.EmployeeTypeName,
+					OrganizationId = e.OrganizationId
+				}).ToList(),
 				FirstName = user.FirstName,
 				LastName = user.LastName,
 				OrganizationId = orgId,
@@ -59,7 +64,7 @@ namespace AllyisApps.Controllers.Auth
 				OrgRolesList = ModelHelper.GetOrgRolesList(),
 				PhoneNumber = user.PhoneNumber,
 				PostalCode = user.Address?.PostalCode,
-				SubscriptionRoles = subs.Select(sub => new EditMemberViewModel.RoleItem
+				SubscriptionRoles = subs.Select(sub => new EditMemberViewModel.RoleItemViewModel
 				{
 					RoleList = ModelHelper.GetRolesList(sub.ProductId),
 					SelectedRoleId =
@@ -102,7 +107,7 @@ namespace AllyisApps.Controllers.Auth
 					// get the subscription roles in to a dictionary
 					var changedsubRoles = new Dictionary<int, int>();
 					var removedSubRole = new List<int>();
-					foreach (EditMemberViewModel.RoleItem item in model.SubscriptionRoles)
+					foreach (EditMemberViewModel.RoleItemViewModel item in model.SubscriptionRoles)
 					{
 						// note: selectedRoleId = 0 means Unassigned or NotInProduct
 						//role changed

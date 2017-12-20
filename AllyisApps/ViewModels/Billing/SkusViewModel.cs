@@ -20,25 +20,25 @@ namespace AllyisApps.ViewModels.Billing
 		/// <summary>
 		/// list of products
 		/// </summary>
-		public List<ProductItem> Products { get; set; }
+		public List<ProductItemViewModel> Products { get; set; }
 
 		/// <summary>
 		/// constructor
 		/// </summary>
 		public SkusViewModel()
 		{
-			Products = new List<ProductItem>();
+			Products = new List<ProductItemViewModel>();
 		}
 
 		/// <summary>
 		/// product
 		/// </summary>
-		public class ProductItem
+		public class ProductItemViewModel
 		{
 			/// <summary>
 			/// list of skus in the product
 			/// </summary>
-			public List<SkuItem> Skus { get; set; }
+			public List<SkuItemViewModel> Skus { get; set; }
 
 			/// <summary>
 			/// product name
@@ -48,15 +48,15 @@ namespace AllyisApps.ViewModels.Billing
 			/// <summary>
 			/// constructor
 			/// </summary>
-			public ProductItem()
+			public ProductItemViewModel()
 			{
-				Skus = new List<SkuItem>();
+				Skus = new List<SkuItemViewModel>();
 			}
 
 			/// <summary>
 			/// sku
 			/// </summary>
-			public class SkuItem
+			public class SkuItemViewModel
 			{
 				/// <summary>
 				/// sku id

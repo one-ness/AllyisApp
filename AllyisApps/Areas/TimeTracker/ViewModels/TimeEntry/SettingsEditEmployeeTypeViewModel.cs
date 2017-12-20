@@ -1,7 +1,6 @@
-﻿using System;
+﻿
+
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
@@ -28,33 +27,16 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		///
 		/// </summary>
-		public List<PayClassInfo> PayClasses { get; set; }
+		public List<PayClassInfoViewModel> PayClasses { get; set; }
 
 		/// <summary>
 		///
 		/// </summary>
-		public List<PayClassInfo> CurrentPayClasses { get; set; }
+		public List<PayClassInfoViewModel> CurrentPayClasses { get; set; }
 
 		/// <summary>
 		///
 		/// </summary>
 		public int[] SelectedPayClass { get; set; }
 	}
-
-	/// <summary>
-	///
-	/// </summary>
-	public class PayClassInfo
-	{
-		/// <summary>
-		///
-		/// </summary>
-		public int PayClassId { get; set; }
-
-		/// <summary>
-		///
-		/// </summary>
-		public string PayClassName { get; set; }
-	}
-
 }

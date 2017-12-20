@@ -7,15 +7,13 @@
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using AllyisApps.Services.TimeTracker;
-using AllyisApps.ViewModels.TimeTracker.Project;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
 	/// <summary>
 	/// Adds name fields to TimeEntries for preview.
 	/// </summary>
-	public struct TablePreviewEntry
+	public struct TablePreviewEntryViewModel
 	{
 		/// <summary>
 		/// TimeEntry field.
@@ -66,7 +64,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets the list of Customers for this organization.
 		/// </summary>
-		public List<Services.Crm.Customer> Customers { get; internal set; }
+		public List<CustomerViewModel> Customers { get; internal set; }
 
 		/// <summary>
 		/// Gets the Select List of Customers for this organization.
@@ -101,7 +99,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets the preview results data.
 		/// </summary>
-		public List<TablePreviewEntry> PreviewEntries { get; internal set; }
+		public List<TablePreviewEntryViewModel> PreviewEntries { get; internal set; }
 
 		/// <summary>
 		/// Gets the preview data total.
@@ -121,7 +119,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets the selections made on the Reports page.
 		/// </summary>
-		public ReportSelectionModel Selection { get; internal set; }
+		public ReportSelectionViewModel Selection { get; internal set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the user can manage and can see others reports.
@@ -132,13 +130,13 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets or sets the pay period ranges for use with the date range picker.
 		/// </summary>
-		public PayPeriodRanges PayPeriodRanges { get; set; }
+		public PayPeriodRangesViewModel PayPeriodRanges { get; set; }
 	}
 
 	/// <summary>
 	/// Model for the selections made on the Reports form.
 	/// </summary>
-	public class ReportSelectionModel
+	public class ReportSelectionViewModel
 	{
 		/// <summary>
 		/// Gets the list of Users selected.
@@ -169,5 +167,140 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Gets the Page selection.
 		/// </summary>
 		public int Page { get; internal set; }
+	}
+
+	/// <summary>
+	/// View Model for Customer
+	/// </summary>
+	public class CustomerViewModel
+	{
+		/// <summary>
+		/// Gets or sets the customer id number.
+		/// </summary>
+		public int CustomerId { get; set; }
+
+		/// <summary>
+		/// Gets or sets Name.
+		/// </summary>
+		public string CustomerName { get; set; }
+
+		/// <summary>
+		/// Gets or sets Address.
+		/// </summary>
+		public AddressViewModel Address { get; set; }
+
+		/// <summary>
+		/// Gets or sets Email.
+		/// </summary>
+		public string ContactEmail { get; set; }
+
+		/// <summary>
+		/// Gets or sets PhoneNumber.
+		/// </summary>
+		public string ContactPhoneNumber { get; set; }
+
+		/// <summary>
+		/// Gets or sets Fax number.
+		/// </summary>
+		public string FaxNumber { get; set; }
+
+		/// <summary>
+		/// Gets or sets Fax number.
+		/// </summary>
+		public string Website { get; set; }
+
+		/// <summary>
+		/// Gets or sets Employer Identification Number.
+		/// </summary>
+		public string EIN { get; set; }
+
+		/// <summary>
+		/// Gets or sets the date the customer was created.
+		/// </summary>
+		public string CreatedUtc { get; set; }
+
+		/// <summary>
+		/// Gets or sets the id of the organization associated with the customer.
+		/// </summary>
+		public int OrganizationId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the id of the customer to be used by the users within the organization.
+		/// </summary>
+		public string CustomerCode { get; set; }
+
+		/// <summary>
+		/// Gets or sets the bool value indicating if this Customer is currently active.
+		/// </summary>
+		public bool IsActive { get; set; }
+
+		/// <summary>
+		/// Gets or sets the active projects for a customer.
+		/// </summary>
+		public int ActiveProjects { get; set; }
+
+		/// <summary>
+		/// Gets or sets the inactive projects for a customer.
+		/// </summary>
+		public int InactiveProjects { get; set; }
+
+		/// <summary>
+		/// Constructor for customer view model
+		/// </summary>
+		public CustomerViewModel()
+		{
+			//AddressViewModel = new AddressViewModel();
+		}
+	}
+
+	/// <summary>
+	/// View Model for Address.
+	/// </summary>
+	public class AddressViewModel
+	{
+		/// <summary>
+		/// Gets or sets the address' Id.
+		/// </summary>
+		public int? AddressId { get; set; }
+
+		/// <summary>
+		/// Gets or sets address1.
+		/// </summary>
+		public string Address1 { get; set; }
+
+		/// <summary>
+		/// Gets or sets address2.
+		/// </summary>
+		public string Address2 { get; set; }
+
+		/// <summary>
+		/// Gets or sets the City.
+		/// </summary>
+		public string City { get; set; }
+
+		/// <summary>
+		/// Get or sets the State.
+		/// </summary>
+		public string StateName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the State Id
+		/// </summary>
+		public int? StateId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the PostalCode
+		/// </summary>
+		public string PostalCode { get; set; }
+
+		/// <summary>
+		/// Gets or sets the country
+		/// </summary>
+		public string CountryName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the country code
+		/// </summary>
+		public string CountryCode { get; set; }
 	}
 }

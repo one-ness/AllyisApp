@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using AllyisApps.Services.Crm;
+﻿using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels.TimeTracker.Project
 {

@@ -240,7 +240,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the list of selected users.
 		/// </summary>
-		public IEnumerable<TargetUser> SelectedUsers { get; set; }
+		public IEnumerable<TargetUserViewModel> SelectedUsers { get; set; }
 
 		/// <summary>
 		/// Gets or sets the actions to be performed.
@@ -317,12 +317,12 @@ namespace AllyisApps.ViewModels.Auth
 	/// <summary>
 	/// A user to perform actions on.
 	/// </summary>
-	public class TargetUser
+	public class TargetUserViewModel
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TargetUser" /> class.
+		/// Initializes a new instance of the <see cref="TargetUserViewModel" /> class.
 		/// </summary>
-		public TargetUser()
+		public TargetUserViewModel()
 		{
 			Message = string.Empty;
 		}

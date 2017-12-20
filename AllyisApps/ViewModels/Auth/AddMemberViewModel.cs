@@ -39,7 +39,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the employee type list.
 		/// </summary>
-		public List<EmployeeType> EmployeeTypeList { get; set; }
+		public List<EmployeeTypeViewModel> EmployeeTypeList { get; set; }
 
 		/// <summary>
 		/// Gets or sets the employee type id.
@@ -84,7 +84,7 @@ namespace AllyisApps.ViewModels.Auth
 		public AddMemberViewModel()
 		{
 			SubscriptionRoles = new List<RoleItem>();
-			EmployeeTypeList = new List<EmployeeType>();
+			EmployeeTypeList = new List<EmployeeTypeViewModel>();
 		}
 	}
 
@@ -109,7 +109,7 @@ namespace AllyisApps.ViewModels.Auth
 		public int ProductId { get; set; }
 
 		/// <summary>
-		///
+		/// Gets or sets the subscription id.
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
@@ -117,5 +117,26 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the select list for dropdown menus.
 		/// </summary>
 		public List<SelectListItem> SelectList { get; set; }
+	}
+
+	/// <summary>
+	/// View Model for employee type
+	/// </summary>
+	public class EmployeeTypeViewModel
+	{
+		/// <summary>
+		///	Gets or sets the employee type id.
+		/// </summary>
+		public int EmployeeTypeId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the organization id.
+		/// </summary>
+		public int OrganizationId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the employee type name.
+		/// </summary>
+		public string EmployeeTypeName { get; set; }
 	}
 }

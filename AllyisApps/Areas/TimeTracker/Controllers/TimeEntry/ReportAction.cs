@@ -71,7 +71,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="showExport">Variable to show or hide export button.</param>
 		/// <param name="previousSelections">An object holding previous report selection data.</param>
 		/// <returns>The ReportViewModel.</returns>
-		public async Task<ReportViewModel> ConstructReportViewModel(int userId, int organizationId, bool canManage, List<Customer> customers, List<CompleteProject> projects, bool showExport = true, ReportSelectionModel previousSelections = null)
+		public async Task<ReportViewModel> ConstructReportViewModel(int userId, int organizationId, bool canManage, List<Customer> customers, List<CompleteProject> projects, bool showExport = true, ReportSelectionViewModel previousSelections = null)
 		{
 			projects.Insert(
 				0,
@@ -101,7 +101,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				PreviewPageTotal = 1,
 				PreviewPageNum = 1,
 				PayPeriodRanges = payPeriods,
-				Selection = previousSelections ?? new ReportSelectionModel
+				Selection = previousSelections ?? new ReportSelectionViewModel
 				{
 					Users = new List<int>(),
 					CustomerId = 0,

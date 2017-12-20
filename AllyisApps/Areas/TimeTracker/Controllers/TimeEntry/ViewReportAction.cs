@@ -67,7 +67,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>Returns a report view with preview data filled out.</returns>
 		public async Task<ActionResult> PreviewReport(List<int> userSelect, int subscriptionId, int organizationId, DateTime? dateRangeStart, DateTime? dateRangeEnd, bool showExport, int customerSelect, int pageNum, int projectSelect = 0)
 		{
-			var reportVMselect = new ReportSelectionModel
+			var reportVMselect = new ReportSelectionViewModel
 			{
 				CustomerId = customerSelect,
 				EndDate = dateRangeEnd,
@@ -113,7 +113,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						data,
 						orgProj = data.ProjectId == 0 ? AppService.GetProject(0) : infos.CompleteProject.SingleOrDefault(o => o.ProjectId == data.ProjectId)
 					})
-					.Select(t => new TablePreviewEntry
+					.Select(t => new TablePreviewEntryViewModel
 					{
 						CustomerName = t.orgProj.OwningCustomer?.CustomerName,
 						ProjectName = t.orgProj.ProjectName,

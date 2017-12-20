@@ -1,5 +1,4 @@
 ﻿using System;
-using AllyisApps.Services.Crm;
 
 namespace AllyisApps.ViewModels.TimeTracker.Project
 {
@@ -103,7 +102,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		/// <summary>
 		/// Initializes a instance of see <see cref="CompleteProjectViewModel"/>
 		/// </summary>
-		public CompleteProjectViewModel(CompleteProject proj)
+		public CompleteProjectViewModel(Services.Crm.CompleteProject proj)
 		{
 			CanEditProject = proj.CanEditProject;
 			CreatedUtc = proj.CreatedUtc;

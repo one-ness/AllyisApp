@@ -6,8 +6,6 @@
 
 using System;
 using System.Collections.Generic;
-using AllyisApps.Services.TimeTracker;
-using AllyisApps.ViewModels.TimeTracker.Project;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
@@ -51,12 +49,12 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets the list of projects available, associated with their total hours.
 		/// </summary>
-		public IEnumerable<ProjectHours> ProjectHours { get; internal set; }
+		public IEnumerable<ProjectHoursViewModel> ProjectHours { get; internal set; }
 
 		/// <summary>
 		/// Gets the total hours spent in the current view.
 		/// </summary>
-		public ProjectHours GrandTotal { get; internal set; }
+		public ProjectHoursViewModel GrandTotal { get; internal set; }
 
 		/// <summary>
 		/// Gets the list of users for the defined organization.
@@ -81,7 +79,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets start of week for an Organization.
 		/// </summary>
-		public StartOfWeekEnum StartOfWeek { get; internal set; }
+		public Services.TimeTracker.StartOfWeekEnum StartOfWeek { get; internal set; }
 
 		/// <summary>
 		/// Gets or sets the type of product.
@@ -137,7 +135,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 	/// <summary>
 	/// Unites the project with the total hours duration.
 	/// </summary>
-	public class ProjectHours
+	public class ProjectHoursViewModel
 	{
 		/// <summary>
 		/// Gets or sets the project in use.

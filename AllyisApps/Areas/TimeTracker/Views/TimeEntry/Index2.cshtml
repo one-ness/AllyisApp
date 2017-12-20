@@ -64,7 +64,7 @@
 		</div>
 
 		<table class="table table-condensed">
-			@foreach (ProjectHours ph in Model.ProjectHours)
+			@foreach (ProjectHoursViewModel ph in Model.ProjectHours)
 			{
 				<tr>
 					<td>
@@ -94,73 +94,64 @@
 				<input id="viewasuser-search" type="text" class="form-control" placeholder=@Strings.SearchPlaceholder />
 			</div>
 			<div id="viewasuser-list" class="list-group allyis-search" style="max-height: 50vh; overflow-y: auto;">
-				@{
-					var count = 0;
-					var userList = Model.Users.ToList();
-					for(int i = 0; i < userList.Count; i++)
-					{
-						var user = userList[i];
-						int pageCount = 1 + count / Model.PageUserSize;
-						const string hide = "flex";
+	@{
+		var userList = Model.Users.ToList();
+		for (int i = 0; i < userList.Count; i++)
+		{
+			var user = userList[i];
 
-						string active = "";
-						var resetBackground = "this.style.backgroundColor=\"#FFFFFF\"";
-						if (user.UserId == Model.EntryRange.UserId)
-						{
-							active = "list-group-item-info";
-							resetBackground = "this.style.backgroundColor=\"#d9edf7\"";
-						}
-						<div data-page="@pageCount"
-							 class="@(active)"
-							 onmouseover='this.style.backgroundColor="#c4e3f3"'
-							 onmouseout="@resetBackground"
-							 style="width: 100%; display: @hide; justify-content: flex-end;">
-							@if (user.UserId == ViewBag.SignedInUserID)
-							{
-								<a class="col-xs-12 text-center"
-								   data-search="@user.Email"
-								   href="@Url.Action("TimeTrackerDatePickerRedirect", new
-									{
-									userId = ViewBag.SignedInUserID,
-									startDate = Model.EntryRange.StartDate,
-									endDate = Model.EntryRange.EndDate
-									})"
-								   style="color: #000000;">
-									@user.FirstName @user.LastName
-								</a>
-							}
-							else
-							{
-								<a class="col-xs-12 text-center" data-search="@user.Email"
-								   href="@Url.Action("TimeTrackerDatePickerRedirect", new
-								{
-									userId = user.UserId,
-									startDate = Model.EntryRange.StartDate,
-									endDate = Model.EntryRange.EndDate
-									})"
-								   style="color: #000000;">
-									@user.FirstName @user.LastName
-								</a>
-							}
-							 <a href="@Url.Action(ActionConstants.UserEdit, new {
-								subscriptionId = Model.SubscriptionId,
-								userId = user.UserId })"
-							   style="text-decoration: none; color: #0066AA; padding-right:5%" title="Assign Projects to User"><i class="fa fa-cog"></i></a>
-							
-						</div>count++;
+			string active = "";
+			var resetBackground = "this.style.backgroundColor=\"#FFFFFF\"";
+			if (user.UserId == Model.EntryRange.UserId)
+			{
+				active = "list-group-item-info";
+				resetBackground = "this.style.backgroundColor=\"#d9edf7\"";
+			}
+			<div class="@(active) member"
+				 onmouseover='this.style.backgroundColor="#c4e3f3"'
+				 onmouseout="@resetBackground"
+				 style="width: 100%; justify-content: flex-end;">
+				<div style="display: flex">
+					@if (user.UserId == ViewBag.SignedInUserID)
+					{
+						<a class="col-xs-12 text-center"
+						   data-search="@user.Email"
+						   href="@Url.Action("TimeTrackerDatePickerRedirect", new
+										{
+										userId = ViewBag.SignedInUserID,
+										startDate = Model.EntryRange.StartDate,
+										endDate = Model.EntryRange.EndDate
+										})"
+						   style="color: #000000;">
+							@user.FirstName @user.LastName
+						</a>
 					}
-				}
+					else
+					{
+						<a class="col-xs-12 text-center" data-search="@user.Email"
+						   href="@Url.Action("TimeTrackerDatePickerRedirect", new
+									{
+										userId = user.UserId,
+										startDate = Model.EntryRange.StartDate,
+										endDate = Model.EntryRange.EndDate
+										})"
+						   style="color: #000000;">
+							@user.FirstName @user.LastName
+						</a>
+					}
+					<a href="@Url.Action(ActionConstants.UserEdit, new {
+									subscriptionId = Model.SubscriptionId,
+									userId = user.UserId })"
+					   style="text-decoration: none; color: #0066AA; padding-right:5%" title="Assign Projects to User"><i class="fa fa-cog"></i></a>
+				</div>
+			</div>
+		}
+	}
 			</div>
 			<div id="footPager" class="panel-footer" style="display: flex; justify-content: space-around; flex-wrap: wrap">
-				@if (Model.Users.Any())
-				{
-					var page = 1;
-					<input class="btn btn-primary btn-xs" id="page @page" name="pageButton" type="button" value="@page" onClick="showPage(@page)" disabled="" />page++;
-					while (page <= Model.UserPageCount)
-					{
-						<input class="btn btn-primary btn-xs" id="page @page" name="pageButton" type="button" value="@page" onClick="showPage(@page)" />page++;
-					}
-				}
+				<div class="pageContainer">
+					@*This container is populated by javascript in allyis-account-permission2.js*@
+				</div>
 			</div>
 		</div>
 					}
@@ -210,10 +201,11 @@
 	@Scripts.Render("~/bundles/pageswithsearch")
 	@Scripts.Render("~/Areas/TimeTracker/Scripts/allyis-timeentry-index2.js");
 
+	<script src="~/Scripts/allyis-account-permission2.js" type="text/javascript"></script>
+	<script src="~/Scripts/allyis-pages-with-filter.js" type="text/javascript"></script>
 	<script type="text/javascript">
-		var pageSize = @Model.PageUserSize;
-		var page_container_id = "viewasuser-list";
-		var page_item_tag = "div";
+		pwf.setPageLimit(10);
+		pwf.setRowClass("member");
 
 		$(document).ready(function () {
 			var disabledButtons = document.getElementsByName("disabledButton");

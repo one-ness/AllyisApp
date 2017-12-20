@@ -1,5 +1,4 @@
 ﻿using System;
-using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
@@ -12,7 +11,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Initializes new pay class view model with a service object
 		/// </summary>
 		/// <param name="payClass"></param>
-		public PayClassInfoViewModel(PayClass payClass)
+		public PayClassInfoViewModel(Services.TimeTracker.PayClass payClass)
 		{
 			CreatedUtc = payClass.CreatedUtc;
 			OrganizationId = payClass.OrganizationId;

@@ -7,12 +7,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
 	/// <summary>
-	/// 
+	/// View Model for review.
 	/// </summary>
 	public class ReviewViewModel
 	{
@@ -91,11 +90,11 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets or sets the pay period ranges for the time tracker subscription.  Includes current, previous, and next pay periods.
 		/// </summary>
-		public PayPeriodRanges PayPeriodRanges { get; set; }
+		public PayPeriodRangesViewModel PayPeriodRanges { get; set; }
 	}
 
 	/// <summary>
-	/// T
+	/// View Model for Time Entry user review.
 	/// </summary>
 	public class TimeEntryUserReviewViewModel
 	{
@@ -129,5 +128,55 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 			UserTimeEntries = new List<TimeEntryViewModel>();
 		}
 
+	}
+
+	/// <summary>
+	/// View Model for pay period ranges.
+	/// </summary>
+	public class PayPeriodRangesViewModel
+	{
+		/// <summary>
+		/// Gets or sets the previous pay period range.
+		/// This is the pay period range right before the current range.
+		/// </summary>
+		public DateRangeViewModel Previous { get; set; }
+
+		/// <summary>
+		/// Gets or sets the current pay period range.
+		/// This is the pay period range that contains the current date.
+		/// </summary>
+		public DateRangeViewModel Current { get; set; }
+
+		/// <summary>
+		/// Gets or sets the next pay period range.
+		/// This is the pay period range right after the current range.
+		/// </summary>
+		public DateRangeViewModel Next { get; set; }
+	}
+
+	/// <summary>
+	/// View Model for date range.
+	/// </summary>
+	public class DateRangeViewModel
+	{
+		/// <summary>
+		/// Constructor for date range view model.
+		/// </summary>
+		/// <param name="dateRange"></param>
+		public DateRangeViewModel(Services.TimeTracker.DateRange dateRange)
+		{
+			StartDate = dateRange.StartDate;
+			EndDate = dateRange.EndDate;
+		}
+
+		/// <summary>
+		/// Gets or sets the start date.
+		/// </summary>
+		public DateTime StartDate { get; set; }
+
+		/// <summary>
+		/// Gets or sets the end date.
+		/// </summary>
+		public DateTime EndDate { get; set; }
 	}
 }

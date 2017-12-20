@@ -39,10 +39,22 @@ namespace AllyisApps.Controllers.Auth
 		{
 			var subs = await AppService.GetSubscriptionsAsync(id);
 
+			var employeeTypes = await AppService.GetEmployeeTypeByOrganization(id);
+			var employeeTypeViewModels = new List<EmployeeTypeViewModel>();
+			foreach (var employeeType in employeeTypes)
+			{
+				employeeTypeViewModels.Add(new EmployeeTypeViewModel()
+				{
+					EmployeeTypeId = employeeType.EmployeeTypeId,
+					EmployeeTypeName = employeeType.EmployeeTypeName,
+					OrganizationId = employeeType.OrganizationId
+				});
+			}
+
 			var model = new AddMemberViewModel
 			{
 				OrganizationId = id,
-				EmployeeTypeList = await AppService.GetEmployeeTypeByOrganization(id),
+				EmployeeTypeList = employeeTypeViewModels,
 				EmployeeId = await AppService.GetNextEmployeeId(id),
 				OrganizationName = "Organization", //AppService.GetOrganization(id).Result.OrganizationName;
 				SubscriptionRoles = subs.Select(sub => new RoleItem

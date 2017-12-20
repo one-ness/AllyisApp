@@ -34,7 +34,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			SettingsEmployeeTypeViewModel model = new SettingsEmployeeTypeViewModel()
 			{
-				EmployeeTypes = employeeTypes.ToList(),
+				EmployeeTypes = employeeTypes.ToList().Select(t => new EmployeeTypeViewModel()
+				{
+					EmployeeTypeId = t.EmployeeTypeId,
+					EmployeeTypeName = t.EmployeeTypeName,
+					OrganizationId = t.OrganizationId
+				}).ToList(),
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subName,
 				UserId = AppService.UserContext.UserId
@@ -55,13 +60,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			ViewData["SubscriptionId"] = subscriptionId;
 			var payclasses = (await AppService.GetPayClassesBySubscriptionId(subscriptionId))
 				.Where(x => (x.BuiltInPayClassId != (int)PayClassId.OverTime))
-				.Select(x => new PayClassInfo() { PayClassId = x.PayClassId, PayClassName = x.PayClassName });
+				.Select(x => new PayClassInfoViewModel() { PayClassId = x.PayClassId, PayClassName = x.PayClassName });
 
 			SettingsEditEmployeeTypeViewModel model = new SettingsEditEmployeeTypeViewModel()
 			{
 				EmployeeTypeName = "",
 				PayClasses = payclasses.ToList(),
-				CurrentPayClasses = new List<PayClassInfo>() { },
+				CurrentPayClasses = new List<PayClassInfoViewModel>() { },
 				IsEdit = false
 			};
 			ViewBag.SubscriptionName = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName;
@@ -140,10 +145,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			var unassignedPayClasses = payClasses
 				.Where(x => !assignedPayClassesIds.Contains(x.PayClassId) && (x.BuiltInPayClassId != (int)PayClassId.OverTime))
-				.Select(x => new PayClassInfo() { PayClassId = x.PayClassId, PayClassName = x.PayClassName });
+				.Select(x => new PayClassInfoViewModel() { PayClassId = x.PayClassId, PayClassName = x.PayClassName });
 			var assignedPayClasses = payClasses
 				.Where(x => assignedPayClassesIds.Contains(x.PayClassId) && (x.BuiltInPayClassId != (int)PayClassId.OverTime))
-				.Select(x => new PayClassInfo() { PayClassId = x.PayClassId, PayClassName = x.PayClassName });
+				.Select(x => new PayClassInfoViewModel() { PayClassId = x.PayClassId, PayClassName = x.PayClassName });
 
 			SettingsEditEmployeeTypeViewModel model = new SettingsEditEmployeeTypeViewModel()
 			{

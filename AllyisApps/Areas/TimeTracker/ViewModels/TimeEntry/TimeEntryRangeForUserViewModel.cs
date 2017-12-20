@@ -33,7 +33,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
         /// <summary>
         /// Gets or sets the date range of the payperiod
         /// </summary>
-        public PayPeriodRanges PayPeriodRanges { get; set; }
+        public PayPeriodRangesViewModel PayPeriodRanges { get; set; }
 
         /// <summary>
         /// Gets the user's Id.

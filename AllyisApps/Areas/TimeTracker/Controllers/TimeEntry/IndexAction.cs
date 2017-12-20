@@ -124,6 +124,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			int startOfWeek = infos.Item1.StartOfWeek;
 			DateTime startDate = startingDateTime != null ? AppService.SetStartingDate(startingDateTime, startOfWeek) : payRanges.Current.StartDate;
 			DateTime endDate = endingDateTime ?? payRanges.Current.EndDate;
+			var payRangesViewModel = new PayPeriodRangesViewModel()
+			{
+				Current = new DateRangeViewModel(payRanges.Current),
+				Next = new DateRangeViewModel(payRanges.Next),
+				Previous = new DateRangeViewModel(payRanges.Previous)
+			};
 
 			// Get all of the projects and initialize their total hours to 0.
 			IList<CompleteProject> allProjects = infos.Item4; // Must also grab inactive projects, or the app will crash if a user has an entry on a project he is no longer a part of
@@ -133,7 +139,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				.ToDictionary(proj =>
 					proj.ProjectId,
 					proj =>
-						new ProjectHours
+						new ProjectHoursViewModel
 						{
 							Project = new CompleteProjectViewModel(proj),
 							Hours = 0.0f
@@ -175,14 +181,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					StartDate = startDate,
 					EndDate = endDate,
-					PayPeriodRanges = payRanges,
+					PayPeriodRanges = payRangesViewModel,
 					Entries = new List<EditTimeEntryViewModel>(),
 					UserId = userId,
 					SubscriptionId = subId
 				},
 				CanManage = isManager,
 				StartOfWeek = (StartOfWeekEnum)startOfWeek,
-				GrandTotal = new ProjectHours { Project = new CompleteProjectViewModel { ProjectName = Strings.Total }, Hours = 0.0f },
+				GrandTotal = new ProjectHoursViewModel { Project = new CompleteProjectViewModel { ProjectName = Strings.Total }, Hours = 0.0f },
 				ProjectHours = hours.Values.Where(x => x.Hours > 0),
 				Users = users,
 				TotalUsers = users.Count(),
@@ -230,7 +236,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						// Update its project's hours
 						if (hours.ContainsKey(iter.Current.ProjectId))
 						{
-							ProjectHours temp = hours[iter.Current.ProjectId];
+							ProjectHoursViewModel temp = hours[iter.Current.ProjectId];
 							temp.Hours += iter.Current.Duration;
 							hours[iter.Current.ProjectId] = temp;
 						}

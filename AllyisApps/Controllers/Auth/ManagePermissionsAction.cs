@@ -68,7 +68,7 @@ namespace AllyisApps.Controllers.Auth
 		public async Task<ActionResult> ManagePermissions(string data)
 		{
 			var model = JsonConvert.DeserializeObject<UserPermissionsAction>(data);
-			var modelSelectedUsers = model.SelectedUsers as IList<TargetUser> ?? model.SelectedUsers.ToList(); //prevent multiple enumeration of IEnumerable
+			var modelSelectedUsers = model.SelectedUsers as IList<TargetUserViewModel> ?? model.SelectedUsers.ToList(); //prevent multiple enumeration of IEnumerable
 
 			AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, model.OrganizationId);
 

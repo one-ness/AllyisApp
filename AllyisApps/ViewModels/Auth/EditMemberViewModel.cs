@@ -84,7 +84,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets list of organization employee types.
 		/// </summary>
-		public List<EmployeeType> EmployeeTypes { get; set; }
+		public List<EmployeeTypeViewModel> EmployeeTypes { get; set; }
 
 		/// <summary>
 		/// Gets or sets the employee type.
@@ -110,12 +110,12 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// subscription roles of this user
 		/// </summary>
-		public List<RoleItem> SubscriptionRoles { get; set; }
+		public List<RoleItemViewModel> SubscriptionRoles { get; set; }
 
 		/// <summary>
 		/// role of a user
 		/// </summary>
-		public class RoleItem
+		public class RoleItemViewModel
 		{
 			/// <summary>
 			/// subscription id
@@ -140,7 +140,7 @@ namespace AllyisApps.ViewModels.Auth
 			/// <summary>
 			/// constructor
 			/// </summary>
-			public RoleItem()
+			public RoleItemViewModel()
 			{
 				RoleList = new Dictionary<int, string>();
 			}
@@ -151,7 +151,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public EditMemberViewModel()
 		{
-			SubscriptionRoles = new List<RoleItem>();
+			SubscriptionRoles = new List<RoleItemViewModel>();
 		}
 	}
 }
