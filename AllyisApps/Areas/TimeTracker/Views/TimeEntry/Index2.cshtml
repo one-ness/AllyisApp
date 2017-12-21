@@ -93,7 +93,7 @@
 				<h1 class="panel-title">@Strings.MemberList</h1>
 				<input id="viewasuser-search" type="text" class="form-control" placeholder=@Strings.SearchPlaceholder />
 			</div>
-			<div id="viewasuser-list" class="list-group allyis-search" style="max-height: 50vh; overflow-y: auto;">
+			<div id="viewasuser-list" class="list-group allyis-search" style="height: 210px;max-height: 50vh; overflow-y: auto;">
 				@{
 					var userList = Model.Users.ToList();
 					for (int i = 0; i < userList.Count; i++)
