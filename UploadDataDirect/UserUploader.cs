@@ -27,6 +27,7 @@ namespace UploadDataDirect
 		internal async Task uploadUsers()
 		{
 			string emailFormat = "Test{0}@testing.com";
+			var project = appService.GetDefaultProject(organizaionID);
 			bool hasEmployeeId = hoursData.Columns.Contains(ColumnConstants.Employee);
 			bool hasUserName = hoursData.Columns.Contains(ColumnConstants.FirstName) && hoursData.Columns.Contains(ColumnConstants.LastName);
 			//TODO: GET EMAIL ADDRESSES OF USERS
@@ -61,11 +62,13 @@ namespace UploadDataDirect
 					{
 						createdUsers.Add(user.UserId);
 					}
+					await appService.UpdateProjectUser(project.Id, user.UserId, true);
 				}
 				
 				i++;
 			}
 			await appService.UpdateSubscriptionUsersRoles(createdUsers, organizaionID, (int)TimeTrackerRole.User, (int)ProductIdEnum.TimeTracker);
+			
 		}
 	}
 }
