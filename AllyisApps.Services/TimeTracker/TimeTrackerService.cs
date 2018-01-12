@@ -789,7 +789,7 @@ namespace AllyisApps.Services
 		public static DateTime? GetSuggestedLockDateForOvertimeSettingsModificationWeekly(int startOfWeek, DateTime? lockDate, DateTime? ppDate)
 		{
 			DateTime? effectiveLockDate = lockDate ?? ppDate;
-			if (effectiveLockDate != null && (int)effectiveLockDate.Value.DayOfWeek != Mod(startOfWeek - 2, 7) + 1)
+			if (effectiveLockDate != null && (int)effectiveLockDate.Value.DayOfWeek != Mod(startOfWeek - 1, 7))
 			{
 				return GetWeeklyOvertimePeriod(startOfWeek, effectiveLockDate.Value).EndDate;
 			}
