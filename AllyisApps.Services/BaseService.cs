@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using AllyisApps.DBModel;
 using AllyisApps.Services.Auth;
+using AllyisApps.Lib;
 
 namespace AllyisApps.Services
 {
@@ -22,6 +23,11 @@ namespace AllyisApps.Services
 		public ServiceSettings ServiceSettings { get; private set; }
 
 		/// <summary>
+		/// send grid email utility
+		/// </summary>
+		public SendGridMailer Mailer { get; private set; }
+
+		/// <summary>
 		/// Default constructor
 		/// </summary>
 		public BaseService() { }
@@ -31,8 +37,9 @@ namespace AllyisApps.Services
 		/// </summary>
 		public BaseService(ServiceSettings settings)
 		{
-			ServiceSettings = settings ?? throw new ArgumentNullException(nameof(settings));
-			DBHelper = new DBHelper(ServiceSettings.SqlConnectionString);
+			this.ServiceSettings = settings ?? throw new ArgumentNullException(nameof(settings));
+			this.Mailer = new SendGridMailer(this.ServiceSettings.SendGridApiKey);
+			this.DBHelper = new DBHelper(ServiceSettings.SqlConnectionString);
 		}
 
 		/// <summary>

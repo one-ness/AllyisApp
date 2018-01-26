@@ -207,7 +207,7 @@ namespace AllyisApps.Services
 					address1, address2, city, stateId, postalCode, countryCode);
 
 				// user created, send confirmation email
-				await Mailer.SendEmailAsync(ServiceSettings.SupportEmail, email, confirmEmailSubject, confirmEmailMessage);
+				await this.Mailer.SendEmailAsync(ServiceSettings.SupportEmail, email, confirmEmailSubject, confirmEmailMessage);
 			}
 			catch (SqlException ex)
 			{
@@ -598,7 +598,7 @@ namespace AllyisApps.Services
 				StringBuilder sb = new StringBuilder();
 				sb.AppendFormat("Please reset your password by clicking <a href=\"{0}\">this reset link</a>.", callbackUrl);
 				string msgbody = new System.Web.HtmlString(sb.ToString()).ToString();
-				result = await Mailer.SendEmailAsync(ServiceSettings.SupportEmail, email, "Reset password", msgbody);
+				result = await this.Mailer.SendEmailAsync(ServiceSettings.SupportEmail, email, "Reset password", msgbody);
 			}
 
 			return result;

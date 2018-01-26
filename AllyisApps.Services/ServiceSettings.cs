@@ -29,7 +29,6 @@ namespace AllyisApps.Services
 			SqlConnectionString = sqlConnectionString;
 			SupportEmail = supportEmail;
 			SendGridApiKey = sendGridApiKey;
-			Mailer.Init(SendGridApiKey);
 		}
 	}
 }

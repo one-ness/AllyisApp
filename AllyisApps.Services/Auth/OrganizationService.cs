@@ -206,14 +206,14 @@ namespace AllyisApps.Services
 			// Send invitation email
 			string orgName = string.Empty;
 			string htmlbody = string.Format(
-				"{0} {1} has requested you join their organization on Allyis Apps{2}!<br /> Click <a href={3}>Here</a> to create an account and join!",
+				"{0} {1} has requested you join their organization {2} on Allyis Apps!<br /> Click <a href={3}>Here</a> to create an account and join!",
 				UserContext.FirstName,
 				UserContext.LastName,
 				orgName,
 				url);
 
 			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
-			var task = Mailer.SendEmailAsync(
+			var task = this.Mailer.SendEmailAsync(
 				ServiceSettings.SupportEmail,
 				email,
 				"Join Allyis Apps!",
@@ -222,32 +222,34 @@ namespace AllyisApps.Services
 			var mailSuccess = task.Result;
 		}
 
-		public async void NotifyInviteAcceptAsync(int inviteId)
+		public async void NotifyInviteAcceptAsync(int invitationId)
 		{
-			InvitationDBEntity invitation = await DBHelper.GetInvitation(inviteId);
-			string msgbody = new System.Web.HtmlString($"{invitation.FirstName} {invitation.LastName} has joined the organization <organization name> on Allyis Apps.").ToString();
-
+			if (invitationId <= 0) throw new ArgumentException(nameof(invitationId));
+			var invitation = await DBHelper.GetInvitation(invitationId);
+			string orgName = string.Empty;
+			string msgbody = string.Format("{0} {1} has joined your organization {2} on Allyis Apps!", invitation.FirstName, invitation.LastName, orgName);
 			foreach (string email in DBHelper.GetOrganizationOwnerEmails(invitation.OrganizationId))
 			{
-				await Mailer.SendEmailAsync(
+				await this.Mailer.SendEmailAsync(
 						ServiceSettings.SupportEmail,
 						email,
-						"Join Allyis Apps!",
+						"New member join notification.",
 						msgbody);
 			}
 		}
 
-		public async void NotifyInviteRejectAsync(int inviteId)
+		public async void NotifyInviteRejectAsync(int invitationId)
 		{
-			InvitationDBEntity invitation = await DBHelper.GetInvitation(inviteId);
-			string msgbody = new System.Web.HtmlString($"{invitation.FirstName} {invitation.LastName} has rejected joining the organization <organization name> on Allyis Apps.").ToString();
-
+			if (invitationId <= 0) throw new ArgumentException(nameof(invitationId));
+			var invitation = await DBHelper.GetInvitation(invitationId);
+			string orgName = string.Empty;
+			string msgbody = string.Format("{0} {1} has rejected joining your organization {2} on Allyis Apps!", invitation.FirstName, invitation.LastName, orgName);
 			foreach (string email in DBHelper.GetOrganizationOwnerEmails(invitation.OrganizationId))
 			{
-				await Mailer.SendEmailAsync(
+				await this.Mailer.SendEmailAsync(
 						ServiceSettings.SupportEmail,
 						email,
-						"User rejected invite Allyis Apps!",
+						"Invite reject notification.",
 						msgbody);
 			}
 		}
@@ -259,10 +261,10 @@ namespace AllyisApps.Services
 		/// <returns>Returns false if permissions fail.</returns>
 		public async Task<bool> RemoveInvitation(int invitationId)
 		{
-			if (invitationId <= 0) throw new ArgumentException("invitationId");
+			if (invitationId <= 0) throw new ArgumentException(nameof(invitationId));
 
-			var invite = await GetInvitation(invitationId);
-			CheckOrgAction(OrgAction.DeleteInvitation, invite.OrganizationId);
+			var invitation = await GetInvitation(invitationId);
+			CheckOrgAction(OrgAction.DeleteInvitation, invitation.OrganizationId);
 			return DBHelper.DeleteInvitation(invitationId);
 		}
 

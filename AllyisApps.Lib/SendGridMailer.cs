@@ -9,21 +9,25 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SendGrid;
+using System.Text;
 using SendGrid.Helpers.Mail;
 
 namespace AllyisApps.Lib
 {
 	/// <summary>
-	/// Email utilties.
+	/// sends email using SendGrid api
 	/// </summary>
-	public static class Mailer
+	public class SendGridMailer
 	{
-		private static SendGridAPIClient sender;
+		SendGridAPIClient sender;
 
-		public static void Init(string apiKey)
+		/// <summary>
+		/// constructor
+		/// </summary>
+		public SendGridMailer(string apiKey)
 		{
 			if (string.IsNullOrWhiteSpace(apiKey)) throw new ArgumentNullException(nameof(apiKey));
-			sender = new SendGridAPIClient(apiKey);
+			this.sender = new SendGridAPIClient(apiKey);
 		}
 
 		/// <summary>
@@ -34,11 +38,16 @@ namespace AllyisApps.Lib
 		/// <param name="subject">The message subject line.</param>
 		/// <param name="bodyHtml">The html body of the email.</param>
 		/// <returns>The async mailing task.</returns>
-		public static async Task<bool> SendEmailAsync(string from, string to, string subject, string bodyHtml)
+		public async Task<bool> SendEmailAsync(string from, string to, string subject, string bodyHtml)
 		{
+			if (string.IsNullOrWhiteSpace(from)) throw new ArgumentNullException(nameof(from));
+			if (string.IsNullOrWhiteSpace(to)) throw new ArgumentNullException(nameof(to));
+			if (string.IsNullOrWhiteSpace(subject)) throw new ArgumentNullException(nameof(subject));
+			if (string.IsNullOrWhiteSpace(bodyHtml)) throw new ArgumentNullException(nameof(bodyHtml));
+
 			bool result = false;
 			Mail mail = new Mail(new Email(from), subject, new Email(to), new Content("text/html", bodyHtml));
-			dynamic response = await sender.client.mail.send.post(requestBody: mail.Get());
+			dynamic response = await this.sender.client.mail.send.post(requestBody: mail.Get());
 			if (response != null && string.Compare(response.StatusCode.ToString(), "accepted", true) == 0)
 			{
 				result = true;
@@ -55,19 +64,31 @@ namespace AllyisApps.Lib
 		/// <param name="subject">The message subject line.</param>
 		/// <param name="bodyHtml">The html body of the email.</param>
 		/// <returns>The async mailing task.</returns>
-		public static async Task<dynamic> SendEmailAsync(string from, List<string> to, string subject, string bodyHtml)
+		public async Task<dynamic> SendEmailAsync(string from, List<string> to, string subject, string bodyHtml)
 		{
-			string toString = "";
-			foreach (string recipient in to)
+			if (string.IsNullOrWhiteSpace(from)) throw new ArgumentNullException(nameof(from));
+			if (to == null || to.Count <= 0) throw new ArgumentNullException(nameof(to));
+			if (string.IsNullOrWhiteSpace(subject)) throw new ArgumentNullException(nameof(subject));
+			if (string.IsNullOrWhiteSpace(bodyHtml)) throw new ArgumentNullException(nameof(bodyHtml));
+
+			// construct the multiple recipient addresses
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < to.Count - 1; i++)
 			{
-				toString += "{ 'email': '" + recipient + "' }, ";
+				sb.Append("{ 'email': '");
+				sb.Append(to[i]);
+				sb.Append("' }, ");
 			}
-			toString = toString.Substring(0, toString.Length - 2); // Chop off last comma and space
+
+			// add the last recipient address
+			sb.Append("{ 'email': '");
+			sb.Append(to[to.Count - 1]);
+			sb.Append("' }, ");
 
 			string data = "{{'personalizations': [ {{ 'to': [ {0} ], 'subject': '{1}' }} ], 'from': {{ 'email': '{2}' }}, 'content': [ {{ 'type': 'text/html', 'value': '{3}' }} ] }}";
-			data = string.Format(data, toString, subject, from, bodyHtml);
+			data = string.Format(data, sb.ToString(), subject, from, bodyHtml);
 			object jsonData = JsonConvert.DeserializeObject<object>(data);
-			return await sender.client.mail.send.post(requestBody: jsonData.ToString());
+			return await this.sender.client.mail.send.post(requestBody: jsonData.ToString());
 		}
 	}
 }

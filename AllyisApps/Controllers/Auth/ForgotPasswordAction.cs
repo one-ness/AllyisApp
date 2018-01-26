@@ -42,11 +42,11 @@ namespace AllyisApps.Controllers.Auth
 			if (ModelState.IsValid)
 			{
 				// NOTE: do not check for failure, always display success message and redirect to login page
-				string code = Guid.NewGuid().ToString();
-				string callbackUrl = Url.Action(ActionConstants.ResetPassword, ControllerConstants.Account, null, protocol: Request.Url.Scheme);
 				User user = await AppService.GetUserByEmail(model.Email);
 				if (user != null)
 				{
+					string code = Guid.NewGuid().ToString();
+					string callbackUrl = Url.Action(ActionConstants.ResetPassword, ControllerConstants.Account, null, protocol: Request.Url.Scheme);
 					StringBuilder sb = new StringBuilder();
 					sb.AppendFormat("{0}/{1}", callbackUrl, code);
 					await AppService.SendPasswordResetMessage(model.Email, code, sb.ToString());

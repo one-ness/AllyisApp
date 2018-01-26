@@ -30,7 +30,10 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AppService"/> class.
 		/// </summary>
-		public AppService(ServiceSettings settings) : base(settings) { }
+		public AppService(ServiceSettings settings) : base(settings)
+		{
+			if (settings == null) throw new ArgumentNullException(nameof(settings));
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AppService"/> class.
