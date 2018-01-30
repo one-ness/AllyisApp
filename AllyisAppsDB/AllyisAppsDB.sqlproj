@@ -412,6 +412,7 @@
     <Build Include="Pjm\Stored Procedures\GetDefaultProject.sql" />
     <Build Include="TimeTracker\Stored Procedures\UpdateUserOrgEmployeeType.sql" />
     <Build Include="TimeTracker\Stored Procedures\UpdateOvertimeChangedFlag.sql" />
+    <Build Include="Auth\Stored Procedures\GetUserOrganizations.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

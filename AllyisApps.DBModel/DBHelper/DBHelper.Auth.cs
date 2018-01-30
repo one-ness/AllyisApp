@@ -66,14 +66,24 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Executes [Auth].[GetUserFromEmail].
 		/// </summary>
-		/// <param name="email">Parameter @email.</param>
-		/// <returns>UserDBEntity obj.</returns>
 		public async Task<UserDBEntity> GetUserByEmailAsync(string email)
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				var result = await connection.QueryAsync<UserDBEntity>("[Auth].[GetUserFromEmail]", new { email }, commandType: CommandType.StoredProcedure);
 				return result.FirstOrDefault();
+			}
+		}
+
+		/// <summary>
+		/// get a list of organizations that user is member of. (note: the organization has to be active)
+		/// </summary>
+		public async Task<dynamic> GetUserOrganizations(int userId)
+		{
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				var result = await connection.QueryAsync<dynamic>("[Auth].[GetUserOrganizations] @a", new { @a = userId });
+				return result.ToList();
 			}
 		}
 
