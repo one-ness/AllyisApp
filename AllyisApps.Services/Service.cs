@@ -737,7 +737,7 @@ namespace AllyisApps.Services
 				spResults.Item2.Select(InitializePayClassInfo).ToList(),
 				spResults.Item3.Select(InitializeHoliday).ToList(),
 				spResults.Item4.Select(InitializeCompleteProjectInfo).ToList(),
-				spResults.Item5.Select(udb => InitializeUser(udb, false)).ToList(),
+				spResults.Item5.Select(udb => InitializeUser(udb)).ToList(),
 				spResults.Item6.Select(InitializeTimeEntryInfo).ToList());
 		}
 

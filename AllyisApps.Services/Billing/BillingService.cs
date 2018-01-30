@@ -500,7 +500,7 @@ namespace AllyisApps.Services
 			}
 
 			var results = await DBHelper.GetUsersWithSubscriptionToProductInOrganization(orgId, productId);
-			return results.Select(u => InitializeUser(u, false));
+			return results.Select(u => InitializeUser(u));
 		}
 
 		public async Task<IEnumerable<Subscription>> GetSubscriptionsByOrg(int organizationId)

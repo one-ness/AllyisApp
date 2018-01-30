@@ -68,7 +68,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="email">Parameter @email.</param>
 		/// <returns>UserDBEntity obj.</returns>
-		public async Task<UserDBEntity> GetUserByEmail(string email)
+		public async Task<UserDBEntity> GetUserByEmailAsync(string email)
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{

@@ -525,7 +525,7 @@ namespace AllyisApps.Services
 			var spResults = DBHelper.GetProjectEditInfo(projectId, subscriptionId);
 			return Tuple.Create(
 				InitializeCompleteProjectInfo(spResults.Item1),
-				spResults.Item2.Select(udb => InitializeUser(udb, false)).ToList(),
+				spResults.Item2.Select(udb => InitializeUser(udb)).ToList(),
 				spResults.Item3.Select(InitializeSubscriptionUser).ToList());
 		}
 

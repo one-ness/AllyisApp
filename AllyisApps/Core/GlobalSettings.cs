@@ -30,12 +30,16 @@ namespace AllyisApps.Core
 		public static string SendGridApiKey { get; set; }
 
 		/// <summary>
+		/// gets or sets whether user has to confirm his/her email
+		/// </summary>
+		public static bool RequireEmailConfirmation { get; set; }
+
+		const string SupportEmailDefault = "support@allyisapps.com";
+
+		/// <summary>
 		/// Initialize Global Settings.
 		/// </summary>
-		/// <param name="connectionStringKey">The connection string used to connect to the db.</param>
-		/// <param name="supportEmailKey">Key for email support.</param>
-		/// <param name="sendGridApiKey">Key for grid api.</param>
-		public static void Init(string connectionStringKey = "DefaultConnection", string supportEmailKey = "SupportEmail", string sendGridApiKey = "SendGridApiKey")
+		public static void Init(string connectionStringKey = "DefaultConnection", string supportEmailKey = "SupportEmail", string sendGridApiKey = "SendGridApiKey", string requireEmailConfirmationKey = "RequireEmailConfirmation")
 		{
 			SqlConnectionString = ConfigurationManager.ConnectionStrings[connectionStringKey].ConnectionString;
 			if (string.IsNullOrWhiteSpace(SqlConnectionString))
@@ -43,20 +47,30 @@ namespace AllyisApps.Core
 				throw new ArgumentException("connection string not found");
 			}
 
-			string email = ConfigurationManager.AppSettings[supportEmailKey];
-			if (!string.IsNullOrWhiteSpace(email))
+			string temp = ConfigurationManager.AppSettings[supportEmailKey];
+			if (!string.IsNullOrWhiteSpace(temp))
 			{
-				SupportEmail = email.Trim();
+				SupportEmail = temp.Trim();
 			}
 			else
 			{
-				SupportEmail = "support@allyisapps.com";
+				SupportEmail = SupportEmailDefault;
 			}
 
-			string apiKey = ConfigurationManager.AppSettings[sendGridApiKey];
-			if (!string.IsNullOrWhiteSpace(sendGridApiKey))
+			temp = ConfigurationManager.AppSettings[sendGridApiKey];
+			if (!string.IsNullOrWhiteSpace(temp))
 			{
-				SendGridApiKey = apiKey.Trim();
+				SendGridApiKey = temp.Trim();
+			}
+
+			temp = ConfigurationManager.AppSettings[requireEmailConfirmationKey];
+			if (!string.IsNullOrWhiteSpace(temp))
+			{
+				temp = temp.Trim();
+				if (string.Compare(temp, "true", true) == 0)
+				{
+					RequireEmailConfirmation = true;
+				}
 			}
 		}
 	}

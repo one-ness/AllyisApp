@@ -234,23 +234,24 @@ namespace AllyisApps.Services
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException(nameof(email));
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException(nameof(password));
 
-			User result = InitializeUser(await DBHelper.GetUserByEmail(email), false);
-
-			if (result == null) return null;
-
-			// email exists, hash the given password and compare with hash in db
-			PassWordValidationResult passwordValidation = Crypto.ValidateAndUpdate(password, result.PasswordHash);
-			if (passwordValidation.successfulMatch)
+			User result = await this.GetUserByEmailAsync(email);
+			if (result != null)
 			{
-				// Store updated password hash if needed
-				if (passwordValidation.updatedHash != null)
+				// email exists, does password match?
+				PassWordValidationResult passwordValidation = Crypto.ValidateAndUpdate(password, result.PasswordHash);
+				if (passwordValidation.successfulMatch)
 				{
-					await DBHelper.UpdateUserPassword(result.UserId, passwordValidation.updatedHash);
+					// yes, store updated password hash if needed
+					if (passwordValidation.updatedHash != null)
+					{
+						await DBHelper.UpdateUserPassword(result.UserId, passwordValidation.updatedHash);
+					}
 				}
-			}
-			else
-			{
-				return null;
+				else
+				{
+					// no, set null result
+					result = null;
+				}
 			}
 
 			return result;
@@ -330,7 +331,7 @@ namespace AllyisApps.Services
 			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId));
 
 			dynamic sets = await DBHelper.GetUser(userId);
-			User user = this.InitializeUser(sets.User);
+			User user = this.InitializeUser(sets.User, true);
 			dynamic subs = sets.Subscriptions;
 			foreach (dynamic item in subs)
 			{
@@ -527,13 +528,11 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets the user info from an email address.
 		/// </summary>
-		/// <param name="email">Email address.</param>
-		/// <returns>A UserInfo instance with the user's info.</returns>
-		public async Task<User> GetUserByEmail(string email)
+		public async Task<User> GetUserByEmailAsync(string email, bool loadAddress = false)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException(nameof(email));
 
-			return InitializeUser(await DBHelper.GetUserByEmail(email));
+			return InitializeUser(await DBHelper.GetUserByEmailAsync(email), loadAddress);
 		}
 
 		/// <summary>
@@ -686,7 +685,7 @@ namespace AllyisApps.Services
 		/// <param name="user">UserDBEntity instance.</param>
 		/// <param name="loadAddress"></param>
 		/// <returns>User instance.</returns>
-		private User InitializeUser(UserDBEntity user, bool loadAddress = true)
+		private User InitializeUser(UserDBEntity user, bool loadAddress = false)
 		{
 			if (user == null)
 			{

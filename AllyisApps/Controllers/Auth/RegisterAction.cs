@@ -74,6 +74,7 @@ namespace AllyisApps.Controllers.Auth
 			}
 
 			// error
+			ViewBag.ReturnUrl = returnUrl;
 			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService.GetCountries());
 			model.LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService.GetStates(model.SelectedCountryCode));
 			return View(model);

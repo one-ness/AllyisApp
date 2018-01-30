@@ -160,7 +160,7 @@ namespace AllyisApps.Controllers.Auth
 
 			try
 			{
-				User usr = await AppService.GetUserByEmail(model.Email);
+				User usr = await AppService.GetUserByEmailAsync(model.Email);
 				string url = usr != null ?
 					Url.Action(ActionConstants.Index, ControllerConstants.Account, null, Request.Url.Scheme) :
 					Url.Action(ActionConstants.Register, ControllerConstants.Account, null, Request.Url.Scheme);

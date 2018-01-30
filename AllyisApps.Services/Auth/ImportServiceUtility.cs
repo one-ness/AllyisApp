@@ -14,7 +14,7 @@ namespace AllyisApps.Services
 	{
 		public async Task<User> AddUserToOrganizaion(string email, string firstName, string lastName, int organizaionId, OrganizationRoleEnum roleType, string empolyeeId, int? employeeTypeId)
 		{
-			User user = await GetUserByEmail(email);
+			User user = await GetUserByEmailAsync(email);
 			int employeeType = 0;
 
 			if (employeeTypeId == null)
@@ -27,15 +27,19 @@ namespace AllyisApps.Services
 				employeeType = employeeTypeId.Value;
 			}
 
+			int userId = 0;
 			if (user == null)
 			{
 				//User is completly new does not exist in any fashion
 				DateTime now = DateTime.Now;
 				DateTime years18 = now.AddYears(-18);
-
-				int userid = await DBHelper.CreateUserAsync(email, Crypto.GetPasswordHash("Welcome1"), firstName, lastName, Guid.NewGuid(), years18, null, null, null, null, null, null, null, null);
-				user = await GetUserByEmail(email);
+				userId = await DBHelper.CreateUserAsync(email, Crypto.GetPasswordHash("Welcome1"), firstName, lastName, Guid.NewGuid(), years18, null, null, null, null, null, null, null, null);
 			}
+			else
+			{
+				userId = user.UserId;
+			}
+
 			OrganizationUserDBEntity orgUser = new OrganizationUserDBEntity()
 			{
 				CreatedUtc = DateTime.Now,
@@ -47,8 +51,9 @@ namespace AllyisApps.Services
 				MaxAmount = 0,
 				OrganizationId = organizaionId,
 				OrganizationRoleId = (int)roleType,
-				UserId = user.UserId
+				UserId = userId
 			};
+
 			DBHelper.CreateOrganizationUser(orgUser);
 			return user;
 		}

@@ -13,6 +13,7 @@ using System.Web.Security;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.Auth;
+using AllyisApps.Core;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -56,17 +57,15 @@ namespace AllyisApps.Controllers.Auth
 				if ((result = await AppService.ValidateLogin(model.Email, model.Password)) != null)
 				{
 					// sign in
-					if (result.IsEmailConfirmed || (WebConfigurationManager.AppSettings["RequireEmailConfirmation"] ?? "true").ToLower().Equals("false"))
+					if (GlobalSettings.RequireEmailConfirmation && !result.IsEmailConfirmed)
 					{
-						SignIn(result.UserId, result.Email, model.RememberMe);
-						return RedirectToLocal(returnUrl);
-					}
-					else
-					{
+						// settings require email confirmation, show warning
 						Notifications.Add(new BootstrapAlert(Resources.Strings.YouMustRegisterYourEmailAddress, Variety.Danger));
-						SignIn(result.UserId, result.Email, model.RememberMe);
-						return RedirectToLocal(returnUrl);
 					}
+
+					// sign in and redirect
+					SignIn(result.UserId, result.Email, model.RememberMe);
+					return RedirectToLocal(returnUrl);
 				}
 				else
 				{
@@ -76,7 +75,6 @@ namespace AllyisApps.Controllers.Auth
 
 			// login failed
 			ViewBag.ReturnUrl = returnUrl;
-
 			return View(model);
 		}
 
