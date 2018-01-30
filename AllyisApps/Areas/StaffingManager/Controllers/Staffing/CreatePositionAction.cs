@@ -70,7 +70,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			for (int k = 0; k < count; k++) tags[k] = temp[k];
 			return new EditPositionViewModel
 			{
-				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService.GetCountries()),
 				LocalizedStates = new Dictionary<string, string>(),
 				IsCreating = true,
 				OrganizationId = subInfo.OrganizationId,

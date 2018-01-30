@@ -54,7 +54,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				EIN = infos.EIN,
 				OrganizationId = customer.OrganizationId,
 				CustomerId = customerId,
-				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService.GetCountries()),
 				CustomerCode = infos.CustomerCode,
 				CanEditCustomers = AppService.CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId, false)
 			});

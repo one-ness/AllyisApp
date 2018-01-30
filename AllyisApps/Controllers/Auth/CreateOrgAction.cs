@@ -29,7 +29,7 @@ namespace AllyisApps.Controllers.Auth
 			model.IsCreating = true;
 
 			// create localized countries
-			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService);
+			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService.GetCountries());
 
 			return View(model);
 		}

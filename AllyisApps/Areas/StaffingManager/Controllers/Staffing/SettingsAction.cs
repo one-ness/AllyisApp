@@ -91,7 +91,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		{
 			StaffingSettingsViewModel result = new StaffingSettingsViewModel
 			{
-				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService.GetCountries()),
 				organizationId = orgId,
 				subscriptionId = subId,
 				subscriptionName = subName,

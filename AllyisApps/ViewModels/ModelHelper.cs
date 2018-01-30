@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AllyisApps.Lib;
-using AllyisApps.Resources;
-using AllyisApps.Services;
+﻿using AllyisApps.Lib;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.TimeTracker;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AllyisApps.ViewModels
 {
@@ -19,21 +17,21 @@ namespace AllyisApps.ViewModels
 		/// <summary>
 		/// Get a list of countries, name localized.
 		/// </summary>
-		/// <param name="service">The AppService object.</param>
-		/// <returns>A Dictionary(string, string) object.</returns>
-		public static Dictionary<string, string> GetLocalizedCountries(AppService service)
+		/// <returns>A Dictionary(string, string) object, that contains country code and localized name</returns>
+		public static Dictionary<string, string> GetLocalizedCountries(Dictionary<string, Country> countries)
 		{
+			if (countries == null) throw new ArgumentNullException(nameof(countries));
+
 			var result = new Dictionary<string, string>();
 
 			// create localized countries
-			var countries = service.GetCountries();
 			foreach (var item in countries)
 			{
 				// get the country name
 				string countryName = Utility.AggregateSpaces(item.Value.CountryName);
 
 				// use the country name in the resource file to get it's localized name
-				string localized = Countries.ResourceManager.GetString(countryName) ?? item.Value.CountryName;
+				string localized = Resources.Countries.ResourceManager.GetString(countryName) ?? item.Value.CountryName;
 
 				result.Add(item.Key, localized);
 			}
@@ -44,20 +42,16 @@ namespace AllyisApps.ViewModels
 		/// <summary>
 		/// Get a list of states for the given country, name localized.
 		/// </summary>
-		/// <param name="service">The service.</param>
-		/// <param name="countryCode">The country code.</param>
-		/// <returns>A Dictionary(string, string) object.</returns>
-		public static Dictionary<string, string> GetLocalizedStates(AppService service, string countryCode)
+		/// <returns>A Dictionary(string, string) object, that contains state id and state name.</returns>
+		public static Dictionary<string, string> GetLocalizedStates(List<State> states)
 		{
+			if (states == null) throw new ArgumentNullException(nameof(states));
+
 			var result = new Dictionary<string, string>();
-
-			if (string.IsNullOrWhiteSpace(countryCode)) return result;
-
-			var states = service.GetStates(countryCode);
 			foreach (State item in states)
 			{
 				string stateName = Utility.AggregateSpaces(item.StateName);
-				string localized = States.ResourceManager.GetString(stateName) ?? item.StateName;
+				string localized = Resources.States.ResourceManager.GetString(stateName) ?? item.StateName;
 				result.Add(item.StateId.ToString(), localized);
 			}
 
@@ -95,8 +89,8 @@ namespace AllyisApps.ViewModels
 		public static Dictionary<int, string> GetOrgRolesList()
 		{
 			var result = new Dictionary<int, string>();
-			result.Add((int)OrganizationRoleEnum.Member, Strings.Member);
-			result.Add((int)OrganizationRoleEnum.Owner, Strings.Owner);
+			result.Add((int)OrganizationRoleEnum.Member, Resources.Strings.Member);
+			result.Add((int)OrganizationRoleEnum.Owner, Resources.Strings.Owner);
 			return result;
 		}
 
@@ -106,9 +100,9 @@ namespace AllyisApps.ViewModels
 		public static Dictionary<int, string> GetTimeTrackerRolesList()
 		{
 			var result = new Dictionary<int, string>();
-			result.Add((int)TimeTrackerRole.NotInProduct, Strings.Unassigned);
-			result.Add((int)TimeTrackerRole.User, Strings.User);
-			result.Add((int)TimeTrackerRole.Manager, Strings.Manager);
+			result.Add((int)TimeTrackerRole.NotInProduct, Resources.Strings.Unassigned);
+			result.Add((int)TimeTrackerRole.User, Resources.Strings.User);
+			result.Add((int)TimeTrackerRole.Manager, Resources.Strings.Manager);
 			return result;
 		}
 
@@ -118,10 +112,10 @@ namespace AllyisApps.ViewModels
 		public static Dictionary<int, string> GetExpenseTrackerRolesList()
 		{
 			var result = new Dictionary<int, string>();
-			result.Add((int)ExpenseTrackerRole.NotInProduct, Strings.Unassigned);
-			result.Add((int)ExpenseTrackerRole.User, Strings.User);
-			result.Add((int)ExpenseTrackerRole.Manager, Strings.Manager);
-			result.Add((int)ExpenseTrackerRole.SuperUser, Strings.SuperUser);
+			result.Add((int)ExpenseTrackerRole.NotInProduct, Resources.Strings.Unassigned);
+			result.Add((int)ExpenseTrackerRole.User, Resources.Strings.User);
+			result.Add((int)ExpenseTrackerRole.Manager, Resources.Strings.Manager);
+			result.Add((int)ExpenseTrackerRole.SuperUser, Resources.Strings.SuperUser);
 			return result;
 		}
 
@@ -131,9 +125,9 @@ namespace AllyisApps.ViewModels
 		public static Dictionary<int, string> GetStaffingManagerRolesList()
 		{
 			var result = new Dictionary<int, string>();
-			result.Add((int)StaffingManagerRole.NotInProduct, Strings.Unassigned);
-			result.Add((int)StaffingManagerRole.User, Strings.User);
-			result.Add((int)StaffingManagerRole.Manager, Strings.Manager);
+			result.Add((int)StaffingManagerRole.NotInProduct, Resources.Strings.Unassigned);
+			result.Add((int)StaffingManagerRole.User, Resources.Strings.User);
+			result.Add((int)StaffingManagerRole.Manager, Resources.Strings.Manager);
 			return result;
 		}
 
@@ -148,7 +142,7 @@ namespace AllyisApps.ViewModels
 				.Cast<TimeEntryStatus>()
 				.ToDictionary(
 					enumValue => (int)enumValue,
-					enumValue => Strings.ResourceManager.GetString(enumValue.ToString()));
+					enumValue => Resources.Strings.ResourceManager.GetString(enumValue.ToString()));
 		}
 
 		/// <summary>

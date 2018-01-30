@@ -27,7 +27,7 @@ namespace AllyisApps.Controllers.Home
 		public JsonResult GetStates(string countryCode)
 		{
 			// NOTE: to serialize a dictionary to json, it can contain only strings
-			return Json(ModelHelper.GetLocalizedStates(AppService, countryCode));
+			return Json(ModelHelper.GetLocalizedStates(this.AppService.GetStates(countryCode)));
 		}
 	}
 }

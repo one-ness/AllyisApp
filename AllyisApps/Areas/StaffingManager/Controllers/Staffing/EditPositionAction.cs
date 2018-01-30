@@ -81,8 +81,8 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			return new EditPositionViewModel
 			{
 				PositionId = pos.PositionId,
-				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
-				LocalizedStates = ModelHelper.GetLocalizedStates(AppService, pos.Address.CountryCode),
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService.GetCountries()),
+				LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService.GetStates(pos.Address.CountryCode)),
 				IsCreating = false,
 				OrganizationId = subInfo.OrganizationId,
 				SubscriptionName = subscriptionNameToDisplay,

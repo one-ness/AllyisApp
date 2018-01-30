@@ -65,8 +65,8 @@ namespace AllyisApps.Controllers.Auth
 				FaxNumber = organization.FaxNumber,
 				CanDelete = canDelete,
 				EmployeeId = "value",//Value needed for model TODO: Seperate Edit and Create
-				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
-				LocalizedStates = ModelHelper.GetLocalizedStates(AppService, organization.Address?.CountryCode ?? string.Empty)
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService.GetCountries()),
+				LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService.GetStates(organization.Address?.CountryCode ?? string.Empty))
 			};
 
 			return View(model);

@@ -36,7 +36,7 @@ namespace AllyisApps.Controllers.Auth
 			var model = new RegisterViewModel
 			{
 				DateOfBirth = DateTime.UtcNow.AddYears(-18).AddDays(-1),
-				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService)
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService.GetCountries())
 			};
 
 			return View(model);
@@ -74,8 +74,8 @@ namespace AllyisApps.Controllers.Auth
 			}
 
 			// error
-			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService);
-			model.LocalizedStates = ModelHelper.GetLocalizedStates(AppService, model.SelectedCountryCode);
+			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService.GetCountries());
+			model.LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService.GetStates(model.SelectedCountryCode));
 			return View(model);
 		}
 	}

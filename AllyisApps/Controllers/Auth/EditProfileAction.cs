@@ -28,7 +28,7 @@ namespace AllyisApps.Controllers.Auth
 
 			var model = new EditProfileViewModel
 			{
-				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService.GetCountries()),
 				Address = user.Address?.Address1,
 				AddressId = user.Address?.AddressId,
 				City = user.Address?.City,
@@ -40,7 +40,7 @@ namespace AllyisApps.Controllers.Auth
 				PostalCode = user.Address?.PostalCode,
 				SelectedCountryCode = user.Address?.CountryCode,
 				SelectedStateId = user.Address?.StateId,
-				LocalizedStates = ModelHelper.GetLocalizedStates(AppService, user.Address?.CountryCode)
+				LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService.GetStates(user.Address?.CountryCode))
 			};
 
 			return View(model);
@@ -64,8 +64,8 @@ namespace AllyisApps.Controllers.Auth
 
 			// model error
 			User user = await AppService.GetCurrentUserAsync();
-			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService);
-			model.LocalizedStates = ModelHelper.GetLocalizedStates(AppService, model.SelectedCountryCode);
+			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService.GetCountries());
+			model.LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService.GetStates(model.SelectedCountryCode));
 			model.DateOfBirth = user.DateOfBirth;
 
 			return View(model);

@@ -94,7 +94,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			return new ViewPositionViewModel
 			{
 				PositionId = pos.PositionId,
-				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService.GetCountries()),
 				LocalizedStates = new Dictionary<string, string>(),
 				IsCreating = false,
 				OrganizationId = subInfo.OrganizationId,

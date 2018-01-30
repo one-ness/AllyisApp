@@ -70,9 +70,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				EIN = customer.EIN,
 				OrganizationId = customer.OrganizationId,
 				CustomerId = userId,
-				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
-				LocalizedStates = ModelHelper.GetLocalizedStates(AppService, customer.Address?.CountryCode),
-
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService.GetCountries()),
+				LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService.GetStates(customer.Address?.CountryCode)),
 				CustomerCode = customer.CustomerCode,
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subscriptionNameToDisplay
