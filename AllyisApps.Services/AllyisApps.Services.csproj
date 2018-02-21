@@ -106,7 +106,6 @@
     <Compile Include="Expense\ExpenseService.cs" />
     <Compile Include="Finance\FinanceService.cs" />
     <Compile Include="Lookup\Address.cs" />
-    <Compile Include="Lookup\AddressService.cs" />
     <Compile Include="Lookup\Country.cs" />
     <Compile Include="Lookup\State.cs" />
     <Compile Include="Project\PjmService.cs" />

@@ -720,6 +720,19 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// get address
+		/// </summary>
+		public Address getAddress(int? addressID)
+		{
+			if (addressID == null)
+			{
+				return null;
+			}
+			var address = DBHelper.getAddreess(addressID);
+			return InitializeAddress(address);
+		}
+
+		/// <summary>
 		/// Translates a <see cref="SubscriptionUserDBEntity"/> into a <see cref="SubscriptionUser"/>"/>.
 		/// </summary>
 		/// <param name="subUser">SubscriptionUserDBEntity instance.</param>
