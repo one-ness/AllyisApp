@@ -99,7 +99,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Address = new Address
 					{
 						Address1 = model.Address,
-						AddressId = model.AddressId,
+						AddressId = model.AddressId.HasValue ? model.AddressId.Value : 0,
 						City = model.City,
 						StateId = model.SelectedStateId,
 						StateName = model.State,

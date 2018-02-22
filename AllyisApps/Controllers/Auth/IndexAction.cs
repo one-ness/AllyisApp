@@ -39,7 +39,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>The Accound Index view model.</returns>
 		public async Task<AccountIndexViewModel> ConstuctIndexViewModel()
 		{
-			User accountInfo = await AppService.GetCurrentUserAsync();
+			User accountInfo = await this.AppService.GetCurrentUserAsync();
 
 			AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel
 			{
@@ -76,8 +76,8 @@ namespace AllyisApps.Controllers.Auth
 			var orgsList = accountInfo.Organizations;
 			foreach (var item in orgsList)
 			{
-				State state = AppService.GetStates(item.Address.CountryCode).Where(s => s.StateId == item.Address.StateId).FirstOrDefault();
-				Country country = AppService.GetCountries().Where(c => c.Key == item.Address.CountryCode).FirstOrDefault().Value;
+				State state = this.AppService.GetStates(item.Address.CountryCode).Where(s => s.StateId == item.Address.StateId).FirstOrDefault();
+				Country country = this.AppService.GetCountries().Where(c => c.Key == item.Address.CountryCode).FirstOrDefault().Value;
 
 				AccountIndexViewModel.OrganizationViewModel orgViewModel =
 				new AccountIndexViewModel.OrganizationViewModel
@@ -92,12 +92,12 @@ namespace AllyisApps.Controllers.Auth
 					Country = country?.CountryName,
 					SiteUrl = item.SiteUrl,
 					FaxNumber = item.FaxNumber,
-					IsCreateSubscriptionAllowed = AppService.CheckOrgAction(AppService.OrgAction.CreateSubscription, item.OrganizationId, false),
-					IsReadBillingDetailsAllowed = AppService.CheckOrgAction(AppService.OrgAction.ReadBilling, item.OrganizationId, false),
-					IsReadMembersListAllowed = AppService.CheckOrgAction(AppService.OrgAction.ReadUsersList, item.OrganizationId, false),
-					IsReadOrgDetailsAllowed = AppService.CheckOrgAction(AppService.OrgAction.ReadOrganization, item.OrganizationId, false),
-					IsReadPermissionsListAllowed = AppService.CheckOrgAction(AppService.OrgAction.ReadPermissions, item.OrganizationId, false),
-					IsReadSubscriptionsListAllowed = AppService.CheckOrgAction(AppService.OrgAction.ReadSubscriptions, item.OrganizationId, false)
+					IsCreateSubscriptionAllowed = this.AppService.CheckOrgAction(AllyisApps.Services.AppService.OrgAction.CreateSubscription, item.OrganizationId, false),
+					IsReadBillingDetailsAllowed = this.AppService.CheckOrgAction(AllyisApps.Services.AppService.OrgAction.ReadBilling, item.OrganizationId, false),
+					IsReadMembersListAllowed = this.AppService.CheckOrgAction(AllyisApps.Services.AppService.OrgAction.ReadUsersList, item.OrganizationId, false),
+					IsReadOrgDetailsAllowed = this.AppService.CheckOrgAction(AllyisApps.Services.AppService.OrgAction.ReadOrganization, item.OrganizationId, false),
+					IsReadPermissionsListAllowed = this.AppService.CheckOrgAction(AllyisApps.Services.AppService.OrgAction.ReadPermissions, item.OrganizationId, false),
+					IsReadSubscriptionsListAllowed = this.AppService.CheckOrgAction(AllyisApps.Services.AppService.OrgAction.ReadSubscriptions, item.OrganizationId, false)
 				};
 
 				// Add subscription info

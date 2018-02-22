@@ -588,97 +588,7 @@ namespace AllyisApps.Services
 
 		#region Info-DBEntity Conversions
 
-		/// <summary>
-		/// Initializes a <see cref="Address"/> from a <see cref="AddressDBEntity"/>.
-		/// </summary>
-		/// <param name="address">.</param>
-		/// <returns>.</returns>
-		public static Address InitializeAddress(AddressDBEntity address)
-		{
-			if (address == null)
-			{
-				return null;
-			}
 
-			return new Address
-			{
-				AddressId = address.AddressId,
-				Address1 = address.Address1,
-				Address2 = address.Address2,
-				City = address.City,
-				StateName = address.State,
-				PostalCode = address.PostalCode,
-				CountryCode = address.CountryCode,
-				StateId = address.StateId,
-				CountryName = address.Country
-			};
-		}
-
-		/// <summary>
-		/// Initialize address from dynamic infomation
-		/// </summary>
-		/// <param name="address"></param>
-		/// <returns></returns>
-		public static Address InitializeAddress(dynamic address)
-		{
-			if (address == null)
-			{
-				return null;
-			}
-
-			return new Address
-			{
-				AddressId = address.AddressId,
-				Address1 = address.Address1 ?? address.Address,
-				Address2 = address.Address2,
-				City = address.City,
-				StateName = address.State ?? address.StateName,
-				PostalCode = address.PostalCode,
-				CountryCode = address.CountryCode,
-				StateId = address.StateId,
-				CountryName = address.Country ?? address.CountryName
-			};
-		}
-
-		public static AddressDBEntity GetDBEntityFromAddress(Address address)
-		{
-			return new AddressDBEntity
-			{
-				AddressId = address?.AddressId,
-				Address1 = address?.Address1,
-				Address2 = address?.Address2,
-				City = address?.City,
-				Country = address?.CountryName,
-				CountryCode = address?.CountryCode,
-				CountryId = null,
-				PostalCode = address?.PostalCode,
-				State = address?.StateName,
-				StateId = address?.StateId
-			};
-		}
-
-		public Customer IntializeCustomer(CustomerDBEntity customer, bool loadAddress = true)
-		{
-			if (customer == null)
-			{
-				return null;
-			}
-			return new Customer
-			{
-				Address = loadAddress ? getAddress(customer.AddressId) : null,
-				ContactEmail = customer.ContactEmail,
-				ContactPhoneNumber = customer.ContactPhoneNumber,
-				CreatedUtc = customer.CreatedUtc,
-				CustomerId = customer.CustomerId,
-				CustomerCode = customer.CustomerCode,
-				EIN = customer.EIN,
-				FaxNumber = customer.FaxNumber,
-				CustomerName = customer.CustomerName,
-				OrganizationId = customer.OrganizationId,
-				Website = customer.Website,
-				IsActive = customer.IsActive
-			};
-		}
 
 		/// <summary>
 		/// Initializes a <see cref="Customer"/> from a query"/>.
@@ -749,7 +659,7 @@ namespace AllyisApps.Services
 				},
 				new AddressDBEntity
 				{
-					AddressId = customer.Address?.AddressId,
+					AddressId = (int)customer.Address?.AddressId,
 					Address1 = customer.Address?.Address1,
 					City = customer.Address?.City,
 					Country = customer.Address?.CountryName,

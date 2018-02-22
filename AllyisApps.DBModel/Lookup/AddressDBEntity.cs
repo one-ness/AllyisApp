@@ -8,7 +8,7 @@
 		/// <summary>
 		/// Gets or sets the address' Id
 		/// </summary>
-		public int? AddressId { get; set; }
+		public int AddressId { get; set; }
 
 		/// <summary>
 		/// Gets or sets address1

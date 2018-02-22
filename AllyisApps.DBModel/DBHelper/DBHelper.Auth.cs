@@ -124,6 +124,17 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// get user from the db
+		/// </summary>
+		public async Task<UserDBEntity> GetUser2Async(int userId)
+		{
+			using (var con = new SqlConnection(SqlConnectionString))
+			{
+				return (await con.QueryAsync<UserDBEntity>("[Auth].[GetUser] @a", new { a = userId })).FirstOrDefault();
+			}
+		}
+
+		/// <summary>
 		///  update the given user profile
 		/// </summary>
 		public async Task UpdateUserProfile(

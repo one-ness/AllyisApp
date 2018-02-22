@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using AllyisApps.Services.Lookup;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Services.Auth
 {
@@ -38,7 +39,12 @@ namespace AllyisApps.Services.Auth
 		public DateTime DateOfBirth { get; set; }
 
 		/// <summary>
-		/// Gets or sets the User's address.
+		/// gets or sets the address id
+		/// </summary>
+		public int? AddressId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the User's address, for the above user address
 		/// </summary>
 		public Address Address { get; set; }
 
@@ -127,6 +133,13 @@ namespace AllyisApps.Services.Auth
 		/// </summary>
 		public List<Invitation> Invitations { get; set; }
 
+		public bool IsAddressLoaded { get; internal set; }
+
+		public bool IsInvitationsLoaded { get; internal set; }
+
+		public bool IsUserOrganizationsLoaded { get; internal set; }
+
+		public bool IsUserSubscriptionsLoaded { get; internal set; }
 
 		/// <summary>
 		/// constructor

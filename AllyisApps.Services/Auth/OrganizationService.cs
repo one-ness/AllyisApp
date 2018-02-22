@@ -450,7 +450,7 @@ namespace AllyisApps.Services
 
 			var result = new OrganizationUser();
 			result.AccessFailedCount = entity.AccessFailedCount;
-			result.Address = InitializeAddress(entity);
+			result.Address = this.InitializeAddress(entity);
 			result.DateOfBirth = entity.DateOfBirth;
 			result.Email = entity.Email;
 			result.EmailConfirmationCode = entity.EmailConfirmationCode;
@@ -498,7 +498,7 @@ namespace AllyisApps.Services
 				PhoneNumber = entity.PhoneNumber,
 				SiteUrl = entity.SiteUrl,
 				Subdomain = entity.Subdomain,
-				Address = loadAddress ? getAddress(entity.AddressId) : null,
+				Address = (loadAddress && entity.AddressId.HasValue) ? this.GetAddress(entity.AddressId.Value) : null,
 				UserCount = entity.UserCount
 			};
 		}
@@ -508,7 +508,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="organizationInfo">OrganizationDBEntity instance.</param>
 		/// <returns>Organization instance.</returns>
-		public static Organization InitializeOrganization(dynamic organizationInfo)
+		public Organization InitializeOrganization(dynamic organizationInfo)
 		{
 			if (organizationInfo == null)
 			{
@@ -518,7 +518,7 @@ namespace AllyisApps.Services
 
 			if (organizationInfo.AddressId != null)
 			{
-				address = InitializeAddress(organizationInfo);
+				address = this.InitializeAddress(organizationInfo);
 			}
 
 			return new Organization

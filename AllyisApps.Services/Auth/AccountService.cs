@@ -323,6 +323,53 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// options to load various information along with user
+		/// </summary>
+		public enum UserLoadOption : int
+		{
+			LoadNone = 0,
+			LoadAddress = 1,
+			LoadInvitations = 2,
+			LoadUserOrganizations = 4,
+			LoadUserSubscriptions = 8,
+			LoadAll = 65535,
+		}
+
+		public async Task<User> GetUser2Async(int userId, UserLoadOption loadOptions = UserLoadOption.LoadNone)
+		{
+			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId));
+
+			User result = null;
+			var user = await this.DBHelper.GetUser2Async(userId);
+			if (user != null)
+			{
+				result = this.InitializeUser(user);
+				if ((loadOptions & UserLoadOption.LoadAddress) == UserLoadOption.LoadAddress && result.AddressId.HasValue)
+				{
+					result.Address = this.GetAddress(result.AddressId.Value);
+					result.IsAddressLoaded = true;
+				}
+
+				if ((loadOptions & UserLoadOption.LoadInvitations) == UserLoadOption.LoadInvitations)
+				{
+					// load the invitations
+				}
+
+				if ((loadOptions & UserLoadOption.LoadUserOrganizations) == UserLoadOption.LoadUserOrganizations)
+				{
+					// load the user organizations
+				}
+
+				if ((loadOptions & UserLoadOption.LoadUserSubscriptions) == UserLoadOption.LoadUserSubscriptions)
+				{
+					// load the user subscriptions
+				}
+			}
+
+			return result;
+		}
+
+		/// <summary>
 		/// get user
 		/// - address, organizations, subscriptions and invitations
 		/// </summary>
@@ -656,29 +703,6 @@ namespace AllyisApps.Services
 			return DBHelper.GetOrganizationsByUserId(userId).Select(o => (Organization)InitializeOrganization(o));
 		}
 
-		private User InitializeUser(dynamic user)
-		{
-			return new User
-			{
-				AccessFailedCount = user.AccessFailedCount,
-				DateOfBirth = user.DateOfBirth,
-				Email = user.Email,
-				IsEmailConfirmed = user.IsEmailConfirmed,
-				FirstName = user.FirstName,
-				LastName = user.LastName,
-				IsLockoutEnabled = user.IsLockoutEnabled,
-				LockoutEndDateUtc = user.LockoutEndDateUtc,
-				PasswordHash = user.PasswordHash,
-				PasswordResetCode = user.PasswordResetCode,
-				PhoneExtension = user.PhoneExtension,
-				PhoneNumber = user.PhoneNumber,
-				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
-				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
-				UserId = user.UserId,
-				Address = InitializeAddress(user)
-			};
-		}
-
 		/// <summary>
 		/// Translates a UserDBEntity into a User business object.
 		/// </summary>
@@ -693,14 +717,15 @@ namespace AllyisApps.Services
 			}
 
 			Address address = null;
-			if (user.AddressId != null && loadAddress)
+			if (user.AddressId.HasValue && loadAddress)
 			{
-				address = getAddress(user.AddressId);
+				address = this.GetAddress(user.AddressId.Value);
 			}
 
 			return new User
 			{
 				AccessFailedCount = user.AccessFailedCount,
+				AddressId = user.AddressId,
 				DateOfBirth = user.DateOfBirth,
 				Email = user.Email,
 				IsEmailConfirmed = user.IsEmailConfirmed,
@@ -717,19 +742,6 @@ namespace AllyisApps.Services
 				UserId = user.UserId,
 				Address = address
 			};
-		}
-
-		/// <summary>
-		/// get address
-		/// </summary>
-		public Address getAddress(int? addressID)
-		{
-			if (addressID == null)
-			{
-				return null;
-			}
-			var address = DBHelper.getAddreess(addressID);
-			return InitializeAddress(address);
 		}
 
 		/// <summary>
