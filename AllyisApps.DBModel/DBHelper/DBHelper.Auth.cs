@@ -82,7 +82,7 @@ namespace AllyisApps.DBModel
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var result = await connection.QueryAsync<dynamic>("[Auth].[GetUserOrganizations] @a", new { @a = userId });
+				var result = await connection.QueryAsync<dynamic>("[Auth].[GetUserOrganizations] @a", new { a = userId });
 				return result.ToList();
 			}
 		}
@@ -113,7 +113,7 @@ namespace AllyisApps.DBModel
 			dynamic result = new ExpandoObject();
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				var res = await con.QueryMultipleAsync("[Auth].[GetUser]", new { userId }, commandType: CommandType.StoredProcedure);
+				var res = await con.QueryMultipleAsync("[Auth].[GetUser] @a", new { a = userId }, commandType: CommandType.StoredProcedure);
 				result.User = res.Read().FirstOrDefault();
 				result.Organizations = res.Read().ToList();
 				result.Subscriptions = res.Read().ToList();

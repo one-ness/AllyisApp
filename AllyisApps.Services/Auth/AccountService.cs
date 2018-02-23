@@ -382,8 +382,8 @@ namespace AllyisApps.Services
 				temp.EmployeeTypeId = item.EmployeeTypeId;
 				temp.FaxNumber = item.FaxNumber;
 				temp.IsActive = item.IsActive;
-				temp.JoinedDateUtc = item.JoinedDateUtc;
-				temp.MaxApprovalAmount = item.ApprovalAmount;
+				temp.JoinedDateUtc = item.OrganizationUserCreatedUtc;
+				temp.MaxApprovalAmount = item.MaxAmount;
 				temp.OrganizationId = item.OrganizationId;
 				temp.OrganizationName = item.OrganizationName;
 				temp.OrganizationRole = (OrganizationRoleEnum)item.OrganizationRoleId;

@@ -84,19 +84,25 @@ namespace AllyisApps.DBModel
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<LanguageDBEntity>("[Lookup].[GetLanguageById]", new { CultureName = CultureName }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				return connection.Query<LanguageDBEntity>("[Lookup].[GetLanguageById] @a", new { a = CultureName }).FirstOrDefault();
 			}
 		}
 
 		/// <summary>
 		/// Get Address based on addressId
 		/// </summary>
-		public AddressDBEntity GetAddreess(int? addressId)
+		public AddressDBEntity GetAddress(int? addressId)
 		{
-			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			AddressDBEntity result = null;
+			if (addressId.HasValue)
 			{
-				return connection.Query<AddressDBEntity>("[Lookup].[GetAddress] @a", new { a = addressId }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+				{
+					result = connection.Query<AddressDBEntity>("[Lookup].[GetAddress] @a", new { a = addressId }).FirstOrDefault();
+				}
 			}
+
+			return result;
 		}
 	}
 }

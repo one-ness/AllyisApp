@@ -95,6 +95,8 @@
     <Folder Include="StaffingManager\User Defined Types" />
     <Folder Include="Auth\Functions" />
     <Folder Include="Crm\Functions" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Functions\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TimeTracker\Tables\Holiday.sql" />
@@ -414,6 +416,9 @@
     <Build Include="TimeTracker\Stored Procedures\UpdateOvertimeChangedFlag.sql" />
     <Build Include="Auth\Stored Procedures\GetUserOrganizations.sql" />
     <Build Include="Auth\Stored Procedures\GetUser2.sql" />
+    <Build Include="Auth\Stored Procedures\GetInvitationsByEmail.sql" />
+    <Build Include="dbo\Functions\SplitNumberString.sql" />
+    <Build Include="Auth\Stored Procedures\GetOrganizationsByIds.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

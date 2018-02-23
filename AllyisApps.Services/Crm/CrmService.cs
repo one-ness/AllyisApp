@@ -660,12 +660,12 @@ namespace AllyisApps.Services
 
 				new AddressDBEntity
 				{
-					AddressId = (int)customer.Address?.AddressId,
+					AddressId = customer.Address == null ? 0 : customer.Address.AddressId,
 					Address1 = customer.Address?.Address1,
 					City = customer.Address?.City,
 					CountryCode = customer.Address?.CountryCode,
 					PostalCode = customer.Address?.PostalCode,
-					StateId = customer.Address?.StateId
+					StateId = customer.Address == null ? 0 : customer.Address.StateId
 				});
 		}
 

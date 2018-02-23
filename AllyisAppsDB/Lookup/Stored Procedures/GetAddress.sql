@@ -1,6 +1,8 @@
 ﻿CREATE PROCEDURE [Lookup].[GetAddress]
-	@addresId int
+	@addressId int
 AS
-BEGIN 
-	SELECT * FROM [Lookup].[Address] WHERE [Address].AddressId = @addresId
+BEGIN
+	set nocount on
+	select * from [Address] with (nolock)
+	where AddressId = @addressId
 END

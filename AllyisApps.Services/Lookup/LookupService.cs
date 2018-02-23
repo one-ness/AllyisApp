@@ -80,7 +80,7 @@ namespace AllyisApps.Services
 			Address result = null;
 			if (addressId.HasValue)
 			{
-				var address = this.DBHelper.GetAddreess(addressId);
+				var address = this.DBHelper.GetAddress(addressId);
 				result = this.InitializeAddress(address);
 			}
 
