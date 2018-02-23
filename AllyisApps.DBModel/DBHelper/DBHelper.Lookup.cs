@@ -91,18 +91,12 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Get Address based on addressId
 		/// </summary>
-		public AddressDBEntity GetAddress(int? addressId)
+		public AddressDBEntity GetAddress(int addressId)
 		{
-			AddressDBEntity result = null;
-			if (addressId.HasValue)
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				using (SqlConnection connection = new SqlConnection(SqlConnectionString))
-				{
-					result = connection.Query<AddressDBEntity>("[Lookup].[GetAddress] @a", new { a = addressId }).FirstOrDefault();
-				}
+				return connection.Query<AddressDBEntity>("[Lookup].[GetAddress] @a", new { a = addressId }).FirstOrDefault();
 			}
-
-			return result;
 		}
 	}
 }

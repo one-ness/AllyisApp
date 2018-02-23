@@ -80,8 +80,11 @@ namespace AllyisApps.Services
 			Address result = null;
 			if (addressId.HasValue)
 			{
-				var address = this.DBHelper.GetAddress(addressId);
-				result = this.InitializeAddress(address);
+				var address = this.DBHelper.GetAddress(addressId.Value);
+				if (address != null)
+				{
+					result = this.InitializeAddress(address);
+				}
 			}
 
 			return result;
@@ -92,11 +95,6 @@ namespace AllyisApps.Services
 		/// </summary>
 		public Address InitializeAddress(AddressDBEntity address)
 		{
-			if (address == null)
-			{
-				return null;
-			}
-
 			return new Address
 			{
 				AddressId = address.AddressId,
