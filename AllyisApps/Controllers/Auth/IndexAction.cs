@@ -41,7 +41,6 @@ namespace AllyisApps.Controllers.Auth
 		{
 			var result = new AccountIndexViewModel();
 			var user = await this.AppService.GetUser2Async(this.AppService.UserContext.UserId);
-			//User user = await this.AppService.GetCurrentUserAsync();
 
 			AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel
 			{
