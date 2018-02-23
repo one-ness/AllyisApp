@@ -15,6 +15,7 @@ namespace AllyisApps.Services.Auth
 	{
 		public int UserId { get; set; }
 		public string EmployeeId { get; set; }
+		public int EmployeeTypeId { get; set; }
 		public OrganizationRoleEnum OrganizationRole { get; set; }
 		public decimal? MaxApprovalAmount { get; set; }
 		public DateTime JoinedDateUtc { get; set; }

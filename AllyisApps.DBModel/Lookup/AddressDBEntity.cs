@@ -26,11 +26,6 @@
 		public string City { get; set; }
 
 		/// <summary>
-		/// Get or sets the State
-		/// </summary>
-		public string State { get; set; }
-
-		/// <summary>
 		/// Gets or sets the state id
 		/// </summary>
 		public int? StateId { get; set; }
@@ -39,11 +34,6 @@
 		/// Gets or sets the PostalCode
 		/// </summary>
 		public string PostalCode { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Country
-		/// </summary>
-		public string Country { get; set; }
 
 		/// <summary>
 		/// Gets or sets the country id

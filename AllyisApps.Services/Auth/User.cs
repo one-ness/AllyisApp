@@ -39,11 +39,6 @@ namespace AllyisApps.Services.Auth
 		public DateTime DateOfBirth { get; set; }
 
 		/// <summary>
-		/// gets or sets the address id
-		/// </summary>
-		public int? AddressId { get; set; }
-
-		/// <summary>
 		/// Gets or sets the User's address, for the above user address
 		/// </summary>
 		public Address Address { get; set; }

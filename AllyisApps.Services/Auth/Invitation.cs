@@ -6,6 +6,7 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using AllyisApps.Lib;
 
 namespace AllyisApps.Services.Auth
 {
@@ -28,7 +29,13 @@ namespace AllyisApps.Services.Auth
 		/// <summary>
 		/// Gets or sets the Compressed version of email address, for display.
 		/// </summary>
-		public string CompressedEmail { get; set; }
+		public string CompressedEmail
+		{
+			get
+			{
+				return Utility.GetCompressedEmail(this.Email);
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the First name.
@@ -44,11 +51,6 @@ namespace AllyisApps.Services.Auth
 		/// Gets or sets the Organization Id.
 		/// </summary>
 		public int OrganizationId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Organization Name.
-		/// </summary>
-		public string OrganizationName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the EmployeeTypeId.
@@ -79,7 +81,11 @@ namespace AllyisApps.Services.Auth
         /// invitation status
         /// </summary>
         public InvitationStatusEnum InvitationStatus { get; set; }
-		public OrganizationRoleEnum OrganizaionRole { get;  set; }
+
+		/// <summary>
+		/// organization role
+		/// </summary>
+		public OrganizationRoleEnum OrganizationRole { get;  set; }
 	}
 
 	public class InvitationPermissionsJson

@@ -24,7 +24,7 @@ namespace AllyisApps.Controllers.Auth
 			if (result)
 			{
 				Invitation invitation = await AppService.GetInvitation(id);
-				Notifications.Add(new BootstrapAlert(string.Format(Strings.AcceptInvitationSuccess, invitation.OrganizationName), Variety.Success));
+				//Notifications.Add(new BootstrapAlert(string.Format(Strings.AcceptInvitationSuccess, invitation.OrganizationName), Variety.Success));
 			}
 			else
 			{

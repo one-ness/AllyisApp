@@ -70,7 +70,7 @@ namespace AllyisApps.Services
 				LastName = item.LastName,
 				OrganizationId = orgId,
 				ProductRolesJson = item.ProductRolesJson,
-				OrganizaionRole = (OrganizationRoleEnum)item.OrganizationRoleId
+				OrganizationRole = (OrganizationRoleEnum)item.OrganizationRoleId
 			})
 				.ToList();
 		}
@@ -550,12 +550,10 @@ namespace AllyisApps.Services
 			return new Invitation
 			{
 				Email = invitation.Email,
-				CompressedEmail = Utility.GetCompressedEmail(invitation.Email),
 				FirstName = invitation.FirstName,
 				InvitationId = invitation.InvitationId,
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
-				OrganizationName = invitation.OrganizationName,
 				EmployeeId = invitation.EmployeeId,
 				DecisionDateUtc = invitation.DecisionDateUtc,
 				InvitationStatus = (InvitationStatusEnum)invitation.InvitationStatus,

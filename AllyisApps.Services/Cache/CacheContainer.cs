@@ -38,7 +38,12 @@ namespace AllyisApps.Services.Cache
 		/// <summary>
 		/// dictionary of all states, indexed by country code
 		/// </summary>
-		public static Dictionary<string, List<State>> StatesCache { get; set; }
+		public static Dictionary<string, List<State>> StatesForCountryCache { get; set; }
+
+		/// <summary>
+		/// dictionary of all states, indexed by state id
+		/// </summary>
+		public static Dictionary<int, State> AllStatesCache { get; set; }
 
 		private static string sqlConnectionString;
 		private static DBHelper DBHelper;
@@ -52,7 +57,8 @@ namespace AllyisApps.Services.Cache
 			DBHelper = new DBHelper(sqlConnectionString);
 
 			// init states
-			StatesCache = new Dictionary<string, List<State>>();
+			StatesForCountryCache = new Dictionary<string, List<State>>();
+			AllStatesCache = new Dictionary<int, State>();
 			var stateEntities = DBHelper.GetAllStates();
 			foreach (var item in stateEntities)
 			{
@@ -62,7 +68,7 @@ namespace AllyisApps.Services.Cache
 				state.StateName = item.Value.StateName;
 				// does it exist in cache?
 				List<State> list = null;
-				if (StatesCache.TryGetValue(state.CountryCode, out list))
+				if (StatesForCountryCache.TryGetValue(state.CountryCode, out list))
 				{
 					// yes
 					list.Add(state);
@@ -72,8 +78,11 @@ namespace AllyisApps.Services.Cache
 					// no
 					list = new List<State>();
 					list.Add(state);
-					StatesCache.Add(state.CountryCode, list);
+					StatesForCountryCache.Add(state.CountryCode, list);
 				}
+
+				// add it to all states cache
+				AllStatesCache.Add(state.StateId, state);
 			}
 
 			// init countries
@@ -86,7 +95,7 @@ namespace AllyisApps.Services.Cache
 				country.CountryId = item.Value.CountryId;
 				country.CountryName = item.Value.CountryName;
 				List<State> states = null;
-				if (StatesCache.TryGetValue(country.CountryCode, out states))
+				if (StatesForCountryCache.TryGetValue(country.CountryCode, out states))
 				{
 					country.States = states;
 				}

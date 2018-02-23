@@ -28,34 +28,6 @@ namespace AllyisApps.Services
 	/// </summary>
 	public partial class AppService : BaseService
 	{
-		/// <summary>
-		/// Gets the list of valid countries.
-		/// </summary>
-		/// <returns>A collection of valid countries.</returns>
-		public Dictionary<string, Country> GetCountries()
-		{
-			return CacheContainer.CountriesCache;
-		}
-
-		/// <summary>
-		/// get the list of states for the given country
-		/// </summary>
-		public List<State> GetStates(string countryCode)
-		{
-			try
-			{
-				return CacheContainer.StatesCache[countryCode].OrderBy(s => s.StateName).ToList();
-			}
-			catch (KeyNotFoundException)
-			{
-				return new List<State>();
-			}
-			catch (ArgumentNullException)
-			{
-				return new List<State>();
-			}
-		}
-
 		public bool DeleteExpenseItem(int itemId)
 		{
 			return DBHelper.DeleteExpenseItem(itemId);
@@ -344,26 +316,84 @@ namespace AllyisApps.Services
 			if (user != null)
 			{
 				result = this.InitializeUser(user);
-				if ((loadOptions & UserLoadOption.LoadAddress) == UserLoadOption.LoadAddress && result.AddressId.HasValue)
+				if ((loadOptions & UserLoadOption.LoadAddress) == UserLoadOption.LoadAddress)
 				{
-					result.Address = this.GetAddress(result.AddressId.Value);
+					result.Address = this.GetAddress(user.AddressId);
 					result.IsAddressLoaded = true;
 				}
 
 				if ((loadOptions & UserLoadOption.LoadInvitations) == UserLoadOption.LoadInvitations)
 				{
 					// load the invitations
+					result.Invitations = await this.GetInvitationsByEmailAsync(user.Email);
+					result.IsInvitationsLoaded = true;
 				}
 
 				if ((loadOptions & UserLoadOption.LoadUserOrganizations) == UserLoadOption.LoadUserOrganizations)
 				{
 					// load the user organizations
+					result.Organizations = await this.GetUserOrganizationsAsync(userId);
+					result.IsUserOrganizationsLoaded = true;
 				}
 
 				if ((loadOptions & UserLoadOption.LoadUserSubscriptions) == UserLoadOption.LoadUserSubscriptions)
 				{
 					// load the user subscriptions
 				}
+			}
+
+			return result;
+		}
+
+		private async Task<List<Invitation>> GetInvitationsByEmailAsync(string email)
+		{
+			var result = new List<Invitation>();
+			var entities = await this.DBHelper.GetInvitationsByEmailAsync(email, (int)InvitationStatusEnum.Pending);
+			foreach (var item in entities)
+			{
+				var temp = new Invitation();
+				temp.Email = email;
+				temp.EmployeeId = item.EmployeeId;
+				temp.EmployeeTypeId = item.EmployeeTypeId;
+				temp.FirstName = item.FirstName;
+				temp.InvitationCreatedUtc = item.InvitationCreatedUtc;
+				temp.InvitationId = item.InvitationId;
+				temp.InvitationStatus = (InvitationStatusEnum)item.InvitationStatus;
+				temp.LastName = item.LastName;
+				temp.OrganizationId = item.OrganizationId;
+				temp.OrganizationRole = (OrganizationRoleEnum)item.OrganizationRoleId;
+				temp.ProductRolesJson = item.ProductRolesJson;
+				result.Add(temp);
+			}
+
+			return result;
+		}
+
+		private async Task<List<UserOrganization>> GetUserOrganizationsAsync(int userId)
+		{
+			var result = new List<UserOrganization>();
+			dynamic entities = await this.DBHelper.GetUserOrganizationsAsync(userId);
+			foreach (dynamic item in entities)
+			{
+				var temp = new UserOrganization();
+				temp.Address = this.GetAddress(item.AddressId);
+				temp.CreatedUtc = item.OrganizationCreatedUtc;
+				temp.EmployeeId = item.EmployeeId;
+				temp.EmployeeTypeId = item.EmployeeTypeId;
+				temp.FaxNumber = item.FaxNumber;
+				temp.IsActive = item.IsActive;
+				temp.JoinedDateUtc = item.JoinedDateUtc;
+				temp.MaxApprovalAmount = item.ApprovalAmount;
+				temp.OrganizationId = item.OrganizationId;
+				temp.OrganizationName = item.OrganizationName;
+				temp.OrganizationRole = (OrganizationRoleEnum)item.OrganizationRoleId;
+				temp.PhoneNumber = item.PhoneNumber;
+				temp.SiteUrl = item.SiteUrl;
+				temp.StripeToken = item.StripeToken;
+				temp.Subdomain = item.Subdomain;
+				temp.UserCount = item.UserCount;
+				temp.UserId = item.UserId;
+				result.Add(temp);
 			}
 
 			return result;
@@ -438,7 +468,6 @@ namespace AllyisApps.Services
 			foreach (var item in invites)
 			{
 				Invitation invite = new Invitation();
-				invite.CompressedEmail = item.Email;
 				invite.Email = item.Email;
 				invite.EmployeeId = item.EmployeeId;
 				invite.FirstName = item.FirstName;
@@ -447,7 +476,6 @@ namespace AllyisApps.Services
 				invite.InvitationStatus = (InvitationStatusEnum)item.InvitationStatus;
 				invite.LastName = item.LastName;
 				invite.OrganizationId = item.OrganizationId;
-				invite.OrganizationName = item.OrganizationName;
 				invite.ProductRolesJson = item.ProductRolesJson;
 				user.Invitations.Add(invite);
 			}
@@ -725,7 +753,6 @@ namespace AllyisApps.Services
 			return new User
 			{
 				AccessFailedCount = user.AccessFailedCount,
-				AddressId = user.AddressId,
 				DateOfBirth = user.DateOfBirth,
 				Email = user.Email,
 				IsEmailConfirmed = user.IsEmailConfirmed,

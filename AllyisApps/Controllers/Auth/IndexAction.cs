@@ -39,46 +39,40 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>The Accound Index view model.</returns>
 		public async Task<AccountIndexViewModel> ConstuctIndexViewModel()
 		{
-			User accountInfo = await this.AppService.GetCurrentUserAsync();
+			var result = new AccountIndexViewModel();
+			var user = await this.AppService.GetUser2Async(this.AppService.UserContext.UserId);
+			//User user = await this.AppService.GetCurrentUserAsync();
 
 			AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel
 			{
-				FirstName = accountInfo.FirstName,
-				LastName = accountInfo.LastName,
-				Email = accountInfo.Email,
-				PhoneNumber = accountInfo.PhoneNumber,
-				PhoneExtension = accountInfo.PhoneExtension,
-				Address1 = accountInfo.Address?.Address1,
-				Address2 = accountInfo.Address?.Address2,
-				City = accountInfo.Address?.City,
-				State = accountInfo.Address?.StateName,
-				PostalCode = accountInfo.Address?.PostalCode,
-				Country = accountInfo.Address?.CountryName,
+				FirstName = user.FirstName,
+				LastName = user.LastName,
+				Email = user.Email,
+				PhoneNumber = user.PhoneNumber,
+				PhoneExtension = user.PhoneExtension,
+				Address1 = user.Address?.Address1,
+				Address2 = user.Address?.Address2,
+				City = user.Address?.City,
+				State = user.Address?.StateName,
+				PostalCode = user.Address?.PostalCode,
+				Country = user.Address?.CountryName,
 			};
-
-			AccountIndexViewModel indexViewModel = new AccountIndexViewModel
-			{
-				UserInfo = userViewModel
-			};
+																							  
+			result.UserInfo = userViewModel;
 
 			// Add invitations to view model
-			var invitationsList = accountInfo.Invitations;
-			foreach (var item in invitationsList)
+			foreach (var item in user.Invitations)
 			{
-				indexViewModel.Invitations.Add(new AccountIndexViewModel.InvitationViewModel
+				result.Invitations.Add(new AccountIndexViewModel.InvitationViewModel
 				{
 					InvitationId = item.InvitationId,
-					OrganizationName = item.OrganizationName
+					//OrganizationName = item.OrganizationName
 				});
 			}
 
 			// Add organizations to model
-			var orgsList = accountInfo.Organizations;
-			foreach (var item in orgsList)
+			foreach (var item in user.Organizations)
 			{
-				State state = this.AppService.GetStates(item.Address.CountryCode).Where(s => s.StateId == item.Address.StateId).FirstOrDefault();
-				Country country = this.AppService.GetCountries().Where(c => c.Key == item.Address.CountryCode).FirstOrDefault().Value;
-
 				AccountIndexViewModel.OrganizationViewModel orgViewModel =
 				new AccountIndexViewModel.OrganizationViewModel
 				{
@@ -87,9 +81,9 @@ namespace AllyisApps.Controllers.Auth
 					PhoneNumber = item.PhoneNumber,
 					Address1 = item.Address?.Address1,
 					City = item.Address?.City,
-					State = state?.StateName,
+					State = item.Address?.StateName,
 					PostalCode = item.Address?.PostalCode,
-					Country = country?.CountryName,
+					Country = item.Address?.CountryName,
 					SiteUrl = item.SiteUrl,
 					FaxNumber = item.FaxNumber,
 					IsCreateSubscriptionAllowed = this.AppService.CheckOrgAction(AllyisApps.Services.AppService.OrgAction.CreateSubscription, item.OrganizationId, false),
@@ -101,7 +95,7 @@ namespace AllyisApps.Controllers.Auth
 				};
 
 				// Add subscription info
-				foreach (var subItem in accountInfo.Subscriptions
+				foreach (var subItem in user.Subscriptions
 					.Where(sub => sub.OrganizationId == item.OrganizationId  && sub.ProductRoleId != 0 )
 					.OrderBy(sub => sub.ProductId))
 				{
@@ -152,10 +146,10 @@ namespace AllyisApps.Controllers.Auth
 					orgViewModel.Subscriptions.Add(subViewModel);
 				}
 
-				indexViewModel.Organizations.Add(orgViewModel);
+				result.Organizations.Add(orgViewModel);
 			}
 
-			return indexViewModel;
+			return result;
 		}
 
 		/// <summary>

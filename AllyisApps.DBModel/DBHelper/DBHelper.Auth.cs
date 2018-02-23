@@ -78,7 +78,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// get a list of organizations that user is member of. (note: the organization has to be active)
 		/// </summary>
-		public async Task<dynamic> GetUserOrganizations(int userId)
+		public async Task<dynamic> GetUserOrganizationsAsync(int userId)
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
@@ -130,7 +130,18 @@ namespace AllyisApps.DBModel
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return (await con.QueryAsync<UserDBEntity>("[Auth].[GetUser] @a", new { a = userId })).FirstOrDefault();
+				return (await con.QueryAsync<UserDBEntity>("[Auth].[GetUser2] @a", new { a = userId })).FirstOrDefault();
+			}
+		}
+
+		/// <summary>
+		/// get the invitations for the given user
+		/// </summary>
+		public async Task<List<InvitationDBEntity>> GetInvitationsByEmailAsync(string email, int statusMask)
+		{
+			using (var con = new SqlConnection(SqlConnectionString))
+			{
+				return (await con.QueryAsync<InvitationDBEntity>("[Auth].[GetInvitationsByEmail] @a, @b", new { a = email, b = statusMask })).ToList();
 			}
 		}
 

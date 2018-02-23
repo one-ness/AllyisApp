@@ -89,15 +89,13 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Get Address based on addres ID
+		/// Get Address based on addressId
 		/// </summary>
-		/// <param name="addressID"></param>
-		/// <returns></returns>
-		public AddressDBEntity getAddreess(int? addressID)
+		public AddressDBEntity GetAddreess(int? addressId)
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<AddressDBEntity>("[Lookup].[GetAddress]", new { addresId = addressID }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				return connection.Query<AddressDBEntity>("[Lookup].[GetAddress] @a", new { a = addressId }, commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
 		}
 	}

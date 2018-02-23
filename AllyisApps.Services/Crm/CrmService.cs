@@ -657,15 +657,14 @@ namespace AllyisApps.Services
 					Website = customer.Website,
 					IsActive = customer.IsActive
 				},
+
 				new AddressDBEntity
 				{
 					AddressId = (int)customer.Address?.AddressId,
 					Address1 = customer.Address?.Address1,
 					City = customer.Address?.City,
-					Country = customer.Address?.CountryName,
 					CountryCode = customer.Address?.CountryCode,
 					PostalCode = customer.Address?.PostalCode,
-					State = customer.Address?.StateName,
 					StateId = customer.Address?.StateId
 				});
 		}
