@@ -53,6 +53,11 @@ namespace AllyisApps.Services.Auth
 		public int OrganizationId { get; set; }
 
 		/// <summary>
+		/// gets or sets the organization name
+		/// </summary>
+		public string OrganizationName { get; set; }
+
+		/// <summary>
 		/// Gets or sets the EmployeeTypeId.
 		/// </summary>
 		public int EmployeeTypeId { get; set; }

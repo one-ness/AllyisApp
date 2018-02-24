@@ -307,7 +307,7 @@ namespace AllyisApps.Services
 			LoadAll = 65535,
 		}
 
-		public async Task<User> GetUser2Async(int userId, UserLoadOption loadOptions = UserLoadOption.LoadNone)
+		public async Task<User> GetCurrentUserDetailsAsync(int userId, UserLoadOption loadOptions = UserLoadOption.LoadNone)
 		{
 			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId));
 
@@ -326,6 +326,28 @@ namespace AllyisApps.Services
 				{
 					// load the invitations
 					result.Invitations = await this.GetInvitationsByEmailAsync(user.Email);
+
+					if (result.Invitations.Count > 0)
+					{
+						// get org ids of all inviations
+						List<int> orgIds = new List<int>();
+						foreach (var item in result.Invitations)
+						{
+							orgIds.Add(item.OrganizationId);
+						}
+
+						// get those org details
+						var orgs = await this.DBHelper.GetOrganizationsByIdsAsync(orgIds);
+						foreach (var item in result.Invitations)
+						{
+							OrganizationDBEntity val = null;
+							if (orgs.TryGetValue(item.OrganizationId, out val))
+							{
+								item.OrganizationName = val.OrganizationName;
+							}
+						}
+					}
+
 					result.IsInvitationsLoaded = true;
 				}
 

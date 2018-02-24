@@ -10,6 +10,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Dynamic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
@@ -131,6 +132,26 @@ namespace AllyisApps.DBModel
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
 				return (await con.QueryAsync<UserDBEntity>("[Auth].[GetUser2] @a", new { a = userId })).FirstOrDefault();
+			}
+		}
+
+		/// <summary>
+		/// get a list of organizations specified by the ids
+		/// </summary>
+		public async Task<Dictionary<int, OrganizationDBEntity>> GetOrganizationsByIdsAsync(List<int> ids)
+		{
+			StringBuilder sb = new StringBuilder();
+			for (int i = ids.Count - 1; i > 0; i--)
+			{
+				sb.Append(ids[i]);
+				sb.Append(",");
+			}
+
+			sb.Append(ids[0]);
+
+			using (var con = new SqlConnection(SqlConnectionString))
+			{
+				return (await con.QueryAsync<OrganizationDBEntity>("Auth.GetOrganizationsByIds @a", new { a = sb.ToString() })).ToDictionary(x => x.OrganizationId, x => x);
 			}
 		}
 
