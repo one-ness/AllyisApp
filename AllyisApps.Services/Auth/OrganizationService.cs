@@ -482,11 +482,8 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		///
+		/// create organization from corresponding db entity
 		/// </summary>
-		/// <param name="entity"></param>
-		/// <param name="loadAddress"></param>
-		/// <returns></returns>
 		public Organization InitializeOrganization(OrganizationDBEntity entity, bool loadAddress = true)
 		{
 			return new Organization

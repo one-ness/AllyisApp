@@ -40,7 +40,7 @@ namespace AllyisApps.Controllers.Auth
 		public async Task<AccountIndexViewModel> ConstuctIndexViewModel()
 		{
 			var result = new AccountIndexViewModel();
-			var user = await this.AppService.GetCurrentUserDetailsAsync(this.AppService.UserContext.UserId, AppService.UserLoadOption.LoadAll);
+			var user = await this.AppService.GetCurrentUserDetailsAsync();
 
 			AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel
 			{
@@ -70,7 +70,7 @@ namespace AllyisApps.Controllers.Auth
 			}
 
 			// Add organizations to model
-			foreach (var item in user.Organizations)
+			foreach (var item in user.UserOrganizations)
 			{
 				AccountIndexViewModel.OrganizationViewModel orgViewModel =
 				new AccountIndexViewModel.OrganizationViewModel
@@ -94,7 +94,7 @@ namespace AllyisApps.Controllers.Auth
 				};
 
 				// Add subscription info
-				foreach (var subItem in user.Subscriptions
+				foreach (var subItem in user.UserSubscriptions
 					.Where(sub => sub.OrganizationId == item.OrganizationId  && sub.ProductRoleId != 0 )
 					.OrderBy(sub => sub.ProductId))
 				{

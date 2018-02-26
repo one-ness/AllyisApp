@@ -307,61 +307,61 @@ namespace AllyisApps.Services
 			LoadAll = 65535,
 		}
 
-		public async Task<User> GetCurrentUserDetailsAsync(int userId, UserLoadOption loadOptions = UserLoadOption.LoadNone)
+		public async Task<User> GetCurrentUserDetailsAsync()
 		{
-			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId));
-
 			User result = null;
-			var user = await this.DBHelper.GetUser2Async(userId);
+			var user = await this.DBHelper.GetUser2Async(this.UserContext.UserId);
 			if (user != null)
 			{
+				// load user address
 				result = this.InitializeUser(user);
-				if ((loadOptions & UserLoadOption.LoadAddress) == UserLoadOption.LoadAddress)
-				{
-					result.Address = this.GetAddress(user.AddressId);
-					result.IsAddressLoaded = true;
-				}
+				result.Address = this.GetAddress(user.AddressId);
 
-				if ((loadOptions & UserLoadOption.LoadInvitations) == UserLoadOption.LoadInvitations)
+				// load the invitations
+				result.Invitations = await this.GetInvitationsByEmailAsync(user.Email);
+				if (result.Invitations.Count > 0)
 				{
-					// load the invitations
-					result.Invitations = await this.GetInvitationsByEmailAsync(user.Email);
-
-					if (result.Invitations.Count > 0)
+					// get org ids of all inviations
+					List<int> orgIds = new List<int>();
+					foreach (var item in result.Invitations)
 					{
-						// get org ids of all inviations
-						List<int> orgIds = new List<int>();
-						foreach (var item in result.Invitations)
-						{
-							orgIds.Add(item.OrganizationId);
-						}
-
-						// get those org details
-						var orgs = await this.DBHelper.GetOrganizationsByIdsAsync(orgIds);
-						foreach (var item in result.Invitations)
-						{
-							OrganizationDBEntity val = null;
-							if (orgs.TryGetValue(item.OrganizationId, out val))
-							{
-								item.OrganizationName = val.OrganizationName;
-							}
-						}
+						orgIds.Add(item.OrganizationId);
 					}
 
-					result.IsInvitationsLoaded = true;
+					// get those org names and add to invitation
+					var entities = await this.DBHelper.GetOrganizationsByIdsAsync(orgIds);
+					foreach (var item in result.Invitations)
+					{
+						OrganizationDBEntity val = null;
+						if (entities.TryGetValue(item.OrganizationId, out val))
+						{
+							item.OrganizationName = val.OrganizationName;
+						}
+					}
 				}
 
-				if ((loadOptions & UserLoadOption.LoadUserOrganizations) == UserLoadOption.LoadUserOrganizations)
+
+				// load the user organizations
+				if (this.UserContext.OrganizationsAndRoles.Count > 0)
 				{
-					// load the user organizations
-					result.Organizations = await this.GetUserOrganizationsAsync(userId);
-					result.IsUserOrganizationsLoaded = true;
+					// get org ids of all membership
+					List<int> orgIds = new List<int>();
+					foreach (var item in this.UserContext.OrganizationsAndRoles)
+					{
+						orgIds.Add(item.Key);
+					}
+
+					// get those organizations
+					var entities = await this.DBHelper.GetOrganizationsByIdsAsync(orgIds);
+					foreach (var item in entities)
+					{
+						result.Organizations.Add(this.InitializeOrganization(item.Value, true));
+					}
 				}
 
-				if ((loadOptions & UserLoadOption.LoadUserSubscriptions) == UserLoadOption.LoadUserSubscriptions)
-				{
-					// load the user subscriptions
-				}
+
+
+				// load the user subscriptions
 			}
 
 			return result;
@@ -455,7 +455,7 @@ namespace AllyisApps.Services
 					JoinedDateUtc = item.SubscriptionUserCreatedUtc,
 					UserId = item.UserId
 				};
-				user.Subscriptions.Add(sub);
+				user.UserSubscriptions.Add(sub);
 			}
 
 			dynamic orgs = sets.Organizations;
@@ -483,7 +483,7 @@ namespace AllyisApps.Services
 				org.PhoneNumber = item.PhoneNumber;
 				org.SiteUrl = item.SiteUrl;
 				org.UserId = item.UserId;
-				user.Organizations.Add(org);
+				user.UserOrganizations.Add(org);
 			}
 
 			dynamic invites = sets.Invitations;
@@ -513,7 +513,7 @@ namespace AllyisApps.Services
 						from item in UserContext.OrganizationsAndRoles
 						select item.Value.OrganizationId into orgId
 						let org =
-							user.Organizations.FirstOrDefault(x => x.OrganizationId == orgId)
+							user.UserOrganizations.FirstOrDefault(x => x.OrganizationId == orgId)
 						where org != null
 						select orgId
 						).ToList();
@@ -541,7 +541,7 @@ namespace AllyisApps.Services
 				else
 				{
 					// does the user belong to that organization?
-					var org = user.Organizations.FirstOrDefault(x => x.OrganizationId == organizationId);
+					var org = user.UserOrganizations.FirstOrDefault(x => x.OrganizationId == organizationId);
 					if (org == null)
 					{
 						// no

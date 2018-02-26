@@ -39,7 +39,7 @@ namespace AllyisApps.Controllers.Auth
 			User user = await AppService.GetUserAsync(userId, orgId, OrgAction.ReadOrganization); // this call makes sure that both logged in user and userId have at least one common org
 			var employeeTypeList = (await AppService.GetEmployeeTypeByOrganization(orgId));
 			var employee = (await AppService.GetOrganizationUsersAsync(orgId)).Where(x => x.UserId == userId).FirstOrDefault();
-			UserOrganization org = user.Organizations.FirstOrDefault(x => x.OrganizationId == orgId);
+			UserOrganization org = user.UserOrganizations.FirstOrDefault(x => x.OrganizationId == orgId);
 			
 			var model = new EditMemberViewModel
 			{
@@ -68,7 +68,7 @@ namespace AllyisApps.Controllers.Auth
 				{
 					RoleList = ModelHelper.GetRolesList(sub.ProductId),
 					SelectedRoleId =
-						user.Subscriptions.FirstOrDefault(x => x.SubscriptionId == sub.SubscriptionId)?.ProductRoleId ?? 0,
+						user.UserSubscriptions.FirstOrDefault(x => x.SubscriptionId == sub.SubscriptionId)?.ProductRoleId ?? 0,
 					SubscriptionId = sub.SubscriptionId,
 					SubscriptionName = sub.SubscriptionName
 				}).ToList(),

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using AllyisApps.Services.Lookup;
 using System.Threading.Tasks;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.Services.Auth
 {
@@ -116,12 +117,19 @@ namespace AllyisApps.Services.Auth
 		/// <summary>
 		/// list of organizations the user is member of
 		/// </summary>
-		public List<UserOrganization> Organizations { get; set; }
+		public List<Organization> Organizations { get; set; }
+
+		/// <summary>
+		/// list of organizations the user is member of
+		/// </summary>
+		public List<UserOrganization> UserOrganizations { get; set; }
+
+		public List<Subscription> Subscriptions { get; set; }
 
 		/// <summary>
 		/// list of subscriptions the user is a member of
 		/// </summary>
-		public List<UserSubscription> Subscriptions { get; set; }
+		public List<UserSubscription> UserSubscriptions { get; set; }
 
 		/// <summary>
 		/// list of invitations pending for the user
@@ -143,8 +151,8 @@ namespace AllyisApps.Services.Auth
 		{
 			Address = new Address();
 			Invitations = new List<Invitation>();
-			Organizations = new List<UserOrganization>();
-			Subscriptions = new List<UserSubscription>();
+			UserOrganizations = new List<UserOrganization>();
+			UserSubscriptions = new List<UserSubscription>();
 		}
 	}
 }

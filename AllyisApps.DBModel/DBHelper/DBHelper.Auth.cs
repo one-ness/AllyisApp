@@ -140,19 +140,25 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		public async Task<Dictionary<int, OrganizationDBEntity>> GetOrganizationsByIdsAsync(List<int> ids)
 		{
-			StringBuilder sb = new StringBuilder();
-			for (int i = ids.Count - 1; i > 0; i--)
+			var result = new Dictionary<int, OrganizationDBEntity>();
+			if (ids != null && ids.Count > 0)
 			{
-				sb.Append(ids[i]);
-				sb.Append(",");
+				StringBuilder sb = new StringBuilder();
+				for (int i = ids.Count - 1; i > 0; i--)
+				{
+					sb.Append(ids[i]);
+					sb.Append(",");
+				}
+
+				sb.Append(ids[0]);
+
+				using (var con = new SqlConnection(SqlConnectionString))
+				{
+					result = (await con.QueryAsync<OrganizationDBEntity>("Auth.GetOrganizationsByIds @a", new { a = sb.ToString() })).ToDictionary(x => x.OrganizationId, x => x);
+				}
 			}
 
-			sb.Append(ids[0]);
-
-			using (var con = new SqlConnection(SqlConnectionString))
-			{
-				return (await con.QueryAsync<OrganizationDBEntity>("Auth.GetOrganizationsByIds @a", new { a = sb.ToString() })).ToDictionary(x => x.OrganizationId, x => x);
-			}
+			return result;
 		}
 
 		/// <summary>
