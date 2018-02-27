@@ -91,9 +91,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Get Address based on addres ID
 		/// </summary>
-		/// <param name="addressID"></param>
-		/// <returns></returns>
-		public AddressDBEntity getAddreess(int? addressID)
+		public AddressDBEntity GetAddreess(int addressID)
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{

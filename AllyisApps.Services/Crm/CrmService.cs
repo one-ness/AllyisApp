@@ -589,32 +589,6 @@ namespace AllyisApps.Services
 		#region Info-DBEntity Conversions
 
 		/// <summary>
-		/// Initializes a <see cref="Address"/> from a <see cref="AddressDBEntity"/>.
-		/// </summary>
-		/// <param name="address">.</param>
-		/// <returns>.</returns>
-		public static Address InitializeAddress(AddressDBEntity address)
-		{
-			if (address == null)
-			{
-				return null;
-			}
-
-			return new Address
-			{
-				AddressId = address.AddressId,
-				Address1 = address.Address1,
-				Address2 = address.Address2,
-				City = address.City,
-				StateName = address.State,
-				PostalCode = address.PostalCode,
-				CountryCode = address.CountryCode,
-				StateId = address.StateId,
-				CountryName = address.Country
-			};
-		}
-
-		/// <summary>
 		/// Initialize address from dynamic infomation
 		/// </summary>
 		/// <param name="address"></param>
