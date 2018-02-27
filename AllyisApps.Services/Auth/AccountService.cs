@@ -696,7 +696,7 @@ namespace AllyisApps.Services
 			Address address = null;
 			if (user.AddressId != null && loadAddress)
 			{
-				address = getAddress(user.AddressId);
+				address = GetAddress(user.AddressId);
 			}
 
 			return new User

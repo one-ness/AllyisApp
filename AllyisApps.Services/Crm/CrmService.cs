@@ -665,7 +665,7 @@ namespace AllyisApps.Services
 			}
 			return new Customer
 			{
-				Address = loadAddress ? getAddress(customer.AddressId) : null,
+				Address = loadAddress ? GetAddress(customer.AddressId) : null,
 				ContactEmail = customer.ContactEmail,
 				ContactPhoneNumber = customer.ContactPhoneNumber,
 				CreatedUtc = customer.CreatedUtc,

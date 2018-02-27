@@ -498,7 +498,7 @@ namespace AllyisApps.Services
 				PhoneNumber = entity.PhoneNumber,
 				SiteUrl = entity.SiteUrl,
 				Subdomain = entity.Subdomain,
-				Address = loadAddress ? getAddress(entity.AddressId) : null,
+				Address = loadAddress ? GetAddress(entity.AddressId) : null,
 				UserCount = entity.UserCount
 			};
 		}

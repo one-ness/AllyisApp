@@ -4,13 +4,13 @@ namespace AllyisApps.Services
 {
 	public partial class AppService : BaseService
 	{
-		public Address getAddress(int? addressID)
+		public Address GetAddress(int? addressId)
 		{
-			if (addressID == null)
+			if (addressId == null)
 			{
 				return null;
 			}
-			var address = DBHelper.getAddreess(addressID);
+			var address = DBHelper.getAddreess(addressId);
 			return InitializeAddress(address);
 		}
 	}
