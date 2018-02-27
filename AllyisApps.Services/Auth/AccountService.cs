@@ -28,34 +28,6 @@ namespace AllyisApps.Services
 	/// </summary>
 	public partial class AppService : BaseService
 	{
-		/// <summary>
-		/// Gets the list of valid countries.
-		/// </summary>
-		/// <returns>A collection of valid countries.</returns>
-		public Dictionary<string, Country> GetCountries()
-		{
-			return CacheContainer.CountriesCache;
-		}
-
-		/// <summary>
-		/// get the list of states for the given country
-		/// </summary>
-		public List<State> GetStates(string countryCode)
-		{
-			try
-			{
-				return CacheContainer.StatesCache[countryCode].OrderBy(s => s.StateName).ToList();
-			}
-			catch (KeyNotFoundException)
-			{
-				return new List<State>();
-			}
-			catch (ArgumentNullException)
-			{
-				return new List<State>();
-			}
-		}
-
 		public bool DeleteExpenseItem(int itemId)
 		{
 			return DBHelper.DeleteExpenseItem(itemId);
