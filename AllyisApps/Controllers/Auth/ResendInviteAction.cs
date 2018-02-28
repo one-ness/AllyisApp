@@ -22,7 +22,7 @@ namespace AllyisApps.Controllers.Auth
             {
                 var invite = await AppService.GetInvitation(inviteId);
                 AppService.CheckOrgAction(Services.AppService.OrgAction.AddUserToOrganization, invite.OrganizationId);
-                User usr = await AppService.GetUserByEmail(invite.Email);
+                User usr = await AppService.GetUserByEmailAsync(invite.Email);
                 string url = usr != null ?
                             Url.Action(ActionConstants.Index, ControllerConstants.Account, null, protocol: Request.Url.Scheme) :
                             Url.Action(ActionConstants.Register, ControllerConstants.Account, null, protocol: Request.Url.Scheme);

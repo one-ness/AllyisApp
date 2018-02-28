@@ -23,6 +23,39 @@ namespace AllyisApps.Services
 	public partial class AppService : BaseService
 	{
 		/// <summary>
+		/// get the subscriptions for the given ids
+		/// </summary>
+		public async Task<Dictionary<int, Subscription>> GetSubscriptionsByIdsAsync(List<int> ids)
+		{
+			Dictionary<int, Subscription> result = new Dictionary<int, Subscription>();
+			var entities = await this.DBHelper.GetSubscriptionsByIdsAsync(ids);
+			foreach (var item in entities)
+			{
+				var sku = CacheContainer.AllSkusCache[(SkuIdEnum)item.SkuId];
+				var product = CacheContainer.ProductsCache[sku.ProductId];
+				var obj = new Subscription();
+				obj.CreatedUtc = item.SubscriptionCreatedUtc;
+				obj.IsActive = item.IsActive;
+				obj.NumberOfUsers = item.NumberOfUsers;
+				obj.OrganizationId = item.OrganizationId;
+				obj.ProductAreaUrl = product.AreaUrl;
+				obj.ProductDescription = product.ProductDescription;
+				obj.ProductId = product.ProductId;
+				obj.ProductName = product.ProductName;
+				obj.PromoExpirationDateUtc = item.PromoExpirationDateUtc;
+				obj.SkuDescription = sku.SkuDescription;
+				obj.SkuIconUrl = sku.IconUrl;
+				obj.SkuId = sku.SkuId;
+				obj.SkuName = sku.SkuName;
+				obj.SubscriptionId = item.SubscriptionId;
+				obj.SubscriptionName = item.SubscriptionName;
+				result.Add(obj.SubscriptionId, obj);
+			}
+
+			return result;
+		}
+
+		/// <summary>
 		/// Lists Billing Service invoices for a given customer.
 		/// </summary>
 		/// <param name="customerId">The id of the customer for which the invoices should be listed.</param>
@@ -553,7 +586,7 @@ namespace AllyisApps.Services
 			}
 
 			// reached here indicates user is subscribing to a new product with a new sku
-			Sku selectedSku = CacheContainer.AllSkusCache.FirstOrDefault(x => x.IsActive && x.SkuId == skuId);
+			Sku selectedSku = CacheContainer.AllSkusCache.Values.FirstOrDefault(x => x.IsActive && x.SkuId == skuId);
 			if (selectedSku == null)
 			{
 				// inactive or invalid sku id

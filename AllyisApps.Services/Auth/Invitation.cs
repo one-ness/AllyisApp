@@ -6,6 +6,7 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using AllyisApps.Lib;
 
 namespace AllyisApps.Services.Auth
 {
@@ -28,7 +29,19 @@ namespace AllyisApps.Services.Auth
 		/// <summary>
 		/// Gets or sets the Compressed version of email address, for display.
 		/// </summary>
-		public string CompressedEmail { get; set; }
+		public string CompressedEmail
+		{
+			get
+			{
+				var result = this.Email;
+				if (!string.IsNullOrWhiteSpace(this.Email))
+				{
+					result = Utility.GetCompressedEmail(this.Email);
+				}
+
+				return result;
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the First name.

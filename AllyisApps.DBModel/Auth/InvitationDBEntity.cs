@@ -54,14 +54,14 @@ namespace AllyisApps.DBModel.Auth
         public int OrganizationId { get; set; }
 
         /// <summary>
-        /// Gets or sets the Organization Name.
-        /// </summary>
-        public string OrganizationName { get; set; }
-
-        /// <summary>
         /// Gets or sets the employee id of the user.
         /// </summary>
         public string EmployeeId { get; set; }
+
+		/// <summary>
+		/// gets or sets the employee type id
+		/// </summary>
+		public int EmployeeTypeId { get; set; }
 
         /// <summary>
         /// Get or set the Role Json string.

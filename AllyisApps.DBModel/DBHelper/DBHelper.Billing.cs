@@ -4,14 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.DBModel.Billing;
+using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using AllyisApps.DBModel.Billing;
-using Dapper;
 
 namespace AllyisApps.DBModel
 {
@@ -20,6 +21,32 @@ namespace AllyisApps.DBModel
 	/// </summary>
 	public partial class DBHelper
 	{
+		/// <summary>
+		/// get the list of subscription db entities for the given ids
+		/// </summary>
+		public async Task<List<SubscriptionDBEntity>> GetSubscriptionsByIdsAsync(List<int> ids)
+		{
+			List<SubscriptionDBEntity> result = new List<SubscriptionDBEntity>();
+			if (ids.Count > 0)
+			{
+				StringBuilder sb = new StringBuilder();
+				for (int i = ids.Count - 1; i > 0; i--)
+				{
+					sb.Append(ids[i]);
+					sb.Append(",");
+				}
+
+				sb.Append(ids[0]);
+
+				using (SqlConnection con = new SqlConnection(SqlConnectionString))
+				{
+					result = (await con.QueryAsync<SubscriptionDBEntity>("[Billing].[GetSubscriptionsByIds] @a", new { a = sb.ToString() })).ToList();
+				}
+			}
+
+			return result;
+		}
+
 		/// <summary>
 		/// Retrieves the area to route to for a specific subscription.
 		/// </summary>

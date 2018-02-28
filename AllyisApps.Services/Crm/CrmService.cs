@@ -639,7 +639,7 @@ namespace AllyisApps.Services
 			}
 			return new Customer
 			{
-				Address = loadAddress ? GetAddress(customer.AddressId) : null,
+				Address = loadAddress && customer.AddressId.HasValue ? GetAddress(customer.AddressId.Value) : null,
 				ContactEmail = customer.ContactEmail,
 				ContactPhoneNumber = customer.ContactPhoneNumber,
 				CreatedUtc = customer.CreatedUtc,

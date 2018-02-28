@@ -3,6 +3,7 @@ using AllyisApps.Services.Cache;
 using AllyisApps.Services.Lookup;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Services
 {
@@ -11,16 +12,9 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// get address for the given id
 		/// </summary>
-		public Address GetAddress(int? addressId)
+		public Address GetAddress(int addressId)
 		{
-			Address result = null;
-			if (addressId.HasValue)
-			{
-				var address = DBHelper.GetAddreess(addressId.Value);
-				result = this.InitializeAddress(address);
-			}
-
-			return result;
+			return this.InitializeAddress(this.DBHelper.GetAddressAsync(addressId));
 		}
 
 		/// <summary>

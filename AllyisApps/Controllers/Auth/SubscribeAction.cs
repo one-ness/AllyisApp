@@ -70,7 +70,7 @@ namespace AllyisApps.Controllers.Auth
 			}
 
 			// reached here indicates user is subscribing to a new product with a new sku
-			var selectedSku = CacheContainer.AllSkusCache.FirstOrDefault(x => x.IsActive && x.SkuId == skuId);
+			var selectedSku = CacheContainer.AllSkusCache.Values.FirstOrDefault(x => x.IsActive && x.SkuId == skuId);
 			if (selectedSku == null)
 			{
 				// inactive or invalid sku

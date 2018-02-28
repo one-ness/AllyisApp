@@ -482,28 +482,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		///
-		/// </summary>
-		/// <param name="entity"></param>
-		/// <param name="loadAddress"></param>
-		/// <returns></returns>
-		public Organization InitializeOrganization(OrganizationDBEntity entity, bool loadAddress = true)
-		{
-			return new Organization
-			{
-				CreatedUtc = entity.CreatedUtc,
-				FaxNumber = entity.FaxNumber,
-				OrganizationName = entity.OrganizationName,
-				OrganizationId = entity.OrganizationId,
-				PhoneNumber = entity.PhoneNumber,
-				SiteUrl = entity.SiteUrl,
-				Subdomain = entity.Subdomain,
-				Address = loadAddress ? GetAddress(entity.AddressId) : null,
-				UserCount = entity.UserCount
-			};
-		}
-
-		/// <summary>
 		/// Translates an OrganizationDBEntity into an Organization business object.
 		/// </summary>
 		/// <param name="organizationInfo">OrganizationDBEntity instance.</param>
@@ -550,12 +528,10 @@ namespace AllyisApps.Services
 			return new Invitation
 			{
 				Email = invitation.Email,
-				CompressedEmail = Utility.GetCompressedEmail(invitation.Email),
 				FirstName = invitation.FirstName,
 				InvitationId = invitation.InvitationId,
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
-				OrganizationName = invitation.OrganizationName,
 				EmployeeId = invitation.EmployeeId,
 				DecisionDateUtc = invitation.DecisionDateUtc,
 				InvitationStatus = (InvitationStatusEnum)invitation.InvitationStatus,
