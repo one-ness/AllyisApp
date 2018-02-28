@@ -1,4 +1,4 @@
-﻿create PROCEDURE [Auth].[GetUserFromEmail2]
+﻿create PROCEDURE [Auth].[GetUserByEmail]
 	@email NVARCHAR(384)
 AS
 BEGIN
