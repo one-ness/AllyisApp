@@ -25,15 +25,17 @@
 		<div class="panel-body" style="padding: 0px;">
 			<table id="loading" class="table table-hover table-condensed" hidden>
 				<thead class="panel-heading">
-					<tr class="no-border">
-						<th style="width: 6%;"></th>
-						<th style="width: 47%;">@Strings.User</th>
-						<th style="width: 47%;" class="tab-OrganizationTab">@Model.RoleHeader</th>
-					</tr>
+                    <tr class="no-border">
+                        <th style="width: 6%;"></th>
+                        <th style="width: 14%;">@Strings.EmployeeId</th>
+                        <th style="width: 40%;">@Strings.User</th>
+                        <th style="width: 40%;" class="tab-OrganizationTab">@Model.RoleHeader</th>
+                    </tr>
 					<tr class="double-bottom-border">
 						<td class="checked">
 							<input type="checkbox" class="all-check" />
 						</td>
+                        <td> </td>
 						<td>
 							<input type="search" placeholder="@Strings.UserSearchPlaceholder" id="userSearch" class="form-control fa-filter" />
 						</td>
@@ -57,6 +59,7 @@
 							<td class="checked">
 								<input type="checkbox" id="check" />
 							</td>
+                            <td id="name">@user.UserId</td>
 							<td id="name">@user.FullName</td>
 							<td id="Role" class="tab-OrganizationTab">@user.CurrentRoleName</td>
 						</tr>
@@ -64,13 +67,14 @@
 					}
 					else
 					{
-						<tr class="userRow currUser" data-id="@user.UserId" data-name="@user.Email">
-							<td>
-								<input type="checkbox" id="check" disabled />
-							</td>
-							<td id="name">@user.FullName</td>
-							<td id="Role" class="tab-OrganizationTab">@user.CurrentRoleName</td>
-						</tr>
+                        <tr class="userRow currUser" data-id="@user.UserId" data-name="@user.Email">
+                            <td>
+                                <input type="checkbox" id="check" disabled />
+                            </td>
+                            <td id="name">@user.UserId</td>
+                            <td id="name">@user.FullName</td>
+                            <td id="Role" class="tab-OrganizationTab">@user.CurrentRoleName</td>
+                        </tr>
 					}
 
 				}
@@ -79,6 +83,7 @@
 				<tr id="tableEnd" class="nohover">
 					<td></td>
 					<td></td>
+                    <td></td>
 					<td class="tab-OrganizationTab"></td>
 				</tr>
 			</table>
