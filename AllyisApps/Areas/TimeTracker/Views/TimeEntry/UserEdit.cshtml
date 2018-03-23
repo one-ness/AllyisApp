@@ -25,6 +25,12 @@
                         @Html.HiddenFor(m => m.UserName)
                         <span class="form-control">@Model.UserName</span>
                     </div>
+
+                    <div class="col-xs-6 filter-row" style="display:flex">
+                        <label class="col-xs-4">Name Filter:&nbsp;</label>
+                        <input class="col-xs-8 form-control fa-filter" type="search" placeholder="@Strings.ProjectSearchPlaceholder" id="projectSearch" />
+                    </div>
+
                     <div id="swapper-ui" class="swapper-ui">
                         <div class="left">
                             <label>@Strings.OffProjects</label>
@@ -39,7 +45,7 @@
                                         var css_class = "out";
                                         @*@Html.HiddenFor(project.CustomerId)
                                             @Html.HiddenFor(project.ProjectId)*@
-                                        <option value="@project.ProjectId" class="@css_class" data-search="@project.ProjectName">@project.ProjectId  - @project.ProjectName (@project.CustomerName)</option>
+                                        <option value="@project.ProjectId" class="@css_class pwfRow" data-search="@project.ProjectName">@project.ProjectId  - @project.ProjectName (@project.CustomerName)</option>
                                     }
                                 }
                             </select>
@@ -63,7 +69,7 @@
                                     if (checkboxValue)
                                     {
                                         var css_class = "in";
-                                        <option value="@project.ProjectId" class="@css_class" data-search="@project.ProjectName">@project.ProjectId  - @project.ProjectName (@project.CustomerName)</option>
+                                        <option value="@project.ProjectId" class="@css_class pwfRow" data-search="@project.ProjectName">@project.ProjectId  - @project.ProjectName (@project.CustomerName)</option>
                                     }
                                 }
                             </select>
@@ -80,7 +86,10 @@
 </div>
 
 @section Scripts {
+    <script src="~/Scripts/allyis-pages-with-filter.js" type="text/javascript"></script>
     <script type="text/javascript">
+        pwf.addFilter("#projectSearch", "search", "self");
+
         var update_link = "@Url.Action(ActionConstants.UserEditAJAX, ControllerConstants.TimeEntry)";
         var index_link = "@Url.Action(ActionConstants.Index, ControllerConstants.TimeEntry, new { subscriptionId = ViewData["SubscriptionId"], userId = ViewData["UserId"] })";
     </script>

@@ -296,11 +296,16 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
 					if (!filterValues[i] || filterValues[i] == "") {
 						display[i] = true; // Display all when no search text entered
 					}
-					else {
-						var thisItemText = ele.find(filters[i].find).html();
-						ele.find(filters[i].find).each(function (index) {
-							thisItemText += $(this).html();
-						});
+                    else {
+                        var thisItemText;
+                        if (filters[i].find == "self") {
+                            thisItemText = ele.html();
+                        } else {
+                            thisItemText = ele.find(filters[i].find).html();
+                            ele.find(filters[i].find).each(function (index) {
+                                thisItemText += $(this).html();
+                            });
+                        }
 						display[i] = thisItemText.toLowerCase().search(filterValues[i]) > -1;
 					}
 				}
