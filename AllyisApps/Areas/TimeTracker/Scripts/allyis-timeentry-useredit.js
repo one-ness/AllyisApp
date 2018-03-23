@@ -8,13 +8,13 @@
             __RequestVerificationToken: token,
             userId: e.find('input[name="UserId"]').val(),
             onUser: user_assign_module.get_in(),
-            offUser: user_assign_module.get_out(),
-            async: false
+            offUser: user_assign_module.get_out()
         }
     }).done(function (data) {
-        if (data.status == "failure") 
-          //  location = index_link_error;      
+        if (data.status == "failure") {
             alert("User must have atleast one project");
+            location = index_link_error;
+        }
         else
         location = index_link;
     })
