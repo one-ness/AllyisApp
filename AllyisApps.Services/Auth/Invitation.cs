@@ -33,7 +33,13 @@ namespace AllyisApps.Services.Auth
 		{
 			get
 			{
-				return Utility.GetCompressedEmail(this.Email);
+				var result = this.Email;
+				if (!string.IsNullOrWhiteSpace(this.Email))
+				{
+					result = Utility.GetCompressedEmail(this.Email);
+				}
+
+				return result;
 			}
 		}
 

@@ -161,18 +161,10 @@ namespace AllyisApps.Controllers.Auth
 			try
 			{
 				User usr = await AppService.GetUserByEmailAsync(model.Email);
-				string url = usr != null ?
-					Url.Action(ActionConstants.Index, ControllerConstants.Account, null, Request.Url.Scheme) :
-					Url.Action(ActionConstants.Register, ControllerConstants.Account, null, Request.Url.Scheme);
-
-				//string prodJson = "{{ "; //string.Format("{{ \"" + (int)ProductIdEnum.TimeTracker + "\" : {0}, \"" + (int)ProductIdEnum.ExpenseTracker + "\" : {1}, \"" + (int)ProductIdEnum.StaffingManager + "\" : 0 }}", model.ttSelection, model.etSelection);
-
-				//foreach (var role in model.SubscriptionRoles)
-				//{
-				//	prodJson += "\"" + role.ProductId + "\" : " + role.SelectedRoleId + ", ";
-				//}
-				//prodJson = prodJson.TrimEnd(new char[] { ' ', ',' });
-				//prodJson += " }}";
+				string redirectLink = usr != null ?
+					Url.Action(ActionConstants.Index, ControllerConstants.Account, null, protocol: Request.Url.Scheme) :
+					Url.Action(ActionConstants.Register, ControllerConstants.Account, null, protocol: Request.Url.Scheme);
+				string url = redirectLink;
 
 				List<InvitationPermissionsJson> json = model.SubscriptionRoles.Select(role => new InvitationPermissionsJson
 				{

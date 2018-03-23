@@ -206,23 +206,22 @@ namespace AllyisApps.Services
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException(nameof(email));
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException(nameof(password));
 
-			User result = await this.GetUserByEmailAsync(email);
-			if (result != null)
+			User result = null;
+			var user = await this.DBHelper.GetUserByEmailAsync(email);
+			if (user != null)
 			{
-				// email exists, does password match?
-				PassWordValidationResult passwordValidation = Crypto.ValidateAndUpdate(password, result.PasswordHash);
+				// email exists, hash the given password and compare with hash in db
+				PassWordValidationResult passwordValidation = Crypto.ValidateAndUpdate(password, user.PasswordHash);
 				if (passwordValidation.successfulMatch)
 				{
-					// yes, store updated password hash if needed
+					// store updated password hash if needed
 					if (passwordValidation.updatedHash != null)
 					{
-						await DBHelper.UpdateUserPassword(result.UserId, passwordValidation.updatedHash);
+						await DBHelper.UpdateUserPasswordAsync(user.UserId, passwordValidation.updatedHash);
 					}
-				}
-				else
-				{
-					// no, set null result
-					result = null;
+
+					// get user obj
+					result = this.InitializeUser(user, false);
 				}
 			}
 
@@ -279,6 +278,7 @@ namespace AllyisApps.Services
 							SubscriptionName = item.SubscriptionName
 						});
 				}
+
 				// set result to self
 				SetUserContext(result);
 			}
@@ -294,131 +294,77 @@ namespace AllyisApps.Services
 			return await GetUserAsync(UserContext.UserId);
 		}
 
-		/// <summary>
-		/// options to load various information along with user
-		/// </summary>
-		public enum UserLoadOption : int
+		public async Task<User2> GetCurrentUser2Async()
 		{
-			LoadNone = 0,
-			LoadAddress = 1,
-			LoadInvitations = 2,
-			LoadUserOrganizations = 4,
-			LoadUserSubscriptions = 8,
-			LoadAll = 65535,
+			return await GetUser2Async(this.UserContext.UserId);
 		}
 
-		public async Task<User> GetCurrentUserDetailsAsync()
+		public async Task<User2> GetUser2Async(int userId)
 		{
-			User result = null;
-			var user = await this.DBHelper.GetUser2Async(this.UserContext.UserId);
-			if (user != null)
-			{
-				// load user address
-				result = this.InitializeUser(user);
-				result.Address = this.GetAddress(user.AddressId);
+			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId));
 
-				// load the invitations
-				result.Invitations = await this.GetInvitationsByEmailAsync(user.Email);
-				if (result.Invitations.Count > 0)
-				{
-					// get org ids of all inviations
-					List<int> orgIds = new List<int>();
-					foreach (var item in result.Invitations)
-					{
-						orgIds.Add(item.OrganizationId);
-					}
-
-					// get those org names and add to invitation
-					var entities = await this.DBHelper.GetOrganizationsByIdsAsync(orgIds);
-					foreach (var item in result.Invitations)
-					{
-						OrganizationDBEntity val = null;
-						if (entities.TryGetValue(item.OrganizationId, out val))
-						{
-							item.OrganizationName = val.OrganizationName;
-						}
-					}
-				}
-
-
-				// load the user organizations
-				if (this.UserContext.OrganizationsAndRoles.Count > 0)
-				{
-					// get org ids of all membership
-					List<int> orgIds = new List<int>();
-					foreach (var item in this.UserContext.OrganizationsAndRoles)
-					{
-						orgIds.Add(item.Key);
-					}
-
-					// get those organizations
-					var entities = await this.DBHelper.GetOrganizationsByIdsAsync(orgIds);
-					foreach (var item in entities)
-					{
-						result.Organizations.Add(this.InitializeOrganization(item.Value, true));
-					}
-				}
-
-
-
-				// load the user subscriptions
-			}
-
-			return result;
+			var user = await this.DBHelper.GetUser2Async(userId);
+			return this.InitializeUser2(user);
 		}
 
-		private async Task<List<Invitation>> GetInvitationsByEmailAsync(string email)
+		public async Task<List<Invitation>> GetCurrentUserInvitationsAsync()
 		{
-			var result = new List<Invitation>();
-			var entities = await this.DBHelper.GetInvitationsByEmailAsync(email, (int)InvitationStatusEnum.Pending);
+			List<Invitation> result = new List<Invitation>();
+			var entities = await this.DBHelper.GetInvitationsByEmailAsync(this.UserContext.Email, (int)InvitationStatusEnum.Pending);
 			foreach (var item in entities)
 			{
-				var temp = new Invitation();
-				temp.Email = email;
-				temp.EmployeeId = item.EmployeeId;
-				temp.EmployeeTypeId = item.EmployeeTypeId;
-				temp.FirstName = item.FirstName;
-				temp.InvitationCreatedUtc = item.InvitationCreatedUtc;
-				temp.InvitationId = item.InvitationId;
-				temp.InvitationStatus = (InvitationStatusEnum)item.InvitationStatus;
-				temp.LastName = item.LastName;
-				temp.OrganizationId = item.OrganizationId;
-				temp.OrganizationRole = (OrganizationRoleEnum)item.OrganizationRoleId;
-				temp.ProductRolesJson = item.ProductRolesJson;
-				result.Add(temp);
+				var obj = new Invitation();
+				obj.DecisionDateUtc = item.DecisionDateUtc;
+				obj.Email = item.Email;
+				obj.EmployeeId = item.EmployeeId;
+				obj.EmployeeTypeId = item.EmployeeTypeId;
+				obj.FirstName = item.FirstName;
+				obj.InvitationCreatedUtc = item.InvitationCreatedUtc;
+				obj.InvitationId = item.InvitationId;
+				obj.InvitationStatus = (InvitationStatusEnum)item.InvitationStatus;
+				obj.LastName = item.LastName;
+				obj.OrganizationRole = (OrganizationRoleEnum)item.OrganizationRoleId;
+				obj.OrganizationId = item.OrganizationId;
+				obj.ProductRolesJson = item.ProductRolesJson;
+				result.Add(obj);
 			}
 
 			return result;
 		}
 
-		private async Task<List<UserOrganization>> GetUserOrganizationsAsync(int userId)
+		public async Task<Dictionary<int, Organization>> GetOrganizationsByIdsAsync(List<int> ids)
 		{
-			var result = new List<UserOrganization>();
-			dynamic entities = await this.DBHelper.GetUserOrganizationsAsync(userId);
-			foreach (dynamic item in entities)
+			if (ids == null) throw new ArgumentNullException(nameof(ids));
+			Dictionary<int, Organization> result = new Dictionary<int, Organization>();
+			if (ids.Count > 0)
 			{
-				var temp = new UserOrganization();
-				temp.Address = this.GetAddress(item.AddressId);
-				temp.CreatedUtc = item.OrganizationCreatedUtc;
-				temp.EmployeeId = item.EmployeeId;
-				temp.EmployeeTypeId = item.EmployeeTypeId;
-				temp.FaxNumber = item.FaxNumber;
-				temp.IsActive = item.IsActive;
-				temp.JoinedDateUtc = item.OrganizationUserCreatedUtc;
-				temp.MaxApprovalAmount = item.MaxAmount;
-				temp.OrganizationId = item.OrganizationId;
-				temp.OrganizationName = item.OrganizationName;
-				temp.OrganizationRole = (OrganizationRoleEnum)item.OrganizationRoleId;
-				temp.PhoneNumber = item.PhoneNumber;
-				temp.SiteUrl = item.SiteUrl;
-				temp.StripeToken = item.StripeToken;
-				temp.Subdomain = item.Subdomain;
-				temp.UserCount = item.UserCount;
-				temp.UserId = item.UserId;
-				result.Add(temp);
+				var entities = await this.DBHelper.GetOrganizationsByIdsAsync(ids);
+				foreach (var item in entities)
+				{
+					result.Add(item.OrganizationId, this.InitializeOrganization(item));
+				}
 			}
 
 			return result;
+		}
+
+		/// <summary>
+		/// get organization from its db entity
+		/// </summary>
+		public Organization InitializeOrganization(OrganizationDBEntity entity, bool loadAddress = true)
+		{
+			return new Organization
+			{
+				CreatedUtc = entity.CreatedUtc,
+				FaxNumber = entity.FaxNumber,
+				OrganizationName = entity.OrganizationName,
+				OrganizationId = entity.OrganizationId,
+				PhoneNumber = entity.PhoneNumber,
+				SiteUrl = entity.SiteUrl,
+				Subdomain = entity.Subdomain,
+				Address = (entity.AddressId.HasValue && loadAddress) ? GetAddress(entity.AddressId.Value) : null,
+				UserCount = entity.UserCount
+			};
 		}
 
 		/// <summary>
@@ -430,7 +376,7 @@ namespace AllyisApps.Services
 			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId));
 
 			dynamic sets = await DBHelper.GetUser(userId);
-			User user = this.InitializeUser(sets.User, true);
+			User user = this.InitializeUser(sets.User);
 			dynamic subs = sets.Subscriptions;
 			foreach (dynamic item in subs)
 			{
@@ -455,7 +401,7 @@ namespace AllyisApps.Services
 					JoinedDateUtc = item.SubscriptionUserCreatedUtc,
 					UserId = item.UserId
 				};
-				user.UserSubscriptions.Add(sub);
+				user.Subscriptions.Add(sub);
 			}
 
 			dynamic orgs = sets.Organizations;
@@ -483,7 +429,7 @@ namespace AllyisApps.Services
 				org.PhoneNumber = item.PhoneNumber;
 				org.SiteUrl = item.SiteUrl;
 				org.UserId = item.UserId;
-				user.UserOrganizations.Add(org);
+				user.Organizations.Add(org);
 			}
 
 			dynamic invites = sets.Invitations;
@@ -498,6 +444,7 @@ namespace AllyisApps.Services
 				invite.InvitationStatus = (InvitationStatusEnum)item.InvitationStatus;
 				invite.LastName = item.LastName;
 				invite.OrganizationId = item.OrganizationId;
+				invite.OrganizationName = item.OrganizationName;
 				invite.ProductRolesJson = item.ProductRolesJson;
 				user.Invitations.Add(invite);
 			}
@@ -513,7 +460,7 @@ namespace AllyisApps.Services
 						from item in UserContext.OrganizationsAndRoles
 						select item.Value.OrganizationId into orgId
 						let org =
-							user.UserOrganizations.FirstOrDefault(x => x.OrganizationId == orgId)
+							user.Organizations.FirstOrDefault(x => x.OrganizationId == orgId)
 						where org != null
 						select orgId
 						).ToList();
@@ -541,7 +488,7 @@ namespace AllyisApps.Services
 				else
 				{
 					// does the user belong to that organization?
-					var org = user.UserOrganizations.FirstOrDefault(x => x.OrganizationId == organizationId);
+					var org = user.Organizations.FirstOrDefault(x => x.OrganizationId == organizationId);
 					if (org == null)
 					{
 						// no
@@ -625,11 +572,13 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets the user info from an email address.
 		/// </summary>
-		public async Task<User> GetUserByEmailAsync(string email, bool loadAddress = false)
+		/// <param name="email">Email address.</param>
+		/// <returns>A UserInfo instance with the user's info.</returns>
+		public async Task<User> GetUserByEmailAsync(string email)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException(nameof(email));
 
-			return InitializeUser(await DBHelper.GetUserByEmailAsync(email), loadAddress);
+			return this.InitializeUser(await DBHelper.GetUserByEmailAsync(email));
 		}
 
 		/// <summary>
@@ -734,7 +683,7 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(passwordHash) || !Crypto.ValidateAndUpdate(oldPassword, passwordHash).successfulMatch) return false;
 
 			// old password is correct.
-			await DBHelper.UpdateUserPassword(UserContext.UserId, Crypto.GetPasswordHash(newPassword));
+			await DBHelper.UpdateUserPasswordAsync(UserContext.UserId, Crypto.GetPasswordHash(newPassword));
 
 			return true;
 		}
@@ -753,26 +702,76 @@ namespace AllyisApps.Services
 			return DBHelper.GetOrganizationsByUserId(userId).Select(o => (Organization)InitializeOrganization(o));
 		}
 
+		private User InitializeUser(dynamic user)
+		{
+			return new User
+			{
+				AccessFailedCount = user.AccessFailedCount,
+				DateOfBirth = user.DateOfBirth,
+				Email = user.Email,
+				IsEmailConfirmed = user.IsEmailConfirmed,
+				FirstName = user.FirstName,
+				LastName = user.LastName,
+				IsLockoutEnabled = user.IsLockoutEnabled,
+				LockoutEndDateUtc = user.LockoutEndDateUtc,
+				PasswordHash = user.PasswordHash,
+				PasswordResetCode = user.PasswordResetCode,
+				PhoneExtension = user.PhoneExtension,
+				PhoneNumber = user.PhoneNumber,
+				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
+				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
+				UserId = user.UserId,
+				Address = InitializeAddress(user)
+			};
+		}
+
 		/// <summary>
 		/// Translates a UserDBEntity into a User business object.
 		/// </summary>
 		/// <param name="user">UserDBEntity instance.</param>
 		/// <param name="loadAddress"></param>
 		/// <returns>User instance.</returns>
-		private User InitializeUser(UserDBEntity user, bool loadAddress = false)
+		private User InitializeUser(UserDBEntity user, bool loadAddress = true)
 		{
 			if (user == null)
-			{
 				return null;
-			}
 
 			Address address = null;
 			if (user.AddressId.HasValue && loadAddress)
 			{
-				address = this.GetAddress(user.AddressId.Value);
+				address = GetAddress(user.AddressId.Value);
 			}
 
 			return new User
+			{
+				AccessFailedCount = user.AccessFailedCount,
+				DateOfBirth = user.DateOfBirth,
+				Email = user.Email,
+				IsEmailConfirmed = user.IsEmailConfirmed,
+				FirstName = user.FirstName,
+				LastName = user.LastName,
+				IsLockoutEnabled = user.IsLockoutEnabled,
+				LockoutEndDateUtc = user.LockoutEndDateUtc,
+				PasswordHash = user.PasswordHash,
+				PasswordResetCode = user.PasswordResetCode,
+				PhoneExtension = user.PhoneExtension,
+				PhoneNumber = user.PhoneNumber,
+				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
+				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
+				UserId = user.UserId,
+				Address = address
+			};
+		}
+
+		private User2 InitializeUser2(UserDBEntity user, bool loadAddress = true)
+		{
+			Address address = null;
+			if (user.AddressId.HasValue && loadAddress)
+			{
+				address = GetAddress(user.AddressId.Value);
+			}
+
+			return new User2
 			{
 				AccessFailedCount = user.AccessFailedCount,
 				DateOfBirth = user.DateOfBirth,

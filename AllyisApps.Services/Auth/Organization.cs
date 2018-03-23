@@ -83,21 +83,6 @@ namespace AllyisApps.Services.Auth
 		public String StripeToken { get; set; }
 
 		/// <summary>
-		/// indicates if the users list has been loaded
-		/// </summary>
-		public bool IsUsersLoaded { get; set; }
-
-		/// <summary>
-		/// indicates if subscriptions list has been loaded
-		/// </summary>
-		public bool IsSubscriptionsLoaded { get; set; }
-
-		/// <summary>
-		/// indicates if inviations list has been loaded
-		/// </summary>
-		public bool IsInvitationsLoaded { get; set; }
-
-		/// <summary>
 		/// Gets or sets the count of users in the organization.
 		/// </summary>
 		public int UserCount { get; set; }

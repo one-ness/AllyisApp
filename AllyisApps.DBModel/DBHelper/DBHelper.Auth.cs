@@ -4,6 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Billing;
+using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,9 +15,6 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Billing;
-using Dapper;
 
 namespace AllyisApps.DBModel
 {
@@ -65,14 +65,13 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Executes [Auth].[GetUserFromEmail].
+		/// get user entity for the given email
 		/// </summary>
 		public async Task<UserDBEntity> GetUserByEmailAsync(string email)
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var result = await connection.QueryAsync<UserDBEntity>("[Auth].[GetUserFromEmail]", new { email }, commandType: CommandType.StoredProcedure);
-				return result.FirstOrDefault();
+				return (await connection.QueryAsync<UserDBEntity>("[Auth].[GetUserByEmail] @a", new { a = email })).FirstOrDefault();
 			}
 		}
 
@@ -125,50 +124,13 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// get user from the db
+		/// Get user from the db
 		/// </summary>
 		public async Task<UserDBEntity> GetUser2Async(int userId)
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
 				return (await con.QueryAsync<UserDBEntity>("[Auth].[GetUser2] @a", new { a = userId })).FirstOrDefault();
-			}
-		}
-
-		/// <summary>
-		/// get a list of organizations specified by the ids
-		/// </summary>
-		public async Task<Dictionary<int, OrganizationDBEntity>> GetOrganizationsByIdsAsync(List<int> ids)
-		{
-			var result = new Dictionary<int, OrganizationDBEntity>();
-			if (ids != null && ids.Count > 0)
-			{
-				StringBuilder sb = new StringBuilder();
-				for (int i = ids.Count - 1; i > 0; i--)
-				{
-					sb.Append(ids[i]);
-					sb.Append(",");
-				}
-
-				sb.Append(ids[0]);
-
-				using (var con = new SqlConnection(SqlConnectionString))
-				{
-					result = (await con.QueryAsync<OrganizationDBEntity>("Auth.GetOrganizationsByIds @a", new { a = sb.ToString() })).ToDictionary(x => x.OrganizationId, x => x);
-				}
-			}
-
-			return result;
-		}
-
-		/// <summary>
-		/// get the invitations for the given user
-		/// </summary>
-		public async Task<List<InvitationDBEntity>> GetInvitationsByEmailAsync(string email, int statusMask)
-		{
-			using (var con = new SqlConnection(SqlConnectionString))
-			{
-				return (await con.QueryAsync<InvitationDBEntity>("[Auth].[GetInvitationsByEmail] @a, @b", new { a = email, b = statusMask })).ToList();
 			}
 		}
 
@@ -303,7 +265,7 @@ namespace AllyisApps.DBModel
 		/// <param name = "userId">Target user's Id.</param>
 		/// <param name = "passwordHash">The new password hash.</param>
 		/// <returns>The password hash retreived independently after the update, for verification.</returns>
-		public async Task UpdateUserPassword(int userId, string passwordHash)
+		public async Task UpdateUserPasswordAsync(int userId, string passwordHash)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
@@ -591,6 +553,32 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// get the list of organization db entities for the given ids
+		/// </summary>
+		public async Task<List<OrganizationDBEntity>> GetOrganizationsByIdsAsync(List<int> ids)
+		{
+			List<OrganizationDBEntity> result = new List<OrganizationDBEntity>();
+			if (ids.Count > 0)
+			{
+				StringBuilder sb = new StringBuilder();
+				for (int i = ids.Count - 1; i > 0; i--)
+				{
+					sb.Append(ids[i]);
+					sb.Append(",");
+				}
+
+				sb.Append(ids[0]);
+
+				using (SqlConnection con = new SqlConnection(SqlConnectionString))
+				{
+					result = (await con.QueryAsync<OrganizationDBEntity>("[Auth].[GetOrganizationsByIds] @a", new { a = sb.ToString() })).ToList();
+				}
+			}
+
+			return result;
+		}
+
+		/// <summary>
 		/// Adds an Invitation to the invitations table and invitation sub roles table.
 		/// </summary>
 		public async Task<int> CreateInvitation(
@@ -682,6 +670,17 @@ namespace AllyisApps.DBModel
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
 				return (await con.QueryAsync<InvitationDBEntity>("[Auth].[GetInvitations]", new { organizationId, statusMask }, commandType: CommandType.StoredProcedure)).ToList();
+			}
+		}
+
+		/// <summary>
+		/// get all the invitations for the given email
+		/// </summary>
+		public async Task<List<InvitationDBEntity>> GetInvitationsByEmailAsync(string email, int statusMask)
+		{
+			using (var con = new SqlConnection(SqlConnectionString))
+			{
+				return (await con.QueryAsync<InvitationDBEntity>("[Auth].[GetInvitationsByEmail] @a, @b", new { a = email, b = statusMask })).ToList();
 			}
 		}
 

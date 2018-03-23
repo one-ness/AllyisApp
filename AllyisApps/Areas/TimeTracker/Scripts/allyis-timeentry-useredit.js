@@ -1,122 +1,127 @@
 ﻿function userSubmit(e) {
-	e = $(e);
-	var token = e.find('input[name="__RequestVerificationToken"]').val();
-	$.ajax({
-		url: update_link,
-		type: "POST",
-		data: {
-			__RequestVerificationToken: token,
-			userId: e.find('input[name="UserId"]').val(),
-			onUser: user_assign_module.get_in(),
-			offUser: user_assign_module.get_out()
-		}
-	}).done(function () {
-		location = index_link;
-	})
-	return false;
+    e = $(e);
+    var token = e.find('input[name="__RequestVerificationToken"]').val();
+    $.ajax({
+        url: update_link,
+        type: "POST",
+        data: {
+            __RequestVerificationToken: token,
+            userId: e.find('input[name="UserId"]').val(),
+            onUser: user_assign_module.get_in(),
+            offUser: user_assign_module.get_out(),
+            async: false
+        }
+    }).done(function (data) {
+        if (data.status == "failure") 
+          //  location = index_link_error;      
+            alert("User must have atleast one project");
+        else
+        location = index_link;
+    })
+    return false;
 }
 
 var user_assign_module = function () {
-	var modal;
-	var left;
-	var right;
-	var left_list;
-	var right_list;
-	var left_input;
-	var right_input;
-	var left_select;
-	var right_select;
-	var actions;
-	var action_move_in;
-	var action_move_out;
+    var modal;
+    var left;
+    var right;
+    var left_list;
+    var right_list;
+    var left_input;
+    var right_input;
+    var left_select;
+    var right_select;
+    var actions;
+    var action_move_in;
+    var action_move_out;
 
-	function init() {
-		modal = $("form#form1");
-		actions = modal.find(".actions");
-		action_move_in = actions.find(".move-in"); //?
-		action_move_out = actions.find(".move-out"); //?
-		left = modal.find(".swapper-ui .left");
-		right = modal.find(".swapper-ui .right");
-		left_select = left.find("select");
-		right_select = right.find("select");
-		left_input = left.find("input"); // Left search bar
-		right_input = right.find("input"); // Right search bar
+    function init() {
+        modal = $("form#form1");
+        actions = modal.find(".actions");
+        action_move_in = actions.find(".move-in"); //?
+        action_move_out = actions.find(".move-out"); //?
+        left = modal.find(".swapper-ui .left");
+        right = modal.find(".swapper-ui .right");
+        left_select = left.find("select");
+        right_select = right.find("select");
+        left_input = left.find("input"); // Left search bar
+        right_input = right.find("input"); // Right search bar
 
-		// Changed parameters for filter and refilter at call to be .find() result
-		// each time to ensure the search results reflected changes made in the modal
-		left_input.keyup(_.debounce(function () {
-			filter(this.value.toLowerCase(), left.find("select option"));
-		}, 250));
-		right_input.keyup(_.debounce(function () {
-			filter(this.value.toLowerCase(), right.find("select option"));
-		}, 250));
-	}
+        // Changed parameters for filter and refilter at call to be .find() result
+        // each time to ensure the search results reflected changes made in the modal
+        left_input.keyup(_.debounce(function () {
+            filter(this.value.toLowerCase(), left.find("select option"));
+        }, 250));
+        right_input.keyup(_.debounce(function () {
+            filter(this.value.toLowerCase(), right.find("select option"));
+        }, 250));
+    }
 
-	function refilter() {
-		filter(left_input.value.toLowerCase(), left.find("select option"));
-		filter(right_input.value.toLowerCase(), right.find("select option"));
-	}
+    function refilter() {
+        filter(left_input.value.toLowerCase(), left.find("select option"));
+        filter(right_input.value.toLowerCase(), right.find("select option"));
+    }
 
-	// filters an element on a phrase
-	function filter(text, what) {
-		_.each(what, function (ele) {
-			var $ele = $(ele);
-			if (!$ele.text_lower) {
-				$ele.text_lower = $ele.text().toLowerCase();
-				if ($ele.attr("data-search"))
-					$ele.text_lower += " " + $ele.attr("data-search").toLowerCase();
-			}
-			var val = $ele.text_lower;
-			if (val.indexOf(text) > -1) {
-				$ele.addClass("included").removeClass("excluded");
-			} else {
-				$ele.addClass("excluded").removeClass("included");
-			}
-		})
-	}
+    // filters an element on a phrase
+    function filter(text, what) {
+        _.each(what, function (ele) {
+            var $ele = $(ele);
+            if (!$ele.text_lower) {
+                $ele.text_lower = $ele.text().toLowerCase();
+                if ($ele.attr("data-search"))
+                    $ele.text_lower += " " + $ele.attr("data-search").toLowerCase();
+            }
+            var val = $ele.text_lower;
+            if (val.indexOf(text) > -1) {
+                $ele.addClass("included").removeClass("excluded");
+            } else {
+                $ele.addClass("excluded").removeClass("included");
+            }
+        })
+    }
 
-	function get_in() {
-		return _.map(right_select.find("option.in"), function (ele) {
-			return ele.value
-		});
-	}
+    function get_in() {
+        return _.map(right_select.find("option.in"), function (ele) {
+            return ele.value
+        });
+    }
 
-	function get_out() {
-		return _.map(left_select.find("option.out"), function (ele) { return ele.value })
-	}
+    function get_out() {
+        return _.map(left_select.find("option.out"), function (ele) { return ele.value })
+    }
 
-	return {
-		init: init,
-		filter: filter,
-		refilter: refilter,
-		get_in: get_in,
-		get_out: get_out
-	}
+    return {
+        init: init,
+        filter: filter,
+        refilter: refilter,
+        get_in: get_in,
+        get_out: get_out
+    }
 }()
 
 // Moves selected elements from left to right (out to in) or right to left (in to out)
 // depending on the provided direction argument
 function moveSelectedUserEditModal(direction) {
-	// Assuming only internally called with "in" or "out"
-	var fromElements = direction == "in" ? document.forms.EditForm.Excluded : document.forms.EditForm.Included;
-	var toElements = direction == "in" ? document.forms.EditForm.Included : document.forms.EditForm.Excluded;
-	var inclusiveness = direction == "in" ? "in" : "out";
+    // Assuming only internally called with "in" or "out"
+    var fromElements = direction == "in" ? document.forms.EditForm.Excluded : document.forms.EditForm.Included;
+    var toElements = direction == "in" ? document.forms.EditForm.Included : document.forms.EditForm.Excluded;
+    var inclusiveness = direction == "in" ? "in" : "out";
 
-	for (var i = 0; i < fromElements.length;) {
-		if (fromElements[i].selected) {
-			// Change class
-			fromElements[i].setAttribute("class", inclusiveness);
-			// Move element to the other side
-			toElements.appendChild(fromElements[i]);
-			// Correction for altering array of elements
-		} else {
-			i++;
-		}
-	}
+    for (var i = 0; i < fromElements.length;) {
+        if (fromElements[i].selected) {
+            // Change class
+            fromElements[i].setAttribute("class", inclusiveness);
+            // Move element to the other side
+            toElements.appendChild(fromElements[i]);
+            // Correction for altering array of elements
+        } else {
+            i++;
+        }
+    }
 }
 
 $(document).ready(function () {
-	user_assign_module.init();
+    user_assign_module.init();
 });
 
 //var ArbitrarySearcher = function () {

@@ -482,25 +482,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// create organization from corresponding db entity
-		/// </summary>
-		public Organization InitializeOrganization(OrganizationDBEntity entity, bool loadAddress = true)
-		{
-			return new Organization
-			{
-				CreatedUtc = entity.CreatedUtc,
-				FaxNumber = entity.FaxNumber,
-				OrganizationName = entity.OrganizationName,
-				OrganizationId = entity.OrganizationId,
-				PhoneNumber = entity.PhoneNumber,
-				SiteUrl = entity.SiteUrl,
-				Subdomain = entity.Subdomain,
-				Address = (loadAddress && entity.AddressId.HasValue) ? this.GetAddress(entity.AddressId.Value) : null,
-				UserCount = entity.UserCount
-			};
-		}
-
-		/// <summary>
 		/// Translates an OrganizationDBEntity into an Organization business object.
 		/// </summary>
 		/// <param name="organizationInfo">OrganizationDBEntity instance.</param>

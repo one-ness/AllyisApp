@@ -254,19 +254,14 @@ function setDefalutProject(form_child) {
 
 
 function changeOccur(form_child) {
-	var form_element = $(form_child).parents("form:first");
-	form_element.addClass("changed");
-	form_element.addClass("compounded");
+    var form_element = $(form_child).parents("form:first");
 
-	if ($(form_element).hasClass("create")) {
+    if ($(form_element).hasClass("create")) {
 		var created = form_element.find("[name='IsCreated']")[0];
-		created.setAttribute("value", "True");
-
-		addRow(form_child);
+        created.setAttribute("value", "True");		
+        //addRow(form_child);
 	}
 
-
-	form_element.removeClass("create");
 	var edited = form_element.find("[name='IsEdited']")[0];
 	edited.setAttribute("value", "True");
 	
@@ -276,7 +271,7 @@ function changeOccur(form_child) {
 	setDefalutProject(form_child);
 
 	form_element.removeClass("error");
-	form_element.removeClass("error-submit");
+    form_element.removeClass("error-submit");    
 }
 
 function fillDLL(form_child) {

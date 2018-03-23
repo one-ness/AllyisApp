@@ -419,6 +419,8 @@
     <Build Include="Auth\Stored Procedures\GetInvitationsByEmail.sql" />
     <Build Include="dbo\Functions\SplitNumberString.sql" />
     <Build Include="Auth\Stored Procedures\GetOrganizationsByIds.sql" />
+    <Build Include="Billing\Stored Procedures\GetSubscriptionsByIds.sql" />
+    <Build Include="Auth\Stored Procedures\GetUserByEmail.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

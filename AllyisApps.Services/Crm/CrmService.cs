@@ -588,7 +588,54 @@ namespace AllyisApps.Services
 
 		#region Info-DBEntity Conversions
 
+		/// <summary>
+		/// Initialize address from dynamic infomation
+		/// </summary>
+		/// <param name="address"></param>
+		/// <returns></returns>
+		public static Address InitializeAddress(dynamic address)
+		{
+			if (address == null)
+			{
+				return null;
+			}
 
+			return new Address
+			{
+				AddressId = address.AddressId,
+				Address1 = address.Address1 ?? address.Address,
+				Address2 = address.Address2,
+				City = address.City,
+				StateName = address.State ?? address.StateName,
+				PostalCode = address.PostalCode,
+				CountryCode = address.CountryCode,
+				StateId = address.StateId,
+				CountryName = address.Country ?? address.CountryName
+			};
+		}
+
+		public Customer IntializeCustomer(CustomerDBEntity customer, bool loadAddress = true)
+		{
+			if (customer == null)
+			{
+				return null;
+			}
+			return new Customer
+			{
+				Address = loadAddress && customer.AddressId.HasValue ? GetAddress(customer.AddressId.Value) : null,
+				ContactEmail = customer.ContactEmail,
+				ContactPhoneNumber = customer.ContactPhoneNumber,
+				CreatedUtc = customer.CreatedUtc,
+				CustomerId = customer.CustomerId,
+				CustomerCode = customer.CustomerCode,
+				EIN = customer.EIN,
+				FaxNumber = customer.FaxNumber,
+				CustomerName = customer.CustomerName,
+				OrganizationId = customer.OrganizationId,
+				Website = customer.Website,
+				IsActive = customer.IsActive
+			};
+		}
 
 		/// <summary>
 		/// Initializes a <see cref="Customer"/> from a query"/>.

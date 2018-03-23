@@ -6,6 +6,7 @@
 
 using System;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Services;
@@ -13,6 +14,7 @@ using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels.Auth;
+using System.Collections.Generic;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -39,9 +41,11 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>The Accound Index view model.</returns>
 		public async Task<AccountIndexViewModel> ConstuctIndexViewModel()
 		{
-			var result = new AccountIndexViewModel();
-			var user = await this.AppService.GetCurrentUserDetailsAsync();
+			// get current user
+			User2 user = await AppService.GetCurrentUser2Async();
 
+			// add to view model
+			var model = new AccountIndexViewModel();
 			AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel
 			{
 				FirstName = user.FirstName,
@@ -56,21 +60,47 @@ namespace AllyisApps.Controllers.Auth
 				PostalCode = user.Address?.PostalCode,
 				Country = user.Address?.CountryName,
 			};
-																							  
-			result.UserInfo = userViewModel;
 
-			// Add invitations to view model
-			foreach (var item in user.Invitations)
+			model.UserInfo = userViewModel;
+
+			// add current user invitations to view model
+			var invites = await this.AppService.GetCurrentUserInvitationsAsync();
+			if (invites.Count > 0)
 			{
-				result.Invitations.Add(new AccountIndexViewModel.InvitationViewModel
+				// get the list of org ids, and get the orgs
+				List<int> ids1 = new List<int>();
+				foreach (var item in invites)
+				{
+					ids1.Add(item.OrganizationId);
+				}
+
+				var orgs1 = await this.AppService.GetOrganizationsByIdsAsync(ids1);
+				// set the org name for each invite
+				foreach (var item in invites)
+				{
+					item.OrganizationName = orgs1[item.OrganizationId].OrganizationName;
+				}
+			}
+
+			// add the invitations to the view model
+			foreach (var item in invites)
+			{
+				model.Invitations.Add(new AccountIndexViewModel.InvitationViewModel
 				{
 					InvitationId = item.InvitationId,
-					//OrganizationName = item.OrganizationName
+					OrganizationName = item.OrganizationName
 				});
 			}
 
-			// Add organizations to model
-			foreach (var item in user.UserOrganizations)
+			// get a list of organizations the user is member of, from usercontext
+			List<int> ids2 = new List<int>();
+			foreach (var item in this.AppService.UserContext.OrganizationsAndRoles)
+			{
+				ids2.Add(item.Key);
+			}
+
+			var orgs2 = await this.AppService.GetOrganizationsByIdsAsync(ids2);
+			foreach (var item in orgs2.Values)
 			{
 				AccountIndexViewModel.OrganizationViewModel orgViewModel =
 				new AccountIndexViewModel.OrganizationViewModel
@@ -93,10 +123,16 @@ namespace AllyisApps.Controllers.Auth
 					IsReadSubscriptionsListAllowed = this.AppService.CheckOrgAction(AllyisApps.Services.AppService.OrgAction.ReadSubscriptions, item.OrganizationId, false)
 				};
 
-				// Add subscription info
-				foreach (var subItem in user.UserSubscriptions
-					.Where(sub => sub.OrganizationId == item.OrganizationId  && sub.ProductRoleId != 0 )
-					.OrderBy(sub => sub.ProductId))
+				// get a list of org's subscriptions that this user is member of
+				List<int> ids3 = new List<int>();
+				var subAndRoles = this.AppService.UserContext.SubscriptionsAndRoles.Values.Where(x => x.OrganizationId == item.OrganizationId && x.ProductRoleId != 0).ToList();
+				foreach (var subItem in subAndRoles)
+				{
+					ids3.Add(subItem.SubscriptionId);
+				}
+
+				var subs = await this.AppService.GetSubscriptionsByIdsAsync(ids3);
+				foreach (var subItem in subAndRoles)
 				{
 					string description = string.Empty;
 					var subViewModel = new AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel();
@@ -135,20 +171,21 @@ namespace AllyisApps.Controllers.Auth
 							break;
 					}
 
-					subViewModel.ProductName = subItem.ProductName;
+					var sub = subs[subItem.SubscriptionId];
+					subViewModel.ProductName = sub.ProductName;
 					subViewModel.SubscriptionId = subItem.SubscriptionId;
 					subViewModel.SubscriptionName = subItem.SubscriptionName;
 					subViewModel.ProductDescription = description;
 					subViewModel.ProductId = subItem.ProductId;
-					subViewModel.AreaUrl = subItem.ProductAreaUrl;
-					subViewModel.IconUrl = subItem.SkuIconUrl == null ? null : "~/" + subItem.SkuIconUrl;
+					subViewModel.AreaUrl = sub.ProductAreaUrl;
+					subViewModel.IconUrl = string.IsNullOrWhiteSpace(sub.SkuIconUrl) ? null : "~/" + sub.SkuIconUrl;
 					orgViewModel.Subscriptions.Add(subViewModel);
 				}
 
-				result.Organizations.Add(orgViewModel);
+				model.Organizations.Add(orgViewModel);
 			}
 
-			return result;
+			return model;
 		}
 
 		/// <summary>

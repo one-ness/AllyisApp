@@ -1,1 +1,1 @@
-﻿INSERT INTO [Finance].[AccountType] (AccountTypeId, AccountTypeName) VALUES (0,'Defalt'); 
+﻿INSERT INTO [Finance].[AccountType] (AccountTypeId, AccountTypeName) VALUES (0,'Default'); 

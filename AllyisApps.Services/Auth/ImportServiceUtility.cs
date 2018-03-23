@@ -33,11 +33,9 @@ namespace AllyisApps.Services
 				//User is completly new does not exist in any fashion
 				DateTime now = DateTime.Now;
 				DateTime years18 = now.AddYears(-18);
-				userId = await DBHelper.CreateUserAsync(email, Crypto.GetPasswordHash("Welcome1"), firstName, lastName, Guid.NewGuid(), years18, null, null, null, null, null, null, null, null);
-			}
-			else
-			{
-				userId = user.UserId;
+
+				int userid = await DBHelper.CreateUserAsync(email, Crypto.GetPasswordHash("Welcome1"), firstName, lastName, Guid.NewGuid(), years18, null, null, null, null, null, null, null, null);
+				user = await GetUserByEmailAsync(email);
 			}
 
 			OrganizationUserDBEntity orgUser = new OrganizationUserDBEntity()
