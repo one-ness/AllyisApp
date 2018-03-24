@@ -629,7 +629,7 @@ namespace AllyisApps.Services
 			int subId = await DBHelper.CreateSubscription(organizationId, (int)skuId, subscriptionName, UserContext.UserId, managerProductRoleId, unassignedProductRoleId);
 
 			// initialize default settings
-			//await MergeDefaultSettingsForProduct(selectedSku.ProductId, organizationId, subId);
+			await MergeDefaultSettingsForProduct(selectedSku.ProductId, organizationId, subId);
 			return subId;
 		}
 

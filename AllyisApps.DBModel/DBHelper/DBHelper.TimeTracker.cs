@@ -383,7 +383,7 @@ namespace AllyisApps.DBModel
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return await connection.QuerySingleAsync<SettingDBEntity>("[TimeTracker].[GetSettings]", new { organizationId }, commandType: CommandType.StoredProcedure);
+				return await connection.QuerySingleOrDefaultAsync<SettingDBEntity>("[TimeTracker].[GetSettings]", new { organizationId }, commandType: CommandType.StoredProcedure);
 			}
 		}
 
