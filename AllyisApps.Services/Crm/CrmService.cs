@@ -602,7 +602,7 @@ namespace AllyisApps.Services
 
 			return new Address
 			{
-				AddressId = address.AddressId,
+				AddressId = address.AddressId == null ? 0 : address.AddressId,
 				Address1 = address.Address1 ?? address.Address,
 				Address2 = address.Address2,
 				City = address.City,

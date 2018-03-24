@@ -450,7 +450,7 @@ namespace AllyisApps.Services
 
 			var result = new OrganizationUser();
 			result.AccessFailedCount = entity.AccessFailedCount;
-			result.Address = this.InitializeAddress(entity);
+			result.Address = InitializeAddress(entity);
 			result.DateOfBirth = entity.DateOfBirth;
 			result.Email = entity.Email;
 			result.EmailConfirmationCode = entity.EmailConfirmationCode;
@@ -496,7 +496,7 @@ namespace AllyisApps.Services
 
 			if (organizationInfo.AddressId != null)
 			{
-				address = this.InitializeAddress(organizationInfo);
+				address = InitializeAddress(organizationInfo);
 			}
 
 			return new Organization
