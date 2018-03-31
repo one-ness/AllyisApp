@@ -95,9 +95,9 @@ namespace AllyisApps.Controllers
 
 			// get the language id from TempData dictionary, which was set in previous request
 			string cultureName = Language.DefaultLanguageCultureName;
-			if (TempData[LanguageKey] != null)
+			if (!string.IsNullOrWhiteSpace(TempData[LanguageKey] as string))
 			{
-				cultureName = ((string)TempData[LanguageKey]).Trim();
+				cultureName = (TempData[LanguageKey] as string).Trim();
 			}
 
 			if (Request.IsAuthenticated)
@@ -144,7 +144,7 @@ namespace AllyisApps.Controllers
 		/// <returns>The culture name.</returns>
 		private string ChangeLanguage(string cultureName)
 		{
-			if (string.IsNullOrEmpty(cultureName))
+			if (string.IsNullOrWhiteSpace(cultureName))
 			{
 				return string.Empty;
 			}

@@ -58,7 +58,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				List<SelectListItem> statuses = new List<SelectListItem>
 				{
 					new SelectListItem { Text = "Active", Value = "1", Selected = false },
-					new SelectListItem { Text = "Disabled", Value= "0", Selected = false }
+					new SelectListItem { Text = "Disabled", Value = "0", Selected = false }
 				};
 
 				string selectedStatus = model.IsActive ? "1" : "0";
@@ -76,7 +76,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				List<SelectListItem> statuses = new List<SelectListItem>
 				{
 					new SelectListItem { Text = "Active", Value = "1", Selected = false },
-					new SelectListItem { Text = "Disabled", Value= "0", Selected = false }
+					new SelectListItem { Text = "Disabled", Value = "0", Selected = false }
 				};
 
 				string selectedStatus = "1";
