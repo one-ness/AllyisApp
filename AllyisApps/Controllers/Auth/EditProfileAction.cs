@@ -24,7 +24,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>Edit profile view.</returns>
 		public async Task<ActionResult> EditProfile()
 		{
-			User user = await AppService.GetCurrentUserAsync();
+			User2 user = await AppService.GetCurrentUser2Async();
 
 			var model = new EditProfileViewModel
 			{
@@ -63,11 +63,8 @@ namespace AllyisApps.Controllers.Auth
 			}
 
 			// model error
-			User user = await AppService.GetCurrentUserAsync();
 			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService.GetCountries());
 			model.LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService.GetStates(model.SelectedCountryCode));
-			model.DateOfBirth = user.DateOfBirth;
-
 			return View(model);
 		}
 	}

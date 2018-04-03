@@ -98,6 +98,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets Date of birth.
 		/// </summary>
+		[Display(Name = "Date Of Birth")]
 		[Required(ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "DateOfBirthRequired")]
 		[MinDateValidation]
 		public DateTime DateOfBirth { get; set; } // has to be int for localization to work correctly. Gets changed to DateTime? when saving data from view.
