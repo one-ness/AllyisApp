@@ -67,18 +67,23 @@ namespace AllyisApps.Controllers.Auth
 			var invites = await this.AppService.GetCurrentUserInvitationsAsync();
 			if (invites.Count > 0)
 			{
-				// get the list of org ids, and get the orgs
-				List<int> ids1 = new List<int>();
-				foreach (var item in invites)
-				{
-					ids1.Add(item.OrganizationId);
-				}
-
-				var orgs1 = await this.AppService.GetOrganizationsByIdsAsync(ids1);
+				// get the list of organizations for the invite, if they are active
+				var orgs1 = await this.AppService.GetOrganizationsByIdsAsync(invites.Keys.ToList<int>());
 				// set the org name for each invite
-				foreach (var item in invites)
+				foreach (var item in orgs1)
 				{
-					item.OrganizationName = orgs1[item.OrganizationId].OrganizationName;
+					Invitation temp = null;
+					if (invites.TryGetValue(item.Value.OrganizationId, out temp))
+					{
+						temp.OrganizationName = item.Value.OrganizationName;
+					}
+					else
+					{
+						// invitation is pending for user, but somehow the organization doesn't exist
+						// (may be the org was deleted in the meantime)
+						// remove the invite from the list
+						invites.Remove(item.Value.OrganizationId);
+					}
 				}
 			}
 
@@ -87,8 +92,8 @@ namespace AllyisApps.Controllers.Auth
 			{
 				model.Invitations.Add(new AccountIndexViewModel.InvitationViewModel
 				{
-					InvitationId = item.InvitationId,
-					OrganizationName = item.OrganizationName
+					InvitationId = item.Value.InvitationId,
+					OrganizationName = item.Value.OrganizationName
 				});
 			}
 

@@ -307,9 +307,12 @@ namespace AllyisApps.Services
 			return this.InitializeUser2(user);
 		}
 
-		public async Task<List<Invitation>> GetCurrentUserInvitationsAsync()
+		/// <summary>
+		/// get the list of pending invitations for the current user, indexed by org id
+		/// </summary>
+		public async Task<Dictionary<int, Invitation>> GetCurrentUserInvitationsAsync()
 		{
-			List<Invitation> result = new List<Invitation>();
+			Dictionary<int, Invitation> result = new Dictionary<int, Invitation>();
 			var entities = await this.DBHelper.GetInvitationsByEmailAsync(this.UserContext.Email, (int)InvitationStatusEnum.Pending);
 			foreach (var item in entities)
 			{
@@ -326,7 +329,7 @@ namespace AllyisApps.Services
 				obj.OrganizationRole = (OrganizationRoleEnum)item.OrganizationRoleId;
 				obj.OrganizationId = item.OrganizationId;
 				obj.ProductRolesJson = item.ProductRolesJson;
-				result.Add(obj);
+				result.Add(obj.OrganizationId, obj);
 			}
 
 			return result;
