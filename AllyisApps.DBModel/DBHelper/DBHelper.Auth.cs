@@ -280,15 +280,11 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updates new password in Auth.User table. Requires proper reset code. Returns the number of rows updated.
 		/// </summary>
-		public int UpdateUserPasswordUsingCode(string passwordHash, Guid code)
+		public async Task<int> UpdateUserPasswordUsingCode(string passwordHash, Guid code)
 		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@passwordHash", passwordHash);
-			parameters.Add("@passwordResetCode", code);
-
-			using (var connection = new SqlConnection(SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Execute("[Auth].[UpdateUserPasswordUsingCode]", parameters, commandType: CommandType.StoredProcedure);
+				return (await con.QueryAsync<int>("[Auth].[UpdateUserPasswordUsingCode] @a, @b", new { a = passwordHash, b = code })).FirstOrDefault();
 			}
 		}
 
@@ -298,15 +294,11 @@ namespace AllyisApps.DBModel
 		/// <param name = "email">Target user's email address.</param>
 		/// <param name = "resetCode">The resetCode.</param>
 		/// <returns>number of rows updated.</returns>
-		public int UpdateUserPasswordResetCode(string email, string resetCode)
+		public async Task<int> UpdateUserPasswordResetCode(string email, string resetCode)
 		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@email", email);
-			parameters.Add("@passwordResetCode", resetCode);
-
-			using (var connection = new SqlConnection(SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Execute("[Auth].[UpdateUserPasswordResetCode]", parameters, commandType: CommandType.StoredProcedure);
+				return (await con.QueryAsync<int>("[Auth].[UpdateUserPasswordResetCode] @a, @b", new { a = email, b = resetCode })).FirstOrDefault();
 			}
 		}
 

@@ -639,14 +639,19 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(callbackUrl)) throw new ArgumentNullException(nameof(callbackUrl));
 
 			bool result = false;
-			int rowsUpdated = DBHelper.UpdateUserPasswordResetCode(email, code);
-			if (rowsUpdated > 0)
+			int rowsUpdated = await this.DBHelper.UpdateUserPasswordResetCode(email, code);
+			if (rowsUpdated == 1)
 			{
 				// Send reset email
 				StringBuilder sb = new StringBuilder();
 				sb.AppendFormat("Please reset your password by clicking <a href=\"{0}\">this reset link</a>.", callbackUrl);
 				string msgbody = new System.Web.HtmlString(sb.ToString()).ToString();
 				result = await this.Mailer.SendEmailAsync(ServiceSettings.SupportEmail, email, "Reset password", msgbody);
+			}
+			else if (rowsUpdated == 0)
+			{
+				// email didn't exist
+				// TODO: log
 			}
 
 			return result;
@@ -655,19 +660,12 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Reset password. Returns the number of rows updated in the db.
 		/// </summary>
-		public async Task<int> ResetPassword(Guid code, string password)
+		public async Task<bool> ResetPassword(Guid code, string password)
 		{
 			if (code == null) throw new ArgumentNullException(nameof(code));
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentNullException(nameof(password));
 
-			int result = 0;
-			await Task.Run(() =>
-			{
-				// update password for user and reset password code to null
-				result = DBHelper.UpdateUserPasswordUsingCode(Crypto.GetPasswordHash(password), code);
-			});
-
-			return result;
+			return ((await this.DBHelper.UpdateUserPasswordUsingCode(Crypto.GetPasswordHash(password), code)) == 1);
 		}
 
 		/// <summary>

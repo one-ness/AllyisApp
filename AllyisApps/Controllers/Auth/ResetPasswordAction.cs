@@ -43,7 +43,7 @@ namespace AllyisApps.Controllers.Auth
 		{
 			if (ModelState.IsValid)
 			{
-				if (await AppService.ResetPassword(model.Code, model.Password) > 0)
+				if (await AppService.ResetPassword(model.Code, model.Password))
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.ResetPasswordSuccessDialogue, Variety.Success));
 					return RedirectToAction(ActionConstants.LogOn, ControllerConstants.Account);
