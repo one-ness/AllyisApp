@@ -420,8 +420,6 @@
     <Build Include="Auth\Stored Procedures\GetOrganizationsByIds.sql" />
     <Build Include="Auth\Stored Procedures\GetUserByEmail.sql" />
     <Build Include="Billing\Stored Procedures\GetActiveSubscriptionsByIds.sql" />
-    <Build Include="Auth\Stored Procedures\GetActiveOrganizationsByIds.sql" />
-    <Build Include="Auth\Stored Procedures\GetActiveOrganizationName.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
