@@ -23,7 +23,7 @@ namespace AllyisApps.Controllers.Auth
 		{
 			var model = new OrganizationDetailsViewModel();
 			model.CanEditOrganization = AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id, false);
-			var org = await AppService.GetOrganization(id);
+			var org = await AppService.GetOrganizationAsync(id);
 			model.CanDeleteOrganization = AppService.CheckOrgAction(AppService.OrgAction.DeleteOrganization, id, false);
 			if (org.Address != null)
 			{

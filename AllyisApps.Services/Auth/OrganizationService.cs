@@ -42,12 +42,12 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>The Organization.</returns>
-		public async Task<Organization> GetOrganization(int orgId)
+		public async Task<Organization> GetOrganizationAsync(int orgId)
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
 
 			CheckOrgAction(OrgAction.ReadOrganization, orgId);
-			return InitializeOrganization(await DBHelper.GetOrganization(orgId));
+			return InitializeOrganization(await DBHelper.GetOrganizationAsync(orgId));
 		}
 
 		public async Task<List<Invitation>> GetInvitationsAsync(int orgId)
@@ -71,8 +71,7 @@ namespace AllyisApps.Services
 				OrganizationId = orgId,
 				ProductRolesJson = item.ProductRolesJson,
 				OrganizationRole = (OrganizationRoleEnum)item.OrganizationRoleId
-			})
-				.ToList();
+			}).ToList();
 		}
 
 		/// <summary>

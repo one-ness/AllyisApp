@@ -41,7 +41,7 @@ namespace AllyisApps.Controllers.Auth
 				model.Subscriptions.Add(data);
 			}
 
-			var org = await AppService.GetOrganization(id);
+			var org = await AppService.GetOrganizationAsync(id);
 			model.OrganizationName = org.OrganizationName;
 
 			return View(model);

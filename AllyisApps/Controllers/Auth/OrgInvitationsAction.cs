@@ -64,7 +64,7 @@ namespace AllyisApps.Controllers.Auth
 				model.Invitations.Add(data);
 			}
 
-			var org = await AppService.GetOrganization(id);
+			var org = await AppService.GetOrganizationAsync(id);
 			model.OrganizationName = org.OrganizationName;
 			model.OrganizationId = id;
 			model.TabInfo.OrganizationId = id;

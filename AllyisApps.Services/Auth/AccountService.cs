@@ -229,10 +229,9 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Uses the database to return a fully populated UserContext from the userId.
+		/// gets the user context for the given user (should be the logged in user). the method
+		/// returns only "active" organizations and subscriptions, which is the key to the whole permissions model.
 		/// </summary>
-		/// <param name="userId">The user Id to look up.</param>
-		/// <returns>The User context after population.</returns>
 		public UserContext PopulateUserContext(int userId)
 		{
 			if (userId <= 0) throw new ArgumentException("userId");
@@ -317,38 +316,34 @@ namespace AllyisApps.Services
 			var entities = await this.DBHelper.GetInvitationsByEmailAsync(this.UserContext.Email, (int)InvitationStatusEnum.Pending);
 			foreach (var item in entities)
 			{
-				// get the org name for the invite, if org is active
-				string orgName = await this.DBHelper.GetActiveOrganizationName(item.OrganizationId);
-				if (!string.IsNullOrWhiteSpace(orgName))
-				{
-					// yes, org is active, create invitation and add to result
-					var obj = new Invitation();
-					obj.DecisionDateUtc = item.DecisionDateUtc;
-					obj.Email = item.Email;
-					obj.EmployeeId = item.EmployeeId;
-					obj.EmployeeTypeId = item.EmployeeTypeId;
-					obj.FirstName = item.FirstName;
-					obj.InvitationCreatedUtc = item.InvitationCreatedUtc;
-					obj.InvitationId = item.InvitationId;
-					obj.InvitationStatus = (InvitationStatusEnum)item.InvitationStatus;
-					obj.LastName = item.LastName;
-					obj.OrganizationRole = (OrganizationRoleEnum)item.OrganizationRoleId;
-					obj.OrganizationId = item.OrganizationId;
-					obj.ProductRolesJson = item.ProductRolesJson;
-					result.Add(obj.OrganizationId, obj);
-				}
+				// get the org			
+				var org = await this.GetOrganizationAsync(item.OrganizationId);
+				var obj = new Invitation();
+				obj.DecisionDateUtc = item.DecisionDateUtc;
+				obj.Email = item.Email;
+				obj.EmployeeId = item.EmployeeId;
+				obj.EmployeeTypeId = item.EmployeeTypeId;
+				obj.FirstName = item.FirstName;
+				obj.InvitationCreatedUtc = item.InvitationCreatedUtc;
+				obj.InvitationId = item.InvitationId;
+				obj.InvitationStatus = (InvitationStatusEnum)item.InvitationStatus;
+				obj.LastName = item.LastName;
+				obj.OrganizationRole = (OrganizationRoleEnum)item.OrganizationRoleId;
+				obj.OrganizationId = item.OrganizationId;
+				obj.ProductRolesJson = item.ProductRolesJson;
+				result.Add(obj.OrganizationId, obj);
+
 			}
 
 			return result;
 		}
 
-		public async Task<Dictionary<int, Organization>> GetActiveOrganizationsByIdsAsync(List<int> ids)
+		public async Task<Dictionary<int, Organization>> GetOrganizationsByIdsAsync(List<int> ids)
 		{
-			if (ids == null) throw new ArgumentNullException(nameof(ids));
 			Dictionary<int, Organization> result = new Dictionary<int, Organization>();
-			if (ids.Count > 0)
+			if (ids != null && ids.Count > 0)
 			{
-				var entities = await this.DBHelper.GetActiveOrganizationsByIdsAsync(ids);
+				var entities = await this.DBHelper.GetOrganizationsByIdsAsync(ids);
 				foreach (var item in entities)
 				{
 					result.Add(item.OrganizationId, this.InitializeOrganization(item));
@@ -367,6 +362,7 @@ namespace AllyisApps.Services
 			{
 				CreatedUtc = entity.CreatedUtc,
 				FaxNumber = entity.FaxNumber,
+				IsActive = entity.IsActive,
 				OrganizationName = entity.OrganizationName,
 				OrganizationId = entity.OrganizationId,
 				PhoneNumber = entity.PhoneNumber,
@@ -639,14 +635,14 @@ namespace AllyisApps.Services
 		/// <param name="code">The password reset code that is .</param>
 		/// <param name="callbackUrl">The Url to include as the "click here" link, with stand-ins for userid and code (as "{userid}" and "{code}".</param>
 		/// <returns>A value indicating whether the given email address matched with an existing user.</returns>
-		public async Task<bool> SendPasswordResetMessage(string email, string code, string callbackUrl)
+		public async Task<bool> SendPasswordResetMessageAsync(string email, string code, string callbackUrl)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException(nameof(email));
 			if (string.IsNullOrWhiteSpace(code)) throw new ArgumentNullException(nameof(code));
 			if (string.IsNullOrWhiteSpace(callbackUrl)) throw new ArgumentNullException(nameof(callbackUrl));
 
 			bool result = false;
-			int rowsUpdated = await this.DBHelper.UpdateUserPasswordResetCode(email, code);
+			int rowsUpdated = await this.DBHelper.UpdateUserPasswordResetCodeAsync(email, code);
 			if (rowsUpdated == 1)
 			{
 				// Send reset email
@@ -667,12 +663,12 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Reset password. Returns the number of rows updated in the db.
 		/// </summary>
-		public async Task<bool> ResetPassword(Guid code, string password)
+		public async Task<bool> ResetPasswordAsync(Guid code, string password)
 		{
 			if (code == null) throw new ArgumentNullException(nameof(code));
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentNullException(nameof(password));
 
-			return ((await this.DBHelper.UpdateUserPasswordUsingCode(Crypto.GetPasswordHash(password), code)) == 1);
+			return ((await this.DBHelper.UpdateUserPasswordUsingCodeAsync(Crypto.GetPasswordHash(password), code)) == 1);
 		}
 
 		/// <summary>
@@ -681,7 +677,7 @@ namespace AllyisApps.Services
 		/// <param name="oldPassword">Old password, for verification.</param>
 		/// <param name="newPassword">New password to change it to.</param>
 		/// <returns>True for a successful change, false if anything fails.</returns>
-		public async Task<bool> ChangePassword(string oldPassword, string newPassword)
+		public async Task<bool> ChangePasswordAsync(string oldPassword, string newPassword)
 		{
 			if (string.IsNullOrWhiteSpace(oldPassword)) throw new ArgumentNullException(nameof(oldPassword));
 			if (string.IsNullOrWhiteSpace(newPassword)) throw new ArgumentNullException(nameof(newPassword));

@@ -48,7 +48,7 @@ namespace AllyisApps.Controllers.Auth
 		{
 			AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
 			bool canDelete = AppService.CheckOrgAction(AppService.OrgAction.DeleteOrganization, id, false);
-			var organization = await AppService.GetOrganization(id);
+			var organization = await AppService.GetOrganizationAsync(id);
 			var model = new EditOrganizationViewModel
 			{
 				OrganizationId = organization.OrganizationId,

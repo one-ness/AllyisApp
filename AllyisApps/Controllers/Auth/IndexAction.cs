@@ -82,7 +82,7 @@ namespace AllyisApps.Controllers.Auth
 				ids2.Add(item.Key);
 			}
 
-			var orgs2 = await this.AppService.GetActiveOrganizationsByIdsAsync(ids2);
+			var orgs2 = await this.AppService.GetOrganizationsByIdsAsync(ids2);
 			foreach (var item in orgs2.Values)
 			{
 				AccountIndexViewModel.OrganizationViewModel orgViewModel =

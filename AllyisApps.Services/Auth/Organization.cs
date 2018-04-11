@@ -56,14 +56,14 @@ namespace AllyisApps.Services.Auth
 		public DateTime? CreatedUtc { get; set; }
 
 		/// <summary>
+		/// gets or sets if this organization is active
+		/// </summary>
+		public bool IsActive { get; set; }
+
+		/// <summary>
 		/// Gets or sets the Organization subdomain perfix.
 		/// </summary>
 		public string Subdomain { get; set; }
-
-		/// <summary>
-		/// Gets or sets if this organization is active
-		/// </summary>
-		public bool IsActive { get; set; }
 
 		/// <summary>
 		/// list of users in this organization

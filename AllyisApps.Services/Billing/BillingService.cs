@@ -740,7 +740,7 @@ namespace AllyisApps.Services
 			if (productId == ProductIdEnum.TimeTracker)
 			{
 				this.PopulateUserContext(this.UserContext.UserId);
-				string orgNme = (await this.GetOrganization(orgId)).OrganizationName;
+				string orgNme = (await this.GetOrganizationAsync(orgId)).OrganizationName;
 				await DBHelper.MergeDefaultTimeTrackerSettings(orgId);
 				var newCustId = await CreateCustomerAsync(new Crm.Customer()
 				{ CustomerName = orgNme, IsActive = true, OrganizationId = orgId, CustomerCode = "000000000001" }, subId);

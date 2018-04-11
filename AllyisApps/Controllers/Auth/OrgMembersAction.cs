@@ -54,7 +54,7 @@ namespace AllyisApps.Controllers.Auth
 				model.Users.Add(data);
 			}
 
-			var org = await AppService.GetOrganization(id);
+			var org = await AppService.GetOrganizationAsync(id);
 			model.OrganizationName = org.OrganizationName;
 			model.TabInfo.MemberCount = model.Users.Count;
 

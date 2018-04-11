@@ -49,7 +49,7 @@ namespace AllyisApps.Controllers.Auth
 					string callbackUrl = Url.Action(ActionConstants.ResetPassword, ControllerConstants.Account, null, protocol: Request.Url.Scheme);
 					StringBuilder sb = new StringBuilder();
 					sb.AppendFormat("{0}/{1}", callbackUrl, code);
-					await AppService.SendPasswordResetMessage(model.Email, code, sb.ToString());
+					await AppService.SendPasswordResetMessageAsync(model.Email, code, sb.ToString());
 				}
 
 				// add a success notification, irrespective of user is null or not.

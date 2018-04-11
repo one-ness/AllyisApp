@@ -41,7 +41,7 @@ namespace AllyisApps.Controllers.Auth
 				if (string.Compare(model.NewPassword, model.ConfirmPassword, true) == 0)
 				{
 					// passwords match
-					if (await AppService.ChangePassword(model.OldPassword, model.NewPassword))
+					if (await AppService.ChangePasswordAsync(model.OldPassword, model.NewPassword))
 					{
 						// successfully changed
 						Notifications.Add(new BootstrapAlert(Resources.Strings.ChangePasswordSuccessMessage, Variety.Success));
