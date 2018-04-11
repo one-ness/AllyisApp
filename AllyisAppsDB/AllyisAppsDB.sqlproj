@@ -192,7 +192,6 @@
     <Build Include="Auth\Stored Procedures\DeleteOrg.sql" />
     <Build Include="Auth\Stored Procedures\RejectInvitation.sql" />
     <Build Include="Auth\Stored Procedures\GetOrganization.sql" />
-    <Build Include="Auth\Stored Procedures\GetOrganizationsByUserId.sql" />
     <Build Include="Auth\Stored Procedures\AcceptInvitation.sql" />
     <Build Include="Auth\Stored Procedures\DeleteInvitation.sql" />
     <Build Include="Auth\Stored Procedures\GetPasswordHashFromUserId.sql" />
@@ -419,8 +418,10 @@
     <Build Include="Auth\Stored Procedures\GetInvitationsByEmail.sql" />
     <Build Include="dbo\Functions\SplitNumberString.sql" />
     <Build Include="Auth\Stored Procedures\GetOrganizationsByIds.sql" />
-    <Build Include="Billing\Stored Procedures\GetSubscriptionsByIds.sql" />
     <Build Include="Auth\Stored Procedures\GetUserByEmail.sql" />
+    <Build Include="Billing\Stored Procedures\GetActiveSubscriptionsByIds.sql" />
+    <Build Include="Auth\Stored Procedures\GetActiveOrganizationsByIds.sql" />
+    <Build Include="Auth\Stored Procedures\GetActiveOrganizationName.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

@@ -25,10 +25,10 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// get the subscriptions for the given ids
 		/// </summary>
-		public async Task<Dictionary<int, Subscription>> GetSubscriptionsByIdsAsync(List<int> ids)
+		public async Task<Dictionary<int, Subscription>> GetActiveSubscriptionsByIdsAsync(List<int> ids)
 		{
 			Dictionary<int, Subscription> result = new Dictionary<int, Subscription>();
-			var entities = await this.DBHelper.GetSubscriptionsByIdsAsync(ids);
+			var entities = await this.DBHelper.GetActiveSubscriptionsByIdsAsync(ids);
 			foreach (var item in entities)
 			{
 				var sku = CacheContainer.AllSkusCache[(SkuIdEnum)item.SkuId];

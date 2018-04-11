@@ -313,35 +313,42 @@ namespace AllyisApps.Services
 		public async Task<Dictionary<int, Invitation>> GetCurrentUserPendingInvitationsAsync()
 		{
 			Dictionary<int, Invitation> result = new Dictionary<int, Invitation>();
+			// get list of pending invitations for the current user email
 			var entities = await this.DBHelper.GetInvitationsByEmailAsync(this.UserContext.Email, (int)InvitationStatusEnum.Pending);
 			foreach (var item in entities)
 			{
-				var obj = new Invitation();
-				obj.DecisionDateUtc = item.DecisionDateUtc;
-				obj.Email = item.Email;
-				obj.EmployeeId = item.EmployeeId;
-				obj.EmployeeTypeId = item.EmployeeTypeId;
-				obj.FirstName = item.FirstName;
-				obj.InvitationCreatedUtc = item.InvitationCreatedUtc;
-				obj.InvitationId = item.InvitationId;
-				obj.InvitationStatus = (InvitationStatusEnum)item.InvitationStatus;
-				obj.LastName = item.LastName;
-				obj.OrganizationRole = (OrganizationRoleEnum)item.OrganizationRoleId;
-				obj.OrganizationId = item.OrganizationId;
-				obj.ProductRolesJson = item.ProductRolesJson;
-				result.Add(obj.OrganizationId, obj);
+				// get the org name for the invite, if org is active
+				string orgName = await this.DBHelper.GetActiveOrganizationName(item.OrganizationId);
+				if (!string.IsNullOrWhiteSpace(orgName))
+				{
+					// yes, org is active, create invitation and add to result
+					var obj = new Invitation();
+					obj.DecisionDateUtc = item.DecisionDateUtc;
+					obj.Email = item.Email;
+					obj.EmployeeId = item.EmployeeId;
+					obj.EmployeeTypeId = item.EmployeeTypeId;
+					obj.FirstName = item.FirstName;
+					obj.InvitationCreatedUtc = item.InvitationCreatedUtc;
+					obj.InvitationId = item.InvitationId;
+					obj.InvitationStatus = (InvitationStatusEnum)item.InvitationStatus;
+					obj.LastName = item.LastName;
+					obj.OrganizationRole = (OrganizationRoleEnum)item.OrganizationRoleId;
+					obj.OrganizationId = item.OrganizationId;
+					obj.ProductRolesJson = item.ProductRolesJson;
+					result.Add(obj.OrganizationId, obj);
+				}
 			}
 
 			return result;
 		}
 
-		public async Task<Dictionary<int, Organization>> GetOrganizationsByIdsAsync(List<int> ids)
+		public async Task<Dictionary<int, Organization>> GetActiveOrganizationsByIdsAsync(List<int> ids)
 		{
 			if (ids == null) throw new ArgumentNullException(nameof(ids));
 			Dictionary<int, Organization> result = new Dictionary<int, Organization>();
 			if (ids.Count > 0)
 			{
-				var entities = await this.DBHelper.GetOrganizationsByIdsAsync(ids);
+				var entities = await this.DBHelper.GetActiveOrganizationsByIdsAsync(ids);
 				foreach (var item in entities)
 				{
 					result.Add(item.OrganizationId, this.InitializeOrganization(item));

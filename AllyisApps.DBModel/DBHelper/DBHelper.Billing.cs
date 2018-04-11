@@ -24,7 +24,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// get the list of subscription db entities for the given ids
 		/// </summary>
-		public async Task<List<SubscriptionDBEntity>> GetSubscriptionsByIdsAsync(List<int> ids)
+		public async Task<List<SubscriptionDBEntity>> GetActiveSubscriptionsByIdsAsync(List<int> ids)
 		{
 			List<SubscriptionDBEntity> result = new List<SubscriptionDBEntity>();
 			if (ids.Count > 0)
@@ -40,7 +40,7 @@ namespace AllyisApps.DBModel
 
 				using (SqlConnection con = new SqlConnection(SqlConnectionString))
 				{
-					result = (await con.QueryAsync<SubscriptionDBEntity>("[Billing].[GetSubscriptionsByIds] @a", new { a = sb.ToString() })).ToList();
+					result = (await con.QueryAsync<SubscriptionDBEntity>("[Billing].[GetActiveSubscriptionsByIds] @a", new { a = sb.ToString() })).ToList();
 				}
 			}
 

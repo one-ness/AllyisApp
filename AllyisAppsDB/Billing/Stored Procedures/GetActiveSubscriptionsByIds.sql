@@ -1,4 +1,4 @@
-﻿CREATE procedure [Billing].[GetSubscriptionsByIds]
+﻿CREATE procedure [Billing].[GetActiveSubscriptionsByIds]
 	@csvSubIds nvarchar(max)
 as
 begin

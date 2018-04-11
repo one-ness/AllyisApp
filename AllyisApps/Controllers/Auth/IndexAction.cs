@@ -65,28 +65,6 @@ namespace AllyisApps.Controllers.Auth
 
 			// get list of invitations pending for user
 			var invites = await this.AppService.GetCurrentUserPendingInvitationsAsync();
-			if (invites.Count > 0)
-			{
-				// get the list of organizations for the invite, if they are active
-				var orgs1 = await this.AppService.GetOrganizationsByIdsAsync(invites.Keys.ToList<int>());
-				// set the org name for each invite
-				foreach (var item in orgs1)
-				{
-					Invitation temp = null;
-					if (invites.TryGetValue(item.Value.OrganizationId, out temp))
-					{
-						temp.OrganizationName = item.Value.OrganizationName;
-					}
-					else
-					{
-						// invitation is pending for user, but somehow the organization doesn't exist
-						// (may be the org was deleted in the meantime)
-						// remove the invite from the list
-						invites.Remove(item.Value.OrganizationId);
-					}
-				}
-			}
-
 			// add the invitations to the view model
 			foreach (var item in invites)
 			{
@@ -104,7 +82,7 @@ namespace AllyisApps.Controllers.Auth
 				ids2.Add(item.Key);
 			}
 
-			var orgs2 = await this.AppService.GetOrganizationsByIdsAsync(ids2);
+			var orgs2 = await this.AppService.GetActiveOrganizationsByIdsAsync(ids2);
 			foreach (var item in orgs2.Values)
 			{
 				AccountIndexViewModel.OrganizationViewModel orgViewModel =
@@ -130,13 +108,13 @@ namespace AllyisApps.Controllers.Auth
 
 				// get a list of org's subscriptions that this user is member of
 				List<int> ids3 = new List<int>();
-				var subAndRoles = this.AppService.UserContext.SubscriptionsAndRoles.Values.Where(x => x.OrganizationId == item.OrganizationId && x.ProductRoleId != 0).ToList();
+				var subAndRoles = this.AppService.UserContext.SubscriptionsAndRoles.Values.Where(x => x.OrganizationId == item.OrganizationId && x.ProductRoleId != ProductRole.NotInProduct).ToList();
 				foreach (var subItem in subAndRoles)
 				{
 					ids3.Add(subItem.SubscriptionId);
 				}
 
-				var subs = await this.AppService.GetSubscriptionsByIdsAsync(ids3);
+				var subs = await this.AppService.GetActiveSubscriptionsByIdsAsync(ids3);
 				foreach (var subItem in subAndRoles)
 				{
 					string description = string.Empty;
