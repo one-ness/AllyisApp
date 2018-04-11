@@ -310,7 +310,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// get the list of pending invitations for the current user, indexed by org id
 		/// </summary>
-		public async Task<Dictionary<int, Invitation>> GetCurrentUserInvitationsAsync()
+		public async Task<Dictionary<int, Invitation>> GetCurrentUserPendingInvitationsAsync()
 		{
 			Dictionary<int, Invitation> result = new Dictionary<int, Invitation>();
 			var entities = await this.DBHelper.GetInvitationsByEmailAsync(this.UserContext.Email, (int)InvitationStatusEnum.Pending);

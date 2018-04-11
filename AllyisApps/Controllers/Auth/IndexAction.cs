@@ -63,8 +63,8 @@ namespace AllyisApps.Controllers.Auth
 
 			model.UserInfo = userViewModel;
 
-			// add current user invitations to view model
-			var invites = await this.AppService.GetCurrentUserInvitationsAsync();
+			// get list of invitations pending for user
+			var invites = await this.AppService.GetCurrentUserPendingInvitationsAsync();
 			if (invites.Count > 0)
 			{
 				// get the list of organizations for the invite, if they are active
