@@ -245,6 +245,14 @@ input.members-checkbox
 	margin-left: 15px;
 }
 
+input[type="text"], input[type="password"] {
+	min-width: 300px;
+}
+
+.logon .form-group {
+	padding-right: 30px;
+}
+
 .pointer
 {
 	cursor: pointer;

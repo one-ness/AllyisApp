@@ -2,9 +2,10 @@
 @{
 	ViewBag.Title = Strings.SignIn;
 }
-<div class="container">
-	<div class="shrink-wrap-center form-grouping">
-		<div class="min300">
+<div class="container shrink-wrap-center logon">
+	<div class="row">
+		<div class="col-lg-6" style="border-right: 1px solid gray;">
+			<h3 style="margin-bottom: 30px;">Use a local account.</h3>
 			@using (Html.BeginForm(ActionConstants.LogOn, ControllerConstants.Account, new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 			{
 				@Html.AntiForgeryToken()
@@ -37,6 +38,9 @@
 					</p>
 				</div>
 			}
+		</div>
+		<div class="col-lg-6" style="white-space:nowrap;">
+			<h3 style="margin-bottom: 30px;">Use a work or school account.</h3>
 		</div>
 	</div>
 </div>
