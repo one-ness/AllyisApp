@@ -381,6 +381,7 @@
     <Compile Include="Controllers\Auth\IndexAction.cs" />
     <Compile Include="Controllers\Auth\LogOffAction.cs" />
     <Compile Include="Controllers\Auth\LogOnAction.cs" />
+    <Compile Include="Controllers\Auth\MsftOidcAction.cs" />
     <Compile Include="Controllers\Auth\OrgDetailsAction.cs" />
     <Compile Include="Controllers\Auth\OrgInvitationsAction.cs" />
     <Compile Include="Controllers\Auth\OrgMembersAction.cs" />
@@ -497,7 +498,7 @@
     <Content Include="Content\icons\StaffingManager.png" />
     <Content Include="Content\icons\TimeTrackerPro.png" />
     <Content Include="Content\icons\TimeTracker.png" />
-	<Content Include="Content\icons\sign-in-with-microsoft-light.png" />
+    <Content Include="Content\icons\sign-in-with-microsoft-light.png" />
     <Content Include="Scripts\allyis-account-permission2.js" />
     <Content Include="Scripts\allyis-pages-with-filter.js" />
     <Content Include="Scripts\allyis-paginate.js" />
@@ -838,7 +839,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>62707</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
