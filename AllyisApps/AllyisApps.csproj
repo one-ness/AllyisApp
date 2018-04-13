@@ -497,6 +497,7 @@
     <Content Include="Content\icons\StaffingManager.png" />
     <Content Include="Content\icons\TimeTrackerPro.png" />
     <Content Include="Content\icons\TimeTracker.png" />
+	<Content Include="Content\icons\sign-in-with-microsoft-light.png" />
     <Content Include="Scripts\allyis-account-permission2.js" />
     <Content Include="Scripts\allyis-pages-with-filter.js" />
     <Content Include="Scripts\allyis-paginate.js" />
