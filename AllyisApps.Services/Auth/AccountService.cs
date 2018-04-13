@@ -212,12 +212,12 @@ namespace AllyisApps.Services
 			{
 				// email exists, hash the given password and compare with hash in db
 				PassWordValidationResult passwordValidation = Crypto.ValidateAndUpdate(password, user.PasswordHash);
-				if (passwordValidation.successfulMatch)
+				if (passwordValidation.SuccessfulMatch)
 				{
 					// store updated password hash if needed
-					if (passwordValidation.updatedHash != null)
+					if (passwordValidation.UpdatedHash != null)
 					{
-						await DBHelper.UpdateUserPasswordAsync(user.UserId, passwordValidation.updatedHash);
+						await DBHelper.UpdateUserPasswordAsync(user.UserId, passwordValidation.UpdatedHash);
 					}
 
 					// get user obj
@@ -682,14 +682,19 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(oldPassword)) throw new ArgumentNullException(nameof(oldPassword));
 			if (string.IsNullOrWhiteSpace(newPassword)) throw new ArgumentNullException(nameof(newPassword));
 
+			bool result = false;
 			string passwordHash = DBHelper.GetPasswordHashById(UserContext.UserId);
+			if (!string.IsNullOrWhiteSpace(passwordHash))
+			{
+				if (Crypto.ValidateAndUpdate(oldPassword, passwordHash).SuccessfulMatch)
+				{
+					result = true;
+					// old password is correct.
+					await DBHelper.UpdateUserPasswordAsync(UserContext.UserId, Crypto.GetPasswordHash(newPassword));
+				}
+			}
 
-			if (string.IsNullOrWhiteSpace(passwordHash) || !Crypto.ValidateAndUpdate(oldPassword, passwordHash).successfulMatch) return false;
-
-			// old password is correct.
-			await DBHelper.UpdateUserPasswordAsync(UserContext.UserId, Crypto.GetPasswordHash(newPassword));
-
-			return true;
+			return result;
 		}
 
 		/// <summary>

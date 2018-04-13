@@ -104,8 +104,8 @@ namespace AllyisApps.Lib
 
 			return new PassWordValidationResult
 			{
-				successfulMatch = result,
-				updatedHash = newHash
+				SuccessfulMatch = result,
+				UpdatedHash = newHash
 			};
 		}
 
@@ -262,11 +262,11 @@ namespace AllyisApps.Lib
 		/// <summary>
 		/// Wheather password was successfully given for login
 		/// </summary>
-		public bool successfulMatch { get; internal set; }
+		public bool SuccessfulMatch { get; internal set; }
 
 		/// <summary>
 		/// Updated password hash if needed otherwise null.
 		/// </summary>
-		public string updatedHash { get; internal set; }
+		public string UpdatedHash { get; internal set; }
 	}
 }
