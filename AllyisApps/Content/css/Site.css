@@ -245,21 +245,13 @@ input.members-checkbox
 	margin-left: 15px;
 }
 
-.logon input[type="text"], input[type="password"] {
-	width: 300px;
-}
-
-.logon .form-group {
-	padding-right: 30px;
-}
-
 .logon h3 {
 	margin-bottom: 30px;
 	white-space: nowrap;
 }
 
-.logon #logon-left {
-	text-align: right;
+.ip-group {
+	margin-bottom: 15px;
 }
 
 .pointer
