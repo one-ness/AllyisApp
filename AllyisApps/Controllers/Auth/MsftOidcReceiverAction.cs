@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="MsftOidcAction.cs" company="Allyis, Inc.">
+// <copyright file="MsftOidcReceiverAction.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -13,16 +13,16 @@ namespace AllyisApps.Controllers.Auth
 	/// </summary>
 	public partial class AccountController : BaseController
 	{
-		
 		/// <summary>
-		/// login to microsoft work or school account using open id connect protocol
+		/// user returns to here after logging in to MSFT
 		/// described here: https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-protocols-openid-connect-code
 		/// </summary>
 		[AllowAnonymous]
-		public ActionResult MsftOidc()
+		[HttpPost]
+		public ActionResult MsftOidcReceiver()
 		{
-			string returnUrl = this.Url.Action(ActionConstants.MsftOidcReceiver, ControllerConstants.Account, null, this.Request.Url.Scheme);
-			return Redirect(AllyisApps.MsftOidc.GetMsftOidcLoginUrl(returnUrl));
+			// get the post data
+			return null;
 		}
 	}
 }

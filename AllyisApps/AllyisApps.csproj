@@ -383,6 +383,7 @@
     <Compile Include="Controllers\Auth\LogOffAction.cs" />
     <Compile Include="Controllers\Auth\LogOnAction.cs" />
     <Compile Include="Controllers\Auth\MsftOidcAction.cs" />
+    <Compile Include="Controllers\Auth\MsftOidcReceiverAction.cs" />
     <Compile Include="Controllers\Auth\OrgDetailsAction.cs" />
     <Compile Include="Controllers\Auth\OrgInvitationsAction.cs" />
     <Compile Include="Controllers\Auth\OrgMembersAction.cs" />
