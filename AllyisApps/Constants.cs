@@ -56,6 +56,7 @@ namespace AllyisApps
 		public const string ManageSubPermissions = "managesubpermissions";
 		public const string ManagePermissions2 = "managepermissions2";
 		public const string MsftOidc = "msftoidc";
+		public const string MsftOidcReceiver = "msftoidcreceiver";
 		public const string OrgIndex = "orgindex";
 		public const string OrganizationDetails = "orgdetails";
 		public const string OrganizationInvitations = "orginvitations";

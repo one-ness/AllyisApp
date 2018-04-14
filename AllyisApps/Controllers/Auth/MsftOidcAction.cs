@@ -17,6 +17,7 @@ using AllyisApps.Core;
 using System.Net;
 using System.IO;
 using System.Web.Helpers;
+using AllyisApps;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -32,10 +33,10 @@ namespace AllyisApps.Controllers.Auth
 		/// sample login url is given above
 		/// </summary>
 		[AllowAnonymous]
-		public async Task<ActionResult> MsftOidc()
+		public ActionResult MsftOidc()
 		{
-
-			
+			string returnUrl = this.Url.Action(ActionConstants.MsftOidcReceiver, ControllerConstants.Account, null, this.Request.Url.Scheme);
+			return Redirect(AllyisApps.MsftOidc.GetMsftOidcLoginUrl(returnUrl));
 		}
 	}
 }

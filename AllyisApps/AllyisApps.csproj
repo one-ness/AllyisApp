@@ -204,6 +204,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\MsftOidc.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\AdminReportAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\AttachmentDownloadController.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\CreateAccountAction.cs" />
