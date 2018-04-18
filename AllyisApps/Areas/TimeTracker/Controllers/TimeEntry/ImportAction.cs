@@ -14,7 +14,7 @@ using AllyisApps.Core.Alert;
 using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.Utilities;
-using Excel;
+using ExcelDataReader;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -69,9 +69,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry, new { subscriptionId, id = AppService.UserContext.UserId });
 				}
 
-				reader.IsFirstRowAsColumnNames = true;
-
-				DataSet result = reader.AsDataSet();
+				//reader.IsFirstRowAsColumnNames = true;
+				//DataSet result = reader.AsDataSet();
+				DataSet result = new DataSet();
 				reader.Close();
 
 				string[] formattedResult = ImportMessageFormatter.FormatImportResult(await AppService.Import(

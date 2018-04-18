@@ -34,12 +34,22 @@ namespace AllyisApps.Core
 		/// </summary>
 		public static bool RequireEmailConfirmation { get; set; }
 
+		/// <summary>
+		/// Azure Active Directory Client Id to be used for msft office 365 / azure ad login
+		/// </summary>
+		public static Guid AadClientId { get; set; }
+
 		const string SupportEmailDefault = "support@allyisapps.com";
+		const string connectionStringKey = "DefaultConnection";
+		const string supportEmailKey = "SupportEmail";
+		const string sendGridApiKeyKey = "SendGridApiKey";
+		const string requireEmailConfirmationKey = "RequireEmailConfirmation";
+		const string aadClientIdKey = "AadClientId";
 
 		/// <summary>
 		/// Initialize Global Settings.
 		/// </summary>
-		public static void Init(string connectionStringKey = "DefaultConnection", string supportEmailKey = "SupportEmail", string sendGridApiKey = "SendGridApiKey", string requireEmailConfirmationKey = "RequireEmailConfirmation")
+		public static void Init()
 		{
 			SqlConnectionString = ConfigurationManager.ConnectionStrings[connectionStringKey].ConnectionString;
 			if (string.IsNullOrWhiteSpace(SqlConnectionString))
@@ -57,7 +67,7 @@ namespace AllyisApps.Core
 				SupportEmail = SupportEmailDefault;
 			}
 
-			temp = ConfigurationManager.AppSettings[sendGridApiKey];
+			temp = ConfigurationManager.AppSettings[sendGridApiKeyKey];
 			if (!string.IsNullOrWhiteSpace(temp))
 			{
 				SendGridApiKey = temp.Trim();
@@ -71,6 +81,13 @@ namespace AllyisApps.Core
 				{
 					RequireEmailConfirmation = true;
 				}
+			}
+
+			temp = ConfigurationManager.AppSettings[aadClientIdKey];
+			if (!string.IsNullOrWhiteSpace(temp))
+			{
+				temp = temp.Trim();
+				AadClientId = new Guid(temp);
 			}
 		}
 	}

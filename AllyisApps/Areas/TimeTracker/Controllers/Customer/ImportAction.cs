@@ -15,7 +15,7 @@ using AllyisApps.Services;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Expense;
 using AllyisApps.Utilities;
-using Excel;
+using ExcelDataReader;
 using System.Web;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -86,9 +86,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					return RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId });
 				}
 
-				reader.IsFirstRowAsColumnNames = true;
-
-				DataSet result = reader.AsDataSet();
+				//reader.IsFirstRowAsColumnNames = true;
+				//DataSet result = reader.AsDataSet();
+				DataSet result = new DataSet();
 				reader.Close();
 
 				string[] formattedResult = ImportMessageFormatter.FormatImportResult(await AppService.Import(

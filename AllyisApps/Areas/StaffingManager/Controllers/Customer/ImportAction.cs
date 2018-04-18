@@ -15,7 +15,7 @@ using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.Services.Billing;
 using AllyisApps.Utilities;
-using Excel;
+using ExcelDataReader;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -85,9 +85,9 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					return RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId });
 				}
 
-				reader.IsFirstRowAsColumnNames = true;
-
-				DataSet result = reader.AsDataSet();
+				//reader.IsFirstRowAsColumnNames = true;
+				//DataSet result = reader.AsDataSet();
+				DataSet result = new DataSet();
 				reader.Close();
 
 				string[] formattedResult = ImportMessageFormatter.FormatImportResult(await AppService.Import(

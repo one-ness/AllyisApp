@@ -12,7 +12,7 @@ using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.Utilities;
-using Excel;
+using ExcelDataReader;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -62,9 +62,9 @@ namespace AllyisApps.Controllers.Auth
 					return RedirectToAction(ActionConstants.AddMember, ControllerConstants.Account, new { organizationId = id });
 				}
 
-				reader.IsFirstRowAsColumnNames = true;
-
-				DataSet result = reader.AsDataSet();
+				//reader.IsFirstRowAsColumnNames = true;
+				//DataSet result = reader.AsDataSet();
+				DataSet result = new DataSet();
 				reader.Close();
 
 				string[] formattedResult = ImportMessageFormatter.FormatImportResult(await AppService.Import(
