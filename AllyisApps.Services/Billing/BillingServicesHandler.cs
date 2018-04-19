@@ -41,7 +41,8 @@ namespace AllyisApps.Services.Billing
 				{
 					case BillingServicesEnum.Stripe:
 						{
-							service = new BillingServices.StripeService.StripeWrapper();
+							//service = new BillingServices.StripeService.StripeWrapper();
+							service = null;
 							break;
 						}
 
