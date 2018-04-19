@@ -4,8 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.OpenIdConnect;
+using System.Web;
 using System.Web.Mvc;
-using AllyisApps.Core;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -14,20 +16,17 @@ namespace AllyisApps.Controllers.Auth
 	/// </summary>
 	public partial class AccountController : BaseController
 	{
-		const string tenantName = "common"; // we are allowing all office 365 / azure ad users to login to our app
-		// Authority is the URL for authority, composed by Azure Active Directory v2 endpoint and the tenant name
-		const string authority = "https://login.microsoftonline.com/common/v2.0";
-
 		/// <summary>
 		/// login to microsoft work or school account using open id connect protocol
 		/// described here: https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-protocols-openid-connect-code
 		/// https://docs.microsoft.com/en-us/azure/active-directory/develop/guidedsetups/active-directory-aspnetwebapp
 		/// </summary>
 		[AllowAnonymous]
-		public ActionResult MsftOidc()
+		public void MsftOidc()
 		{
 			string returnUrl = this.Url.Action(ActionConstants.MsftOidcReceiver, ControllerConstants.Account, null, this.Request.Url.Scheme);
-			return Redirect(AllyisApps.MsftOidc.GetMsftOidcLoginUrl(returnUrl));
+			HttpContext.GetOwinContext().Authentication.Challenge(new AuthenticationProperties { RedirectUri = returnUrl },
+				OpenIdConnectAuthenticationDefaults.AuthenticationType);
 		}
 	}
 }
