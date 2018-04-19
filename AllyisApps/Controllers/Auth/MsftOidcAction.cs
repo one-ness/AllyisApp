@@ -16,7 +16,7 @@ namespace AllyisApps.Controllers.Auth
 	{
 		const string tenantName = "common"; // we are allowing all office 365 / azure ad users to login to our app
 		// Authority is the URL for authority, composed by Azure Active Directory v2 endpoint and the tenant name
-		string authority = "https://login.microsoftonline.com/common/v2.0";
+		const string authority = "https://login.microsoftonline.com/common/v2.0";
 
 		/// <summary>
 		/// login to microsoft work or school account using open id connect protocol

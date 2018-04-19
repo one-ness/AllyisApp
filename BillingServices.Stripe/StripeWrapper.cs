@@ -219,10 +219,10 @@ namespace BillingServices.StripeService
 
 			StripePlanUpdateOptions planUpdateOptions = new StripePlanUpdateOptions();
 
-			planUpdateOptions.Name = newPlan.Name;
+			planUpdateOptions.Nickname = newPlan.Nickname;
 
 			StripeSubscriptionUpdateOptions subUpdateOptions = new StripeSubscriptionUpdateOptions();
-			subUpdateOptions.PlanId = newPlan.Id;
+			subUpdateOptions.Items = newPlan.Id;
 
 			StripeSubscription sub = subscriptionService.Get(customerId.Id, subscriptionId);
 			if (sub.TrialEnd != null)
