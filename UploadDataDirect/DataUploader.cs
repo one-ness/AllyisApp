@@ -1,6 +1,6 @@
 ﻿using AllyisApps.Services;
 using System.Threading.Tasks;
-using Excel;
+using ExcelDataReader;
 using System.IO;
 using System.Data;
 using System;
@@ -30,8 +30,9 @@ namespace UploadDataDirect
 			using (FileStream fileS = File.OpenRead(file))
 			{
 				var reader = ExcelReaderFactory.CreateOpenXmlReader(fileS);
-				reader.IsFirstRowAsColumnNames = true;
-				DataSet data = reader.AsDataSet();
+				//reader.IsFirstRowAsColumnNames = true;
+				//DataSet data = reader.AsDataSet();
+				DataSet data = new DataSet();
 				reader.Close();
 
 				DataTable hoursData = null;
