@@ -40,7 +40,8 @@ namespace AllyisApps.DBModel
 			string city,
 			int? stateId,
 			string postalCode,
-			string countryCode)
+			string countryCode,
+			int loginProviderId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@email", email);
@@ -57,6 +58,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@stateId", stateId);
 			parameters.Add("@postalCode", postalCode);
 			parameters.Add("@countryCode", countryCode);
+			parameters.Add("@loginProviderId", loginProviderId);
 
 			using (var con = new SqlConnection(SqlConnectionString))
 			{

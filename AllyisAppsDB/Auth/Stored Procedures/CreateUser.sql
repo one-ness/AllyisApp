@@ -13,7 +13,8 @@ CREATE PROCEDURE [Auth].[CreateUser]
 	@city nvarchar(32) = null,
 	@stateId int = null,
 	@postalCode nvarchar(16) = null,
-	@countryCode varchar(8) = null
+	@countryCode varchar(8) = null,
+	@loginProviderId int = 1
 as
 begin
 	set nocount on
@@ -30,7 +31,7 @@ begin
 				goto _failure
 		end
 
-	insert into Auth.[User] (Email, PasswordHash, FirstName, LastName, EmailConfirmationCode, DateOfBirth, PhoneNumber, PreferredLanguageId, AddressId) values (@email, @passwordHash, @firstName, @lastName, @emailConfirmationCode, @dateOfBirth, @phoneNumber, @preferredLanguageId, @addressId)
+	insert into Auth.[User] (Email, PasswordHash, FirstName, LastName, EmailConfirmationCode, DateOfBirth, PhoneNumber, PreferredLanguageId, AddressId, LoginProviderId) values (@email, @passwordHash, @firstName, @lastName, @emailConfirmationCode, @dateOfBirth, @phoneNumber, @preferredLanguageId, @addressId, @loginProviderId)
 	if (@@ERROR <> 0)
 		goto _failure
 

@@ -176,7 +176,7 @@ namespace AllyisApps.Services
 			{
 				result = await DBHelper.CreateUserAsync(
 					email, Crypto.GetPasswordHash(password), firstName, lastName, emailConfirmationCode, dateOfBirth, phoneNumber, Language.DefaultLanguageCultureName,
-					address1, address2, city, stateId, postalCode, countryCode);
+					address1, address2, city, stateId, postalCode, countryCode, (int)LoginProviderEnum.AllyisApps);
 
 				// user created, send confirmation email
 				await this.Mailer.SendEmailAsync(ServiceSettings.SupportEmail, email, confirmEmailSubject, confirmEmailMessage);

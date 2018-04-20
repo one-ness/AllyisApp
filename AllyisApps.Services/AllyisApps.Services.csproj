@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="Auth\ImportServiceUtility.cs" />
     <Compile Include="Auth\InvitationStatusEnum.cs" />
+    <Compile Include="Auth\LoginProviderEnum.cs" />
     <Compile Include="Auth\Organization.cs" />
     <Compile Include="Auth\AccountService.cs" />
     <Compile Include="Auth\AuthorizationService.cs" />
