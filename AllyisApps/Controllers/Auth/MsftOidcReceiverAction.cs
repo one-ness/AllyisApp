@@ -23,12 +23,24 @@ namespace AllyisApps.Controllers.Auth
 		{
 			// get id token
 			var idtoken = this.Request.Form[AllyisApps.MsftOidc.IdTokenKey];
-			if (string.IsNullOrWhiteSpace(idtoken))
+			if (!string.IsNullOrWhiteSpace(idtoken))
+			{
+				// decode the id_token
+				dynamic tokenJson = System.Web.Helpers.Json.Decode(AllyisApps.MsftOidc.DecodeIdToken(idtoken));
+				if (tokenJson != null && tokenJson.upn != null && !string.IsNullOrWhiteSpace(tokenJson.upn))
+				{
+					// unique name is available. check our database
+
+				}
+			}
+			else
 			{
 				// add notifications, redirect to login url
+				Notifications.Add(new Core.Alert.BootstrapAlert("Microsoft server did not return your identification information. Please close and re-launch your browser and try again.", Core.Alert.Variety.Danger));
+				return RedirectToAction(ActionConstants.LogOn);
 			}
 
-			// decode the id_token
+			
 
 			return null;
 		}

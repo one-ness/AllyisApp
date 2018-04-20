@@ -173,6 +173,8 @@ namespace AllyisApps
 		/// </summary>
 		public static string DecodeIdToken(string idtoken)
 		{
+			if (string.IsNullOrWhiteSpace(idtoken)) throw new ArgumentNullException(nameof(idtoken));
+
 			var resultJson = string.Empty;
 			// split on .
 			var tokens = idtoken.Split('.');
