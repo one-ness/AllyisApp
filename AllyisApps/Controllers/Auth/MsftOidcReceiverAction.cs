@@ -21,7 +21,15 @@ namespace AllyisApps.Controllers.Auth
 		[HttpPost]
 		public ActionResult MsftOidcReceiver()
 		{
-			// get the post data
+			// get id token
+			var idtoken = this.Request.Form[AllyisApps.MsftOidc.IdTokenKey];
+			if (string.IsNullOrWhiteSpace(idtoken))
+			{
+				// add notifications, redirect to login url
+			}
+
+			// decode the id_token
+
 			return null;
 		}
 	}

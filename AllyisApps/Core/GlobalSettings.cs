@@ -34,29 +34,11 @@ namespace AllyisApps.Core
 		/// </summary>
 		public static bool RequireEmailConfirmation { get; set; }
 
-		/// <summary>
-		/// Azure Active Directory Application Id to be used for msft office 365 / azure ad login
-		/// </summary>
-		public static Guid AadAppId { get; set; }
-
-		/// <summary>
-		/// Tenant name as registered in our Azure subscription. If we use the name "common"
-		/// it will allow all office 365 / azure ad users to login to our app
-		/// </summary>
-		public static string AadTenantName { get; set; }
-
-		/// <summary>
-		/// Authority is the URL for authority, composed by Azure Active Directory v2 endpoint and the tenant name
-		/// </summary>
-		public static string MsftOidcAuthority { get; set; }
-
 		const string SupportEmailDefault = "support@allyisapps.com";
 		const string connectionStringKey = "DefaultConnection";
 		const string supportEmailKey = "SupportEmail";
 		const string sendGridApiKeyKey = "SendGridApiKey";
 		const string requireEmailConfirmationKey = "RequireEmailConfirmation";
-		const string aadAppIdKey = "AadAppId";
-		const string aadTenantNameKey = "AadTenantName";
 
 		/// <summary>
 		/// Initialize Global Settings.
@@ -93,20 +75,6 @@ namespace AllyisApps.Core
 				{
 					RequireEmailConfirmation = true;
 				}
-			}
-
-			temp = ConfigurationManager.AppSettings[aadAppIdKey];
-			if (!string.IsNullOrWhiteSpace(temp))
-			{
-				temp = temp.Trim();
-				AadAppId = new Guid(temp);
-			}
-
-			temp = ConfigurationManager.AppSettings[aadTenantNameKey];
-			if (!string.IsNullOrWhiteSpace(temp))
-			{
-				AadTenantName = temp.Trim();
-				MsftOidcAuthority = string.Format("https://login.microsoftonline.com/{0}/v2.0", AadTenantName);
 			}
 		}
 	}

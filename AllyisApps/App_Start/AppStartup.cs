@@ -28,6 +28,9 @@ namespace AllyisApps
 
 			// init services cache
 			CacheContainer.Init(GlobalSettings.SqlConnectionString);
+
+			// init msft oidc
+			MsftOidc.Init();
 		}
 	}
 }

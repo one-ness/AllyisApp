@@ -29,8 +29,8 @@ namespace AllyisApps.Owin
 			app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions()
 			{
 				// Sets the ClientId, authority, RedirectUri as obtained from web.config
-				ClientId = GlobalSettings.AadAppId.ToString(),
-				Authority = GlobalSettings.MsftOidcAuthority,
+				ClientId = MsftOidc.AadAppId.ToString(),
+				Authority = MsftOidc.MsftOidcAuthority,
 				RedirectUri = string.Empty, // URL the user will come back to after successful signin, will be filled later in the controller
 				PostLogoutRedirectUri = string.Empty, // PostLogoutRedirectUri is the page that users will be redirected to after sign-out, will be filled later in the controller
 				Scope = "openid", // const string value, as specified in the open id connect protocol

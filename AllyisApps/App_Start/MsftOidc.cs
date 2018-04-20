@@ -7,6 +7,7 @@ using System.Net;
 using System.Web.Helpers;
 using System.IO;
 using System.Text;
+using System.Configuration;
 
 namespace AllyisApps
 {
@@ -16,25 +17,92 @@ namespace AllyisApps
 	/// </summary>
 	public static class MsftOidc
 	{
+		/// <summary>
+		/// Azure Active Directory Application Id to be used for msft office 365 / azure ad login
+		/// </summary>
+		public static Guid AadAppId { get; set; }
+
+		/// <summary>
+		/// Tenant name as registered in our Azure subscription. If we use the name "common"
+		/// it will allow all office 365 / azure ad users to login to our app
+		/// </summary>
+		public static string AadTenantName { get; set; }
+
+		/// <summary>
+		/// Authority is the URL for authority, composed by Azure Active Directory v2 endpoint and the tenant name
+		/// https://login.microsoftonline.com/{tenant}/v2.0, if we are multi-tenant, then tenant = "common"
+		/// </summary>
+		public static string MsftOidcAuthority
+		{
+			get
+			{
+				return "https://login.microsoftonline.com/common/v2.0";
+			}
+		}
+
+		/// <summary>
+		/// msft oidc metadata url. open id connect metadata document is here: https://login.microsoftonline.com/{tenant}/.well-known/openid-configuration
+		/// if we are multi-tenant, then tenant = "common"
+		/// </summary>
+		public static string MsftOidcMetaDataUrl
+		{
+			get
+			{
+				return "https://login.microsoftonline.com/common/.well-known/openid-configuration";
+			}
+		}
+
+		/// <summary>
+		/// msft oidc authorization url. default authorization url is here: https://login.microsoftonline.com/{tenant}/oauth2/authorize
+		/// if we are multi-tenant, then tenant = "common"
+		/// </summary>
+		public static string MsftOidcAuthorizationUrl
+		{
+			get
+			{
+				return "https://login.microsoftonline.com/common/oauth2/authorize";
+			}
+		}
+
 		static string OidcMetaDataJson;
 		static dynamic OidcMetaData;
-		//static bool fullMetadataDocumentObtained;
+		const string aadAppIdKey = "AadAppId";
+		const string aadTenantNameKey = "AadTenantName";
 
-		// open id connect metadata document is here: https://login.microsoftonline.com/{tenant}/.well-known/openid-configuration
-		// but, we use common metadata url since we are configured for multi-tenant
-		const string metadataUrl = "https://login.microsoftonline.com/common/.well-known/openid-configuration";
-		// default authorization url is here: https://login.microsoftonline.com/{tenant}/oauth2/authorize
-		// but, we use common authorization url
-		const string MsftOidcCommonAuthorizationUrl = "https://login.microsoftonline.com/common/oauth2/authorize";
 		/// <summary>
 		/// init the msft oidc
 		/// </summary>
 		public static void Init()
 		{
+			// get the msft oidc settings from config
+			string temp = ConfigurationManager.AppSettings[aadAppIdKey];
+			if (!string.IsNullOrWhiteSpace(temp))
+			{
+				temp = temp.Trim();
+				AadAppId = new Guid(temp);
+			}
+
+			// NOTE: endpoints can be obtained in the azure portal under App Registrations --> End Points
+			// we can also form them using the tenant name
+			//temp = ConfigurationManager.AppSettings[aadTenantNameKey];
+			//if (!string.IsNullOrWhiteSpace(temp))
+			//{
+			//	AadTenantName = temp.Trim();
+			//	MsftOidcAuthority = string.Format("https://login.microsoftonline.com/{0}/v2.0", AadTenantName);
+			//	MsftOidcMetaDataUrl = string.Format("https://login.microsoftonline.com/{0}/.well-known/openid-configuration", AadTenantName);
+			//	MsftOidcAuthorizationUrl = string.Format("https://login.microsoftonline.com/{0}/oauth2/authorize", AadTenantName);
+			//}
+		}
+
+		/// <summary>
+		/// some method
+		/// </summary>
+		public static void someMethod()
+		{ 
 			try
 			{
 				// obtain the oidc metadata document
-				var req = WebRequest.Create(metadataUrl);
+				var req = WebRequest.Create(MsftOidcMetaDataUrl);
 				using (var res = req.GetResponse())
 				{
 					using (var stream = res.GetResponseStream())
@@ -51,7 +119,7 @@ namespace AllyisApps
 							if (string.IsNullOrWhiteSpace(OidcMetaData.authorization_endpoint))
 							{
 								// no, create default
-								OidcMetaData.authorization_endpoint = MsftOidcCommonAuthorizationUrl;
+								OidcMetaData.authorization_endpoint = MsftOidcAuthorizationUrl;
 							}
 							else
 							{
@@ -65,7 +133,7 @@ namespace AllyisApps
 			catch
 			{
 				// something went wrong. create the metadata object with just the common authorize url
-				OidcMetaData.authorization_endpoint = MsftOidcCommonAuthorizationUrl;
+				OidcMetaData.authorization_endpoint = MsftOidcAuthorizationUrl;
 			}
 		}
 
@@ -80,11 +148,14 @@ namespace AllyisApps
 			&state=12345
 			&nonce=7362CAEA-9CA5-4B43-9BA3-34D7C303EBA7
 		*/
-		const string clientId = "a4d8d348-8614-4f13-b221-0863616b8d4c"; // application id of our app in our tenant (which is our azure ad in our subscription)
+		/// <summary>
+		/// id_token received in the post from the authorization provider
+		/// </summary>
+		public const string IdTokenKey = "id_token"; // we ask for id_token in response type and should get this back from the authorization provider
 		const string responseType = "id_token%20code"; // id_token is mandatory for oidc signin
 		const string scope = "openid%20profile%20email%20address%20phone"; // openid is mandatory for oidc signin
 		/// <summary>
-		/// get the open id authorization url
+		/// get the open id login url
 		/// </summary>
 		public static string GetMsftOidcLoginUrl(string returnUrl)
 		{
@@ -92,7 +163,30 @@ namespace AllyisApps
 			// this can mitigate xsrf and replay attacks.
 			var xsrfAndReplayMitigation = Guid.NewGuid().ToString();
 			string url = "{0}?client_id={1}&response_type={2}&redirect_uri={3}&response_mode=form_post&scope={4}&state={5}&nonce={6}";
-			return string.Format(url, MsftOidcCommonAuthorizationUrl, clientId, responseType, HttpUtility.UrlEncode(returnUrl), scope, xsrfAndReplayMitigation, xsrfAndReplayMitigation);
+			return string.Format(url, MsftOidcAuthorizationUrl, AadAppId, responseType, HttpUtility.UrlEncode(returnUrl), scope, xsrfAndReplayMitigation, xsrfAndReplayMitigation);
+		}
+
+		/// <summary>
+		/// decodes the given id token. id token is of the form base64(header + "." + claims + "." + signature)
+		/// signature is formed by base64(HashHMAC(publickey, header + "." + claims)
+		/// this is based on jwt spec
+		/// </summary>
+		public static string DecodeIdToken(string idtoken)
+		{
+			var resultJson = string.Empty;
+			// split on .
+			var tokens = idtoken.Split('.');
+			if (tokens.Length == 3)
+			{
+				var claimsstr = tokens[1];
+				if (!string.IsNullOrWhiteSpace(claimsstr))
+				{
+					var jsonBytes = Convert.FromBase64String(claimsstr);
+					resultJson = Encoding.UTF8.GetString(jsonBytes);
+				}
+			}
+
+			return resultJson;
 		}
 	}
 }

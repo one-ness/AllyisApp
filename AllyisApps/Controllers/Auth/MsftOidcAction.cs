@@ -22,11 +22,10 @@ namespace AllyisApps.Controllers.Auth
 		/// https://docs.microsoft.com/en-us/azure/active-directory/develop/guidedsetups/active-directory-aspnetwebapp
 		/// </summary>
 		[AllowAnonymous]
-		public void MsftOidc()
+		public ActionResult MsftOidc()
 		{
 			string returnUrl = this.Url.Action(ActionConstants.MsftOidcReceiver, ControllerConstants.Account, null, this.Request.Url.Scheme);
-			HttpContext.GetOwinContext().Authentication.Challenge(new AuthenticationProperties { RedirectUri = returnUrl },
-				OpenIdConnectAuthenticationDefaults.AuthenticationType);
+			return new RedirectResult(AllyisApps.MsftOidc.GetMsftOidcLoginUrl(returnUrl));
 		}
 	}
 }
