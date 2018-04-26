@@ -8,6 +8,11 @@ using System.Web.Helpers;
 using System.IO;
 using System.Text;
 using System.Configuration;
+using System.IdentityModel.Tokens.Jwt
+using Microsoft.IdentityModel.Tokens
+using Microsoft.IdentityModel.Protocols
+using Microsoft.IdentityModel.Protocols.OpenIdConnect
+
 
 namespace AllyisApps
 {
