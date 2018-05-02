@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System.Web.Mvc;
+using System;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -21,28 +22,35 @@ namespace AllyisApps.Controllers.Auth
 		[HttpPost]
 		public ActionResult MsftOidcReceiver()
 		{
-			// get id token
-			var idtoken = this.Request.Form[AllyisApps.MsftOidc.IdTokenKey];
-			if (!string.IsNullOrWhiteSpace(idtoken))
+			try
 			{
-				// decode the id_token
-				dynamic tokenJson = System.Web.Helpers.Json.Decode(AllyisApps.MsftOidc.DecodeIdToken(idtoken));
-				if (tokenJson != null && tokenJson.upn != null && !string.IsNullOrWhiteSpace(tokenJson.upn))
+				// get id token
+				var idtoken = this.Request.Form[AllyisApps.MsftOidc.IdTokenKey];
+				if (!string.IsNullOrWhiteSpace(idtoken))
 				{
-					// unique name is available. check our database
+					// decode the id_token
+					dynamic tokenJson = System.Web.Helpers.Json.Decode(AllyisApps.MsftOidc.DecodeIdToken(idtoken));
+					if (tokenJson != null && tokenJson.upn != null && !string.IsNullOrWhiteSpace(tokenJson.upn))
+					{
+						// unique name is available. check our database
 
+					}
+
+					return null;
+				}
+				else
+				{
+					// add notifications, redirect to login url
+					Notifications.Add(new Core.Alert.BootstrapAlert("Microsoft server did not return your identification information. Please close your browser, then re-launch and try again.", Core.Alert.Variety.Danger));
+					return RedirectToAction(ActionConstants.LogOn);
 				}
 			}
-			else
+			catch
 			{
 				// add notifications, redirect to login url
-				Notifications.Add(new Core.Alert.BootstrapAlert("Microsoft server did not return your identification information. Please close and re-launch your browser and try again.", Core.Alert.Variety.Danger));
+				Notifications.Add(new Core.Alert.BootstrapAlert("Unexpected error while decoding your Microsoft identification information. Please close your browser, then re-launch and try again.", Core.Alert.Variety.Danger));
 				return RedirectToAction(ActionConstants.LogOn);
 			}
-
-			
-
-			return null;
 		}
 	}
 }

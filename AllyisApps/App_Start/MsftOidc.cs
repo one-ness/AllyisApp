@@ -8,10 +8,10 @@ using System.Web.Helpers;
 using System.IO;
 using System.Text;
 using System.Configuration;
-using System.IdentityModel.Tokens.Jwt
-using Microsoft.IdentityModel.Tokens
-using Microsoft.IdentityModel.Protocols
-using Microsoft.IdentityModel.Protocols.OpenIdConnect
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.IdentityModel.Protocols;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 
 namespace AllyisApps
@@ -35,42 +35,24 @@ namespace AllyisApps
 
 		/// <summary>
 		/// Authority is the URL for authority, composed by Azure Active Directory v2 endpoint and the tenant name
-		/// https://login.microsoftonline.com/{tenant}/v2.0, if we are multi-tenant, then tenant = "common"
+		/// https://login.microsoftonline.com/{tenant}/v2.0
+		/// if we are multi-tenant, then tenant = "common"
 		/// </summary>
-		public static string MsftOidcAuthority
-		{
-			get
-			{
-				return "https://login.microsoftonline.com/common/v2.0";
-			}
-		}
+		public static string MsftOidcAuthority { get; set; }
 
 		/// <summary>
 		/// msft oidc metadata url. open id connect metadata document is here: https://login.microsoftonline.com/{tenant}/.well-known/openid-configuration
 		/// if we are multi-tenant, then tenant = "common"
 		/// </summary>
-		public static string MsftOidcMetaDataUrl
-		{
-			get
-			{
-				return "https://login.microsoftonline.com/common/.well-known/openid-configuration";
-			}
-		}
+		public static string MsftOidcMetaDataUrl { get; set; }
 
 		/// <summary>
 		/// msft oidc authorization url. default authorization url is here: https://login.microsoftonline.com/{tenant}/oauth2/authorize
 		/// if we are multi-tenant, then tenant = "common"
 		/// </summary>
-		public static string MsftOidcAuthorizationUrl
-		{
-			get
-			{
-				return "https://login.microsoftonline.com/common/oauth2/authorize";
-			}
-		}
+		public static string MsftOidcAuthorizationUrl { get; set; }
 
 		static string OidcMetaDataJson;
-		static dynamic OidcMetaData;
 		const string aadAppIdKey = "AadAppId";
 		const string aadTenantNameKey = "AadTenantName";
 
@@ -81,29 +63,28 @@ namespace AllyisApps
 		{
 			// get the msft oidc settings from config
 			string temp = ConfigurationManager.AppSettings[aadAppIdKey];
-			if (!string.IsNullOrWhiteSpace(temp))
-			{
-				temp = temp.Trim();
-				AadAppId = new Guid(temp);
-			}
+			if (string.IsNullOrWhiteSpace(temp)) throw new ArgumentNullException("AadAppId setting not found in config.");
+
+			temp = temp.Trim();
+			AadAppId = new Guid(temp);
 
 			// NOTE: endpoints can be obtained in the azure portal under App Registrations --> End Points
 			// we can also form them using the tenant name
-			//temp = ConfigurationManager.AppSettings[aadTenantNameKey];
-			//if (!string.IsNullOrWhiteSpace(temp))
-			//{
-			//	AadTenantName = temp.Trim();
-			//	MsftOidcAuthority = string.Format("https://login.microsoftonline.com/{0}/v2.0", AadTenantName);
-			//	MsftOidcMetaDataUrl = string.Format("https://login.microsoftonline.com/{0}/.well-known/openid-configuration", AadTenantName);
-			//	MsftOidcAuthorizationUrl = string.Format("https://login.microsoftonline.com/{0}/oauth2/authorize", AadTenantName);
-			//}
+			temp = ConfigurationManager.AppSettings[aadTenantNameKey];
+			if (string.IsNullOrWhiteSpace(temp)) throw new ArgumentNullException("AadTenantName setting not found in config.");
+
+			AadTenantName = temp.Trim();
+			MsftOidcAuthority = string.Format("https://login.microsoftonline.com/{0}/v2.0", AadTenantName);
+			MsftOidcMetaDataUrl = string.Format("https://login.microsoftonline.com/{0}/.well-known/openid-configuration", AadTenantName);
+			MsftOidcAuthorizationUrl = string.Format("https://login.microsoftonline.com/{0}/oauth2/authorize", AadTenantName);
 		}
 
 		/// <summary>
 		/// some method
 		/// </summary>
-		public static void someMethod()
-		{ 
+		public static dynamic GetMsftOidcMetaDataDocument()
+		{
+			dynamic result = new object();
 			try
 			{
 				// obtain the oidc metadata document
@@ -118,19 +99,7 @@ namespace AllyisApps
 							OidcMetaDataJson = reader.ReadToEnd();
 
 							// convert to object
-							OidcMetaData = System.Web.Helpers.Json.Decode(OidcMetaDataJson);
-
-							// check if authorization end point is available
-							if (string.IsNullOrWhiteSpace(OidcMetaData.authorization_endpoint))
-							{
-								// no, create default
-								OidcMetaData.authorization_endpoint = MsftOidcAuthorizationUrl;
-							}
-							else
-							{
-								// yes, assume other information in the document is also available.
-								//fullMetadataDocumentObtained = true;
-							}
+							result = System.Web.Helpers.Json.Decode(OidcMetaDataJson);
 						}
 					}
 				}
@@ -138,8 +107,10 @@ namespace AllyisApps
 			catch
 			{
 				// something went wrong. create the metadata object with just the common authorize url
-				OidcMetaData.authorization_endpoint = MsftOidcAuthorizationUrl;
+				result.authorization_endpoint = MsftOidcAuthorizationUrl;
 			}
+
+			return result;
 		}
 
 		/*
@@ -188,6 +159,17 @@ namespace AllyisApps
 				var claimsstr = tokens[1];
 				if (!string.IsNullOrWhiteSpace(claimsstr))
 				{
+					// base64 string should always be a multiple of 4
+					int rem = claimsstr.Length % 4;
+					if (rem != 0)
+					{
+						var filler = new string('=', rem);
+						StringBuilder sb = new StringBuilder();
+						sb.Append(claimsstr);
+						sb.Append(filler);
+						claimsstr = sb.ToString();
+					}
+
 					var jsonBytes = Convert.FromBase64String(claimsstr);
 					resultJson = Encoding.UTF8.GetString(jsonBytes);
 				}
