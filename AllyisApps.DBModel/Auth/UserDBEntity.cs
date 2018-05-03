@@ -54,6 +54,11 @@ namespace AllyisApps.DBModel.Auth
 		public bool IsPhoneNumberConfirmed { get; set; }
 
 		/// <summary>
+		/// Gets or sets the login provider id
+		/// </summary>
+		public int LoginProviderId { get; set; }
+
+		/// <summary>
 		/// Gets or sets a value indicating whether IsTwoFactorEnabled.
 		/// </summary>
 		public bool IsTwoFactorEnabled { get; set; }

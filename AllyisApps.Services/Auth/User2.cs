@@ -113,6 +113,11 @@ namespace AllyisApps.Services.Auth
 		public DateTime UserCreatedUtc { get; set; }
 
 		/// <summary>
+		/// Gets or sets the login provider.
+		/// </summary>
+		public LoginProviderEnum LoginProvider { get; set; }
+
+		/// <summary>
 		/// constructor
 		/// </summary>
 		public User2()

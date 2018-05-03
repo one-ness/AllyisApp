@@ -169,7 +169,6 @@ namespace AllyisApps.Services
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException(nameof(email));
 			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException(nameof(firstName));
 			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException(nameof(lastName));
-			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException(nameof(password));
 			if (emailConfirmationCode == null) throw new ArgumentException(nameof(emailConfirmationCode));
 			var result = 0;
 			try
@@ -588,6 +587,18 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// Gets the user info from an email address.
+		/// </summary>
+		/// <param name="email">Email address.</param>
+		/// <returns>A UserInfo instance with the user's info.</returns>
+		public async Task<User2> GetUser2ByEmailAsync(string email)
+		{
+			if (!Utility.IsValidEmail(email)) throw new ArgumentException(nameof(email));
+
+			return this.InitializeUser2(await DBHelper.GetUserByEmailAsync(email), false);
+		}
+
+		/// <summary>
 		/// Updates an organization member's info.
 		/// </summary>
 		public async Task<bool> UpdateMember(int userId, int orgId, string employeeId, int roleId, string firstName, string lastName, bool isInvited)
@@ -790,6 +801,7 @@ namespace AllyisApps.Services
 				LastName = user.LastName,
 				IsLockoutEnabled = user.IsLockoutEnabled,
 				LockoutEndDateUtc = user.LockoutEndDateUtc,
+				LoginProvider = (LoginProviderEnum)user.LoginProviderId,
 				PasswordHash = user.PasswordHash,
 				PasswordResetCode = user.PasswordResetCode,
 				PhoneExtension = user.PhoneExtension,

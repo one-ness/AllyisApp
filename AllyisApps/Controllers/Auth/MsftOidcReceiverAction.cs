@@ -6,6 +6,7 @@
 
 using System.Web.Mvc;
 using System;
+using AllyisApps.Services.Auth;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -30,10 +31,37 @@ namespace AllyisApps.Controllers.Auth
 				{
 					// decode the id_token
 					dynamic tokenJson = System.Web.Helpers.Json.Decode(AllyisApps.MsftOidc.DecodeIdToken(idtoken));
-					if (tokenJson != null && tokenJson.upn != null && !string.IsNullOrWhiteSpace(tokenJson.upn))
+					if (tokenJson != null && !string.IsNullOrWhiteSpace(tokenJson.upn))
 					{
 						// unique name is available. check our database
-
+						var user = this.AppService.GetUser2ByEmailAsync(tokenJson.upn);
+						if (user == null)
+						{
+							// user doesn't exist, create the user and return to home page
+						}
+						else
+						{
+							if (user.LoginProvider == LoginProviderEnum.Microsoft)
+							{
+								// user exists, with microsoft as login provider
+								// set cookie and take to profile page
+								SignIn(user.UserId, user.Email, false);
+							}
+							else if (user.LoginProvider == LoginProviderEnum.AllyisApps)
+							{
+								// user exists, with allyis apps as login provider
+								// show error message and take to login page
+								Notifications.Add(new Core.Alert.BootstrapAlert("Your login information already exists, but you used an Allyis Apps account. Please login using that account. (You can convert to an employer account in your Profile page.)", Core.Alert.Variety.Danger));
+								return RedirectToAction(ActionConstants.LogOn);
+							}
+							else
+							{
+								// user exists, with a different employer as login provider
+								// show error message and take to login page
+								Notifications.Add(new Core.Alert.BootstrapAlert("Your login information already exists, but you used a different employer account. Please login using that account.", Core.Alert.Variety.Danger));
+								return RedirectToAction(ActionConstants.LogOn);
+							}
+						}
 					}
 
 					return null;
