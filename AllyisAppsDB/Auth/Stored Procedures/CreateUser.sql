@@ -1,11 +1,11 @@
 ﻿
 CREATE PROCEDURE [Auth].[CreateUser]
 	@email nvarchar(384),
-	@passwordHash nvarchar(512),
-	@firstName nvarchar(32),
-	@lastName nvarchar(32),
+	@passwordHash nvarchar(512) = null,
+	@firstName nvarchar(32) = null,
+	@lastName nvarchar(32) = null,
 	@emailConfirmationCode uniqueidentifier,
-	@dateOfBirth date,
+	@dateOfBirth date = null,
 	@phoneNumber varchar(16) = null,
 	@preferredLanguageId varchar(16) = null,
 	@address1 nvarchar(64) = null,
