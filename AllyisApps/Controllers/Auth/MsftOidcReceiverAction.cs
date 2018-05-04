@@ -44,9 +44,9 @@ namespace AllyisApps.Controllers.Auth
 							string confirmUrl = Url.Action(ActionConstants.ConfirmEmail, ControllerConstants.Account, new { id = code }, protocol: Request.Url.Scheme);
 							string confirmEmailSubject = string.Format(Strings.ConfirmEmailSubject, Strings.ApplicationTitle);
 							string confirmEmailBody = string.Format(Strings.ConfirmEmailMessage, Strings.ApplicationTitle, confirmUrl);
-
+							string firstName = 
 							// create new user in the db and get back the userId and count of invitations
-							int userId = this.await AppService.SetupNewUser(model.Email, model.Password, model.FirstName, model.LastName, code, model.DateOfBirth, model.PhoneNumber, model.Address, null, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode, confirmEmailSubject, confirmEmailBody);
+							int userId = this.await AppService.SetupNewUser(tokenJson.upn, null, model.FirstName, model.LastName, code, model.DateOfBirth, model.PhoneNumber, model.Address, null, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode, confirmEmailSubject, confirmEmailBody);
 						}
 						else
 						{
