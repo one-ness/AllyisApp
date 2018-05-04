@@ -49,7 +49,7 @@ namespace AllyisApps.Controllers.Auth
 							string firstName = tokenJson.given_name;
 							string lastName = tokenJson.family_name;
 							// create new user in the db and get back the userId
-							int userId = await this.AppService.SetupNewUser(email, null, firstName, lastName, code, null, null, null, null, null, null, null, null, confirmEmailSubject, confirmEmailBody);
+							int userId = await this.AppService.SetupNewUser(email, null, firstName, lastName, code, null, null, null, null, null, null, null, null, confirmEmailSubject, confirmEmailBody, LoginProviderEnum.Microsoft);
 							// set cookie and take to profile page
 							SignIn(userId, email, false);
 							return RedirectToAction(ActionConstants.Index);

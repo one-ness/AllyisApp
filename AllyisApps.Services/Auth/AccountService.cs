@@ -164,7 +164,8 @@ namespace AllyisApps.Services
 			string postalCode,
 			string countryCode,
 			string confirmEmailSubject,
-			string confirmEmailMessage)
+			string confirmEmailMessage,
+			LoginProviderEnum loginProvider = LoginProviderEnum.AllyisApps)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException(nameof(email));
 			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException(nameof(firstName));
@@ -175,7 +176,7 @@ namespace AllyisApps.Services
 			{
 				var hash = string.IsNullOrWhiteSpace(password) ? null : Crypto.GetPasswordHash(password);
 				result = await DBHelper.CreateUserAsync(email, hash, firstName, lastName, emailConfirmationCode, dateOfBirth, phoneNumber, Language.DefaultLanguageCultureName,
-					address1, address2, city, stateId, postalCode, countryCode, (int)LoginProviderEnum.AllyisApps);
+					address1, address2, city, stateId, postalCode, countryCode, (int)loginProvider);
 
 				// user created, send confirmation email
 				await this.Mailer.SendEmailAsync(ServiceSettings.SupportEmail, email, confirmEmailSubject, confirmEmailMessage);
