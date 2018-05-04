@@ -1,18 +1,18 @@
 ﻿CREATE TABLE [Auth].[User] (
     [UserId]                 INT              IDENTITY (111119, 3) NOT NULL,
-    [FirstName]              NVARCHAR (32)    NOT NULL,
-    [LastName]               NVARCHAR (32)    NOT NULL,
-    [AddressId]              INT              NULL,
     [Email]                  NVARCHAR (384)   NOT NULL,
-    [PasswordHash]           NVARCHAR (512)   NOT NULL,
     [IsEmailConfirmed]       BIT              CONSTRAINT [DF__User__EmailConfirmed] DEFAULT ((0)) NOT NULL,
     [IsPhoneNumberConfirmed] BIT              CONSTRAINT [DF__User__PhoneNumberConfirmed] DEFAULT ((0)) NOT NULL,
     [IsTwoFactorEnabled]     BIT              CONSTRAINT [DF__User__TwoFactorEnabled] DEFAULT ((0)) NOT NULL,
     [AccessFailedCount]      INT              CONSTRAINT [DF__User__AccessFailedCount] DEFAULT ((0)) NOT NULL,
     [IsLockoutEnabled]       BIT              CONSTRAINT [DF__User__LockoutEnabled] DEFAULT ((0)) NOT NULL,
     [UserCreatedUtc]         DATETIME2 (0)    CONSTRAINT [DF__User__UserCreatedUtc] DEFAULT (getutcdate()) NOT NULL,
-    [DateOfBirth]            DATE             NOT NULL,
     [LoginProviderId]        INT              CONSTRAINT [DF_User_AuthProviderId] DEFAULT ((1)) NOT NULL,
+    [FirstName]              NVARCHAR (32)    NULL,
+    [LastName]               NVARCHAR (32)    NULL,
+    [PasswordHash]           NVARCHAR (512)   NULL,
+    [AddressId]              INT              NULL,
+    [DateOfBirth]            DATE             NULL,
     [PreferredLanguageId]    VARCHAR (16)     NULL,
     [PhoneNumber]            VARCHAR (16)     NULL,
     [PhoneExtension]         VARCHAR (8)      NULL,
@@ -25,6 +25,8 @@
     CONSTRAINT [FK_User_Subscription] FOREIGN KEY ([LastUsedSubscriptionId]) REFERENCES [Billing].[Subscription] ([SubscriptionId]),
     CONSTRAINT [UQ_User] UNIQUE NONCLUSTERED ([Email] ASC)
 );
+
+
 
 
 
