@@ -9,6 +9,7 @@ using System;
 using AllyisApps.Services.Auth;
 using AllyisApps.Resources;
 using AllyisApps.Services;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -23,7 +24,7 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		[AllowAnonymous]
 		[HttpPost]
-		public ActionResult MsftOidcReceiver()
+		public async Task<ActionResult> MsftOidcReceiver()
 		{
 			try
 			{
@@ -33,10 +34,11 @@ namespace AllyisApps.Controllers.Auth
 				{
 					// decode the id_token
 					dynamic tokenJson = System.Web.Helpers.Json.Decode(AllyisApps.MsftOidc.DecodeIdToken(idtoken));
-					if (tokenJson != null && !string.IsNullOrWhiteSpace(tokenJson.upn))
+					string email = null;
+					if (tokenJson != null && !string.IsNullOrWhiteSpace(email = tokenJson.upn))
 					{
 						// unique name is available. check our database
-						var user = this.AppService.GetUser2ByEmailAsync(tokenJson.upn);
+						var user = await this.AppService.GetUser2ByEmailAsync(email);
 						if (user == null)
 						{
 							// user doesn't exist, create the user and return to profile page
@@ -44,9 +46,13 @@ namespace AllyisApps.Controllers.Auth
 							string confirmUrl = Url.Action(ActionConstants.ConfirmEmail, ControllerConstants.Account, new { id = code }, protocol: Request.Url.Scheme);
 							string confirmEmailSubject = string.Format(Strings.ConfirmEmailSubject, Strings.ApplicationTitle);
 							string confirmEmailBody = string.Format(Strings.ConfirmEmailMessage, Strings.ApplicationTitle, confirmUrl);
-							string firstName = 
-							// create new user in the db and get back the userId and count of invitations
-							int userId = this.await AppService.SetupNewUser(tokenJson.upn, null, model.FirstName, model.LastName, code, model.DateOfBirth, model.PhoneNumber, model.Address, null, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode, confirmEmailSubject, confirmEmailBody);
+							string firstName = tokenJson.given_name;
+							string lastName = tokenJson.family_name;
+							// create new user in the db and get back the userId
+							int userId = await this.AppService.SetupNewUser(email, null, firstName, lastName, code, null, null, null, null, null, null, null, null, confirmEmailSubject, confirmEmailBody);
+							// set cookie and take to profile page
+							SignIn(userId, email, false);
+							return RedirectToAction(ActionConstants.Index);
 						}
 						else
 						{
@@ -55,6 +61,7 @@ namespace AllyisApps.Controllers.Auth
 								// user exists, with microsoft as login provider
 								// set cookie and take to profile page
 								SignIn(user.UserId, user.Email, false);
+								return RedirectToAction(ActionConstants.Index);
 							}
 							else if (user.LoginProvider == LoginProviderEnum.AllyisApps)
 							{

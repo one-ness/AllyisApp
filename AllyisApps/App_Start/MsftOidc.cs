@@ -161,9 +161,9 @@ namespace AllyisApps
 				{
 					// base64 string should always be a multiple of 4
 					int rem = claimsstr.Length % 4;
-					if (rem != 0)
+					if (rem > 0)
 					{
-						var filler = new string('=', rem);
+						var filler = new string('=', 4 - rem);
 						StringBuilder sb = new StringBuilder();
 						sb.Append(claimsstr);
 						sb.Append(filler);

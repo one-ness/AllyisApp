@@ -155,7 +155,7 @@ namespace AllyisApps.Services
 			string firstName,
 			string lastName,
 			Guid emailConfirmationCode,
-			DateTime dateOfBirth,
+			DateTime? dateOfBirth,
 			string phoneNumber,
 			string address1,
 			string address2,
@@ -785,6 +785,8 @@ namespace AllyisApps.Services
 
 		private User2 InitializeUser2(UserDBEntity user, bool loadAddress = true)
 		{
+			if (user == null) return null;
+
 			Address address = null;
 			if (user.AddressId.HasValue && loadAddress)
 			{
