@@ -3,7 +3,7 @@
 @if (User.Identity.IsAuthenticated)
 {
 	<li>
-		<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)">@Model.UserName</a>
+		<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)">@Model.Email</a>
 	</li>
 	<li>
 		<a href="@Url.Action(ActionConstants.LogOff, ControllerConstants.Account)" title="@Strings.SignOut" onclick="javascript: return confirm('@Strings.LogOffPrompt');">

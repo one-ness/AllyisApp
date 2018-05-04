@@ -32,7 +32,7 @@ namespace AllyisApps.DBModel
 			string firstName,
 			string lastName,
 			Guid emailConfirmationCode,
-			DateTime dateOfBirth,
+			DateTime? dateOfBirth,
 			string phoneNumber,
 			string preferredLanguageId,
 			string address1,

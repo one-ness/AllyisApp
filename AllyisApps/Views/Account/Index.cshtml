@@ -8,35 +8,41 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-8 col-md-push-2">
-
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<h2 style="margin-top: 0px; margin-bottom: 0px;">
-						@Model.UserInfo.FirstName @Model.UserInfo.LastName
-						<span class="small text-muted" style="margin-left: 10px;">
-							(@Model.UserInfo.Email)
-						</span>
-					</h2>
+					<div class="row">
+						<div class="col-sm-9">
+							<h2 style="margin-top: 0px; margin-bottom: 0px;">
+								@Model.UserInfo.FirstName @Model.UserInfo.LastName
+								<span class="small text-muted" style="margin-left: 10px;">
+									(@Model.UserInfo.Email)
+								</span>
+							</h2>
+						</div>
+						<div class="col-sm-3">
+							<div class="dropdown pull-right">
+								<a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> @Strings.Manage <i class="fa fa-caret-down"></i></a>
+								<ul class="dropdown-menu">
+									<li><a href="@Url.Action(ActionConstants.EditProfile, ControllerConstants.Account)">@Strings.EditProfile <i class="fa fa-info-circle"></i></a></li>
+									<li><a href="@Url.Action(ActionConstants.ChangePassword, ControllerConstants.Account)">@Strings.ChangePassword <i class="fa fa-user-secret"></i></a></li>
+									<li><a href="@Url.Action(ActionConstants.ChangePassword, ControllerConstants.Account)">Convert to Microsoft Account <i class="fa fa-user-secret"></i></a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
 				</div>
 				<div class="panel-body">
-					<div class="col-sm-9 index-details">
+					<div class="col-sm-12 index-details">
 						<p>
-							<label>@Strings.PhoneNumber:</label>
+							<label>Phone: </label>
 							@Model.UserInfo.PhoneNumber @Model.UserInfo.PhoneExtension
 						</p>
 						<p>
-							<label>@Strings.Address:</label>
+							<label>Address: </label>
 							<span class="address-row">@Model.UserInfo.Address1</span>
 							<span class="address-row">@cityState @Model.UserInfo.PostalCode</span>
+							<span class="address-row">@Model.UserInfo.Country</span>
 						</p>
-						<p>
-							<label>@Strings.Country:</label>
-							<span class="country-row">@Model.UserInfo.Country</span>
-						</p>
-					</div>
-					<div class="col-sm-3 vertically-stacked-buttons text-right" style="padding-right:5px">
-						<a href="@Url.Action(ActionConstants.ChangePassword, ControllerConstants.Account)" class="btn btn-default btn-full">@Strings.ChangePassword <i class="fa fa-user-secret"></i></a><br/>
-						<a href="@Url.Action(ActionConstants.EditProfile, ControllerConstants.Account)" class="btn btn-default btn-full">@Strings.EditProfile <i class="fa fa-info-circle"></i></a>
 					</div>
 				</div>
 
@@ -81,11 +87,11 @@
 		</div>
 	</div>
 
-	<div class="row">
+	<div class="row" style="margin-top:20px;">
 		<div class="col-md-push-2 col-md-8">
 			<div class="row" style="margin-bottom:5px;">
 				<div class="col-xs-6">
-					<h1 class="pull-left" style="margin-bottom:0px; margin-top:0px;">My Employers</h1>
+					<h1 class="pull-left">My Employers</h1>
 				</div>
 				<div class="col-xs-6">
 					<a href="@Url.Action(ActionConstants.CreateOrg, ControllerConstants.Account)" class="btn btn-default pull-right">@Strings.CreateOrganization <i class="fa fa-building"></i></a>
@@ -94,7 +100,7 @@
 			@if (Model.Organizations.Count <= 0)
 			{
 				<div class="row">
-					<div class="col-xs-12">
+					<div class="col-md-12">
 						<p><i>You are not part of an organization yet. Please contact your employer to send you an invitation.</i></p>
 						<p><i>If you are an employer, create your organization by clicking the button above, and then start inviting your employees.</i></p>
 					</div>
@@ -117,7 +123,7 @@
 											<h2 style="margin-top:0px; margin-bottom:0px;">@title</h2>
 										</div>
 										<div class="col-xs-3">
-											<div id="managebtn" class="dropdown pull-right">
+											<div class="dropdown pull-right">
 												<a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> @Strings.Manage <i class="fa fa-caret-down"></i></a>
 												<ul class="dropdown-menu">
 													@if (org.IsReadOrgDetailsAllowed)
@@ -222,9 +228,9 @@
 					</div>
 
 					@*<div class="row">
-					</div>*@
-													}
-												}
+						</div>*@
+				}
+			}
 		</div>
 	</div>
 </div>

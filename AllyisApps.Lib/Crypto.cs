@@ -40,6 +40,8 @@ namespace AllyisApps.Lib
 		/// <returns>String of the format "iterationCount:salt:hash".</returns>
 		public static string GetPasswordHash(string password)
 		{
+			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentNullException(nameof(password));
+
 			RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
 			byte[] salt = new byte[SaltBytes];
 			provider.GetBytes(salt);

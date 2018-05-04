@@ -79,7 +79,7 @@ a#homelink:hover, a#homelink:focus
 	color: #595959;
 }
 
-#managebtn
+.managebtn
 {
 	margin-right: 20px;
 }

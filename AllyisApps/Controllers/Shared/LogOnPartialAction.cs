@@ -27,6 +27,7 @@ namespace AllyisApps.Controllers.Shared
 			{
 				model = new LogOnPartialViewModel
 				{
+					Email = AppService.UserContext.Email,
 					FirstName = AppService.UserContext.FirstName,
 					LastName = AppService.UserContext.LastName
 				};

@@ -37,6 +37,11 @@ namespace AllyisApps.ViewModels.Shared
 		public string LastName { get; set; }
 
 		/// <summary>
+		/// Gets or sets the email of the user
+		/// </summary>
+		public string Email { get; set; }
+
+		/// <summary>
 		/// Gets or sets the name of the organziation the user is working in currently.
 		/// </summary>
 		public string CurrentOrganizationName { get; set; }

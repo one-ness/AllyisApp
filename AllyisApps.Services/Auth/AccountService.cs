@@ -173,8 +173,8 @@ namespace AllyisApps.Services
 			var result = 0;
 			try
 			{
-				result = await DBHelper.CreateUserAsync(
-					email, Crypto.GetPasswordHash(password), firstName, lastName, emailConfirmationCode, dateOfBirth, phoneNumber, Language.DefaultLanguageCultureName,
+				var hash = string.IsNullOrWhiteSpace(password) ? null : Crypto.GetPasswordHash(password);
+				result = await DBHelper.CreateUserAsync(email, hash, firstName, lastName, emailConfirmationCode, dateOfBirth, phoneNumber, Language.DefaultLanguageCultureName,
 					address1, address2, city, stateId, postalCode, countryCode, (int)LoginProviderEnum.AllyisApps);
 
 				// user created, send confirmation email
