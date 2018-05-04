@@ -71,7 +71,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		public async Task<UserDBEntity> GetUserByEmailAsync(string email)
 		{
-			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			using (var connection = new SqlConnection(SqlConnectionString))
 			{
 				return await connection.QueryFirstOrDefaultAsync<UserDBEntity>("[Auth].[GetUserByEmail] @a", new { a = email });
 			}

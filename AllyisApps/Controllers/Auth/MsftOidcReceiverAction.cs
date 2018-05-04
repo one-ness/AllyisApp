@@ -7,6 +7,8 @@
 using System.Web.Mvc;
 using System;
 using AllyisApps.Services.Auth;
+using AllyisApps.Resources;
+using AllyisApps.Services;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -37,7 +39,14 @@ namespace AllyisApps.Controllers.Auth
 						var user = this.AppService.GetUser2ByEmailAsync(tokenJson.upn);
 						if (user == null)
 						{
-							// user doesn't exist, create the user and return to home page
+							// user doesn't exist, create the user and return to profile page
+							Guid code = Guid.NewGuid();
+							string confirmUrl = Url.Action(ActionConstants.ConfirmEmail, ControllerConstants.Account, new { id = code }, protocol: Request.Url.Scheme);
+							string confirmEmailSubject = string.Format(Strings.ConfirmEmailSubject, Strings.ApplicationTitle);
+							string confirmEmailBody = string.Format(Strings.ConfirmEmailMessage, Strings.ApplicationTitle, confirmUrl);
+
+							// create new user in the db and get back the userId and count of invitations
+							int userId = this.await AppService.SetupNewUser(model.Email, model.Password, model.FirstName, model.LastName, code, model.DateOfBirth, model.PhoneNumber, model.Address, null, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode, confirmEmailSubject, confirmEmailBody);
 						}
 						else
 						{
