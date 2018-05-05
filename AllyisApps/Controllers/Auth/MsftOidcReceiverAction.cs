@@ -26,6 +26,8 @@ namespace AllyisApps.Controllers.Auth
 		[HttpPost]
 		public async Task<ActionResult> MsftOidcReceiver()
 		{
+			string returnStr = ActionConstants.Index;
+
 			try
 			{
 				// get id token
@@ -52,7 +54,6 @@ namespace AllyisApps.Controllers.Auth
 							int userId = await this.AppService.SetupNewUser(email, null, firstName, lastName, code, null, null, null, null, null, null, null, null, confirmEmailSubject, confirmEmailBody, LoginProviderEnum.Microsoft);
 							// set cookie and take to profile page
 							SignIn(userId, email, false);
-							return RedirectToAction(ActionConstants.Index);
 						}
 						else
 						{
@@ -61,40 +62,39 @@ namespace AllyisApps.Controllers.Auth
 								// user exists, with microsoft as login provider
 								// set cookie and take to profile page
 								SignIn(user.UserId, user.Email, false);
-								return RedirectToAction(ActionConstants.Index);
 							}
 							else if (user.LoginProvider == LoginProviderEnum.AllyisApps)
 							{
 								// user exists, with allyis apps as login provider
 								// show error message and take to login page
 								Notifications.Add(new Core.Alert.BootstrapAlert("Your login information already exists, but you used an Allyis Apps account. Please login using that account. (You can convert to an employer account in your Profile page.)", Core.Alert.Variety.Danger));
-								return RedirectToAction(ActionConstants.LogOn);
+								returnStr = ActionConstants.LogOn;
 							}
 							else
 							{
 								// user exists, with a different employer as login provider
 								// show error message and take to login page
 								Notifications.Add(new Core.Alert.BootstrapAlert("Your login information already exists, but you used a different employer account. Please login using that account.", Core.Alert.Variety.Danger));
-								return RedirectToAction(ActionConstants.LogOn);
+								returnStr = ActionConstants.LogOn;
 							}
 						}
 					}
-
-					return null;
 				}
 				else
 				{
 					// add notifications, redirect to login url
 					Notifications.Add(new Core.Alert.BootstrapAlert("Microsoft server did not return your identification information. Please close your browser, then re-launch and try again.", Core.Alert.Variety.Danger));
-					return RedirectToAction(ActionConstants.LogOn);
+					returnStr = ActionConstants.LogOn;
 				}
 			}
 			catch
 			{
 				// add notifications, redirect to login url
 				Notifications.Add(new Core.Alert.BootstrapAlert("Unexpected error while decoding your Microsoft identification information. Please close your browser, then re-launch and try again.", Core.Alert.Variety.Danger));
-				return RedirectToAction(ActionConstants.LogOn);
+				returnStr = ActionConstants.LogOn;
 			}
+
+			return RedirectToAction(returnStr);
 		}
 	}
 }
