@@ -219,6 +219,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\GoogleOAuth.cs" />
     <Compile Include="App_Start\MsftOidc.cs" />
     <Compile Include="App_Start\OwinStartup.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\AdminReportAction.cs" />

@@ -25,13 +25,13 @@ namespace AllyisApps
 		/// <summary>
 		/// Azure Active Directory Application Id to be used for msft office 365 / azure ad login
 		/// </summary>
-		public static Guid AadAppId { get; set; }
+		public static Guid MsftAadAppId { get; set; }
 
 		/// <summary>
 		/// Tenant name as registered in our Azure subscription. If we use the name "common"
 		/// it will allow all office 365 / azure ad users to login to our app
 		/// </summary>
-		public static string AadTenantName { get; set; }
+		public static string MsftAadTenantName { get; set; }
 
 		/// <summary>
 		/// Authority is the URL for authority, composed by Azure Active Directory v2 endpoint and the tenant name
@@ -53,8 +53,8 @@ namespace AllyisApps
 		public static string MsftOidcAuthorizationUrl { get; set; }
 
 		static string OidcMetaDataJson;
-		const string aadAppIdKey = "AadAppId";
-		const string aadTenantNameKey = "AadTenantName";
+		const string aadAppIdKey = "MsftAadAppId";
+		const string aadTenantNameKey = "MsftAadTenantName";
 
 		/// <summary>
 		/// init the msft oidc
@@ -63,20 +63,20 @@ namespace AllyisApps
 		{
 			// get the msft oidc settings from config
 			string temp = ConfigurationManager.AppSettings[aadAppIdKey];
-			if (string.IsNullOrWhiteSpace(temp)) throw new ArgumentNullException("AadAppId setting not found in config.");
+			if (string.IsNullOrWhiteSpace(temp)) throw new ArgumentNullException("MsftAadAppId setting not found in config.");
 
 			temp = temp.Trim();
-			AadAppId = new Guid(temp);
+			MsftAadAppId = new Guid(temp);
 
 			// NOTE: endpoints can be obtained in the azure portal under App Registrations --> End Points
 			// we can also form them using the tenant name
 			temp = ConfigurationManager.AppSettings[aadTenantNameKey];
-			if (string.IsNullOrWhiteSpace(temp)) throw new ArgumentNullException("AadTenantName setting not found in config.");
+			if (string.IsNullOrWhiteSpace(temp)) throw new ArgumentNullException("MsftAadTenantName setting not found in config.");
 
-			AadTenantName = temp.Trim();
-			MsftOidcAuthority = string.Format("https://login.microsoftonline.com/{0}/v2.0", AadTenantName);
-			MsftOidcMetaDataUrl = string.Format("https://login.microsoftonline.com/{0}/.well-known/openid-configuration", AadTenantName);
-			MsftOidcAuthorizationUrl = string.Format("https://login.microsoftonline.com/{0}/oauth2/authorize", AadTenantName);
+			MsftAadTenantName = temp.Trim();
+			MsftOidcAuthority = string.Format("https://login.microsoftonline.com/{0}/v2.0", MsftAadTenantName);
+			MsftOidcMetaDataUrl = string.Format("https://login.microsoftonline.com/{0}/.well-known/openid-configuration", MsftAadTenantName);
+			MsftOidcAuthorizationUrl = string.Format("https://login.microsoftonline.com/{0}/oauth2/authorize", MsftAadTenantName);
 		}
 
 		/// <summary>
@@ -139,7 +139,7 @@ namespace AllyisApps
 			// this can mitigate xsrf and replay attacks.
 			var xsrfAndReplayMitigation = Guid.NewGuid().ToString();
 			string url = "{0}?client_id={1}&response_type={2}&redirect_uri={3}&response_mode=form_post&scope={4}&state={5}&nonce={6}";
-			return string.Format(url, MsftOidcAuthorizationUrl, AadAppId, responseType, HttpUtility.UrlEncode(returnUrl), scope, xsrfAndReplayMitigation, xsrfAndReplayMitigation);
+			return string.Format(url, MsftOidcAuthorizationUrl, MsftAadAppId, responseType, HttpUtility.UrlEncode(returnUrl), scope, xsrfAndReplayMitigation, xsrfAndReplayMitigation);
 		}
 
 		/// <summary>
