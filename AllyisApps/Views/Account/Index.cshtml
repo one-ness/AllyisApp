@@ -24,8 +24,11 @@
 								<a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> @Strings.Manage <i class="fa fa-caret-down"></i></a>
 								<ul class="dropdown-menu">
 									<li><a href="@Url.Action(ActionConstants.EditProfile, ControllerConstants.Account)">@Strings.EditProfile <i class="fa fa-info-circle"></i></a></li>
-									<li><a href="@Url.Action(ActionConstants.ChangePassword, ControllerConstants.Account)">@Strings.ChangePassword <i class="fa fa-user-secret"></i></a></li>
-									<li><a href="@Url.Action(ActionConstants.ChangePassword, ControllerConstants.Account)">Convert to Microsoft Account <i class="fa fa-user-secret"></i></a></li>
+									@if (Model.UserInfo.ShowConvertToEmployerAccount)
+									{
+										<li><a href="@Url.Action(ActionConstants.ChangePassword, ControllerConstants.Account)">@Strings.ChangePassword <i class="fa fa-user-secret"></i></a></li>
+										<li><a href="@Url.Action(ActionConstants.ChangePassword, ControllerConstants.Account)">Convert to Employer Account <i class="fa fa-user-secret"></i></a></li>
+									}
 								</ul>
 							</div>
 						</div>

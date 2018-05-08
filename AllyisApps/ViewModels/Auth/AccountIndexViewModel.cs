@@ -93,6 +93,11 @@ namespace AllyisApps.ViewModels.Auth
 			/// Gets or sets Country.
 			/// </summary>
 			public string Country { get; set; }
+
+			/// <summary>
+			/// Gets or sets variable to indicate if convert to employer account option must be shown
+			/// </summary>
+			public bool ShowConvertToEmployerAccount { get; set; }
 		}
 
 		/// <summary>

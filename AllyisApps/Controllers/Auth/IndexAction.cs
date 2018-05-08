@@ -59,6 +59,7 @@ namespace AllyisApps.Controllers.Auth
 				State = user.Address?.StateName,
 				PostalCode = user.Address?.PostalCode,
 				Country = user.Address?.CountryName,
+				ShowConvertToEmployerAccount = user.LoginProvider == LoginProviderEnum.AllyisApps,
 			};
 
 			model.UserInfo = userViewModel;
