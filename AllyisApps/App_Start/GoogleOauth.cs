@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using AllyisApps.Utilities;
 
 namespace AllyisApps
 {
@@ -42,7 +43,7 @@ namespace AllyisApps
 		public static void Init()
 		{
 			// get the metadata document
-			OidcMetaDataDocument = MsftOidc.GetOidcMetaDataDocument(GoogleOAuthMetaDataUrl, out OidcMetaDataDocumentJson);
+			OidcMetaDataDocument = OidcUtility.GetOidcMetaDataDocument(GoogleOAuthMetaDataUrl, out OidcMetaDataDocumentJson);
 
 			GoogleOAuthAuthorizationUrl = OidcMetaDataDocument.authorization_endpoint;
 

@@ -44,6 +44,7 @@ namespace AllyisApps
 		public const string GetBillingSummary = "getbillingsummary";
 		public const string GetDetailsDataJson = "getdetailsdatajson";
 		public const string GetStates = "getstates";
+		public const string GoogleOidcReceiver = "googleoidcreceiver";
 		public const string Import = "import";
 		public const string Index = "index";
 		public const string IndexNoUserId = "indexnouserid";

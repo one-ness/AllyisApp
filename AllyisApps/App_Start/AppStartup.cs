@@ -31,6 +31,9 @@ namespace AllyisApps
 
 			// init msft oidc
 			MsftOidc.Init();
+
+			// init google oauth
+			GoogleOAuth.Init();
 		}
 	}
 }

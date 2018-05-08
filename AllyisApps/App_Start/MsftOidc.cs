@@ -1,17 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Threading.Tasks;
-using System.Net;
-using System.Web.Helpers;
-using System.IO;
-using System.Text;
 using System.Configuration;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.IdentityModel.Protocols;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using System.Web;
 
 
 namespace AllyisApps
@@ -52,8 +41,6 @@ namespace AllyisApps
 		/// </summary>
 		public static string MsftOidcAuthorizationUrl { get; set; }
 
-		static string OidcMetaDataDocumentJson;
-		static dynamic OidcMetaDataDocument;
 		const string aadAppIdKey = "MsftAadAppId";
 		const string aadTenantNameKey = "MsftAadTenantName";
 
@@ -80,42 +67,6 @@ namespace AllyisApps
 			MsftOidcAuthorizationUrl = string.Format("https://login.microsoftonline.com/{0}/oauth2/authorize", MsftAadTenantName);
 		}
 
-		/// <summary>
-		/// get the metadata document from the given url
-		/// </summary>
-		public static dynamic GetOidcMetaDataDocument(string url, out string jsonDocument)
-		{
-			jsonDocument = string.Empty;
-			dynamic result = null;
-			try
-			{
-				// obtain the oidc metadata document
-				var req = WebRequest.Create(url);
-				using (var res = req.GetResponse())
-				{
-					using (var stream = res.GetResponseStream())
-					{
-						using (var reader = new StreamReader(stream))
-						{
-							// get metadata json string
-							jsonDocument = reader.ReadToEnd();
-
-							// convert to object
-							result = System.Web.Helpers.Json.Decode(jsonDocument);
-						}
-					}
-				}
-			}
-			catch
-			{
-				// something went wrong. create the metadata object with just the common authorize url
-				// TODO: log
-				throw;
-			}
-
-			return result;
-		}
-
 		/*
 		* sample login url
 		GET https://login.microsoftonline.com/{tenant}/oauth2/authorize?
@@ -127,10 +78,6 @@ namespace AllyisApps
 			&state=12345
 			&nonce=7362CAEA-9CA5-4B43-9BA3-34D7C303EBA7
 		*/
-		/// <summary>
-		/// id_token received in the post from the authorization provider
-		/// </summary>
-		public const string IdTokenKey = "id_token"; // we ask for id_token in response type and should get this back from the authorization provider
 		const string responseType = "id_token%20code"; // id_token is mandatory for oidc signin
 		const string scope = "openid%20profile%20email%20address%20phone"; // openid is mandatory for oidc signin
 		/// <summary>
@@ -143,42 +90,6 @@ namespace AllyisApps
 			var xsrfAndReplayMitigation = Guid.NewGuid().ToString();
 			string url = "{0}?client_id={1}&response_type={2}&redirect_uri={3}&response_mode=form_post&scope={4}&state={5}&nonce={6}";
 			return string.Format(url, MsftOidcAuthorizationUrl, MsftAadAppId, responseType, HttpUtility.UrlEncode(returnUrl), scope, xsrfAndReplayMitigation, xsrfAndReplayMitigation);
-		}
-
-		/// <summary>
-		/// decodes the given id token. id token is of the form base64(header + "." + claims + "." + signature)
-		/// signature is formed by base64(HashHMAC(publickey, header + "." + claims)
-		/// this is based on jwt spec
-		/// </summary>
-		public static string DecodeIdToken(string idtoken)
-		{
-			if (string.IsNullOrWhiteSpace(idtoken)) throw new ArgumentNullException(nameof(idtoken));
-
-			var resultJson = string.Empty;
-			// split on .
-			var tokens = idtoken.Split('.');
-			if (tokens.Length == 3)
-			{
-				var claimsstr = tokens[1];
-				if (!string.IsNullOrWhiteSpace(claimsstr))
-				{
-					// base64 string should always be a multiple of 4
-					int rem = claimsstr.Length % 4;
-					if (rem > 0)
-					{
-						var filler = new string('=', 4 - rem);
-						StringBuilder sb = new StringBuilder();
-						sb.Append(claimsstr);
-						sb.Append(filler);
-						claimsstr = sb.ToString();
-					}
-
-					var jsonBytes = Convert.FromBase64String(claimsstr);
-					resultJson = Encoding.UTF8.GetString(jsonBytes);
-				}
-			}
-
-			return resultJson;
 		}
 	}
 }

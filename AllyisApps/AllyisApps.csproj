@@ -391,6 +391,8 @@
     <Compile Include="Controllers\Auth\CreateOrgAction.cs" />
     <Compile Include="Controllers\Auth\EditMemberAction.cs" />
     <Compile Include="Controllers\Auth\EditProfileAction.cs" />
+    <Compile Include="Controllers\Auth\GoogleOidcAction.cs" />
+    <Compile Include="Controllers\Auth\GoogleOidcReceiverAction.cs" />
     <Compile Include="Controllers\Auth\ManageOrgPermissionsAction.cs" />
     <Compile Include="Controllers\Auth\ManageSubPermissionsAction.cs" />
     <Compile Include="Controllers\Auth\EditSubscriptionAction.cs" />
@@ -466,6 +468,7 @@
     <Compile Include="Utilities\EnumExtensionMethods.cs" />
     <Compile Include="Utilities\Helpers.cs" />
     <Compile Include="Utilities\ImportMessageFormatter.cs" />
+    <Compile Include="Utilities\OidcUtility.cs" />
     <Compile Include="ViewModels\Auth\ManagePermissionsViewModel.cs" />
     <Compile Include="ViewModels\Auth\OrganizationInvitationsViewModel.cs" />
     <Compile Include="ViewModels\Auth\AddMemberViewModel.cs" />

@@ -1,15 +1,16 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="MsftOidcReceiverAction.cs" company="Allyis, Inc.">
+// <copyright file="GoogleOidcReceiverAction.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Resources;
-using AllyisApps.Services.Auth;
-using AllyisApps.Utilities;
-using System;
-using System.Threading.Tasks;
 using System.Web.Mvc;
+using System;
+using AllyisApps.Services.Auth;
+using AllyisApps.Resources;
+using AllyisApps.Services;
+using System.Threading.Tasks;
+using AllyisApps.Utilities;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -19,12 +20,11 @@ namespace AllyisApps.Controllers.Auth
 	public partial class AccountController : BaseController
 	{
 		/// <summary>
-		/// user returns to here after logging in to MSFT
-		/// described here: https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-protocols-openid-connect-code
+		/// user returns to here after logging in to google
 		/// </summary>
 		[AllowAnonymous]
 		[HttpPost]
-		public async Task<ActionResult> MsftOidcReceiver()
+		public async Task<ActionResult> GoogleOidcReceiver()
 		{
 			string returnStr = ActionConstants.Index;
 
