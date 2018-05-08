@@ -20,14 +20,34 @@ namespace AllyisApps
 		/// </summary>
 		public static string GoogleOAuthClientSecret { get; set; }
 
+		/// <summary>
+		/// metadata url that is hardcoded as per google instruction
+		/// </summary>
+		public static string GoogleOAuthMetaDataUrl = "https://accounts.google.com/.well-known/openid-configuration";
+
+		/// <summary>
+		/// authorization end point
+		/// </summary>
+		public static string GoogleOAuthAuthorizationUrl { get; set; }
+
 		const string GoogleOAuthClientIdKey = "GoogleOAuthClientId";
 		const string GoogleOAuthClientSecretKey = "GoogleOAuthClientSecret";
+
+		static string OidcMetaDataDocumentJson;
+		static dynamic OidcMetaDataDocument;
 
 		/// <summary>
 		/// google oauth init
 		/// </summary>
 		public static void Init()
 		{
+			// get the metadata document
+			OidcMetaDataDocument = MsftOidc.GetOidcMetaDataDocument(GoogleOAuthMetaDataUrl, out OidcMetaDataDocumentJson);
+
+			GoogleOAuthAuthorizationUrl = OidcMetaDataDocument.authorization_endpoint;
+
 		}
+
+
 	}
 }

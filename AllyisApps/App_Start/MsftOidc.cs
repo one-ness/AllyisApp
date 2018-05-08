@@ -52,7 +52,8 @@ namespace AllyisApps
 		/// </summary>
 		public static string MsftOidcAuthorizationUrl { get; set; }
 
-		static string OidcMetaDataJson;
+		static string OidcMetaDataDocumentJson;
+		static dynamic OidcMetaDataDocument;
 		const string aadAppIdKey = "MsftAadAppId";
 		const string aadTenantNameKey = "MsftAadTenantName";
 
@@ -80,15 +81,16 @@ namespace AllyisApps
 		}
 
 		/// <summary>
-		/// some method
+		/// get the metadata document from the given url
 		/// </summary>
-		public static dynamic GetMsftOidcMetaDataDocument()
+		public static dynamic GetOidcMetaDataDocument(string url, out string jsonDocument)
 		{
-			dynamic result = new object();
+			jsonDocument = string.Empty;
+			dynamic result = null;
 			try
 			{
 				// obtain the oidc metadata document
-				var req = WebRequest.Create(MsftOidcMetaDataUrl);
+				var req = WebRequest.Create(url);
 				using (var res = req.GetResponse())
 				{
 					using (var stream = res.GetResponseStream())
@@ -96,10 +98,10 @@ namespace AllyisApps
 						using (var reader = new StreamReader(stream))
 						{
 							// get metadata json string
-							OidcMetaDataJson = reader.ReadToEnd();
+							jsonDocument = reader.ReadToEnd();
 
 							// convert to object
-							result = System.Web.Helpers.Json.Decode(OidcMetaDataJson);
+							result = System.Web.Helpers.Json.Decode(jsonDocument);
 						}
 					}
 				}
@@ -107,7 +109,8 @@ namespace AllyisApps
 			catch
 			{
 				// something went wrong. create the metadata object with just the common authorize url
-				result.authorization_endpoint = MsftOidcAuthorizationUrl;
+				// TODO: log
+				throw;
 			}
 
 			return result;
