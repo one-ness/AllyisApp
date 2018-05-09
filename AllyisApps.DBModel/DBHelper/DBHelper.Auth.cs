@@ -82,7 +82,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		public async Task<dynamic> GetUserOrganizationsAsync(int userId)
 		{
-			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			using (var connection = new SqlConnection(SqlConnectionString))
 			{
 				var result = await connection.QueryAsync<dynamic>("[Auth].[GetUserOrganizations] @a", new { a = userId });
 				return result.ToList();

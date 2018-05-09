@@ -501,6 +501,7 @@
     <Content Include="Content\css\bootstrap-select.min.css" />
     <Content Include="Content\css\margin-fixes.css" />
     <Content Include="Content\css\daterangepicker.css" />
+    <Content Include="Content\icons\btn_google_signin_light_normal_web.png" />
     <Content Include="Scripts\bootstrap\bootstrap.min.js" />
     <Content Include="Content\css\ExpenseTracker.css" />
     <Content Include="Content\css\ExpenseTracker.min.css">
