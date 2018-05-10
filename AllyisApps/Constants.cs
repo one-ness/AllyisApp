@@ -17,6 +17,8 @@ namespace AllyisApps
 		public const string Charge = "charge";
 		public const string ConfirmEmail = "confirmemail";
 		public const string ConvertToEmployer = "converttoemployer";
+		public const string ConvertToGoogle = "converttogoogle";
+		public const string ConvertToMicrosoft = "converttomicrosoft";
 		public const string Create = "create";
 		public const string CreateHoliday = "createholiday";
 		public const string CreateOrg = "createorg";
