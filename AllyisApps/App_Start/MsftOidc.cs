@@ -51,7 +51,7 @@ namespace AllyisApps
 		{
 			// get the msft oidc settings from config
 			string temp = ConfigurationManager.AppSettings[aadAppIdKey];
-			if (string.IsNullOrWhiteSpace(temp)) throw new ArgumentNullException("MsftAadAppId setting not found in config.");
+			if (string.IsNullOrWhiteSpace(temp)) throw new ArgumentNullException(string.Format("{0} setting not found in config.", nameof(aadAppIdKey)));
 
 			temp = temp.Trim();
 			MsftAadAppId = new Guid(temp);
@@ -59,7 +59,7 @@ namespace AllyisApps
 			// NOTE: endpoints can be obtained in the azure portal under App Registrations --> End Points
 			// we can also form them using the tenant name
 			temp = ConfigurationManager.AppSettings[aadTenantNameKey];
-			if (string.IsNullOrWhiteSpace(temp)) throw new ArgumentNullException("MsftAadTenantName setting not found in config.");
+			if (string.IsNullOrWhiteSpace(temp)) throw new ArgumentNullException(string.Format("{0} setting not found in config.", nameof(aadTenantNameKey)));
 
 			MsftAadTenantName = temp.Trim();
 			MsftOidcAuthority = string.Format("https://login.microsoftonline.com/{0}/v2.0", MsftAadTenantName);

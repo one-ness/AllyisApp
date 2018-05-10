@@ -14,15 +14,14 @@ namespace AllyisApps.Controllers.Auth
 	public partial class AccountController : BaseController
 	{
 		/// <summary>
-		/// login to microsoft work or school account using open id connect protocol
-		/// described here: https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-protocols-openid-connect-code
-		/// https://docs.microsoft.com/en-us/azure/active-directory/develop/guidedsetups/active-directory-aspnetwebapp
+		/// login to google user, work or school account using open id connect protocol
+		/// described here: https://developers.google.com/identity/protocols/OpenIDConnect
 		/// </summary>
 		[AllowAnonymous]
 		public ActionResult GoogleOidc()
 		{
-			string returnUrl = this.Url.Action(ActionConstants.MsftOidcReceiver, ControllerConstants.Account, null, this.Request.Url.Scheme);
-			return new RedirectResult(AllyisApps.MsftOidc.GetMsftOidcLoginUrl(returnUrl));
+			string returnUrl = this.Url.Action(ActionConstants.GoogleOidcReceiver, ControllerConstants.Account, null, this.Request.Url.Scheme);
+			return new RedirectResult(AllyisApps.GoogleOAuth.GetGoogleOAuthLoginUrl(returnUrl));
 		}
 	}
 }

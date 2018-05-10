@@ -37,7 +37,7 @@ namespace AllyisApps.Controllers.Auth
 					// decode the id_token
 					dynamic tokenJson = System.Web.Helpers.Json.Decode(OidcUtility.DecodeIdToken(idtoken));
 					string email = null;
-					if (tokenJson != null && !string.IsNullOrWhiteSpace(email = tokenJson.upn))
+					if (tokenJson != null && !string.IsNullOrWhiteSpace(email = tokenJson.email))
 					{
 						// unique name is available. check our database
 						var user = await this.AppService.GetUser2ByEmailAsync(email);
@@ -57,40 +57,47 @@ namespace AllyisApps.Controllers.Auth
 						}
 						else
 						{
-							if (user.LoginProvider == LoginProviderEnum.Microsoft)
+							// user exists, check login provider
+							if (user.LoginProvider == LoginProviderEnum.AllyisApps)
 							{
-								// user exists, with microsoft as login provider
-								// set cookie and take to profile page
-								SignIn(user.UserId, user.Email, false);
-							}
-							else if (user.LoginProvider == LoginProviderEnum.AllyisApps)
-							{
-								// user exists, with allyis apps as login provider
+								// allyis apps
 								// show error message and take to login page
 								Notifications.Add(new Core.Alert.BootstrapAlert("Your login information already exists, but you used an Allyis Apps account. Please login using that account. (You can convert to an employer account in your Profile page.)", Core.Alert.Variety.Danger));
 								returnStr = ActionConstants.LogOn;
 							}
+							if (user.LoginProvider == LoginProviderEnum.Microsoft || user.LoginProvider == LoginProviderEnum.Google)
+							{
+								// microsoft or google
+								// set cookie and take to profile page
+								SignIn(user.UserId, user.Email, false);
+							}
 							else
 							{
-								// user exists, with a different employer as login provider
+								// some other employer as login provider
 								// show error message and take to login page
 								Notifications.Add(new Core.Alert.BootstrapAlert("Your login information already exists, but you used a different employer account. Please login using that account.", Core.Alert.Variety.Danger));
 								returnStr = ActionConstants.LogOn;
 							}
 						}
 					}
+					else
+					{
+						// google didn't provide the email
+						Notifications.Add(new Core.Alert.BootstrapAlert("Google server did not return your email information. Please close your browser, then re-launch and try again.", Core.Alert.Variety.Danger));
+						returnStr = ActionConstants.LogOn;
+					}
 				}
 				else
 				{
 					// add notifications, redirect to login url
-					Notifications.Add(new Core.Alert.BootstrapAlert("Microsoft server did not return your identification information. Please close your browser, then re-launch and try again.", Core.Alert.Variety.Danger));
+					Notifications.Add(new Core.Alert.BootstrapAlert("Google server did not return your identification information. Please close your browser, then re-launch and try again.", Core.Alert.Variety.Danger));
 					returnStr = ActionConstants.LogOn;
 				}
 			}
 			catch
 			{
 				// add notifications, redirect to login url
-				Notifications.Add(new Core.Alert.BootstrapAlert("Unexpected error while decoding your Microsoft identification information. Please close your browser, then re-launch and try again.", Core.Alert.Variety.Danger));
+				Notifications.Add(new Core.Alert.BootstrapAlert("Unexpected error while decoding your Google identification information. Please close your browser, then re-launch and try again.", Core.Alert.Variety.Danger));
 				returnStr = ActionConstants.LogOn;
 			}
 
