@@ -389,6 +389,8 @@
     <Compile Include="Controllers\Auth\ChangePasswordAction.cs" />
     <Compile Include="Controllers\Auth\ConfirmEmailAction.cs" />
     <Compile Include="Controllers\Auth\ConvertToEmployerAction.cs" />
+    <Compile Include="Controllers\Auth\ConvertToGoogleAction.cs" />
+    <Compile Include="Controllers\Auth\ConvertToMicrosoftAction.cs" />
     <Compile Include="Controllers\Auth\CreateOrgAction.cs" />
     <Compile Include="Controllers\Auth\EditMemberAction.cs" />
     <Compile Include="Controllers\Auth\EditProfileAction.cs" />

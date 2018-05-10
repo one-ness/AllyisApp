@@ -250,6 +250,7 @@ namespace AllyisApps.Services
 				result.FirstName = expando.User.FirstName;
 				result.LastName = expando.User.LastName;
 				result.Email = expando.User.Email;
+				result.LoginProvider = (LoginProviderEnum)expando.User.LoginProviderId;
 
 				// get organization and roles
 				foreach (var item in expando.OrganizationsAndRoles)

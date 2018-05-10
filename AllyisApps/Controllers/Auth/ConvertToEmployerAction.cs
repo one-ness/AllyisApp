@@ -6,6 +6,7 @@
 
 using System.Web.Mvc;
 using AllyisApps.ViewModels.Auth;
+using AllyisApps.Services.Auth;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -20,6 +21,13 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		public ActionResult ConvertToEmployer()
 		{
+			if (this.AppService.UserContext.LoginProvider != LoginProviderEnum.AllyisApps)
+			{
+				// convert to employer available only for allyisapps local account
+				Notifications.Add(new Core.Alert.BootstrapAlert("Your are already using an employer/school account. Convert to employer functionality is available only for Allyis Apps local accounts.", Core.Alert.Variety.Danger);
+				return RedirectToAction(ActionConstants.Index);
+			}
+
 			var model = new ConvertToEmployerViewModel();
 			model.Email = this.AppService.UserContext.Email;
 			return View(model);

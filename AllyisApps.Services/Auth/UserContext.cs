@@ -42,6 +42,11 @@ namespace AllyisApps.Services.Auth
         /// </summary>
         public string PreferedLanguageId { get; set; }
 
+		/// <summary>
+		/// Gets or sets the login provider
+		/// </summary>
+		public LoginProviderEnum LoginProvider { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UserContext"/> class.
         /// </summary>
@@ -49,23 +54,6 @@ namespace AllyisApps.Services.Auth
         {
             OrganizationsAndRoles = new Dictionary<int, OrganizationAndRole>();
             SubscriptionsAndRoles = new Dictionary<int, SubscriptionAndRole>();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UserContext"/> class.
-        /// </summary>
-        public UserContext(int userId, string email, string firstName, string lastName, string preferredLanguageId = "en-US") : this()
-        {
-            if (userId <= 0) throw new ArgumentException("userId");
-            if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentException("firstName");
-            if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentException("lastName");
-            if (string.IsNullOrWhiteSpace(email)) throw new ArgumentException("email");
-
-            Email = email;
-            UserId = userId;
-            FirstName = firstName;
-            LastName = lastName;
-            PreferedLanguageId = preferredLanguageId;
         }
 
         /// <summary>
