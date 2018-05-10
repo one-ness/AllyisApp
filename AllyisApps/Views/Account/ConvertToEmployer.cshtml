@@ -1,0 +1,20 @@
+﻿@model ConvertToEmployerViewModel
+
+@{
+	ViewBag.Title = "Convert to Employer/School Account";
+}
+
+<div class="container">
+	<p>Your Allyis Apps local account is: @Model.Email</p>
+	<p>If you want to use your employer/school account for login, please choose one of the options below, then click Convert. Please note that converting to an employer account is <b>irreversible</b>! All your data will be retained, but after conversion, you can use only your employer account to login. If you don't want to convert, click Cancel</p>
+</div>
+<div class="container">
+	<div class="row">
+		<div class="col-md-9">
+			My employer/school account is also: @Model.Email, provided by Microsoft.
+		</div>
+		<div class="col-md-3">
+
+		</div>
+	</div>
+</div>

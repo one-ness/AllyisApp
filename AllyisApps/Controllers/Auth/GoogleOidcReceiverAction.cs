@@ -62,12 +62,12 @@ namespace AllyisApps.Controllers.Auth
 							{
 								// allyis apps
 								// show error message and take to login page
-								Notifications.Add(new Core.Alert.BootstrapAlert("Your login information already exists, but you used an Allyis Apps account. Please login using that account. (You can convert to an employer account in your Profile page.)", Core.Alert.Variety.Danger));
+								Notifications.Add(new Core.Alert.BootstrapAlert(string.Format("Your login information: {0} already exists, but you used an Allyis Apps local account. Please login using that account. (You can convert to an employer account in your Profile page.)", email), Core.Alert.Variety.Danger));
 								returnStr = ActionConstants.LogOn;
 							}
-							if (user.LoginProvider == LoginProviderEnum.Microsoft || user.LoginProvider == LoginProviderEnum.Google)
+							else if (user.LoginProvider == LoginProviderEnum.Google)
 							{
-								// microsoft or google
+								// google
 								// set cookie and take to profile page
 								SignIn(user.UserId, user.Email, false);
 							}
@@ -75,7 +75,7 @@ namespace AllyisApps.Controllers.Auth
 							{
 								// some other employer as login provider
 								// show error message and take to login page
-								Notifications.Add(new Core.Alert.BootstrapAlert("Your login information already exists, but you used a different employer account. Please login using that account.", Core.Alert.Variety.Danger));
+								Notifications.Add(new Core.Alert.BootstrapAlert(string.Format("Your login information: {0} already exists, but you used a different employer account. Please login using that account.", email), Core.Alert.Variety.Danger));
 								returnStr = ActionConstants.LogOn;
 							}
 						}

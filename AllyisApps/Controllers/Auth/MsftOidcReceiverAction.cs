@@ -57,27 +57,34 @@ namespace AllyisApps.Controllers.Auth
 						}
 						else
 						{
-							if (user.LoginProvider == LoginProviderEnum.Microsoft)
+							// user exists, check login provider
+							if (user.LoginProvider == LoginProviderEnum.AllyisApps)
 							{
-								// user exists, with microsoft as login provider
+								// allyis apps
+								// show error message and take to login page
+								Notifications.Add(new Core.Alert.BootstrapAlert(string.Format("Your login information: {0} already exists, but you used an Allyis Apps local account. Please login using that account. (You can convert to an employer account in your Profile page.)", email), Core.Alert.Variety.Danger));
+								returnStr = ActionConstants.LogOn;
+							}
+							else if (user.LoginProvider == LoginProviderEnum.Microsoft)
+							{
+								// microsoft
 								// set cookie and take to profile page
 								SignIn(user.UserId, user.Email, false);
-							}
-							else if (user.LoginProvider == LoginProviderEnum.AllyisApps)
-							{
-								// user exists, with allyis apps as login provider
-								// show error message and take to login page
-								Notifications.Add(new Core.Alert.BootstrapAlert("Your login information already exists, but you used an Allyis Apps account. Please login using that account. (You can convert to an employer account in your Profile page.)", Core.Alert.Variety.Danger));
-								returnStr = ActionConstants.LogOn;
 							}
 							else
 							{
 								// user exists, with a different employer as login provider
 								// show error message and take to login page
-								Notifications.Add(new Core.Alert.BootstrapAlert("Your login information already exists, but you used a different employer account. Please login using that account.", Core.Alert.Variety.Danger));
+								Notifications.Add(new Core.Alert.BootstrapAlert(string.Format("Your login information: {0} already exists, but you used a different employer account. Please login using that account.", email), Core.Alert.Variety.Danger));
 								returnStr = ActionConstants.LogOn;
 							}
 						}
+					}
+					else
+					{
+						// microsoft didn't provide the email
+						Notifications.Add(new Core.Alert.BootstrapAlert("Microsoft server did not return your email information. Please close your browser, then re-launch and try again.", Core.Alert.Variety.Danger));
+						returnStr = ActionConstants.LogOn;
 					}
 				}
 				else
