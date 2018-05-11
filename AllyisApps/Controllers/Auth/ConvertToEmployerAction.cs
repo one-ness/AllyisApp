@@ -24,7 +24,7 @@ namespace AllyisApps.Controllers.Auth
 			if (this.AppService.UserContext.LoginProvider != LoginProviderEnum.AllyisApps)
 			{
 				// convert to employer available only for allyisapps local account
-				Notifications.Add(new Core.Alert.BootstrapAlert("Your are already using an employer/school account. Convert to employer functionality is available only for Allyis Apps local accounts.", Core.Alert.Variety.Danger);
+				Notifications.Add(new Core.Alert.BootstrapAlert("Your are already using an employer/school account. Convert to employer functionality is available only for Allyis Apps local accounts.", Core.Alert.Variety.Danger));
 				return RedirectToAction(ActionConstants.Index);
 			}
 

@@ -91,7 +91,7 @@ namespace AllyisApps
 			// TODO: store this guid in the database as an open connection, then verify in the returnUrl action, mark it as complete
 			// this can mitigate xsrf and replay attacks.
 			var xsrfAndReplayMitigation = Guid.NewGuid().ToString();
-			string url = "{0}?client_id={1}&response_type={2}&redirect_uri={3}&response_mode=form_post&scope={4}&state={5}&nonce={6}";
+			string url = "{0}?client_id={1}&response_type={2}&redirect_uri={3}&response_mode=form_post&scope={4}&state={5}&nonce={6}&hd=*";
 			return string.Format(url, GoogleOAuthAuthorizationUrl, GoogleOAuthClientId, responseType, returnUrl, scope, xsrfAndReplayMitigation, xsrfAndReplayMitigation);
 		}
 	}

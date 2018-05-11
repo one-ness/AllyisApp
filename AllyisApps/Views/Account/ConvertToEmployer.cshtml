@@ -6,7 +6,7 @@
 
 <div class="container">
 	<p>Your Allyis Apps local account is: @Model.Email</p>
-	<p>If you want to use your employer/school account for login, please choose one of the Convert options below. Please note that converting to an employer account is <b>irreversible</b>! All your data will be retained, but after conversion, you can use only your employer account to login. If you don't want to convert, click Cancel</p>
+	<p>If you want to use your employer/school account for login AND your employer/school account is also same as @Model.Email, then you can choose one of the Convert options below. Please note that converting to an employer account is <b>irreversible</b>! All your data will be retained, but after conversion, you can use only your employer/school account to login. If you don't want to convert, click Cancel</p>
 </div>
 <div class="container">
 	<div class="row" style="margin-top:20px;">
@@ -14,15 +14,15 @@
 			My employer/school account is also: @Model.Email, provided by Microsoft.
 		</div>
 		<div class="col-md-3 pull-right">
-			<a href="@Url.Action(ActionConstants.ConvertToMicrosoft, ControllerConstants.Account)" class="btn btn-primary"><img src="~/Content/icons/msft-logo.png" />&nbsp;&nbsp;&nbsp;&nbsp;Convert to Microsoft Account</a>
+			<a href="@Url.Action(ActionConstants.ConvertToMicrosoft, ControllerConstants.Account)" onclick="javascript: return confirm('Are you sure you want to convert to Microsoft Account?');" class="btn btn-primary"><img src="~/Content/icons/msft-logo.png" />&nbsp;&nbsp;&nbsp;&nbsp;Convert to Microsoft Account</a>
 		</div>
 	</div>
 	<div class="row" style="margin-top:20px;">
 		<div class="col-md-9">
-			My personal/employer/school account is also: @Model.Email, provided by Google.
+			My employer/school account is also: @Model.Email, provided by Google.
 		</div>
 		<div class="col-md-3 pull-right">
-			<a href="@Url.Action(ActionConstants.ConvertToGoogle, ControllerConstants.Account)" class="btn btn-default"><img src="~/Content/icons/google-logo.png" />&nbsp;&nbsp;&nbsp;&nbsp;Convert to Google Account</a>
+			<a href="@Url.Action(ActionConstants.ConvertToGoogle, ControllerConstants.Account)" onclick="javascript: return confirm('Are you sure you want to convert to Google Account?');" class="btn btn-default"><img src="~/Content/icons/google-logo.png" />&nbsp;&nbsp;&nbsp;&nbsp;Convert to Google Account</a>
 		</div>
 	</div>
 </div>
