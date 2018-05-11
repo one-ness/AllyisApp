@@ -197,6 +197,17 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// change the login provider of the logged in user (allyis apps user)
+		/// this will also set password hash to null
+		/// </summary>
+		public async Task ChangeLoginProviderAsync(LoginProviderEnum provider)
+		{
+			if (this.UserContext.LoginProvider == LoginProviderEnum.AllyisApps && provider != LoginProviderEnum.AllyisApps)
+			{
+				await this.DBHelper.UpdateUserLoginProviderAsync(this.UserContext.UserId, (int)provider);
+			}
+		}
+		/// <summary>
 		/// Validates the given email and password with the database.
 		/// </summary>
 		/// <param name="email">The login email.</param>

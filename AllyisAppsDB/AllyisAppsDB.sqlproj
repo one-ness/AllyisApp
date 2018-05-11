@@ -421,6 +421,7 @@
     <Build Include="Auth\Stored Procedures\GetOrganizationsByIds.sql" />
     <Build Include="Auth\Stored Procedures\GetUserByEmail.sql" />
     <Build Include="Billing\Stored Procedures\GetActiveSubscriptionsByIds.sql" />
+    <Build Include="Auth\Stored Procedures\UpdateUserLoginProvider.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

@@ -302,6 +302,17 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// update the given user's login provider to given value. this will also null out the password hash
+		/// </summary>
+		public async Task UpdateUserLoginProviderAsync(int userId, int providerId)
+		{
+			using (var con = new SqlConnection(SqlConnectionString))
+			{
+				await con.ExecuteAsync("[Auth].[UpdateUserLoginProvider] @a, @b", new { a = userId, b = providerId });
+			}
+		}
+
+		/// <summary>
 		/// create a new organization, add the user in the given role
 		/// </summary>
 		public async Task<int> SetupOrganization(

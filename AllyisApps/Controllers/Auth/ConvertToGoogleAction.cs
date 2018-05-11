@@ -5,6 +5,8 @@
 //------------------------------------------------------------------------------
 
 using System.Web.Mvc;
+using System.Threading.Tasks;
+using AllyisApps.Services.Auth;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -14,11 +16,13 @@ namespace AllyisApps.Controllers.Auth
 	public partial class AccountController : BaseController
 	{
 		/// <summary>
-		/// convert the user's allyis apps account to microsoft account
+		/// convert the user's allyis apps account to google account
 		/// </summary>
-		public ActionResult ConvertToGoogle()
+		public async Task<ActionResult> ConvertToGoogle()
 		{
-			return null;
+			// change login provider to microsoft and set password hash to null
+			await this.AppService.ChangeLoginProviderAsync(LoginProviderEnum.Google);
+			return RedirectToAction(ActionConstants.LogOff);
 		}
 	}
 }
