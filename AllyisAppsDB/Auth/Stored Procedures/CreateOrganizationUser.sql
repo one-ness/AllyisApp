@@ -26,7 +26,7 @@ BEGIN
 	/*Unassigned for all subscription in organizaion*/
 
 	Insert Into @subs(SubscriptionId)
-	SELECT SubscriptionID from
+	SELECT SubscriptionId from
 		[Billing].[Subscription]
 	where 
 		Subscription.OrganizationId = @organizationId

@@ -9,7 +9,7 @@ BEGIN
 
 	SELECT @count = COUNT(*)
 	FROM [Pjm].[Project]
-	WHERE [customerId] = @customerId
+	WHERE [CustomerId] = @customerId
 
 	RETURN @count
 END

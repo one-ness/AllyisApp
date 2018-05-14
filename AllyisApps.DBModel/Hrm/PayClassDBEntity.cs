@@ -31,10 +31,5 @@ namespace AllyisApps.DBModel.Hrm
 		/// Gets or sets.
 		/// </summary>
 		public int OrganizationId { get; set; }
-
-		/// <summary>
-		/// Gets or sets.
-		/// </summary>
-		public DateTime CreatedUtc { get; set; }
 	}
 }

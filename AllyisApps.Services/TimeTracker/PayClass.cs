@@ -29,9 +29,8 @@ namespace AllyisApps.Services.TimeTracker
 		public int OrganizationId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Created time.
+		/// Gets or sets the built-in payclass id
 		/// </summary>
-		public DateTime CreatedUtc { get; set; }
-		public int BuiltInPayClassId { get; set; }
+		public BuiltinPayClassIdEnum BuiltInPayClassId { get; set; }
 	}
 }

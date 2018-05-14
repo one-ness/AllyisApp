@@ -1,10 +1,11 @@
 ﻿CREATE PROCEDURE [Hrm].[CreateEmployeeType]
-	@orgId int = 0,
-	@employeeName varchar(64)
+	@orgId int,
+	@employeeTypeName varchar(64)
 AS
 BEGIN
+	set nocount on
 	INSERT INTO [Hrm].[EmployeeType] ([OrganizationId], [EmployeeTypeName]) 
-	VALUES (@orgId, @employeeName);
+	VALUES (@orgId, @employeeTypeName);
 
-	SELECT SCOPE_IDENTITY(); 
+	return SCOPE_IDENTITY(); 
 END

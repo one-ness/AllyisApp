@@ -1,12 +1,12 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="PayClassIdEnum.cs" company="Allyis, Inc.">
+// <copyright file="BuiltinPayClassIdEnum.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
 namespace AllyisApps.Services.TimeTracker
 {
-	public enum PayClassId
+	public enum BuiltinPayClassIdEnum : int
 	{
 		/// <summary>
 		/// Indentify custome created ids

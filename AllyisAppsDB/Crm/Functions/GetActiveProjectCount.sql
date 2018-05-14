@@ -9,7 +9,7 @@ BEGIN
 
 	SELECT @count = COUNT(*)
 	FROM [Pjm].[Project]
-	WHERE [customerId] = @customerId
+	WHERE [CustomerId] = @customerId
 	AND ([EndUtc] IS NULL OR GETUTCDATE() <= [EndUtc])
 	AND ([StartUtc] IS NULL OR GETUTCDATE() >= [StartUtc])
 

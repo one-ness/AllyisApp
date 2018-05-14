@@ -18,29 +18,23 @@ BEGIN
 	SET XACT_ABORT ON;
 
 	BEGIN TRANSACTION
-		-- Create organization
-		EXEC [Auth].[CreateOrganization] @organizationName, @siteUrl, @address, @city, @stateID, @countryCode, @postalCode, @phoneNumber, @faxNumber, @subdomainName;
+		-- create organization
+		declare @organizationId int
+		exec @organizationId = CreateOrganization @organizationName, @siteUrl, @address, @city, @stateID, @countryCode, @postalCode, @phoneNumber, @faxNumber, @subdomainName;
 
-		-- get the new organization id
-		DECLARE @organizationId INT = IDENT_CURRENT('[Auth].[Organization]');
-		
-		-- Init default pay classes for org
-		EXEC [Hrm].[CreateDefaultPayClass] @organizationId;
+		-- init default information for org: payclasses, employee type
+		EXEC [Hrm].[CreateDefaultPayClasses] @organizationId;
+		declare @employeeTypeId int
+		EXEC @employeeTypeId = [Hrm].[CreateEmployeeType] @organizationId, 'Full Time Employee';
 
-
-		EXEC [Hrm].[CreateEmployeeType] @organizationId, 'Full Time Employee';
-
-		DECLARE @employeeTypeId INT = IDENT_CURRENT('[Hrm].[EmployeeType]');
-
+		-- add the payclasses to the employee type
 		EXEC [Hrm].[AddOrgPayClassesToEmployeeType] @employeeTypeId, @organizationId
-		
 
-		-- Add user to the org
+		-- finally, add the user to the org
 		EXEC [Auth].[CreateOrganizationUser] @userId, @organizationId, @roleId, @employeeTypeId, @employeeId;
-
 
 	COMMIT TRANSACTION
 
 	-- return the new organization id
-	SELECT @organizationId;
+	return @organizationId
 END

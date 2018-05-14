@@ -13,7 +13,6 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <param name="payClass"></param>
 		public PayClassInfoViewModel(Services.TimeTracker.PayClass payClass)
 		{
-			CreatedUtc = payClass.CreatedUtc;
 			OrganizationId = payClass.OrganizationId;
 			PayClassId = payClass.PayClassId;
 			PayClassName = payClass.PayClassName;
@@ -38,10 +37,5 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Gets or sets the organization Id.
 		/// </summary>
 		public int OrganizationId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Created time.
-		/// </summary>
-		public DateTime CreatedUtc { get; set; }
 	}
 }

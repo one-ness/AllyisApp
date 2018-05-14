@@ -98,6 +98,8 @@
     <Folder Include="Crm\Functions" />
     <Folder Include="dbo\" />
     <Folder Include="dbo\Functions\" />
+    <Folder Include="Hrm\" />
+    <Folder Include="Hrm\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TimeTracker\Tables\Holiday.sql" />
@@ -274,7 +276,6 @@
     <Build Include="Pjm\Stored Procedures\UpdateProject.sql" />
     <Build Include="Pjm\Stored Procedures\UpdateProjectAndUsers.sql" />
     <Build Include="Pjm\Stored Procedures\UpdateProjectUser.sql" />
-    <Build Include="TimeTracker\Stored Procedures\CreateDefaultPayClass.sql" />
     <Build Include="Lookup\Tables\OrganizationLocation.sql" />
     <Build Include="Auth\Stored Procedures\GetInvitation.sql" />
     <Build Include="Auth\Stored Procedures\GetOrganizationOwnerEmails.sql" />
@@ -422,6 +423,7 @@
     <Build Include="Auth\Stored Procedures\GetUserByEmail.sql" />
     <Build Include="Billing\Stored Procedures\GetActiveSubscriptionsByIds.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserLoginProvider.sql" />
+    <Build Include="Hrm\Stored Procedures\CreateDefaultPayClasses.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
