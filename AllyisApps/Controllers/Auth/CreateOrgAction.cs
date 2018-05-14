@@ -60,6 +60,8 @@ namespace AllyisApps.Controllers.Auth
 			}
 
 			// Something happened, reload this view
+			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService.GetCountries());
+			model.LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService.GetStates(model.SelectedCountryCode));
 			return View(model);
 		}
 	}
