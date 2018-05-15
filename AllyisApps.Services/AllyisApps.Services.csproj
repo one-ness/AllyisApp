@@ -131,18 +131,18 @@
     <Compile Include="Lookup\Tag.cs" />
     <Compile Include="TimeTracker\CreateUpdateTimeEntryResultEnum.cs" />
     <Compile Include="TimeTracker\DateRange.cs" />
-    <Compile Include="TimeTracker\EmployeeType.cs" />
+    <Compile Include="Hrm\EmployeeType.cs" />
     <Compile Include="TimeTracker\Holiday.cs" />
     <Compile Include="Auth\Invitation.cs" />
     <Compile Include="Lookup\Language.cs" />
     <Compile Include="TimeTracker\PayPeriod.cs" />
     <Compile Include="TimeTracker\PayPeriodRanges.cs" />
-    <Compile Include="TimeTracker\PayClass.cs" />
+    <Compile Include="Hrm\PayClass.cs" />
     <Compile Include="Crm\CompleteProject.cs" />
     <Compile Include="TimeTracker\ServiceResultClasses.cs" />
     <Compile Include="TimeTracker\ServiceResultEnums.cs" />
     <Compile Include="TimeTracker\TimeEntryStatusIdEnum.cs" />
-    <Compile Include="TimeTracker\PayClassIdEnum.cs" />
+    <Compile Include="Hrm\PayClassIdEnum.cs" />
     <Compile Include="TimeTracker\Setting.cs" />
     <Compile Include="Billing\SkuIdEnum.cs" />
     <Compile Include="Billing\SkuInfo.cs" />
@@ -178,9 +178,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Hrm\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

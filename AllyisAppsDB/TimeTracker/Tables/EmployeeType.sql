@@ -1,10 +1,12 @@
-﻿CREATE TABLE [Hrm].[EmployeeType]
-(
-	[EmployeeTypeId] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
-	[OrganizationId] INT NOT NULL,
-	[EmployeeTypeName] NVARCHAR(64) NOT NULL,
-	CONSTRAINT [FK_ORGANIZATION_ID] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId])
+﻿CREATE TABLE [Hrm].[EmployeeType] (
+    [EmployeeTypeId]   INT           IDENTITY (1, 1) NOT NULL,
+    [OrganizationId]   INT           NOT NULL,
+    [EmployeeTypeName] NVARCHAR (64) NOT NULL,
+    PRIMARY KEY CLUSTERED ([EmployeeTypeId] ASC),
+    CONSTRAINT [FK_EmployeeType_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId])
 );
+
+
 
 GO
 

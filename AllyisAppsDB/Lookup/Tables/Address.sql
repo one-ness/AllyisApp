@@ -6,12 +6,12 @@
     [StateId]     INT           NULL,
     [PostalCode]  NVARCHAR (16) NULL,
     [CountryCode] VARCHAR (8)   NULL,
-    [CountryId]   INT           NULL,
     CONSTRAINT [PK_Address] PRIMARY KEY CLUSTERED ([AddressId] ASC),
-    CONSTRAINT [FK_Address_Country] FOREIGN KEY ([CountryId]) REFERENCES [Lookup].[Country] ([CountryId]),
-    CONSTRAINT [FK_Address_Country1] FOREIGN KEY ([CountryCode]) REFERENCES [Lookup].[Country] ([CountryCode]),
+    CONSTRAINT [FK_Address_Country] FOREIGN KEY ([CountryCode]) REFERENCES [Lookup].[Country] ([CountryCode]),
     CONSTRAINT [FK_Address_State] FOREIGN KEY ([StateId]) REFERENCES [Lookup].[State] ([StateId])
 );
+
+
 
 
 

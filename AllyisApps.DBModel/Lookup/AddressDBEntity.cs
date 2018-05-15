@@ -36,11 +36,6 @@
 		public string PostalCode { get; set; }
 
 		/// <summary>
-		/// Gets or sets the country id
-		/// </summary>
-		public int? CountryId { get; set; }
-
-		/// <summary>
 		/// Gets or sets the country code
 		/// </summary>
 		public string CountryCode { get; set; }
