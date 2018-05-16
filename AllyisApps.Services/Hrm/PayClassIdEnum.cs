@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="BuiltinPayClassIdEnum.cs" company="Allyis, Inc.">
+// <copyright file="BuiltinPayClassEnum.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
