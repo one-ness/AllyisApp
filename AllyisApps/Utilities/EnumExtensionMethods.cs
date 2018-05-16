@@ -728,28 +728,28 @@ namespace AllyisApps.Services.TimeTracker
 		/// </summary>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public static string GetEnumName(this BuiltinPayClass value)
+		public static string GetEnumName(this BuiltinPayClassEnum value)
 		{
 			string name = "";
 			switch (value)
 			{
-				case BuiltinPayClass.Holiday:
+				case BuiltinPayClassEnum.Holiday:
 					name = "Holiday";
 					break;
 
-				case BuiltinPayClass.PaidTimeOff:
+				case BuiltinPayClassEnum.PaidTimeOff:
 					name = "Paid Time Off";
 					break;
 
-				case BuiltinPayClass.Regular:
+				case BuiltinPayClassEnum.Regular:
 					name = "Regular";
 					break;
 
-				case BuiltinPayClass.OverTime:
+				case BuiltinPayClassEnum.OverTime:
 					name = "Overtime";
 					break;
 
-				case BuiltinPayClass.UnpaidTimeOff:
+				case BuiltinPayClassEnum.UnpaidTimeOff:
 					name = "Unpaid Time Off";
 					break;
 			}

@@ -34,4 +34,4 @@ DBCC CHECKIdENT('Pjm.Project');
 DBCC CHECKIdENT('Crm.Customer');
 DBCC CHECKIdENT('Billing.Subscription');
 DBCC CHECKIdENT('Lookup.State');
-DBCC CHECKIdENT('Lookup.Country');
+

@@ -324,7 +324,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Creates a new pay class for an organization.
 		/// </summary>
-		public async Task<int> CreatePayClass(string payClassName, int orgId, int subscriptionId, BuiltinPayClass builtinPayClassId = BuiltinPayClass.Custom)
+		public async Task<int> CreatePayClass(string payClassName, int orgId, int subscriptionId, BuiltinPayClassEnum builtinPayClassId = BuiltinPayClassEnum.Custom)
 		{
 			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 			int createPayclass = DBHelper.CreatePayClass(payClassName, orgId, (int)builtinPayClassId);
@@ -751,7 +751,7 @@ namespace AllyisApps.Services
 				PayClassName = pc.PayClassName,
 				OrganizationId = pc.OrganizationId,
 				PayClassId = pc.PayClassId,
-				BuiltInPayClassId = (BuiltinPayClass)pc.BuiltInPayClassId
+				BuiltInPayClassId = (BuiltinPayClassEnum)pc.BuiltInPayClassId
 			};
 		}
 

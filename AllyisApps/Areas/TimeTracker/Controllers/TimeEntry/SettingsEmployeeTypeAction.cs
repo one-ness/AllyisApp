@@ -59,7 +59,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			ViewData["SubscriptionName"] = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName;
 			ViewData["SubscriptionId"] = subscriptionId;
 			var payclasses = (await AppService.GetPayClassesBySubscriptionId(subscriptionId))
-				.Where(x => (x.BuiltInPayClassId != BuiltinPayClass.OverTime))
+				.Where(x => (x.BuiltInPayClassId != BuiltinPayClassEnum.OverTime))
 				.Select(x => new PayClassInfoViewModel(x));
 
 			SettingsEditEmployeeTypeViewModel model = new SettingsEditEmployeeTypeViewModel()
@@ -144,10 +144,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var payClasses = (await AppService.GetPayClassesByOrganizationId(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId));
 
 			var unassignedPayClasses = payClasses
-				.Where(x => !assignedPayClassesIds.Contains(x.PayClassId) && (x.BuiltInPayClassId != BuiltinPayClass.OverTime))
+				.Where(x => !assignedPayClassesIds.Contains(x.PayClassId) && (x.BuiltInPayClassId != BuiltinPayClassEnum.OverTime))
 				.Select(x => new PayClassInfoViewModel(x));
 			var assignedPayClasses = payClasses
-				.Where(x => assignedPayClassesIds.Contains(x.PayClassId) && (x.BuiltInPayClassId != BuiltinPayClass.OverTime))
+				.Where(x => assignedPayClassesIds.Contains(x.PayClassId) && (x.BuiltInPayClassId != BuiltinPayClassEnum.OverTime))
 				.Select(x => new PayClassInfoViewModel(x));
 
 			SettingsEditEmployeeTypeViewModel model = new SettingsEditEmployeeTypeViewModel()
@@ -176,7 +176,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			int orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			var payclasses = await AppService.GetPayClassesByOrganizationId(orgId);
-			var overtimepayclass = payclasses.First(pc => (pc.BuiltInPayClassId == BuiltinPayClass.OverTime));
+			var overtimepayclass = payclasses.First(pc => (pc.BuiltInPayClassId == BuiltinPayClassEnum.OverTime));
 			if (string.IsNullOrEmpty(model.EmployeeTypeName))
 			{
 				Notifications.Add(new BootstrapAlert("Employee Type Requires a name."));

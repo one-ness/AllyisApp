@@ -1048,7 +1048,7 @@ namespace AllyisApps.Services
 						continue;
 					}
 					//EmployeeType Validation 
-					if (!(assignedPayClasses[userInOrg.EmployeeTypeId].Contains(payClass.PayClassId)) && !(payClass.BuiltInPayClassId == BuiltinPayClass.OverTime))
+					if (!(assignedPayClasses[userInOrg.EmployeeTypeId].Contains(payClass.PayClassId)) && !(payClass.BuiltInPayClassId == BuiltinPayClassEnum.OverTime))
 					{
 						result.TimeEntryFailures.Add($"Error importing time entry on sheet {table.TableName}, row {table.Rows.IndexOf(row) + 2}: employee is  Not Assignedable To Pay Class");
 						continue;

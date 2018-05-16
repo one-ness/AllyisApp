@@ -42,7 +42,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			string subscriptionName = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName;
 
 			// Built-in, non-editable pay classes cannot be merged
-			if (sourcePayClass.BuiltInPayClassId != (int)BuiltinPayClass.Custom)
+			if (sourcePayClass.BuiltInPayClassId != (int)BuiltinPayClassEnum.Custom)
 			{
 				Notifications.Add(new BootstrapAlert(Strings.CannotMergePayClass, Variety.Warning));
 				return RedirectToAction(ActionConstants.SettingsPayClass, new { subscriptionId });
@@ -54,7 +54,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				SourcePayClassName = sourcePayClass.PayClassName,
 				SubscriptionId = subscriptionId,
 				SubscriptionName = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName,
-				DestinationPayClasses = destPayClasses.Where(payc => payc.BuiltInPayClassId != BuiltinPayClass.OverTime).Select(payclass => new PayClassInfoViewModel(payclass))
+				DestinationPayClasses = destPayClasses.Where(payc => payc.BuiltInPayClassId != BuiltinPayClassEnum.OverTime).Select(payclass => new PayClassInfoViewModel(payclass))
 			};
 
 			return View(ViewConstants.MergePayClass, model);
@@ -75,7 +75,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				var paylcasses = (await AppService.GetPayClassesBySubscriptionId(model.SubscriptionId)).ToDictionary(pc => pc.PayClassId);
 
-				if (paylcasses[destPayClass].BuiltInPayClassId == BuiltinPayClass.OverTime)
+				if (paylcasses[destPayClass].BuiltInPayClassId == BuiltinPayClassEnum.OverTime)
 				{
 					Notifications.Add(new BootstrapAlert("Cannont merge into overtime Over time has specail meaning suggest regular"));
 				}
@@ -90,7 +90,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Notifications.Add(new BootstrapAlert("Succssfuly changd all editalbe records but payclass could not be deleted as it has locked Time entries"));
 					Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 				}
-				if (paylcasses[destPayClass].BuiltInPayClassId == BuiltinPayClass.Regular)
+				if (paylcasses[destPayClass].BuiltInPayClassId == BuiltinPayClassEnum.Regular)
 				{
 					//upadate over time 
 					var orgId = AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId;
