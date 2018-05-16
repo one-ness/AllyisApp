@@ -31,6 +31,6 @@ namespace AllyisApps.Services.TimeTracker
 		/// <summary>
 		/// Gets or sets the built-in payclass id
 		/// </summary>
-		public BuiltinPayClassIdEnum BuiltInPayClassId { get; set; }
+		public BuiltinPayClass BuiltInPayClassId { get; set; }
 	}
 }

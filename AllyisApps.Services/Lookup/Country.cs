@@ -7,7 +7,6 @@ namespace AllyisApps.Services.Lookup
 	/// </summary>
 	public class Country
 	{
-		public int CountryId { get; set; }
 		public string CountryCode { get; set; }
 		public string CountryName { get; set; }
 		public List<State> States { get; set; }

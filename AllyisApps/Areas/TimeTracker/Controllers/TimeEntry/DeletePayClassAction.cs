@@ -33,11 +33,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			// Built-in, non-editable pay classes cannot be deleted
 			// Used pay classes cannot be deleted, suggest manager to merge it with another payclass instead
-			if (sourcePayClassName == BuiltinPayClassIdEnum.Regular.GetEnumName() ||
-				sourcePayClassName == BuiltinPayClassIdEnum.OverTime.GetEnumName() ||
-				sourcePayClassName == BuiltinPayClassIdEnum.Holiday.GetEnumName() ||
-				sourcePayClassName == BuiltinPayClassIdEnum.PaidTimeOff.GetEnumName() ||
-				sourcePayClassName == BuiltinPayClassIdEnum.UnpaidTimeOff.GetEnumName() ||
+			if (sourcePayClassName == BuiltinPayClass.Regular.GetEnumName() ||
+				sourcePayClassName == BuiltinPayClass.OverTime.GetEnumName() ||
+				sourcePayClassName == BuiltinPayClass.Holiday.GetEnumName() ||
+				sourcePayClassName == BuiltinPayClass.PaidTimeOff.GetEnumName() ||
+				sourcePayClassName == BuiltinPayClass.UnpaidTimeOff.GetEnumName() ||
 				AppService.GetTimeEntriesThatUseAPayClass(userId).Count() > 0)
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.CannotDeletePayClass, Variety.Warning));

@@ -6,7 +6,7 @@
 
 namespace AllyisApps.Services.TimeTracker
 {
-	public enum BuiltinPayClassIdEnum : int
+	public enum BuiltinPayClass : int
 	{
 		/// <summary>
 		/// Indentify custome created ids

@@ -48,7 +48,7 @@ BEGIN
 		LEFT JOIN [StaffingManager].[PositionTag]	 WITH (NOLOCK) ON [PositionTag].[PositionId] = [Position].[PositionId]
 			 JOIN [Lookup].[Tag]					 WITH (NOLOCK) ON [PositionTag].[TagId] = [Tag].[TagId]
 		LEFT JOIN [Lookup].[Address]				 WITH (NOLOCK) ON [Address].[AddressId] = [Position].[AddressId]
-		LEFT JOIN [Lookup].[Country]				 WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
+		LEFT JOIN [Lookup].[Country]				 WITH (NOLOCK) ON [Country].[CountryCode] = [Address].[CountryCode]
 		LEFT JOIN [Lookup].[State]					 WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
 		LEFT JOIN [CRM].[Customer]					 WITH (NOLOCK) ON [Customer].[CustomerId] = [Position].[CustomerId]
 		LEFT JOIN [StaffingManager].[EmploymentType] WITH (NOLOCK) ON [EmploymentType].[EmploymentTypeId] = [Position].[EmploymentTypeId]

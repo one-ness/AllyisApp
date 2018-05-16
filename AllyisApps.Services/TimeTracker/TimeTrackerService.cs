@@ -420,7 +420,7 @@ namespace AllyisApps.Services
 		public async Task<CreateUpdateTimeEntryResult> ValidateTimeEntryCreateUpdate(TimeEntry entry, int organizationId)
 		{
 			// 7 is the payclassid for Overtime
-			if (entry.BuiltInPayClassId == (int)BuiltinPayClassIdEnum.OverTime)
+			if (entry.BuiltInPayClassId == (int)BuiltinPayClass.OverTime)
 			{
 				return CreateUpdateTimeEntryResult.OvertimePayClass;
 			}
@@ -590,12 +590,12 @@ namespace AllyisApps.Services
 			}
 			if (!entriesInOvertimePeriod.Any()) return; // no time entries to recalculate
 
-			var overtimeEntries = entriesInOvertimePeriod.Where(e => e.BuiltInPayClassId == (int)BuiltinPayClassIdEnum.OverTime).OrderBy(e => e.Date).ToList();
-			var regularEntries = entriesInOvertimePeriod.Where(e => e.BuiltInPayClassId == (int)BuiltinPayClassIdEnum.Regular).OrderByDescending(e => e.Date).ToList();
+			var overtimeEntries = entriesInOvertimePeriod.Where(e => e.BuiltInPayClassId == (int)BuiltinPayClass.OverTime).OrderBy(e => e.Date).ToList();
+			var regularEntries = entriesInOvertimePeriod.Where(e => e.BuiltInPayClassId == (int)BuiltinPayClass.Regular).OrderByDescending(e => e.Date).ToList();
 
 			var payClasses = (await GetPayClassesByOrganizationId(organizationId)).ToList();
-			int regularPayClassId = payClasses.Single(pc => pc.BuiltInPayClassId == BuiltinPayClassIdEnum.Regular).PayClassId;
-			int overtimePayClassId = payClasses.Single(pc => pc.BuiltInPayClassId == BuiltinPayClassIdEnum.OverTime).PayClassId;
+			int regularPayClassId = payClasses.Single(pc => pc.BuiltInPayClassId == BuiltinPayClass.Regular).PayClassId;
+			int overtimePayClassId = payClasses.Single(pc => pc.BuiltInPayClassId == BuiltinPayClass.OverTime).PayClassId;
 
 			//edge case involving recently changed overtime periods -- makes sure all overtime entries are after all regular entries
 			foreach (var o in overtimeEntries.Where(e => e.Date < regularEntries.FirstOrDefault()?.Date))
@@ -718,11 +718,11 @@ namespace AllyisApps.Services
 		public async Task DeleteOvertimeInDateRange(int organizationId, DateRange range)
 		{
 			var payClasses = (await GetPayClassesByOrganizationId(organizationId)).ToList();
-			int regularPayClassId = payClasses.Single(pc => pc.BuiltInPayClassId == BuiltinPayClassIdEnum.Regular).PayClassId;
+			int regularPayClassId = payClasses.Single(pc => pc.BuiltInPayClassId == BuiltinPayClass.Regular).PayClassId;
 
 			var entries = await GetTimeEntriesOverDateRange(organizationId, range.StartDate, range.EndDate);
 			var updatedOvertimeEntries = entries
-				.Where(e => e.BuiltInPayClassId == (int)BuiltinPayClassIdEnum.OverTime)
+				.Where(e => e.BuiltInPayClassId == (int)BuiltinPayClass.OverTime)
 				.Select(e =>
 				{
 					e.PayClassId = regularPayClassId;

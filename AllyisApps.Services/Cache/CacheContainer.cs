@@ -92,7 +92,6 @@ namespace AllyisApps.Services.Cache
 			{
 				var country = new Country();
 				country.CountryCode = item.Value.CountryCode;
-				country.CountryId = item.Value.CountryId;
 				country.CountryName = item.Value.CountryName;
 				List<State> states = null;
 				if (StatesForCountryCache.TryGetValue(country.CountryCode, out states))

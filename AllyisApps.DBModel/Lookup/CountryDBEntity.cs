@@ -6,11 +6,6 @@ namespace AllyisApps.DBModel.Lookup
 	public class CountryDBEntity : BaseDBEntity
 	{
 		/// <summary>
-		/// country id.
-		/// </summary>
-		public int CountryId { get; set; }
-
-		/// <summary>
 		/// two character country code.
 		/// </summary>
 		public string CountryCode { get; set; }
