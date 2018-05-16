@@ -4,9 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.OpenIdConnect;
-using System.Web;
 using System.Web.Mvc;
 
 namespace AllyisApps.Controllers.Auth
