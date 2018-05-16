@@ -24,7 +24,7 @@ BEGIN
 	SET [Address1] = @address,
 		[City] = @city,
 		[StateId] = (SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [StateName] = @state),
-		[CountryId] = (SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [CountryName] = @country),
+		[CountryCode] = (SELECT [CountryCode] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [CountryName] = @country),
 		[PostalCode] = @postalCode
 	WHERE [AddressId] = @addressId
 END
