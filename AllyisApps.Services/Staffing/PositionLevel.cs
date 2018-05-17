@@ -1,11 +1,8 @@
 ﻿using System;
 
-namespace AllyisApps.DBModel.StaffingManager
+namespace AllyisApps.Services.StaffingManager
 {
-	/// <summary>
-	/// DB obj
-	/// </summary>
-	public class PositionLevelDBEntity
+	public class PositionLevel
 	{
 		private string positionLevelName;
 
@@ -13,11 +10,6 @@ namespace AllyisApps.DBModel.StaffingManager
 		/// Gets or sets the position level Id
 		/// </summary>
 		public int PositionLevelId { get; set; }
-
-		/// <summary>
-		/// Gets or sets Organization Id
-		/// </summary>
-		public int OrganizationId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Position Level's Name

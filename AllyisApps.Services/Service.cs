@@ -13,7 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.Hrm;
-using AllyisApps.DBModel.StaffingManager;
+using AllyisApps.DBModel.Staffing;
 using AllyisApps.DBModel.TimeTracker;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;

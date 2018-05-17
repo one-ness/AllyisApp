@@ -1,4 +1,4 @@
-namespace AllyisApps.DBModel.StaffingManager
+namespace AllyisApps.DBModel.Staffing
 {
 	/// <summary>
 	/// Represents the Address table in the database.

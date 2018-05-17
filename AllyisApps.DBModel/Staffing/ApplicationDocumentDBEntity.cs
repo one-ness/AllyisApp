@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.DBModel.StaffingManager
+namespace AllyisApps.DBModel.Staffing
 {
 	/// <summary>
 	/// Represents the ApplicationDocument table in the database.

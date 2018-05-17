@@ -10,7 +10,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using AllyisApps.DBModel.Lookup;
-using AllyisApps.DBModel.Staffing;
+using AllyisApps.DBModel.StaffingManager;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;

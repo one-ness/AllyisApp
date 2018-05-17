@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AllyisApps.DBModel.StaffingManager
+namespace AllyisApps.DBModel.Staffing
 {
 	/// <summary>
 	/// DB object for position status

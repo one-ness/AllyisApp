@@ -1,26 +1,18 @@
 ﻿using System;
 
-namespace AllyisApps.DBModel.StaffingManager
+namespace AllyisApps.Services.StaffingManager
 {
-	/// <summary>
-	/// DB object for position status
-	/// </summary>
-	public class ApplicationStatusDBEntity
+	public class ApplicationStatus
 	{
 		private string applicationStatusName;
 
 		/// <summary>
-		/// Gets or sets the application status Id
+		/// Gets or sets the position status Id
 		/// </summary>
 		public int ApplicationStatusId { get; set; }
 
 		/// <summary>
-		/// Gets or sets Organization Id
-		/// </summary>
-		public int OrganizationId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the applications status's Name
+		/// Gets or sets the Position Level's Name
 		/// </summary>
 		public string ApplicationStatusName
 		{

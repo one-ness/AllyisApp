@@ -13,7 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.Lookup;
-using AllyisApps.DBModel.StaffingManager;
+using AllyisApps.DBModel.Staffing;
 using Dapper;
 
 namespace AllyisApps.DBModel

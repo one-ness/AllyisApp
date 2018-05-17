@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.DBModel.StaffingManager
+namespace AllyisApps.DBModel.Staffing
 {
 	/// <summary>
 	/// Represents the Applicant table in the database.
