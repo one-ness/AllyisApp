@@ -219,7 +219,7 @@ namespace AllyisApps.Services
 
 			User result = null;
 			var user = await this.DBHelper.GetUserByEmailAsync(email);
-			if (user != null)
+			if (user != null && user.LoginProviderId == (int)LoginProviderEnum.AllyisApps && (!string.IsNullOrWhiteSpace(user.PasswordHash)))
 			{
 				// email exists, hash the given password and compare with hash in db
 				PassWordValidationResult passwordValidation = Crypto.ValidateAndUpdate(password, user.PasswordHash);

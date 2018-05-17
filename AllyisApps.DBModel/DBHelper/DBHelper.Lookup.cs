@@ -98,5 +98,16 @@ namespace AllyisApps.DBModel
 				return con.Query<AddressDBEntity>("[Lookup].[GetAddress] @a", new { a = addressID }).FirstOrDefault();
 			}
 		}
+
+		/// <summary>
+		/// create address
+		/// </summary>
+		public async Task<int> CreateAddress(string address1, string address2, string city, short stateId, string postalCode, string countryCode)
+		{
+			using (var con = new SqlConnection(SqlConnectionString))
+			{
+				return (await con.QueryAsync<int>("[Lookup].[CreateAddress] @p1, @p2, @p3, @p4, @p5, @p6", new { p1 = address1, p2 = address2, p3 = city, p4 = stateId, p5 = postalCode, p6 = countryCode })).FirstOrDefault();
+			}
+		}
 	}
 }

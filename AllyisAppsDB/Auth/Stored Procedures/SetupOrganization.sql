@@ -16,10 +16,11 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	SET XACT_ABORT ON;
+	declare @organizationId int
+	set @organizationId = null
 
 	BEGIN TRANSACTION
 		-- create organization
-		declare @organizationId int
 		exec @organizationId = [Auth].[CreateOrganization] @organizationName, @siteUrl, @address, @city, @stateId, @countryCode, @postalCode, @phoneNumber, @faxNumber, @subdomainName;
 
 		-- init default information for org: payclasses, employee type
@@ -36,5 +37,5 @@ BEGIN
 	COMMIT TRANSACTION
 
 	-- return the new organization id
-	select @organizationId
+	return @organizationId
 END

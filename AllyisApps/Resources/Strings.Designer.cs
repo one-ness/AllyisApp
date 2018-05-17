@@ -4093,7 +4093,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Username or password was incorrect..
+        ///   Looks up a localized string similar to Username or password was incorrect, or you might have used an employer/school account..
         /// </summary>
         public static string SignInFailureMessage {
             get {

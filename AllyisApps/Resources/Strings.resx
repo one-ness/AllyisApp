@@ -1412,7 +1412,7 @@
     <value>The provided parameters are not valid.</value>
   </data>
   <data name="SignInFailureMessage" xml:space="preserve">
-    <value>Username or password was incorrect.</value>
+    <value>Username or password was incorrect, or you might have used an employer/school account.</value>
   </data>
   <data name="SubscriptionNonExistantMessage" xml:space="preserve">
     <value>The specified subscription does not exist.</value>
@@ -1768,82 +1768,82 @@
   <data name="MustBeAssignedToProject" xml:space="preserve">
     <value>User must be assigned to project.</value>
   </data>
-	<data name="LockTimeEntriesNoChange" xml:space="preserve">
+  <data name="LockTimeEntriesNoChange" xml:space="preserve">
     <value>Lock date was not changed, it is already set to {0}</value>
   </data>
-	<data name="AcceptInvitationSuccess" xml:space="preserve">
+  <data name="AcceptInvitationSuccess" xml:space="preserve">
     <value>You have successfully joined {0}</value>
   </data>
-	<data name="CancelConfirm" xml:space="preserve">
+  <data name="CancelConfirm" xml:space="preserve">
     <value>Are you sure you want to cancel?\nAll unsaved changes will be lost.</value>
   </data>
-	<data name="ProjectCreateNoCustomers" xml:space="preserve">
+  <data name="ProjectCreateNoCustomers" xml:space="preserve">
     <value>You cannot create a new project because there are no active customers.</value>
   </data>
-	<data name="ActiveProjects" xml:space="preserve">
+  <data name="ActiveProjects" xml:space="preserve">
     <value>Active Projects</value>
   </data>
-	<data name="InactiveProjects" xml:space="preserve">
+  <data name="InactiveProjects" xml:space="preserve">
     <value>Inactive Projects</value>
   </data>
-	<data name="TimeEntryResultOvertimePayClass" xml:space="preserve">
+  <data name="TimeEntryResultOvertimePayClass" xml:space="preserve">
     <value>Cannot create or edit overtime hours. These are automatically calculated.</value>
   </data>
-	<data name="TimeEntryResultLocked" xml:space="preserve">
+  <data name="TimeEntryResultLocked" xml:space="preserve">
     <value>Cannot create or edit time entries with dates on or before lock date.</value>
   </data>
-	<data name="TimeEntryResultInvalidAction" xml:space="preserve">
+  <data name="TimeEntryResultInvalidAction" xml:space="preserve">
     <value>Invalid action for time entry on date {0}</value>
   </data>
-	<data name="ConfirmStartOfWeek" xml:space="preserve">
+  <data name="ConfirmStartOfWeek" xml:space="preserve">
     <value>Are you sure you want to change start of week?\n\nIf overtime settings is based on week, the lock date must be set to be the day before what you are changing the start of week to be.\n\nFor example, if you are changing the start of week to be Monday, the lock date must be set to any Sunday.</value>
   </data>
-	<data name="ConfirmOvertime" xml:space="preserve">
+  <data name="ConfirmOvertime" xml:space="preserve">
     <value>Are you sure you want to change overtime settings?\n\nTo change, the lock date must be set to be the end date of the updated overtime period.\n\nFor example, if you are changing the overtime period to be Monthly, the lock date must be set to the last day of any month.</value>
   </data>
-	<data name="StartOfWeekSuccessAndRecalculatedOvertime" xml:space="preserve">
+  <data name="StartOfWeekSuccessAndRecalculatedOvertime" xml:space="preserve">
     <value>Successfully updated start of week settings, and recalculated all overtime periods after lock date.</value>
   </data>
-	<data name="StartOfWeekSettingsNotFound" xml:space="preserve">
+  <data name="StartOfWeekSettingsNotFound" xml:space="preserve">
     <value>No settings updated, settings not found.</value>
   </data>
-	<data name="OvertimeResultInvalidPeriod" xml:space="preserve">
+  <data name="OvertimeResultInvalidPeriod" xml:space="preserve">
     <value>Overtime period must be either 'Day', 'Week', or 'Month'.</value>
   </data>
-	<data name="OvertimeResultNoHours" xml:space="preserve">
+  <data name="OvertimeResultNoHours" xml:space="preserve">
     <value>Must input a value for hours.</value>
   </data>
-	<data name="OvertimeResultInvalidHours" xml:space="preserve">
+  <data name="OvertimeResultInvalidHours" xml:space="preserve">
     <value>Overtime hours must be greater than 0</value>
   </data>
-	<data name="OvertimeResultSettingsNotFound" xml:space="preserve">
+  <data name="OvertimeResultSettingsNotFound" xml:space="preserve">
     <value>Could not update settings, settings not found.</value>
   </data>
-	<data name="OvertimeResultSuccessAndRecalculatedOvertime" xml:space="preserve">
+  <data name="OvertimeResultSuccessAndRecalculatedOvertime" xml:space="preserve">
     <value>Successfully updated overtime and recalculated all overtime periods after lock date.</value>
   </data>
-	<data name="OvertimeResultSuccessAndDeletedOvertime" xml:space="preserve">
+  <data name="OvertimeResultSuccessAndDeletedOvertime" xml:space="preserve">
     <value>Successfully updated overtime and changed all overtime entries after lock date to regular hours.</value>
   </data>
-	<data name="SkippedRecalculationOfOvertimePeriod" xml:space="preserve">
+  <data name="SkippedRecalculationOfOvertimePeriod" xml:space="preserve">
     <value>Skipped recalculation of overtime for overtime period {0} - {1} because it contains locked dates.</value>
   </data>
-	<data name="StartOfWeekResultInvalidLockDate" xml:space="preserve">
+  <data name="StartOfWeekResultInvalidLockDate" xml:space="preserve">
     <value>Cannot change start of week because there are un-processed time entries that would interfere with overtime re-calculation.\n\nAll entries before {0} (or the end date of any overtime period) must be locked.</value>
   </data>
-	<data name="OvertimeResultInvalidLockDate" xml:space="preserve">
+  <data name="OvertimeResultInvalidLockDate" xml:space="preserve">
     <value>Cannot change overtime settings because there are un-processed time entries that would interfere with overtime re-calculation.\n\nAll entries before {0} (or the end of any overtime period) must be locked.</value>
   </data>
-	<data name="UnlockTimeEntriesInvalidLockDate" xml:space="preserve">
+  <data name="UnlockTimeEntriesInvalidLockDate" xml:space="preserve">
     <value>Cannot unlock time entries because your overtime calculation settings were recently changed. You can either payroll process your locked entries, or set the lock date to any date that is the end of an overtime period.</value>
   </data>
-	<data name="LockTimeEntriesInvalidLockDateWithOvertimeChange" xml:space="preserve">
+  <data name="LockTimeEntriesInvalidLockDateWithOvertimeChange" xml:space="preserve">
     <value>Cannot reduce lock date to {0} because your overtime calculation settings were recently changed. You can either payroll process your locked entries, or set the lock date to any date that is the end of an overtime period.</value>
   </data>
-	<data name="LockEntriesResultSuccessAndRecalculatedOvertime" xml:space="preserve">
+  <data name="LockEntriesResultSuccessAndRecalculatedOvertime" xml:space="preserve">
     <value>Successfully locked all dates for time entries up to {0}, and updated overtime calculations to new overtime settings for the newly unlocked entries.</value>
   </data>
-	<data name="UnlockEntriesResultSuccessAndRecalculatedOvertime" xml:space="preserve">
+  <data name="UnlockEntriesResultSuccessAndRecalculatedOvertime" xml:space="preserve">
     <value>Successfully unlocked all locked time entries, and updated overtime calculations to the new overtime settings for the newly unlocked entries.</value>
   </data>
 </root>

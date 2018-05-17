@@ -14,7 +14,9 @@ BEGIN
 	SET NOCOUNT ON;
 	SET XACT_ABORT ON;
 	declare @addressId int
-	declare @ret int
+	set @addressId = null
+	declare @organizationId int
+	set @organizationId = null
 
 	BEGIN TRANSACTION
 		-- Create Address
@@ -33,9 +35,8 @@ BEGIN
 				@phoneNumber,
 				@faxNumber,
 				@subdomain);
-		select @ret = SCOPE_IDENTITY();
+		select @organizationId = SCOPE_IDENTITY()
 	COMMIT TRANSACTION
 
-	-- return the new organization id
-	select @ret
+	return @organizationId
 END
