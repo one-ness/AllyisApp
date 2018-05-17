@@ -5,7 +5,7 @@
 	@siteUrl NVARCHAR(100),
 	@address NVARCHAR(100),
 	@city NVARCHAR(100),
-	@stateID INT,
+	@stateId INT,
 	@countryCode VARCHAR(8),
 	@postalCode NVARCHAR(50),
 	@phoneNumber VARCHAR(50),
@@ -20,7 +20,7 @@ BEGIN
 	BEGIN TRANSACTION
 		-- create organization
 		declare @organizationId int
-		exec @organizationId = CreateOrganization @organizationName, @siteUrl, @address, @city, @stateID, @countryCode, @postalCode, @phoneNumber, @faxNumber, @subdomainName;
+		exec @organizationId = [Auth].[CreateOrganization] @organizationName, @siteUrl, @address, @city, @stateId, @countryCode, @postalCode, @phoneNumber, @faxNumber, @subdomainName;
 
 		-- init default information for org: payclasses, employee type
 		EXEC [Hrm].[CreateDefaultPayClasses] @organizationId;
@@ -36,5 +36,5 @@ BEGIN
 	COMMIT TRANSACTION
 
 	-- return the new organization id
-	return @organizationId
+	select @organizationId
 END

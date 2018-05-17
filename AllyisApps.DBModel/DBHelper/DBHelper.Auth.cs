@@ -330,25 +330,9 @@ namespace AllyisApps.DBModel
 			string postalCode,
 			string countryCode)
 		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@userId", userId);
-			parameters.Add("@roleId", roleId);
-			parameters.Add("@organizationName", organizationName);
-			parameters.Add("@siteUrl", siteUrl);
-			parameters.Add("@address", address1);
-			parameters.Add("@city", city);
-			parameters.Add("@stateID", stateId);
-			parameters.Add("@countryCode", countryCode);
-			parameters.Add("@postalCode", postalCode);
-			parameters.Add("@phoneNumber", phoneNumber);
-			parameters.Add("@faxNumber", faxNumber);
-			parameters.Add("@subdomainName", subDomainName);
-			parameters.Add("@employeeId", employeeId);
-
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				var results = await con.QueryAsync<int>("[Auth].[SetupOrganization]", parameters, commandType: CommandType.StoredProcedure);
-				return results.SingleOrDefault();
+				return (await con.QueryAsync<int>("[Auth].[SetupOrganization] @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13", new { p1 = userId, p2 = roleId, p3 = organizationName, p4 = siteUrl, p5 = address1, p6 = city, p7 = stateId, p8 = countryCode, p9 = postalCode, p10 = phoneNumber, p11 = faxNumber, p12 = subDomainName, p13 = employeeId })).FirstOrDefault();
 			}
 		}
 

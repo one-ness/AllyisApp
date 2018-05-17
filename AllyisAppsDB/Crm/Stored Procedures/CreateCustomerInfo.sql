@@ -1,4 +1,4 @@
-CREATE PROCEDURE [Crm].[CreateCustomerInfo]
+﻿CREATE PROCEDURE [Crm].[CreateCustomerInfo]
 	@customerName NVARCHAR(32),
     @address NVARCHAR(100),
     @city NVARCHAR(100), 
@@ -69,13 +69,11 @@ BEGIN
 		_success:
 			begin
 				commit tran t1
-				return @retId;
 			end
 
 		_failure:
 			begin
 				rollback tran t1
-				return @retId;
 			end		
 	END
 END

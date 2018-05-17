@@ -84,15 +84,11 @@
 			<div class="form-group allyis-action-buttons">
 				@if (Model.IsCreating)
 				{
-					<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)" new { class="btn btn-default" }>
-						@Strings.Cancel
-					</a>
+					<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)" class="btn btn-default">@Strings.Cancel</a>
 				}
 				else
 				{
-					<a href="@Url.Action(ActionConstants.OrganizationDetails, ControllerConstants.Account, new { id = Model.OrganizationId })" new { class="btn btn-default" }>
-						@Strings.Cancel
-					</a>
+					<a href="@Url.Action(ActionConstants.OrganizationDetails, ControllerConstants.Account, new { @id = Model.OrganizationId })" class="btn btn-default">@Strings.Cancel</a>
 				}
 				<input type="submit" value="@Strings.Save" class="btn btn-primary btn-gray" id="submit" />
 			</div>

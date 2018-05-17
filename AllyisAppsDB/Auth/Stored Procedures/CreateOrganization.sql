@@ -15,11 +15,10 @@ BEGIN
 	SET XACT_ABORT ON;
 	declare @addressId int
 	declare @ret int
-	set @ret = null
 
 	BEGIN TRANSACTION
 		-- Create Address
-		exec @addressId = [Lookup].CreateAddress @address, null, @city, @stateId, @postalCode, @countryCode
+		exec @addressId = [Lookup].[CreateAddress] @address, null, @city, @stateId, @postalCode, @countryCode
 		-- Create org
 		INSERT INTO [Auth].[Organization] 
 				([OrganizationName],
@@ -34,9 +33,9 @@ BEGIN
 				@phoneNumber,
 				@faxNumber,
 				@subdomain);
-		select @ret = SCOPE_IDENTITY()
+		select @ret = SCOPE_IDENTITY();
 	COMMIT TRANSACTION
 
 	-- return the new organization id
-	return @ret
+	select @ret
 END

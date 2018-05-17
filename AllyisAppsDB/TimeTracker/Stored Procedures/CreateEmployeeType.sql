@@ -7,5 +7,5 @@ BEGIN
 	INSERT INTO [Hrm].[EmployeeType] ([OrganizationId], [EmployeeTypeName]) 
 	VALUES (@orgId, @employeeTypeName);
 
-	return SCOPE_IDENTITY(); 
+	select SCOPE_IDENTITY(); 
 END
