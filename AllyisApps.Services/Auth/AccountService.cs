@@ -147,6 +147,21 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// create address
+		/// </summary>
+		public async Task<int> CreateAddress(string address1, string address2, string city, int? stateId, string postalCode, string countryCode)
+		{
+			int result = 0;
+			if (!(string.IsNullOrWhiteSpace(address1) && string.IsNullOrWhiteSpace(address2) && string.IsNullOrWhiteSpace(city)
+				&& (!stateId.HasValue) && string.IsNullOrWhiteSpace(postalCode) && string.IsNullOrWhiteSpace(countryCode)))
+			{
+				// at least there is one entry for address
+				result = await this.DBHelper.CreateAddress(address1, address2, city, stateId, postalCode, countryCode);
+			}
+
+			return result;
+		}
+		/// <summary>
 		/// Setup a new user.
 		/// </summary>
 		public async Task<int> SetupNewUser(
@@ -174,6 +189,7 @@ namespace AllyisApps.Services
 			var result = 0;
 			try
 			{
+				var addressId = await this.CreateAddress(address1, address2, city, stateId, postalCode, countryCode);
 				var hash = string.IsNullOrWhiteSpace(password) ? null : Crypto.GetPasswordHash(password);
 				result = await DBHelper.CreateUserAsync(email, hash, firstName, lastName, emailConfirmationCode, dateOfBirth, phoneNumber, Language.DefaultLanguageCultureName,
 					address1, address2, city, stateId, postalCode, countryCode, (int)loginProvider);
