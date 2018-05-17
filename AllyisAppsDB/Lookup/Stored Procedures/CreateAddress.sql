@@ -2,7 +2,7 @@
 	@address1 nvarchar(64),
 	@address2 nvarchar(64),
 	@city nvarchar(32),
-	@stateId smallint,
+	@stateId int,
 	@postalCode nvarchar(16),
 	@countryCode varchar(8)
 as
