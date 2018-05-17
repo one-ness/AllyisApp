@@ -12,7 +12,7 @@ BEGIN
 		DECLARE @tagId INT 
 		SET @tagId = IDENT_CURRENT('[Lookup].[TagId]');
 
-		EXEC [StaffingManager].[CreatePositionTag] @tagId, @positionId;
+		EXEC [Staffing].[CreatePositionTag] @tagId, @positionId;
 
 		SELECT IDENT_CURRENT('[Lookup].[TagId]');
 	COMMIT TRANSACTION

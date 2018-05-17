@@ -57,7 +57,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var result = await connection.QueryAsync<int>("[StaffingManager].[CreateApplicant]", parameters, commandType: CommandType.StoredProcedure);
+				var result = await connection.QueryAsync<int>("[Staffing].[CreateApplicant]", parameters, commandType: CommandType.StoredProcedure);
 				return result.Single();
 			}
 		}
@@ -82,7 +82,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var result = await connection.QueryAsync<int>("[StaffingManager].[CreateApplication]", parameters, commandType: CommandType.StoredProcedure);
+				var result = await connection.QueryAsync<int>("[Staffing].[CreateApplication]", parameters, commandType: CommandType.StoredProcedure);
 				return result.Single();
 			}
 		}
@@ -106,7 +106,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var result = await connection.QueryAsync<int>("[StaffingManager].[CreateApplicationDocument]", parameters, commandType: CommandType.StoredProcedure);
+				var result = await connection.QueryAsync<int>("[Staffing].[CreateApplicationDocument]", parameters, commandType: CommandType.StoredProcedure);
 				return result.Single();
 			}
 		}
@@ -163,7 +163,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return await connection.ExecuteAsync("[StaffingManager].[SetupPosition]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.ExecuteAsync("[Staffing].[SetupPosition]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -179,7 +179,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				connection.Execute("[StaffingManager].[CreatePositionLevel]", parameters, commandType: CommandType.StoredProcedure);
+				connection.Execute("[Staffing].[CreatePositionLevel]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -195,7 +195,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				connection.Execute("[StaffingManager].[CreatePositionStatus]", parameters, commandType: CommandType.StoredProcedure);
+				connection.Execute("[Staffing].[CreatePositionStatus]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -211,7 +211,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				connection.Execute("[StaffingManager].[CreateEmploymentType]", parameters, commandType: CommandType.StoredProcedure);
+				connection.Execute("[Staffing].[CreateEmploymentType]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -235,7 +235,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default -1
-				await connection.ExecuteAsync("[StaffingManager].[SetupTag]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[Staffing].[SetupTag]", parameters, commandType: CommandType.StoredProcedure);
 			}
 
 			return parameters.Get<int>("@returnValue");
@@ -261,7 +261,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default -1
-				connection.Execute("[StaffingManager].[CreatePositionTag]", parameters, commandType: CommandType.StoredProcedure);
+				connection.Execute("[Staffing].[CreatePositionTag]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -282,7 +282,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default -1
-				connection.Execute("[StaffingManager].[CreateStaffingSettings]", parameters, commandType: CommandType.StoredProcedure);
+				connection.Execute("[Staffing].[CreateStaffingSettings]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -307,7 +307,7 @@ namespace AllyisApps.DBModel
 			dynamic applicationAndDocs = new ExpandoObject();
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var results = connection.QueryMultiple("[StaffingManager].[GetApplicationAndDocumentsById]", parameters, commandType: CommandType.StoredProcedure);
+				var results = connection.QueryMultiple("[Staffing].[GetApplicationAndDocumentsById]", parameters, commandType: CommandType.StoredProcedure);
 				applicationAndDocs.application = results.Read<ApplicationDBEntity>().Single();
 				applicationAndDocs.applicationDocuments = results.Read<ApplicationDocumentDBEntity>().ToList();
 			}
@@ -332,7 +332,7 @@ namespace AllyisApps.DBModel
 			dynamic applicationsAndDocuments = new ExpandoObject();
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var results = await connection.QueryAsync<ApplicationDBEntity>("[StaffingManager].[GetApplicationsByPositionId]", parameters, commandType: CommandType.StoredProcedure);
+				var results = await connection.QueryAsync<ApplicationDBEntity>("[Staffing].[GetApplicationsByPositionId]", parameters, commandType: CommandType.StoredProcedure);
 			}
 			return applicationsAndDocuments;
 		}
@@ -350,7 +350,7 @@ namespace AllyisApps.DBModel
 			IEnumerable<ApplicationDBEntity> applications;
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				applications = await connection.QueryAsync<ApplicationDBEntity>("[StaffingManager].[GetApplicationsByApplicantId]", parameters, commandType: CommandType.StoredProcedure);
+				applications = await connection.QueryAsync<ApplicationDBEntity>("[Staffing].[GetApplicationsByApplicantId]", parameters, commandType: CommandType.StoredProcedure);
 			}
 			return applications;
 		}
@@ -367,7 +367,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var result = await connection.QueryAsync<ApplicationDocumentDBEntity>("[StaffingManager].[GetApplicationDocumentById]", parameters, commandType: CommandType.StoredProcedure);
+				var result = await connection.QueryAsync<ApplicationDocumentDBEntity>("[Staffing].[GetApplicationDocumentById]", parameters, commandType: CommandType.StoredProcedure);
 				return result.Single();
 			}
 		}
@@ -384,7 +384,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return await connection.QueryAsync<ApplicationDocumentDBEntity>("[StaffingManager].[GetApplicationDocumentsByApplicationId]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.QueryAsync<ApplicationDocumentDBEntity>("[Staffing].[GetApplicationDocumentsByApplicationId]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -400,7 +400,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var result = await connection.QueryAsync<ApplicantDBEntity>("[StaffingManager].[GetApplicantsByOrgId]", parameters, commandType: CommandType.StoredProcedure);
+				var result = await connection.QueryAsync<ApplicantDBEntity>("[Staffing].[GetApplicantsByOrgId]", parameters, commandType: CommandType.StoredProcedure);
 				return result.ToList();
 			}
 		}
@@ -417,7 +417,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var result = await connection.QueryAsync<ApplicantAddressDBEntity>("[StaffingManager].[GetApplicantsByOrgId]", parameters, commandType: CommandType.StoredProcedure);
+				var result = await connection.QueryAsync<ApplicantAddressDBEntity>("[Staffing].[GetApplicantsByOrgId]", parameters, commandType: CommandType.StoredProcedure);
 				return result.ToList();
 			}
 		}
@@ -434,7 +434,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var result = await connection.QueryAsync<ApplicantAddressDBEntity>("[StaffingManager].[GetApplicantById]", parameters, commandType: CommandType.StoredProcedure);
+				var result = await connection.QueryAsync<ApplicantAddressDBEntity>("[Staffing].[GetApplicantById]", parameters, commandType: CommandType.StoredProcedure);
 				return result.Single();
 			}
 		}
@@ -451,7 +451,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var result = await connection.QueryAsync<ApplicantDBEntity>("[StaffingManager].[GetApplicantById]", parameters, commandType: CommandType.StoredProcedure);
+				var result = await connection.QueryAsync<ApplicantDBEntity>("[Staffing].[GetApplicantById]", parameters, commandType: CommandType.StoredProcedure);
 				return result.Single();
 			}
 		}
@@ -468,7 +468,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var result = await connection.QueryAsync<ApplicantDBEntity>("[StaffingManager].[GetApplicantByApplicationId]", parameters, commandType: CommandType.StoredProcedure);
+				var result = await connection.QueryAsync<ApplicantDBEntity>("[Staffing].[GetApplicantByApplicationId]", parameters, commandType: CommandType.StoredProcedure);
 				return result.Single();
 			}
 		}
@@ -486,7 +486,7 @@ namespace AllyisApps.DBModel
 			dynamic applicationsAndApplicantInfo = new ExpandoObject();
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var results = await connection.QueryMultipleAsync("[StaffingManager].[GetFullApplicationInfosByPositionId]", parameters, commandType: CommandType.StoredProcedure);
+				var results = await connection.QueryMultipleAsync("[Staffing].[GetFullApplicationInfosByPositionId]", parameters, commandType: CommandType.StoredProcedure);
 
 				applicationsAndApplicantInfo.applications = results.Read<dynamic>().ToList();
 				applicationsAndApplicantInfo.applicants = results.Read<dynamic>().ToList();
@@ -509,7 +509,7 @@ namespace AllyisApps.DBModel
 			dynamic positionAndTags = new ExpandoObject();
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var results = await connection.QueryMultipleAsync("[StaffingManager].[GetPosition]", parameters, commandType: CommandType.StoredProcedure);
+				var results = await connection.QueryMultipleAsync("[Staffing].[GetPosition]", parameters, commandType: CommandType.StoredProcedure);
 				positionAndTags.position = results.Read<dynamic>().First();
 				positionAndTags.tags = results.Read<dynamic>().ToList();
 			}
@@ -529,7 +529,7 @@ namespace AllyisApps.DBModel
 			dynamic positionsAndTags = new ExpandoObject();
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var results = await connection.QueryMultipleAsync("[StaffingManager].[GetPositionsByOrganizationId]", parameters, commandType: CommandType.StoredProcedure);
+				var results = await connection.QueryMultipleAsync("[Staffing].[GetPositionsByOrganizationId]", parameters, commandType: CommandType.StoredProcedure);
 				positionsAndTags.positions = results.Read<dynamic>().ToList();
 				//positionsAndTags.tags = results.Read<dynamic>().ToDictionary(t => t.PositionId, t => t);
 			}
@@ -547,7 +547,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<PositionLevelDBEntity>("[StaffingManager].[GetPositionLevelById]", parameters, commandType: CommandType.StoredProcedure).Single();
+				return connection.Query<PositionLevelDBEntity>("[Staffing].[GetPositionLevelById]", parameters, commandType: CommandType.StoredProcedure).Single();
 			}
 		}
 
@@ -562,7 +562,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<PositionLevelDBEntity>("[StaffingManager].[GetPositionLevelsByOrganization]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.Query<PositionLevelDBEntity>("[Staffing].[GetPositionLevelsByOrganization]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -577,7 +577,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<PositionStatusDBEntity>("[StaffingManager].[GetPositionStatusById]", parameters, commandType: CommandType.StoredProcedure).Single();
+				return connection.Query<PositionStatusDBEntity>("[Staffing].[GetPositionStatusById]", parameters, commandType: CommandType.StoredProcedure).Single();
 			}
 		}
 
@@ -592,7 +592,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<PositionStatusDBEntity>("[StaffingManager].[GetPositionStatusByOrganizationId]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.Query<PositionStatusDBEntity>("[Staffing].[GetPositionStatusByOrganizationId]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -607,7 +607,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<EmploymentTypeDBEntity>("[StaffingManager].[GetEmploymentTypeById]", parameters, commandType: CommandType.StoredProcedure).Single();
+				return connection.Query<EmploymentTypeDBEntity>("[Staffing].[GetEmploymentTypeById]", parameters, commandType: CommandType.StoredProcedure).Single();
 			}
 		}
 
@@ -622,7 +622,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<EmploymentTypeDBEntity>("[StaffingManager].[GetEmploymentTypesByOrganization]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.Query<EmploymentTypeDBEntity>("[Staffing].[GetEmploymentTypesByOrganization]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -638,7 +638,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return await connection.QueryAsync<TagDBEntity>("[StaffingManager].[GetTagsByPositionId]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.QueryAsync<TagDBEntity>("[Staffing].[GetTagsByPositionId]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -650,7 +650,7 @@ namespace AllyisApps.DBModel
 		{
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return await connection.QueryAsync<TagDBEntity>("[StaffingManager].[GetTags]", commandType: CommandType.StoredProcedure);
+				return await connection.QueryAsync<TagDBEntity>("[Staffing].[GetTags]", commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -668,7 +668,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				var results = await connection.QueryMultipleAsync(
-					"[StaffingManager].[GetStaffingIndexInfo]",
+					"[Staffing].[GetStaffingIndexInfo]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
 
@@ -709,14 +709,14 @@ namespace AllyisApps.DBModel
 			TagTable.Columns.Add("TagName", typeof(string));
 			foreach (string tag in tags) TagTable.Rows.Add(tag);
 
-			parameters.Add("@status", StatusesTable.AsTableValuedParameter("[StaffingManager].[StatusesTable]"));
-			parameters.Add("@type", TypesTable.AsTableValuedParameter("[StaffingManager].[TypesTable]"));
+			parameters.Add("@status", StatusesTable.AsTableValuedParameter("[Staffing].[StatusesTable]"));
+			parameters.Add("@type", TypesTable.AsTableValuedParameter("[Staffing].[TypesTable]"));
 			parameters.Add("@tags", TagTable.AsTableValuedParameter("[Lookup].[TagTable]"));
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				var results = await connection.QueryMultipleAsync(
-					"[StaffingManager].[GetStaffingIndexInfoFiltered]",
+					"[Staffing].[GetStaffingIndexInfoFiltered]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
 
@@ -743,7 +743,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var result = await connection.QueryMultipleAsync("[StaffingManager].[GetStaffingDefaultStatus]", parameters, commandType: CommandType.StoredProcedure);
+				var result = await connection.QueryMultipleAsync("[Staffing].[GetStaffingDefaultStatus]", parameters, commandType: CommandType.StoredProcedure);
 
 				return result.Read<int>().ToList();
 			}
@@ -785,7 +785,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return await connection.ExecuteAsync("[StaffingManager].[UpdateApplicant]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.ExecuteAsync("[Staffing].[UpdateApplicant]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -808,7 +808,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return await connection.ExecuteAsync("[StaffingManager].[UpdateApplication]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.ExecuteAsync("[Staffing].[UpdateApplication]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -831,7 +831,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return await connection.ExecuteAsync("[StaffingManager].[UpdateApplicationDocument]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.ExecuteAsync("[Staffing].[UpdateApplicationDocument]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -875,7 +875,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return await connection.ExecuteAsync("[StaffingManager].[UpdatePosition]", parameters, commandType: CommandType.StoredProcedure);
+				return await connection.ExecuteAsync("[Staffing].[UpdatePosition]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -894,7 +894,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default -1
-				connection.Execute("[StaffingManager].[UpdateStaffingSettings]", parameters, commandType: CommandType.StoredProcedure);
+				connection.Execute("[Staffing].[UpdateStaffingSettings]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -917,7 +917,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				await connection.ExecuteAsync("[StaffingManager].[DeleteApplicant]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[Staffing].[DeleteApplicant]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -932,7 +932,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				await connection.ExecuteAsync("[StaffingManager].[DeleteApplication]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[Staffing].[DeleteApplication]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -947,7 +947,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				connection.Execute("[StaffingManager].[DeleteApplicationDocument]", parameters, commandType: CommandType.StoredProcedure);
+				connection.Execute("[Staffing].[DeleteApplicationDocument]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -962,7 +962,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				connection.Execute("[StaffingManager].[DeleteTag]", parameters, commandType: CommandType.StoredProcedure);
+				connection.Execute("[Staffing].[DeleteTag]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -977,7 +977,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				connection.Execute("[StaffingManager].[DeletePositionLevel]", parameters, commandType: CommandType.StoredProcedure);
+				connection.Execute("[Staffing].[DeletePositionLevel]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -992,7 +992,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				connection.Execute("[StaffingManager].[DeletePositionStatus]", parameters, commandType: CommandType.StoredProcedure);
+				connection.Execute("[Staffing].[DeletePositionStatus]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -1007,7 +1007,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				await connection.ExecuteAsync("[StaffingManager].[DeleteEmploymentType]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[Staffing].[DeleteEmploymentType]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -1024,7 +1024,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				connection.Execute("[StaffingManager].[DeletePositionTag]", parameters, commandType: CommandType.StoredProcedure);
+				connection.Execute("[Staffing].[DeletePositionTag]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -1039,7 +1039,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				connection.Execute("[StaffingManager].[DeletePosition]", parameters, commandType: CommandType.StoredProcedure);
+				connection.Execute("[Staffing].[DeletePosition]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
