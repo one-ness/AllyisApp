@@ -102,7 +102,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// create address
 		/// </summary>
-		public async Task<int> CreateAddress(string address1, string address2, string city, int? stateId, string postalCode, string countryCode)
+		public async Task<int> CreateAddressAsync(string address1, string address2, string city, int? stateId, string postalCode, string countryCode)
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{

@@ -76,16 +76,10 @@ namespace AllyisApps.DBModel
 			string countryCode,
 			int loginProviderId)
 		{
-			var result = 0;
-			using (var scope = new TransactionScope())
-			{
-				int? addressId = await this.CreateAddress(address1, address2, city, stateId, postalCode, countryCode);
-				result = await this.CreateUserAsync(email, passwordHash, firstName, lastName, emailConfirmationCode, dateOfBirth, phoneNumber, preferredLanguageId, (addressId == 0) ? null : addressId, loginProviderId);
-				// commit
-				scope.Complete();
-			}
-
-			return result;
+			// todo: wrap these two in a transaction
+			// note: transaction scope, and all db calls must be in the same thread, cannot be async
+			int? addressId = await this.CreateAddressAsync(address1, address2, city, stateId, postalCode, countryCode);
+			return await this.CreateUserAsync(email, passwordHash, firstName, lastName, emailConfirmationCode, dateOfBirth, phoneNumber, preferredLanguageId, (addressId == 0) ? null : addressId, loginProviderId);
 		}
 
 		/// <summary>
