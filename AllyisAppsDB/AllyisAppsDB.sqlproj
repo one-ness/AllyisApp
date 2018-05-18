@@ -197,7 +197,6 @@
     <Build Include="Auth\Stored Procedures\GetOrganization.sql" />
     <Build Include="Auth\Stored Procedures\AcceptInvitation.sql" />
     <Build Include="Auth\Stored Procedures\DeleteInvitation.sql" />
-    <Build Include="Auth\Stored Procedures\GetPasswordHashFromUserId.sql" />
     <Build Include="Auth\Stored Procedures\CreateInvitation.sql" />
     <Build Include="Auth\Stored Procedures\UpdateEmailConfirmed.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserLanguagePreference.sql" />
@@ -424,6 +423,7 @@
     <Build Include="Billing\Stored Procedures\GetActiveSubscriptionsByIds.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserLoginProvider.sql" />
     <Build Include="Hrm\Stored Procedures\CreateDefaultPayClasses.sql" />
+    <Build Include="Auth\Stored Procedures\GetUserPassword.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

@@ -36,7 +36,7 @@ namespace AllyisApps.Controllers.Auth
 		{
 			// get all subscriptions of this organization, get a list of roles for each subscription and user's role in each subscription
 			var subs = await AppService.GetSubscriptionsAsync(orgId, true);
-			UserOld user = await AppService.GetUserAsync(userId, orgId, OrgAction.ReadOrganization); // this call makes sure that both logged in user and userId have at least one common org
+			UserOld user = await AppService.GetUserOldAsync(userId, orgId, OrgAction.ReadOrganization); // this call makes sure that both logged in user and userId have at least one common org
 			var employeeTypeList = (await AppService.GetEmployeeTypeByOrganization(orgId));
 			var employee = (await AppService.GetOrganizationUsersAsync(orgId)).Where(x => x.UserId == userId).FirstOrDefault();
 			UserOrganization org = user.UserOrganizations.FirstOrDefault(x => x.OrganizationId == orgId);

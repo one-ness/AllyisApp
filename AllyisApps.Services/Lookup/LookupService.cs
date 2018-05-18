@@ -12,9 +12,9 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// get address for the given id
 		/// </summary>
-		public Address GetAddress(int addressId)
+		public async Task<Address> GetAddressAsync(int addressId)
 		{
-			return this.InitializeAddress(this.DBHelper.GetAddressAsync(addressId));
+			return this.InitializeAddress(await this.DBHelper.GetAddressAsync(addressId));
 		}
 
 		/// <summary>

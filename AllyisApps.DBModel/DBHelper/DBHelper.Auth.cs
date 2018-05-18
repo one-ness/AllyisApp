@@ -126,7 +126,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Get user from the db
 		/// </summary>
-		public async Task<dynamic> GetUser(int userId)
+		public async Task<dynamic> GetUserOld(int userId)
 		{
 			dynamic result = new ExpandoObject();
 			using (var con = new SqlConnection(SqlConnectionString))
@@ -144,7 +144,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Get user from the db
 		/// </summary>
-		public async Task<UserDBEntity> GetUser2Async(int userId)
+		public async Task<UserDBEntity> GetUserAsync(int userId)
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
@@ -263,14 +263,14 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="userId">User id.</param>
 		/// <returns>Password hash.</returns>
-		public string GetPasswordHashById(int userId)
+		public async Task<string> GetUserPasswordAsync(int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
 
-			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return connection.QueryFirstOrDefault<string>("[Auth].[GetPasswordHashFromUserId]", parameters, commandType: CommandType.StoredProcedure);
+				return await con.QueryFirstOrDefaultAsync<string>("[Auth].[GetUserPassword]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 

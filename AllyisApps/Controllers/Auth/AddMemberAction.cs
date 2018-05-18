@@ -160,7 +160,7 @@ namespace AllyisApps.Controllers.Auth
 
 			try
 			{
-				UserOld usr = await AppService.GetUserByEmailAsync(model.Email);
+				UserOld usr = await AppService.GetUserOldByEmailAsync(model.Email);
 				string redirectLink = usr != null ?
 					Url.Action(ActionConstants.Index, ControllerConstants.Account, null, protocol: Request.Url.Scheme) :
 					Url.Action(ActionConstants.Register, ControllerConstants.Account, null, protocol: Request.Url.Scheme);

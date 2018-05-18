@@ -14,7 +14,7 @@ namespace AllyisApps.Services
 	{
 		public async Task<UserOld> AddUserToOrganizaion(string email, string firstName, string lastName, int organizaionId, OrganizationRoleEnum roleType, string empolyeeId, int? employeeTypeId)
 		{
-			UserOld user = await GetUserByEmailAsync(email);
+			UserOld user = await GetUserOldByEmailAsync(email);
 			int employeeType = 0;
 
 			if (employeeTypeId == null)
@@ -35,7 +35,7 @@ namespace AllyisApps.Services
 				DateTime years18 = now.AddYears(-18);
 
 				int userid = await DBHelper.CreateUserAsync(email, Crypto.GetPasswordHash("Welcome1"), firstName, lastName, Guid.NewGuid(), years18, null, null, null, (int)LoginProviderEnum.AllyisApps);
-				user = await GetUserByEmailAsync(email);
+				user = await GetUserOldByEmailAsync(email);
 			}
 
 			OrganizationUserDBEntity orgUser = new OrganizationUserDBEntity()

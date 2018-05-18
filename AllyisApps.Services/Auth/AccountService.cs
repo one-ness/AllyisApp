@@ -299,22 +299,22 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// get the current logged in user
 		/// </summary>
-		public async Task<UserOld> GetCurrentUserAsync()
+		public async Task<UserOld> GetCurrentUserOldAsync()
 		{
-			return await GetUserAsync(UserContext.UserId);
+			return await GetUserOldAsync(UserContext.UserId);
 		}
 
-		public async Task<User> GetCurrentUser2Async()
+		public async Task<User> GetCurrentUserAsync()
 		{
-			return await GetUser2Async(this.UserContext.UserId);
+			return await GetUserAsync(this.UserContext.UserId);
 		}
 
-		public async Task<User> GetUser2Async(int userId)
+		public async Task<User> GetUserAsync(int userId)
 		{
 			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId));
 
-			var user = await this.DBHelper.GetUser2Async(userId);
-			return this.InitializeUser(user);
+			var user = await this.DBHelper.GetUserAsync(userId);
+			return await this.InitializeUserAsync(user);
 		}
 
 		/// <summary>
@@ -379,7 +379,7 @@ namespace AllyisApps.Services
 				PhoneNumber = entity.PhoneNumber,
 				SiteUrl = entity.SiteUrl,
 				Subdomain = entity.Subdomain,
-				Address = (entity.AddressId.HasValue && loadAddress) ? GetAddress(entity.AddressId.Value) : null,
+				//Address = (entity.AddressId.HasValue && loadAddress) ? await GetAddressAsync(entity.AddressId.Value) : null,
 				UserCount = entity.UserCount
 			};
 		}
@@ -388,11 +388,11 @@ namespace AllyisApps.Services
 		/// get user
 		/// - address, organizations, subscriptions and invitations
 		/// </summary>
-		public async Task<UserOld> GetUserAsync(int userId, int organizationId = 0, OrgAction actionContext = OrgAction.ReadUser)
+		public async Task<UserOld> GetUserOldAsync(int userId, int organizationId = 0, OrgAction actionContext = OrgAction.ReadUser)
 		{
 			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId));
 
-			dynamic sets = await DBHelper.GetUser(userId);
+			dynamic sets = await DBHelper.GetUserOld(userId);
 			UserOld user = this.InitializeUser(sets.User);
 			dynamic subs = sets.Subscriptions;
 			foreach (dynamic item in subs)
@@ -591,7 +591,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="email">Email address.</param>
 		/// <returns>A UserInfo instance with the user's info.</returns>
-		public async Task<UserOld> GetUserByEmailAsync(string email)
+		public async Task<UserOld> GetUserOldByEmailAsync(string email)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException(nameof(email));
 
@@ -603,11 +603,11 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="email">Email address.</param>
 		/// <returns>A UserInfo instance with the user's info.</returns>
-		public async Task<User> GetUser2ByEmailAsync(string email)
+		public async Task<User> GetUserByEmailAsync(string email)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException(nameof(email));
 
-			return this.InitializeUser(await DBHelper.GetUserByEmailAsync(email), false);
+			return await this.InitializeUserAsync(await DBHelper.GetUserByEmailAsync(email), false);
 		}
 
 		/// <summary>
@@ -706,7 +706,7 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(newPassword)) throw new ArgumentNullException(nameof(newPassword));
 
 			bool result = false;
-			string passwordHash = DBHelper.GetPasswordHashById(UserContext.UserId);
+			string passwordHash = await DBHelper.GetUserPasswordAsync(UserContext.UserId);
 			if (!string.IsNullOrWhiteSpace(passwordHash))
 			{
 				if (Crypto.ValidateAndUpdate(oldPassword, passwordHash).SuccessfulMatch)
@@ -771,7 +771,7 @@ namespace AllyisApps.Services
 			Address address = null;
 			if (user.AddressId.HasValue && loadAddress)
 			{
-				address = GetAddress(user.AddressId.Value);
+				//address = GetAddressAsync(user.AddressId.Value);
 			}
 
 			return new UserOld
@@ -795,14 +795,14 @@ namespace AllyisApps.Services
 			};
 		}
 
-		private User InitializeUser(UserDBEntity user, bool loadAddress = true)
+		private async Task<User> InitializeUserAsync(UserDBEntity user, bool loadAddress = true)
 		{
 			if (user == null) return null;
 
 			Address address = null;
 			if (user.AddressId.HasValue && loadAddress)
 			{
-				address = GetAddress(user.AddressId.Value);
+				address = await GetAddressAsync(user.AddressId.Value);
 			}
 
 			return new User

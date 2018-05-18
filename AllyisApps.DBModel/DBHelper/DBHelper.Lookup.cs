@@ -91,11 +91,11 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Get Address based on addressId
 		/// </summary>
-		public AddressDBEntity GetAddressAsync(int addressID)
+		public async Task<AddressDBEntity> GetAddressAsync(int addressID)
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return con.Query<AddressDBEntity>("[Lookup].[GetAddress] @a", new { a = addressID }).FirstOrDefault();
+				return await con.QueryFirstOrDefaultAsync<AddressDBEntity>("[Lookup].[GetAddress] @a", new { a = addressID });
 			}
 		}
 
