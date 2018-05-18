@@ -211,12 +211,12 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="email">The login email.</param>
 		/// <param name="password">The login password.</param>
-		public async Task<User> ValidateLogin(string email, string password)
+		public async Task<UserOld> ValidateLogin(string email, string password)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException(nameof(email));
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException(nameof(password));
 
-			User result = null;
+			UserOld result = null;
 			var user = await this.DBHelper.GetUserByEmailAsync(email);
 			if (user != null && user.LoginProviderId == (int)LoginProviderEnum.AllyisApps && (!string.IsNullOrWhiteSpace(user.PasswordHash)))
 			{
@@ -231,7 +231,7 @@ namespace AllyisApps.Services
 					}
 
 					// get user obj
-					result = this.InitializeUser(user, false);
+					result = this.InitializeOldUser(user, false);
 				}
 			}
 
@@ -299,22 +299,22 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// get the current logged in user
 		/// </summary>
-		public async Task<User> GetCurrentUserAsync()
+		public async Task<UserOld> GetCurrentUserAsync()
 		{
 			return await GetUserAsync(UserContext.UserId);
 		}
 
-		public async Task<User2> GetCurrentUser2Async()
+		public async Task<User> GetCurrentUser2Async()
 		{
 			return await GetUser2Async(this.UserContext.UserId);
 		}
 
-		public async Task<User2> GetUser2Async(int userId)
+		public async Task<User> GetUser2Async(int userId)
 		{
 			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId));
 
 			var user = await this.DBHelper.GetUser2Async(userId);
-			return this.InitializeUser2(user);
+			return this.InitializeUser(user);
 		}
 
 		/// <summary>
@@ -388,12 +388,12 @@ namespace AllyisApps.Services
 		/// get user
 		/// - address, organizations, subscriptions and invitations
 		/// </summary>
-		public async Task<User> GetUserAsync(int userId, int organizationId = 0, OrgAction actionContext = OrgAction.ReadUser)
+		public async Task<UserOld> GetUserAsync(int userId, int organizationId = 0, OrgAction actionContext = OrgAction.ReadUser)
 		{
 			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId));
 
 			dynamic sets = await DBHelper.GetUser(userId);
-			User user = this.InitializeUser(sets.User);
+			UserOld user = this.InitializeUser(sets.User);
 			dynamic subs = sets.Subscriptions;
 			foreach (dynamic item in subs)
 			{
@@ -591,11 +591,11 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="email">Email address.</param>
 		/// <returns>A UserInfo instance with the user's info.</returns>
-		public async Task<User> GetUserByEmailAsync(string email)
+		public async Task<UserOld> GetUserByEmailAsync(string email)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException(nameof(email));
 
-			return this.InitializeUser(await DBHelper.GetUserByEmailAsync(email));
+			return this.InitializeOldUser(await DBHelper.GetUserByEmailAsync(email));
 		}
 
 		/// <summary>
@@ -603,11 +603,11 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="email">Email address.</param>
 		/// <returns>A UserInfo instance with the user's info.</returns>
-		public async Task<User2> GetUser2ByEmailAsync(string email)
+		public async Task<User> GetUser2ByEmailAsync(string email)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException(nameof(email));
 
-			return this.InitializeUser2(await DBHelper.GetUserByEmailAsync(email), false);
+			return this.InitializeUser(await DBHelper.GetUserByEmailAsync(email), false);
 		}
 
 		/// <summary>
@@ -734,9 +734,9 @@ namespace AllyisApps.Services
 			return DBHelper.GetOrganizationsByUserId(userId).Select(o => (Organization)InitializeOrganization(o));
 		}
 
-		private User InitializeUser(dynamic user)
+		private UserOld InitializeUser(dynamic user)
 		{
-			return new User
+			return new UserOld
 			{
 				AccessFailedCount = user.AccessFailedCount,
 				DateOfBirth = user.DateOfBirth,
@@ -763,7 +763,7 @@ namespace AllyisApps.Services
 		/// <param name="user">UserDBEntity instance.</param>
 		/// <param name="loadAddress"></param>
 		/// <returns>User instance.</returns>
-		private User InitializeUser(UserDBEntity user, bool loadAddress = true)
+		private UserOld InitializeOldUser(UserDBEntity user, bool loadAddress = true)
 		{
 			if (user == null)
 				return null;
@@ -774,7 +774,7 @@ namespace AllyisApps.Services
 				address = GetAddress(user.AddressId.Value);
 			}
 
-			return new User
+			return new UserOld
 			{
 				AccessFailedCount = user.AccessFailedCount,
 				DateOfBirth = user.DateOfBirth,
@@ -795,7 +795,7 @@ namespace AllyisApps.Services
 			};
 		}
 
-		private User2 InitializeUser2(UserDBEntity user, bool loadAddress = true)
+		private User InitializeUser(UserDBEntity user, bool loadAddress = true)
 		{
 			if (user == null) return null;
 
@@ -805,7 +805,7 @@ namespace AllyisApps.Services
 				address = GetAddress(user.AddressId.Value);
 			}
 
-			return new User2
+			return new User
 			{
 				AccessFailedCount = user.AccessFailedCount,
 				DateOfBirth = user.DateOfBirth,

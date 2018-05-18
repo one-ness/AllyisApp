@@ -76,7 +76,7 @@
     <Compile Include="Auth\ProductSubscription.cs" />
     <Compile Include="Auth\ReportInfo.cs" />
     <Compile Include="Auth\ServiceActionEnums.cs" />
-    <Compile Include="Auth\User2.cs" />
+    <Compile Include="Auth\User.cs" />
     <Compile Include="Auth\UserContext.cs" />
     <Compile Include="Auth\UserOrganization.cs" />
     <Compile Include="Auth\UserSubscription.cs" />
@@ -144,7 +144,7 @@
     <Compile Include="Auth\ProductRole.cs" />
     <Compile Include="Billing\SubscriptionUser.cs" />
     <Compile Include="TimeTracker\TimeEntry.cs" />
-    <Compile Include="Auth\User.cs" />
+    <Compile Include="Auth\UserOld.cs" />
     <Compile Include="Crm\CrmService.cs" />
     <Compile Include="Billing\Product.cs" />
     <Compile Include="Billing\ProductIdEnum.cs" />

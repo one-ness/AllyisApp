@@ -11,7 +11,7 @@ namespace AllyisApps.Services.Auth
 	/// <summary>
 	/// Represents an organization user.
 	/// </summary>
-	public class OrganizationUser : User
+	public class OrganizationUser : UserOld
 	{
 		/// <summary>
 		/// Gets or sets the Organization Id.

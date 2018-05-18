@@ -347,7 +347,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="user">Sercive Object User.</param>
 		/// <returns>User View Model.</returns>
-		public UserViewModel ConstuctUserViewModel(User user)
+		public UserViewModel ConstuctUserViewModel(UserOld user)
 		{
 			return new UserViewModel
 			{

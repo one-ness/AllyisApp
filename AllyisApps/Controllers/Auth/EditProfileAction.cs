@@ -24,7 +24,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>Edit profile view.</returns>
 		public async Task<ActionResult> EditProfile()
 		{
-			User2 user = await AppService.GetCurrentUser2Async();
+			User user = await AppService.GetCurrentUser2Async();
 
 			var model = new EditProfileViewModel
 			{

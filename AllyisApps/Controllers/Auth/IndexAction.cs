@@ -42,7 +42,7 @@ namespace AllyisApps.Controllers.Auth
 		public async Task<AccountIndexViewModel> ConstuctIndexViewModel()
 		{
 			// get current user
-			User2 user = await AppService.GetCurrentUser2Async();
+			User user = await AppService.GetCurrentUser2Async();
 
 			// add to view model
 			var model = new AccountIndexViewModel();

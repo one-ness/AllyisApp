@@ -665,8 +665,8 @@ namespace AllyisApps.Services
 		private async Task<ImportActionResult> ImportUser(List<DataTable> userImports, int orgId, int subscriptionId, int organizationId, string inviteUrl, ImportActionResult result = null)
 		{
 			// Retrieval of existing user data
-			User userGet = await GetUserAsync(UserContext.UserId);
-			var users = GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, o)).ToList();
+			UserOld userGet = await GetUserAsync(UserContext.UserId);
+			var users = GetOrganizationMemberList(orgId).Select(o => new Tuple<string, UserOld>(o.EmployeeId, o)).ToList();
 
 			foreach (DataTable table in userImports)
 			{
@@ -707,10 +707,10 @@ namespace AllyisApps.Services
 				}
 				foreach (DataRow row in table.Rows)
 				{
-					User userInOrg = null;
+					UserOld userInOrg = null;
 					if (hasUserEmail || hasEmployeeId || hasUserName)
 					{
-						Tuple<string, User> userTuple = null;
+						Tuple<string, UserOld> userTuple = null;
 
 						// Find existing user by whatever information we have
 						string readValue = null;
@@ -1003,7 +1003,7 @@ namespace AllyisApps.Services
 						continue;
 					}
 
-					List<User> userSubs = new List<User>();
+					List<UserOld> userSubs = new List<UserOld>();
 					string readValue = null;
 					ReadColumn(row, ColumnHeaders.EmployeeId, e => readValue = e);
 					var userTuple = users.FirstOrDefault(tup => tup.Item1.Equals(readValue));

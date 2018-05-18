@@ -53,7 +53,7 @@ namespace AllyisApps.Controllers.Auth
 		{
 			if (ModelState.IsValid)
 			{
-				User result = null;
+				UserOld result = null;
 				if ((result = await AppService.ValidateLogin(model.Email, model.Password)) != null)
 				{
 					// sign in

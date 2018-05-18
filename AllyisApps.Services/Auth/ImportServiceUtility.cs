@@ -12,9 +12,9 @@ namespace AllyisApps.Services
 {
 	public partial class AppService : BaseService
 	{
-		public async Task<User> AddUserToOrganizaion(string email, string firstName, string lastName, int organizaionId, OrganizationRoleEnum roleType, string empolyeeId, int? employeeTypeId)
+		public async Task<UserOld> AddUserToOrganizaion(string email, string firstName, string lastName, int organizaionId, OrganizationRoleEnum roleType, string empolyeeId, int? employeeTypeId)
 		{
-			User user = await GetUserByEmailAsync(email);
+			UserOld user = await GetUserByEmailAsync(email);
 			int employeeType = 0;
 
 			if (employeeTypeId == null)

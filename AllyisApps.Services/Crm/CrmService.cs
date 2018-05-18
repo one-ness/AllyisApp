@@ -515,7 +515,7 @@ namespace AllyisApps.Services
         /// <param name="projectId">Project Id.</param>
         /// <param name="subscriptionId">.</param>
         /// <returns>.</returns>
-        public Tuple<CompleteProject, List<User>, List<SubscriptionUser>> GetProjectEditInfo(int projectId, int subscriptionId)
+        public Tuple<CompleteProject, List<UserOld>, List<SubscriptionUser>> GetProjectEditInfo(int projectId, int subscriptionId)
         {
             if (projectId < 0)
             {
@@ -525,7 +525,7 @@ namespace AllyisApps.Services
             var spResults = DBHelper.GetProjectEditInfo(projectId, subscriptionId);
             return Tuple.Create(
                 InitializeCompleteProjectInfo(spResults.Item1),
-                spResults.Item2.Select(udb => InitializeUser(udb)).ToList(),
+                spResults.Item2.Select(udb => InitializeOldUser(udb)).ToList(),
                 spResults.Item3.Select(InitializeSubscriptionUser).ToList());
         }
 

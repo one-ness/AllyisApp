@@ -515,12 +515,12 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets a list of <see cref="User"/>'s for users in the organization with subscriptions to the given product.
+		/// Gets a list of <see cref="UserOld"/>'s for users in the organization with subscriptions to the given product.
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="productId">Product Id.</param>
 		/// <returns>A list of User's for users in the organization with subscriptions to the given product.</returns>
-		public async Task<IEnumerable<User>> GetUsersWithSubscriptionToProductInOrganization(int orgId, int productId)
+		public async Task<IEnumerable<UserOld>> GetUsersWithSubscriptionToProductInOrganization(int orgId, int productId)
 		{
 			if (orgId <= 0)
 			{
@@ -533,7 +533,7 @@ namespace AllyisApps.Services
 			}
 
 			var results = await DBHelper.GetUsersWithSubscriptionToProductInOrganization(orgId, productId);
-			return results.Select(u => InitializeUser(u));
+			return results.Select(u => InitializeOldUser(u));
 		}
 
 		public async Task<IEnumerable<Subscription>> GetSubscriptionsByOrg(int organizationId)

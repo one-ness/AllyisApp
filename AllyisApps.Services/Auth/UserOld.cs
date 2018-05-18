@@ -7,13 +7,15 @@
 using System;
 using System.Collections.Generic;
 using AllyisApps.Services.Lookup;
+using System.Threading.Tasks;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.Services.Auth
 {
 	/// <summary>
 	/// Represents a user.
 	/// </summary>
-	public class User2
+	public class UserOld
 	{
 		public const int PasswordMinLength = 8;
 
@@ -38,7 +40,7 @@ namespace AllyisApps.Services.Auth
 		public DateTime DateOfBirth { get; set; }
 
 		/// <summary>
-		/// Gets or sets the User's address.
+		/// Gets or sets the User's address, for the above user address
 		/// </summary>
 		public Address Address { get; set; }
 
@@ -113,16 +115,44 @@ namespace AllyisApps.Services.Auth
 		public DateTime UserCreatedUtc { get; set; }
 
 		/// <summary>
-		/// Gets or sets the login provider.
+		/// list of organizations the user is member of
 		/// </summary>
-		public LoginProviderEnum LoginProvider { get; set; }
+		public List<Organization> Organizations { get; set; }
+
+		/// <summary>
+		/// list of organizations the user is member of
+		/// </summary>
+		public List<UserOrganization> UserOrganizations { get; set; }
+
+		public List<Subscription> Subscriptions { get; set; }
+
+		/// <summary>
+		/// list of subscriptions the user is a member of
+		/// </summary>
+		public List<UserSubscription> UserSubscriptions { get; set; }
+
+		/// <summary>
+		/// list of invitations pending for the user
+		/// </summary>
+		public List<Invitation> Invitations { get; set; }
+
+		public bool IsAddressLoaded { get; internal set; }
+
+		public bool IsInvitationsLoaded { get; internal set; }
+
+		public bool IsUserOrganizationsLoaded { get; internal set; }
+
+		public bool IsUserSubscriptionsLoaded { get; internal set; }
 
 		/// <summary>
 		/// constructor
 		/// </summary>
-		public User2()
+		public UserOld()
 		{
 			Address = new Address();
+			Invitations = new List<Invitation>();
+			UserOrganizations = new List<UserOrganization>();
+			UserSubscriptions = new List<UserSubscription>();
 		}
 	}
 }
