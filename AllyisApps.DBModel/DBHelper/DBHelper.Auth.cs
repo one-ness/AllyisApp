@@ -15,6 +15,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace AllyisApps.DBModel
 {
@@ -35,12 +36,7 @@ namespace AllyisApps.DBModel
 			DateTime? dateOfBirth,
 			string phoneNumber,
 			string preferredLanguageId,
-			string address1,
-			string address2,
-			string city,
-			int? stateId,
-			string postalCode,
-			string countryCode,
+			int? addressId,
 			int loginProviderId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -52,18 +48,44 @@ namespace AllyisApps.DBModel
 			parameters.Add("@dateOfBirth", dateOfBirth);
 			parameters.Add("@phoneNumber", phoneNumber);
 			parameters.Add("@preferredLanguageId", preferredLanguageId);
-			parameters.Add("@address1", address1);
-			parameters.Add("@address2", address2);
-			parameters.Add("@city", city);
-			parameters.Add("@stateId", stateId);
-			parameters.Add("@postalCode", postalCode);
-			parameters.Add("@countryCode", countryCode);
+			parameters.Add("@addressId", addressId);
 			parameters.Add("@loginProviderId", loginProviderId);
 
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
 				return await con.QueryFirstOrDefaultAsync<int>("[Auth].[CreateUser]", parameters, commandType: CommandType.StoredProcedure);
 			}
+		}
+
+		/// <summary>
+		/// create a new user, with address
+		/// </summary>
+		public async Task<int> SetupNewUserAsync(string email,
+			string passwordHash,
+			string firstName,
+			string lastName,
+			Guid emailConfirmationCode,
+			DateTime? dateOfBirth,
+			string phoneNumber,
+			string preferredLanguageId,
+			string address1,
+			string address2,
+			string city,
+			int? stateId,
+			string postalCode,
+			string countryCode,
+			int loginProviderId)
+		{
+			var result = 0;
+			using (var scope = new TransactionScope())
+			{
+				int? addressId = await this.CreateAddress(address1, address2, city, stateId, postalCode, countryCode);
+				result = await this.CreateUserAsync(email, passwordHash, firstName, lastName, emailConfirmationCode, dateOfBirth, phoneNumber, preferredLanguageId, (addressId == 0) ? null : addressId, loginProviderId);
+				// commit
+				scope.Complete();
+			}
+
+			return result;
 		}
 
 		/// <summary>

@@ -34,7 +34,7 @@ namespace AllyisApps.Services
 				DateTime now = DateTime.Now;
 				DateTime years18 = now.AddYears(-18);
 
-				int userid = await DBHelper.CreateUserAsync(email, Crypto.GetPasswordHash("Welcome1"), firstName, lastName, Guid.NewGuid(), years18, null, null, null, null, null, null, null, null, (int)LoginProviderEnum.AllyisApps);
+				int userid = await DBHelper.CreateUserAsync(email, Crypto.GetPasswordHash("Welcome1"), firstName, lastName, Guid.NewGuid(), years18, null, null, null, (int)LoginProviderEnum.AllyisApps);
 				user = await GetUserByEmailAsync(email);
 			}
 

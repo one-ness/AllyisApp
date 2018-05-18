@@ -40,19 +40,21 @@ namespace AllyisApps.ViewModels
 		}
 
 		/// <summary>
-		/// Get a list of states for the given country, name localized.
+		/// Get a list of states, name localized.
 		/// </summary>
 		/// <returns>A Dictionary(string, string) object, that contains state id and state name.</returns>
 		public static Dictionary<string, string> GetLocalizedStates(List<State> states)
 		{
-			if (states == null) throw new ArgumentNullException(nameof(states));
-
 			var result = new Dictionary<string, string>();
-			foreach (State item in states)
+			// some countries dont have states. exclude from localizing them.
+			if (states != null && states.Count > 0)
 			{
-				string stateName = Utility.AggregateSpaces(item.StateName);
-				string localized = Resources.States.ResourceManager.GetString(stateName) ?? item.StateName;
-				result.Add(item.StateId.ToString(), localized);
+				foreach (State item in states)
+				{
+					string stateName = Utility.AggregateSpaces(item.StateName);
+					string localized = Resources.States.ResourceManager.GetString(stateName) ?? item.StateName;
+					result.Add(item.StateId.ToString(), localized);
+				}
 			}
 
 			return result;
