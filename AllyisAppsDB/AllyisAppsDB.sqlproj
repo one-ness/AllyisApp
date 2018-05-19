@@ -424,6 +424,7 @@
     <Build Include="Auth\Stored Procedures\UpdateUserLoginProvider.sql" />
     <Build Include="Hrm\Stored Procedures\CreateDefaultPayClasses.sql" />
     <Build Include="Auth\Stored Procedures\GetUserPassword.sql" />
+    <Build Include="Auth\Stored Procedures\UpdateUser.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
