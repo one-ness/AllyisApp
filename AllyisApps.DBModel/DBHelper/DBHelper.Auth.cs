@@ -186,7 +186,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@lastName", lastName);
 			parameters.Add("@dateOfBirth", dateOfBirth);
 			parameters.Add("@phoneNumber", phoneNumber);
-			parameters.Add("@addressId", addressId);
+			parameters.Add("@addressId", addressId == 0 ? null : addressId);
 
 			using (var con = new SqlConnection(SqlConnectionString))
 			{

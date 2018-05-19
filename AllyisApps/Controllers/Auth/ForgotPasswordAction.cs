@@ -42,7 +42,7 @@ namespace AllyisApps.Controllers.Auth
 			if (ModelState.IsValid)
 			{
 				// NOTE: do not check for failure, always display success message and redirect to login page
-				UserOld user = await AppService.GetUserOldByEmailAsync(model.Email);
+				User user = await AppService.GetUserByEmailAsync(model.Email);
 				if (user != null)
 				{
 					string code = Guid.NewGuid().ToString();
