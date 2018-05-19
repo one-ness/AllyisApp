@@ -100,13 +100,24 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// create address
+		/// create address, returns address id
 		/// </summary>
 		public async Task<int> CreateAddressAsync(string address1, string address2, string city, int? stateId, string postalCode, string countryCode)
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return (await con.QueryAsync<int>("[Lookup].[CreateAddress] @p1, @p2, @p3, @p4, @p5, @p6", new { p1 = address1, p2 = address2, p3 = city, p4 = stateId, p5 = postalCode, p6 = countryCode })).FirstOrDefault();
+				return await con.QueryFirstOrDefaultAsync<int>("[Lookup].[CreateAddress] @p1, @p2, @p3, @p4, @p5, @p6", new { p1 = address1, p2 = address2, p3 = city, p4 = stateId, p5 = postalCode, p6 = countryCode });
+			}
+		}
+
+		/// <summary>
+		/// update the given address, returns number of rows affected
+		/// </summary>
+		public async Task<int> UpdateAddressAsync(int addressId, string address1, string address2, string city, int? stateId, string postalCode, string countryCode)
+		{
+			using (var con = new SqlConnection(SqlConnectionString))
+			{
+				return await con.QueryFirstOrDefaultAsync<int>("[Lookup].[UpdateAddress] @p1, @p2, @p3, @p4, @p5, @p6, @p7", new { p1 = addressId, p2 = address1, p3 = address2, p4 = city, p5 = stateId, p6 = postalCode, p7 = countryCode });
 			}
 		}
 	}

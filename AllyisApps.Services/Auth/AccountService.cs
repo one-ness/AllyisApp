@@ -525,7 +525,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		public async Task UpdateCurrentUserProfile(DateTime dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
 		{
-			await DBHelper.UpdateUserProfile(UserContext.UserId, firstName, lastName, dateOfBirth, phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
+			await this.DBHelper.UpdateUserProfile(UserContext.UserId, firstName, lastName, dateOfBirth, phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
 		}
 
 		/// <summary>
@@ -802,7 +802,7 @@ namespace AllyisApps.Services
 			Address address = null;
 			if (user.AddressId.HasValue && loadAddress)
 			{
-				address = await GetAddressAsync(user.AddressId.Value);
+				address = await this.GetAddressAsync(user.AddressId.Value);
 			}
 
 			return new User

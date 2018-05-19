@@ -169,6 +169,17 @@ namespace AllyisApps.DBModel
 			string postalCode,
 			string countryCode)
 		{
+			if (addressId.HasValue)
+			{
+				// update the address
+				await this.UpdateAddressAsync(addressId.Value, address1, address2, city, stateId, postalCode, countryCode);
+			}
+			else
+			{
+				// create address
+				addressId = await this.CreateAddressAsync(address1, address2, city, stateId, postalCode, countryCode);
+			}
+
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
 			parameters.Add("@firstName", firstName);
@@ -176,16 +187,10 @@ namespace AllyisApps.DBModel
 			parameters.Add("@dateOfBirth", dateOfBirth);
 			parameters.Add("@phoneNumber", phoneNumber);
 			parameters.Add("@addressId", addressId);
-			parameters.Add("@address1", address1);
-			parameters.Add("@address2", address2);
-			parameters.Add("@city", city);
-			parameters.Add("@stateId", stateId);
-			parameters.Add("@postalCode", postalCode);
-			parameters.Add("@countryCode", countryCode);
 
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				await con.ExecuteAsync("[Auth].[UpdateUserProfile]", parameters, commandType: CommandType.StoredProcedure);
+				await con.ExecuteAsync("[Auth].[UpdateUser]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
