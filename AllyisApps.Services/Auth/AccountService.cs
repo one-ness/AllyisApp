@@ -684,7 +684,7 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Reset password. Returns the number of rows updated in the db.
+		/// Reset password. Returns true if password was updated.
 		/// </summary>
 		public async Task<bool> ResetPasswordAsync(Guid code, string password)
 		{

@@ -16,6 +16,7 @@ using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
+using AllyisApps.Services.Hrm;
 
 namespace AllyisApps.Services
 {
@@ -26,11 +27,39 @@ namespace AllyisApps.Services
 	{
 		/// <summary>
 		/// Creates an organization.
+		/// TODO: wrap the calls in a transaction
 		/// </summary>
 		public async Task<int> SetupOrganization(string employeeId, string organizationName, string phoneNumber, string faxNumber, string siteUrl, string subDomainName, string address1, string city, int? stateId, string postalCode, string countryCode)
 		{
 			if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException(nameof(employeeId));
 			if (string.IsNullOrWhiteSpace(organizationName)) throw new ArgumentNullException(nameof(organizationName));
+
+			// create address
+			int? addressId = await this.DBHelper.CreateAddressAsync(address1, null, city, stateId, postalCode, countryCode);
+
+			// create organization
+			var orgId = await this.DBHelper.CreateOrganizationAsync(organizationName, siteUrl, phoneNumber, faxNumber, subDomainName, addressId == 0 ? null : addressId);
+
+			// create default payclasses for the organization
+			var idsAndNames = new List<Tuple<int, string>>();
+			idsAndNames.Add(new Tuple<int, string>((int)BuiltinPayClassEnum.Holiday, "Holiday"));
+			idsAndNames.Add(new Tuple<int, string>((int)BuiltinPayClassEnum.Overtime, "Overtime"));
+			idsAndNames.Add(new Tuple<int, string>((int)BuiltinPayClassEnum.PaidTimeOff, "Paid Time Off"));
+			idsAndNames.Add(new Tuple<int, string>((int)BuiltinPayClassEnum.Regular, "Regular"));
+			idsAndNames.Add(new Tuple<int, string>((int)BuiltinPayClassEnum.UnpaidTimeOff, "Unpaid Time Off"));
+			idsAndNames.Add(new Tuple<int, string>((int)BuiltinPayClassEnum.Custom, "Jury Duty"));
+			idsAndNames.Add(new Tuple<int, string>((int)BuiltinPayClassEnum.Custom, "Bereavement Leave"));
+			idsAndNames.Add(new Tuple<int, string>((int)BuiltinPayClassEnum.Custom, "Other Leave"));
+			await this.CreateDefaultPayClassesAsync(idsAndNames);
+
+			// create default employee type for the organization
+			var etid = await this.DBHelper.CreateEmployeeType(orgId, "Full Time Employee");
+
+			// add default payclasses to default employee type
+
+			// create organization user with that employee type, employee id and role id
+
+			// get all subscriptions of the organization and add the user to those subscriptions as unassigned
 
 			var results = await DBHelper.SetupOrganization(UserContext.UserId, (int)OrganizationRoleEnum.Owner, employeeId, organizationName, phoneNumber, faxNumber, siteUrl, subDomainName, address1, city, stateId, postalCode, countryCode);
 

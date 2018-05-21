@@ -21,7 +21,7 @@ BEGIN
 
 	BEGIN TRANSACTION
 		-- create organization
-		exec @organizationId = [Auth].[CreateOrganization] @organizationName, @siteUrl, @address, @city, @stateId, @countryCode, @postalCode, @phoneNumber, @faxNumber, @subdomainName;
+		exec @organizationId = [Auth].[CreateOrganization] @organizationName, @siteUrl, @phoneNumber, @faxNumber, @subdomainName;
 
 		-- init default information for org: payclasses, employee type
 		EXEC [Hrm].[CreateDefaultPayClasses] @organizationId;

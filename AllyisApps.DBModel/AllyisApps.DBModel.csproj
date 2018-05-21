@@ -65,6 +65,7 @@
     <Compile Include="Billing\SubscriptionRoleDBEntity.cs" />
     <Compile Include="Crm\ProjectDBEntity.cs" />
     <Compile Include="DBHelper\DBHelper.Expense.cs" />
+    <Compile Include="DBHelper\DBHelper.Hrm.cs" />
     <Compile Include="DBHelper\DBHelper.Staffing.cs" />
     <Compile Include="DBHelper\DBHelper.Finance.cs" />
     <Compile Include="DBHelper\DBHelper.Lookup.cs" />

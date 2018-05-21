@@ -6,7 +6,7 @@
 
 using System;
 
-namespace AllyisApps.Services.TimeTracker
+namespace AllyisApps.Services.Hrm
 {
 	/// <summary>
 	/// An object for keeping track of all the info related to a given pay class.

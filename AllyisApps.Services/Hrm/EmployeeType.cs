@@ -1,4 +1,4 @@
-﻿namespace AllyisApps.Services.TimeTracker
+﻿namespace AllyisApps.Services.Hrm
 {
 	/// <summary>
 	///

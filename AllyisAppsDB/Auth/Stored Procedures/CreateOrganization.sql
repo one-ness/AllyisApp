@@ -1,27 +1,13 @@
 ﻿CREATE PROCEDURE [Auth].[CreateOrganization]
 	@organizationName NVARCHAR(100),
 	@siteUrl NVARCHAR(100),
-	@address NVARCHAR(100),
-	@city NVARCHAR(100),
-	@stateId int,
-	@countryCode VARCHAR(8),
-	@postalCode NVARCHAR(50),
 	@phoneNumber VARCHAR(50),
 	@faxNumber VARCHAR(50),
-	@subdomain NVARCHAR(40)
+	@subdomain NVARCHAR(40),
+	@addressId int = null
 AS
 BEGIN
 	SET NOCOUNT ON;
-	SET XACT_ABORT ON;
-	declare @addressId int
-	set @addressId = null
-	declare @organizationId int
-	set @organizationId = null
-
-	BEGIN TRANSACTION
-		-- Create Address
-		exec @addressId = [Lookup].[CreateAddress] @address, null, @city, @stateId, @postalCode, @countryCode
-		-- Create org
 		INSERT INTO [Auth].[Organization] 
 				([OrganizationName],
 				[SiteUrl],
@@ -35,8 +21,5 @@ BEGIN
 				@phoneNumber,
 				@faxNumber,
 				@subdomain);
-		select @organizationId = SCOPE_IDENTITY()
-	COMMIT TRANSACTION
-
-	return @organizationId
+		select SCOPE_IDENTITY()
 END

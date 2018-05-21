@@ -581,26 +581,6 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		///
 		/// </summary>
-		/// <returns></returns>
-		public async Task<int> CreateEmployeeType(int orgId, string employeeName)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@orgId", orgId);
-			parameters.Add("@employeeName", employeeName);
-
-			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
-			{
-				var results = await connection.QueryAsync<int>(
-					"[Hrm].[CreateEmployeeType]",
-					parameters,
-					commandType: CommandType.StoredProcedure);
-				return results.FirstOrDefault();
-			}
-		}
-
-		/// <summary>
-		///
-		/// </summary>
 		/// <param name="employeeTypeId"></param>
 		/// <returns></returns>
 		public async Task DeleteEmployeeType(int employeeTypeId)

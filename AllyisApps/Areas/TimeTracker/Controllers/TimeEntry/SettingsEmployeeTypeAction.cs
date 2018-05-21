@@ -1,14 +1,12 @@
-﻿using System;
+﻿using AllyisApps.Controllers;
+using AllyisApps.Core.Alert;
+using AllyisApps.Services;
+using AllyisApps.Services.Hrm;
+using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using AllyisApps.Controllers;
-using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -59,7 +57,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			ViewData["SubscriptionName"] = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName;
 			ViewData["SubscriptionId"] = subscriptionId;
 			var payclasses = (await AppService.GetPayClassesBySubscriptionId(subscriptionId))
-				.Where(x => (x.BuiltInPayClassId != BuiltinPayClassEnum.OverTime))
+				.Where(x => (x.BuiltInPayClassId != BuiltinPayClassEnum.Overtime))
 				.Select(x => new PayClassInfoViewModel(x));
 
 			SettingsEditEmployeeTypeViewModel model = new SettingsEditEmployeeTypeViewModel()
@@ -144,10 +142,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var payClasses = (await AppService.GetPayClassesByOrganizationId(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId));
 
 			var unassignedPayClasses = payClasses
-				.Where(x => !assignedPayClassesIds.Contains(x.PayClassId) && (x.BuiltInPayClassId != BuiltinPayClassEnum.OverTime))
+				.Where(x => !assignedPayClassesIds.Contains(x.PayClassId) && (x.BuiltInPayClassId != BuiltinPayClassEnum.Overtime))
 				.Select(x => new PayClassInfoViewModel(x));
 			var assignedPayClasses = payClasses
-				.Where(x => assignedPayClassesIds.Contains(x.PayClassId) && (x.BuiltInPayClassId != BuiltinPayClassEnum.OverTime))
+				.Where(x => assignedPayClassesIds.Contains(x.PayClassId) && (x.BuiltInPayClassId != BuiltinPayClassEnum.Overtime))
 				.Select(x => new PayClassInfoViewModel(x));
 
 			SettingsEditEmployeeTypeViewModel model = new SettingsEditEmployeeTypeViewModel()
@@ -176,7 +174,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			int orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			var payclasses = await AppService.GetPayClassesByOrganizationId(orgId);
-			var overtimepayclass = payclasses.First(pc => (pc.BuiltInPayClassId == BuiltinPayClassEnum.OverTime));
+			var overtimepayclass = payclasses.First(pc => (pc.BuiltInPayClassId == BuiltinPayClassEnum.Overtime));
 			if (string.IsNullOrEmpty(model.EmployeeTypeName))
 			{
 				Notifications.Add(new BootstrapAlert("Employee Type Requires a name."));

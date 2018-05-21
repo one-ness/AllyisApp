@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.Services.TimeTracker
+namespace AllyisApps.Services.Hrm
 {
 	public enum BuiltinPayClassEnum : int
 	{
@@ -35,6 +35,6 @@ namespace AllyisApps.Services.TimeTracker
 		/// <summary>
 		/// Overtime.
 		/// </summary>
-		OverTime = 5
+		Overtime = 5
 	}
 }

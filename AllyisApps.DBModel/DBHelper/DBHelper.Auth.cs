@@ -334,7 +334,7 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// create a new organization, add the user in the given role
+		/// create a new organization.
 		/// </summary>
 		public async Task<int> SetupOrganization(
 			int userId,
@@ -354,6 +354,17 @@ namespace AllyisApps.DBModel
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
 				return (await con.QueryAsync<int>("[Auth].[SetupOrganization] @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13", new { p1 = userId, p2 = roleId, p3 = organizationName, p4 = siteUrl, p5 = address1, p6 = city, p7 = stateId, p8 = countryCode, p9 = postalCode, p10 = phoneNumber, p11 = faxNumber, p12 = subDomainName, p13 = employeeId })).FirstOrDefault();
+			}
+		}
+
+		/// <summary>
+		/// create organization
+		/// </summary>
+		public async Task<int> CreateOrganizationAsync(string organizationName, string siteUrl = null, string phoneNumber = null, string faxNumber = null, string subDomain = null, int? addressId = null)
+		{
+			using (var con = new SqlConnection(SqlConnectionString))
+			{
+				return await con.QueryFirstOrDefaultAsync<int>("[Auth].[CreateOrganization] @p1, @p2, @p3, @p4, @p5, @p6", new { p1 = organizationName, p2 = siteUrl, p3 = phoneNumber, p4 = faxNumber, p5 = subDomain, p6 = addressId });
 			}
 		}
 
