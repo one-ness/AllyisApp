@@ -14,13 +14,13 @@ namespace AllyisApps.DBModel
 	public partial class DBHelper
 	{
 		/// <summary>
-		/// creates a set of default payclasses
+		/// creates default payclasses for the given org
 		/// </summary>
-		public async Task CreateDefaultPayClassesAsync()
+		public async Task CreateDefaultPayClassesAsync(int orgId)
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				await con.ExecuteAsync("[Hrm].[CreateDefaultPayClasses]");
+				await con.ExecuteAsync("[Hrm].[CreateDefaultPayClasses] @a", new { a = orgId });
 			}
 		}
 
@@ -32,6 +32,17 @@ namespace AllyisApps.DBModel
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
 				return await con.QueryFirstOrDefaultAsync("[Hrm].[CreateEmployeeType] @a, @b", new { a = orgId, b = employeeTypeName });
+			}
+		}
+
+		/// <summary>
+		/// add all of the org payclasses to the given employee type
+		/// </summary>
+		public async Task AddOrgPayClassesToEmployeeType(int orgId, int employeeTypeId)
+		{
+			using (var con = new SqlConnection(SqlConnectionString))
+			{
+				await con.ExecuteAsync("[Hrm].[AddOrgPayClassesToEmployeeType] @a, @b", new { a = employeeTypeId, b = orgId });
 			}
 		}
 	}

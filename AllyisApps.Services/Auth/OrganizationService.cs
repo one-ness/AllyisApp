@@ -50,14 +50,17 @@ namespace AllyisApps.Services
 			idsAndNames.Add(new Tuple<int, string>((int)BuiltinPayClassEnum.Custom, "Jury Duty"));
 			idsAndNames.Add(new Tuple<int, string>((int)BuiltinPayClassEnum.Custom, "Bereavement Leave"));
 			idsAndNames.Add(new Tuple<int, string>((int)BuiltinPayClassEnum.Custom, "Other Leave"));
-			await this.CreateDefaultPayClassesAsync(idsAndNames);
+			// TODO: create the above payclasses, then delete createdefaultpayclasses
+			//await this.CreatePayClassesAsync(orgId, idsAndNames);
+			await this.DBHelper.CreateDefaultPayClassesAsync(orgId);
 
 			// create default employee type for the organization
 			var etid = await this.DBHelper.CreateEmployeeType(orgId, "Full Time Employee");
 
 			// add default payclasses to default employee type
+			await this.DBHelper.AddOrgPayClassesToEmployeeType(orgId, etid);
 
-			// create organization user with that employee type, employee id and role id
+			// create organization user with that employee type id, employee id and role id
 
 			// get all subscriptions of the organization and add the user to those subscriptions as unassigned
 

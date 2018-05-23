@@ -12,20 +12,12 @@ namespace AllyisApps.Services
 	public partial class AppService : BaseService
 	{
 		/// <summary>
-		/// create the default payclasses (for all the builtinpayclassenums)
+		/// create the given payclasses for the given organization
 		/// </summary>
-		public async Task CreateDefaultPayClassesAsync(List<Tuple<int, string>> payClassIdsAndNames)
+		public async Task CreatePayClassesAsync(int orgId, List<Tuple<int, string>> payClassIdsAndNames)
 		{
-			// TODO: either change this to multiple calls in a transaction, or change stored procedure to accept multiple payclass ids and names
-			await this.DBHelper.CreateDefaultPayClassesAsync();
-		}
-
-		/// <summary>
-		/// add all payclasses of the organization to the given employee type
-		/// </summary>
-		public async Task AddAllPayClassesToEmployeeType(int orgId, int employeeTypeId)
-		{
-
+			// TODO: delete the following line and create the payclasses in a transaction or use a stored procedure
+			await this.DBHelper.CreateDefaultPayClassesAsync(orgId);
 		}
 	}
 }
