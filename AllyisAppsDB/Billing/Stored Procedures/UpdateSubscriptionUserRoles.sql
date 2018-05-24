@@ -1,4 +1,4 @@
-CREATE PROCEDURE [Billing].[UpdateSubscriptionUserRoles]
+﻿CREATE PROCEDURE [Billing].[UpdateSubscriptionUserRoles]
 	@organizationId INT,
 	@userIds [Auth].[UserTable] READONLY,
 	@productRoleId INT,
@@ -12,7 +12,7 @@ BEGIN TRANSACTION
 	FROM [Billing].[Subscription] WITH (NOLOCK)
 	JOIN [Billing].[Sku] WITH (NOLOCK) ON [Sku].[SkuId] = [Subscription].[SkuId]
 	JOIN [Billing].[Product] WITH (NOLOCK) ON [Product].[ProductId] = [Sku].[ProductId] -- @productId
-	WHERE [Subscription].[OrganizationId] = @organizationId AND [Product].[ProductId] = @productId AND [Subscription].[IsActive] = 1
+	WHERE [Subscription].[OrganizationId] = @organizationId AND [Product].[ProductId] = @productId --AND [Subscription].[IsActive] = 1
 
 	-- Update users already in subscription
 	UPDATE [Billing].[SubscriptionUser] 

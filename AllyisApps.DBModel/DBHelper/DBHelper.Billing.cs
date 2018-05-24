@@ -183,13 +183,13 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// get the list of subscriptions for the given organization
 		/// </summary>
-		public async Task<dynamic> GetSubscriptionsAsync(int organizationId)
+		public async Task<List<SubscriptionDBEntity>> GetSubscriptionsAsync(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return (await con.QueryAsync<dynamic>("[Billing].[GetSubscriptions]", parameters , commandType: CommandType.StoredProcedure)).ToList();
+				return (await con.QueryAsync<SubscriptionDBEntity>("[Billing].[GetSubscriptions] @a", new { a = organizationId })).ToList();
 			}
 		}
 

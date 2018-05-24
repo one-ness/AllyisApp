@@ -1,20 +1,9 @@
 ﻿CREATE PROCEDURE [Billing].[GetSubscriptions]
-    @organizationId INT
+    @orgId int,
+	@subStatus int
 AS
 BEGIN
     SET NOCOUNT ON
-    SELECT [s].*,
-           [sk].[SkuName],
-           [sk].[IconUrl],
-           [p].[ProductId],
-           [p].[ProductName],
-           [p].[AreaUrl],
-           [p].[Description] AS [ProductDescription]
-      FROM [Subscription] [s] WITH (NOLOCK)
-      JOIN [Sku]         [sk] WITH (NOLOCK) ON [sk].[SkuId] = [s].[SkuId]
-      JOIN [Product]      [p] WITH (NOLOCK) ON [p].[ProductId] = [sk].[ProductId]
-     WHERE [s].[OrganizationId] = @organizationId
-       AND [s].[IsActive] = 1
-       AND [sk].[IsActive] = 1
-       AND [p].[IsActive] = 1
+	select * from Subscription with (nolock)
+	where OrganizationId = @orgId and (SubscriptionStatus & @subStatus > 0)
 END

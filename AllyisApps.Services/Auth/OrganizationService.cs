@@ -76,7 +76,7 @@ namespace AllyisApps.Services
 			await this.DBHelper.CreateOrganizationUser(orgId, userId, (int)orgRole, employeeId, employeeTypeId, approvalLimit);
 
 			// get all subscriptions of the organization
-			await this.DBHelper.GetSubscriptionsAsync(orgId);
+			var subs = await this.DBHelper.GetSubscriptionsAsync(orgId);
 		}
 
 		/// <summary>
@@ -194,7 +194,7 @@ namespace AllyisApps.Services
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
 			CheckOrgAction(OrgAction.DeleteOrganization, orgId);
-			await DBHelper.DeleteOrganization(orgId);
+			await this.DBHelper.UpdateOrganizationStatusAsync(orgId, (int)OrganizationStatusEnum.Inactive);
 		}
 
 		/// <summary>

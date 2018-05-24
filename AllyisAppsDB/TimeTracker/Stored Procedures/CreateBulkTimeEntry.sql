@@ -1,4 +1,4 @@
-CREATE PROCEDURE [TimeTracker].[CreateBulkTimeEntry]
+﻿CREATE PROCEDURE [TimeTracker].[CreateBulkTimeEntry]
 	@date DATETIME2(0),
 	@duration FLOAT,
 	@description NVARCHAR(120),
@@ -15,7 +15,7 @@ BEGIN
 		(SELECT TOP 1 [SubscriptionId] 
 		FROM [Billing].[Subscription] WITH (NOLOCK) 
 		WHERE [OrganizationId] = @organizationId 
-			AND [IsActive] = 1
+			--AND [IsActive] = 1
 			AND [SkuId] IN (SELECT [SkuId] FROM #SKUIDs));
 	SELECT [UserId], 
 			@date AS [Date],

@@ -1,5 +1,6 @@
 ﻿using System;
 using AllyisApps.Resources;
+using AllyisApps.Services.Hrm;
 
 #region service
 
@@ -724,11 +725,9 @@ namespace AllyisApps.Services.TimeTracker
 	public static class EnumExtenstionMethods
 	{
 		/// <summary>
-		///
+		/// get the enum name
 		/// </summary>
-		/// <param name="value"></param>
-		/// <returns></returns>
-		public static string GetEnumName(this BuiltinPayClassEnum value)
+		public static string GetEnumName(this Services.Hrm.BuiltinPayClassEnum value)
 		{
 			string name = "";
 			switch (value)
@@ -745,7 +744,7 @@ namespace AllyisApps.Services.TimeTracker
 					name = "Regular";
 					break;
 
-				case BuiltinPayClassEnum.OverTime:
+				case BuiltinPayClassEnum.Overtime:
 					name = "Overtime";
 					break;
 

@@ -100,6 +100,7 @@
     <Folder Include="dbo\Functions\" />
     <Folder Include="Hrm\" />
     <Folder Include="Hrm\Stored Procedures\" />
+    <Folder Include="Billing\Functions\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TimeTracker\Tables\Holiday.sql" />
@@ -192,7 +193,6 @@
     <Build Include="Auth\Stored Procedures\UpdateUserPassword.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserPasswordResetCode.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserPasswordUsingCode.sql" />
-    <Build Include="Auth\Stored Procedures\DeleteOrg.sql" />
     <Build Include="Auth\Stored Procedures\RejectInvitation.sql" />
     <Build Include="Auth\Stored Procedures\GetOrganization.sql" />
     <Build Include="Auth\Stored Procedures\AcceptInvitation.sql" />
@@ -285,7 +285,6 @@
     <Build Include="Auth\Stored Procedures\DeleteOrganizationUsers.sql" />
     <Build Include="Auth\Stored Procedures\CreateUser.sql" />
     <Build Include="Billing\Stored Procedures\UpdateSubscriptionUserRoles.sql" />
-    <Build Include="Billing\Stored Procedures\GetNumberSubscriptionUsers.sql" />
     <Build Include="Billing\Stored Procedures\CreateSubscription.sql" />
     <None Include="UpgradeScripts\Upgrade_AllyisAppsDB_1.0_to_1.1.sql" />
     <None Include="UpgradeScripts\Upgrade_AllyisAppsDB_1.1_to_1.2.sql" />
@@ -398,7 +397,6 @@
     <Build Include="TimeTracker\Stored Procedures\GetTimeEntriesByProjectId.sql" />
     <Build Include="Auth\Stored Procedures\GetOrgInvitationCount.sql" />
     <Build Include="Billing\Stored Procedures\GetSubscriptionRoleForUser.sql" />
-    <Build Include="Auth\Functions\GetUserCount.sql" />
     <Build Include="Crm\Functions\GetProjectCount.sql" />
     <Build Include="Crm\Functions\GetActiveProjectCount.sql" />
     <Build Include="TimeTracker\Tables\EmployeeType.sql" />
@@ -425,6 +423,10 @@
     <Build Include="Hrm\Stored Procedures\CreateDefaultPayClasses.sql" />
     <Build Include="Auth\Stored Procedures\GetUserPassword.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUser.sql" />
+    <Build Include="Billing\Functions\GetSubscriptionUserCount.sql" />
+    <Build Include="Auth\Functions\GetOrganizationUserCount.sql" />
+    <Build Include="Auth\Functions\GetOrganizationSubscriptionCount.sql" />
+    <Build Include="Auth\Stored Procedures\UpdateOrganizationStatus.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

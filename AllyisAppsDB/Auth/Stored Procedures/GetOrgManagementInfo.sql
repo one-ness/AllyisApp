@@ -1,4 +1,4 @@
-CREATE PROCEDURE [Auth].[GetOrgManagementInfo]
+﻿CREATE PROCEDURE [Auth].[GetOrgManagementInfo]
 	@organizationId INT
 AS
 BEGIN
@@ -51,7 +51,7 @@ BEGIN
 		[Organization].[OrganizationId],
 		[Subscription].[SkuId],
 		[Sku].[SkuName],
-		[Subscription].[NumberOfUsers],
+		[Subscription].[UserCount],
 		[Subscription].[SubscriptionName],
 		[Organization].[OrganizationName] AS [OrganizationName],
 		[Sku].[SkuName] AS [SkuName]
@@ -60,7 +60,7 @@ BEGIN
 	LEFT JOIN [Auth].[Organization]	WITH (NOLOCK) ON [Organization].[OrganizationId] = [Subscription].[OrganizationId]
 	LEFT JOIN [Billing].[Product]		WITH (NOLOCK) ON [Product].[ProductId] = [Sku].[ProductId]
 	WHERE [Subscription].[OrganizationId] = @organizationId
-	AND [Subscription].[IsActive] = 1
+	--AND [Subscription].[IsActive] = 1
 	AND [Product].IsActive = 1
 	ORDER BY [Product].[ProductName]
 

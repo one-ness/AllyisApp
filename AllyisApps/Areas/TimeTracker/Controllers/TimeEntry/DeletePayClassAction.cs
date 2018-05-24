@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services.TimeTracker;
+using AllyisApps.Services.Hrm;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -34,7 +35,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			// Built-in, non-editable pay classes cannot be deleted
 			// Used pay classes cannot be deleted, suggest manager to merge it with another payclass instead
 			if (sourcePayClassName == BuiltinPayClassEnum.Regular.GetEnumName() ||
-				sourcePayClassName == BuiltinPayClassEnum.OverTime.GetEnumName() ||
+				sourcePayClassName == BuiltinPayClassEnum.Overtime.GetEnumName() ||
 				sourcePayClassName == BuiltinPayClassEnum.Holiday.GetEnumName() ||
 				sourcePayClassName == BuiltinPayClassEnum.PaidTimeOff.GetEnumName() ||
 				sourcePayClassName == BuiltinPayClassEnum.UnpaidTimeOff.GetEnumName() ||

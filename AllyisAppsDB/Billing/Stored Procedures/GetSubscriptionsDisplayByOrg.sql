@@ -1,4 +1,4 @@
-CREATE PROCEDURE [Billing].[GetSubscriptionsDisplayByOrg]
+﻿CREATE PROCEDURE [Billing].[GetSubscriptionsDisplayByOrg]
 	@organizationId INT
 AS
 	SET NOCOUNT ON;
@@ -8,7 +8,7 @@ SELECT	[Product].[ProductId],
 		[Organization].[OrganizationId],
 		[Subscription].[SkuId],
 		[Subscription].[SubscriptionCreatedUtc] as 'CreatedUtc',
-		[Subscription].[NumberOfUsers],
+		[Subscription].[UserCount],
 		[Subscription].[SubscriptionName],
 		[Organization].[OrganizationName] AS [OrganizationName],
 		[Sku].[SkuName] AS [SkuName]
@@ -17,5 +17,5 @@ SELECT	[Product].[ProductId],
   LEFT JOIN [Auth].[Organization]	WITH (NOLOCK) ON [Organization].[OrganizationId] = [Subscription].[OrganizationId]
   LEFT JOIN [Billing].[Product]		WITH (NOLOCK) ON [Product].[ProductId] = [Sku].[ProductId]
   WHERE [Subscription].[OrganizationId] = @organizationId
-	AND [Subscription].[IsActive] = 1
+	--AND [Subscription].[IsActive] = 1
 ORDER BY [Product].[ProductName]

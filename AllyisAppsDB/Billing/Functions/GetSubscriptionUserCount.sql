@@ -1,4 +1,4 @@
-﻿CREATE FUNCTION [Billing].[GetNumberSubscriptionUsers](@subscriptoinID Int)
+﻿create FUNCTION [Billing].[GetSubscriptionUserCount] (@subscriptoinID Int)
 RETURNS INT
 AS
 BEGIN

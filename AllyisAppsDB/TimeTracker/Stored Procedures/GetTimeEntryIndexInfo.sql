@@ -1,4 +1,4 @@
-CREATE PROCEDURE [TimeTracker].[GetTimeEntryIndexInfo]
+﻿CREATE PROCEDURE [TimeTracker].[GetTimeEntryIndexInfo]
 	@organizationId INT,
 	@userId INT,
 	@productId INT,
@@ -95,7 +95,7 @@ AS
 		LEFT JOIN [Auth].[Organization] WITH (NOLOCK) ON [Organization].[OrganizationId] = [Subscription].[OrganizationId]
 		WHERE [Subscription].[OrganizationId] = @organizationId
 			AND [Sku].[ProductId] = @productId
-			AND [Subscription].[IsActive] = 1
+			--AND [Subscription].[IsActive] = 1
 		)
 	ORDER BY [User].[LastName]
 

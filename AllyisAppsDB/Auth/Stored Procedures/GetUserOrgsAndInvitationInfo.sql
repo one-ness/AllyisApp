@@ -1,4 +1,4 @@
-CREATE PROCEDURE [Auth].[GetUserOrgsAndInvitationInfo]
+﻿CREATE PROCEDURE [Auth].[GetUserOrgsAndInvitationInfo]
 	@userId int
 AS
 BEGIN
@@ -38,7 +38,7 @@ BEGIN
 	LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryCode] = [Address].[CountryCode]
 	LEFT JOIN [Lookup].[State]		WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
 	WHERE [OrganizationUser].[UserId] = @userId 
-		  AND [Auth].[Organization].[IsActive] = 1
+		  --AND [Auth].[Organization].[IsActive] = 1
 	ORDER BY [OrganizationUser].[OrganizationRoleId] DESC, [Organization].[OrganizationName]
 
 	SELECT 

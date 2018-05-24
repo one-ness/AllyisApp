@@ -11,7 +11,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Initializes new pay class view model with a service object
 		/// </summary>
 		/// <param name="payClass"></param>
-		public PayClassInfoViewModel(Services.TimeTracker.PayClass payClass)
+		public PayClassInfoViewModel(Services.Hrm.PayClass payClass)
 		{
 			OrganizationId = payClass.OrganizationId;
 			PayClassId = payClass.PayClassId;

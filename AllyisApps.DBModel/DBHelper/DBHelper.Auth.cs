@@ -406,17 +406,13 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Executes [Auth].[DeleteOrg].
+		/// update the given org to given status
 		/// </summary>
-		/// <param name="organizationId">Parameter @organizationId. .</param>
-		public async Task DeleteOrganization(int organizationId)
+		public async Task UpdateOrganizationStatusAsync(int orgId, int orgStatus)
 		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@orgId", organizationId);
-
-			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				await connection.ExecuteAsync("[Auth].[DeleteOrg]", parameters, commandType: CommandType.StoredProcedure);
+				await con.ExecuteAsync("[Auth].[UpdateOrganizationStatus] @a, @b", new { a = orgId, b = orgStatus });
 			}
 		}
 

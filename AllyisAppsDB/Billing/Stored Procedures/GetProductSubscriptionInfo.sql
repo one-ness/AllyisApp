@@ -1,4 +1,4 @@
-CREATE PROCEDURE [Billing].[GetProductSubscriptionInfo]
+﻿CREATE PROCEDURE [Billing].[GetProductSubscriptionInfo]
 	@skuId INT,
 	@orgId INT
 AS
@@ -23,12 +23,12 @@ SELECT
 	SELECT
 		@subscriptionId = [SubscriptionId]
 	FROM [Billing].[Subscription] WITH (NOLOCK) 
-	WHERE [OrganizationId] = @orgId AND [Subscription].[SkuId] = @skuId AND [Subscription].[IsActive] = 1
+	WHERE [OrganizationId] = @orgId AND [Subscription].[SkuId] = @skuId --AND [Subscription].[IsActive] = 1
 
 	SELECT
 		[SubscriptionId],
 		[SkuId],
-		[NumberOfUsers],
+		[UserCount],
 		[SubscriptionCreatedUtc],
 		[OrganizationId]
 	FROM [Billing].[Subscription] WITH (NOLOCK) 
@@ -52,7 +52,7 @@ SELECT
 
 	SELECT [StripeTokenCustId]
 	FROM [Billing].[StripeOrganizationCustomer] WITH (NOLOCK) 
-	WHERE [OrganizationId] = @orgId AND [IsActive] = 1
+	WHERE [OrganizationId] = @orgId --AND [IsActive] = 1
 
 	SELECT COUNT([UserId])
 	FROM (

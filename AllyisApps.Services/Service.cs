@@ -22,6 +22,7 @@ using AllyisApps.Services.Expense;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.Services.TimeTracker;
+using AllyisApps.Services.Hrm;
 
 namespace AllyisApps.Services
 {

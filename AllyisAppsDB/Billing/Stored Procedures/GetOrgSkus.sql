@@ -1,4 +1,4 @@
-CREATE PROCEDURE [Billing].[GetOrgSkus]
+﻿CREATE PROCEDURE [Billing].[GetOrgSkus]
 	@organizationId INT
 AS
 BEGIN
@@ -25,7 +25,7 @@ BEGIN
 			INNER JOIN [Billing].[Sku] AS [Sku] WITH (NOLOCK) 
 			ON [Product].[ProductId] = [Sku].[ProductId]
 		) AS [ProductSku]
-		ON [ProductSku].[SkuId] = [OrgSub].[SkuId] AND [OrgSub].[IsActive] = 1
+		ON [ProductSku].[SkuId] = [OrgSub].[SkuId] --AND [OrgSub].[IsActive] = 1
 		WHERE [OrgSub].[OrganizationId] = @organizationId
 	) AS [A1]
 	INNER JOIN
@@ -34,7 +34,7 @@ BEGIN
 		FROM [Billing].[SubscriptionUser] AS [SubUser] WITH (NOLOCK) 
 		INNER JOIN [Billing].[Subscription] AS [OrgSubs] WITH (NOLOCK) 
 		ON [OrgSubs].[SubscriptionId] = [SubUser].[SubscriptionId]
-		WHERE [OrgSubs].[OrganizationId] = @organizationId AND [OrgSubs].[IsActive] = 1
+		WHERE [OrgSubs].[OrganizationId] = @organizationId --AND [OrgSubs].[IsActive] = 1
 		GROUP BY [SubUser].[SubscriptionId]
 	) AS [A2]
 	ON [A1].[SubscriptionId] = [A2].[SubscriptionId]

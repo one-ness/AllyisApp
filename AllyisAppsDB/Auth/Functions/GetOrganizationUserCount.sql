@@ -1,4 +1,4 @@
-﻿CREATE FUNCTION [Auth].[GetUserCount]
+﻿create FUNCTION [Auth].[GetOrganizationUserCount]
 (
 	@organizationId INT
 )

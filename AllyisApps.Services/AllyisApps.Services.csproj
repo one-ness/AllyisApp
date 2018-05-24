@@ -71,11 +71,13 @@
     <Compile Include="Auth\AuthorizationService.cs" />
     <Compile Include="Auth\ImportService.cs" />
     <Compile Include="Auth\Account.cs" />
+    <Compile Include="Auth\OrganizationStatusEnum.cs" />
     <Compile Include="Auth\OrganizationUser.cs" />
     <Compile Include="Auth\ProductRoleEnums.cs" />
     <Compile Include="Auth\ProductSubscription.cs" />
     <Compile Include="Auth\ReportInfo.cs" />
     <Compile Include="Auth\ServiceActionEnums.cs" />
+    <Compile Include="Auth\SubscriptionStatusEnum.cs" />
     <Compile Include="Auth\User.cs" />
     <Compile Include="Auth\UserContext.cs" />
     <Compile Include="Auth\UserOrganization.cs" />

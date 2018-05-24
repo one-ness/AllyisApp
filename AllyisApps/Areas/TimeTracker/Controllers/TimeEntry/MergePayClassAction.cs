@@ -12,7 +12,7 @@ using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Resources;
 using AllyisApps.Services;
-using AllyisApps.Services.TimeTracker;
+using AllyisApps.Services.Hrm;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using System.Collections.Generic;
 
@@ -54,7 +54,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				SourcePayClassName = sourcePayClass.PayClassName,
 				SubscriptionId = subscriptionId,
 				SubscriptionName = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName,
-				DestinationPayClasses = destPayClasses.Where(payc => payc.BuiltInPayClassId != BuiltinPayClassEnum.OverTime).Select(payclass => new PayClassInfoViewModel(payclass))
+				DestinationPayClasses = destPayClasses.Where(payc => payc.BuiltInPayClassId != BuiltinPayClassEnum.Overtime).Select(payclass => new PayClassInfoViewModel(payclass))
 			};
 
 			return View(ViewConstants.MergePayClass, model);
@@ -75,7 +75,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				var paylcasses = (await AppService.GetPayClassesBySubscriptionId(model.SubscriptionId)).ToDictionary(pc => pc.PayClassId);
 
-				if (paylcasses[destPayClass].BuiltInPayClassId == BuiltinPayClassEnum.OverTime)
+				if (paylcasses[destPayClass].BuiltInPayClassId == BuiltinPayClassEnum.Overtime)
 				{
 					Notifications.Add(new BootstrapAlert("Cannont merge into overtime Over time has specail meaning suggest regular"));
 				}

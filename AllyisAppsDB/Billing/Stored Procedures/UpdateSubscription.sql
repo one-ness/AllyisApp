@@ -1,4 +1,4 @@
--- TODO: pass in subscriptionId as a parameter to simplify logic
+﻿-- TODO: pass in subscriptionId as a parameter to simplify logic
 
 CREATE PROCEDURE [Billing].[UpdateSubscription]
 	@organizationId INT,
@@ -12,6 +12,6 @@ BEGIN
 	--Because the productRoleId and subscriptionId don't change, no need to update SubscriptionUser table
 	UPDATE [Billing].[Subscription] SET [SkuId] = @skuId, [SubscriptionName] = @subscriptionName
 		WHERE [OrganizationId] = @organizationId
-		AND [Subscription].[IsActive] = 1
+		--AND [Subscription].[IsActive] = 1
 		AND [Subscription].SubscriptionId = @subscriptionId;
 END

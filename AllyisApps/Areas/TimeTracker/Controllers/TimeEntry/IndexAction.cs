@@ -19,6 +19,7 @@ using AllyisApps.Services.Crm;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using static AllyisApps.ViewModels.TimeTracker.TimeEntry.TimeEntryOverDateRangeViewModel;
+using AllyisApps.Services.Hrm;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -166,7 +167,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var employeeTypeId = (await AppService.GetOrganizationUsersAsync(orgId)).Where(x => x.UserId == userId).FirstOrDefault().EmployeeTypeId;
 			var assignedPayClassesIds = (await AppService.GetAssignedPayClasses(employeeTypeId));
 			var assignedPayClasses = payClasses.Where(x => assignedPayClassesIds.Contains(x.PayClassId)).ToList();
-			var withoutOverTimePayClasses = payClasses.Where(x => assignedPayClassesIds.Contains(x.PayClassId) && (x.BuiltInPayClassId != BuiltinPayClassEnum.OverTime)).ToList();
+			var withoutOverTimePayClasses = payClasses.Where(x => assignedPayClassesIds.Contains(x.PayClassId) && (x.BuiltInPayClassId != BuiltinPayClassEnum.Overtime)).ToList();
 			var result = new TimeEntryOverDateRangeViewModel
 			{
 				StartDateint = Utility.GetDaysFromDateTime(startDate),
@@ -222,10 +223,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						}
 
 						//exclude overtime if it is not the time entry's pay class -- this is a calculated column
-						bool isOvertime = iter.Current.BuiltInPayClassId == (int)BuiltinPayClassEnum.OverTime;
+						bool isOvertime = iter.Current.BuiltInPayClassId == (int)BuiltinPayClassEnum.Overtime;
 						var filteredPayClasses = isOvertime
-							? tempPayClasses.Where(pc => pc.BuiltInPayClassId == BuiltinPayClassEnum.OverTime)
-							: tempPayClasses.Where(pc => pc.BuiltInPayClassId != BuiltinPayClassEnum.OverTime);
+							? tempPayClasses.Where(pc => pc.BuiltInPayClassId == BuiltinPayClassEnum.Overtime)
+							: tempPayClasses.Where(pc => pc.BuiltInPayClassId != BuiltinPayClassEnum.Overtime);
 
 						// Update its project's hours
 						if (hours.ContainsKey(iter.Current.ProjectId))
