@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [Billing].[CreateSubscription]
 	@organizationId INT,
-	@skuId INT,
+	@productId INT,
 	@subscriptionName NVARCHAR(50),
 	@userId INT,
 	@managerProductRoleId INT,
@@ -8,15 +8,15 @@
 AS
 BEGIN
 	SET NOCOUNT ON;
-
+    
 	--Create the new subscription
 	INSERT INTO [Billing].[Subscription]
 		([OrganizationId],
-		[SkuId],
+		[ProductId],
 		[SubscriptionName])
 	VALUES
 		(@organizationId,
-		@skuId,
+		@productId,
 		@subscriptionName);
 
 	DECLARE @subscriptionId INT = SCOPE_IDENTITY();

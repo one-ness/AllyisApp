@@ -183,13 +183,11 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// get the list of subscriptions for the given organization
 		/// </summary>
-		public async Task<List<SubscriptionDBEntity>> GetSubscriptionsAsync(int organizationId)
+		public async Task<List<SubscriptionDBEntity>> GetSubscriptionsAsync(int orgId, int subStatus = 0)
 		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", organizationId);
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return (await con.QueryAsync<SubscriptionDBEntity>("[Billing].[GetSubscriptions] @a", new { a = organizationId })).ToList();
+				return (await con.QueryAsync<SubscriptionDBEntity>("[Billing].[GetSubscriptions] @a, @b", new { a = orgId, b = subStatus })).ToList();
 			}
 		}
 
@@ -289,33 +287,6 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return await connection.QuerySingleAsync<int>("[Billing].[CreateSubscription]", parameters, commandType: CommandType.StoredProcedure);
-			}
-		}
-
-		/// <summary>
-		/// Executes [Billing].[GetSkuById].
-		/// </summary>
-		/// <param name="skuId">Sets SkuId.</param>
-		/// <returns>SkuDBEntity obj.</returns>
-		public SkuDBEntity GetSkuDetails(int skuId)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@skuId", skuId);
-			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
-			{
-				// default empty object
-				return connection.Query<SkuDBEntity>("[Billing].[GetSkuById]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
-			}
-		}
-
-		/// <summary>
-		/// get all skus in the system
-		/// </summary>
-		public List<SkuDBEntity> GetAllSkus()
-		{
-			using (var con = new SqlConnection(SqlConnectionString))
-			{
-				return con.Query<SkuDBEntity>("Billing.GetAllSkus").ToList();
 			}
 		}
 
@@ -600,51 +571,6 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return await connection.QueryAsync<BillingHistoryItemDBEntity>("[Billing].[GetBillingHistoryByOrg]", parameters, commandType: CommandType.StoredProcedure);
-			}
-		}
-
-		/// <summary>
-		/// Returns a ProductDBEntity for the product that the given SKU belongs to, a SubscriptionDBEntity for the given org's
-		/// subscription to that product (or null if none), a list of SkuDBEntities for all the skus for
-		/// that product, the Stripe billing token for the given org (or null if none), and the total
-		/// number of users in the org with roles in the subscription for the product.
-		/// </summary>
-		/// <param name="orgId">Organization Id.</param>
-		/// <param name="skuId">Product Id.</param>
-		/// <returns>.</returns>
-		public Tuple<ProductDBEntity, SubscriptionDBEntity, List<SkuDBEntity>, string, int> GetProductSubscriptionInfo(int orgId, int skuId)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@orgId", orgId);
-			parameters.Add("@skuId", skuId);
-			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
-			{
-				var results = connection.QueryMultiple(
-					"[Billing].[GetProductSubscriptionInfo]",
-					parameters,
-					commandType: CommandType.StoredProcedure);
-				return Tuple.Create(
-					results.Read<ProductDBEntity>().SingleOrDefault(),
-					results.Read<SubscriptionDBEntity>().SingleOrDefault(),
-					results.Read<SkuDBEntity>().ToList(),
-					results.Read<string>().SingleOrDefault(),
-					results.Read<int>().SingleOrDefault());
-			}
-		}
-
-		/// <summary>
-		/// Returns a list of active products and each product's active skus.
-		/// </summary>
-		public Tuple<List<ProductDBEntity>, List<SkuDBEntity>> GetAllActiveProductsAndSkus()
-		{
-			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
-			{
-				var results = connection.QueryMultiple(
-					"[Billing].[GetAllActiveProductsAndSkus]",
-					commandType: CommandType.StoredProcedure);
-				return Tuple.Create(
-					results.Read<ProductDBEntity>().ToList(),
-					results.Read<SkuDBEntity>().ToList());
 			}
 		}
 	}

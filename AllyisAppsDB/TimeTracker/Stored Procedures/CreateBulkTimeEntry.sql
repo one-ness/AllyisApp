@@ -16,7 +16,7 @@ BEGIN
 		FROM [Billing].[Subscription] WITH (NOLOCK) 
 		WHERE [OrganizationId] = @organizationId 
 			--AND [IsActive] = 1
-			AND [SkuId] IN (SELECT [SkuId] FROM #SKUIDs));
+			AND ProductId = @tTProductId);
 	SELECT [UserId], 
 			@date AS [Date],
 			@duration AS [Duration], 

@@ -51,35 +51,19 @@ namespace AllyisApps.Controllers.Auth
 					return RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id });
 				}
 
-				// is it a sku of this product?
-				if (!CacheContainer.SkusCache.TryGetValue(pid, out var skus)) continue;
-				Sku sku = skus.FirstOrDefault(x => x.IsActive && x.SkuId == skuId);
-				if (sku == null) continue;
-
 				// yes, user is subscribing to another sku of an existing subscription (i.e., product)
 				model.IsChanging = true;
 				model.OrganizationId = id;
 				model.ProductName = subscription.ProductName;
-				model.SkuDescription = sku.SkuDescription;
-				model.SkuIconUrl = sku.IconUrl;
-				model.SkuName = sku.SkuName;
 				model.SubscriptionName = subscription.SubscriptionName;
 
 				// show the view
 				return View(model);
 			}
 
-			// reached here indicates user is subscribing to a new product with a new sku
-			var selectedSku = CacheContainer.AllSkusCache.Values.FirstOrDefault(x => x.IsActive && x.SkuId == skuId);
-			if (selectedSku == null)
-			{
-				// inactive or invalid sku
-				Notifications.Add(new BootstrapAlert("You selected an invalid sku to subscribe to.", Variety.Danger));
-				return RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id });
-			}
-
 			// get product for the sku
-			if (!CacheContainer.ProductsCache.TryGetValue(selectedSku.ProductId, out Product selectedProduct) || !selectedProduct.IsActive)
+			ProductIdEnum temp = ProductIdEnum.TimeTracker;
+			if (!CacheContainer.ProductsCache.TryGetValue(temp, out Product selectedProduct) || !selectedProduct.IsActive)
 			{
 				// inactive or invalid product
 				Notifications.Add(new BootstrapAlert("You selected an invalid product to subscribe to.", Variety.Danger));
@@ -89,9 +73,6 @@ namespace AllyisApps.Controllers.Auth
 			// fill model
 			model.OrganizationId = id;
 			model.ProductName = selectedProduct.ProductName;
-			model.SkuDescription = selectedSku.SkuDescription;
-			model.SkuIconUrl = selectedSku.IconUrl;
-			model.SkuName = selectedSku.SkuName;
 			return View(model);
 		}
 

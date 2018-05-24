@@ -122,7 +122,6 @@
     <Build Include="Auth\Tables\Logging.sql" />
     <Build Include="Auth\Tables\Organization.sql" />
     <Build Include="Auth\Tables\OrganizationUser.sql" />
-    <Build Include="Auth\Tables\OrganizationRole.sql" />
     <Build Include="Auth\Tables\ProductRole.sql" />
     <Build Include="Auth\Tables\AppUser.sql" />
     <Build Include="Security\aaUser.sql" />
@@ -168,7 +167,6 @@
     <Build Include="Billing\Stored Procedures\DeleteCustomerSubscription.sql" />
     <Build Include="Billing\Stored Procedures\DeactivateSubscription.sql" />
     <Build Include="Billing\Stored Procedures\DeleteSubscriptionUser.sql" />
-    <Build Include="Billing\Stored Procedures\GetOrgSkus.sql" />
     <Build Include="Billing\Stored Procedures\GetProductAreaBySubscription.sql" />
     <Build Include="Billing\Stored Procedures\GetProductById.sql" />
     <Build Include="Billing\Stored Procedures\GetProductIdByName.sql" />
@@ -226,7 +224,6 @@
     <None Include="TestData\TestData.sql" />
     <None Include="TestData\TimeTracker.Settings.Table.sql" />
     <None Include="TestData\TimeTracker.TimeEntry.Table.sql" />
-    <Build Include="Billing\Stored Procedures\GetAllActiveProductsAndSkus.sql" />
     <Build Include="Auth\Stored Procedures\UpdateMember.sql" />
     <Build Include="Finance\Tables\Account.sql" />
     <Build Include="Finance\Tables\AccountType.sql" />
@@ -383,8 +380,6 @@
     <Build Include="Auth\Stored Procedures\GetProductRoles.sql" />
     <Build Include="Billing\Stored Procedures\UpdateSubscriptionName.sql" />
     <Build Include="Lookup\Stored Procedures\GetAllStates.sql" />
-    <Build Include="Billing\Stored Procedures\GetAllSkus.sql" />
-    <Build Include="Billing\Stored Procedures\UpdateSubscriptionSkuAndName.sql" />
     <Build Include="TimeTracker\Stored Procedures\UpdateLockDate.sql" />
     <Build Include="TimeTracker\Stored Procedures\UpdatePayrollProcessedDate.sql" />
     <Build Include="Auth\Stored Procedures\UpdateEmployeeIdAndOrgRole.sql" />

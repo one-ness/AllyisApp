@@ -31,22 +31,17 @@ namespace AllyisApps.Services
 			var entities = await this.DBHelper.GetActiveSubscriptionsByIdsAsync(ids);
 			foreach (var item in entities)
 			{
-				var sku = CacheContainer.AllSkusCache[(SkuIdEnum)item.SkuId];
-				var product = CacheContainer.ProductsCache[sku.ProductId];
+				var product = CacheContainer.ProductsCache[(ProductIdEnum)item.ProductId];
 				var obj = new Subscription();
 				obj.CreatedUtc = item.SubscriptionCreatedUtc;
 				obj.IsActive = item.IsActive;
-				obj.NumberOfUsers = item.NumberOfUsers;
+				obj.NumberOfUsers = item.UserCount;
 				obj.OrganizationId = item.OrganizationId;
 				obj.ProductAreaUrl = product.AreaUrl;
 				obj.ProductDescription = product.ProductDescription;
 				obj.ProductId = product.ProductId;
 				obj.ProductName = product.ProductName;
 				obj.PromoExpirationDateUtc = item.PromoExpirationDateUtc;
-				obj.SkuDescription = sku.SkuDescription;
-				obj.SkuIconUrl = sku.IconUrl;
-				obj.SkuId = sku.SkuId;
-				obj.SkuName = sku.SkuName;
 				obj.SubscriptionId = item.SubscriptionId;
 				obj.SubscriptionName = item.SubscriptionName;
 				result.Add(obj.SubscriptionId, obj);
@@ -575,35 +570,17 @@ namespace AllyisApps.Services
 					throw new InvalidOperationException("You selected an invalid product to subscribe to.");
 				}
 
-				// is it a sku of this product?
-				if (!CacheContainer.SkusCache.TryGetValue(pid, out var skus)) continue;
-				Sku sku = skus.FirstOrDefault(x => x.IsActive && x.SkuId == skuId);
-				if (sku == null) continue;
-
 				// yes, user is subscribing to another sku of an existing subscription (i.e., product)
 				UpdateSubscriptionSkuAndName(organizationId, subscription.SubscriptionId, subscriptionName, skuId);
 				return subscription.SubscriptionId;
 			}
 
-			// reached here indicates user is subscribing to a new product with a new sku
-			Sku selectedSku = CacheContainer.AllSkusCache.Values.FirstOrDefault(x => x.IsActive && x.SkuId == skuId);
-			if (selectedSku == null)
-			{
-				// inactive or invalid sku id
-				throw new InvalidOperationException("You selected an invalid sku to subscribe to.");
-			}
-
-			// get product for the sku
-			if (!CacheContainer.ProductsCache.TryGetValue(selectedSku.ProductId, out Product selectedProduct) || !selectedProduct.IsActive)
-			{
-				// inactive or invalid product
-				throw new InvalidOperationException("You selected an invalid product to subscribe to.");
-			}
-
 			// set the creating user as highest level, and all other users as unassigned
 			int managerProductRoleId;
 			int unassignedProductRoleId;
-			switch (selectedSku.ProductId)
+			// TODO: completely rewrite subscription
+			ProductIdEnum temp = ProductIdEnum.TimeTracker;
+			switch (temp)
 			{
 				case ProductIdEnum.ExpenseTracker:
 					managerProductRoleId = (int)ExpenseTrackerRole.Manager;
@@ -629,7 +606,8 @@ namespace AllyisApps.Services
 			int subId = await DBHelper.CreateSubscription(organizationId, (int)skuId, subscriptionName, UserContext.UserId, managerProductRoleId, unassignedProductRoleId);
 
 			// initialize default settings
-			await MergeDefaultSettingsForProduct(selectedSku.ProductId, organizationId, subId);
+			// TODO: replace temp
+			await MergeDefaultSettingsForProduct(temp, organizationId, subId);
 			return subId;
 		}
 
@@ -815,39 +793,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Returns a Product for the given product, a SubscriptionInfo for the current org's
-		/// subscription to that product (or null if none), a list of SkuInfos for all the skus for
-		/// that product, the Stripe billing token for the current org (or null if none), and the total
-		/// number of users in the org with roles in the subscription for the product.
-		/// </summary>
-		/// <param name="orgId">.</param>
-		/// <param name="skuId">Product Id.</param>
-		/// <returns>.</returns>
-		public ProductSubscription GetProductSubscriptionInfo(int orgId, SkuIdEnum skuId)
-		{
-			if (skuId <= 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(skuId), "SKU Id cannot be 0 or negative.");
-			}
-			var spResults = DBHelper.GetProductSubscriptionInfo(orgId, (int)skuId);
-			var product = InitializeProduct(spResults.Item1);
-			//product.Skus = spResults.Item3.Select(sdb => InitializeSkuInfo(sdb)).ToList();
-
-			var subscription = InitializeSubscription(spResults.Item2);
-			if (subscription != null)
-			{
-				subscription.NumberOfUsers = spResults.Item5;
-			}
-			return new ProductSubscription(
-				product,
-				InitializeSubscription(spResults.Item2),
-				spResults.Item3.Select(InitializeSkuInfo).ToList(),
-				spResults.Item4,
-				spResults.Item5
-			);
-		}
-
-		/// <summary>
 		/// Returns a list of active products and each product's active skus.
 		/// </summary>
 		public List<Product> GetAllActiveProductsAndSkus()
@@ -911,35 +856,10 @@ namespace AllyisApps.Services
 				CreatedUtc = subscription.SubscriptionCreatedUtc,
 				IsActive = subscription.IsActive,
 				SubscriptionName = subscription.SubscriptionName,
-				NumberOfUsers = subscription.NumberOfUsers,
+				NumberOfUsers = subscription.UserCount,
 				OrganizationId = subscription.OrganizationId,
-				SkuId = (SkuIdEnum)subscription.SkuId,
+				SkuId = (SkuIdEnum)subscription.ProductId,
 				SubscriptionId = subscription.SubscriptionId
-			};
-		}
-
-		/// <summary>
-		/// Translates a <see cref="SkuDBEntity"/> into a <see cref="SkuInfo"/>.
-		/// </summary>
-		/// <param name="sku">SkuDBEntity instance.</param>
-		/// <returns>SkuInfo instance.</returns>
-		public static SkuInfo InitializeSkuInfo(SkuDBEntity sku)
-		{
-			if (sku == null)
-			{
-				return null;
-			}
-
-			return new SkuInfo
-			{
-				BillingFrequency = (BillingFrequencyEnum)sku.BillingFrequency,
-				SkuName = sku.SkuName,
-				Price = sku.CostPerBlock,
-				ProductId = (ProductIdEnum)sku.ProductId,
-				SkuId = (SkuIdEnum)sku.SkuId,
-				UserLimit = sku.UserLimit,
-				Description = sku.Description,
-				IconUrl = sku.IconUrl
 			};
 		}
 

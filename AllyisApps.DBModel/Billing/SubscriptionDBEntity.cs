@@ -26,12 +26,17 @@ namespace AllyisApps.DBModel.Billing
 		/// <summary>
 		/// Gets or sets SkuId.
 		/// </summary>
-		public int SkuId { get; set; }
+		public int ProductId { get; set; }
 
 		/// <summary>
 		/// Gets or sets number of users.
 		/// </summary>
-		public int NumberOfUsers { get; set; }
+		public int UserCount { get; set; }
+
+		/// <summary>
+		/// Gets or sets the subscription status
+		/// </summary>
+		public int SubscriptionStatus { get; set; }
 
 		/// <summary>
 		/// Gets or sets CreatedDate.

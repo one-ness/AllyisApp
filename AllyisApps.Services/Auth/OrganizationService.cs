@@ -75,8 +75,29 @@ namespace AllyisApps.Services
 			// add the user to organization
 			await this.DBHelper.CreateOrganizationUser(orgId, userId, (int)orgRole, employeeId, employeeTypeId, approvalLimit);
 
-			// get all subscriptions of the organization
-			var subs = await this.DBHelper.GetSubscriptionsAsync(orgId);
+			// get all active subscriptions of the organization
+			var subs = await this.DBHelper.GetSubscriptionsAsync(orgId, (int)SubscriptionStatusEnum.Active);
+
+			// add to given subscription with given roles
+			var subroles = new Dictionary<int, int>();
+			if (subscriptionRoles != null)
+			{
+				foreach (var item in subs)
+				{
+					int subid = 0;
+					if (subscriptionRoles.TryGetValue(item.SubscriptionId, out subid))
+					{
+						// TODO: for now, we assume the role provided is a valid role for that product.
+						// we may have to validate in the future
+						subroles.Add(item.SubscriptionId, subscriptionRoles[item.SubscriptionId]);
+					}
+					else
+					{
+						// org's subscription not found in the supplied list
+						subroles.Add(item.SubscriptionId, ProductRole.NotInProduct);
+					}
+				}
+			}
 		}
 
 		/// <summary>

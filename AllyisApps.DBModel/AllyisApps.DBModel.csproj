@@ -95,7 +95,6 @@
     </Compile>
     <Compile Include="Auth\OrganizationDBEntity.cs" />
     <Compile Include="Auth\UserDBEntity.cs" />
-    <Compile Include="Billing\SkuDBEntity.cs" />
     <Compile Include="Lookup\LanguageDBEntity.cs" />
     <Compile Include="Hrm\HolidayDBEntity.cs" />
     <Compile Include="Staffing\ApplicantDBEntity.cs" />

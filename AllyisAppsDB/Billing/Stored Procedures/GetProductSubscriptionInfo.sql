@@ -1,16 +1,9 @@
 ﻿CREATE PROCEDURE [Billing].[GetProductSubscriptionInfo]
-	@skuId INT,
+	@productId int,
 	@orgId INT
 AS
 	SET NOCOUNT ON;
-	DECLARE @productId INT;
 	DECLARE @subscriptionId INT;
-
-SELECT @productId = [Product].[ProductId]
-FROM [Billing].[Product] 
-	  LEFT JOIN [Billing].[Sku] WITH (NOLOCK) 
-	  ON [Product].ProductId = [Sku].ProductId	  
-	  WHERE [Sku].SkuId = @skuId
 
 SELECT 
 	[Product].[ProductName], 
@@ -23,11 +16,10 @@ SELECT
 	SELECT
 		@subscriptionId = [SubscriptionId]
 	FROM [Billing].[Subscription] WITH (NOLOCK) 
-	WHERE [OrganizationId] = @orgId AND [Subscription].[SkuId] = @skuId --AND [Subscription].[IsActive] = 1
+	WHERE [OrganizationId] = @orgId AND [Subscription].[ProductId] = @productId --AND [Subscription].[IsActive] = 1
 
 	SELECT
 		[SubscriptionId],
-		[SkuId],
 		[UserCount],
 		[SubscriptionCreatedUtc],
 		[OrganizationId]

@@ -16,16 +16,6 @@ namespace AllyisApps.Services.Cache
 		public static Dictionary<ProductIdEnum, Product> ProductsCache { get; private set; }
 
 		/// <summary>
-		/// dictionary of all skus, indexed by product id
-		/// </summary>
-		public static Dictionary<ProductIdEnum, List<Sku>> SkusCache { get; private set; }
-
-		/// <summary>
-		/// dictionary of all skus in the system, indexed by sku id
-		/// </summary>
-		public static Dictionary<SkuIdEnum, Sku> AllSkusCache { get; private set; }
-
-		/// <summary>
 		/// dictionary of all langugages, indexed by culture name
 		/// </summary>
 		public static Dictionary<string, Language> LanguagesCache { get; set; }
@@ -113,47 +103,6 @@ namespace AllyisApps.Services.Cache
 				LanguagesCache.Add(lang.CultureName, lang);
 			}
 
-			// init skus
-			SkusCache = new Dictionary<ProductIdEnum, List<Sku>>();
-			AllSkusCache = new Dictionary<SkuIdEnum, Sku>();
-			var skuEntities = DBHelper.GetAllSkus();
-			foreach (var item in skuEntities)
-			{
-				var sku = new Sku();
-				sku.BillingFrequency = (BillingFrequencyEnum)item.BillingFrequency;
-				sku.UnitSize = item.BlockSize;
-				sku.CostPerUnit = item.CostPerBlock;
-				sku.IconUrl = item.IconUrl;
-				sku.IsActive = item.IsActive;
-				sku.ProductId = (ProductIdEnum)item.ProductId;
-				sku.PromotionalCostPerUnit = item.PromoCostPerBlock;
-				// TODO: need to convert promotion deadline in the database to promotion duration days
-				sku.PromotionDurationDays = 0;
-				sku.SkuDescription = item.Description;
-				sku.SkuId = (SkuIdEnum)item.SkuId;
-				sku.SkuName = item.SkuName;
-				sku.UnitSize = item.BlockSize;
-				sku.UnitType = (UnitTypeEnum)item.BlockBasedOn;
-				sku.UserLimit = item.UserLimit;
-				List<Sku> list = null;
-				// was it added to cache?
-				if (SkusCache.TryGetValue(sku.ProductId, out list))
-				{
-					// yes
-					list.Add(sku);
-				}
-				else
-				{
-					// no
-					list = new List<Sku>();
-					list.Add(sku);
-					SkusCache.Add(sku.ProductId, list);
-				}
-
-				// add to all skus cache as well
-				AllSkusCache.Add(sku.SkuId, sku);
-			}
-
 			// init products
 			ProductsCache = new Dictionary<ProductIdEnum, Product>();
 			var prodEntities = DBHelper.GetProductList();
@@ -165,12 +114,6 @@ namespace AllyisApps.Services.Cache
 				prod.ProductDescription = item.Description;
 				prod.ProductId = (ProductIdEnum)item.ProductId;
 				prod.ProductName = item.ProductName;
-				List<Sku> skus = null;
-				if (SkusCache.TryGetValue(prod.ProductId, out skus))
-				{
-					prod.Skus = skus;
-				}
-
 				ProductsCache.Add(prod.ProductId, prod);
 			}
 		}
