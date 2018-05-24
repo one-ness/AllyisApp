@@ -70,12 +70,12 @@ namespace AllyisApps.Services
 		/// add user to organization
 		/// TODO: wrap the calls in a transaction
 		/// </summary>
-		public async Task AddUserToOrganization(int orgId, int userId, string employeeId, int employeeTypeId, OrganizationRoleEnum orgRole = OrganizationRoleEnum.Member, decimal approvalLimit = 0)
+		public async Task AddUserToOrganization(int orgId, int userId, string employeeId, int employeeTypeId, OrganizationRoleEnum orgRole = OrganizationRoleEnum.Member, decimal approvalLimit = 0, Dictionary<int, int> subscriptionRoles = null)
 		{
 			// add the user to organization
 			await this.DBHelper.CreateOrganizationUser(orgId, userId, (int)orgRole, employeeId, employeeTypeId, approvalLimit);
 
-			// get all subscriptions of the organization, and add this user to all subscriptions with no role
+			// get all subscriptions of the organization
 			await this.DBHelper.GetSubscriptionsAsync(orgId);
 		}
 
