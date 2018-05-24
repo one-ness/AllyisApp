@@ -1,9 +1,10 @@
 ﻿CREATE PROCEDURE [Auth].[CreateOrganizationUser]
-	@userId INT,
 	@organizationId INT,
+	@userId INT,
 	@roleId INT,
+	@employeeId NVARCHAR(128),
 	@employeeTypeId INT,
-	@employeeId NVARCHAR(128) = NULL
+	@approvalLimit decimal = 0
 AS
 BEGIN
 
@@ -21,20 +22,5 @@ BEGIN
 		@roleId,
 		@employeeTypeId,
 		@employeeId,
-		0);
-	Declare @subs Table (SubscriptionId INT)
-	/*Unassigned for all subscription in organizaion*/
-
-	Insert Into @subs(SubscriptionId)
-	SELECT SubscriptionId from
-		[Billing].[Subscription]
-	where 
-		Subscription.OrganizationId = @organizationId
-	;
-
-	Insert Into [Billing].[SubscriptionUser]([ProductRoleId],[SubscriptionId],[UserId]) 
-	SELECT 0, SubscriptionId,@userId 
-	FROM [Billing].[Subscription] 
-	where Subscription.OrganizationId = @organizationId
-
+		@approvalLimit);
 END

@@ -445,6 +445,17 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// create org user
+		/// </summary>
+		public async Task CreateOrganizationUser(int orgId, int userId, int roleId, string employeeId, int employeeTypeId, decimal approvalLimit)
+		{
+			using (var con = new SqlConnection(SqlConnectionString))
+			{
+				await con.ExecuteAsync("[Auth].[CreateOrganizationUser] @p1, @p2, @p3, @p4, @p5, @p6", new { p1 = orgId, p2 = userId, p3 = roleId, p4 = employeeId, p5 = employeeTypeId, p6 = approvalLimit });
+			}
+		}
+
+		/// <summary>
 		/// Updates an organization member's info.
 		/// </summary>
 		public async Task<int> UpdateMember(int userId, int orgId, string employeeId, int roleId, string firstName, string lastName, bool isInvited)

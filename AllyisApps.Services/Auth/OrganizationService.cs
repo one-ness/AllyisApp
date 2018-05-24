@@ -61,12 +61,22 @@ namespace AllyisApps.Services
 			await this.DBHelper.AddOrgPayClassesToEmployeeType(orgId, etid);
 
 			// create organization user with that employee type id, employee id and role id
+			await this.AddUserToOrganization(orgId, this.UserContext.UserId, employeeId, etid, OrganizationRoleEnum.Owner);
 
-			// get all subscriptions of the organization and add the user to those subscriptions as unassigned
+			return orgId;
+		}
 
-			var results = await DBHelper.SetupOrganization(UserContext.UserId, (int)OrganizationRoleEnum.Owner, employeeId, organizationName, phoneNumber, faxNumber, siteUrl, subDomainName, address1, city, stateId, postalCode, countryCode);
+		/// <summary>
+		/// add user to organization
+		/// TODO: wrap the calls in a transaction
+		/// </summary>
+		public async Task AddUserToOrganization(int orgId, int userId, string employeeId, int employeeTypeId, OrganizationRoleEnum orgRole = OrganizationRoleEnum.Member, decimal approvalLimit = 0)
+		{
+			// add the user to organization
+			await this.DBHelper.CreateOrganizationUser(orgId, userId, (int)orgRole, employeeId, employeeTypeId, approvalLimit);
 
-			return results;
+			// get all subscriptions of the organization, and add this user to all subscriptions with no role
+			await this.DBHelper.GetSubscriptionsAsync(orgId);
 		}
 
 		/// <summary>
