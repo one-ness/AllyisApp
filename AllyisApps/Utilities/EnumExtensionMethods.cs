@@ -376,7 +376,7 @@ namespace AllyisApps.Services.Auth
 					name = Strings.Member;
 					break;
 
-				case OrganizationRoleEnum.Owner:
+				case OrganizationRoleEnum.Admin:
 					name = Strings.Owner;
 					break;
 			}
@@ -394,7 +394,7 @@ namespace AllyisApps.Services.Auth
 			string name = "";
 			switch (value)
 			{
-				case StaffingManagerRole.Manager:
+				case StaffingManagerRole.Admin:
 					name = Strings.Manager;
 					break;
 
@@ -420,7 +420,7 @@ namespace AllyisApps.Services.Auth
 			string name = "";
 			switch (value)
 			{
-				case TimeTrackerRole.Manager:
+				case TimeTrackerRole.Admin:
 					name = Strings.Manager;
 					break;
 
@@ -454,7 +454,7 @@ namespace AllyisApps.Services.Auth
 					name = Strings.Unassigned;
 					break;
 
-				case ExpenseTrackerRole.SuperUser:
+				case ExpenseTrackerRole.Admin:
 					name = Strings.SuperUser;
 					break;
 

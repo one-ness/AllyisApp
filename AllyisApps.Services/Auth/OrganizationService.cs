@@ -61,7 +61,7 @@ namespace AllyisApps.Services
 			await this.DBHelper.AddOrgPayClassesToEmployeeType(orgId, etid);
 
 			// create organization user with that employee type id, employee id and role id
-			await this.AddUserToOrganization(orgId, this.UserContext.UserId, employeeId, etid, OrganizationRoleEnum.Owner);
+			await this.AddUserToOrganization(orgId, this.UserContext.UserId, employeeId, etid, OrganizationRoleEnum.Admin);
 
 			return orgId;
 		}
@@ -93,10 +93,24 @@ namespace AllyisApps.Services
 					}
 					else
 					{
-						// org's subscription not found in the supplied list
+						// org's subscription not found in the supplied list, hence add the user to this subscription with not in product role
 						subroles.Add(item.SubscriptionId, ProductRole.NotInProduct);
 					}
 				}
+			}
+			else
+			{
+				// no subcription and roles supplied, hence add the user to all the subscriptions with not in product role
+				foreach (var item in subs)
+				{
+					subroles.Add(item.SubscriptionId, ProductRole.NotInProduct);
+				}
+			}
+
+			// update the db
+			foreach (var item in subroles)
+			{
+				await this.DBHelper.CreateSubscriptionUserAsync(item.Key, this.UserContext.UserId, item.Value);
 			}
 		}
 

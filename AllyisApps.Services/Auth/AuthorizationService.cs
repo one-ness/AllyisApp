@@ -117,7 +117,7 @@ namespace AllyisApps.Services
 			{
 				switch (orgInfo.OrganizationRole)
 				{
-					case OrganizationRoleEnum.Owner:
+					case OrganizationRoleEnum.Admin:
 						result = true;
 						break;
 
@@ -214,7 +214,7 @@ namespace AllyisApps.Services
 					case TimeTrackerAction.TimeEntry:
 						switch (ttRole)
 						{
-							case TimeTrackerRole.Manager:
+							case TimeTrackerRole.Admin:
 							case TimeTrackerRole.User:
 								result = true;
 								break;
@@ -224,7 +224,7 @@ namespace AllyisApps.Services
 					default:
 						switch (ttRole)
 						{
-							case TimeTrackerRole.Manager:
+							case TimeTrackerRole.Admin:
 								result = true;
 								break;
 						}
@@ -278,7 +278,7 @@ namespace AllyisApps.Services
 								result = true;
 								break;
 
-							case ExpenseTrackerRole.SuperUser:
+							case ExpenseTrackerRole.Admin:
 								result = true;
 								break;
 						}

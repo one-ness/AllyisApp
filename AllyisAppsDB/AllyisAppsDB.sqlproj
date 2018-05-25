@@ -208,7 +208,6 @@
     <None Include="DefaultData\CountryStates.sql" />
     <None Include="DefaultData\Languages.sql" />
     <None Include="DefaultData\Products.sql" />
-    <None Include="DefaultData\Sku.sql" />
     <None Include="TestData\Auth.Organization.Table.sql" />
     <None Include="TestData\Auth.OrganizationUser.Table.sql" />
     <None Include="TestData\Auth.User.Table.sql" />

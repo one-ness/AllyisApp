@@ -68,7 +68,7 @@ namespace AllyisApps.Controllers.Auth
 					new List<SelectListItem>
 					{
 						new SelectListItem { Text = OrganizationRoleEnum.Member.GetEnumName(), Value = ((int)OrganizationRoleEnum.Member).ToString()},
-						new SelectListItem { Text = OrganizationRoleEnum.Owner.GetEnumName(), Value = ((int)OrganizationRoleEnum.Member).ToString()}
+						new SelectListItem { Text = OrganizationRoleEnum.Admin.GetEnumName(), Value = ((int)OrganizationRoleEnum.Member).ToString()}
 					},
 					"Value",
 					"Text",
@@ -105,7 +105,7 @@ namespace AllyisApps.Controllers.Auth
 					new List<SelectListItem>
 					{
 						new SelectListItem { Text = OrganizationRoleEnum.Member.GetEnumName(), Value = ((int)OrganizationRoleEnum.Member).ToString()},
-						new SelectListItem { Text = OrganizationRoleEnum.Owner.GetEnumName(), Value = ((int)OrganizationRoleEnum.Member).ToString()}
+						new SelectListItem { Text = OrganizationRoleEnum.Admin.GetEnumName(), Value = ((int)OrganizationRoleEnum.Member).ToString()}
 					},
 					"Value",
 					"Text",
@@ -122,7 +122,7 @@ namespace AllyisApps.Controllers.Auth
 					{
 						new SelectListItem { Text = TimeTrackerRole.NotInProduct.GetEnumName(), Value = ((int)TimeTrackerRole.NotInProduct).ToString() },
 						new SelectListItem { Text = TimeTrackerRole.User.GetEnumName(), Value = ((int)TimeTrackerRole.User).ToString()},
-						new SelectListItem { Text = TimeTrackerRole.Manager.GetEnumName(), Value = ((int)TimeTrackerRole.Manager).ToString()}
+						new SelectListItem { Text = TimeTrackerRole.Admin.GetEnumName(), Value = ((int)TimeTrackerRole.Admin).ToString()}
 					};
 
 				case SkuIdEnum.ExpenseTrackerBasic:
@@ -131,7 +131,7 @@ namespace AllyisApps.Controllers.Auth
 						new SelectListItem { Text = ExpenseTrackerRole.NotInProduct.GetEnumName(), Value = ((int)ExpenseTrackerRole.NotInProduct).ToString()},
 						new SelectListItem { Text = ExpenseTrackerRole.User.GetEnumName(), Value = ((int)ExpenseTrackerRole.User).ToString()},
 						new SelectListItem { Text = ExpenseTrackerRole.Manager.GetEnumName(), Value = ((int)ExpenseTrackerRole.Manager).ToString()},
-						new SelectListItem { Text = ExpenseTrackerRole.SuperUser.GetEnumName(), Value = ((int)ExpenseTrackerRole.SuperUser).ToString()},
+						new SelectListItem { Text = ExpenseTrackerRole.Admin.GetEnumName(), Value = ((int)ExpenseTrackerRole.Admin).ToString()},
 					};
 
 				case SkuIdEnum.StaffingManagerBasic:
@@ -139,7 +139,7 @@ namespace AllyisApps.Controllers.Auth
 					{
 						new SelectListItem { Text = StaffingManagerRole.NotInProduct.GetEnumName(), Value = ((int)StaffingManagerRole.NotInProduct).ToString()},
 						new SelectListItem { Text = StaffingManagerRole.User.GetEnumName(), Value = ((int)StaffingManagerRole.User).ToString()},
-						new SelectListItem { Text = StaffingManagerRole.Manager.GetEnumName(), Value = ((int)StaffingManagerRole.Manager).ToString()}
+						new SelectListItem { Text = StaffingManagerRole.Admin.GetEnumName(), Value = ((int)StaffingManagerRole.Admin).ToString()}
 					};
 			}
 			return null;
@@ -182,7 +182,7 @@ namespace AllyisApps.Controllers.Auth
 					model.LastName,
 					model.OrganizationId,
 					orgName,
-					model.OrgRoleSelection == 2 ? OrganizationRoleEnum.Owner : OrganizationRoleEnum.Member,
+					model.OrgRoleSelection == 2 ? OrganizationRoleEnum.Admin : OrganizationRoleEnum.Member,
 					model.EmployeeId,
 					jsonString,
 					model.EmployeeTypeId

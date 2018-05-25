@@ -92,7 +92,7 @@ namespace AllyisApps.ViewModels
 		{
 			var result = new Dictionary<int, string>();
 			result.Add((int)OrganizationRoleEnum.Member, Resources.Strings.Member);
-			result.Add((int)OrganizationRoleEnum.Owner, Resources.Strings.Owner);
+			result.Add((int)OrganizationRoleEnum.Admin, Resources.Strings.Owner);
 			return result;
 		}
 
@@ -104,7 +104,7 @@ namespace AllyisApps.ViewModels
 			var result = new Dictionary<int, string>();
 			result.Add((int)TimeTrackerRole.NotInProduct, Resources.Strings.Unassigned);
 			result.Add((int)TimeTrackerRole.User, Resources.Strings.User);
-			result.Add((int)TimeTrackerRole.Manager, Resources.Strings.Manager);
+			result.Add((int)TimeTrackerRole.Admin, Resources.Strings.Manager);
 			return result;
 		}
 
@@ -117,7 +117,7 @@ namespace AllyisApps.ViewModels
 			result.Add((int)ExpenseTrackerRole.NotInProduct, Resources.Strings.Unassigned);
 			result.Add((int)ExpenseTrackerRole.User, Resources.Strings.User);
 			result.Add((int)ExpenseTrackerRole.Manager, Resources.Strings.Manager);
-			result.Add((int)ExpenseTrackerRole.SuperUser, Resources.Strings.SuperUser);
+			result.Add((int)ExpenseTrackerRole.Admin, Resources.Strings.SuperUser);
 			return result;
 		}
 
@@ -129,7 +129,7 @@ namespace AllyisApps.ViewModels
 			var result = new Dictionary<int, string>();
 			result.Add((int)StaffingManagerRole.NotInProduct, Resources.Strings.Unassigned);
 			result.Add((int)StaffingManagerRole.User, Resources.Strings.User);
-			result.Add((int)StaffingManagerRole.Manager, Resources.Strings.Manager);
+			result.Add((int)StaffingManagerRole.Admin, Resources.Strings.Manager);
 			return result;
 		}
 

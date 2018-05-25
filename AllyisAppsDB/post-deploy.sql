@@ -20,7 +20,6 @@ GO
 
 :r .\DefaultData\CountryStates.sql
 :r .\DefaultData\Products.sql
-:r .\DefaultData\Sku.sql
 :r .\DefaultData\Role.sql
 :r .\DefaultData\Languages.sql
 --:r .\TestData\TestData.sql

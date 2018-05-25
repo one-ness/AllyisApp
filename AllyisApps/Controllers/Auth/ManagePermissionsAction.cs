@@ -30,14 +30,14 @@ namespace AllyisApps.Controllers.Auth
 		private readonly Dictionary<int, string> organizationRoles = new Dictionary<int, string>
 		{
 			{ (int)OrganizationRoleEnum.Member, Strings.Member },
-			{ (int)OrganizationRoleEnum.Owner, Strings.Owner }
+			{ (int)OrganizationRoleEnum.Admin, Strings.Owner }
 		};
 
 		private readonly Dictionary<string, int> setOrganizationRoles = new Dictionary<string, int>
 		{
 			{ Strings.RemoveOrg, -1 },
 			{ Strings.SetMember, (int)OrganizationRoleEnum.Member },
-			{ Strings.SetOwner, (int)OrganizationRoleEnum.Owner }
+			{ Strings.SetOwner, (int)OrganizationRoleEnum.Admin }
 		};
 
 		private string GetPermissionsUrl(ProductIdEnum productId, int subscripitonId)

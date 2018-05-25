@@ -291,6 +291,17 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// add the given user to the given role int the given subscription
+		/// </summary>
+		public async Task CreateSubscriptionUserAsync(int subId, int userId, int productRoleId)
+		{
+			using (var con = new SqlConnection(SqlConnectionString))
+			{
+				await con.ExecuteAsync("[Billing].[CreateSubscriptionUser] @a, @b, @c", new { a = subId, b = userId, c = productRoleId });
+			}
+		}
+
+		/// <summary>
 		/// Adds an entry to the customer subscription table, and adds a billing history item.
 		/// </summary>
 		/// <param name="stripeTokenCustId">The id of the stripe customer.</param>

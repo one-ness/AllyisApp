@@ -12,14 +12,14 @@ namespace AllyisApps.Services.Auth
 	public enum OrganizationRoleEnum
 	{
 		/// <summary>
-		/// Organization member.
+		/// Organization admin (aka owner).
 		/// </summary>
-		Member = 1,
+		Admin = 1,
 
 		/// <summary>
-		/// Organization owner.
+		/// Organization member.
 		/// </summary>
-		Owner = 2
+		Member = 2
 	}
 
 	public enum StaffingManagerRole
@@ -30,14 +30,14 @@ namespace AllyisApps.Services.Auth
 		NotInProduct = 0,
 
 		/// <summary>
-		/// Staffing Manager User.
+		/// Staffing Manager admin.
 		/// </summary>
-		User = 1,
+		Admin = 1,
 
 		/// <summary>
-		/// Staffing Manager Manager.
+		/// Staffing Manager user.
 		/// </summary>
-		Manager = 2
+		User = 2
 	}
 
 	/// <summary>
@@ -51,14 +51,14 @@ namespace AllyisApps.Services.Auth
 		NotInProduct = 0,
 
 		/// <summary>
-		/// TimeTracker User.
+		/// TimeTracker admin.
 		/// </summary>
-		User = 1,
+		Admin = 1,
 
 		/// <summary>
-		/// TimeTracker Manager.
+		/// TimeTracker user.
 		/// </summary>
-		Manager = 2
+		User = 2
 	}
 
 	public enum ExpenseTrackerRole
@@ -69,9 +69,9 @@ namespace AllyisApps.Services.Auth
 		NotInProduct = 0,
 
 		/// <summary>
-		/// Expense Tracker User.
+		/// Expense Tracker admin.
 		/// </summary>
-		User = 1,
+		Admin = 1,
 
 		/// <summary>
 		/// Expense Tracker Manager.
@@ -79,8 +79,8 @@ namespace AllyisApps.Services.Auth
 		Manager = 2,
 
 		/// <summary>
-		/// Expense Tracker Admin.
+		/// Expense Tracker user.
 		/// </summary>
-		SuperUser = 3
+		User = 3
 	}
 }

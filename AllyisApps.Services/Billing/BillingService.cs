@@ -588,12 +588,12 @@ namespace AllyisApps.Services
 					break;
 
 				case ProductIdEnum.StaffingManager:
-					managerProductRoleId = (int)StaffingManagerRole.Manager;
+					managerProductRoleId = (int)StaffingManagerRole.Admin;
 					unassignedProductRoleId = (int)StaffingManagerRole.NotInProduct;
 					break;
 
 				case ProductIdEnum.TimeTracker:
-					managerProductRoleId = (int)TimeTrackerRole.Manager;
+					managerProductRoleId = (int)TimeTrackerRole.Admin;
 					unassignedProductRoleId = (int)TimeTrackerRole.NotInProduct;
 					break;
 

@@ -58,7 +58,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			int actualUserId = userId ?? AppService.UserContext.UserId;
 			int productRoleId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductRoleId;
-			bool isManager = productRoleId == (int)TimeTrackerRole.Manager;
+			bool isManager = productRoleId == (int)TimeTrackerRole.Admin;
 
 			ViewBag.GetDateTimeFromDays = new Func<int?, DateTime?>(Utility.GetNullableDateTimeFromDays);
 			ViewBag.SignedInUserID = AppService.UserContext.UserId;

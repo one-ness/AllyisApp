@@ -17,7 +17,7 @@ namespace AllyisApps.Controllers.Auth
 		private Dictionary<int, string> ttRoles = new Dictionary<int, string>
 		{
 			{ (int)TimeTrackerRole.User, Strings.User },
-			{ (int)TimeTrackerRole.Manager, Strings.Manager },
+			{ (int)TimeTrackerRole.Admin, Strings.Manager },
 			{ (int)TimeTrackerRole.NotInProduct, Strings.Unassigned }
 		};
 
@@ -25,14 +25,14 @@ namespace AllyisApps.Controllers.Auth
 		{
 			{ Strings.RemoveFromSubscription, -1 },
 			{ Strings.SetUser, (int)TimeTrackerRole.User },
-			{ Strings.SetManager, (int)TimeTrackerRole.Manager }
+			{ Strings.SetManager, (int)TimeTrackerRole.Admin }
 		};
 
 		private Dictionary<int, string> etRoles = new Dictionary<int, string>
 		{
 			{ (int)ExpenseTrackerRole.User, Strings.User },
 			{ (int)ExpenseTrackerRole.Manager, Strings.Manager },
-			{ (int)ExpenseTrackerRole.SuperUser, ExpenseTrackerRole.SuperUser.GetEnumName() },
+			{ (int)ExpenseTrackerRole.Admin, ExpenseTrackerRole.Admin.GetEnumName() },
 			{ (int)ExpenseTrackerRole.NotInProduct, Strings.Unassigned }
 		};
 
@@ -41,13 +41,13 @@ namespace AllyisApps.Controllers.Auth
 			{ Strings.RemoveFromSubscription, -1},
 			{ Strings.SetUser, (int)ExpenseTrackerRole.User },
 			{ Strings.SetManager, (int)ExpenseTrackerRole.Manager },
-			{ "Set Super User", (int)ExpenseTrackerRole.SuperUser }
+			{ "Set Super User", (int)ExpenseTrackerRole.Admin }
 		};
 
 		private Dictionary<int, string> smRoles = new Dictionary<int, string>
 		{
 			{ (int)StaffingManagerRole.User, Strings.User  },
-			{ (int)StaffingManagerRole.Manager, Strings.Manager },
+			{ (int)StaffingManagerRole.Admin, Strings.Manager },
 			{(int)StaffingManagerRole.NotInProduct,Strings.Unassigned }
 		};
 
@@ -55,7 +55,7 @@ namespace AllyisApps.Controllers.Auth
 		{
 			{ Strings.RemoveFromSubscription, -1},
 			{ Strings.SetUser, (int)StaffingManagerRole.User },
-			{ Strings.SetManager, (int)StaffingManagerRole.Manager },
+			{ Strings.SetManager, (int)StaffingManagerRole.Admin },
 		};
 
 		/// <summary>
