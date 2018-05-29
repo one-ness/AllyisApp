@@ -58,31 +58,6 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// create a new user, with address
-		/// </summary>
-		public async Task<int> SetupNewUserAsync(string email,
-			string passwordHash,
-			string firstName,
-			string lastName,
-			Guid emailConfirmationCode,
-			DateTime? dateOfBirth,
-			string phoneNumber,
-			string preferredLanguageId,
-			string address1,
-			string address2,
-			string city,
-			int? stateId,
-			string postalCode,
-			string countryCode,
-			int loginProviderId)
-		{
-			// todo: wrap these two in a transaction
-			// note: transaction scope, and all db calls must be in the same thread, cannot be async
-			int? addressId = await this.CreateAddressAsync(address1, address2, city, stateId, postalCode, countryCode);
-			return await this.CreateUserAsync(email, passwordHash, firstName, lastName, emailConfirmationCode, dateOfBirth, phoneNumber, preferredLanguageId, (addressId == 0) ? null : addressId, loginProviderId);
-		}
-
-		/// <summary>
 		/// get user entity for the given email
 		/// </summary>
 		public async Task<UserDBEntity> GetUserByEmailAsync(string email)

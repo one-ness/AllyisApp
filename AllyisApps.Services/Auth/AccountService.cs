@@ -148,6 +148,7 @@ namespace AllyisApps.Services
 
 		/// <summary>
 		/// Setup a new user.
+		/// TODO: wrap these calls in a transaction
 		/// </summary>
 		public async Task<int> SetupNewUser(
 			string email,
@@ -174,8 +175,10 @@ namespace AllyisApps.Services
 			var result = 0;
 			try
 			{
+				// hash the password, create the address and then the user
 				var hash = string.IsNullOrWhiteSpace(password) ? null : Crypto.GetPasswordHash(password);
-				result = await this.DBHelper.SetupNewUserAsync(email, hash, firstName, lastName, emailConfirmationCode, dateOfBirth, phoneNumber, Language.DefaultLanguageCultureName, address1, address2, city, stateId, postalCode, countryCode, (int)loginProvider);
+				var aid = await this.DBHelper.CreateAddressAsync(address1, address2, city, stateId, postalCode, countryCode);
+				result = await this.DBHelper.CreateUserAsync(email, hash, firstName, lastName, emailConfirmationCode, dateOfBirth, phoneNumber, Language.DefaultLanguageCultureName, aid, (int)loginProvider);
 
 				// user created, send confirmation email
 				await this.Mailer.SendEmailAsync(ServiceSettings.SupportEmail, email, confirmEmailSubject, confirmEmailMessage);
