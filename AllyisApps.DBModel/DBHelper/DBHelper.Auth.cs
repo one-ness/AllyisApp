@@ -699,12 +699,12 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// get context for the given user. sp selects only active organizations and subscriptions.
 		/// </summary>
-		public dynamic GetUserContext(int userId)
+		public dynamic GetUserContext(int userId, int orgStatusMask, int subStatusMask)
 		{
 			dynamic result = new ExpandoObject();
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				var query = con.QueryMultiple("[Auth].[GetUserContext]", new { userId }, commandType: CommandType.StoredProcedure);
+				var query = con.QueryMultiple("[Auth].[GetUserContext] @a, @b, @c", new { a = userId, b = orgStatusMask, c = subStatusMask });
 				result.User = query.ReadFirstOrDefault<dynamic>();
 				result.OrganizationsAndRoles = query.Read<dynamic>().ToList();
 				result.SubscriptionsAndRoles = query.Read<dynamic>().ToList();

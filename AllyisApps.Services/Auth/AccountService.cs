@@ -252,7 +252,7 @@ namespace AllyisApps.Services
 			UserContext result = null;
 
 			// get context from db
-			dynamic expando = DBHelper.GetUserContext(userId);
+			dynamic expando = this.DBHelper.GetUserContext(userId, (int)OrganizationStatusEnum.Active, (int)SubscriptionStatusEnum.Active);
 
 			// get user information
 			if (expando != null && expando.User != null)
@@ -285,7 +285,6 @@ namespace AllyisApps.Services
 							AreaUrl = item.AreaUrl,
 							ProductId = (ProductIdEnum)item.ProductId,
 							ProductRoleId = item.ProductRoleId,
-							SkuId = (SkuIdEnum)item.SkuId,
 							SubscriptionId = item.SubscriptionId,
 							OrganizationId = item.OrganizationId,
 							SubscriptionName = item.SubscriptionName

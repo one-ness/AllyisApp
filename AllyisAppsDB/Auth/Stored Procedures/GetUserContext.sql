@@ -1,5 +1,7 @@
 ﻿CREATE procedure [Auth].[GetUserContext]
-	@userId int
+	@userId int,
+	@orgStatusMask int,
+	@subStatusMask int
 as
 begin
 	set nocount on
@@ -12,17 +14,16 @@ begin
 	create table #OrgAndRole(OrganizationId int, OrganizationRoleId int, OrganizationName nvarchar(64), MaxAmount decimal)
 	insert into #OrgAndRole(OrganizationId, OrganizationRoleId, OrganizationName, MaxAmount) select ou.OrganizationId, ou.OrganizationRoleId, o.OrganizationName, ou.MaxAmount from OrganizationUser ou with (nolock)
 	inner join Organization o with (nolock) on o.OrganizationId = ou.OrganizationId
-	where ou.UserId = @userId --and o.IsActive = 1
+	where ou.UserId = @userId and (o.OrganizationStatus & @orgStatusMask) > 0
 	select * from #OrgAndRole with (nolock)
 
 	-- get the subscriptions of those organizations and the role of the user in those subscriptions
 	select s.SubscriptionId, s.SubscriptionName,
-	sku.SkuId, sku.SkuName, p.ProductId, p.ProductName, p.AreaUrl, su.ProductRoleId, s.OrganizationId from Billing.Subscription s with (nolock)
+	p.ProductId, p.ProductName, p.AreaUrl, su.ProductRoleId, s.OrganizationId from Billing.Subscription s with (nolock)
 	inner join #OrgAndRole orgrole with (nolock) on orgrole.OrganizationId = s.OrganizationId
-	inner join Billing.Sku sku with (nolock) on sku.SkuId = s.SkuId
-	inner join Billing.Product p with (nolock) on p.ProductId = sku.ProductId
+	inner join Billing.Product p with (nolock) on p.ProductId = s.ProductId
 	inner join Billing.SubscriptionUser su with (nolock) on su.SubscriptionId = s.SubscriptionId
-	where su.UserId = @userId --and s.IsActive = 1
+	where su.UserId = @userId and (s.SubscriptionStatus & @subStatusMask) > 0
 
 	-- drop the temp table
 	drop table #OrgAndRole
