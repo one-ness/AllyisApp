@@ -762,6 +762,7 @@ namespace AllyisApps.Services
 				LastName = user.LastName,
 				IsLockoutEnabled = user.IsLockoutEnabled,
 				LockoutEndDateUtc = user.LockoutEndDateUtc,
+				LoginProvider = (LoginProviderEnum)user.LoginProviderId,
 				PasswordHash = user.PasswordHash,
 				PasswordResetCode = user.PasswordResetCode,
 				PhoneExtension = user.PhoneExtension,
