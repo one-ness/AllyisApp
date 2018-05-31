@@ -177,8 +177,8 @@ namespace AllyisApps.Services
 			{
 				// hash the password, create the address and then the user
 				var hash = string.IsNullOrWhiteSpace(password) ? null : Crypto.GetPasswordHash(password);
-				var aid = await this.DBHelper.CreateAddressAsync(address1, address2, city, stateId, postalCode, countryCode);
-				result = await this.DBHelper.CreateUserAsync(email, hash, firstName, lastName, emailConfirmationCode, dateOfBirth, phoneNumber, Language.DefaultLanguageCultureName, aid, (int)loginProvider);
+				int? aid = await this.DBHelper.CreateAddressAsync(address1, address2, city, stateId, postalCode, countryCode);
+				result = await this.DBHelper.CreateUserAsync(email, hash, firstName, lastName, emailConfirmationCode, dateOfBirth, phoneNumber, Language.DefaultLanguageCultureName, aid == 0 ? null : aid, (int)loginProvider);
 
 				// user created, send confirmation email
 				await this.Mailer.SendEmailAsync(ServiceSettings.SupportEmail, email, confirmEmailSubject, confirmEmailMessage);
@@ -214,12 +214,12 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="email">The login email.</param>
 		/// <param name="password">The login password.</param>
-		public async Task<UserOld> ValidateLogin(string email, string password)
+		public async Task<User> ValidateLogin(string email, string password)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException(nameof(email));
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException(nameof(password));
 
-			UserOld result = null;
+			User result = null;
 			var user = await this.DBHelper.GetUserByEmailAsync(email);
 			if (user != null && user.LoginProviderId == (int)LoginProviderEnum.AllyisApps && (!string.IsNullOrWhiteSpace(user.PasswordHash)))
 			{
@@ -234,7 +234,7 @@ namespace AllyisApps.Services
 					}
 
 					// get user obj
-					result = this.InitializeOldUser(user, false);
+					result = await this.InitializeUserAsync(user, false);
 				}
 			}
 
@@ -736,70 +736,13 @@ namespace AllyisApps.Services
 			return DBHelper.GetOrganizationsByUserId(userId).Select(o => (Organization)InitializeOrganization(o));
 		}
 
-		private UserOld InitializeUser(dynamic user)
-		{
-			return new UserOld
-			{
-				AccessFailedCount = user.AccessFailedCount,
-				DateOfBirth = user.DateOfBirth,
-				Email = user.Email,
-				IsEmailConfirmed = user.IsEmailConfirmed,
-				FirstName = user.FirstName,
-				LastName = user.LastName,
-				IsLockoutEnabled = user.IsLockoutEnabled,
-				LockoutEndDateUtc = user.LockoutEndDateUtc,
-				PasswordHash = user.PasswordHash,
-				PasswordResetCode = user.PasswordResetCode,
-				PhoneExtension = user.PhoneExtension,
-				PhoneNumber = user.PhoneNumber,
-				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
-				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
-				UserId = user.UserId,
-				Address = InitializeAddress(user)
-			};
-		}
-
 		/// <summary>
-		/// Translates a UserDBEntity into a User business object.
+		/// initialize user from userdbentity
 		/// </summary>
-		/// <param name="user">UserDBEntity instance.</param>
-		/// <param name="loadAddress"></param>
-		/// <returns>User instance.</returns>
-		private UserOld InitializeOldUser(UserDBEntity user, bool loadAddress = true)
+		private async Task<User> InitializeUserAsync(UserDBEntity user, bool loadAddress = true)
 		{
 			if (user == null)
 				return null;
-
-			Address address = null;
-			if (user.AddressId.HasValue && loadAddress)
-			{
-				//address = GetAddressAsync(user.AddressId.Value);
-			}
-
-			return new UserOld
-			{
-				AccessFailedCount = user.AccessFailedCount,
-				DateOfBirth = user.DateOfBirth,
-				Email = user.Email,
-				IsEmailConfirmed = user.IsEmailConfirmed,
-				FirstName = user.FirstName,
-				LastName = user.LastName,
-				IsLockoutEnabled = user.IsLockoutEnabled,
-				LockoutEndDateUtc = user.LockoutEndDateUtc,
-				PasswordHash = user.PasswordHash,
-				PasswordResetCode = user.PasswordResetCode,
-				PhoneExtension = user.PhoneExtension,
-				PhoneNumber = user.PhoneNumber,
-				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
-				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
-				UserId = user.UserId,
-				Address = address
-			};
-		}
-
-		private async Task<User> InitializeUserAsync(UserDBEntity user, bool loadAddress = true)
-		{
-			if (user == null) return null;
 
 			Address address = null;
 			if (user.AddressId.HasValue && loadAddress)
@@ -817,7 +760,6 @@ namespace AllyisApps.Services
 				LastName = user.LastName,
 				IsLockoutEnabled = user.IsLockoutEnabled,
 				LockoutEndDateUtc = user.LockoutEndDateUtc,
-				LoginProvider = (LoginProviderEnum)user.LoginProviderId,
 				PasswordHash = user.PasswordHash,
 				PasswordResetCode = user.PasswordResetCode,
 				PhoneExtension = user.PhoneExtension,

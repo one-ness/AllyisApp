@@ -53,8 +53,8 @@ namespace AllyisApps.Controllers.Auth
 		{
 			if (ModelState.IsValid)
 			{
-				UserOld result = null;
-				if ((result = await AppService.ValidateLogin(model.Email, model.Password)) != null)
+				var result = await AppService.ValidateLogin(model.Email, model.Password);
+				if (result != null)
 				{
 					// sign in
 					if (GlobalSettings.RequireEmailConfirmation && !result.IsEmailConfirmed)
