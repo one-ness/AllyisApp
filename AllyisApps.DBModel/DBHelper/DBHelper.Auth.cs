@@ -130,38 +130,21 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		///  update the given user profile
 		/// </summary>
-		public async Task UpdateUserProfile(
+		public async Task UpdateUser(
 			int userId,
 			string firstName,
 			string lastName,
 			DateTime? dateOfBirth,
 			string phoneNumber,
-			int? addressId,
-			string address1,
-			string address2,
-			string city,
-			int? stateId,
-			string postalCode,
-			string countryCode)
+			int? addressId)
 		{
-			if (addressId.HasValue)
-			{
-				// update the address
-				await this.UpdateAddressAsync(addressId.Value, address1, address2, city, stateId, postalCode, countryCode);
-			}
-			else
-			{
-				// create address
-				addressId = await this.CreateAddressAsync(address1, address2, city, stateId, postalCode, countryCode);
-			}
-
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
 			parameters.Add("@firstName", firstName);
 			parameters.Add("@lastName", lastName);
 			parameters.Add("@dateOfBirth", dateOfBirth);
 			parameters.Add("@phoneNumber", phoneNumber);
-			parameters.Add("@addressId", addressId == 0 ? null : addressId);
+			parameters.Add("@addressId", addressId);
 
 			using (var con = new SqlConnection(SqlConnectionString))
 			{

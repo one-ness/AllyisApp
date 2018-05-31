@@ -527,15 +527,29 @@ namespace AllyisApps.Services
 		/// </summary>
 		public async Task UpdateCurrentUserProfile(DateTime dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
 		{
-			await this.DBHelper.UpdateUserProfile(UserContext.UserId, firstName, lastName, dateOfBirth, phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
+			await this.UpdateUserProfile(this.UserContext.UserId, dateOfBirth, firstName, lastName, phoneNumber, addressId, address, city, stateId, postalCode, countryCode);
 		}
 
 		/// <summary>
 		/// update the current user profile
+		/// TODO: wrap in transaction
 		/// </summary>
-		public async Task UpdateUserProfile(int userId, int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
+		public async Task UpdateUserProfile(int userId, DateTime dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
 		{
-			await DBHelper.UpdateUserProfile(userId, firstName, lastName, Utility.GetDateTimeFromDays((int)dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
+			// update address first
+			if (addressId.HasValue)
+			{
+				// update the address
+				await this.DBHelper.UpdateAddressAsync(addressId.Value, address, null, city, stateId, postalCode, countryCode);
+			}
+			else
+			{
+				// create address
+				addressId = await this.DBHelper.CreateAddressAsync(address, null, city, stateId, postalCode, countryCode);
+			}
+
+			// update the user next
+			await DBHelper.UpdateUser(userId, firstName, lastName, dateOfBirth, phoneNumber, addressId.HasValue ? addressId : null);
 		}
 
 		/// <summary>
