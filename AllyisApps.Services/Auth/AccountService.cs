@@ -395,7 +395,7 @@ namespace AllyisApps.Services
 			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId));
 
 			dynamic sets = await DBHelper.GetUserOld(userId);
-			UserOld user = this.InitializeUser(sets.User);
+			UserOld user = null; // this.InitializeUser(sets.User);
 			dynamic subs = sets.Subscriptions;
 			foreach (dynamic item in subs)
 			{
@@ -597,7 +597,9 @@ namespace AllyisApps.Services
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException(nameof(email));
 
-			return this.InitializeOldUser(await DBHelper.GetUserByEmailAsync(email));
+			await this.InitializeUserAsync(await DBHelper.GetUserByEmailAsync(email));
+
+			return null;
 		}
 
 		/// <summary>

@@ -509,27 +509,6 @@ namespace AllyisApps.Services
 			return sub.OrganizationId;
 		}
 
-		/// <summary>
-		/// Gets a list of <see cref="UserOld"/>'s for users in the organization with subscriptions to the given product.
-		/// </summary>
-		/// <param name="orgId">Organization Id.</param>
-		/// <param name="productId">Product Id.</param>
-		/// <returns>A list of User's for users in the organization with subscriptions to the given product.</returns>
-		public async Task<IEnumerable<UserOld>> GetUsersWithSubscriptionToProductInOrganization(int orgId, int productId)
-		{
-			if (orgId <= 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(orgId), "Organization Id cannot be 0 or negative.");
-			}
-
-			if (productId <= 0)
-			{
-				throw new ArgumentOutOfRangeException(nameof(productId), "Product Id cannot be 0 or negative.");
-			}
-
-			var results = await DBHelper.GetUsersWithSubscriptionToProductInOrganization(orgId, productId);
-			return results.Select(u => InitializeOldUser(u));
-		}
 
 		public async Task<IEnumerable<Subscription>> GetSubscriptionsByOrg(int organizationId)
 		{

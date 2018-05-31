@@ -38,7 +38,7 @@ namespace UploadDataDirect
 			
 			//Expected Args  email, password, file, organizationId=optional, subscriptionId optional 
 
-			UserOld user = appService.ValidateLogin(args[0],args[1]).Result;
+			User user = appService.ValidateLogin(args[0],args[1]).Result;
 			UserOld existingUser = appService.GetUserOldByEmailAsync(args[0]).Result;
 			DateTime today = DateTime.Now;
 			
