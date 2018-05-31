@@ -38,9 +38,26 @@ namespace AllyisApps.Services.Auth
 		public DateTime DateOfBirth { get; set; }
 
 		/// <summary>
+		/// indicates if address is loaded
+		/// </summary>
+		public bool IsAddressLoaded { get; private set; }
+
+		private Address address;
+		/// <summary>
 		/// Gets or sets the User's address.
 		/// </summary>
-		public Address Address { get; set; }
+		public Address Address
+		{
+			get
+			{
+				return this.address;
+			}
+			set
+			{
+				this.address = value;
+				this.IsAddressLoaded = true;
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets Email address.
