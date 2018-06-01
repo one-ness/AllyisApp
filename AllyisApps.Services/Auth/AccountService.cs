@@ -549,7 +549,7 @@ namespace AllyisApps.Services
 			}
 
 			// update the user next
-			await DBHelper.UpdateUser(userId, firstName, lastName, dateOfBirth, phoneNumber, addressId.HasValue ? addressId : null);
+			await DBHelper.UpdateUser(userId, firstName, lastName, dateOfBirth, phoneNumber, addressId == 0 ? null : addressId);
 		}
 
 		/// <summary>
@@ -761,20 +761,26 @@ namespace AllyisApps.Services
 				return null;
 
 			Address address = null;
+			var addressLoaded = false;
 			if (user.AddressId.HasValue && loadAddress)
 			{
 				address = await this.GetAddressAsync(user.AddressId.Value);
+				addressLoaded = true;
 			}
 
 			return new User
 			{
 				AccessFailedCount = user.AccessFailedCount,
+				Address = address,
 				DateOfBirth = user.DateOfBirth,
 				Email = user.Email,
-				IsEmailConfirmed = user.IsEmailConfirmed,
+				EmailConfirmationCode = user.EmailConfirmationCode,
 				FirstName = user.FirstName,
 				LastName = user.LastName,
+				IsAddressLoaded = addressLoaded,
+				IsEmailConfirmed = user.IsEmailConfirmed,
 				IsLockoutEnabled = user.IsLockoutEnabled,
+				LastUsedSubscriptionId = user.LastUsedSubscriptionId,
 				LockoutEndDateUtc = user.LockoutEndDateUtc,
 				LoginProvider = (LoginProviderEnum)user.LoginProviderId,
 				PasswordHash = user.PasswordHash,
@@ -783,8 +789,8 @@ namespace AllyisApps.Services
 				PhoneNumber = user.PhoneNumber,
 				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
 				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
+				UserCreatedUtc = user.UserCreatedUtc,
 				UserId = user.UserId,
-				Address = address
 			};
 		}
 

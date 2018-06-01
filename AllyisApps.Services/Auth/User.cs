@@ -40,24 +40,12 @@ namespace AllyisApps.Services.Auth
 		/// <summary>
 		/// indicates if address is loaded
 		/// </summary>
-		public bool IsAddressLoaded { get; private set; }
+		public bool IsAddressLoaded { get; set; }
 
-		private Address address;
 		/// <summary>
 		/// Gets or sets the User's address.
 		/// </summary>
-		public Address Address
-		{
-			get
-			{
-				return this.address;
-			}
-			set
-			{
-				this.address = value;
-				this.IsAddressLoaded = true;
-			}
-		}
+		public Address Address { get; set; }
 
 		/// <summary>
 		/// Gets or sets Email address.

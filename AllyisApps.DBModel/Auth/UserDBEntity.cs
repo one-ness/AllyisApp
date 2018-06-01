@@ -114,8 +114,8 @@ namespace AllyisApps.DBModel.Auth
 		public string PreferredLanguageId { get; set; }
 
 		/// <summary>
-		/// Gets or sets MaxAmount
+		/// gets or sets the created utc
 		/// </summary>
-		public decimal MaxAmount { get; set; }
+		public DateTime UserCreatedUtc { get; set; }
 	}
 }
