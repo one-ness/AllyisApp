@@ -40,7 +40,7 @@ namespace AllyisApps.Controllers.Auth
 					if (tokenJson != null && !string.IsNullOrWhiteSpace(email = tokenJson.email))
 					{
 						// unique name is available. check our database
-						var user = await this.AppService.GetUserByEmailAsync(email);
+						var user = await this.AppService.GetUserByEmailAsync(email, false);
 						if (user == null)
 						{
 							// user doesn't exist, create the user and return to profile page

@@ -306,17 +306,17 @@ namespace AllyisApps.Services
 			return await GetUserOldAsync(UserContext.UserId);
 		}
 
-		public async Task<User> GetCurrentUserAsync()
+		public async Task<User> GetCurrentUserAsync(bool loadAddress = true)
 		{
-			return await GetUserAsync(this.UserContext.UserId);
+			return await GetUserAsync(this.UserContext.UserId, loadAddress);
 		}
 
-		public async Task<User> GetUserAsync(int userId)
+		public async Task<User> GetUserAsync(int userId, bool loadAddress = true)
 		{
 			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId));
 
 			var user = await this.DBHelper.GetUserAsync(userId);
-			return await this.InitializeUserAsync(user);
+			return await this.InitializeUserAsync(user, loadAddress);
 		}
 
 		/// <summary>
@@ -619,13 +619,11 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets the user info from an email address.
 		/// </summary>
-		/// <param name="email">Email address.</param>
-		/// <returns>A UserInfo instance with the user's info.</returns>
-		public async Task<User> GetUserByEmailAsync(string email)
+		public async Task<User> GetUserByEmailAsync(string email, bool loadAddress = true)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException(nameof(email));
 
-			return await this.InitializeUserAsync(await DBHelper.GetUserByEmailAsync(email), false);
+			return await this.InitializeUserAsync(await DBHelper.GetUserByEmailAsync(email), loadAddress);
 		}
 
 		/// <summary>
