@@ -33,11 +33,6 @@ namespace AllyisApps.DBModel.Auth
 		public int? AddressId { get; set; }
 
 		/// <summary>
-		/// gets or sets whether this organization is active
-		/// </summary>
-		public bool IsActive { get; set; }
-
-		/// <summary>
 		/// Gets or sets the organization's phone number.
 		/// </summary>
 		public string PhoneNumber { get; set; }
@@ -61,5 +56,10 @@ namespace AllyisApps.DBModel.Auth
 		/// Gets or sets the count of users in the organization.
 		/// </summary>
 		public int UserCount { get; set; }
+
+		/// <summary>
+		/// Gets or sets the organization status
+		/// </summary>
+		public int OrganizationStatus { get; set; }
 	}
 }

@@ -28,6 +28,12 @@ namespace AllyisApps.Services.Auth
 		public string OrganizationName { get; set; }
 
 		/// <summary>
+		/// Gets or sets the organization status
+		/// </summary>
+		[CLSCompliant(false)]
+		public OrganizationStatusEnum OrganizationStatus { get; set; }
+
+		/// <summary>
 		/// Gets or sets the Organization site URL.
 		/// </summary>
 		[Display(Name = "Website")]
@@ -54,11 +60,6 @@ namespace AllyisApps.Services.Auth
 		/// Gets or sets the Date this organization was created.
 		/// </summary>
 		public DateTime? CreatedUtc { get; set; }
-
-		/// <summary>
-		/// gets or sets if this organization is active
-		/// </summary>
-		public bool IsActive { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Organization subdomain perfix.

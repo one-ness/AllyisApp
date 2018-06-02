@@ -202,5 +202,6 @@ namespace AllyisApps
 		public const string ExpenseTracker = "ExpenseTracker_Default";
 		public const string TimeEntryIndexUserTimeSheet = "TimeEntry_Index_User_TimeSheet";
 		public const string TimeTracker = "TimeTracker_Default";
+		public const string StaffingManager = "StaffingManager_Default";
 	}
 }

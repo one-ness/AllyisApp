@@ -412,7 +412,6 @@
     <Build Include="dbo\Functions\SplitNumberString.sql" />
     <Build Include="Auth\Stored Procedures\GetOrganizationsByIds.sql" />
     <Build Include="Auth\Stored Procedures\GetUserByEmail.sql" />
-    <Build Include="Billing\Stored Procedures\GetActiveSubscriptionsByIds.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserLoginProvider.sql" />
     <Build Include="Hrm\Stored Procedures\CreateDefaultPayClasses.sql" />
     <Build Include="Auth\Stored Procedures\GetUserPassword.sql" />
@@ -421,6 +420,7 @@
     <Build Include="Auth\Functions\GetOrganizationUserCount.sql" />
     <Build Include="Auth\Functions\GetOrganizationSubscriptionCount.sql" />
     <Build Include="Auth\Stored Procedures\UpdateOrganizationStatus.sql" />
+    <Build Include="Billing\Stored Procedures\GetSubscriptionsByIds.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

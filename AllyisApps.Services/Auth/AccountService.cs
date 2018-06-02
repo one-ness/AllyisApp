@@ -341,25 +341,25 @@ namespace AllyisApps.Services
 				obj.InvitationId = item.InvitationId;
 				obj.InvitationStatus = (InvitationStatusEnum)item.InvitationStatus;
 				obj.LastName = item.LastName;
-				obj.OrganizationRole = (OrganizationRoleEnum)item.OrganizationRoleId;
 				obj.OrganizationId = item.OrganizationId;
+				obj.OrganizationName = org.OrganizationName;
+				obj.OrganizationRole = (OrganizationRoleEnum)item.OrganizationRoleId;
 				obj.ProductRolesJson = item.ProductRolesJson;
 				result.Add(obj.OrganizationId, obj);
-
 			}
 
 			return result;
 		}
 
-		public async Task<Dictionary<int, Organization>> GetOrganizationsByIdsAsync(List<int> ids)
+		public async Task<Dictionary<int, Organization>> GetActiveOrganizationsByIdsAsync(List<int> ids)
 		{
 			Dictionary<int, Organization> result = new Dictionary<int, Organization>();
 			if (ids != null && ids.Count > 0)
 			{
-				var entities = await this.DBHelper.GetOrganizationsByIdsAsync(ids);
+				var entities = await this.DBHelper.GetOrganizationsByIdsAsync(ids, (int)OrganizationStatusEnum.Active);
 				foreach (var item in entities)
 				{
-					result.Add(item.OrganizationId, this.InitializeOrganization(item));
+					result.Add(item.OrganizationId, await this.InitializeOrganization(item));
 				}
 			}
 
@@ -369,19 +369,19 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// get organization from its db entity
 		/// </summary>
-		public Organization InitializeOrganization(OrganizationDBEntity entity, bool loadAddress = true)
+		public async Task<Organization> InitializeOrganization(OrganizationDBEntity entity, bool loadAddress = true)
 		{
 			return new Organization
 			{
 				CreatedUtc = entity.CreatedUtc,
 				FaxNumber = entity.FaxNumber,
-				IsActive = entity.IsActive,
-				OrganizationName = entity.OrganizationName,
 				OrganizationId = entity.OrganizationId,
+				OrganizationName = entity.OrganizationName,
+				OrganizationStatus = (OrganizationStatusEnum)entity.OrganizationStatus,
 				PhoneNumber = entity.PhoneNumber,
 				SiteUrl = entity.SiteUrl,
 				Subdomain = entity.Subdomain,
-				//Address = (entity.AddressId.HasValue && loadAddress) ? await GetAddressAsync(entity.AddressId.Value) : null,
+				Address = (entity.AddressId.HasValue && loadAddress) ? await this.GetAddressAsync(entity.AddressId.Value) : null,
 				UserCount = entity.UserCount
 			};
 		}
@@ -439,7 +439,6 @@ namespace AllyisApps.Services
 				org.CreatedUtc = item.OrganizationCreatedUtc;
 				org.EmployeeId = item.EmployeeId;
 				org.FaxNumber = item.FaxNumber;
-				org.IsActive = item.IsActive;
 				org.JoinedDateUtc = item.OrganizationUserCreatedUtc;
 				org.MaxApprovalAmount = item.ApprovalAmount;
 				org.OrganizationId = item.OrganizationId;
@@ -743,11 +742,6 @@ namespace AllyisApps.Services
 		{
 			if (code == null) throw new ArgumentNullException(nameof(code));
 			return DBHelper.UpdateEmailConfirmed(code) == 1;
-		}
-
-		public IEnumerable<Organization> GetOrganizationsByUserId(int userId)
-		{
-			return DBHelper.GetOrganizationsByUserId(userId).Select(o => (Organization)InitializeOrganization(o));
 		}
 
 		/// <summary>

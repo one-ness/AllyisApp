@@ -30,8 +30,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>The async task responsible for this action.</returns>
 		public async Task<ActionResult> Index()
 		{
-			AccountIndexViewModel viewModel = await ConstuctIndexViewModel();
-
+			AccountIndexViewModel viewModel = await this.ConstuctIndexViewModel();
 			return View(viewModel);
 		}
 
@@ -83,7 +82,7 @@ namespace AllyisApps.Controllers.Auth
 				ids2.Add(item.Key);
 			}
 
-			var orgs2 = await this.AppService.GetOrganizationsByIdsAsync(ids2);
+			var orgs2 = await this.AppService.GetActiveOrganizationsByIdsAsync(ids2);
 			foreach (var item in orgs2.Values)
 			{
 				AccountIndexViewModel.OrganizationViewModel orgViewModel =
@@ -146,7 +145,8 @@ namespace AllyisApps.Controllers.Auth
 							break;
 
 						case ProductIdEnum.StaffingManager:
-							subViewModel.ProductGoToUrl = Url.RouteUrl("StaffingManager_default",
+							subViewModel.ProductGoToUrl = Url.RouteUrl(
+								RouteNameConstants.StaffingManager,
 								new
 								{
 									subscriptionId = subItem.SubscriptionId,
@@ -170,20 +170,6 @@ namespace AllyisApps.Controllers.Auth
 			}
 
 			return model;
-		}
-
-		/// <summary>
-		/// Gets the Starting date from an int value.
-		/// </summary>
-		/// <param name="startOfWeek">Integer value representing a date.</param>
-		/// <returns>A datetime object.</returns>
-		private DateTime SetStartingDate(int startOfWeek)
-		{
-			DateTime today = DateTime.Now;
-			int daysIntoTheWeek = (int)today.DayOfWeek < startOfWeek
-				? (int)today.DayOfWeek + (7 - startOfWeek)
-				: (int)today.DayOfWeek - startOfWeek;
-			return today.AddDays(-daysIntoTheWeek);
 		}
 	}
 }

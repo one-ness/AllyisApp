@@ -124,7 +124,7 @@ namespace AllyisApps.Services
 			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
 
 			CheckOrgAction(OrgAction.ReadOrganization, orgId);
-			return InitializeOrganization(await DBHelper.GetOrganizationAsync(orgId));
+			return await InitializeOrganization(await DBHelper.GetOrganizationAsync(orgId));
 		}
 
 		public async Task<List<Invitation>> GetInvitationsAsync(int orgId)
@@ -200,7 +200,7 @@ namespace AllyisApps.Services
 		public async Task<Organization> GetOrganizationManagementInfo(int orgId)
 		{
 			var spResults = await DBHelper.GetOrganizationManagementInfo(orgId);
-			Organization org = InitializeOrganization(spResults.Item1);
+			Organization org = await InitializeOrganization(spResults.Item1);
 			org.Users = spResults.Item2.Select(InitializeOrganizationUser).ToList();
 			org.Subscriptions = spResults.Item3.Select(InitializeSubscription).ToList();
 			org.Invitations = spResults.Item4.Select(InitializeInvitationInfo).ToList();

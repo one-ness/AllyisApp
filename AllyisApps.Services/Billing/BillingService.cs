@@ -28,7 +28,7 @@ namespace AllyisApps.Services
 		public async Task<Dictionary<int, Subscription>> GetActiveSubscriptionsByIdsAsync(List<int> ids)
 		{
 			Dictionary<int, Subscription> result = new Dictionary<int, Subscription>();
-			var entities = await this.DBHelper.GetActiveSubscriptionsByIdsAsync(ids);
+			var entities = await this.DBHelper.GetSubscriptionsByIdsAsync(ids, (int)SubscriptionStatusEnum.Active);
 			foreach (var item in entities)
 			{
 				var product = CacheContainer.ProductsCache[(ProductIdEnum)item.ProductId];

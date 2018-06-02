@@ -538,7 +538,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// get the list of organization db entities for the given ids
 		/// </summary>
-		public async Task<List<OrganizationDBEntity>> GetOrganizationsByIdsAsync(List<int> ids)
+		public async Task<List<OrganizationDBEntity>> GetOrganizationsByIdsAsync(List<int> ids, int statusMask)
 		{
 			List<OrganizationDBEntity> result = new List<OrganizationDBEntity>();
 			if (ids.Count > 0)
@@ -554,7 +554,7 @@ namespace AllyisApps.DBModel
 
 				using (SqlConnection con = new SqlConnection(SqlConnectionString))
 				{
-					result = (await con.QueryAsync<OrganizationDBEntity>("[Auth].[GetOrganizationsByIds] @a", new { a = sb.ToString() })).ToList();
+					result = (await con.QueryAsync<OrganizationDBEntity>("[Auth].[GetOrganizationsByIds] @a, @b", new { a = sb.ToString(), b = statusMask })).ToList();
 				}
 			}
 
