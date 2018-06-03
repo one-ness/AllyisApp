@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [Hrm].[CreateEmployeeType]
 	@orgId int,
-	@employeeTypeName varchar(64)
+	@employeeTypeName nvarchar(64)
 AS
 BEGIN
 	set nocount on
