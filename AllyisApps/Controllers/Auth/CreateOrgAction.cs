@@ -47,7 +47,7 @@ namespace AllyisApps.Controllers.Auth
 			{
 				int orgId = await AppService.SetupOrganization(model.EmployeeId, model.OrganizationName, model.PhoneNumber, model.FaxNumber, model.SiteUrl, null, model.Address, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode);
 
-				if (orgId < 0)
+				if (orgId <= 0)
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.SubdomainTaken, Variety.Danger));
 					return View(model);

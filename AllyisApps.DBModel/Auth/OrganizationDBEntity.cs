@@ -48,14 +48,19 @@ namespace AllyisApps.DBModel.Auth
 		public string Subdomain { get; set; }
 
 		/// <summary>
-		/// Gets or sets DateCreated.
+		/// Gets or sets the date this organization was created
 		/// </summary>
-		public DateTime? CreatedUtc { get; set; }
+		public DateTime? OrganizationCreatedUtc { get; set; }
 
 		/// <summary>
 		/// Gets or sets the count of users in the organization.
 		/// </summary>
 		public int UserCount { get; set; }
+
+		/// <summary>
+		/// Gets or sets the count of subscriptions this organization has
+		/// </summary>
+		public int SubscriptionCount { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization status

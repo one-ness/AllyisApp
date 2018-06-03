@@ -31,7 +31,7 @@ namespace AllyisApps.DBModel
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return await con.QueryFirstOrDefaultAsync("[Hrm].[CreateEmployeeType] @a, @b", new { a = orgId, b = employeeTypeName });
+				return await con.QueryFirstOrDefaultAsync<int>("[Hrm].[CreateEmployeeType] @a, @b", new { a = orgId, b = employeeTypeName });
 			}
 		}
 

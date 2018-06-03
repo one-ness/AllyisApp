@@ -373,7 +373,7 @@ namespace AllyisApps.Services
 		{
 			return new Organization
 			{
-				CreatedUtc = entity.CreatedUtc,
+				CreatedUtc = entity.OrganizationCreatedUtc,
 				FaxNumber = entity.FaxNumber,
 				OrganizationId = entity.OrganizationId,
 				OrganizationName = entity.OrganizationName,
