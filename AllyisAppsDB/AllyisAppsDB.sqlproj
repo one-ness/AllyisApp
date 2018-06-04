@@ -421,6 +421,8 @@
     <Build Include="Auth\Functions\GetOrganizationSubscriptionCount.sql" />
     <Build Include="Auth\Stored Procedures\UpdateOrganizationStatus.sql" />
     <Build Include="Billing\Stored Procedures\GetSubscriptionsByIds.sql" />
+    <Build Include="Auth\Stored Procedures\CreateProductRole.sql" />
+    <Build Include="Auth\Stored Procedures\CreatePermission.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
