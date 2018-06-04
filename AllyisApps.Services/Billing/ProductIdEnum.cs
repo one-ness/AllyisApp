@@ -12,11 +12,6 @@ namespace AllyisApps.Services.Billing
 	public enum ProductIdEnum
 	{
 		/// <summary>
-		/// Id for no product.
-		/// </summary>
-		None = 0,
-
-		/// <summary>
 		/// Allyis Apps.
 		/// </summary>
 		AllyisApps = 100000,

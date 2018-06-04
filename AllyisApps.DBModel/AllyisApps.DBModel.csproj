@@ -56,11 +56,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Auth\ProductRoleDBEntity.cs" />
     <Compile Include="BaseDBEntity.cs" />
     <Compile Include="Auth\UserContextDBEntity.cs" />
     <Compile Include="Auth\UserRolesDBEntity.cs" />
     <Compile Include="Billing\BillingHistoryItemDBEntity.cs" />
-    <Compile Include="Billing\ProductRoleDBEntity.cs" />
     <Compile Include="Billing\SubscriptionDisplayDBEntity.cs" />
     <Compile Include="Billing\SubscriptionRoleDBEntity.cs" />
     <Compile Include="Crm\ProjectDBEntity.cs" />

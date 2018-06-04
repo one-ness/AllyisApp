@@ -10,6 +10,6 @@ namespace AllyisApps.Services.Auth
 	{
 		Active = 1,
 		Inactive = 2,
-		Any = 0xFFFFFFFF,
+		Any = uint.MaxValue,
 	}
 }

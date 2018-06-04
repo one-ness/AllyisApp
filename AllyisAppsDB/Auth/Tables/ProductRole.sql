@@ -1,12 +1,17 @@
-﻿CREATE TABLE [Auth].[ProductRole] (
-	[ProductRoleId] INT           NOT NULL,
-	[ProductId]     INT           NOT NULL,
-	[ProductRoleName]          NVARCHAR (64) NOT NULL,
-	[OrganizationId] INT NULL, 
-	CONSTRAINT [PK_ProductRole] PRIMARY KEY CLUSTERED ([ProductRoleId] ASC, [ProductId] ASC),
-	CONSTRAINT [FK_ProductRole_Product] FOREIGN KEY ([ProductId]) REFERENCES [Billing].[Product] ([ProductId]),
-	CONSTRAINT [FK_ProductRole_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId])
+CREATE TABLE [Auth].[ProductRole] (
+    [ProductRoleId]        INT            IDENTITY (1, 101) NOT NULL,
+    [ProductId]            INT            NOT NULL,
+    [ProductRoleShortName] NVARCHAR (32)  NOT NULL,
+    [ProductRoleFullName]  NVARCHAR (128) NOT NULL,
+    [OrgOrSubId]           INT            NOT NULL,
+    [BuiltInProductRoleId] INT            CONSTRAINT [DF_ProductRole_IsBuiltin] DEFAULT ((0)) NOT NULL,
+    CONSTRAINT [PK_ProductRole] PRIMARY KEY CLUSTERED ([ProductRoleId] ASC),
+    CONSTRAINT [FK_ProductRole_Product] FOREIGN KEY ([ProductId]) REFERENCES [Billing].[Product] ([ProductId])
 );
 
+
+
 GO
+CREATE NONCLUSTERED INDEX [IX_ProductRole]
+    ON [Auth].[ProductRole]([ProductId] ASC, [OrgOrSubId] ASC);
 

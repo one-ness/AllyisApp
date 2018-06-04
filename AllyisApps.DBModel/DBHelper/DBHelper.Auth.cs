@@ -753,5 +753,27 @@ namespace AllyisApps.DBModel
 				return (await con.QueryAsync<ProductRoleDBEntity>("[Auth].[GetProductRoles]", new { orgId, productId }, commandType: CommandType.StoredProcedure)).ToList();
 			}
 		}
+
+		/// <summary>
+		/// creat a given role for the given product, for the given organization or subscription
+		/// </summary>
+		public async Task<int> CreateProductRole(int productId, string productRoleShortName, string productRoleFullName, int orgOrSubId, int builtinProductRoleId)
+		{
+			using (var con = new SqlConnection(SqlConnectionString))
+			{
+				return await con.QueryFirstOrDefaultAsync<int>("[Auth].[CreateProductRole] @a, @b, @c, @d, @e", new { a = productId, b = productRoleShortName, c = productRoleFullName, d = orgOrSubId, e = builtinProductRoleId });
+			}
+		}
+
+		/// <summary>
+		/// create the given permission for the given product role
+		/// </summary>
+		public async Task CreatePermission(int productRoleId, int entityId, int actionId, bool isAllowed)
+		{
+			using (var con = new SqlConnection(SqlConnectionString))
+			{
+				await con.ExecuteAsync("[Auth].[CreatePermission] @a, @b, @c, @d", new { a = productRoleId, b = entityId, c = actionId, d = isAllowed });
+			}
+		}
 	}
 }

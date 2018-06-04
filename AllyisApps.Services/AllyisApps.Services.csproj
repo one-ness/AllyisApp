@@ -77,7 +77,8 @@
     <Compile Include="Auth\ProductSubscription.cs" />
     <Compile Include="Auth\ReportInfo.cs" />
     <Compile Include="Auth\ServiceActionEnums.cs" />
-    <Compile Include="Auth\SubscriptionStatusEnum.cs" />
+    <Compile Include="Billing\ProductStatusEnum.cs" />
+    <Compile Include="Billing\SubscriptionStatusEnum.cs" />
     <Compile Include="Auth\User.cs" />
     <Compile Include="Auth\UserContext.cs" />
     <Compile Include="Auth\UserOrganization.cs" />

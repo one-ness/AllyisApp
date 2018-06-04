@@ -894,9 +894,44 @@ namespace AllyisApps.Services
 					OrganizationId = orgId,
 					ProductId = (ProductIdEnum)item.ProductId,
 					ProductRoleId = item.ProductRoleId,
-					ProductRoleName = item.ProductRoleName
+					ProductRoleName = item.ProductRoleShortName
 				})
 				.ToList();
+		}
+
+		/// <summary>
+		/// create the default product roles and permissions for the given product and org or sub id
+		/// </summary>
+		public async Task CreateDefaultProductRolesAndPermissions(ProductIdEnum productId, int orgOrSubId)
+		{
+			if (orgOrSubId <= 0) throw new ArgumentOutOfRangeException(nameof(orgOrSubId));
+
+			switch (productId)
+			{
+				case ProductIdEnum.AllyisApps:
+					await this.CreateDefaultAllyisAppsRolesAndPermissions(orgOrSubId);
+					break;
+
+				case ProductIdEnum.ExpenseTracker:
+					break;
+
+				case ProductIdEnum.StaffingManager:
+					break;
+
+				case ProductIdEnum.TimeTracker:
+					break;
+
+				default:
+					break;
+			}
+		}
+
+		private async Task CreateDefaultAllyisAppsRolesAndPermissions(int orgOrSubId)
+		{
+			// create admin role
+			var roleId = await this.DBHelper.CreateProductRole((int)ProductIdEnum.AllyisApps, "Admin", "Organization Administrator", orgOrSubId, (int)OrganizationRoleEnum.Admin);
+
+			// create permissions for this role
 		}
 	}
 }

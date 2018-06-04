@@ -777,7 +777,7 @@ namespace AllyisApps.Services
 		public List<Product> GetAllActiveProductsAndSkus()
 		{
 			// get only active products and with sku products
-			var result = CacheContainer.ProductsCache.Values.Where(x => x.IsActive && x.Skus.Count > 0).ToList();
+			var result = CacheContainer.ProductsCache.Values.Where(x => x.IsActive).ToList();
 
 			// reduce to show products
 			foreach (var item in result)
