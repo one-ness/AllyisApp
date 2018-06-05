@@ -757,7 +757,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// creat a given role for the given product, for the given organization or subscription
 		/// </summary>
-		public async Task<int> CreateProductRole(int productId, string productRoleShortName, string productRoleFullName, int orgOrSubId, int builtinProductRoleId)
+		public async Task<int> CreateProductRoleAsync(int productId, string productRoleShortName, string productRoleFullName, int orgOrSubId, int builtinProductRoleId)
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
@@ -768,11 +768,22 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// create the given permission for the given product role
 		/// </summary>
-		public async Task CreatePermission(int productRoleId, int entityId, int actionId, bool isAllowed)
+		public async Task CreatePermissionAsync(int productRoleId, int userActionId, int actionGroupId, bool isDenied = false)
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				await con.ExecuteAsync("[Auth].[CreatePermission] @a, @b, @c, @d", new { a = productRoleId, b = entityId, c = actionId, d = isAllowed });
+				await con.ExecuteAsync("[Auth].[CreatePermission] @a, @b, @c, @d", new { a = productRoleId, b = userActionId, c = actionGroupId, d = isDenied });
+			}
+		}
+
+		/// <summary>
+		/// create the list of permissions
+		/// </summary>
+		public async Task CreatePermissionsAsync(List<PermissionDBEntity> list)
+		{
+			using (var con = new SqlConnection(SqlConnectionString))
+			{
+				await con.ExecuteAsync("[Auth].[CreatePermission] @ProductRoleId, @UserActionId, @ActionGroupId, @IsDenied", list);
 			}
 		}
 	}

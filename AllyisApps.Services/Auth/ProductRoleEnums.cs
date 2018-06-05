@@ -7,6 +7,32 @@
 namespace AllyisApps.Services.Auth
 {
 	/// <summary>
+	/// list of builtin roles
+	/// </summary>
+	public enum BuiltinRoleEnum : int
+	{
+		/// <summary>
+		/// not in product
+		/// </summary>
+		NotInProduct = 0,
+
+		/// <summary>
+		/// administrator
+		/// </summary>
+		Admin = 1,
+
+		/// <summary>
+		/// user
+		/// </summary>
+		User = 2,
+
+		/// <summary>
+		/// custom
+		/// </summary>
+		Custom = 4,
+	}
+
+	/// <summary>
 	/// Role of the user in an organization.
 	/// </summary>
 	public enum OrganizationRoleEnum
@@ -19,7 +45,12 @@ namespace AllyisApps.Services.Auth
 		/// <summary>
 		/// Organization member.
 		/// </summary>
-		Member = 2
+		Member = 2,
+		
+		/// <summary>
+		/// custom role
+		/// </summary>
+		Custom = 4,
 	}
 
 	public enum StaffingManagerRole
@@ -58,7 +89,12 @@ namespace AllyisApps.Services.Auth
 		/// <summary>
 		/// TimeTracker user.
 		/// </summary>
-		User = 2
+		User = 2,
+
+		/// <summary>
+		/// approver
+		/// </summary>
+		Approver = 4,
 	}
 
 	public enum ExpenseTrackerRole

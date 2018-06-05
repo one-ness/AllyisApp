@@ -60,8 +60,11 @@ namespace AllyisApps.Services
 			// add default payclasses to default employee type
 			await this.DBHelper.AddOrgPayClassesToEmployeeType(orgId, etid);
 
+			// add default roles and permissions for allyis apps
+			var roleIds = await this.CreateDefaultAllyisAppsRolesAndPermissions(orgId);
+
 			// create organization user with that employee type id, employee id and role id
-			await this.AddUserToOrganization(orgId, this.UserContext.UserId, employeeId, etid, OrganizationRoleEnum.Admin);
+			await this.AddUserToOrganization(orgId, this.UserContext.UserId, employeeId, etid, roleIds.Item1);
 
 			return orgId;
 		}
@@ -70,10 +73,10 @@ namespace AllyisApps.Services
 		/// add user to organization
 		/// TODO: wrap the calls in a transaction
 		/// </summary>
-		public async Task AddUserToOrganization(int orgId, int userId, string employeeId, int employeeTypeId, OrganizationRoleEnum orgRole = OrganizationRoleEnum.Member, decimal approvalLimit = 0, Dictionary<int, int> subscriptionRoles = null)
+		public async Task AddUserToOrganization(int orgId, int userId, string employeeId, int employeeTypeId, int roleId, decimal approvalLimit = 0, Dictionary<int, int> subscriptionRoles = null)
 		{
 			// add the user to organization
-			await this.DBHelper.CreateOrganizationUser(orgId, userId, (int)orgRole, employeeId, employeeTypeId, approvalLimit);
+			await this.DBHelper.CreateOrganizationUser(orgId, userId, roleId, employeeId, employeeTypeId, approvalLimit);
 
 			// get all active subscriptions of the organization
 			var subs = await this.DBHelper.GetSubscriptionsAsync(orgId, (int)SubscriptionStatusEnum.Active);
@@ -82,19 +85,16 @@ namespace AllyisApps.Services
 			var subroles = new Dictionary<int, int>();
 			if (subscriptionRoles != null)
 			{
-				foreach (var item in subs)
+				foreach (var item in subscriptionRoles)
 				{
-					int subid = 0;
-					if (subscriptionRoles.TryGetValue(item.SubscriptionId, out subid))
+					// check if this subscription is active for this org
+					SubscriptionDBEntity sub = null;
+					if (subs.TryGetValue(item.Key, out sub))
 					{
+						// yes
 						// TODO: for now, we assume the role provided is a valid role for that product.
 						// we may have to validate in the future
-						subroles.Add(item.SubscriptionId, subscriptionRoles[item.SubscriptionId]);
-					}
-					else
-					{
-						// org's subscription not found in the supplied list, hence add the user to this subscription with not in product role
-						subroles.Add(item.SubscriptionId, ProductRole.NotInProduct);
+						subroles.Add(item.Key, item.Value);
 					}
 				}
 			}
@@ -103,7 +103,7 @@ namespace AllyisApps.Services
 				// no subcription and roles supplied, hence add the user to all the subscriptions with not in product role
 				foreach (var item in subs)
 				{
-					subroles.Add(item.SubscriptionId, ProductRole.NotInProduct);
+					subroles.Add(item.Key, ProductRole.NotInProduct);
 				}
 			}
 
@@ -171,7 +171,7 @@ namespace AllyisApps.Services
 			foreach (var item in entities)
 			{
 				var data = new Subscription();
-				data.ProductAreaUrl = item.ArealUrl;
+				data.ProductAreaUrl = item.;
 				data.IsActive = item.IsActive;
 				data.NumberOfUsers = item.NumberOfUsers ?? 0;
 				data.OrganizationId = item.OrganizationId;
@@ -179,8 +179,6 @@ namespace AllyisApps.Services
 				data.ProductId = (ProductIdEnum)item.ProductId;
 				data.ProductName = item.ProductName;
 				data.PromoExpirationDateUtc = item.PromoExpirationDateUtc;
-				data.SkuId = (SkuIdEnum)item.SkuId;
-				data.SkuName = item.SkuName;
 				data.SkuIconUrl = item.IconUrl;
 				data.CreatedUtc = item.SubscriptionCreatedUtc;
 				data.SubscriptionId = item.SubscriptionId;

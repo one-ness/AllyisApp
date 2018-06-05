@@ -183,11 +183,11 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// get the list of subscriptions for the given organization
 		/// </summary>
-		public async Task<List<SubscriptionDBEntity>> GetSubscriptionsAsync(int orgId, int subStatus = 0)
+		public async Task<Dictionary<int, SubscriptionDBEntity>> GetSubscriptionsAsync(int orgId, int subStatus = 0)
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return (await con.QueryAsync<SubscriptionDBEntity>("[Billing].[GetSubscriptions] @a, @b", new { a = orgId, b = subStatus })).ToList();
+				return (await con.QueryAsync<SubscriptionDBEntity>("[Billing].[GetSubscriptions] @a, @b", new { a = orgId, b = subStatus })).ToDictionary(x => x.SubscriptionId, x => x);
 			}
 		}
 

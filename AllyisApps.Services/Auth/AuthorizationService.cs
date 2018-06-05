@@ -17,25 +17,26 @@ namespace AllyisApps.Services
 	public partial class AppService : BaseService
 	{
 		/// <summary>
-		/// list of entities in the app, the user can take action on
+		/// logical grouping of business objects in the application, the user can take action on
 		/// </summary>
-		public enum AppEntity : int
+		public enum ActionGroup : int
 		{
-			Organization = 100,
-			Subscription = 200,
-			User = 300,
+			Billing = 10,
+			Organization = 20,
+			OrganizationUser = 30,
+			Subscription = 40,
+			SubscriptionUser = 50,
 		}
 
 		/// <summary>
 		/// list of actions a user can take
 		/// </summary>
-		public enum AppAction : int
+		public enum UserAction : int
 		{
-			Create = 100,
-			Read = 200,
-			Update = 300,
-			Delete = 400,
-			List = 500,
+			Create = 10,
+			Read = 20,
+			Update = 30,
+			Delete = 40,
 		}
 
 		/// <summary>

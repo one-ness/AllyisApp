@@ -926,12 +926,64 @@ namespace AllyisApps.Services
 			}
 		}
 
-		private async Task CreateDefaultAllyisAppsRolesAndPermissions(int orgOrSubId)
+		private async Task<Tuple<int, int>> CreateDefaultAllyisAppsRolesAndPermissions(int orgOrSubId)
+		{
+			var adminRoleId = await this.CreateAllyisAppsAdminRoleAndPermissions(orgOrSubId);
+			var userRoleId = await this.CreateAllyisAppsUserRoleAndPermissions(orgOrSubId);
+			return new Tuple<int, int>(adminRoleId, userRoleId);
+		}
+
+		private async Task<int> CreateAllyisAppsAdminRoleAndPermissions(int orgOrSubId)
 		{
 			// create admin role
-			var roleId = await this.DBHelper.CreateProductRole((int)ProductIdEnum.AllyisApps, "Admin", "Organization Administrator", orgOrSubId, (int)OrganizationRoleEnum.Admin);
+			var result = await this.DBHelper.CreateProductRoleAsync((int)ProductIdEnum.AllyisApps, "Admin", "Organization Administrator", orgOrSubId, (int)BuiltinRoleEnum.Admin);
 
 			// create permissions for this role
+			var list = new List<PermissionDBEntity>();
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Delete, ActionGroupId = (int)ActionGroup.Organization, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, ActionGroupId = (int)ActionGroup.Organization, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Update, ActionGroupId = (int)ActionGroup.Organization, ProductRoleId = result });
+
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Create, ActionGroupId = (int)ActionGroup.OrganizationUser, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Delete, ActionGroupId = (int)ActionGroup.OrganizationUser, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, ActionGroupId = (int)ActionGroup.OrganizationUser, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Update, ActionGroupId = (int)ActionGroup.OrganizationUser, ProductRoleId = result });
+
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Create, ActionGroupId = (int)ActionGroup.Subscription, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Delete, ActionGroupId = (int)ActionGroup.Subscription, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, ActionGroupId = (int)ActionGroup.Subscription, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Update, ActionGroupId = (int)ActionGroup.Subscription, ProductRoleId = result });
+
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Create, ActionGroupId = (int)ActionGroup.SubscriptionUser, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Delete, ActionGroupId = (int)ActionGroup.SubscriptionUser, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, ActionGroupId = (int)ActionGroup.SubscriptionUser, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Update, ActionGroupId = (int)ActionGroup.SubscriptionUser, ProductRoleId = result });
+
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Create, ActionGroupId = (int)ActionGroup.Billing, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Delete, ActionGroupId = (int)ActionGroup.Billing, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, ActionGroupId = (int)ActionGroup.Billing, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Update, ActionGroupId = (int)ActionGroup.Billing, ProductRoleId = result });
+
+			await this.DBHelper.CreatePermissionsAsync(list);
+
+			return result;
+		}
+
+		private async Task<int> CreateAllyisAppsUserRoleAndPermissions(int orgOrSubId)
+		{
+			// create user role
+			var result = await this.DBHelper.CreateProductRoleAsync((int)ProductIdEnum.AllyisApps, "User", "Organization User", orgOrSubId, (int)BuiltinRoleEnum.User);
+
+			// create permissions for this role
+			var list = new List<PermissionDBEntity>();
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, ActionGroupId = (int)ActionGroup.Organization, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, ActionGroupId = (int)ActionGroup.OrganizationUser, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, ActionGroupId = (int)ActionGroup.Subscription, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, ActionGroupId = (int)ActionGroup.SubscriptionUser, ProductRoleId = result });
+
+			await this.DBHelper.CreatePermissionsAsync(list);
+
+			return result;
 		}
 	}
 }
