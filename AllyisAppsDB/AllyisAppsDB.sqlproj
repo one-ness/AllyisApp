@@ -423,6 +423,7 @@
     <Build Include="Billing\Stored Procedures\GetSubscriptionsByIds.sql" />
     <Build Include="Auth\Stored Procedures\CreateProductRole.sql" />
     <Build Include="Auth\Stored Procedures\CreatePermission.sql" />
+    <Build Include="Auth\Stored Procedures\GetPermission.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
