@@ -45,7 +45,7 @@ namespace AllyisApps.Controllers.Auth
 		{
 			if (ModelState.IsValid)
 			{
-				int orgId = await AppService.SetupOrganization(model.EmployeeId, model.OrganizationName, model.PhoneNumber, model.FaxNumber, model.SiteUrl, null, model.Address, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode);
+				int orgId = await AppService.SetupNewOrganization(model.EmployeeId, model.OrganizationName, model.PhoneNumber, model.FaxNumber, model.SiteUrl, null, model.Address, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode);
 
 				if (orgId <= 0)
 				{

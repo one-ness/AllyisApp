@@ -29,7 +29,7 @@ namespace AllyisApps.Services
 		/// Creates an organization.
 		/// TODO: wrap the calls in a transaction
 		/// </summary>
-		public async Task<int> SetupOrganization(string employeeId, string organizationName, string phoneNumber, string faxNumber, string siteUrl, string subDomainName, string address1, string city, int? stateId, string postalCode, string countryCode)
+		public async Task<int> SetupNewOrganization(string employeeId, string organizationName, string phoneNumber, string faxNumber, string siteUrl, string subDomainName, string address1, string city, int? stateId, string postalCode, string countryCode)
 		{
 			if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException(nameof(employeeId));
 			if (string.IsNullOrWhiteSpace(organizationName)) throw new ArgumentNullException(nameof(organizationName));

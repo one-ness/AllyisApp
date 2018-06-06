@@ -1,13 +1,15 @@
 ﻿CREATE TABLE [Billing].[SubscriptionUser] (
     [SubscriptionId]             INT           NOT NULL,
     [UserId]                     INT           NOT NULL,
-    [ProductRoleId]              INT           NULL,
+    [ProductRoleId]              INT           NOT NULL,
     [SubscriptionUserCreatedUtc] DATETIME2 (0) CONSTRAINT [DF_SubscriptionUser_CreatedUtc] DEFAULT (getutcdate()) NOT NULL,
     CONSTRAINT [PK_SubscriptionUser] PRIMARY KEY NONCLUSTERED ([SubscriptionId] ASC, [UserId] ASC),
     CONSTRAINT [FK_SubscriptionUser_ProductRole] FOREIGN KEY ([ProductRoleId]) REFERENCES [Auth].[ProductRole] ([ProductRoleId]),
     CONSTRAINT [FK_SubscriptionUser_Subscription] FOREIGN KEY ([SubscriptionId]) REFERENCES [Billing].[Subscription] ([SubscriptionId]),
     CONSTRAINT [FK_SubscriptionUser_User] FOREIGN KEY ([UserId]) REFERENCES [Auth].[User] ([UserId]) ON DELETE CASCADE
 );
+
+
 
 
 

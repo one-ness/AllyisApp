@@ -19,7 +19,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// logical grouping of business objects in the application, the user can take action on
 		/// </summary>
-		public enum ActionGroup : int
+		public enum AppEntity : int
 		{
 			Billing = 10,
 			Organization = 20,
@@ -37,6 +37,26 @@ namespace AllyisApps.Services
 			Read = 20,
 			Update = 30,
 			Delete = 40,
+		}
+
+		/// <summary>
+		/// checks if the logged in user has permission to perform the given action in the given group
+		/// </summary>
+		private async Task<bool> CheckPermission(int productRoleId, UserAction userActionId, AppEntity appEntityId, bool throwException = true)
+		{
+			bool result = false;
+			var entity = await this.DBHelper.GetPermissionAsync(productRoleId, (int)userActionId, (int)appEntityId);
+			if (entity != null)
+			{
+				result = !entity.IsDenied;
+			}
+
+			if (!result && throwException)
+			{
+				throw new AccessViolationException(string.Format("Access denied to perform action: {0} on entity: {1} for user", userActionId, appEntityId));
+			}
+
+			return result;
 		}
 
 		/// <summary>

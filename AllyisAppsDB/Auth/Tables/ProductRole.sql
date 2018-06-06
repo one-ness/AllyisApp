@@ -1,5 +1,5 @@
-CREATE TABLE [Auth].[ProductRole] (
-    [ProductRoleId]        INT            IDENTITY (1, 101) NOT NULL,
+﻿CREATE TABLE [Auth].[ProductRole] (
+    [ProductRoleId]        INT            IDENTITY (101, 1) NOT NULL,
     [ProductId]            INT            NOT NULL,
     [ProductRoleShortName] NVARCHAR (32)  NOT NULL,
     [ProductRoleFullName]  NVARCHAR (128) NOT NULL,
@@ -8,6 +8,8 @@ CREATE TABLE [Auth].[ProductRole] (
     CONSTRAINT [PK_ProductRole] PRIMARY KEY CLUSTERED ([ProductRoleId] ASC),
     CONSTRAINT [FK_ProductRole_Product] FOREIGN KEY ([ProductId]) REFERENCES [Billing].[Product] ([ProductId])
 );
+
+
 
 
 

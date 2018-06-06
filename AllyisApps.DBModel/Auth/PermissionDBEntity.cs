@@ -24,9 +24,9 @@ namespace AllyisApps.DBModel.Auth
 		public int ProductRoleId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the action group for which this permission applies
+		/// Gets or sets the entity for which this permission applies
 		/// </summary>
-		public int ActionGroupId { get; set; }
+		public int AppEntityId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the action for which this permission applies

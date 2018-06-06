@@ -1,11 +1,11 @@
 ﻿CREATE procedure [Auth].[CreatePermission]
 	@productRoleId int,
 	@userActionId int,
-	@actionGroupId int,
+	@appEntityId int,
 	@isDenied bit = 0
 as
 begin
 	set nocount on
-	insert into Permission (ProductRoleId, UseractionId, ActionGroupId, IsDenied)
-	values (@productRoleId, @userActionId, @actionGroupId, @isDenied)
+	insert into Permission (ProductRoleId, UseractionId, AppEntityId, IsDenied)
+	values (@productRoleId, @userActionId, @appEntityId, @isDenied)
 end

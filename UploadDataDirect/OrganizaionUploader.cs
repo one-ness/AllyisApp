@@ -15,7 +15,7 @@ namespace UploadDataDirect
 
 		internal async Task<int> CreateOrganizaion()
 		{
-			return await appService.SetupOrganization("1_OWNER", "AllyisAppsInstall", null, null, null, null, null, null, null, null, null);
+			return await appService.SetupNewOrganization("1_OWNER", "AllyisAppsInstall", null, null, null, null, null, null, null, null, null);
 		}
 	}
 }
