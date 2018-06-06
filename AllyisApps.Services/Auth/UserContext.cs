@@ -72,8 +72,7 @@ namespace AllyisApps.Services.Auth
         public class OrganizationAndRole
         {
             public int OrganizationId { get; set; }
-            public OrganizationRoleEnum OrganizationRole { get; set; }
-            public string OrganizationName { get; set; }
+            public int OrganizationRoleId { get; set; }
         }
 
         /// <summary>
@@ -83,7 +82,6 @@ namespace AllyisApps.Services.Auth
         {
             public int SubscriptionId { get; set; }
             public int OrganizationId { get; set; }
-            public SkuIdEnum SkuId { get; set; }
             public ProductIdEnum ProductId { get; set; }
             public int ProductRoleId { get; set; }
             public string AreaUrl { get; set; }

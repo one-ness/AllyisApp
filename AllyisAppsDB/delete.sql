@@ -1,0 +1,7 @@
+--delete auth.OrganizationUser
+--delete hrm.EmployeeTypePayClass
+--delete hrm.EmployeeType
+--delete hrm.PayClass
+--delete auth.Permission
+--delete auth.ProductRole
+--delete auth.Organization

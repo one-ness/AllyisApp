@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -26,11 +27,13 @@ namespace AllyisApps.Controllers.Auth
 		[HttpPost]
 		public async Task<ActionResult> RemoveInvitation(string checkedIds, int orgId)
 		{
+			await AppService.CheckPermission(ProductIdEnum.AllyisApps, AppService.UserAction.Delete, AppService.AppEntity.OrganizationUser, orgId);
+
 			if (checkedIds != "")
 			{
 				//concat stuff here
 				int[] concat = StringToIntList(checkedIds);
-				AppService.CheckOrgAction(AppService.OrgAction.DeleteInvitation, orgId);
+
 				var results = await AppService.RemoveInvitations(concat, orgId);
 
 				if (results)

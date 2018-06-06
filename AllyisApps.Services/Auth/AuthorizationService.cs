@@ -40,20 +40,52 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// checks if the logged in user has permission to perform the given action in the given group
+		/// checks if the logged in user has permission to perform the given action on the given entity, in the given organziatio or subscription
 		/// </summary>
-		private async Task<bool> CheckPermission(int productRoleId, UserAction userActionId, AppEntity appEntityId, bool throwException = true)
+		public async Task<bool> CheckPermission(ProductIdEnum productId, UserAction userActionId, AppEntity appEntityId, int orgOrSubId, bool throwException = true)
 		{
 			bool result = false;
-			var entity = await this.DBHelper.GetPermissionAsync(productRoleId, (int)userActionId, (int)appEntityId);
-			if (entity != null)
+			var productRoleId = 0;
+			// product id tells us if it is org or sub
+			if (productId == ProductIdEnum.AllyisApps)
 			{
-				result = !entity.IsDenied;
+				// it is organization id
+				// check if the user is part of the organization
+				UserContext.OrganizationAndRole role = null;
+				if (this.UserContext.OrganizationsAndRoles.TryGetValue(orgOrSubId, out role))
+				{
+					productRoleId = role.OrganizationRoleId;
+				}
+			}
+			else
+			{
+				// it is subscription id
+				// check if the user is part of the subscription
+				UserContext.SubscriptionAndRole role = null;
+				if (this.UserContext.SubscriptionsAndRoles.TryGetValue(orgOrSubId, out role))
+				{
+					productRoleId = role.SubscriptionId;
+				}
 			}
 
+			// is the user part of the subscription or organization?
+			if (productRoleId > 0)
+			{
+				// yes, check the db for permission for this role for this action on this entity
+				var entity = await this.DBHelper.GetPermissionAsync(productRoleId, (int)userActionId, (int)appEntityId);
+				// is there a permission entry?
+				if (entity != null)
+				{
+					// yes
+					result = !entity.IsDenied;
+				}
+			}
+
+			// does the caller want to throw exception?
 			if (!result && throwException)
 			{
-				throw new AccessViolationException(string.Format("Access denied to perform action: {0} on entity: {1} for user", userActionId, appEntityId));
+				// yes
+				throw new AccessViolationException(string.Format("Access denied to perform action: {0} on entity: {1}.", userActionId, appEntityId));
 			}
 
 			return result;
@@ -158,7 +190,7 @@ namespace AllyisApps.Services
 
 			if (orgInfo != null)
 			{
-				switch (orgInfo.OrganizationRole)
+				switch (orgInfo.OrganizationRoleId)
 				{
 					case OrganizationRoleEnum.Admin:
 						result = true;

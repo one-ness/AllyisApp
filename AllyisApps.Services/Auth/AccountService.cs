@@ -271,7 +271,7 @@ namespace AllyisApps.Services
 					result.OrganizationsAndRoles.Add(item.OrganizationId, new UserContext.OrganizationAndRole
 					{
 						OrganizationId = item.OrganizationId,
-						OrganizationRole = (OrganizationRoleEnum)item.OrganizationRoleId,
+						OrganizationRoleId = (OrganizationRoleEnum)item.OrganizationRoleId,
 						OrganizationName = item.OrganizationName
 					});
 				}
@@ -568,7 +568,7 @@ namespace AllyisApps.Services
 			{
 				// employee is trying to update oneself
 				var org = UserContext.OrganizationsAndRoles.FirstOrDefault(x => x.Value.OrganizationId == orgId);
-				if (org.Value.OrganizationRole != orgRoleId)
+				if (org.Value.OrganizationRoleId != orgRoleId)
 				{
 					// employee is trying to change the oneself's role, not allowed
 					result = UpdateEmployeeIdAndOrgRoleResult.CannotSelfUpdateOrgRole;
