@@ -70,8 +70,6 @@ namespace AllyisApps.ViewModels
 		{
 			switch (product)
 			{
-				case ProductIdEnum.None:
-					return null;
 				case ProductIdEnum.AllyisApps:
 					return GetOrgRolesList();
 				case ProductIdEnum.TimeTracker:

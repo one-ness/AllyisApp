@@ -576,10 +576,6 @@ namespace AllyisApps.Services.Billing
 					name = Strings.ExpenseTracker;
 					break;
 
-				case ProductIdEnum.None:
-					name = Strings.None;
-					break;
-
 				case ProductIdEnum.StaffingManager:
 					name = Strings.StaffingManager;
 					break;
