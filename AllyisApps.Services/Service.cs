@@ -753,7 +753,7 @@ namespace AllyisApps.Services
 				PayClassName = pc.PayClassName,
 				OrganizationId = pc.OrganizationId,
 				PayClassId = pc.PayClassId,
-				BuiltInPayClassId = (BuiltinPayClassEnum)pc.BuiltInPayClassId
+				BuiltInPayClassId = (BuiltinPayClassEnum)pc.BuiltinPayClassId
 			};
 		}
 

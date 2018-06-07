@@ -21,7 +21,7 @@ namespace AllyisApps.DBModel
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				await con.ExecuteAsync("[Hrm].[CreatePayClass] @BuiltInPayClassId, @PayClassName, @OrganizationId", list);
+				await con.ExecuteAsync("[Hrm].[CreatePayClass] @PayClassName, @OrganizationId, @BuiltinPayClassId", list);
 			}
 		}
 

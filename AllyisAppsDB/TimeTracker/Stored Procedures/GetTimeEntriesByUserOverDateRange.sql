@@ -19,7 +19,7 @@ SELECT DISTINCT
          ,[u].[Email]
          ,[ou].[EmployeeId]
          ,[pc].[PayClassName] AS [PayClassName]
-		 ,[pc].[BuiltInPayClassId]
+		 ,[pc].[BuiltinPayClassId]
          ,[IsLocked] = CAST(
              CASE
                  WHEN ([s].[LockDate] IS NOT NULL

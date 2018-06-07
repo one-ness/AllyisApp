@@ -49,7 +49,7 @@ AS
 	SELECT  [PayClassId],
 			[PayClassName],
 			[OrganizationId],
-			[BuiltInPayClassId]
+			[BuiltinPayClassId]
 	FROM [Hrm].[PayClass] WITH (NOLOCK)
 	WHERE [OrganizationId] = @organizationId;
 
@@ -108,7 +108,7 @@ AS
 		,[TimeEntry].[ProjectId]
 		,[TimeEntry].[PayClassId]
 		,[PayClass].[PayClassName] AS [PayClassName]
-		,[PayClass].[BuiltInPayClassId]
+		,[PayClass].[BuiltinPayClassId]
 		,[Date]
 		,[Duration]
 		,[Description]

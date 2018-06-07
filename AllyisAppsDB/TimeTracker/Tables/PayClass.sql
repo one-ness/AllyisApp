@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [Hrm].[PayClass] (
     [PayClassId]        INT           IDENTITY (1, 1) NOT NULL,
     [PayClassName]      NVARCHAR (32) NOT NULL,
-    [BuiltInPayClassId] INT           CONSTRAINT [DF__PayClass__BuiltI__2645B050] DEFAULT ((0)) NOT NULL,
+    [BuiltinPayClassId] INT           CONSTRAINT [DF__PayClass__BuiltI__2645B050] DEFAULT ((0)) NOT NULL,
     [OrganizationId]    INT           NOT NULL,
     CONSTRAINT [PK_PayClass] PRIMARY KEY NONCLUSTERED ([PayClassId] ASC),
     CONSTRAINT [FK_PayClass_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId])

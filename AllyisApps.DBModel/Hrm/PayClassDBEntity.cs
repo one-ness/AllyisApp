@@ -20,7 +20,7 @@ namespace AllyisApps.DBModel.Hrm
 		/// <summary>
 		/// Gets or sets the built-in payclass this payclass corresponds to.
 		/// </summary>
-		public int BuiltInPayClassId { get; set; }
+		public int BuiltinPayClassId { get; set; }
 
 		/// <summary>
 		/// Gets or sets payclass name.

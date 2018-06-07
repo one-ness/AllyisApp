@@ -43,7 +43,7 @@ namespace AllyisApps.Services
 			int orgId = 0;
 			try
 			{
-				await this.DBHelper.CreateOrganizationAsync(organizationName, (int)OrganizationStatusEnum.Active, siteUrl, phoneNumber, faxNumber, subDomainName, addressId == 0 ? null : addressId);
+				orgId = await this.DBHelper.CreateOrganizationAsync(organizationName, (int)OrganizationStatusEnum.Active, siteUrl, phoneNumber, faxNumber, subDomainName, addressId == 0 ? null : addressId);
 			}
 			catch (SqlException ex)
 			{
@@ -66,14 +66,14 @@ namespace AllyisApps.Services
 
 			// create default payclasses for the organization
 			var list = new List<PayClassDBEntity>();
-			list.Add(new PayClassDBEntity() { BuiltInPayClassId = (int)BuiltinPayClassEnum.Custom, OrganizationId = orgId, PayClassName = "Bereavement Leave" });
-			list.Add(new PayClassDBEntity() { BuiltInPayClassId = (int)BuiltinPayClassEnum.Custom, OrganizationId = orgId, PayClassName = "Jury Duty" });
-			list.Add(new PayClassDBEntity() { BuiltInPayClassId = (int)BuiltinPayClassEnum.Custom, OrganizationId = orgId, PayClassName = "Other Leave" });
-			list.Add(new PayClassDBEntity() { BuiltInPayClassId = (int)BuiltinPayClassEnum.Holiday, OrganizationId = orgId, PayClassName = "Holiday" });
-			list.Add(new PayClassDBEntity() { BuiltInPayClassId = (int)BuiltinPayClassEnum.Overtime, OrganizationId = orgId, PayClassName = "Overtime" });
-			list.Add(new PayClassDBEntity() { BuiltInPayClassId = (int)BuiltinPayClassEnum.PaidTimeOff, OrganizationId = orgId, PayClassName = "Paid Time Off" });
-			list.Add(new PayClassDBEntity() { BuiltInPayClassId = (int)BuiltinPayClassEnum.Regular, OrganizationId = orgId, PayClassName = "Regular" });
-			list.Add(new PayClassDBEntity() { BuiltInPayClassId = (int)BuiltinPayClassEnum.UnpaidTimeOff, OrganizationId = orgId, PayClassName = "Unpaid Time Off" });
+			list.Add(new PayClassDBEntity() { BuiltinPayClassId = (int)BuiltinPayClassEnum.Custom, OrganizationId = orgId, PayClassName = "Bereavement Leave" });
+			list.Add(new PayClassDBEntity() { BuiltinPayClassId = (int)BuiltinPayClassEnum.Custom, OrganizationId = orgId, PayClassName = "Jury Duty" });
+			list.Add(new PayClassDBEntity() { BuiltinPayClassId = (int)BuiltinPayClassEnum.Custom, OrganizationId = orgId, PayClassName = "Other Leave" });
+			list.Add(new PayClassDBEntity() { BuiltinPayClassId = (int)BuiltinPayClassEnum.Holiday, OrganizationId = orgId, PayClassName = "Holiday" });
+			list.Add(new PayClassDBEntity() { BuiltinPayClassId = (int)BuiltinPayClassEnum.Overtime, OrganizationId = orgId, PayClassName = "Overtime" });
+			list.Add(new PayClassDBEntity() { BuiltinPayClassId = (int)BuiltinPayClassEnum.PaidTimeOff, OrganizationId = orgId, PayClassName = "Paid Time Off" });
+			list.Add(new PayClassDBEntity() { BuiltinPayClassId = (int)BuiltinPayClassEnum.Regular, OrganizationId = orgId, PayClassName = "Regular" });
+			list.Add(new PayClassDBEntity() { BuiltinPayClassId = (int)BuiltinPayClassEnum.UnpaidTimeOff, OrganizationId = orgId, PayClassName = "Unpaid Time Off" });
 			await this.DBHelper.CreatePayClassesAsync(orgId, list);
 
 			// create default employee type for the organization
