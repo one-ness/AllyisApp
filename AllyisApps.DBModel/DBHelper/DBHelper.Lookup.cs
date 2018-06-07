@@ -120,5 +120,16 @@ namespace AllyisApps.DBModel
 				return await con.QueryFirstOrDefaultAsync<int>("[Lookup].[UpdateAddress] @p1, @p2, @p3, @p4, @p5, @p6, @p7", new { p1 = addressId, p2 = address1, p3 = address2, p4 = city, p5 = stateId, p6 = postalCode, p7 = countryCode });
 			}
 		}
+
+		/// <summary>
+		/// deletes the given address, returns number of rows affected
+		/// </summary>
+		public async Task<int> DeleteAddressAsync(int addressId)
+		{
+			using (var con = new SqlConnection(SqlConnectionString))
+			{
+				return await con.QueryFirstOrDefaultAsync<int>("[Lookup].[DeleteAddress] @p1", new { p1 = addressId });
+			}
+		}
 	}
 }

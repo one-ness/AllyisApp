@@ -187,7 +187,7 @@ namespace AllyisApps.Services
 			{
 				if (ex.Message.ToLower().Contains("unique"))
 				{
-					// unique constraint violation of email
+					// unique constraint, email already taken
 				}
 				else
 				{

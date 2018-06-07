@@ -17,6 +17,7 @@ using AllyisApps.Services.Billing;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.Hrm;
+using System.Data.SqlClient;
 
 namespace AllyisApps.Services
 {
@@ -38,7 +39,29 @@ namespace AllyisApps.Services
 			int? addressId = await this.DBHelper.CreateAddressAsync(address1, null, city, stateId, postalCode, countryCode);
 
 			// create organization
-			var orgId = await this.DBHelper.CreateOrganizationAsync(organizationName, siteUrl, phoneNumber, faxNumber, subDomainName, addressId == 0 ? null : addressId);
+			int orgId = 0;
+			try
+			{
+				await this.DBHelper.CreateOrganizationAsync(organizationName, siteUrl, phoneNumber, faxNumber, subDomainName, addressId == 0 ? null : addressId);
+			}
+			catch (SqlException ex)
+			{
+				if (ex.Message.ToLower().Contains("unique"))
+				{
+					// unique constraint, sudomain already taken
+					// delete the address
+					if (addressId > 0)
+					{
+						await this.DBHelper.DeleteAddressAsync(addressId.Value);
+						return orgId;
+					}
+				}
+				else
+				{
+					throw;
+				}
+
+			}
 
 			// create default payclasses for the organization
 			var idsAndNames = new List<Tuple<int, string>>();
