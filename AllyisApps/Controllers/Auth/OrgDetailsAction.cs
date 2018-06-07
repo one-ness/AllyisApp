@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -22,9 +23,9 @@ namespace AllyisApps.Controllers.Auth
 		public async Task<ActionResult> OrgDetails(int id)
 		{
 			var model = new OrganizationDetailsViewModel();
-			model.CanEditOrganization = AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id, false);
+			model.CanEditOrganization = await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppService.AppEntity.Organization, id, false);
 			var org = await AppService.GetOrganizationAsync(id);
-			model.CanDeleteOrganization = AppService.CheckOrgAction(AppService.OrgAction.DeleteOrganization, id, false);
+			model.CanDeleteOrganization = await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Delete, AppService.AppEntity.Organization, id, false);
 			if (org.Address != null)
 			{
 				model.Address = org.Address.Address1;

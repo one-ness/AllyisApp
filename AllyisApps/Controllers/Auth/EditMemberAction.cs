@@ -28,6 +28,7 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		public async Task<ActionResult> EditMember(int id, int userId)
 		{
+			await this.AppService.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, UserAction.Update, AppEntity.OrganizationUser, id);
 			var model = await ConstructViewModel(id, userId);
 			return View(ActionConstants.EditMember, model);
 		}
@@ -36,14 +37,14 @@ namespace AllyisApps.Controllers.Auth
 		{
 			// get all subscriptions of this organization, get a list of roles for each subscription and user's role in each subscription
 			var subs = await AppService.GetSubscriptionsAsync(orgId, true);
-			UserOld user = await AppService.GetUserOldAsync(userId, orgId, OrgAction.ReadOrganization); // this call makes sure that both logged in user and userId have at least one common org
+			var user = await AppService.GetCurrentUserAsync();
 			var employeeTypeList = (await AppService.GetEmployeeTypeByOrganization(orgId));
 			var employee = (await AppService.GetOrganizationUsersAsync(orgId)).Where(x => x.UserId == userId).FirstOrDefault();
-			UserOrganization org = user.UserOrganizations.FirstOrDefault(x => x.OrganizationId == orgId);
+			UserOrganization org = null; // user.UserOrganizations.FirstOrDefault(x => x.OrganizationId == orgId);
 			
 			var model = new EditMemberViewModel
 			{
-				CanEditMember = AppService.CheckOrgAction(OrgAction.EditUser, orgId, false),
+				CanEditMember = await AppService.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, UserAction.Update, AppEntity.OrganizationUser, orgId, false),
 				Address = user.Address?.Address1,
 				City = user.Address?.City,
 				CountryName = user.Address?.CountryName,
@@ -67,8 +68,8 @@ namespace AllyisApps.Controllers.Auth
 				SubscriptionRoles = subs.Select(sub => new EditMemberViewModel.RoleItemViewModel
 				{
 					RoleList = ModelHelper.GetRolesList(sub.ProductId),
-					SelectedRoleId =
-						user.UserSubscriptions.FirstOrDefault(x => x.SubscriptionId == sub.SubscriptionId)?.ProductRoleId ?? 0,
+					//SelectedRoleId =
+					//	user.UserSubscriptions.FirstOrDefault(x => x.SubscriptionId == sub.SubscriptionId)?.ProductRoleId ?? 0,
 					SubscriptionId = sub.SubscriptionId,
 					SubscriptionName = sub.SubscriptionName
 				}).ToList(),

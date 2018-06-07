@@ -10,6 +10,7 @@ using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Auth;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -46,8 +47,8 @@ namespace AllyisApps.Controllers.Auth
 		[HttpGet]
 		public async Task<ActionResult> EditOrg(int id)
 		{
-			AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
-			bool canDelete = AppService.CheckOrgAction(AppService.OrgAction.DeleteOrganization, id, false);
+			await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppService.AppEntity.Organization, id);
+			bool canDelete = await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Delete, AppService.AppEntity.Organization, id, false);
 			var organization = await AppService.GetOrganizationAsync(id);
 			var model = new EditOrganizationViewModel
 			{

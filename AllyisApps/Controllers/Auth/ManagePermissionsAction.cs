@@ -70,7 +70,7 @@ namespace AllyisApps.Controllers.Auth
 			var model = JsonConvert.DeserializeObject<UserPermissionsAction>(data);
 			var modelSelectedUsers = model.SelectedUsers as IList<TargetUserViewModel> ?? model.SelectedUsers.ToList(); //prevent multiple enumeration of IEnumerable
 
-			AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, model.OrganizationId);
+			await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppService.AppEntity.Organization, model.OrganizationId);
 
 			if (model.SelectedUsers == null || !modelSelectedUsers.Any())
 			{

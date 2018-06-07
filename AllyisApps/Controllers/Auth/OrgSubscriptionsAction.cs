@@ -23,8 +23,8 @@ namespace AllyisApps.Controllers.Auth
 		public async Task<ActionResult> OrgSubscriptions(int id)
 		{
 			var model = new OrganizationSubscriptionsViewModel();
-			model.CanEditSubscriptions = AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, id, false);
-			model.CanManagePermissions = AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id, false);
+			model.CanEditSubscriptions = await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppService.AppEntity.Subscription, id, false);
+			model.CanManagePermissions = await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppService.AppEntity.Permission, id, false);
 			model.OrganizationId = id;
 			var collection = await AppService.GetSubscriptionsAsync(id);
 			foreach (Subscription item in collection)

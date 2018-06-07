@@ -13,6 +13,7 @@ using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.Utilities;
 using ExcelDataReader;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -37,7 +38,7 @@ namespace AllyisApps.Controllers.Auth
 			// TODO: Buff up the error handling (catch errors from import functions, etc.)
 			if (!ModelState.IsValid) return RedirectToAction(ActionConstants.AddMember, ControllerConstants.Account, new { organizationId = id });
 
-			AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
+			await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppService.AppEntity.Organization, id);
 
 			if (upload != null && upload.ContentLength > 0)
 			{

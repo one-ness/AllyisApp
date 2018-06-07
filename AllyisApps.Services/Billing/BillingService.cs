@@ -202,9 +202,9 @@ namespace AllyisApps.Services
 		/// Removes billing from the current organization.
 		/// </summary>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool RemoveBilling(int orgId)
+		public async Task<bool> RemoveBilling(int orgId)
 		{
-			CheckOrgAction(OrgAction.EditBilling, orgId);
+			await CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppEntity.Subscription, orgId);
 			DBHelper.RemoveBilling(orgId);
 			return true;
 		}
@@ -346,7 +346,8 @@ namespace AllyisApps.Services
 				int subId = item.Key;
 				int roleId = item.Value;
 
-				await CheckSubscriptionAction(OrgAction.EditSubscriptionUser, subId);
+				// TODO: below call needs org id
+				await this.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppService.AppEntity.Subscription, subId);
 				await DBHelper.MergeSubscriptionUserProductRole(roleId, subId, userId);
 			}
 		}
@@ -387,7 +388,8 @@ namespace AllyisApps.Services
 		{
 			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException(nameof(subscriptionId));
 
-			await CheckSubscriptionAction(OrgAction.ReadSubscription, subscriptionId);
+			// TODO: below call needs org id
+			await this.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, AppService.UserAction.Read, AppService.AppEntity.Subscription, subscriptionId);
 
 			// get from db
 			var sub = await DBHelper.GetSubscriptionDetailsById(subscriptionId);
@@ -419,7 +421,8 @@ namespace AllyisApps.Services
 
 		public async Task<List<SubscriptionUser>> GetSubscriptionUsers(int subscriptionId)
 		{
-			await CheckSubscriptionAction(OrgAction.EditSubscriptionUser, subscriptionId);
+			// TODO: below call needs org id
+			await this.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppService.AppEntity.SubscriptionUser, subscriptionId);
 			var subUsers = DBHelper.GetSubscriptionUsersBySubscriptionId(subscriptionId);
 			return subUsers.Select(InitializeSubscriptionUser).ToList();
 		}
@@ -504,7 +507,7 @@ namespace AllyisApps.Services
 			 * - stop future billing
 			 */
 			Subscription sub = await GetSubscription(subscriptionId);
-			CheckOrgAction(OrgAction.DeleteSubscritpion, sub.OrganizationId);
+			await CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Delete, AppEntity.Subscription, sub.OrganizationId);
 			DBHelper.DeactivateSubscription(subscriptionId);
 			return sub.OrganizationId;
 		}
@@ -595,13 +598,14 @@ namespace AllyisApps.Services
 			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException(nameof(subscriptionId));
 			if (string.IsNullOrWhiteSpace(subscriptionName)) throw new ArgumentNullException(nameof(subscriptionName));
 
-			await CheckSubscriptionAction(OrgAction.EditSubscription, subscriptionId);
+			// TODO: below call need org id
+			await this.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppService.AppEntity.Subscription, subscriptionId);
 			DBHelper.UpdateSubscriptionName(subscriptionId, subscriptionName);
 		}
 
 		private async void UpdateSubscriptionSkuAndName(int organizationId, int subscriptionId, string subscriptionName, SkuIdEnum skuId)
 		{
-			CheckOrgAction(OrgAction.EditSubscription, organizationId);
+			await this.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppService.AppEntity.Subscription, organizationId);
 			DBHelper.UpdateSubscriptionSkuAndName(subscriptionId, subscriptionName, (int)skuId);
 			await Task.Yield();
 		}

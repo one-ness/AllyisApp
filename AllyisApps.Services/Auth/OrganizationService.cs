@@ -123,7 +123,7 @@ namespace AllyisApps.Services
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
 
-			CheckOrgAction(OrgAction.ReadOrganization, orgId);
+			await CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Read, AppEntity.Organization, orgId);
 			return await InitializeOrganization(await DBHelper.GetOrganizationAsync(orgId));
 		}
 
@@ -131,7 +131,7 @@ namespace AllyisApps.Services
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId), "Organization Id must be greater than 0.");
 
-			CheckOrgAction(OrgAction.ReadInvitationsList, orgId);
+			await CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Read, AppEntity.OrganizationUser, orgId);
 
 			var collection = await DBHelper.GetInvitationsAsync(orgId, (int)InvitationStatusEnum.Any);
 
@@ -163,7 +163,7 @@ namespace AllyisApps.Services
 
 			if (!readingList)
 			{
-				CheckOrgAction(OrgAction.ReadSubscriptions, orgId);
+				await CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Read, AppEntity.Subscription, orgId);
 			}
 
 			var result = new List<Subscription>();
@@ -214,7 +214,7 @@ namespace AllyisApps.Services
 			if (organizationId <= 0) throw new ArgumentOutOfRangeException(nameof(organizationId));
 			if (string.IsNullOrWhiteSpace(organizationName)) throw new ArgumentNullException(nameof(organizationName));
 
-			CheckOrgAction(OrgAction.EditOrganization, organizationId);
+			await CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppEntity.Organization, organizationId);
 
 			return await DBHelper.UpdateOrganization(organizationId, organizationName, siteUrl, addressId, address1, city, stateId, countryCode, postalCode, phoneNumber, faxNumber, subDomain) > 0;
 		}
@@ -226,7 +226,7 @@ namespace AllyisApps.Services
 		public async Task DeleteOrganization(int orgId)
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
-			CheckOrgAction(OrgAction.DeleteOrganization, orgId);
+			await CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Delete, AppEntity.Organization, orgId);
 			await this.DBHelper.UpdateOrganizationStatusAsync(orgId, (int)OrganizationStatusEnum.Inactive);
 		}
 
@@ -236,7 +236,7 @@ namespace AllyisApps.Services
 		public async Task<int> InviteUser(string url, string email, string firstName, string lastName, int organizationId, string organizationName, OrganizationRoleEnum organizationRoleId, string employeedId, string prodJson, int? employeetypeId)
 		{
 			if (organizationId <= 0) throw new ArgumentOutOfRangeException(nameof(organizationId));
-			CheckOrgAction(OrgAction.AddUserToOrganization, organizationId);
+			await CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Create, AppEntity.OrganizationUser, organizationId);
 			if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
 			if (string.IsNullOrWhiteSpace(email)) throw new ArgumentNullException(nameof(email));
 			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException(nameof(firstName));
@@ -338,7 +338,7 @@ namespace AllyisApps.Services
 			if (invitationId <= 0) throw new ArgumentException(nameof(invitationId));
 
 			var invitation = await GetInvitation(invitationId);
-			CheckOrgAction(OrgAction.DeleteInvitation, invitation.OrganizationId);
+			await CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Delete, AppEntity.OrganizationUser, invitation.OrganizationId);
 			return DBHelper.DeleteInvitation(invitationId);
 		}
 
@@ -353,7 +353,7 @@ namespace AllyisApps.Services
 			if (InvitationIds[0] <= 0) throw new ArgumentException("invitationId");
 
 			bool worked = true;
-			CheckOrgAction(OrgAction.DeleteInvitation, orgId);
+			await CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Delete, AppEntity.OrganizationUser, orgId);
 
 			foreach (var invitationId in InvitationIds)
 			{
@@ -386,7 +386,7 @@ namespace AllyisApps.Services
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
 
-			CheckOrgAction(OrgAction.ReadUsersList, orgId);
+			await CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Read, AppEntity.OrganizationUser, orgId);
 
 
 			var collection = await DBHelper.GetOrganizationUsersAsync(orgId);
@@ -397,7 +397,7 @@ namespace AllyisApps.Services
 		public async Task<int> GetOrganizationInvitationCountAsync(int orgId, InvitationStatusEnum statusMask)
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
-			CheckOrgAction(OrgAction.ReadInvitationsList, orgId);
+			await CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Read, AppEntity.OrganizationUser, orgId);
 
 			return await this.DBHelper.GetOrganizationInvitationCountAsync(orgId, (int)statusMask);
 		}

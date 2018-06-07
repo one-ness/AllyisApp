@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -21,7 +22,7 @@ namespace AllyisApps.Controllers.Auth
 		public async Task<ActionResult> ManageOrgPermissions(int id)
 		{
 			//Get OrganizaionUser Rows
-			AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id);
+			await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppService.AppEntity.Permission, id);
 			var orgUsers = AppService.GetOrganizationMemberList(id);
 			var orgSubs = await AppService.GetSubscriptionsAsync(id);
 

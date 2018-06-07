@@ -26,6 +26,7 @@ namespace AllyisApps.Services
 			OrganizationUser = 30,
 			Subscription = 40,
 			SubscriptionUser = 50,
+			Permission = 60,
 		}
 
 		/// <summary>
@@ -42,7 +43,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// checks if the logged in user has permission to perform the given action on the given entity, in the given organziatio or subscription
 		/// </summary>
-		public async Task<bool> CheckPermission(ProductIdEnum productId, UserAction userActionId, AppEntity appEntityId, int orgOrSubId, bool throwException = true)
+		public async Task<bool> CheckPermissionAsync(ProductIdEnum productId, UserAction userActionId, AppEntity appEntityId, int orgOrSubId, bool throwException = true)
 		{
 			bool result = false;
 			var productRoleId = 0;
@@ -178,73 +179,6 @@ namespace AllyisApps.Services
 			ViewApplication,
 			ViewOthers,
 			EditOthers,
-		}
-
-		/// <summary>
-		/// check permissions for the given action in the given org for the logged in user.
-		/// </summary>
-		public bool CheckOrgAction(OrgAction action, int orgId, bool throwException = true)
-		{
-			bool result = false;
-			UserContext.OrganizationsAndRoles.TryGetValue(orgId, out UserContext.OrganizationAndRole orgInfo);
-
-			if (orgInfo != null)
-			{
-				switch (orgInfo.OrganizationRoleId)
-				{
-					case OrganizationRoleEnum.Admin:
-						result = true;
-						break;
-
-					default:
-						switch (action)
-						{
-							case OrgAction.ReadOrganization:
-							case OrgAction.ReadSubscription:
-							case OrgAction.ReadUsersList:
-								// all members can read organization details
-								result = true;
-								break;
-						}
-
-						break;
-				}
-			}
-
-			if (!result && throwException)
-			{
-				string message = string.Format("action {0} denied for org {1}", action, orgId);
-				throw new AccessViolationException(message);
-			}
-
-			return result;
-		}
-
-		public async Task<bool> CheckSubscriptionAction(OrgAction action, int subscriptionId, bool throwException = true)
-		{
-			bool result = false;
-			int organizationId = 0;
-
-			// reduce database lookup 
-			if (UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out UserContext.SubscriptionAndRole sar))
-			{
-				organizationId = sar.OrganizationId;
-				result = CheckOrgAction(action, organizationId, throwException);
-			}
-			else
-			{
-				var sub = await DBHelper.GetSubscriptionDetailsById(subscriptionId);
-				organizationId = sub.OrganizationId;
-				result = CheckOrgAction(action, organizationId, throwException);
-			}
-
-			if (!result && throwException)
-			{
-				string message = string.Format("action {0} denied for subscription {1}", action, subscriptionId);
-				throw new AccessViolationException(message);
-			}
-
-			return result;
 		}
 
 		public bool CheckStaffingManagerAction(StaffingManagerAction action, int subId, bool throwException = true)

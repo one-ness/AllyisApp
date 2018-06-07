@@ -271,8 +271,7 @@ namespace AllyisApps.Services
 					result.OrganizationsAndRoles.Add(item.OrganizationId, new UserContext.OrganizationAndRole
 					{
 						OrganizationId = item.OrganizationId,
-						OrganizationRoleId = (OrganizationRoleEnum)item.OrganizationRoleId,
-						OrganizationName = item.OrganizationName
+						OrganizationRoleId = item.OrganizationRoleId
 					});
 				}
 
@@ -296,14 +295,6 @@ namespace AllyisApps.Services
 			}
 
 			return result;
-		}
-
-		/// <summary>
-		/// get the current logged in user
-		/// </summary>
-		public async Task<UserOld> GetCurrentUserOldAsync()
-		{
-			return await GetUserOldAsync(UserContext.UserId);
 		}
 
 		public async Task<User> GetCurrentUserAsync(bool loadAddress = true)
@@ -387,141 +378,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// get user
-		/// - address, organizations, subscriptions and invitations
-		/// </summary>
-		public async Task<UserOld> GetUserOldAsync(int userId, int organizationId = 0, OrgAction actionContext = OrgAction.ReadUser)
-		{
-			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId));
-
-			dynamic sets = await DBHelper.GetUserOld(userId);
-			UserOld user = null; // this.InitializeUser(sets.User);
-			dynamic subs = sets.Subscriptions;
-			foreach (dynamic item in subs)
-			{
-				var sub = new UserSubscription
-				{
-					IsActive = item.IsActive,
-					NumberOfUsers = item.NumberOfUsers,
-					OrganizationId = item.OrganizationId,
-					ProductAreaUrl = item.ProductAreaUrl,
-					ProductDescription = item.ProductDescription,
-					ProductId = (ProductIdEnum)item.ProductId,
-					ProductName = item.ProductName,
-					ProductRoleId = item.ProductRoleId,
-					PromoExpirationDateUtc = item.PromotionExpirationDateUtc,
-					SkuDescription = item.SkuDescription,
-					SkuIconUrl = item.IconUrl,
-					SkuId = (SkuIdEnum)item.SkuId,
-					SkuName = item.SkuName,
-					CreatedUtc = item.SubscriptionCreatedUtc,
-					SubscriptionId = item.SubscriptionId,
-					SubscriptionName = item.SubscriptionName,
-					JoinedDateUtc = item.SubscriptionUserCreatedUtc,
-					UserId = item.UserId
-				};
-				user.Subscriptions.Add(sub);
-			}
-
-			dynamic orgs = sets.Organizations;
-			foreach (var item in orgs)
-			{
-				UserOrganization org = new UserOrganization();
-				org.Address = new Address();
-				org.Address.Address1 = item.Address1;
-				org.Address.AddressId = item.AddressId;
-				org.Address.City = item.City;
-				org.Address.CountryCode = item.CountryCode;
-				org.Address.CountryName = item.CountryName;
-				org.Address.PostalCode = item.PostalCode;
-				org.Address.StateId = item.StateId;
-				org.Address.StateName = item.StateName;
-				org.CreatedUtc = item.OrganizationCreatedUtc;
-				org.EmployeeId = item.EmployeeId;
-				org.FaxNumber = item.FaxNumber;
-				org.JoinedDateUtc = item.OrganizationUserCreatedUtc;
-				org.MaxApprovalAmount = item.ApprovalAmount;
-				org.OrganizationId = item.OrganizationId;
-				org.OrganizationName = item.OrganizationName;
-				org.OrganizationRole = (OrganizationRoleEnum)item.OrganizationRoleId;
-				org.PhoneNumber = item.PhoneNumber;
-				org.SiteUrl = item.SiteUrl;
-				org.UserId = item.UserId;
-				user.Organizations.Add(org);
-			}
-
-			dynamic invites = sets.Invitations;
-			foreach (var item in invites)
-			{
-				Invitation invite = new Invitation();
-				invite.Email = item.Email;
-				invite.EmployeeId = item.EmployeeId;
-				invite.FirstName = item.FirstName;
-				invite.InvitationCreatedUtc = item.InvitationCreatedUtc;
-				invite.InvitationId = item.InvitationId;
-				invite.InvitationStatus = (InvitationStatusEnum)item.InvitationStatus;
-				invite.LastName = item.LastName;
-				invite.OrganizationId = item.OrganizationId;
-				invite.OrganizationName = item.OrganizationName;
-				invite.ProductRolesJson = item.ProductRolesJson;
-				user.Invitations.Add(invite);
-			}
-
-			if (UserContext.UserId != user.UserId)
-			{
-				// logged in user is trying to read a different user's information
-				// was an org id provided?
-				if (organizationId <= 0)
-				{
-					// no, get the list of organizations that both of them are member of
-					var orgIds = (
-						from item in UserContext.OrganizationsAndRoles
-						select item.Value.OrganizationId into orgId
-						let org =
-							user.Organizations.FirstOrDefault(x => x.OrganizationId == orgId)
-						where org != null
-						select orgId
-						).ToList();
-
-					// is there any?
-					bool permFound = false;
-					if (orgIds.Count <= 0)
-					{
-						// no
-						throw new AccessViolationException(string.Format("User {0} not found in any of the organizations.", user.UserId));
-					}
-
-					// yes, does the logged in user have readuser permission in at least one of them?
-					foreach (int item in orgIds)
-					{
-						permFound = CheckOrgAction(actionContext, item, false);
-					}
-
-					if (!permFound)
-					{
-						// no
-						throw new AccessViolationException(string.Format("User {0} does not have permission to read user {1}.", UserContext.UserId, user.UserId));
-					}
-				}
-				else
-				{
-					// does the user belong to that organization?
-					var org = user.Organizations.FirstOrDefault(x => x.OrganizationId == organizationId);
-					if (org == null)
-					{
-						// no
-						throw new AccessViolationException(string.Format("User {0} not found in the organization {1}.", user.UserId, organizationId));
-					}
-
-					// yes, check the logged in user's permission
-					CheckOrgAction(actionContext, organizationId);
-				}
-			}
-
-			return user;
-		}
-
-		/// <summary>
 		/// update the current user profile
 		/// </summary>
 		public async Task UpdateCurrentUserProfile(DateTime dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
@@ -560,15 +416,15 @@ namespace AllyisApps.Services
 			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId));
 			if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException(nameof(employeeId));
 
-			CheckOrgAction(OrgAction.EditUser, orgId);
+			//CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.EditUser, orgId);
 
 			var result = UpdateEmployeeIdAndOrgRoleResult.Success;
-			CheckOrgAction(OrgAction.EditUser, orgId);
+			//CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.EditUser, orgId);
 			if (userId == UserContext.UserId)
 			{
 				// employee is trying to update oneself
 				var org = UserContext.OrganizationsAndRoles.FirstOrDefault(x => x.Value.OrganizationId == orgId);
-				if (org.Value.OrganizationRoleId != orgRoleId)
+				//if (org.Value.OrganizationRoleId != orgRoleId)
 				{
 					// employee is trying to change the oneself's role, not allowed
 					result = UpdateEmployeeIdAndOrgRoleResult.CannotSelfUpdateOrgRole;

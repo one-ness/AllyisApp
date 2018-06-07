@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Services;
 using AllyisApps.Services.Common.Types;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -27,7 +28,7 @@ namespace AllyisApps.Controllers.Auth
 		[CLSCompliant(false)]
 		public async Task<ActionResult> Charge(int id, BillingServicesToken token, string billingServicesEmail)
 		{
-			AppService.CheckOrgAction(AppService.OrgAction.EditBilling, id);
+			await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppService.AppEntity.Billing, id);
 			await AppService.UpdateBillingInfo(billingServicesEmail, token, id);
 			Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Strings.Billing, Core.Alert.Variety.Success));
 			await Task.Yield();

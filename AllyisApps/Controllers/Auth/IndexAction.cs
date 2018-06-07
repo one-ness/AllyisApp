@@ -98,12 +98,12 @@ namespace AllyisApps.Controllers.Auth
 					Country = item.Address?.CountryName,
 					SiteUrl = item.SiteUrl,
 					FaxNumber = item.FaxNumber,
-					IsCreateSubscriptionAllowed = this.AppService.CheckOrgAction(AllyisApps.Services.AppService.OrgAction.CreateSubscription, item.OrganizationId, false),
-					IsReadBillingDetailsAllowed = this.AppService.CheckOrgAction(AllyisApps.Services.AppService.OrgAction.ReadBilling, item.OrganizationId, false),
-					IsReadMembersListAllowed = this.AppService.CheckOrgAction(AllyisApps.Services.AppService.OrgAction.ReadUsersList, item.OrganizationId, false),
-					IsReadOrgDetailsAllowed = this.AppService.CheckOrgAction(AllyisApps.Services.AppService.OrgAction.ReadOrganization, item.OrganizationId, false),
-					IsReadPermissionsListAllowed = this.AppService.CheckOrgAction(AllyisApps.Services.AppService.OrgAction.ReadPermissions, item.OrganizationId, false),
-					IsReadSubscriptionsListAllowed = this.AppService.CheckOrgAction(AllyisApps.Services.AppService.OrgAction.ReadSubscriptions, item.OrganizationId, false)
+					IsCreateSubscriptionAllowed = await this.AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Create, AppService.AppEntity.Subscription, item.OrganizationId, false),
+					IsReadBillingDetailsAllowed = await this.AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Read, AppService.AppEntity.Billing, item.OrganizationId, false),
+					IsReadMembersListAllowed = await this.AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Read, AppService.AppEntity.OrganizationUser, item.OrganizationId, false),
+					IsReadOrgDetailsAllowed = await this.AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Read, AppService.AppEntity.Organization, item.OrganizationId, false),
+					IsReadPermissionsListAllowed = await this.AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Read, AppService.AppEntity.Permission, item.OrganizationId, false),
+					IsReadSubscriptionsListAllowed = await this.AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Read, AppService.AppEntity.Subscription, item.OrganizationId, false)
 				};
 
 				// get a list of org's subscriptions that this user is member of

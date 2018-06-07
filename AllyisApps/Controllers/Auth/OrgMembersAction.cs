@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.Auth;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -26,10 +27,10 @@ namespace AllyisApps.Controllers.Auth
 
 			var model = new OrganizationMembersViewModel
 			{
-				CanAddUser = AppService.CheckOrgAction(AppService.OrgAction.AddUserToOrganization, id, false),
-				CanDeleteUser = AppService.CheckOrgAction(AppService.OrgAction.DeleteUserFromOrganization, id, false),
-				CanEditUser = AppService.CheckOrgAction(AppService.OrgAction.EditUser, id, false),
-				CanManagePermissions = AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id, false),
+				CanAddUser = await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Create, AppService.AppEntity.OrganizationUser, id, false),
+				CanDeleteUser = await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Delete, AppService.AppEntity.OrganizationUser, id, false),
+				CanEditUser = await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppService.AppEntity.OrganizationUser, id, false),
+				CanManagePermissions = await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppService.AppEntity.Permission, id, false),
 				OrganizationId = id,
 				PossibleRoles = organizationRoles,
 				CurrentUserId = AppService.UserContext.UserId

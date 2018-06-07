@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.Auth;
 using Newtonsoft.Json;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -70,8 +71,8 @@ namespace AllyisApps.Controllers.Auth
 			model.TabInfo.OrganizationId = id;
 			model.TabInfo.MemberCount = org.UserCount;
 			model.TabInfo.PendingInvitationCount = model.PendingInvitationCount;
-			model.CanDeleteInvitations = AppService.CheckOrgAction(Services.AppService.OrgAction.DeleteInvitation, id, false);
-			model.CanResendInvitations = AppService.CheckOrgAction(Services.AppService.OrgAction.AddUserToOrganization, id, false);
+			model.CanDeleteInvitations = await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, Services.AppService.UserAction.Delete, Services.AppService.AppEntity.OrganizationUser, id, false);
+			model.CanResendInvitations = await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, Services.AppService.UserAction.Create, Services.AppService.AppEntity.OrganizationUser, id, false);
 			return View(model);
 		}
 	}

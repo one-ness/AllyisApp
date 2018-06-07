@@ -29,7 +29,7 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		public async Task<ActionResult> AddMember(int id)
 		{
-			AppService.CheckOrgAction(AppService.OrgAction.AddUserToOrganization, id);
+			await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Create, AppService.AppEntity.Organization, id);
 			AddMemberViewModel model = await constuctViewModel(id);
 
 			return View(model);
@@ -173,7 +173,7 @@ namespace AllyisApps.Controllers.Auth
 				}).ToList<InvitationPermissionsJson>();
 
 				string jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(json);
-				string orgName = AppService.UserContext.OrganizationsAndRoles[model.OrganizationId].OrganizationName;
+				string orgName = string.Empty; // AppService.UserContext.OrganizationsAndRoles[model.OrganizationId].OrganizationName;
 
 				int invitationId = await AppService.InviteUser(
 					url,

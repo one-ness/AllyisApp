@@ -666,7 +666,7 @@ namespace AllyisApps.Services
 		private async Task<ImportActionResult> ImportUser(List<DataTable> userImports, int orgId, int subscriptionId, int organizationId, string inviteUrl, ImportActionResult result = null)
 		{
 			// Retrieval of existing user data
-			UserOld userGet = await GetUserOldAsync(UserContext.UserId);
+			var userGet = await this.GetCurrentUserAsync();
 			var users = GetOrganizationMemberList(orgId).Select(o => new Tuple<string, UserOld>(o.EmployeeId, o)).ToList();
 
 			foreach (DataTable table in userImports)
@@ -849,7 +849,7 @@ namespace AllyisApps.Services
 										employeeTypeId = int.Parse(employeeType);
 									}
 
-									await InviteUser(inviteUrl, fields[0].Trim(), names[0], names[1], orgId, UserContext.OrganizationsAndRoles[orgId].OrganizationName, OrganizationRoleEnum.Member, fields[1], "", employeeTypeId);
+									await InviteUser(inviteUrl, fields[0].Trim(), names[0], names[1], orgId, string.Empty, OrganizationRoleEnum.Member, fields[1], "", employeeTypeId);
 
 									result.UsersImported += 1;
 								}

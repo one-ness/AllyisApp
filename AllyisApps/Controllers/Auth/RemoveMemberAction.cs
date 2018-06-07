@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using System.Linq;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -34,7 +35,7 @@ namespace AllyisApps.Controllers.Auth
                 Notifications.Add(new BootstrapAlert("Please select atleast one user to delete", Variety.Danger));
             }
 
-            this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
+            await this.AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppService.AppEntity.OrganizationUser, id);
 
 			List<int> userIds = csvUserIds.Split(',').Select(userIdString => Convert.ToInt32(userIdString)).ToList();
 			try

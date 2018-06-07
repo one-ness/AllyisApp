@@ -27,7 +27,7 @@ namespace AllyisApps.Controllers.Auth
 		[HttpPost]
 		public async Task<ActionResult> RemoveInvitation(string checkedIds, int orgId)
 		{
-			await AppService.CheckPermission(ProductIdEnum.AllyisApps, AppService.UserAction.Delete, AppService.AppEntity.OrganizationUser, orgId);
+			await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Delete, AppService.AppEntity.OrganizationUser, orgId);
 
 			if (checkedIds != "")
 			{

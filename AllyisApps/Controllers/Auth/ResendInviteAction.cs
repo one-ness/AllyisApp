@@ -2,7 +2,9 @@
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Resources;
+using AllyisApps.Services;
 using AllyisApps.Services.Auth;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -21,7 +23,7 @@ namespace AllyisApps.Controllers.Auth
             foreach (int inviteId in concat)
             {
                 var invite = await AppService.GetInvitation(inviteId);
-                AppService.CheckOrgAction(Services.AppService.OrgAction.AddUserToOrganization, invite.OrganizationId);
+                await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Create, Services.AppService.AppEntity.OrganizationUser, invite.OrganizationId);
                 UserOld usr = await AppService.GetUserOldByEmailAsync(invite.Email);
                 string url = usr != null ?
                             Url.Action(ActionConstants.Index, ControllerConstants.Account, null, protocol: Request.Url.Scheme) :
