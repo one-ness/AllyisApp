@@ -204,7 +204,7 @@ namespace AllyisApps.Services
 		/// <returns>Returns false if authorization fails.</returns>
 		public async Task<bool> RemoveBilling(int orgId)
 		{
-			await CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppEntity.Subscription, orgId);
+			await CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Edit, AppEntity.Subscription, orgId);
 			DBHelper.RemoveBilling(orgId);
 			return true;
 		}
@@ -347,7 +347,7 @@ namespace AllyisApps.Services
 				int roleId = item.Value;
 
 				// TODO: below call needs org id
-				await this.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppService.AppEntity.Subscription, subId);
+				await this.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, AppService.UserAction.Edit, AppService.AppEntity.Subscription, subId);
 				await DBHelper.MergeSubscriptionUserProductRole(roleId, subId, userId);
 			}
 		}
@@ -422,7 +422,7 @@ namespace AllyisApps.Services
 		public async Task<List<SubscriptionUser>> GetSubscriptionUsers(int subscriptionId)
 		{
 			// TODO: below call needs org id
-			await this.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppService.AppEntity.SubscriptionUser, subscriptionId);
+			await this.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, AppService.UserAction.Edit, AppService.AppEntity.SubscriptionUser, subscriptionId);
 			var subUsers = DBHelper.GetSubscriptionUsersBySubscriptionId(subscriptionId);
 			return subUsers.Select(InitializeSubscriptionUser).ToList();
 		}
@@ -599,13 +599,13 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(subscriptionName)) throw new ArgumentNullException(nameof(subscriptionName));
 
 			// TODO: below call need org id
-			await this.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppService.AppEntity.Subscription, subscriptionId);
+			await this.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, AppService.UserAction.Edit, AppService.AppEntity.Subscription, subscriptionId);
 			DBHelper.UpdateSubscriptionName(subscriptionId, subscriptionName);
 		}
 
 		private async void UpdateSubscriptionSkuAndName(int organizationId, int subscriptionId, string subscriptionName, SkuIdEnum skuId)
 		{
-			await this.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppService.AppEntity.Subscription, organizationId);
+			await this.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, AppService.UserAction.Edit, AppService.AppEntity.Subscription, organizationId);
 			DBHelper.UpdateSubscriptionSkuAndName(subscriptionId, subscriptionName, (int)skuId);
 			await Task.Yield();
 		}

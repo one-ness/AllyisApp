@@ -47,7 +47,7 @@ namespace AllyisApps.Controllers.Auth
 		[HttpGet]
 		public async Task<ActionResult> EditOrg(int id)
 		{
-			await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppService.AppEntity.Organization, id);
+			await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Edit, AppService.AppEntity.Organization, id);
 			bool canDelete = await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Delete, AppService.AppEntity.Organization, id, false);
 			var organization = await AppService.GetOrganizationAsync(id);
 			var model = new EditOrganizationViewModel
@@ -55,6 +55,7 @@ namespace AllyisApps.Controllers.Auth
 				OrganizationId = organization.OrganizationId,
 				OrganizationName = organization.OrganizationName,
 				SiteUrl = organization.SiteUrl,
+				Subdomain = organization.Subdomain,
 				AddressId = organization.Address?.AddressId,
 				Address = organization.Address?.Address1,
 				City = organization.Address?.City,

@@ -36,7 +36,7 @@ namespace AllyisApps.Services
 		{
 			Create = 10,
 			Read = 20,
-			Update = 30,
+			Edit = 30,
 			Delete = 40,
 		}
 

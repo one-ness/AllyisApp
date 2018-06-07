@@ -214,7 +214,7 @@ namespace AllyisApps.Services
 			if (organizationId <= 0) throw new ArgumentOutOfRangeException(nameof(organizationId));
 			if (string.IsNullOrWhiteSpace(organizationName)) throw new ArgumentNullException(nameof(organizationName));
 
-			await CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppEntity.Organization, organizationId);
+			await CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Edit, AppEntity.Organization, organizationId);
 
 			return await DBHelper.UpdateOrganization(organizationId, organizationName, siteUrl, addressId, address1, city, stateId, countryCode, postalCode, phoneNumber, faxNumber, subDomain) > 0;
 		}

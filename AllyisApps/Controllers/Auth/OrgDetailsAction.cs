@@ -23,7 +23,7 @@ namespace AllyisApps.Controllers.Auth
 		public async Task<ActionResult> OrgDetails(int id)
 		{
 			var model = new OrganizationDetailsViewModel();
-			model.CanEditOrganization = await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppService.AppEntity.Organization, id, false);
+			model.CanEditOrganization = await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Edit, AppService.AppEntity.Organization, id, false);
 			var org = await AppService.GetOrganizationAsync(id);
 			model.CanDeleteOrganization = await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Delete, AppService.AppEntity.Organization, id, false);
 			if (org.Address != null)

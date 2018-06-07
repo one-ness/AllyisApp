@@ -20,7 +20,7 @@ namespace AllyisApps.Controllers.Auth
 		public async Task<ActionResult> EditSubscription(int id)
 		{
 			// TODO: below call needs org id
-			await this.AppService.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppService.AppEntity.Subscription, id);
+			await this.AppService.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, AppService.UserAction.Edit, AppService.AppEntity.Subscription, id);
 			var sub = await AppService.GetSubscription(id);
 			var model = new EditSubscriptionViewModel();
 			model.OrganizationId = sub.OrganizationId;

@@ -801,27 +801,32 @@ namespace AllyisApps.Services
 			var list = new List<PermissionDBEntity>();
 			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Delete, AppEntityId = (int)AppEntity.Organization, ProductRoleId = result });
 			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, AppEntityId = (int)AppEntity.Organization, ProductRoleId = result });
-			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Update, AppEntityId = (int)AppEntity.Organization, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Edit, AppEntityId = (int)AppEntity.Organization, ProductRoleId = result });
 
 			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Create, AppEntityId = (int)AppEntity.OrganizationUser, ProductRoleId = result });
 			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Delete, AppEntityId = (int)AppEntity.OrganizationUser, ProductRoleId = result });
 			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, AppEntityId = (int)AppEntity.OrganizationUser, ProductRoleId = result });
-			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Update, AppEntityId = (int)AppEntity.OrganizationUser, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Edit, AppEntityId = (int)AppEntity.OrganizationUser, ProductRoleId = result });
 
 			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Create, AppEntityId = (int)AppEntity.Subscription, ProductRoleId = result });
 			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Delete, AppEntityId = (int)AppEntity.Subscription, ProductRoleId = result });
 			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, AppEntityId = (int)AppEntity.Subscription, ProductRoleId = result });
-			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Update, AppEntityId = (int)AppEntity.Subscription, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Edit, AppEntityId = (int)AppEntity.Subscription, ProductRoleId = result });
 
 			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Create, AppEntityId = (int)AppEntity.SubscriptionUser, ProductRoleId = result });
 			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Delete, AppEntityId = (int)AppEntity.SubscriptionUser, ProductRoleId = result });
 			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, AppEntityId = (int)AppEntity.SubscriptionUser, ProductRoleId = result });
-			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Update, AppEntityId = (int)AppEntity.SubscriptionUser, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Edit, AppEntityId = (int)AppEntity.SubscriptionUser, ProductRoleId = result });
 
 			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Create, AppEntityId = (int)AppEntity.Billing, ProductRoleId = result });
 			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Delete, AppEntityId = (int)AppEntity.Billing, ProductRoleId = result });
 			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, AppEntityId = (int)AppEntity.Billing, ProductRoleId = result });
-			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Update, AppEntityId = (int)AppEntity.Billing, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Edit, AppEntityId = (int)AppEntity.Billing, ProductRoleId = result });
+
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Create, AppEntityId = (int)AppEntity.Permission, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Delete, AppEntityId = (int)AppEntity.Permission, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, AppEntityId = (int)AppEntity.Permission, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Edit, AppEntityId = (int)AppEntity.Permission, ProductRoleId = result });
 
 			await this.DBHelper.CreatePermissionsAsync(list);
 
@@ -839,6 +844,7 @@ namespace AllyisApps.Services
 			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, AppEntityId = (int)AppEntity.OrganizationUser, ProductRoleId = result });
 			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, AppEntityId = (int)AppEntity.Subscription, ProductRoleId = result });
 			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, AppEntityId = (int)AppEntity.SubscriptionUser, ProductRoleId = result });
+			list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, AppEntityId = (int)AppEntity.Permission, ProductRoleId = result });
 
 			await this.DBHelper.CreatePermissionsAsync(list);
 

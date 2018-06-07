@@ -104,8 +104,13 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		[Required]
 		[DataType(DataType.Text)]
-		[Display(Name = "Owner Employee Id")]
+		[Display(Name = "Your Employee ID")]
 		public string EmployeeId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the subdomain of the organization
+		/// </summary>
+		public string Subdomain { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization's Id.

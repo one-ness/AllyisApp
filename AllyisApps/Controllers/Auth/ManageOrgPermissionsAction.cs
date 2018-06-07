@@ -22,7 +22,7 @@ namespace AllyisApps.Controllers.Auth
 		public async Task<ActionResult> ManageOrgPermissions(int id)
 		{
 			//Get OrganizaionUser Rows
-			await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppService.AppEntity.Permission, id);
+			await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Edit, AppService.AppEntity.Permission, id);
 			var orgUsers = AppService.GetOrganizationMemberList(id);
 			var orgSubs = await AppService.GetSubscriptionsAsync(id);
 

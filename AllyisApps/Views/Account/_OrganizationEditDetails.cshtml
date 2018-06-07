@@ -20,11 +20,18 @@
 						@Html.TextBoxFor(m => m.OrganizationName, new { @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.OrganizationName, "", new { @class = "text-danger" })
 					</div>
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.SiteUrl, Strings.SiteURL)
-						@Html.TextBoxFor(m => m.SiteUrl, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.SiteUrl, "", new { @class = "text-danger" })
-					</div>
+					@if (Model.IsCreating)
+					{
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.EmployeeId, "Your Employee ID")
+							@Html.TextBoxFor(m => m.EmployeeId, new { @class = "form-control", @maxlength = "16", @title="Type in your Employee ID. If you don't have one, please create an Employee ID for yourself. Based on this ID, the Application will auto-generate the IDs for employees who are added subsequently." })
+							@Html.ValidationMessageFor(m => m.EmployeeId, "", new { @class = "text-danger" })
+						</div>
+					}
+					else
+					{
+						@Html.HiddenFor(m => m.EmployeeId);
+					}
 					<div class="form-group">
 						@Html.ReqLabelFor(m => m.PhoneNumber, Strings.PhoneNumber)
 						@Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
@@ -35,18 +42,15 @@
 						@Html.TextBoxFor(m => m.FaxNumber, new { @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.FaxNumber, "", new { @class = "text-danger" })
 					</div>
-					@if (Model.IsCreating)
-					{
-						<div class="form-group">
-							@Html.ReqLabelFor(m => m.EmployeeId, Strings.EmployeeId)
-							@Html.TextBoxFor(m => m.EmployeeId, new { @class = "form-control", @maxlength = "16" })
-							@Html.ValidationMessageFor(m => m.EmployeeId, "", new { @class = "text-danger" })
-						</div>
-					}
-					else
-					{
-						@Html.HiddenFor(m => m.EmployeeId);
-					}
+					<div class="form-group">
+						@Html.ReqLabelFor(m => m.SiteUrl, Strings.SiteURL)
+						@Html.TextBoxFor(m => m.SiteUrl, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.SiteUrl, "", new { @class = "text-danger" })
+					</div>
+					<div class="form-group">
+						@Html.ReqLabelFor(m => m.SiteUrl, Strings.Subdomain)
+						@Html.TextBoxFor(m => m.SiteUrl, new { @class = "form-control" })
+					</div>
 				</div>
 				<div class="col-md-6 sm-control-width">
 					<div class="form-group">

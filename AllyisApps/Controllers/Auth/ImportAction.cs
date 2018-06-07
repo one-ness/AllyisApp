@@ -38,7 +38,7 @@ namespace AllyisApps.Controllers.Auth
 			// TODO: Buff up the error handling (catch errors from import functions, etc.)
 			if (!ModelState.IsValid) return RedirectToAction(ActionConstants.AddMember, ControllerConstants.Account, new { organizationId = id });
 
-			await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Update, AppService.AppEntity.Organization, id);
+			await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Edit, AppService.AppEntity.Organization, id);
 
 			if (upload != null && upload.ContentLength > 0)
 			{

@@ -28,7 +28,7 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		public async Task<ActionResult> EditMember(int id, int userId)
 		{
-			await this.AppService.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, UserAction.Update, AppEntity.OrganizationUser, id);
+			await this.AppService.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, UserAction.Edit, AppEntity.OrganizationUser, id);
 			var model = await ConstructViewModel(id, userId);
 			return View(ActionConstants.EditMember, model);
 		}
@@ -44,7 +44,7 @@ namespace AllyisApps.Controllers.Auth
 			
 			var model = new EditMemberViewModel
 			{
-				CanEditMember = await AppService.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, UserAction.Update, AppEntity.OrganizationUser, orgId, false),
+				CanEditMember = await AppService.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, UserAction.Edit, AppEntity.OrganizationUser, orgId, false),
 				Address = user.Address?.Address1,
 				City = user.Address?.City,
 				CountryName = user.Address?.CountryName,
