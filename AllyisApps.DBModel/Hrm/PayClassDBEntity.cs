@@ -14,21 +14,21 @@ namespace AllyisApps.DBModel.Hrm
 	public class PayClassDBEntity : BaseDBEntity
 	{
 		/// <summary>
-		/// Gets or sets.
+		/// Gets or sets the payclass id.
 		/// </summary>
 		public int PayClassId { get; set; }
 		/// <summary>
-		/// Gets or sets int to identify the payclass if it is among the main entries.
+		/// Gets or sets the built-in payclass this payclass corresponds to.
 		/// </summary>
 		public int BuiltInPayClassId { get; set; }
 
 		/// <summary>
-		/// Gets or sets.
+		/// Gets or sets payclass name.
 		/// </summary>
 		public string PayClassName { get; set; }
 
 		/// <summary>
-		/// Gets or sets.
+		/// Gets or sets organization this payclass belongs to.
 		/// </summary>
 		public int OrganizationId { get; set; }
 	}

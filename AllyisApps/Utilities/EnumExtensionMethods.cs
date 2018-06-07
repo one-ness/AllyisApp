@@ -723,6 +723,7 @@ namespace AllyisApps.Services.TimeTracker
 		/// <summary>
 		/// get the enum name
 		/// </summary>
+		[CLSCompliant(false)]
 		public static string GetEnumName(this Services.Hrm.BuiltinPayClassEnum value)
 		{
 			string name = "";

@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [Hrm].[CreatePayClass]
-	@payClassName NVARCHAR(50),
-	@organizationId INT,
+	@payClassName NVARCHAR(32),
+	@organizationId int,
 	@builtinPayClassId int
 AS
 begin

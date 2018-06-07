@@ -1,25 +1,28 @@
 ﻿CREATE PROCEDURE [Auth].[CreateOrganization]
-	@organizationName NVARCHAR(100),
-	@siteUrl NVARCHAR(100),
-	@phoneNumber VARCHAR(50),
-	@faxNumber VARCHAR(50),
-	@subdomain NVARCHAR(40),
+	@organizationName NVARCHAR(64),
+	@organizationStatus int,
+	@siteUrl NVARCHAR(384) = null,
+	@phoneNumber VARCHAR(16) = null,
+	@faxNumber VARCHAR(16) = null,
+	@subdomain NVARCHAR(32) = null,
 	@addressId int = null
 AS
 BEGIN
 	SET NOCOUNT ON;
 		INSERT INTO [Auth].[Organization] 
 				([OrganizationName],
+				[OrganizationStatus],
 				[SiteUrl],
-				[AddressId],
 				[PhoneNumber],
 				[FaxNumber],
-				[Subdomain])
+				[Subdomain],
+				[AddressId])
 		VALUES (@organizationName,
+				@organizationStatus,
 				@siteUrl,
-				@addressId,
 				@phoneNumber,
 				@faxNumber,
-				@subdomain);
+				@subdomain,
+				@addressId);
 		select SCOPE_IDENTITY()
 END

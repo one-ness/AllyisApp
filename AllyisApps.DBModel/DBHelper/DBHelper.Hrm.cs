@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using AllyisApps.DBModel.Lookup;
+using AllyisApps.DBModel.Hrm;
 using Dapper;
 
 namespace AllyisApps.DBModel
@@ -14,13 +15,13 @@ namespace AllyisApps.DBModel
 	public partial class DBHelper
 	{
 		/// <summary>
-		/// creates default payclasses for the given org
+		/// creates the given list of payclasses for the given org
 		/// </summary>
-		public async Task CreateDefaultPayClassesAsync(int orgId)
+		public async Task CreatePayClassesAsync(int orgId, List<PayClassDBEntity> list)
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				await con.ExecuteAsync("[Hrm].[CreateDefaultPayClasses] @a", new { a = orgId });
+				await con.ExecuteAsync("[Hrm].[CreatePayClass] @BuiltInPayClassId, @PayClassName, @OrganizationId", list);
 			}
 		}
 

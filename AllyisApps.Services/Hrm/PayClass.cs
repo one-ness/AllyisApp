@@ -31,6 +31,7 @@ namespace AllyisApps.Services.Hrm
 		/// <summary>
 		/// Gets or sets the built-in payclass id
 		/// </summary>
+		[CLSCompliant(false)]
 		public BuiltinPayClassEnum BuiltInPayClassId { get; set; }
 	}
 }

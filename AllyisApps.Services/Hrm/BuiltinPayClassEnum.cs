@@ -3,15 +3,13 @@
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
+using System;
 
 namespace AllyisApps.Services.Hrm
 {
-	public enum BuiltinPayClassEnum : int
+	[CLSCompliant(false)]
+	public enum BuiltinPayClassEnum : uint
 	{
-		/// <summary>
-		/// Indentify custome created ids
-		/// </summary>
-		Custom = 0,
 		/// <summary>
 		/// Regular.
 		/// </summary>
@@ -25,16 +23,26 @@ namespace AllyisApps.Services.Hrm
 		/// <summary>
 		/// Unpaid Time Off.
 		/// </summary>
-		UnpaidTimeOff = 3,
+		UnpaidTimeOff = 4,
 
 		/// <summary>
 		/// Holiday.
 		/// </summary>
-		Holiday = 4,
+		Holiday = 8,
 
 		/// <summary>
 		/// Overtime.
 		/// </summary>
-		Overtime = 5
+		Overtime = 16,
+
+		/// <summary>
+		/// Indentify customer created pay classes
+		/// </summary>
+		Custom = 32,
+
+		/// <summary>
+		/// any of these
+		/// </summary>
+		Any = uint.MaxValue,
 	}
 }

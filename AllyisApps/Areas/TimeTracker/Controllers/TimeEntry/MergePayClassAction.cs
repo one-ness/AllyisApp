@@ -42,7 +42,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			string subscriptionName = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].SubscriptionName;
 
 			// Built-in, non-editable pay classes cannot be merged
-			if (sourcePayClass.BuiltInPayClassId != (int)BuiltinPayClassEnum.Custom)
+			if (sourcePayClass.BuiltInPayClassId != BuiltinPayClassEnum.Custom)
 			{
 				Notifications.Add(new BootstrapAlert(Strings.CannotMergePayClass, Variety.Warning));
 				return RedirectToAction(ActionConstants.SettingsPayClass, new { subscriptionId });

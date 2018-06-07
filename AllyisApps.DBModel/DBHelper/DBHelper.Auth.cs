@@ -318,11 +318,11 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// create organization
 		/// </summary>
-		public async Task<int> CreateOrganizationAsync(string organizationName, string siteUrl = null, string phoneNumber = null, string faxNumber = null, string subDomain = null, int? addressId = null)
+		public async Task<int> CreateOrganizationAsync(string organizationName, int orgStatus, string siteUrl = null, string phoneNumber = null, string faxNumber = null, string subDomain = null, int? addressId = null)
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return await con.QueryFirstOrDefaultAsync<int>("[Auth].[CreateOrganization] @p1, @p2, @p3, @p4, @p5, @p6", new { p1 = organizationName, p2 = siteUrl, p3 = phoneNumber, p4 = faxNumber, p5 = subDomain, p6 = addressId });
+				return await con.QueryFirstOrDefaultAsync<int>("[Auth].[CreateOrganization] @p1, @p2, @p3, @p4, @p5, @p6, @p7", new { p1 = organizationName, p2 = orgStatus, p3 = siteUrl, p4 = phoneNumber, p5 = faxNumber, p6 = subDomain, p7 = addressId });
 			}
 		}
 

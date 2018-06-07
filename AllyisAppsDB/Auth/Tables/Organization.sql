@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [Auth].[Organization] (
     [OrganizationId]         INT            IDENTITY (112559, 7) NOT NULL,
     [OrganizationName]       NVARCHAR (64)  NOT NULL,
-    [OrganizationStatus]     INT            CONSTRAINT [DF_Organization_IsActive] DEFAULT ((1)) NOT NULL,
+    [OrganizationStatus]     INT            NOT NULL,
     [OrganizationCreatedUtc] DATETIME2 (0)  CONSTRAINT [DF_Organization_CreatedUtc] DEFAULT (getutcdate()) NOT NULL,
     [SiteUrl]                NVARCHAR (384) NULL,
     [AddressId]              INT            NULL,
@@ -13,6 +13,8 @@
     CONSTRAINT [PK_Organization] PRIMARY KEY CLUSTERED ([OrganizationId] ASC),
     CONSTRAINT [FK_Organization_Address] FOREIGN KEY ([AddressId]) REFERENCES [Lookup].[Address] ([AddressId])
 );
+
+
 
 
 

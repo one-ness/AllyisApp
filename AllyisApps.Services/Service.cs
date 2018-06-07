@@ -325,6 +325,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Creates a new pay class for an organization.
 		/// </summary>
+		[CLSCompliant(false)]
 		public async Task<int> CreatePayClass(string payClassName, int orgId, int subscriptionId, BuiltinPayClassEnum builtinPayClassId = BuiltinPayClassEnum.Custom)
 		{
 			CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);

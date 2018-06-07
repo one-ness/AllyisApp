@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
+using AllyisApps.DBModel.Hrm;
 using AllyisApps.Lib;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Billing;
@@ -42,14 +43,14 @@ namespace AllyisApps.Services
 			int orgId = 0;
 			try
 			{
-				await this.DBHelper.CreateOrganizationAsync(organizationName, siteUrl, phoneNumber, faxNumber, subDomainName, addressId == 0 ? null : addressId);
+				await this.DBHelper.CreateOrganizationAsync(organizationName, (int)OrganizationStatusEnum.Active, siteUrl, phoneNumber, faxNumber, subDomainName, addressId == 0 ? null : addressId);
 			}
 			catch (SqlException ex)
 			{
 				if (ex.Message.ToLower().Contains("unique"))
 				{
 					// unique constraint, sudomain already taken
-					// delete the address
+					// delete the address that was created
 					if (addressId > 0)
 					{
 						await this.DBHelper.DeleteAddressAsync(addressId.Value);
@@ -64,18 +65,16 @@ namespace AllyisApps.Services
 			}
 
 			// create default payclasses for the organization
-			var idsAndNames = new List<Tuple<int, string>>();
-			idsAndNames.Add(new Tuple<int, string>((int)BuiltinPayClassEnum.Holiday, "Holiday"));
-			idsAndNames.Add(new Tuple<int, string>((int)BuiltinPayClassEnum.Overtime, "Overtime"));
-			idsAndNames.Add(new Tuple<int, string>((int)BuiltinPayClassEnum.PaidTimeOff, "Paid Time Off"));
-			idsAndNames.Add(new Tuple<int, string>((int)BuiltinPayClassEnum.Regular, "Regular"));
-			idsAndNames.Add(new Tuple<int, string>((int)BuiltinPayClassEnum.UnpaidTimeOff, "Unpaid Time Off"));
-			idsAndNames.Add(new Tuple<int, string>((int)BuiltinPayClassEnum.Custom, "Jury Duty"));
-			idsAndNames.Add(new Tuple<int, string>((int)BuiltinPayClassEnum.Custom, "Bereavement Leave"));
-			idsAndNames.Add(new Tuple<int, string>((int)BuiltinPayClassEnum.Custom, "Other Leave"));
-			// TODO: create the above payclasses, then delete createdefaultpayclasses
-			//await this.CreatePayClassesAsync(orgId, idsAndNames);
-			await this.DBHelper.CreateDefaultPayClassesAsync(orgId);
+			var list = new List<PayClassDBEntity>();
+			list.Add(new PayClassDBEntity() { BuiltInPayClassId = (int)BuiltinPayClassEnum.Custom, OrganizationId = orgId, PayClassName = "Bereavement Leave" });
+			list.Add(new PayClassDBEntity() { BuiltInPayClassId = (int)BuiltinPayClassEnum.Custom, OrganizationId = orgId, PayClassName = "Jury Duty" });
+			list.Add(new PayClassDBEntity() { BuiltInPayClassId = (int)BuiltinPayClassEnum.Custom, OrganizationId = orgId, PayClassName = "Other Leave" });
+			list.Add(new PayClassDBEntity() { BuiltInPayClassId = (int)BuiltinPayClassEnum.Holiday, OrganizationId = orgId, PayClassName = "Holiday" });
+			list.Add(new PayClassDBEntity() { BuiltInPayClassId = (int)BuiltinPayClassEnum.Overtime, OrganizationId = orgId, PayClassName = "Overtime" });
+			list.Add(new PayClassDBEntity() { BuiltInPayClassId = (int)BuiltinPayClassEnum.PaidTimeOff, OrganizationId = orgId, PayClassName = "Paid Time Off" });
+			list.Add(new PayClassDBEntity() { BuiltInPayClassId = (int)BuiltinPayClassEnum.Regular, OrganizationId = orgId, PayClassName = "Regular" });
+			list.Add(new PayClassDBEntity() { BuiltInPayClassId = (int)BuiltinPayClassEnum.UnpaidTimeOff, OrganizationId = orgId, PayClassName = "Unpaid Time Off" });
+			await this.DBHelper.CreatePayClassesAsync(orgId, list);
 
 			// create default employee type for the organization
 			var etid = await this.DBHelper.CreateEmployeeType(orgId, "Full Time Employee");
@@ -170,7 +169,7 @@ namespace AllyisApps.Services
 				LastName = item.LastName,
 				OrganizationId = orgId,
 				ProductRolesJson = item.ProductRolesJson,
-				OrganizationRoleId = (OrganizationRoleEnum)item.OrganizationRoleId
+				OrganizationRoleId = item.OrganizationRoleId
 			}).ToList();
 		}
 
