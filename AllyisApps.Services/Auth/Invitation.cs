@@ -96,7 +96,7 @@ namespace AllyisApps.Services.Auth
 		/// <summary>
 		/// organization role
 		/// </summary>
-		public OrganizationRoleEnum OrganizationRole { get;  set; }
+		public int OrganizationRoleId { get;  set; }
 	}
 
 	public class InvitationPermissionsJson

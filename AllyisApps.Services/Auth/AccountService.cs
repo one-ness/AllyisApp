@@ -334,7 +334,7 @@ namespace AllyisApps.Services
 				obj.LastName = item.LastName;
 				obj.OrganizationId = item.OrganizationId;
 				obj.OrganizationName = org.OrganizationName;
-				obj.OrganizationRole = (OrganizationRoleEnum)item.OrganizationRoleId;
+				obj.OrganizationRoleId = item.OrganizationRoleId;
 				obj.ProductRolesJson = item.ProductRolesJson;
 				result.Add(obj.OrganizationId, obj);
 			}

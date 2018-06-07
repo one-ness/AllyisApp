@@ -170,7 +170,7 @@ namespace AllyisApps.Services
 				LastName = item.LastName,
 				OrganizationId = orgId,
 				ProductRolesJson = item.ProductRolesJson,
-				OrganizationRole = (OrganizationRoleEnum)item.OrganizationRoleId
+				OrganizationRoleId = (OrganizationRoleEnum)item.OrganizationRoleId
 			}).ToList();
 		}
 

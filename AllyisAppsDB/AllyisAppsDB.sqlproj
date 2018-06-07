@@ -424,6 +424,7 @@
     <Build Include="Auth\Stored Procedures\CreateProductRole.sql" />
     <Build Include="Auth\Stored Procedures\CreatePermission.sql" />
     <Build Include="Auth\Stored Procedures\GetPermission.sql" />
+    <Build Include="Lookup\Stored Procedures\DeleteAddress.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

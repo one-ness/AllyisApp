@@ -40,7 +40,7 @@ namespace AllyisApps.Controllers.Auth
 					InvitationId = item.InvitationId,
 					InvitedOn = item.InvitationCreatedUtc,
 					Status = item.InvitationStatus.GetEnumName(),
-					OrgRoleName = item.OrganizationRole.GetEnumName(),
+					OrgRoleName = item.OrganizationRoleId.GetEnumName(),
 					Username = $"{item.FirstName} {item.LastName}",
 					
 					ProductAndRoleNames = new List<Tuple<string, string>>()
