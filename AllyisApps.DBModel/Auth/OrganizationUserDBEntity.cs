@@ -19,21 +19,6 @@ namespace AllyisApps.DBModel.Auth
 		public int UserId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the user's FirstName.
-		/// </summary>
-		public string FirstName { get; set; }
-
-		/// <summary>
-		/// Gets or sets the user's LastName.
-		/// </summary>
-		public string LastName { get; set; }
-
-		/// <summary>
-		/// Gets or sets the user's EmailName.
-		/// </summary>
-		public string Email { get; set; }
-
-		/// <summary>
 		/// Gets or sets OrganizationId.
 		/// </summary>
 		public int OrganizationId { get; set; }
