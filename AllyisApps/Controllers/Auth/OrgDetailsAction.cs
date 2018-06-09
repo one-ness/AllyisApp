@@ -40,6 +40,7 @@ namespace AllyisApps.Controllers.Auth
 			model.OrganizationName = org.OrganizationName;
 			model.PhoneNumber = org.PhoneNumber;
 			model.SiteURL = org.SiteUrl;
+			model.Subdomain = org.Subdomain;
 
 			return View(model);
 		}

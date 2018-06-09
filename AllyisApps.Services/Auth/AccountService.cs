@@ -393,31 +393,40 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// update the profile of the given user in the given organization
+		/// </summary>
+		public async Task UpdateOrganizationUserProfile(int userId, DateTime dateOfBirth, string firstName, string lastName, string phoneNumber, string address, string city, int? stateId, string postalCode, string countryCode, int orgId)
+		{
+			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
+
+			// check permission to edit another user
+			await this.CheckPermissionAsync(ProductIdEnum.AllyisApps, UserAction.Edit, AppEntity.OrganizationUser, orgId);
+			// get the organizations of the user being updated
+			// does the given org id one of them?
+
+		}
+		/// <summary>
 		/// update the given user id profile
-		/// note: orgid must be supplied if updating profile of a different user
 		/// TODO: wrap in transaction
 		/// </summary>
-		public async Task UpdateUserProfile(int userId, DateTime dateOfBirth, string firstName, string lastName, string phoneNumber, string address, string city, int? stateId, string postalCode, string countryCode, int orgId = 0)
+		private async Task UpdateUserProfile(int userId, DateTime dateOfBirth, string firstName, string lastName, string phoneNumber, string address, string city, int? stateId, string postalCode, string countryCode)
 		{
-			if (userId != this.UserContext.UserId)
-			{
-				// logged in user is updating the profile of another user, which means orgId should have been supplied
-				if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
-				// check permission to edit another user
-				await this.CheckPermissionAsync(ProductIdEnum.AllyisApps, UserAction.Edit, AppEntity.OrganizationUser, orgId);
-			}
+			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId));
+			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException(nameof(firstName));
+			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException(nameof(lastName));
+			if (dateOfBirth < DateTime.UtcNow.AddYears(-150)) throw new ArgumentOutOfRangeException(nameof(dateOfBirth));
 
 			// are we updating address? if yes, we need to get the user details to get the address id.
 			int? addressId = 0;
 			if (!string.IsNullOrWhiteSpace(address) || !string.IsNullOrWhiteSpace(city) || !string.IsNullOrWhiteSpace(postalCode) || !string.IsNullOrWhiteSpace(countryCode) || stateId.HasValue)
 			{
 				// yes, at least one non-null information, get the user and then the address id
-				var user = await this.GetUserAsync(userId, true);
+				var user = await this.GetUserAsync(userId);
 				if (user.Address != null)
 				{
 					// address exists, update the address
 					addressId = user.Address.AddressId;
-					await this.DBHelper.UpdateAddressAsync(user.Address.AddressId, address, null, city, stateId, postalCode, countryCode);
+					await this.DBHelper.UpdateAddressAsync(addressId.Value, address, null, city, stateId, postalCode, countryCode);
 				}
 				else
 				{
