@@ -97,6 +97,7 @@ namespace AllyisApps.Controllers.Auth
 					PostalCode = item.Address?.PostalCode,
 					Country = item.Address?.CountryName,
 					SiteUrl = item.SiteUrl,
+					Subdomain = item.Subdomain,
 					FaxNumber = item.FaxNumber,
 					IsCreateSubscriptionAllowed = await this.AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Create, AppService.AppEntity.Subscription, item.OrganizationId, false),
 					IsReadBillingDetailsAllowed = await this.AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Read, AppService.AppEntity.Billing, item.OrganizationId, false),

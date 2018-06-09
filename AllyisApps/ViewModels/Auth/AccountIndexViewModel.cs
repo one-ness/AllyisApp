@@ -180,6 +180,11 @@ namespace AllyisApps.ViewModels.Auth
 			public string SiteUrl { get; set; }
 
 			/// <summary>
+			/// Gets or sets the subdomain
+			/// </summary>
+			public string Subdomain { get; set; }
+
+			/// <summary>
 			/// Gets or sets the FaxNumber.
 			/// </summary>
 			public string FaxNumber { get; set; }
