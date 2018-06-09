@@ -21,6 +21,11 @@
 		public string SiteURL { get; set; }
 
 		/// <summary>
+		/// Gets or sets the subdomain
+		/// </summary>
+		public string Subdomain { get; set; }
+
+		/// <summary>
 		/// Gets or sets Address1 for organizaiton address.
 		/// </summary>
 		public string Address { get; set; }

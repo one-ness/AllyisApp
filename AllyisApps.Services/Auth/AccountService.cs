@@ -302,9 +302,16 @@ namespace AllyisApps.Services
 			return await GetUserAsync(this.UserContext.UserId, loadAddress);
 		}
 
-		public async Task<User> GetUserAsync(int userId, bool loadAddress = true)
+		public async Task<User> GetUserAsync(int userId, bool loadAddress = true, int orgId = 0)
 		{
 			if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId));
+			if (userId != this.UserContext.UserId)
+			{
+				// logged in user is reading the profile of another user, which means orgId should have been supplied
+				if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
+				// check permission to read another user
+				await this.CheckPermissionAsync(ProductIdEnum.AllyisApps, UserAction.Read, AppEntity.OrganizationUser, orgId);
+			}
 
 			var user = await this.DBHelper.GetUserAsync(userId);
 			return await this.InitializeUserAsync(user, loadAddress);
@@ -380,27 +387,43 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// update the current user profile
 		/// </summary>
-		public async Task UpdateCurrentUserProfile(DateTime dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
+		public async Task UpdateCurrentUserProfile(DateTime dateOfBirth, string firstName, string lastName, string phoneNumber, string address, string city, int? stateId, string postalCode, string countryCode)
 		{
-			await this.UpdateUserProfile(this.UserContext.UserId, dateOfBirth, firstName, lastName, phoneNumber, addressId, address, city, stateId, postalCode, countryCode);
+			await this.UpdateUserProfile(this.UserContext.UserId, dateOfBirth, firstName, lastName, phoneNumber, address, city, stateId, postalCode, countryCode);
 		}
 
 		/// <summary>
-		/// update the current user profile
+		/// update the given user id profile
+		/// note: orgid must be supplied if updating profile of a different user
 		/// TODO: wrap in transaction
 		/// </summary>
-		public async Task UpdateUserProfile(int userId, DateTime dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
+		public async Task UpdateUserProfile(int userId, DateTime dateOfBirth, string firstName, string lastName, string phoneNumber, string address, string city, int? stateId, string postalCode, string countryCode, int orgId = 0)
 		{
-			// update address first
-			if (addressId.HasValue)
+			if (userId != this.UserContext.UserId)
 			{
-				// update the address
-				await this.DBHelper.UpdateAddressAsync(addressId.Value, address, null, city, stateId, postalCode, countryCode);
+				// logged in user is updating the profile of another user, which means orgId should have been supplied
+				if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
+				// check permission to edit another user
+				await this.CheckPermissionAsync(ProductIdEnum.AllyisApps, UserAction.Edit, AppEntity.OrganizationUser, orgId);
 			}
-			else
+
+			// are we updating address? if yes, we need to get the user details to get the address id.
+			int? addressId = 0;
+			if (!string.IsNullOrWhiteSpace(address) || !string.IsNullOrWhiteSpace(city) || !string.IsNullOrWhiteSpace(postalCode) || !string.IsNullOrWhiteSpace(countryCode) || stateId.HasValue)
 			{
-				// create address
-				addressId = await this.DBHelper.CreateAddressAsync(address, null, city, stateId, postalCode, countryCode);
+				// yes, at least one non-null information, get the user and then the address id
+				var user = await this.GetUserAsync(userId, true);
+				if (user.Address != null)
+				{
+					// address exists, update the address
+					addressId = user.Address.AddressId;
+					await this.DBHelper.UpdateAddressAsync(user.Address.AddressId, address, null, city, stateId, postalCode, countryCode);
+				}
+				else
+				{
+					// create address
+					addressId = await this.DBHelper.CreateAddressAsync(address, null, city, stateId, postalCode, countryCode);
+				}
 			}
 
 			// update the user next
