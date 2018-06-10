@@ -51,7 +51,6 @@ namespace AllyisApps.Controllers.Auth
 				{
 					// subdomain is already taken
 					Notifications.Add(new BootstrapAlert(Resources.Strings.SubdomainTaken, Variety.Danger));
-					return View(model);
 				}
 				// NOTE: don't have to check for employeeid error here, because the org is just being created
 				//else if (orgId == -1)
