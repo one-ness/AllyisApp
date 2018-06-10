@@ -44,6 +44,44 @@ namespace AllyisApps.Services
 			try
 			{
 				orgId = await this.DBHelper.CreateOrganizationAsync(organizationName, (int)OrganizationStatusEnum.Active, siteUrl, phoneNumber, faxNumber, subDomainName, addressId == 0 ? null : addressId);
+
+				// create default payclasses for the organization
+				var list = new List<PayClassDBEntity>();
+				list.Add(new PayClassDBEntity() { BuiltinPayClassId = (int)BuiltinPayClassEnum.Custom, OrganizationId = orgId, PayClassName = "Bereavement Leave" });
+				list.Add(new PayClassDBEntity() { BuiltinPayClassId = (int)BuiltinPayClassEnum.Custom, OrganizationId = orgId, PayClassName = "Jury Duty" });
+				list.Add(new PayClassDBEntity() { BuiltinPayClassId = (int)BuiltinPayClassEnum.Custom, OrganizationId = orgId, PayClassName = "Other Leave" });
+				list.Add(new PayClassDBEntity() { BuiltinPayClassId = (int)BuiltinPayClassEnum.Holiday, OrganizationId = orgId, PayClassName = "Holiday" });
+				list.Add(new PayClassDBEntity() { BuiltinPayClassId = (int)BuiltinPayClassEnum.Overtime, OrganizationId = orgId, PayClassName = "Overtime" });
+				list.Add(new PayClassDBEntity() { BuiltinPayClassId = (int)BuiltinPayClassEnum.PaidTimeOff, OrganizationId = orgId, PayClassName = "Paid Time Off" });
+				list.Add(new PayClassDBEntity() { BuiltinPayClassId = (int)BuiltinPayClassEnum.Regular, OrganizationId = orgId, PayClassName = "Regular" });
+				list.Add(new PayClassDBEntity() { BuiltinPayClassId = (int)BuiltinPayClassEnum.UnpaidTimeOff, OrganizationId = orgId, PayClassName = "Unpaid Time Off" });
+				await this.DBHelper.CreatePayClassesAsync(orgId, list);
+
+				// create default employee type for the organization
+				var etid = await this.DBHelper.CreateEmployeeType(orgId, "Full Time Employee");
+
+				// add default payclasses to default employee type
+				await this.DBHelper.AddOrgPayClassesToEmployeeType(orgId, etid);
+
+				// add default roles and permissions for allyis apps
+				var roleIds = await this.CreateDefaultAllyisAppsRolesAndPermissions(orgId);
+
+				// create organization user with that employee type id, employee id and role id
+				try
+				{
+					await this.AddUserToOrganization(orgId, this.UserContext.UserId, employeeId, etid, roleIds.Item1);
+				}
+				catch (SqlException ex)
+				{
+					if (ex.Message.ToLower().Contains("unique"))
+					{
+						orgId = -1;
+					}
+					else
+					{
+						throw;
+					}
+				}
 			}
 			catch (SqlException ex)
 			{
@@ -54,39 +92,13 @@ namespace AllyisApps.Services
 					if (addressId > 0)
 					{
 						await this.DBHelper.DeleteAddressAsync(addressId.Value);
-						return orgId;
 					}
 				}
 				else
 				{
 					throw;
 				}
-
 			}
-
-			// create default payclasses for the organization
-			var list = new List<PayClassDBEntity>();
-			list.Add(new PayClassDBEntity() { BuiltinPayClassId = (int)BuiltinPayClassEnum.Custom, OrganizationId = orgId, PayClassName = "Bereavement Leave" });
-			list.Add(new PayClassDBEntity() { BuiltinPayClassId = (int)BuiltinPayClassEnum.Custom, OrganizationId = orgId, PayClassName = "Jury Duty" });
-			list.Add(new PayClassDBEntity() { BuiltinPayClassId = (int)BuiltinPayClassEnum.Custom, OrganizationId = orgId, PayClassName = "Other Leave" });
-			list.Add(new PayClassDBEntity() { BuiltinPayClassId = (int)BuiltinPayClassEnum.Holiday, OrganizationId = orgId, PayClassName = "Holiday" });
-			list.Add(new PayClassDBEntity() { BuiltinPayClassId = (int)BuiltinPayClassEnum.Overtime, OrganizationId = orgId, PayClassName = "Overtime" });
-			list.Add(new PayClassDBEntity() { BuiltinPayClassId = (int)BuiltinPayClassEnum.PaidTimeOff, OrganizationId = orgId, PayClassName = "Paid Time Off" });
-			list.Add(new PayClassDBEntity() { BuiltinPayClassId = (int)BuiltinPayClassEnum.Regular, OrganizationId = orgId, PayClassName = "Regular" });
-			list.Add(new PayClassDBEntity() { BuiltinPayClassId = (int)BuiltinPayClassEnum.UnpaidTimeOff, OrganizationId = orgId, PayClassName = "Unpaid Time Off" });
-			await this.DBHelper.CreatePayClassesAsync(orgId, list);
-
-			// create default employee type for the organization
-			var etid = await this.DBHelper.CreateEmployeeType(orgId, "Full Time Employee");
-
-			// add default payclasses to default employee type
-			await this.DBHelper.AddOrgPayClassesToEmployeeType(orgId, etid);
-
-			// add default roles and permissions for allyis apps
-			var roleIds = await this.CreateDefaultAllyisAppsRolesAndPermissions(orgId);
-
-			// create organization user with that employee type id, employee id and role id
-			await this.AddUserToOrganization(orgId, this.UserContext.UserId, employeeId, etid, roleIds.Item1);
 
 			return orgId;
 		}
@@ -231,14 +243,58 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Updates an organization chosen by the current user.
 		/// </summary>
-		public async Task<bool> UpdateOrganization(int organizationId, string organizationName, string siteUrl, int? addressId, string address1, string city, int? stateId, string countryCode, string postalCode, string phoneNumber, string faxNumber, string subDomain)
+		public async Task<bool> UpdateOrganization(int organizationId, string organizationName, string siteUrl, string address1, string city, int? stateId, string countryCode, string postalCode, string phoneNumber, string faxNumber, string subDomain)
 		{
 			if (organizationId <= 0) throw new ArgumentOutOfRangeException(nameof(organizationId));
 			if (string.IsNullOrWhiteSpace(organizationName)) throw new ArgumentNullException(nameof(organizationName));
 
+			bool result = false;
 			await CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Edit, AppEntity.Organization, organizationId);
 
-			return await DBHelper.UpdateOrganization(organizationId, organizationName, siteUrl, addressId, address1, city, stateId, countryCode, postalCode, phoneNumber, faxNumber, subDomain) > 0;
+			// to update address, firt get the address of the organization
+			int? addressId = 0;
+			var org = await this.GetOrganizationAsync(organizationId);
+			if (org.Address != null)
+			{
+				// address exists, update
+				addressId = org.Address.AddressId;
+				await this.DBHelper.UpdateAddressAsync(addressId.Value, address1, null, city, stateId, postalCode, countryCode);
+			}
+			else
+			{
+				// address doesn't exist. any non-null input from user?
+				if (!string.IsNullOrWhiteSpace(address1) || !string.IsNullOrWhiteSpace(city) || !string.IsNullOrWhiteSpace(postalCode) || !string.IsNullOrWhiteSpace(countryCode) || stateId.HasValue)
+				{
+					// yes, create address
+					addressId = await this.DBHelper.CreateAddressAsync(address1, null, city, stateId, postalCode, countryCode);
+				}
+			}
+
+			// update the org next
+			try
+			{
+				await DBHelper.UpdateOrganization(organizationId, organizationName, siteUrl, phoneNumber, faxNumber, subDomain, addressId);
+				result = true;
+			}
+			catch (SqlException ex)
+			{
+				if (ex.Message.ToLower().Contains("unique"))
+				{
+					// unique constraint, sudomain already taken
+					// delete the address that was created
+					if (addressId > 0)
+					{
+						await this.DBHelper.DeleteAddressAsync(addressId.Value);
+						result = false;
+					}
+				}
+				else
+				{
+					throw;
+				}
+			}
+
+			return result;
 		}
 
 		/// <summary>

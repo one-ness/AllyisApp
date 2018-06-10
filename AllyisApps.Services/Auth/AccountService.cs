@@ -173,11 +173,12 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException(nameof(lastName));
 			if (emailConfirmationCode == null) throw new ArgumentException(nameof(emailConfirmationCode));
 			var result = 0;
+			int? aid = 0;
 			try
 			{
 				// hash the password, create the address and then the user
 				var hash = string.IsNullOrWhiteSpace(password) ? null : Crypto.GetPasswordHash(password);
-				int? aid = await this.DBHelper.CreateAddressAsync(address1, address2, city, stateId, postalCode, countryCode);
+				aid = await this.DBHelper.CreateAddressAsync(address1, address2, city, stateId, postalCode, countryCode);
 				result = await this.DBHelper.CreateUserAsync(email, hash, firstName, lastName, emailConfirmationCode, dateOfBirth, phoneNumber, Language.DefaultLanguageCultureName, aid == 0 ? null : aid, (int)loginProvider);
 
 				// user created, send confirmation email
@@ -188,6 +189,11 @@ namespace AllyisApps.Services
 				if (ex.Message.ToLower().Contains("unique"))
 				{
 					// unique constraint, email already taken
+					// delete the address that was created
+					if (aid > 0)
+					{
+						await this.DBHelper.DeleteAddressAsync(aid.Value);
+					}
 				}
 				else
 				{
@@ -379,6 +385,7 @@ namespace AllyisApps.Services
 				PhoneNumber = entity.PhoneNumber,
 				SiteUrl = entity.SiteUrl,
 				Subdomain = entity.Subdomain,
+				SubscriptionCount = entity.SubscriptionCount,
 				Address = (entity.AddressId.HasValue && loadAddress) ? await this.GetAddressAsync(entity.AddressId.Value) : null,
 				UserCount = entity.UserCount
 			};
@@ -416,21 +423,21 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException(nameof(lastName));
 			if (dateOfBirth < DateTime.UtcNow.AddYears(-150)) throw new ArgumentOutOfRangeException(nameof(dateOfBirth));
 
-			// are we updating address? if yes, we need to get the user details to get the address id.
+			// to update address, first get the address of the current user
+			var user = await this.GetUserAsync(userId);
 			int? addressId = 0;
-			if (!string.IsNullOrWhiteSpace(address) || !string.IsNullOrWhiteSpace(city) || !string.IsNullOrWhiteSpace(postalCode) || !string.IsNullOrWhiteSpace(countryCode) || stateId.HasValue)
+			if (user.Address != null)
 			{
-				// yes, at least one non-null information, get the user and then the address id
-				var user = await this.GetUserAsync(userId);
-				if (user.Address != null)
+				// address exists, update
+				addressId = user.Address.AddressId;
+				await this.DBHelper.UpdateAddressAsync(addressId.Value, address, null, city, stateId, postalCode, countryCode);
+			}
+			else
+			{
+				// address doesn't exist. any non-null input from user?
+				if (!string.IsNullOrWhiteSpace(address) || !string.IsNullOrWhiteSpace(city) || !string.IsNullOrWhiteSpace(postalCode) || !string.IsNullOrWhiteSpace(countryCode) || stateId.HasValue)
 				{
-					// address exists, update the address
-					addressId = user.Address.AddressId;
-					await this.DBHelper.UpdateAddressAsync(addressId.Value, address, null, city, stateId, postalCode, countryCode);
-				}
-				else
-				{
-					// create address
+					// yes, create address
 					addressId = await this.DBHelper.CreateAddressAsync(address, null, city, stateId, postalCode, countryCode);
 				}
 			}

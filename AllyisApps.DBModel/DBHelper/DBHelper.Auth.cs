@@ -329,37 +329,27 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updates the specified organization with new information.
 		/// </summary>
-		public async Task<int> UpdateOrganization(
+		public async Task UpdateOrganization(
 			int organizationId,
 			string organizationName,
 			string siteUrl,
-			int? addressId,
-			string address1,
-			string city,
-			int? stateId,
-			string countryCode,
-			string postalCode,
 			string phoneNumber,
 			string faxNumber,
-			string subDomain)
+			string subDomain,
+			int? addressId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@organizationName", organizationName);
 			parameters.Add("@siteUrl", siteUrl);
-			parameters.Add("@addressId", addressId);
-			parameters.Add("@address1", address1);
-			parameters.Add("@city", city);
-			parameters.Add("@stateId", stateId);
-			parameters.Add("@countryCode", countryCode);
-			parameters.Add("@postalCode", postalCode);
 			parameters.Add("@phoneNumber", phoneNumber);
 			parameters.Add("@faxNumber", faxNumber);
 			parameters.Add("@subdomainName", subDomain);
+			parameters.Add("@addressId", addressId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return await connection.ExecuteAsync("[Auth].[UpdateOrganization]", parameters, commandType: CommandType.StoredProcedure);
+				await connection.ExecuteAsync("[Auth].[UpdateOrganization]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 

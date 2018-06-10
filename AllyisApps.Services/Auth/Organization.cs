@@ -88,6 +88,11 @@ namespace AllyisApps.Services.Auth
 		/// </summary>
 		public int UserCount { get; set; }
 
+		/// <summary>
+		/// Gets or sets the number of subscriptions this organization has
+		/// </summary>
+		public int SubscriptionCount { get; set; }
+
 		public Organization()
 		{
 			Address = new Address();

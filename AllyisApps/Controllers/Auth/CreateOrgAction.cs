@@ -47,11 +47,19 @@ namespace AllyisApps.Controllers.Auth
 			{
 				int orgId = await AppService.SetupNewOrganization(model.EmployeeId, model.OrganizationName, model.PhoneNumber, model.FaxNumber, model.SiteUrl, model.Subdomain, model.Address, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode);
 
-				if (orgId <= 0)
+				if (orgId == 0)
 				{
+					// subdomain is already taken
 					Notifications.Add(new BootstrapAlert(Resources.Strings.SubdomainTaken, Variety.Danger));
 					return View(model);
 				}
+				// NOTE: don't have to check for employeeid error here, because the org is just being created
+				//else if (orgId == -1)
+				//{
+				//	// employeeid is not unique
+				//	Notifications.Add(new BootstrapAlert(Resources.Strings.EmployeeIdNotUniqueError, Variety.Danger));
+				//	return View(model);
+				//}
 				else
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.OrganizationCreatedNotification, Variety.Success));

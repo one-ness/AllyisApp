@@ -30,9 +30,17 @@ namespace AllyisApps.Controllers.Auth
 		{
 			if (ModelState.IsValid)
 			{
-				await AppService.UpdateOrganization(model.OrganizationId, model.OrganizationName, model.SiteUrl, model.AddressId, model.Address, model.City, model.SelectedStateId, model.SelectedCountryCode, model.PostalCode, model.PhoneNumber, model.FaxNumber, model.Subdomain);
-				Notifications.Add(new BootstrapAlert(@Resources.Strings.OrganizationDetailsUpdated, Variety.Success));
-				return RedirectToAction(ActionConstants.OrganizationDetails, ControllerConstants.Account, new { id = model.OrganizationId });
+				if (await AppService.UpdateOrganization(model.OrganizationId, model.OrganizationName, model.SiteUrl, model.Address, model.City, model.SelectedStateId, model.SelectedCountryCode, model.PostalCode, model.PhoneNumber, model.FaxNumber, model.Subdomain))
+				{
+					// successfully updated
+					Notifications.Add(new BootstrapAlert(@Resources.Strings.OrganizationDetailsUpdated, Variety.Success));
+					return RedirectToAction(ActionConstants.OrganizationDetails, ControllerConstants.Account, new { id = model.OrganizationId });
+				}
+				else
+				{
+					Notifications.Add(new BootstrapAlert(Resources.Strings.SubdomainTaken, Variety.Danger));
+					return View(model);
+				}
 			}
 
 			// Model is invalid, try again
@@ -56,7 +64,6 @@ namespace AllyisApps.Controllers.Auth
 				OrganizationName = organization.OrganizationName,
 				SiteUrl = organization.SiteUrl,
 				Subdomain = organization.Subdomain,
-				AddressId = organization.Address?.AddressId,
 				Address = organization.Address?.Address1,
 				City = organization.Address?.City,
 				SelectedStateId = organization.Address?.StateId,
@@ -66,7 +73,6 @@ namespace AllyisApps.Controllers.Auth
 				PhoneNumber = organization.PhoneNumber,
 				FaxNumber = organization.FaxNumber,
 				CanDelete = canDelete,
-				EmployeeId = "value",//Value needed for model TODO: Seperate Edit and Create
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService.GetCountries()),
 				LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService.GetStates(organization.Address?.CountryCode ?? string.Empty))
 			};
