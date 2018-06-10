@@ -4255,7 +4255,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The subdomain name provided has already been taken!.
+        ///   Looks up a localized string similar to The subdomain is already taken..
         /// </summary>
         public static string SubdomainTaken {
             get {

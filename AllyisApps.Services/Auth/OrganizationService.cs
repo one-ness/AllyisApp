@@ -67,21 +67,8 @@ namespace AllyisApps.Services
 				var roleIds = await this.CreateDefaultAllyisAppsRolesAndPermissions(orgId);
 
 				// create organization user with that employee type id, employee id and role id
-				try
-				{
-					await this.AddUserToOrganization(orgId, this.UserContext.UserId, employeeId, etid, roleIds.Item1);
-				}
-				catch (SqlException ex)
-				{
-					if (ex.Message.ToLower().Contains("unique"))
-					{
-						orgId = -1;
-					}
-					else
-					{
-						throw;
-					}
-				}
+				// note: this is the first user in the org, hence the employeeId won't be a duplicate
+				await this.AddUserToOrganization(orgId, this.UserContext.UserId, employeeId, etid, roleIds.Item1);
 			}
 			catch (SqlException ex)
 			{

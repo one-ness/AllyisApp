@@ -202,7 +202,7 @@
     <value>An error has occurred.</value>
   </data>
   <data name="SubdomainTaken" xml:space="preserve">
-    <value>The subdomain name provided has already been taken!</value>
+    <value>The subdomain is already taken.</value>
   </data>
   <data name="Token" xml:space="preserve">
     <value>Token was not assigned properly.</value>

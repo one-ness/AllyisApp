@@ -52,13 +52,6 @@ namespace AllyisApps.Controllers.Auth
 					// subdomain is already taken
 					Notifications.Add(new BootstrapAlert(Resources.Strings.SubdomainTaken, Variety.Danger));
 				}
-				// NOTE: don't have to check for employeeid error here, because the org is just being created
-				//else if (orgId == -1)
-				//{
-				//	// employeeid is not unique
-				//	Notifications.Add(new BootstrapAlert(Resources.Strings.EmployeeIdNotUniqueError, Variety.Danger));
-				//	return View(model);
-				//}
 				else
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.OrganizationCreatedNotification, Variety.Success));

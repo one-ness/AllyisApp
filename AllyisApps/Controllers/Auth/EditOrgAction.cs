@@ -28,6 +28,8 @@ namespace AllyisApps.Controllers.Auth
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> EditOrg(EditOrganizationViewModel model)
 		{
+			// employeeid is not required, since we are only editing the organization
+			ModelState["EmployeeId"].Errors.Clear();
 			if (ModelState.IsValid)
 			{
 				if (await AppService.UpdateOrganization(model.OrganizationId, model.OrganizationName, model.SiteUrl, model.Address, model.City, model.SelectedStateId, model.SelectedCountryCode, model.PostalCode, model.PhoneNumber, model.FaxNumber, model.Subdomain))
@@ -44,6 +46,8 @@ namespace AllyisApps.Controllers.Auth
 			}
 
 			// Model is invalid, try again
+			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService.GetCountries());
+			model.LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService.GetStates(model.SelectedCountryCode));
 			return View(model);
 		}
 
