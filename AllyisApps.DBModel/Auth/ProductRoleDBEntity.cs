@@ -45,6 +45,6 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets the built-in role id
 		/// </summary>
-		public bool BuiltInProductRoleId { get; set; }
+		public int BuiltInProductRoleId { get; set; }
 	}
 }

@@ -736,11 +736,11 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// get the product roles for the given org and given product
 		/// </summary>
-		public async Task<List<ProductRoleDBEntity>> GetProductRolesAsync(int orgId, int productId)
+		public async Task<List<ProductRoleDBEntity>> GetProductRolesAsync(int orgOrSubId, int productId)
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return (await con.QueryAsync<ProductRoleDBEntity>("[Auth].[GetProductRoles]", new { orgId, productId }, commandType: CommandType.StoredProcedure)).ToList();
+				return (await con.QueryAsync<ProductRoleDBEntity>("[Auth].[GetProductRoles]", new { orgOrSubId, productId }, commandType: CommandType.StoredProcedure)).ToList();
 			}
 		}
 

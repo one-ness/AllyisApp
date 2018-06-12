@@ -53,7 +53,7 @@ namespace AllyisApps.Controllers.Auth
 
 					data.ProductAndRoleNames.Add(new Tuple<string, string>(
 						(await AppService.GetSubscription(invitation.SubscriptionId)).ProductName,
-						(await AppService.GetProductRoles(id, productInfo.ProductId)).FirstOrDefault(role => invitation.ProductRoleId == role.ProductRoleId)?.ProductRoleName ?? "Unassigned"
+						(await AppService.GetProductRolesAsync(id, productInfo.ProductId)).FirstOrDefault(role => invitation.ProductRoleId == role.ProductRoleId)?.ProductRoleShortName ?? "Unassigned"
 					));
 				}
 

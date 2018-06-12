@@ -774,22 +774,23 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// get the list of roles for the given product, for the given organization
+		/// get the list of roles for the given product, for the given organization or subscription
 		/// </summary>
-		public async Task<List<ProductRole>> GetProductRoles(int orgId, ProductIdEnum pid)
+		public async Task<List<ProductRole>> GetProductRolesAsync(int orgOrSubId, ProductIdEnum pid)
 		{
 			// NOTE: orgid is ignored for now
 			if (pid < 0) throw new ArgumentOutOfRangeException(nameof(pid));
 
-			var collection = await DBHelper.GetProductRolesAsync(orgId, (int)pid);
-
+			var collection = await DBHelper.GetProductRolesAsync(orgOrSubId, (int)pid);
 			return collection.Select(item =>
 				new ProductRole
 				{
-					OrganizationId = orgId,
-					ProductId = (ProductIdEnum)item.ProductId,
+					BuiltinProductRoleId = (BuiltinProductRoleIdEnum)item.BuiltInProductRoleId,
+					OrgOrSubId = orgOrSubId,
+					ProductId = pid,
 					ProductRoleId = item.ProductRoleId,
-					ProductRoleName = item.ProductRoleShortName
+					ProductRoleShortName = item.ProductRoleShortName,
+					ProductRoleFullName = item.ProductRoleFullName,
 				})
 				.ToList();
 		}
@@ -834,7 +835,7 @@ namespace AllyisApps.Services
 		private async Task<int> CreateAllyisAppsAdminRoleAndPermissions(int orgOrSubId)
 		{
 			// create admin role
-			var result = await this.DBHelper.CreateProductRoleAsync((int)ProductIdEnum.AllyisApps, "Admin", "Organization Administrator", orgOrSubId, (int)BuiltinRoleEnum.Admin);
+			var result = await this.DBHelper.CreateProductRoleAsync((int)ProductIdEnum.AllyisApps, "Admin", "Organization Administrator", orgOrSubId, (int)BuiltinProductRoleIdEnum.Admin);
 
 			// create permissions for this role
 			var list = new List<PermissionDBEntity>();
@@ -875,7 +876,7 @@ namespace AllyisApps.Services
 		private async Task<int> CreateAllyisAppsUserRoleAndPermissions(int orgOrSubId)
 		{
 			// create user role
-			var result = await this.DBHelper.CreateProductRoleAsync((int)ProductIdEnum.AllyisApps, "User", "Organization User", orgOrSubId, (int)BuiltinRoleEnum.User);
+			var result = await this.DBHelper.CreateProductRoleAsync((int)ProductIdEnum.AllyisApps, "User", "Organization User", orgOrSubId, (int)BuiltinProductRoleIdEnum.User);
 
 			// create permissions for this role
 			var list = new List<PermissionDBEntity>();

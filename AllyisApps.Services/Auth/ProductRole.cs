@@ -19,9 +19,14 @@ namespace AllyisApps.Services.Auth
 		public const int NotInProduct = 0;
 
 		/// <summary>
-		/// Gets or sets Name.
+		/// gets or sets the short name.
 		/// </summary>
-		public string ProductRoleName { get; set; }
+		public string ProductRoleShortName { get; set; }
+
+		/// <summary>
+		/// gets or sets the full name
+		/// </summary>
+		public string ProductRoleFullName { get; set; }
 
 		/// <summary>
 		/// Gets or sets ProductRoleId.
@@ -34,8 +39,13 @@ namespace AllyisApps.Services.Auth
 		public ProductIdEnum ProductId { get; set; }
 
 		/// <summary>
-		/// the organization this role belongs to
+		/// the organization or subscription this role belongs to
 		/// </summary>
-		public int OrganizationId { get; set; }
+		public int OrgOrSubId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the builtin product role id
+		/// </summary>
+		public BuiltinProductRoleIdEnum BuiltinProductRoleId { get; set; }
 	}
 }

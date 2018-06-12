@@ -11,6 +11,7 @@ using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.Auth;
 using AllyisApps.Services.Billing;
+using System.Collections.Generic;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -24,7 +25,6 @@ namespace AllyisApps.Controllers.Auth
 		/// </summary>
 		public async Task<ActionResult> OrgMembers(int id)
 		{
-
 			var model = new OrganizationMembersViewModel
 			{
 				CanAddUser = await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Create, AppService.AppEntity.OrganizationUser, id, false),
@@ -32,9 +32,17 @@ namespace AllyisApps.Controllers.Auth
 				CanEditUser = await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Edit, AppService.AppEntity.OrganizationUser, id, false),
 				CanManagePermissions = await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Edit, AppService.AppEntity.Permission, id, false),
 				OrganizationId = id,
-				PossibleRoles = organizationRoles,
 				CurrentUserId = AppService.UserContext.UserId
 			};
+
+			var roles = await this.AppService.GetProductRolesAsync(id, ProductIdEnum.AllyisApps);
+			var dicy = new Dictionary<int, string>();
+			foreach (var item in roles)
+			{
+				dicy.Add(item.ProductRoleId, item.ProductRoleShortName);
+			}
+
+			model.PossibleRoles = dicy;
 			model.TabInfo.OrganizationId = id;
 			
 			var collection = await AppService.GetOrganizationUsersAsync(id);

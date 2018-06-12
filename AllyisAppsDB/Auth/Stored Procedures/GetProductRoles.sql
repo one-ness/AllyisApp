@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [Auth].[GetProductRoles]
-	@orgId INT,
+	@orgOrSubId INT,
 	@productId INT
 AS
 BEGIN
@@ -8,5 +8,5 @@ BEGIN
 
 	SELECT *
 	FROM [ProductRole] WITH (NOLOCK)
-	WHERE ProductId = @productId
+	WHERE ProductId = @productId and OrgOrSubId = @orgOrSubId
 END

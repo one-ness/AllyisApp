@@ -9,7 +9,7 @@ namespace AllyisApps.Services.Auth
 	/// <summary>
 	/// list of builtin roles
 	/// </summary>
-	public enum BuiltinRoleEnum : int
+	public enum BuiltinProductRoleIdEnum : int
 	{
 		/// <summary>
 		/// not in product

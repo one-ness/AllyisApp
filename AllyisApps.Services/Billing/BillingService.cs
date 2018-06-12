@@ -860,7 +860,7 @@ namespace AllyisApps.Services
 
 			return new ProductRole
 			{
-				ProductRoleName = subscriptionRole.ProductRoleName,
+				ProductRoleShortName = subscriptionRole.ProductRoleName,
 				ProductRoleId = subscriptionRole.ProductRoleId,
 				ProductId = (ProductIdEnum)subscriptionRole.ProductId
 			};
