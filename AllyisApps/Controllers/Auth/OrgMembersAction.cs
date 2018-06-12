@@ -45,17 +45,15 @@ namespace AllyisApps.Controllers.Auth
 			model.PossibleRoles = dicy;
 			model.TabInfo.OrganizationId = id;
 			
-			var collection = await AppService.GetOrganizationUsersAsync(id);
+			var collection = await AppService.GetOrganizationUsersAsync(id, false);
 			foreach (var item in collection)
 			{
-				OrganizationRoleEnum orgRole = (OrganizationRoleEnum)item.OrganizationRoleId;
-
 				var data = new OrganizationMembersViewModel.ViewModelItem
 				{
 					Email = item.Email,
 					EmployeeId = item.EmployeeId,
 					JoinedDate = item.OrganizationUserCreatedUtc,
-					RoleName = Enum.GetName(typeof(OrganizationRoleEnum), orgRole) ?? string.Empty,
+					RoleName = dicy[item.OrganizationRoleId],
 					UserId = item.UserId,
 					Username = $"{item.FirstName} {item.LastName}"
 				};

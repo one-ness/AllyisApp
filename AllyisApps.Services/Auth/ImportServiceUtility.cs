@@ -40,7 +40,7 @@ namespace AllyisApps.Services
 
 			OrganizationUserDBEntity orgUser = new OrganizationUserDBEntity()
 			{
-				CreatedUtc = DateTime.Now,
+				OrganizationUserCreatedUtc = DateTime.Now,
 				EmployeeTypeId = employeeType,
 				EmployeeId = empolyeeId,
 				MaxAmount = 0,

@@ -667,7 +667,7 @@ namespace AllyisApps.Services
 		{
 			// Retrieval of existing user data
 			var userGet = await this.GetCurrentUserAsync();
-			var users = GetOrganizationMemberList(orgId).Select(o => new Tuple<string, UserOld>(o.EmployeeId, o)).ToList();
+			var users = GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, o)).ToList();
 
 			foreach (DataTable table in userImports)
 			{
@@ -708,10 +708,10 @@ namespace AllyisApps.Services
 				}
 				foreach (DataRow row in table.Rows)
 				{
-					UserOld userInOrg = null;
+					User userInOrg = null;
 					if (hasUserEmail || hasEmployeeId || hasUserName)
 					{
-						Tuple<string, UserOld> userTuple = null;
+						Tuple<string, User> userTuple = null;
 
 						// Find existing user by whatever information we have
 						string readValue = null;

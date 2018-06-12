@@ -447,17 +447,30 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// get the list of users in the given organization
 		/// </summary>
-		public async Task<List<OrganizationUser>> GetOrganizationUsersAsync(int orgId)
+		public async Task<List<OrganizationUser>> GetOrganizationUsersAsync(int orgId, bool loadAddress = true)
 		{
 			if (orgId <= 0) throw new ArgumentOutOfRangeException(nameof(orgId));
 
 			await CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Read, AppEntity.OrganizationUser, orgId);
+			var ouDicy = await this.DBHelper.GetOrganizationUsersAsync(orgId);
+			var uDicy = await this.DBHelper.GetUsersbyIdsAsync(ouDicy.Keys.ToList());
+			var result = new List<OrganizationUser>();
+			foreach (var item in uDicy.Values)
+			{
+				result.Add(new OrganizationUser(await this.InitializeUserAsync(item, loadAddress)));
+			}
 
+			foreach (var item in result)
+			{
+				item.EmployeeId = ouDicy[item.UserId].EmployeeId;
+				item.EmployeeTypeId = ouDicy[item.UserId].EmployeeTypeId;
+				item.ExpenseApprovalLimit = ouDicy[item.UserId].MaxAmount;
+				item.OrganizationRoleId = ouDicy[item.UserId].OrganizationRoleId;
+				item.OrganizationUserCreatedUtc = ouDicy[item.UserId].OrganizationUserCreatedUtc;
+			}
 
-			var collection = await DBHelper.GetOrganizationUsersAsync(orgId);
-			return collection.Select(InitializeOrganizationUser).ToList();
+			return result;
 		}
-
 
 		public async Task<int> GetOrganizationInvitationCountAsync(int orgId, InvitationStatusEnum statusMask)
 		{
@@ -570,13 +583,13 @@ namespace AllyisApps.Services
 
 			return new OrganizationUser
 			{
-				OrganizationUserCreatedUtc = organizationUser.CreatedUtc,
+				OrganizationUserCreatedUtc = organizationUser.OrganizationUserCreatedUtc,
 				EmployeeId = organizationUser.EmployeeId,
 				OrganizationId = organizationUser.OrganizationId,
 				OrganizationRoleId = organizationUser.OrganizationRoleId,
 				EmployeeTypeId = organizationUser.EmployeeTypeId,
 				UserId = organizationUser.UserId,
-				MaxApprovalAmount = organizationUser.MaxAmount
+				ExpenseApprovalLimit = organizationUser.MaxAmount
 			};
 		}
 
@@ -600,7 +613,7 @@ namespace AllyisApps.Services
 			result.LastName = entity.LastName;
 			result.LastUsedSubscriptionId = entity.LastUsedSubscriptionId;
 			result.LockoutEndDateUtc = entity.LockoutEndDateUtc;
-			result.MaxApprovalAmount = entity.MaxAmount;
+			result.ExpenseApprovalLimit = entity.MaxAmount;
 			result.OrganizationId = entity.OrganizationId;
 			result.OrganizationRoleId = entity.OrganizationRoleId;
 			//result.Organizations =

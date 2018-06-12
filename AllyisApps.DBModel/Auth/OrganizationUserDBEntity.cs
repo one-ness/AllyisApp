@@ -31,10 +31,10 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets the date this user was added to the organization.
 		/// </summary>
-		public DateTime CreatedUtc { get; set; }
+		public DateTime OrganizationUserCreatedUtc { get; set; }
 
 		/// <summary>
-		///
+		/// Gets or sets the employee type id
 		/// </summary>
 		public int EmployeeTypeId { get; set; }
 

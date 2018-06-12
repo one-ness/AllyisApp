@@ -491,13 +491,32 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// get the list of users in the given organization
+		/// get the list of users in the given organization, indexed by user id
 		/// </summary>
-		public async Task<List<dynamic>> GetOrganizationUsersAsync(int organizationId)
+		public async Task<Dictionary<int, OrganizationUserDBEntity>> GetOrganizationUsersAsync(int orgId)
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				return (await con.QueryAsync<dynamic>("[Auth].[GetOrganizationUsers]", new { organizationId }, commandType: CommandType.StoredProcedure)).ToList();
+				return (await con.QueryAsync<OrganizationUserDBEntity>("[Auth].[GetOrganizationUsers] @a", new { a = orgId })).ToDictionary(x => x.UserId, x => x);
+			}
+		}
+
+		/// <summary>
+		/// get the list of users for the given ids
+		/// </summary>
+		public async Task<Dictionary<int, UserDBEntity>> GetUsersbyIdsAsync(List<int> userIds)
+		{
+			// create userids csv
+			var sb = new StringBuilder();
+			for (var i = 0; i < userIds.Count; i++)
+			{
+				sb.Append(userIds[i]);
+				sb.Append(',');
+			}
+
+			using (var con = new SqlConnection(SqlConnectionString))
+			{
+				return (await con.QueryAsync<UserDBEntity>("[Auth].[GetUsersByIds] @a", new { a = sb.ToString() })).ToDictionary(x => x.UserId, x => x);
 			}
 		}
 

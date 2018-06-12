@@ -17,6 +17,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// Current User
 		/// </summary>
 		public int CurrentUserId { get; set; }
+
 		/// <summary>
 		/// organization name
 		/// </summary>
@@ -77,15 +78,22 @@ namespace AllyisApps.ViewModels.Auth
 		/// Possible Organization Roles
 		/// </summary>
 		public Dictionary<int, string> PossibleRoles { get; set; }
+
+		const int DefaultPageSize = 20;
+		const int DefaultStartingPageNumber = 1;
+
 		/// <summary>
 		/// constructor
 		/// </summary>
 		public OrganizationMembersViewModel()
 		{
-			PageSize = 20; // default page number
-			CurrentPageNumber = 1; // default page
-			TabInfo = new MembersAndInvitationsTabViewModel();
-			TabInfo.MembersTabActive = "active";
+			PageSize = DefaultPageSize;
+			CurrentPageNumber = DefaultStartingPageNumber;
+			TabInfo = new MembersAndInvitationsTabViewModel
+			{
+				MembersTabActive = "active"
+			};
+
 			Users = new List<ViewModelItem>();
 		}
 
