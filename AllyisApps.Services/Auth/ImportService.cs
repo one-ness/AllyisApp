@@ -1004,7 +1004,7 @@ namespace AllyisApps.Services
 						continue;
 					}
 
-					List<UserOld> userSubs = new List<UserOld>();
+					var userSubs = new List<User>();
 					string readValue = null;
 					ReadColumn(row, ColumnHeaders.EmployeeId, e => readValue = e);
 					var userTuple = users.FirstOrDefault(tup => tup.Item1.Equals(readValue));

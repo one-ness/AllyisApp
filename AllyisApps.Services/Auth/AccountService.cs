@@ -499,20 +499,6 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets the user info from an email address.
 		/// </summary>
-		/// <param name="email">Email address.</param>
-		/// <returns>A UserInfo instance with the user's info.</returns>
-		public async Task<UserOld> GetUserOldByEmailAsync(string email)
-		{
-			if (!Utility.IsValidEmail(email)) throw new ArgumentException(nameof(email));
-
-			await this.InitializeUserAsync(await DBHelper.GetUserByEmailAsync(email));
-
-			return null;
-		}
-
-		/// <summary>
-		/// Gets the user info from an email address.
-		/// </summary>
 		public async Task<User> GetUserByEmailAsync(string email, bool loadAddress = true)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException(nameof(email));

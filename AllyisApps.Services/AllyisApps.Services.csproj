@@ -148,7 +148,6 @@
     <Compile Include="Auth\ProductRole.cs" />
     <Compile Include="Billing\SubscriptionUser.cs" />
     <Compile Include="TimeTracker\TimeEntry.cs" />
-    <Compile Include="Auth\UserOld.cs" />
     <Compile Include="Crm\CrmService.cs" />
     <Compile Include="Billing\Product.cs" />
     <Compile Include="Billing\ProductIdEnum.cs" />

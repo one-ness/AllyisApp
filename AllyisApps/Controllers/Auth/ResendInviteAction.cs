@@ -24,7 +24,7 @@ namespace AllyisApps.Controllers.Auth
             {
                 var invite = await AppService.GetInvitation(inviteId);
                 await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Create, Services.AppService.AppEntity.OrganizationUser, invite.OrganizationId);
-                UserOld usr = await AppService.GetUserOldByEmailAsync(invite.Email);
+                var usr = await AppService.GetUserByEmailAsync(invite.Email);
                 string url = usr != null ?
                             Url.Action(ActionConstants.Index, ControllerConstants.Account, null, protocol: Request.Url.Scheme) :
                             Url.Action(ActionConstants.Register, ControllerConstants.Account, null, protocol: Request.Url.Scheme);

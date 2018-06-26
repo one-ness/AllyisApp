@@ -32,11 +32,11 @@ namespace AllyisApps
 		/// </summary>
 		public static string GoogleOAuthAuthorizationUrl { get; set; }
 
-		const string googleOAuthClientIdKey = "GoogleOAuthClientId";
-		const string googleOAuthClientSecretKey = "GoogleOAuthClientSecret";
+		private const string googleOAuthClientIdKey = "GoogleOAuthClientId";
+		private const string googleOAuthClientSecretKey = "GoogleOAuthClientSecret";
 
-		static string OidcMetaDataDocumentJson;
-		static dynamic OidcMetaDataDocument;
+		private static string oidcMetaDataDocumentJson;
+		private static dynamic oidcMetaDataDocument;
 
 		/// <summary>
 		/// google oauth init
@@ -59,8 +59,8 @@ namespace AllyisApps
 			// get the metadata document
 			try
 			{
-				OidcMetaDataDocument = OidcUtility.GetOidcMetaDataDocument(GoogleOAuthMetaDataUrl, out OidcMetaDataDocumentJson);
-				GoogleOAuthAuthorizationUrl = OidcMetaDataDocument.authorization_endpoint;
+				oidcMetaDataDocument = OidcUtility.GetOidcMetaDataDocument(GoogleOAuthMetaDataUrl, out oidcMetaDataDocumentJson);
+				GoogleOAuthAuthorizationUrl = oidcMetaDataDocument.authorization_endpoint;
 			}
 			catch (Exception ex)
 			{
@@ -81,8 +81,8 @@ namespace AllyisApps
 			nonce=0394852-3190485-2490358&
 			hd=example.com
 		 */
-		const string responseType = "id_token%20code%20token"; // id_token is mandatory for oidc signin
-		const string scope = "openid%20profile%20email%20address%20phone"; // openid is mandatory for oidc signin
+		private const string ResponseType = "id_token%20code%20token"; // id_token is mandatory for oidc signin
+		private const string Scope = "openid%20profile%20email%20address%20phone"; // openid is mandatory for oidc signin
 		/// <summary>
 		/// get the open id login url
 		/// </summary>
@@ -92,7 +92,7 @@ namespace AllyisApps
 			// this can mitigate xsrf and replay attacks.
 			var xsrfAndReplayMitigation = Guid.NewGuid().ToString();
 			string url = "{0}?client_id={1}&response_type={2}&redirect_uri={3}&response_mode=form_post&scope={4}&state={5}&nonce={6}&hd=*";
-			return string.Format(url, GoogleOAuthAuthorizationUrl, GoogleOAuthClientId, responseType, returnUrl, scope, xsrfAndReplayMitigation, xsrfAndReplayMitigation);
+			return string.Format(url, GoogleOAuthAuthorizationUrl, GoogleOAuthClientId, ResponseType, returnUrl, Scope, xsrfAndReplayMitigation, xsrfAndReplayMitigation);
 		}
 	}
 }

@@ -705,7 +705,7 @@ namespace AllyisApps.Services
 		/// <param name="startingDate">Start of date range.</param>
 		/// <param name="endingDate">End of date range.</param>
 		/// <returns>.</returns>
-		public async Task<Tuple<Setting, List<PayClass>, List<Holiday>, List<CompleteProject>, List<UserOld>, List<TimeEntry>>>
+		public async Task<Tuple<Setting, List<PayClass>, List<Holiday>, List<CompleteProject>, List<User>, List<TimeEntry>>>
 			GetTimeEntryIndexInfo(int orgId, DateTime? startingDate, DateTime? endingDate, int? userId = null)
 		{
 			#region Validation
@@ -735,7 +735,7 @@ namespace AllyisApps.Services
 				spResults.Item2.Select(InitializePayClassInfo).ToList(),
 				spResults.Item3.Select(InitializeHoliday).ToList(),
 				spResults.Item4.Select(InitializeCompleteProjectInfo).ToList(),
-				new List<UserOld>(), //spResults.Item5.Select(udb => InitializeOldUser(udb)).ToList(),
+				new List<User>(),//spResults.Item5.Select(udb => await InitializeUserAsync(udb)).ToList(),
 				spResults.Item6.Select(InitializeTimeEntryInfo).ToList());
 		}
 
