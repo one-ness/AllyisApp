@@ -13,8 +13,6 @@ namespace UploadDataDirect
 {
 	class Program
 	{
-		public static DBHelper DBHelper;
-
 		static ServiceSettings settings;
 		public static AppService appService;
 

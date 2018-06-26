@@ -21,7 +21,7 @@ namespace AllyisApps
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "MVC framework impl.")]
 		public static void RegisterGlobalFilters(GlobalFilterCollection filters)
 		{
-			// Default all pages and actions to authorization required.
+			// Default all pages and actions to authentication required.
 			filters.Add(new AuthorizeAttribute());
 
 			// Default all pages to handle errors.
