@@ -69,6 +69,7 @@ namespace AllyisApps.Controllers.Auth
 			{
 				model.TabInfo.PendingInvitationCount = await this.AppService.GetOrganizationInvitationCountAsync(id, Services.Auth.InvitationStatusEnum.Pending);
 			}
+
 			return View(model);
 		}
 	}
