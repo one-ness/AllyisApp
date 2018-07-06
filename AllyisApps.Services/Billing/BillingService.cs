@@ -546,7 +546,7 @@ namespace AllyisApps.Services
 
 				// no, get the product of this subscription
 				ProductIdEnum pid = subscription.ProductId;
-				if (!CacheContainer.ProductsCache.TryGetValue(pid, out Product product) || !product.IsActive)
+				if (!CacheContainer.ProductsCache.TryGetValue(pid, out Product product) || product.ProductStatus == ProductStatusEnum.Inactive)
 				{
 					// inactive or invalid product
 					throw new InvalidOperationException("You selected an invalid product to subscribe to.");
@@ -781,14 +781,7 @@ namespace AllyisApps.Services
 		public List<Product> GetAllActiveProductsAndSkus()
 		{
 			// get only active products and with sku products
-			var result = CacheContainer.ProductsCache.Values.Where(x => x.IsActive).ToList();
-
-			// reduce to show products
-			foreach (var item in result)
-			{
-				// reduce the skus list to only active skus
-				item.Skus = item.Skus.Where(x => x.IsActive).ToList();
-			}
+			var result = CacheContainer.ProductsCache.Values.Where(x => x.ProductStatus == ProductStatusEnum.Active).ToList();
 
 			return result;
 		}

@@ -32,16 +32,6 @@ namespace AllyisApps.Controllers.Auth
 			{
 				var pi = new SkusViewModel.ProductItemViewModel();
 				pi.ProductName = item.ProductName;
-				foreach (var sku in item.Skus)
-				{
-					var si = new SkusViewModel.ProductItemViewModel.SkuItemViewModel();
-					si.Price = sku.CostPerUnit;
-					si.SkuDescription = sku.SkuDescription;
-					si.SkuIconUrl = sku.IconUrl;
-					si.SkuId = (int)sku.SkuId;
-					si.SkuName = sku.SkuName;
-					pi.Skus.Add(si);
-				}
 
 				model.Products.Add(pi);
 			}

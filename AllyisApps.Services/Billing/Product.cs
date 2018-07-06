@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 
 namespace AllyisApps.Services.Billing
@@ -29,26 +30,14 @@ namespace AllyisApps.Services.Billing
 		public string ProductDescription { get; set; }
 
 		/// <summary>
-		/// is active
-		/// </summary>
-		public bool IsActive { get; set; }
-
-		/// <summary>
-		/// Gets or sets the list of Skus under this product.
-		/// </summary>
-		public List<Sku> Skus { get; set; }
-
-		/// <summary>
 		/// Gets or sets the area url.
 		/// </summary>
 		public string AreaUrl { get; set; }
 
 		/// <summary>
-		/// constructor
+		/// Gets or sets the product status
 		/// </summary>
-		public Product()
-		{
-			Skus = new List<Sku>();
-		}
+		[CLSCompliant(false)]
+		public ProductStatusEnum ProductStatus { get; set; }
 	}
 }
