@@ -44,7 +44,7 @@ namespace AllyisApps.Controllers.Auth
 
 				// no, get the product of this subscription
 				var pid = subscription.ProductId;
-				if (!CacheContainer.ProductsCache.TryGetValue(pid, out Product product) || !product.IsActive)
+				if (!CacheContainer.ProductsCache.TryGetValue(pid, out Product product) || product.ProductStatus != ProductStatusEnum.Active)
 				{
 					// inactive or invalid product
 					Notifications.Add(new BootstrapAlert("You selected an invalid product to subscribe to.", Variety.Danger));
@@ -63,7 +63,7 @@ namespace AllyisApps.Controllers.Auth
 
 			// get product for the sku
 			ProductIdEnum temp = ProductIdEnum.TimeTracker;
-			if (!CacheContainer.ProductsCache.TryGetValue(temp, out Product selectedProduct) || !selectedProduct.IsActive)
+			if (!CacheContainer.ProductsCache.TryGetValue(temp, out Product selectedProduct) || selectedProduct.ProductStatus != ProductStatusEnum.Active)
 			{
 				// inactive or invalid product
 				Notifications.Add(new BootstrapAlert("You selected an invalid product to subscribe to.", Variety.Danger));

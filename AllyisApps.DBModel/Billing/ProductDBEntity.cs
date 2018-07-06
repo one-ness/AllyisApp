@@ -27,9 +27,9 @@ namespace AllyisApps.DBModel.Billing
 		public string ProductName { get; set; }
 
 		/// <summary>
-		/// Gets or sets is active.
+		/// Gets or sets product status
 		/// </summary>
-		public bool IsActive { get; set; }
+		public int ProductStatus { get; set; }
 
 		/// <summary>
 		/// Gets or sets area url.
