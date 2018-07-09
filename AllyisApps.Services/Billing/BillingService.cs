@@ -399,7 +399,7 @@ namespace AllyisApps.Services
 			var result = new Subscription
 			{
 				ProductAreaUrl = sub.ArealUrl,
-				SkuIconUrl = sub.IconUrl,
+				ProductIconUrl = sub.ProductIconUrl,
 				IsActive = sub.IsActive,
 				NumberOfUsers = sub.NumberOfUsers,
 				OrganizationId = sub.OrganizationId,
@@ -521,7 +521,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Subscribes the current organization to a product or updates the organization's subscription to the product.
 		/// </summary>
-		public async Task<int> Subscribe(int organizationId, SkuIdEnum skuId, string subscriptionName)
+		public async Task<int> Subscribe(int organizationId, ProductIdEnum prodId, string subscriptionName)
 		{
 			if (organizationId <= 0)
 			{
@@ -538,33 +538,26 @@ namespace AllyisApps.Services
 			foreach (Subscription subscription in subscriptions)
 			{
 				// is it an existing sku?
-				if (subscription.SkuId == skuId)
+				if (subscription.ProductId == prodId)
 				{
 					// yes, already subscribed
 					return subscription.SubscriptionId;
 				}
-
-				// no, get the product of this subscription
-				ProductIdEnum pid = subscription.ProductId;
-				if (!CacheContainer.ProductsCache.TryGetValue(pid, out Product product) || product.ProductStatus == ProductStatusEnum.Inactive)
-				{
-					// inactive or invalid product
-					throw new InvalidOperationException("You selected an invalid product to subscribe to.");
-				}
-
-				// yes, user is subscribing to another sku of an existing subscription (i.e., product)
-				UpdateSubscriptionSkuAndName(organizationId, subscription.SubscriptionId, subscriptionName, skuId);
-				return subscription.SubscriptionId;
 			}
 
 			// set the creating user as highest level, and all other users as unassigned
 			int managerProductRoleId;
 			int unassignedProductRoleId;
-			// TODO: completely rewrite subscription
-			ProductIdEnum temp = ProductIdEnum.TimeTracker;
-			switch (temp)
+
+            // set the roles for the product
+			switch (prodId)
 			{
-				case ProductIdEnum.ExpenseTracker:
+                case ProductIdEnum.AllyisApps:
+                    managerProductRoleId = (int)BuiltinProductRoleIdEnum.Admin;
+                    unassignedProductRoleId = (int)BuiltinProductRoleIdEnum.NotInProduct;
+                    break;
+
+                case ProductIdEnum.ExpenseTracker:
 					managerProductRoleId = (int)ExpenseTrackerRole.Manager;
 					unassignedProductRoleId = (int)ExpenseTrackerRole.NotInProduct;
 					break;
@@ -583,13 +576,18 @@ namespace AllyisApps.Services
 					// inactive or invalid product
 					throw new InvalidOperationException("You selected an invalid product to subscribe to.");
 			}
+            // create new subscription
+            int subId = await DBHelper.CreateSubscription(organizationId, (int) prodId, subscriptionName, UserContext.UserId, managerProductRoleId, unassignedProductRoleId);
+            // create product roles for subscription (admin)
+            int prodRole = await DBHelper.CreateProductRoleAsync((int)prodId, "Admin", "Organization Administrator", subId, Int32.Parse(await GetNextProjectId(organizationId, subId)));
+            // create product roles for subscription (user)
+            await DBHelper.CreateProductRoleAsync((int)prodId, "User", "Organization User", subId, Int32.Parse(await GetNextProjectId(organizationId, subId)));
+            // create subscription-user for admin-productrole
+            await DBHelper.CreateSubscriptionUserAsync(subId, UserContext.UserId, prodRole);
 
-			// create new subscription
-			int subId = await DBHelper.CreateSubscription(organizationId, (int)skuId, subscriptionName, UserContext.UserId, managerProductRoleId, unassignedProductRoleId);
-
-			// initialize default settings
-			// TODO: replace temp
-			await MergeDefaultSettingsForProduct(temp, organizationId, subId);
+            // initialize default settings
+            // TODO: replace temp
+            await MergeDefaultSettingsForProduct(prodId, organizationId, subId);
 			return subId;
 		}
 

@@ -426,6 +426,7 @@
     <Build Include="Auth\Stored Procedures\GetPermission.sql" />
     <Build Include="Lookup\Stored Procedures\DeleteAddress.sql" />
     <Build Include="Auth\Stored Procedures\GetUsersByIds.sql" />
+    <Build Include="Billing\Stored Procedures\CreateSubscriptionUser.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

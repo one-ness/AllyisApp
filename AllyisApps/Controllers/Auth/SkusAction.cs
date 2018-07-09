@@ -32,10 +32,9 @@ namespace AllyisApps.Controllers.Auth
 			{
 				var pi = new SkusViewModel.ProductItemViewModel();
 				pi.ProductName = item.ProductName;
-
+                pi.ProductID = (int) item.ProductId;
 				model.Products.Add(pi);
 			}
-
 			return View(model);
 		}
 	}

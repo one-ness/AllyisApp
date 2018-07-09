@@ -18,7 +18,17 @@ namespace AllyisApps.DBModel.Billing
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
-		/// <summary>
+        /// <summary>
+        /// Gets or Sets the ProductAreaUrl
+        /// </summary>
+        public string ProductAreaUrl { get; set; }
+
+        /// <summary>
+        /// Gets or Sets the productIconUrl
+        /// </summary>
+        public string ProductIconUrl { get; set; }
+
+        /// <summary>
 		/// Gets or sets OrganizationId.
 		/// </summary>
 		public int OrganizationId { get; set; }
@@ -27,6 +37,11 @@ namespace AllyisApps.DBModel.Billing
 		/// Gets or sets SkuId.
 		/// </summary>
 		public int ProductId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ProductName
+        /// </summary>
+        public string ProductName { get; set; }
 
 		/// <summary>
 		/// Gets or sets number of users.
@@ -54,8 +69,13 @@ namespace AllyisApps.DBModel.Billing
 		public bool IsActive { get; set; }
 
 		/// <summary>
-		///  Gets or sets the name of the Sku.
+		///  Gets or sets the name of the Product
 		/// </summary>
 		public string SubscriptionName { get; set; }
+
+        /// <summary>
+        /// Gets or Sets the product description
+        /// </summary>
+        public string ProductDescription { get; set; }
 	}
 }

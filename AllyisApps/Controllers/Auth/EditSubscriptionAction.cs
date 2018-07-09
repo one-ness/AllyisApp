@@ -25,8 +25,8 @@ namespace AllyisApps.Controllers.Auth
 			var model = new EditSubscriptionViewModel();
 			model.OrganizationId = sub.OrganizationId;
 			model.ProductName = sub.ProductName;
-			model.SkuDescription = sub.SkuDescription;
-			model.SkuIconUrl = sub.SkuIconUrl;
+			model.ProductDescription = sub.ProductDescription;
+			model.ProductIconUrl = sub.ProductIconUrl;
 			model.SkuName = sub.SkuName;
 			model.SubscriptionId = id;
 			model.SubscriptionName = sub.SubscriptionName;

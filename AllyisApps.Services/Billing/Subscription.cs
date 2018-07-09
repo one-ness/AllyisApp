@@ -62,6 +62,6 @@ namespace AllyisApps.Services.Billing
 
 		public string ProductAreaUrl { get; set; }
 
-		public string SkuIconUrl { get; internal set; }
+		public string ProductIconUrl { get; internal set; }
 	}
 }

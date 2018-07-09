@@ -22,7 +22,7 @@ BEGIN
 	DECLARE @subscriptionId INT = SCOPE_IDENTITY();
 	
 	-- Add all org users to the subscription.  Current user is manager, other users are unassigned
-	WITH #organizationUsers AS (
+	/*WITH #organizationUsers AS (
 		SELECT  [UserId],
 				[SubscriptionId] = @subscriptionId,
 				[ProductRoleId] = @unassignedProductRoleId
@@ -33,16 +33,7 @@ BEGIN
 		SELECT  [UserId] = @userId,
 				[SubscriptionId] = @subscriptionId,
 				[ProductRoleId] = @managerProductRoleId
-	)
-	INSERT INTO [Billing].[SubscriptionUser] (
-		[UserId],
-		[SubscriptionId],
-		[ProductRoleId])
-	SELECT
-		[UserId],
-		[SubscriptionId],
-		[ProductRoleId]
-	FROM #organizationUsers
-
+	)*/
 	SELECT @subscriptionId
 END
+GO

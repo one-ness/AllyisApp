@@ -24,7 +24,7 @@ namespace AllyisApps.ViewModels.Billing
 		/// <summary>
 		/// IcornUrl
 		/// </summary>
-		public string SkuIconUrl { get; set; }
+		public string ProductIconUrl { get; set; }
 
 		/// <summary>
 		/// Gets or sets all information relating to this product.
@@ -36,10 +36,15 @@ namespace AllyisApps.ViewModels.Billing
 		/// </summary>
 		public string ProductName { get; set; }
 
+        /// <summary>
+		/// product name
+		/// </summary>
+        public int ProductID { get; set; }
+
 		/// <summary>
 		/// Gets or sets a description of this product.
 		/// </summary>
-		public string SkuDescription { get; set; }
+		public string ProductDescription { get; set; }
 
 		/// <summary>
 		/// Gets or sets the subscription name that is being unsubscribed from.

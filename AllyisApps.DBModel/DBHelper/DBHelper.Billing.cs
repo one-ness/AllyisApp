@@ -262,23 +262,23 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		/// <summary>
-		/// Creates subscription
-		/// Adds all the organization users as users to the subscription
-		/// Adds the user who subscribed to the subscription as a manager.
-		/// </summary>
-		/// <param name="organizationId">Sets OrganizationId.</param>
-		/// <param name="skuId">Sku -- the subscription item you're subscribing to.</param>
-		/// <param name="subscriptionName">The subscription name.</param>
-		/// <param name="userId">The user who is subscribing -- we need to make them manager.</param>
-		/// <param name="managerProductRoleId">product role for the manager.</param>
-		/// <param name="unassignedProductRoleId">The product role id for an unassigned user.</param>
-		/// <returns>The new subscription id.</returns>
-		public async Task<int> CreateSubscription(int organizationId, int skuId, string subscriptionName, int userId, int managerProductRoleId, int unassignedProductRoleId)
+        /// <summary>
+        /// Creates subscription
+        /// Adds all the organization users as users to the subscription
+        /// Adds the user who subscribed to the subscription as a manager.
+        /// </summary>
+        /// <param name="organizationId">Sets OrganizationId.</param>
+        /// <param name="prodId">Sku -- the subscription item you're subscribing to.</param>
+        /// <param name="subscriptionName">The subscription name.</param>
+        /// <param name="userId">The user who is subscribing -- we need to make them manager.</param>
+        /// <param name="managerProductRoleId">product role for the manager.</param>
+        /// <param name="unassignedProductRoleId">The product role id for an unassigned user.</param>
+        /// <returns>The new subscription id.</returns>
+        public async Task<int> CreateSubscription(int organizationId, int prodId, string subscriptionName, int userId, int managerProductRoleId, int unassignedProductRoleId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
-			parameters.Add("@skuId", skuId);
+			parameters.Add("@productId", prodId);
 			parameters.Add("@subscriptionName", subscriptionName);
 			parameters.Add("@userId", userId);
 			parameters.Add("@managerProductRoleId", managerProductRoleId);

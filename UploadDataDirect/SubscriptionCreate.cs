@@ -16,7 +16,7 @@ namespace UploadDataDirect
 
 		internal async Task<int> CreateTimeTrackerSubscription()
 		{
-			return await appService.Subscribe(organizaionId, AllyisApps.Services.Billing.SkuIdEnum.TimeTrackerBasic, "Time Tracker");
+			return await appService.Subscribe(organizaionId, AllyisApps.Services.Billing.ProductIdEnum.TimeTracker, "Time Tracker");
 		}
 	}
 }

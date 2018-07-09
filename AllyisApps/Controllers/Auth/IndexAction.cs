@@ -30,7 +30,7 @@ namespace AllyisApps.Controllers.Auth
 		/// <returns>The async task responsible for this action.</returns>
 		public async Task<ActionResult> Index()
 		{
-			AccountIndexViewModel viewModel = await this.ConstuctIndexViewModel();
+			AccountIndexViewModel viewModel = await this.ConstructIndexViewModel();
 			return View(viewModel);
 		}
 
@@ -38,7 +38,7 @@ namespace AllyisApps.Controllers.Auth
 		/// Constuct index view Model for Accounts.
 		/// </summary>
 		/// <returns>The Accound Index view model.</returns>
-		public async Task<AccountIndexViewModel> ConstuctIndexViewModel()
+		public async Task<AccountIndexViewModel> ConstructIndexViewModel()
 		{
 			// get current user
 			User user = await AppService.GetCurrentUserAsync();
@@ -163,7 +163,7 @@ namespace AllyisApps.Controllers.Auth
 					subViewModel.ProductDescription = description;
 					subViewModel.ProductId = subItem.ProductId;
 					subViewModel.AreaUrl = sub.ProductAreaUrl;
-					subViewModel.IconUrl = string.IsNullOrWhiteSpace(sub.SkuIconUrl) ? null : "~/" + sub.SkuIconUrl;
+					subViewModel.IconUrl = string.IsNullOrWhiteSpace(sub.ProductIconUrl) ? null : "~/" + sub.ProductIconUrl;
 					orgViewModel.Subscriptions.Add(subViewModel);
 				}
 

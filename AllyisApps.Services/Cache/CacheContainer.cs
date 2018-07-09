@@ -110,7 +110,8 @@ namespace AllyisApps.Services.Cache
 			{
 				var prod = new Product();
 				prod.AreaUrl = item.AreaUrl;
-				prod.ProductStatus = (ProductStatusEnum)item.ProductStatus;
+                prod.ProductStatus = (item.ProductStatus == 1) ? 
+                    ProductStatusEnum.Active : ProductStatusEnum.Inactive;
 				prod.ProductDescription = item.Description;
 				prod.ProductId = (ProductIdEnum)item.ProductId;
 				prod.ProductName = item.ProductName;

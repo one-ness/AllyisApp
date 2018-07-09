@@ -4,6 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+
 namespace AllyisApps.DBModel.Billing
 {
 	/// <summary>
@@ -26,14 +28,14 @@ namespace AllyisApps.DBModel.Billing
 		/// </summary>
 		public string ProductName { get; set; }
 
-		/// <summary>
-		/// Gets or sets product status
-		/// </summary>
-		public int ProductStatus { get; set; }
+        /// <summary>
+        /// Gets or sets is active.
+        /// </summary>
+        public int ProductStatus { get; set; }
 
-		/// <summary>
-		/// Gets or sets area url.
-		/// </summary>
-		public string AreaUrl { get; set; }
-	}
+        /// <summary>
+        /// Gets or sets area url.
+        /// </summary>
+        public string AreaUrl { get; set; }
+    }
 }

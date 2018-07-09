@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -24,56 +25,30 @@ namespace AllyisApps.Controllers.Auth
 		/// GET: /Subscription/Subscribe/skuid.
 		/// </summary>
 		/// <param name="id">Organization id.</param>
-		/// <param name="skuId">The id of the SKU being subscribed to.</param>
+		/// <param name="prodId">The id of the SKU being subscribed to.</param>
 		/// <returns>The result of this action.</returns>
 		[HttpGet]
-		public async Task<ActionResult> Subscribe(int id, SkuIdEnum skuId)
+		public async Task<ActionResult> Subscribe(int id, int prodId)
 		{
 			// get all subscriptions of the given organization
 			var subscriptions = await AppService.GetSubscriptionsAsync(id);
 			var model = new SubscribeViewModel();
+            ViewBag.productId = prodId;
 			foreach (var subscription in subscriptions)
 			{
-				// is it an existing sku?
-				if (subscription.SkuId == skuId)
+                // is it an existing subscription?
+                if (subscription.ProductId == (ProductIdEnum)prodId)
 				{
 					// yes, already subscribed
-					Notifications.Add(new BootstrapAlert($"You are already subscribed to {subscription.SkuName}.", Variety.Warning));
+					Notifications.Add(new BootstrapAlert($"You are already subscribed to {subscription.ProductName}.", Variety.Warning));
 					return RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id });
 				}
-
-				// no, get the product of this subscription
-				var pid = subscription.ProductId;
-				if (!CacheContainer.ProductsCache.TryGetValue(pid, out Product product) || product.ProductStatus != ProductStatusEnum.Active)
-				{
-					// inactive or invalid product
-					Notifications.Add(new BootstrapAlert("You selected an invalid product to subscribe to.", Variety.Danger));
-					return RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id });
-				}
-
-				// yes, user is subscribing to another sku of an existing subscription (i.e., product)
-				model.IsChanging = true;
-				model.OrganizationId = id;
-				model.ProductName = subscription.ProductName;
-				model.SubscriptionName = subscription.SubscriptionName;
-
-				// show the view
-				return View(model);
 			}
+            model.OrganizationId = id;
+            model.ProductName = AppService.GetProductById(prodId).ProductName;
 
-			// get product for the sku
-			ProductIdEnum temp = ProductIdEnum.TimeTracker;
-			if (!CacheContainer.ProductsCache.TryGetValue(temp, out Product selectedProduct) || selectedProduct.ProductStatus != ProductStatusEnum.Active)
-			{
-				// inactive or invalid product
-				Notifications.Add(new BootstrapAlert("You selected an invalid product to subscribe to.", Variety.Danger));
-				return RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id });
-			}
-
-			// fill model
-			model.OrganizationId = id;
-			model.ProductName = selectedProduct.ProductName;
-			return View(model);
+            // show the view
+            return View(model);
 		}
 
 		/// <summary>
@@ -83,7 +58,8 @@ namespace AllyisApps.Controllers.Auth
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Subscribe(SubscribeViewModel model)
 		{
-			await AppService.Subscribe(model.OrganizationId, (SkuIdEnum)model.SkuId, model.SubscriptionName);
+            var prodsidser = model.ProductID;
+			await AppService.Subscribe(model.OrganizationId, (ProductIdEnum) model.ProductID, model.SubscriptionName);
 			Notifications.Add(new BootstrapAlert($"Your subscription: {model.SubscriptionName} was created successfully!", Variety.Success));
 			return RedirectToAction(ActionConstants.OrganizationSubscriptions, new { id = model.OrganizationId });
 		}

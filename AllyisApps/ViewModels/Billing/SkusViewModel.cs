@@ -45,6 +45,11 @@ namespace AllyisApps.ViewModels.Billing
 			/// </summary>
 			public string ProductName { get; set; }
 
+            /// <summary>
+            /// 
+            /// </summary>
+            public int ProductID { get; set; }
+
 			/// <summary>
 			/// constructor
 			/// </summary>

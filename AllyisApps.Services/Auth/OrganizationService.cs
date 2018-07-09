@@ -188,19 +188,20 @@ namespace AllyisApps.Services
 			}
 
 			var result = new List<Subscription>();
-			dynamic entities = await DBHelper.GetSubscriptionsAsync(orgId);
-			foreach (var item in entities)
+			dynamic entities = await DBHelper.GetSubscriptionsAsync(orgId, 1);
+			foreach (var curr_model in entities)
 			{
+                SubscriptionDBEntity item = curr_model.Value;
 				var data = new Subscription();
-				data.ProductAreaUrl = item.AreaUrl;
+				data.ProductAreaUrl = item.ProductAreaUrl;
 				data.IsActive = item.IsActive;
-				data.NumberOfUsers = item.NumberOfUsers ?? 0;
+				data.NumberOfUsers = item.UserCount;
 				data.OrganizationId = item.OrganizationId;
 				data.ProductDescription = item.ProductDescription;
 				data.ProductId = (ProductIdEnum)item.ProductId;
 				data.ProductName = item.ProductName;
 				data.PromoExpirationDateUtc = item.PromoExpirationDateUtc;
-				data.SkuIconUrl = item.IconUrl;
+				data.ProductIconUrl = item.ProductIconUrl;
 				data.CreatedUtc = item.SubscriptionCreatedUtc;
 				data.SubscriptionId = item.SubscriptionId;
 				data.SubscriptionName = item.SubscriptionName;
