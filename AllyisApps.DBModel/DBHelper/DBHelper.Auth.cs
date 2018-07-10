@@ -98,10 +98,28 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		/// <summary>
-		/// Get user from the db
-		/// </summary>
-		public async Task<dynamic> GetUserOld(int userId)
+        /// <summary>
+        /// Gets the product role name for a user.
+        /// </summary>
+        /// <param name="subscriptionId">The subscription that the user belongs to.</param>
+        /// <param name="productRoleId">User Id.</param>
+        /// <returns>The product role id for the user in the subscription. Returns null if user is not in the subscription or the subscription is inactive.</returns>
+        public async Task<string> GetProductRoleName(int subscriptionId, int productRoleId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@subscriptionId", subscriptionId);
+            parameters.Add("@productRoleId", productRoleId);
+
+            using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+            {
+                return (await connection.QueryAsync<string>("[Auth].[GetProductRoleName]", parameters, commandType: CommandType.StoredProcedure)).SingleOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Get user from the db
+        /// </summary>
+        public async Task<dynamic> GetUserOld(int userId)
 		{
 			dynamic result = new ExpandoObject();
 			using (var con = new SqlConnection(SqlConnectionString))

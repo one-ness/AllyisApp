@@ -5,6 +5,7 @@ using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
 using AllyisApps.Services.Billing;
+using AllyisApps.Services.Auth;
 
 namespace AllyisApps.Controllers.Auth
 {
@@ -25,8 +26,20 @@ namespace AllyisApps.Controllers.Auth
 			await AppService.CheckPermissionAsync(ProductIdEnum.AllyisApps, AppService.UserAction.Edit, AppService.AppEntity.Permission, id);
 			var orgUsers = AppService.GetOrganizationMemberList(id);
 			var orgSubs = await AppService.GetSubscriptionsAsync(id);
-
-			PermissionsViewModel perModel = new PermissionsViewModel
+            System.Collections.Generic.List<OrganizationRoleEnum> productroles = new System.Collections.Generic.List<OrganizationRoleEnum>();
+            int prodRoleCounter = 0;
+            foreach (OrganizationUser orguser in orgUsers)
+            {
+                string role = await AppService.GetProductRoleName(id, orguser.OrganizationRoleId);
+                if (role.Equals(Strings.Admin))
+                {
+                    productroles.Add(OrganizationRoleEnum.Admin);
+                } else
+                {
+                    productroles.Add(OrganizationRoleEnum.Member);
+                }
+            }
+            PermissionsViewModel perModel = new PermissionsViewModel
 			{
 				Actions = setOrganizationRoles,
 				UserId = AppService.UserContext.UserId,
@@ -42,14 +55,14 @@ namespace AllyisApps.Controllers.Auth
 					SubscriptionName = sub.SubscriptionName,
 					ManagePermissionsUrl = GetPermissionsUrl(sub.ProductId, sub.SubscriptionId),
 				}).OrderBy(sub => sub.ProductId).ToList(),
-
+                
 				OrganizationId = id,
 				ProductId = null,
 				SubscriptionId = null,
 				Users = orgUsers.Select(orgU => new UserPermssionViewModel
 				{
 					CurrentRole = orgU.OrganizationRoleId,
-					CurrentRoleName = organizationRoles[orgU.OrganizationRoleId],
+					CurrentRoleName = organizationRoles[(int)productroles.ElementAt(prodRoleCounter++)],
 					Email = orgU.Email,
 					FullName = orgU.FirstName + " " + orgU.LastName,
 					UserId = orgU.UserId,

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.Lib;
 using AllyisApps.Services.Auth;
@@ -578,17 +579,64 @@ namespace AllyisApps.Services
 			}
             // create new subscription
             int subId = await DBHelper.CreateSubscription(organizationId, (int) prodId, subscriptionName, UserContext.UserId, managerProductRoleId, unassignedProductRoleId);
+            
             // create product roles for subscription (admin)
             int prodRole = await DBHelper.CreateProductRoleAsync((int)prodId, "Admin", "Organization Administrator", subId, Int32.Parse(await GetNextProjectId(organizationId, subId)));
+            
             // create product roles for subscription (user)
-            await DBHelper.CreateProductRoleAsync((int)prodId, "User", "Organization User", subId, Int32.Parse(await GetNextProjectId(organizationId, subId)));
+            int userRole = await DBHelper.CreateProductRoleAsync((int)prodId, "User", "Organization User", subId, Int32.Parse(await GetNextProjectId(organizationId, subId)));
+            
+            // create permissions for this admin
+            var list = new List<PermissionDBEntity>();
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Delete, AppEntityId = (int)AppEntity.Organization, ProductRoleId = prodRole });
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, AppEntityId = (int)AppEntity.Organization, ProductRoleId = prodRole });
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Edit, AppEntityId = (int)AppEntity.Organization, ProductRoleId = prodRole });
+
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Create, AppEntityId = (int)AppEntity.OrganizationUser, ProductRoleId = prodRole });
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Delete, AppEntityId = (int)AppEntity.OrganizationUser, ProductRoleId = prodRole });
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, AppEntityId = (int)AppEntity.OrganizationUser, ProductRoleId = prodRole });
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Edit, AppEntityId = (int)AppEntity.OrganizationUser, ProductRoleId = prodRole });
+
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Create, AppEntityId = (int)AppEntity.Subscription, ProductRoleId = prodRole });
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Delete, AppEntityId = (int)AppEntity.Subscription, ProductRoleId = prodRole });
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, AppEntityId = (int)AppEntity.Subscription, ProductRoleId = prodRole });
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Edit, AppEntityId = (int)AppEntity.Subscription, ProductRoleId = prodRole });
+
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Create, AppEntityId = (int)AppEntity.SubscriptionUser, ProductRoleId = prodRole });
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Delete, AppEntityId = (int)AppEntity.SubscriptionUser, ProductRoleId = prodRole });
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, AppEntityId = (int)AppEntity.SubscriptionUser, ProductRoleId = prodRole });
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Edit, AppEntityId = (int)AppEntity.SubscriptionUser, ProductRoleId = prodRole });
+
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Create, AppEntityId = (int)AppEntity.Billing, ProductRoleId = prodRole });
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Delete, AppEntityId = (int)AppEntity.Billing, ProductRoleId = prodRole });
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, AppEntityId = (int)AppEntity.Billing, ProductRoleId = prodRole });
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Edit, AppEntityId = (int)AppEntity.Billing, ProductRoleId = prodRole });
+
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Create, AppEntityId = (int)AppEntity.Permission, ProductRoleId = prodRole });
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Delete, AppEntityId = (int)AppEntity.Permission, ProductRoleId = prodRole });
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, AppEntityId = (int)AppEntity.Permission, ProductRoleId = prodRole });
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Edit, AppEntityId = (int)AppEntity.Permission, ProductRoleId = prodRole });
+
+            await this.DBHelper.CreatePermissionsAsync(list);
+
             // create subscription-user for admin-productrole
             await DBHelper.CreateSubscriptionUserAsync(subId, UserContext.UserId, prodRole);
+
+            // create permissions for user role
+            list = new List<PermissionDBEntity>();
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, AppEntityId = (int)AppEntity.Organization, ProductRoleId = userRole });
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, AppEntityId = (int)AppEntity.OrganizationUser, ProductRoleId = userRole });
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, AppEntityId = (int)AppEntity.Subscription, ProductRoleId = userRole });
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, AppEntityId = (int)AppEntity.SubscriptionUser, ProductRoleId = userRole });
+            list.Add(new PermissionDBEntity() { UserActionId = (int)UserAction.Read, AppEntityId = (int)AppEntity.Permission, ProductRoleId = userRole });
+
+            await this.DBHelper.CreatePermissionsAsync(list);
 
             // initialize default settings
             // TODO: replace temp
             await MergeDefaultSettingsForProduct(prodId, organizationId, subId);
-			return subId;
+
+            return subId;
 		}
 
 		public async Task UpdateSubscriptionName(int subscriptionId, string subscriptionName)

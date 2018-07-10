@@ -550,13 +550,31 @@ namespace AllyisApps.Services
 			return await DBHelper.DeleteOrganizationUsers(userIds, organizationId);
 		}
 
-		/// <summary>
-		/// Gets the product role for a user.
-		/// </summary>
-		/// <param name="subscriptionId">The subscription that the user belongs to.</param>
-		/// <param name="userId">User Id.</param>
-		/// <returns>The product role id for the user in the subscription. Returns null if user is not in the subscription or the subscription is inactive.</returns>
-		public Task<int?> GetSubscriptionRoleForUser(int subscriptionId, int userId)
+        /// <summary>
+        /// Gets the product role for a user.
+        /// </summary>
+        /// <param name="subscriptionId">The subscription that the user belongs to.</param>
+        /// <param name="productRoleId">User Id.</param>
+        /// <returns>The product role id for the user in the subscription. Returns null if user is not in the subscription or the subscription is inactive.</returns>
+        public Task<string> GetProductRoleName(int subscriptionId, int productRoleId)
+        {
+            #region Validation
+
+            if (productRoleId <= 0) throw new ArgumentOutOfRangeException(nameof(productRoleId), "ProductRole Id must be greater than 0.");
+            if (subscriptionId <= 0) throw new ArgumentOutOfRangeException(nameof(subscriptionId), "Subscription Id must be greater than 0.");
+
+            #endregion Validation
+
+            return DBHelper.GetProductRoleName(subscriptionId, productRoleId);
+        }
+
+        /// <summary>
+        /// Gets the product role for a user.
+        /// </summary>
+        /// <param name="subscriptionId">The subscription that the user belongs to.</param>
+        /// <param name="userId">User Id.</param>
+        /// <returns>The product role id for the user in the subscription. Returns null if user is not in the subscription or the subscription is inactive.</returns>
+        public Task<int?> GetSubscriptionRoleForUser(int subscriptionId, int userId)
 		{
 			#region Validation
 
