@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
+using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Billing;
 
@@ -19,8 +20,21 @@ namespace AllyisApps.Controllers.Auth
 		[HttpGet]
 		public async Task<ActionResult> EditSubscription(int id)
 		{
+            /*
+            string prodname = await AppService.GetProductNameBySubscriptionId(id);
+            Services.Billing.ProductIdEnum prodType;
+            if(prodname.Equals(Services.Billing.ProductIdEnum.ExpenseTracker.ToString())) { } 
+            */
+
+            //get the orgID for the next call to checkPermissionAsync
+            int? orgID = await AppService.GetOrganizationIdBySubscriptionId(id);
+            if(orgID == null)
+            {
+                orgID = 0;
+            }
+            
 			// TODO: below call needs org id
-			await this.AppService.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, AppService.UserAction.Edit, AppService.AppEntity.Subscription, id);
+			await this.AppService.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, AppService.UserAction.Edit, AppService.AppEntity.Subscription, (int)orgID);
 			var sub = await AppService.GetSubscription(id);
 			var model = new EditSubscriptionViewModel();
 			model.OrganizationId = sub.OrganizationId;

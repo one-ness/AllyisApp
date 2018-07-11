@@ -47,12 +47,24 @@ namespace AllyisApps.DBModel
 			return result;
 		}
 
-		/// <summary>
-		/// Retrieves the area to route to for a specific subscription.
-		/// </summary>
-		/// <param name="subscriptionId">The subscription Id.</param>
-		/// <returns>The product area string.</returns>
-		public async Task<string> GetProductAreaBySubscription(int subscriptionId)
+        /// <summary>
+        /// get the organization id from the subscriptions table using the subscriptionId parameter
+        /// /// <param name="subscriptionId">Parameter @subscriptionId.</param>
+        /// </summary>
+        public async Task<int> GetOrganizationIdBySubscription(int subscriptionId)
+        {
+            using (var con = new SqlConnection(SqlConnectionString))
+            {
+                return await con.QueryFirstOrDefaultAsync<int>("[Billing].[GetOrganizationIdBySubscriptionId]", new { subscriptionId }, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the area to route to for a specific subscription.
+        /// </summary>
+        /// <param name="subscriptionId">The subscription Id.</param>
+        /// <returns>The product area string.</returns>
+        public async Task<string> GetProductAreaBySubscription(int subscriptionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@subscriptionId", subscriptionId);
@@ -170,13 +182,14 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Get Subscription Details by Id.
 		/// </summary>
-		public async Task<dynamic> GetSubscriptionDetailsById(int subscriptionId)
+		public async Task<SubscriptionDBEntity> GetSubscriptionDetailsById(int subscriptionId)
 		{
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
 				// default blank object
-				var results = await con.QueryAsync<dynamic>("[Billing].[GetSubscriptionDetailsById] @a", new { a = subscriptionId });
-				return results.FirstOrDefault();
+				var results = await con.QueryAsync<SubscriptionDBEntity>("[Billing].[GetSubscriptionDetailsById] @a", new { a = subscriptionId });
+                SubscriptionDBEntity sub = results.FirstOrDefault();
+				return sub;
 			}
 		}
 

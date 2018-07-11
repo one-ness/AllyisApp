@@ -370,10 +370,20 @@ namespace AllyisApps.Services
 			return result;
 		}
 
-		/// <summary>
-		/// get organization from its db entity
-		/// </summary>
-		public async Task<Organization> InitializeOrganization(OrganizationDBEntity entity, bool loadAddress = true)
+        /// <summary>
+        /// gets the organization id from the subscription id
+        /// </summary>
+        /// <param name="subId"></param>
+        /// <returns>organizationId (int?) since can be not found</returns>
+        public async Task<int ?> GetOrganizationIdBySubscriptionId(int subId)
+        {
+            return await this.DBHelper.GetOrganizationIdBySubscription(subId);
+        }
+
+        /// <summary>
+        /// get organization from its db entity
+        /// </summary>
+        public async Task<Organization> InitializeOrganization(OrganizationDBEntity entity, bool loadAddress = true)
 		{
 			return new Organization
 			{

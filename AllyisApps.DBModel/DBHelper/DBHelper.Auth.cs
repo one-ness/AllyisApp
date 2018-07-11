@@ -562,10 +562,10 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		/// <summary>
-		/// get the list of organization db entities for the given ids
-		/// </summary>
-		public async Task<List<OrganizationDBEntity>> GetOrganizationsByIdsAsync(List<int> ids, int statusMask)
+        /// <summary>
+        /// get the list of organization db entities for the given ids
+        /// </summary>
+        public async Task<List<OrganizationDBEntity>> GetOrganizationsByIdsAsync(List<int> ids, int statusMask)
 		{
 			List<OrganizationDBEntity> result = new List<OrganizationDBEntity>();
 			if (ids.Count > 0)

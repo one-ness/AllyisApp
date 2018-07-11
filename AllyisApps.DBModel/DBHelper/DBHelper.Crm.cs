@@ -359,12 +359,12 @@ namespace AllyisApps.DBModel
 			return parameters.Get<int>("@retId");
 		}
 
-		/// <summary>
-		/// Updates the customer with the specified Id.
-		/// </summary>
-		/// <param name="customerInfo">The table with the customer to create.</param>
-		/// <return>1 if succeed, -1 if fail because CustOrgId is not unique.</return>
-		public async Task<int> UpdateCustomerAsync(Tuple<CustomerDBEntity, AddressDBEntity> customerInfo)
+        /// <summary>
+        /// Updates the customer with the specified Id.
+        /// </summary>
+        /// <param name="customerInfo">The table with the customer to create.</param>
+        /// <return>1 if succeed, -1 if fail because CustOrgId is not unique.</return>
+        public async Task<int> UpdateCustomerAsync(Tuple<CustomerDBEntity, AddressDBEntity> customerInfo)
 		{
 			if (customerInfo == null)
 			{

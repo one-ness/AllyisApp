@@ -428,6 +428,7 @@
     <Build Include="Auth\Stored Procedures\GetUsersByIds.sql" />
     <Build Include="Billing\Stored Procedures\CreateSubscriptionUser.sql" />
     <Build Include="Auth\Stored Procedures\GetProductRoleName.sql" />
+    <Build Include="Billing\Stored Procedures\GetOrganizationIdBySubscriptionId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

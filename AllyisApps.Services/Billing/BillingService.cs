@@ -388,29 +388,37 @@ namespace AllyisApps.Services
 		public async Task<Subscription> GetSubscription(int subscriptionId)
 		{
 			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException(nameof(subscriptionId));
+            
+            //get the orgID for the next call to checkPermissionAsync
+            int? orgID = await GetOrganizationIdBySubscriptionId(subscriptionId);
+            if (orgID == null)
+            {
+                orgID = 0;
+            }
 
-			// TODO: below call needs org id
-			await this.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, AppService.UserAction.Read, AppService.AppEntity.Subscription, subscriptionId);
+            // TODO: below call needs org id
+            await this.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, AppService.UserAction.Read, AppService.AppEntity.Subscription, (int)orgID);
 
 			// get from db
-			var sub = await DBHelper.GetSubscriptionDetailsById(subscriptionId);
+			SubscriptionDBEntity sub = await DBHelper.GetSubscriptionDetailsById(subscriptionId);
+            sub.IsActive = (sub.SubscriptionStatus == 1) ? true : false;
 			if (sub == null) throw new InvalidOperationException("subscriptionId");
-
+            ProductDBEntity prod = DBHelper.GetProductById(sub.ProductId);
 			// copy to subscription
-			var result = new Subscription
+			Subscription result = new Subscription
 			{
-				ProductAreaUrl = sub.ArealUrl,
+				ProductAreaUrl = sub.ProductAreaUrl,
 				ProductIconUrl = sub.ProductIconUrl,
 				IsActive = sub.IsActive,
-				NumberOfUsers = sub.NumberOfUsers,
+				NumberOfUsers = sub.UserCount,
 				OrganizationId = sub.OrganizationId,
 				ProductDescription = sub.ProductDescription,
 				ProductId = (ProductIdEnum)sub.ProductId,
 				ProductName = sub.ProductName,
 				PromoExpirationDateUtc = sub.PromoExpirationDateUtc,
-				SkuDescription = sub.SkuDescription,
-				SkuId = (SkuIdEnum)sub.SkuId,
-				SkuName = sub.SkuName,
+				//SkuDescription = sub.SkuDescription,
+				//SkuId = (SkuIdEnum)sub.SkuId,
+				//SkuName = sub.SkuName,
 				CreatedUtc = sub.SubscriptionCreatedUtc,
 				SubscriptionId = subscriptionId,
 				SubscriptionName = sub.SubscriptionName
