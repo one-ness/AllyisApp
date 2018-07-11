@@ -651,9 +651,12 @@ namespace AllyisApps.Services
 		{
 			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException(nameof(subscriptionId));
 			if (string.IsNullOrWhiteSpace(subscriptionName)) throw new ArgumentNullException(nameof(subscriptionName));
-
-			// TODO: below call need org id
-			await this.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, AppService.UserAction.Edit, AppService.AppEntity.Subscription, subscriptionId);
+            int? orgID = await GetOrganizationIdBySubscriptionId(subscriptionId);
+            if(orgID == null)
+            {
+                orgID = 0;
+            }
+			await this.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, AppService.UserAction.Edit, AppService.AppEntity.Subscription, (int) orgID);
 			DBHelper.UpdateSubscriptionName(subscriptionId, subscriptionName);
 		}
 
