@@ -2914,6 +2914,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to NotInProduct.
+        /// </summary>
+        public static string NotInProduct {
+            get {
+                return ResourceManager.GetString("NotInProduct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No users have been defined for this action..
         /// </summary>
         public static string NoUsersHaveBeenDefined {

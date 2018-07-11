@@ -10,10 +10,9 @@ AS
 	[Billing].[SubscriptionUser].ProductRoleId,
 	[Billing].[SubscriptionUser].SubscriptionUserCreatedUtc as 'CreatedUtc',
 	[Billing].[SubscriptionUser].[SubscriptionId],
-	[Billing].[Sku].ProductId
+	[Billing].[Subscription].[ProductId]
 	FROM 
 	[Billing].SubscriptionUser
 	JOIN [Auth].[User] ON [Auth].[User].UserId = [SubscriptionUser].UserId
 	JOIN [Billing].[Subscription] ON [Billing].[Subscription].SubscriptionId = [Billing].[SubscriptionUser].SubscriptionId
-	JOIN [Billing].[Sku] ON [Billing].[Sku].[SkuId] = [Billing].[Subscription].[SkuId]
 	WHERE  [SubscriptionUser].SubscriptionId = @subscriptionId;

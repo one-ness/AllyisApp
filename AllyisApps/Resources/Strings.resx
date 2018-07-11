@@ -1846,4 +1846,7 @@
   <data name="UnlockEntriesResultSuccessAndRecalculatedOvertime" xml:space="preserve">
     <value>Successfully unlocked all locked time entries, and updated overtime calculations to the new overtime settings for the newly unlocked entries.</value>
   </data>
+  <data name="NotInProduct" xml:space="preserve">
+    <value>NotInProduct</value>
+  </data>
 </root>

@@ -148,12 +148,26 @@ namespace AllyisApps.Controllers.Auth
 				IsChecked = false,
 				UserId = orgU.UserId
 			}).OrderBy(orgU => orgU.FullName).ToList();
-
 			foreach (var subU in subUsers)
 			{
 				var OrgUserWithSub = OrgUsers.First(orgU => orgU.UserId == subU.UserId);
 				OrgUserWithSub.CurrentRole = subU.ProductRoleId;
-				OrgUserWithSub.CurrentRoleName = roles[subU.ProductRoleId];
+                string prodrolename = await AppService.GetProductRoleName(id, subU.ProductRoleId);
+                int prodRoleId;
+                if(prodrolename.Equals(Strings.Admin))
+                {
+                    prodRoleId = (int)BuiltinProductRoleIdEnum.Admin;
+                } else if(prodrolename.Equals(Strings.User))
+                {
+                    prodRoleId = (int)BuiltinProductRoleIdEnum.User;
+                } else if(prodrolename.Equals(Strings.NotInProduct))
+                {
+                    prodRoleId = (int)BuiltinProductRoleIdEnum.NotInProduct;
+                } else
+                {
+                    prodRoleId = (int)BuiltinProductRoleIdEnum.Custom;
+                }
+                OrgUserWithSub.CurrentRoleName = roles[prodRoleId];
 			}
 
 			PermissionsViewModel model = new PermissionsViewModel()

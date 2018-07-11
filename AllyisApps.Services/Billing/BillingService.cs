@@ -430,8 +430,12 @@ namespace AllyisApps.Services
 
 		public async Task<List<SubscriptionUser>> GetSubscriptionUsers(int subscriptionId)
 		{
-			// TODO: below call needs org id
-			await this.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, AppService.UserAction.Edit, AppService.AppEntity.SubscriptionUser, subscriptionId);
+            int? orgID = await GetOrganizationIdBySubscriptionId(subscriptionId);
+            if(orgID == null)
+            {
+                orgID = 0;
+            }
+			await this.CheckPermissionAsync(Services.Billing.ProductIdEnum.AllyisApps, AppService.UserAction.Edit, AppService.AppEntity.SubscriptionUser, (int)orgID);
 			var subUsers = DBHelper.GetSubscriptionUsersBySubscriptionId(subscriptionId);
 			return subUsers.Select(InitializeSubscriptionUser).ToList();
 		}
