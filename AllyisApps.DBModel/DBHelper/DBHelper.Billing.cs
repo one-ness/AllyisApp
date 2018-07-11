@@ -482,13 +482,14 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Sets subscription IsActive to false.
+		/// Deletes the entries related to subscriptionID in all tables
 		/// </summary>
 		public async void DeactivateSubscription(int subscriptionid)
 		{
+            int orgId = await GetOrganizationIdBySubscription(subscriptionid);
 			using (var con = new SqlConnection(SqlConnectionString))
 			{
-				await con.ExecuteAsync("[Billing].[DeactivateSubscription]", new { subscriptionid }, commandType: CommandType.StoredProcedure);
+				await con.ExecuteAsync("[Billing].[DeactivateSubscription]", new { subscriptionid, orgId}, commandType: CommandType.StoredProcedure);
 			}
 		}
 
